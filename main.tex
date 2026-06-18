@@ -1,0 +1,41 @@
+% Faber2026 — CHIME/FRB–DSA-110 co-detected FRBs: dispersion & scattering budget
+%
+% Manuscript repo (Overleaf-synced). The analysis pipeline that produces the
+% numbers and figures here is dsa110-FLITS, pinned as a git submodule under
+% pipeline/ (see PIPELINE.md). Overleaf ignores the submodule and compiles
+% the .tex / figures at the repo root.
+\documentclass[twocolumn]{aastex631}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+\begin{document}
+
+\title{Disentangling the Dispersion and Scattering Budgets of
+CHIME/FRB--DSA-110 Co-detected Fast Radio Bursts}
+
+% Author / affiliation block lives in auth.tex for reuse and clean diffs.
+\input{auth.tex}
+
+\begin{abstract}
+% TODO: 12 CHIME/FRB–DSA-110 co-detected sightlines; per-sightline attribution
+% of observed DM and scattering to Milky-Way ISM/halo, intervening foreground
+% CGM, the cosmic IGM (Macquart), and the host; coherent-picture cases where an
+% intervening galaxy is the likely scattering screen.
+\end{abstract}
+
+\keywords{Radio transient sources (2008) --- Interstellar scattering (854)
+--- Intergalactic medium (813) --- Circumgalactic medium (1879)}
+
+\input{sections/intro.tex}
+\input{sections/observations.tex}
+\input{sections/budget.tex}
+\input{sections/results.tex}
+\input{sections/discussion.tex}
+\input{sections/conclusions.tex}
+
+\bibliographystyle{aasjournal}
+\bibliography{bib/refs}
+
+\end{document}
