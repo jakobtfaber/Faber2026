@@ -1,0 +1,16 @@
+# LaTeX build artifacts (Overleaf regenerates these).
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+
+# Built PDF of the manuscript itself (figures under figures/ ARE tracked).
+/main.pdf
