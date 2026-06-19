@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>DSA-110 × CHIME — CHIME-band scattering fits</title>
+<style>
+ body{font:15px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;margin:0;color:#1a1a1a;background:#fafafa}
+ header{background:#11243f;color:#fff;padding:28px 6vw}
+ header h1{margin:0 0 4px;font-size:26px} header p{margin:2px 0;color:#b9c7da}
+ main{max-width:1100px;margin:0 auto;padding:24px 5vw 60px}
+ a.dl{display:inline-block;margin:14px 0;padding:9px 16px;background:#11243f;color:#fff;
+   text-decoration:none;border-radius:6px}
+ table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px;background:#fff}
+ th,td{padding:6px 9px;border-bottom:1px solid #e5e5e5;text-align:left}
+ th{background:#f0f2f5} td:first-child{font-weight:600}
+ tr.ok td:first-child{color:#1a7a1a} tr.nd td:first-child{color:#1a5a9a}
+ tr.mg td:first-child{color:#b8860b} tr.bad td:first-child{color:#b00020}
+ .card{background:#fff;border:1px solid #e5e5e5;border-left:5px solid #999;
+   border-radius:8px;padding:14px 18px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+ .card.ok{border-left-color:#1a7a1a} .card.nd{border-left-color:#1a5a9a}
+ .card.mg{border-left-color:#b8860b} .card.bad{border-left-color:#b00020}
+ .card h2{margin:0 0 4px;font-size:19px}
+ .badge{font-size:12px;color:#fff;padding:2px 9px;border-radius:11px;vertical-align:middle;font-weight:600}
+ .meta{color:#555;font-size:13px;margin:0 0 10px}
+ .card img{width:100%;height:auto;border:1px solid #eee;border-radius:4px}
+ .note{color:#777;font-size:12.5px;margin-top:30px;border-top:1px solid #ddd;padding-top:12px}
+</style></head><body>
+<header>
+ <h1>DSA-110 × CHIME co-detected FRBs — CHIME-band scattering fits</h1>
+ <p>Nested sampling + Bayesian evidence (M0–M3) · init-independent priors · α fixed = 4.0 · 16 chan, 0.4–0.8 GHz</p>
+ <p><b>Orientation-corrected</b> — the CHIME/DSA freq axis was stored descending; these τ supersede the earlier backwards-freq values. Fit quality judged by residual σ (target = 1.0). Unpublished — Faber et&nbsp;al. 2026 (in prep).</p>
+</header>
+<main>
+ <a class="dl" href="assets/scattering_deck.pdf">⬇ Download deck (PDF)</a>
+ <p><b>6 clean detections</b> (σ≈1): mahi, oran, johndoeII, whitney, phineas, isha ·
+    <b>2 marginal</b>: wilhelm, hamilton ·
+    <b>3 fail</b>: chromatica, freya, zach (freya/zach under-dedispersed) · casey pending.</p>
+ <table><thead><tr><th>burst</th><th>model</th><th>τ₁GHz (ms)</th><th>ζ (ms)</th>
+   <th>χ²/dof</th><th>resid σ</th><th>verdict</th></tr></thead><tbody>
+ <tr class="ok"><td>mahi</td><td>M2</td><td>0.212 (+0.015/−0.014)</td><td>— (M2)</td><td>1.053</td><td><b>1.03</b></td><td>detection (M2: scattering-only)</td></tr>
+<tr class="ok"><td>oran</td><td>M3</td><td>0.540 (+0.063/−0.059)</td><td>1.95</td><td>1.058</td><td><b>1.03</b></td><td>detection</td></tr>
+<tr class="ok"><td>johndoeII</td><td>M3</td><td>0.143 (+0.0055/−0.0048)</td><td>0.12</td><td>1.120</td><td><b>1.06</b></td><td>detection</td></tr>
+<tr class="ok"><td>whitney</td><td>M2</td><td>0.117 (+0.0057/−0.0053)</td><td>— (M2)</td><td>1.164</td><td><b>1.08</b></td><td>detection (M2: scattering-only)</td></tr>
+<tr class="ok"><td>phineas</td><td>M3</td><td>0.274 (+0.011/−0.011)</td><td>1.26</td><td>1.199</td><td><b>1.10</b></td><td>detection</td></tr>
+<tr class="ok"><td>isha</td><td>M3</td><td>0.290 (+0.016/−0.014)</td><td>0.78</td><td>1.216</td><td><b>1.10</b></td><td>detection</td></tr>
+<tr class="mg"><td>wilhelm</td><td>M3</td><td>0.144 (+0.0055/−0.0054)</td><td>0.17</td><td>1.704</td><td><b>1.31</b></td><td>marginal</td></tr>
+<tr class="mg"><td>hamilton</td><td>M2</td><td>0.020 (+0.0002/−0.0002)</td><td>— (M2)</td><td>3.362</td><td><b>1.83</b></td><td>marginal</td></tr>
+<tr class="bad"><td>chromatica</td><td>M3</td><td>0.114 (+0.0009/−0.0008)</td><td>0.46</td><td>5.113</td><td><b>2.26</b></td><td>poor fit</td></tr>
+<tr class="bad"><td>freya</td><td>M2</td><td>0.150 (+0.0006/−0.0007)</td><td>— (M2)</td><td>9.560</td><td><b>3.09</b></td><td>FAIL — under-dedispersed</td></tr>
+<tr class="bad"><td>zach</td><td>M3</td><td>0.262 (+0.0009/−0.0009)</td><td>0.16</td><td>22.000</td><td><b>4.68</b></td><td>FAIL — under-dedispersed</td></tr>
+ </tbody></table>
+ <section class="card ok"><h2>MAHI <span class="badge" style="background:#1a7a1a">detection (M2: scattering-only)</span></h2><p class="meta">model M2 · τ₁GHz = 0.212 (+0.015/−0.014) ms · ζ = — (M2) ms · χ²ᵣ = 1.053 · residual σ = <b>1.03</b> (target 1.0) · R² = 0.045</p><img src="assets/mahi_fq.png" alt="mahi fit-quality figure" loading="lazy"></section>
+<section class="card ok"><h2>ORAN <span class="badge" style="background:#1a7a1a">detection</span></h2><p class="meta">model M3 · τ₁GHz = 0.540 (+0.063/−0.059) ms · ζ = 1.95 ms · χ²ᵣ = 1.058 · residual σ = <b>1.03</b> (target 1.0) · R² = 0.060</p><img src="assets/oran_fq.png" alt="oran fit-quality figure" loading="lazy"></section>
+<section class="card ok"><h2>JOHNDOEII <span class="badge" style="background:#1a7a1a">detection</span></h2><p class="meta">model M3 · τ₁GHz = 0.143 (+0.0055/−0.0048) ms · ζ = 0.12 ms · χ²ᵣ = 1.120 · residual σ = <b>1.06</b> (target 1.0) · R² = 0.188</p><img src="assets/johndoeII_fq.png" alt="johndoeII fit-quality figure" loading="lazy"></section>
+<section class="card ok"><h2>WHITNEY <span class="badge" style="background:#1a7a1a">detection (M2: scattering-only)</span></h2><p class="meta">model M2 · τ₁GHz = 0.117 (+0.0057/−0.0053) ms · ζ = — (M2) ms · χ²ᵣ = 1.164 · residual σ = <b>1.08</b> (target 1.0) · R² = 0.099</p><img src="assets/whitney_fq.png" alt="whitney fit-quality figure" loading="lazy"></section>
+<section class="card ok"><h2>PHINEAS <span class="badge" style="background:#1a7a1a">detection</span></h2><p class="meta">model M3 · τ₁GHz = 0.274 (+0.011/−0.011) ms · ζ = 1.26 ms · χ²ᵣ = 1.199 · residual σ = <b>1.10</b> (target 1.0) · R² = 0.323</p><img src="assets/phineas_fq.png" alt="phineas fit-quality figure" loading="lazy"></section>
+<section class="card ok"><h2>ISHA <span class="badge" style="background:#1a7a1a">detection</span></h2><p class="meta">model M3 · τ₁GHz = 0.290 (+0.016/−0.014) ms · ζ = 0.78 ms · χ²ᵣ = 1.216 · residual σ = <b>1.10</b> (target 1.0) · R² = 0.152</p><img src="assets/isha_fq.png" alt="isha fit-quality figure" loading="lazy"></section>
+<section class="card mg"><h2>WILHELM <span class="badge" style="background:#b8860b">marginal</span></h2><p class="meta">model M3 · τ₁GHz = 0.144 (+0.0055/−0.0054) ms · ζ = 0.17 ms · χ²ᵣ = 1.704 · residual σ = <b>1.31</b> (target 1.0) · R² = 0.281</p><img src="assets/wilhelm_fq.png" alt="wilhelm fit-quality figure" loading="lazy"></section>
+<section class="card mg"><h2>HAMILTON <span class="badge" style="background:#b8860b">marginal</span></h2><p class="meta">model M2 · τ₁GHz = 0.020 (+0.0002/−0.0002) ms · ζ = — (M2) ms · χ²ᵣ = 3.362 · residual σ = <b>1.83</b> (target 1.0) · R² = 0.338</p><img src="assets/hamilton_fq.png" alt="hamilton fit-quality figure" loading="lazy"></section>
+<section class="card bad"><h2>CHROMATICA <span class="badge" style="background:#b00020">poor fit</span></h2><p class="meta">model M3 · τ₁GHz = 0.114 (+0.0009/−0.0008) ms · ζ = 0.46 ms · χ²ᵣ = 5.113 · residual σ = <b>2.26</b> (target 1.0) · R² = 0.663</p><img src="assets/chromatica_fq.png" alt="chromatica fit-quality figure" loading="lazy"></section>
+<section class="card bad"><h2>FREYA <span class="badge" style="background:#b00020">FAIL — under-dedispersed</span></h2><p class="meta">model M2 · τ₁GHz = 0.150 (+0.0006/−0.0007) ms · ζ = — (M2) ms · χ²ᵣ = 9.560 · residual σ = <b>3.09</b> (target 1.0) · R² = 0.504</p><img src="assets/freya_fq.png" alt="freya fit-quality figure" loading="lazy"></section>
+<section class="card bad"><h2>ZACH <span class="badge" style="background:#b00020">FAIL — under-dedispersed</span></h2><p class="meta">model M3 · τ₁GHz = 0.262 (+0.0009/−0.0009) ms · ζ = 0.16 ms · χ²ᵣ = 22.000 · residual σ = <b>4.68</b> (target 1.0) · R² = 0.614</p><img src="assets/zach_fq.png" alt="zach fit-quality figure" loading="lazy"></section>
+ <section class="card mg"><h2>CASEY <span class="badge" style="background:#777">pending</span></h2><p class="meta">refit re-running orientation-corrected (M3 stalls at noise floor; M1 strongly preferred). Slide updates when it lands.</p></section>
+ <p class="note">Residual σ is the standard deviation of the per-channel, noise-normalized
+  residuals; a correct fit gives σ≈1 with a white (structureless) residual map. χ²/dof and
+  R² alone are ambiguous for faint bursts (low R² with χ²≈1). Generated by the FLITS
+  scattering pipeline (plot_fit_quality). Pre-publication; do not redistribute.</p>
+</main></body></html>
