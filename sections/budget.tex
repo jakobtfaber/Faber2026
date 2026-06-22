@@ -33,10 +33,11 @@ cosmological mean $\langle\mathrm{DM_{cosmic}}\rangle(z)$ follows the Macquart
 relation \citep{Macquart2020}. For the sightlines that cross a foreground
 galaxy we model the intervening circumgalactic column $\mathrm{DM_{int}}$ as a
 two-phase (hot modified-NFW plus clumpy cool) medium, taking the mNFW gas
-profile from \citet{ProchaskaZheng2019}; such intervening halos are known to
-contribute measurable dispersion and scattering to FRB sightlines
-\citep{Prochaska2019, Ocker2021}. The residual after the modeled terms are
-removed is attributed to the host.
+profile from \citet{ProchaskaZheng2019}. Such intervening halos can imprint
+measurable dispersion and, where the gas is turbulent, scattering on FRB
+sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
+yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
+The residual after the modeled terms are removed is attributed to the host.
 
 \subsection{Scattering Attribution}
 \label{sec:scattering}
@@ -63,11 +64,10 @@ time $t_0$, intrinsic width $\zeta$, and a residual dispersion
 $\delta\mathrm{DM}$). The $\sim$1\,GHz lever arm between the bands measures
 $\alpha$ directly: the ratio of the two scattering times pins the slope, while
 the shared normalization $\tau_{1\,\mathrm{GHz}}$ pins its value at 1\,GHz. With
-$\alpha$ held at the Kolmogorov value $4$ \citep{Rickett1990}, the two bands
-instead return
-$\tau_{1\,\mathrm{GHz}}$ estimates that disagree by up to an order of magnitude
-for the same sightline---direct evidence that $\alpha\neq4$ along these lines of
-sight.
+$\alpha$ held at the Kolmogorov value $4.4$ \citep{Rickett1990}, the two bands
+instead return $\tau_{1\,\mathrm{GHz}}$ estimates that disagree by up to an
+order of magnitude for the same sightline---evidence that $\alpha\neq4.4$ along
+these lines of sight.
 
 \subsubsection{Gain-marginalized likelihood}
 \label{sec:gainmarg}
@@ -78,9 +78,10 @@ structure in the fit residuals and invalidates a $\chi^2$ goodness-of-fit test.
 We therefore marginalize the per-channel gain analytically. With a Gaussian
 prior on the gain the per-channel evidence is available in closed form (a
 matched-filter likelihood), and the recovered gain absorbs both the burst
-spectrum and the scintillation pattern. This whitens the two-dimensional
-residual, so that the reduced $\chi^2$ and the lag-1 residual autocorrelation
-become meaningful quality gates, and it lowers the sampled dimensionality. We
+spectrum and the scintillation pattern. This removes the spectral and
+scintillation structure from the residual, so that the reduced $\chi^2$ and the
+lag-1 residual autocorrelation become meaningful quality gates, and it lowers
+the sampled dimensionality. We
 sample the posterior by nested sampling \citep{Skilling2004}, as implemented in
 \texttt{dynesty} \citep{Speagle2020}, and quality-gate each fit on its reduced
 $\chi^2$ and residual whiteness, treating $R^2$ and residual normality as
