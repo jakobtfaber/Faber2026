@@ -1,0 +1,58 @@
+name: Sync to Overleaf
+
+# Mirrors the manuscript to the Overleaf project on every push to main, so
+# GitHub stays the single source of truth and Overleaf updates hands-off.
+#
+# One-time setup (see README):
+#   1. Overleaf -> Account Settings -> Git integration -> generate a Git token.
+#   2. Add it as a repo secret:  gh secret set OVERLEAF_GIT_TOKEN -R jakobtfaber/Faber2026
+#   3. (Recommended) Unlink the project from Overleaf's GitHub Sync so the git
+#      bridge is the only writer.
+#
+# The pipeline/ submodule and build artifacts are excluded — Overleaf compiles
+# main.tex + sections/ at the project root and ignores the submodule anyway.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: overleaf-sync
+  cancel-in-progress: false
+
+jobs:
+  overleaf-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Mirror manuscript to Overleaf git bridge
+        env:
+          TOKEN: ${{ secrets.OVERLEAF_GIT_TOKEN }}
+          PROJECT_ID: 6a342d18e1d0da94aa746795
+        run: |
+          set -euo pipefail
+          if [ -z "${TOKEN}" ]; then
+            echo "OVERLEAF_GIT_TOKEN secret is not set — see .github/workflows/overleaf-sync.yml header." >&2
+            exit 1
+          fi
+          git clone --quiet "https://git:${TOKEN}@git.overleaf.com/${PROJECT_ID}" /tmp/overleaf
+          rsync -a --delete \
+            --exclude '.git/' \
+            --exclude 'pipeline/' \
+            --exclude '.github/' \
+            --exclude '*.pdf' --exclude '*.aux' --exclude '*.log' --exclude '*.bbl' \
+            --exclude '*.blg' --exclude '*.out' --exclude '*.toc' --exclude '*.synctex.gz' \
+            ./ /tmp/overleaf/
+          cd /tmp/overleaf
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Overleaf already up to date."
+            exit 0
+          fi
+          git -c user.name="GitHub Actions" -c user.email="actions@users.noreply.github.com" \
+            commit -m "Sync from GitHub @ ${GITHUB_SHA::7}"
+          git push origin HEAD:master
