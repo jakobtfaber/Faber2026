@@ -39,6 +39,31 @@ sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
 yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
 The residual after the modeled terms are removed is attributed to the host.
 
+\subsection{Intervening Foreground Galaxies and Clusters}
+\label{sec:foreground}
+
+The intervening term $\mathrm{DM_{int}}$ is sourced only where a sightline
+actually intersects foreground circumgalactic or intracluster gas, so we first
+establish which candidate systems along the twelve sightlines are genuinely in
+the foreground. Each candidate is cross-matched against the DESI Legacy Imaging
+Survey DR9 with \citet{Zhou2021} photometric redshifts, DESI DR1 spectroscopic
+redshifts, the NASA/IPAC Extragalactic Database (NED), and PS1-STRM
+\citep{Beck2021}---by coordinate match (morphology and redshift) and, for the
+PS1-classified halos, by direct \texttt{objID} lookup. We label a candidate
+\emph{confirmed} foreground when its best catalog redshift lies below the FRB
+host redshift, \emph{background} when at or above it, and \emph{inconclusive}
+when the redshift straddles the host within $1\sigma$, the host lacks a
+spectroscopic redshift, or no trustworthy redshift exists (a PS1-STRM
+\texttt{UNSURE} classification or extrapolated photo-$z$). Of the 49 candidates
+in Table~\ref{tab:foreground}, 29 are confirmed foreground, 7 are background,
+and 13 remain inconclusive; the photometric redshifts in the source compilation
+are superseded by the catalog values reported here. Only one of the 15 clusters
+has an impact parameter inside its own $R_{500}$, so for the rest the sightline
+does not pierce the intracluster medium and the cluster contributes negligibly
+to $\mathrm{DM_{int}}$.
+
+\input{foreground_table.tex}
+
 \subsection{Scattering Attribution}
 \label{sec:scattering}
 
