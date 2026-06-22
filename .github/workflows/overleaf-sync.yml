@@ -39,7 +39,13 @@ jobs:
             echo "OVERLEAF_GIT_TOKEN secret is not set — see .github/workflows/overleaf-sync.yml header." >&2
             exit 1
           fi
-          git clone --quiet "https://git:${TOKEN}@git.overleaf.com/${PROJECT_ID}" /tmp/overleaf
+          # Header auth (user 'git', token as password) instead of inline-URL
+          # credentials, which curl rejects ("malformed URL") for tokens
+          # containing URL-reserved characters.
+          AUTH=$(printf 'git:%s' "${TOKEN}" | base64 | tr -d '\n')
+          echo "::add-mask::${AUTH}"
+          git clone --quiet -c http.extraheader="Authorization: Basic ${AUTH}" \
+            "https://git.overleaf.com/${PROJECT_ID}" /tmp/overleaf
           rsync -a --delete \
             --exclude '.git/' \
             --exclude 'pipeline/' \
