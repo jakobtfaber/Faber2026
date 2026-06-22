@@ -16,5 +16,93 @@
 \subsection{Dispersion Measure Decomposition}
 \label{sec:dm}
 
+The observed dispersion measure of each co-detection separates into Galactic,
+cosmological, host, and (where the sightline intersects a foreground galaxy)
+intervening contributions \citep{CordesChatterjee2019},
+\begin{equation}
+\mathrm{DM_{obs}} = \mathrm{DM_{MW}} + \langle\mathrm{DM_{cosmic}}\rangle(z)
++ \mathrm{DM_{int}} + \mathrm{DM_{host}},
+\label{eq:dmbudget}
+\end{equation}
+with the Galactic term $\mathrm{DM_{MW}} = \mathrm{DM_{MW,ISM}} +
+\mathrm{DM_{MW,halo}}$ split between disk and halo. We estimate the disk
+contribution $\mathrm{DM_{MW,ISM}}$ from the NE2001 \citep{CordesLazio2002} and
+YMW16 \citep{YMW2017} electron-density models and adopt a
+$\sim$40\,pc\,cm$^{-3}$ Milky-Way halo prior \citep{YamasakiTotani2020}. The
+cosmological mean $\langle\mathrm{DM_{cosmic}}\rangle(z)$ follows the Macquart
+relation \citep{Macquart2020}. For the sightlines that cross a foreground
+galaxy we model the intervening circumgalactic column $\mathrm{DM_{int}}$ as a
+two-phase (hot modified-NFW plus clumpy cool) medium, taking the mNFW gas
+profile from \citet{ProchaskaZheng2019}; such intervening halos are known to
+contribute measurable dispersion and scattering to FRB sightlines
+\citep{Prochaska2019, Ocker2021}. The residual after the modeled terms are
+removed is attributed to the host.
+
 \subsection{Scattering Attribution}
 \label{sec:scattering}
+
+We measure the pulse-broadening time and its frequency scaling from the
+co-detected dynamic spectra and compare them against the scattering predicted
+by each candidate screen: the Milky-Way ISM, an intervening circumgalactic
+medium, or a host galaxy, where the host can dominate the scattering of a
+heavily broadened burst \citep{Ocker2022}. The fits are produced by the
+\texttt{dsa110-FLITS} pipeline (\texttt{pipeline/}).
+
+\subsubsection{The joint two-band fit}
+\label{sec:jointfit}
+
+A single-band scattering fit cannot separate the scattering index $\alpha$ from
+the scattering time, because the pulse broadening
+$\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$ enters a
+single band only through its value at that band's frequency: one band fixes the
+product, not the slope. Co-detection breaks this degeneracy. We fit the
+CHIME/FRB ($\sim$0.4--0.8\,GHz) and DSA-110 ($\sim$1.4\,GHz) dynamic spectra
+\emph{simultaneously} with a shared sightline pair
+$(\tau_{1\,\mathrm{GHz}},\alpha)$ and per-telescope pulse parameters (arrival
+time $t_0$, intrinsic width $\zeta$, and a residual dispersion
+$\delta\mathrm{DM}$). The $\sim$1\,GHz lever arm between the bands measures
+$\alpha$ directly: the ratio of the two scattering times pins the slope, while
+the shared normalization $\tau_{1\,\mathrm{GHz}}$ pins its value at 1\,GHz. With
+$\alpha$ held at the Kolmogorov value $4$ \citep{Rickett1990}, the two bands
+instead return
+$\tau_{1\,\mathrm{GHz}}$ estimates that disagree by up to an order of magnitude
+for the same sightline---direct evidence that $\alpha\neq4$ along these lines of
+sight.
+
+\subsubsection{Gain-marginalized likelihood}
+\label{sec:gainmarg}
+
+The per-channel amplitude of an FRB spectrum is unknown and strongly modulated
+by scintillation; carried as a free spectral envelope it leaves correlated
+structure in the fit residuals and invalidates a $\chi^2$ goodness-of-fit test.
+We therefore marginalize the per-channel gain analytically. With a Gaussian
+prior on the gain the per-channel evidence is available in closed form (a
+matched-filter likelihood), and the recovered gain absorbs both the burst
+spectrum and the scintillation pattern. This whitens the two-dimensional
+residual, so that the reduced $\chi^2$ and the lag-1 residual autocorrelation
+become meaningful quality gates, and it lowers the sampled dimensionality. We
+sample the posterior by nested sampling \citep{Skilling2004}, as implemented in
+\texttt{dynesty} \citep{Speagle2020}, and quality-gate each fit on its reduced
+$\chi^2$ and residual whiteness, treating $R^2$ and residual normality as
+informational.
+
+\subsubsection{Multiple temporal components}
+\label{sec:multicomp}
+
+Some bursts comprise more than one temporal sub-component, a common feature of
+the resolved FRB population \citep{Hessels2019, Pleunis2021}. An unmodeled
+second component is partially absorbed by a single scattered pulse---as a steeper slope
+and a larger scattering time---and so biases the inferred $\alpha$. We extend
+the likelihood to $N$ temporal components per band, each contributing its own
+$(t_0,\zeta)$ while $(\tau_{1\,\mathrm{GHz}},\alpha)$ remain shared across both
+bands and all components, and we select the number of components per band by
+Bayesian evidence. Because the evidence normalization differs between likelihood
+variants, the component counts are compared on a single matched grid in which
+even the one-component model is evaluated through the multi-component
+likelihood, so that evidence differences are meaningful. Component arrival times
+within a band are ordered and separated by a data-derived minimum spacing,
+keeping the fit identifiable at every prior sample. A clean single-component
+co-detection in our sample, for which the joint fit returns
+$\alpha=4.48\pm0.04$ with white residuals, validates the method; a
+multi-component case is presented in Section~\ref{sec:results-alpha}.
+% Validating clean case = burst internally labelled "freya" (swap to TNS name).
