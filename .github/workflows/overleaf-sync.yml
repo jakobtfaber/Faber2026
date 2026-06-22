@@ -61,4 +61,4 @@ jobs:
           fi
           git -c user.name="GitHub Actions" -c user.email="actions@users.noreply.github.com" \
             commit -m "Sync from GitHub @ ${GITHUB_SHA::7}"
-          git push origin HEAD:master
+          git push origin HEAD:main
