@@ -74,6 +74,54 @@ medium, or a host galaxy, where the host can dominate the scattering of a
 heavily broadened burst \citep{Ocker2022}. The fits are produced by the
 \texttt{dsa110-FLITS} pipeline (\texttt{pipeline/}).
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{wilhelm_scint_dnud_ne2025}
+  \caption{Scintillation decorrelation bandwidth $\Delta\nu_d$ versus frequency for
+  FRB~wilhelm. DSA-resolved $\Delta\nu_d\approx0.13$\,MHz (blue; nearly flat,
+  $x=-0.23\pm0.19$ over the 10\% DSA lever arm); CHIME upper limits (red) since the
+  diffractive scale is sub-channel at native resolution. Purple stars: the NE2025
+  Milky-Way scattering floor, $\sim8\times$ \emph{above} the measurement. Green
+  dash-dot: the pulse-broadening screen ($2\pi\tau\,\Delta\nu_d=C_1=1$), $\sim85\times$
+  \emph{below}. The three separated scales imply the dominant pulse-broadening screen
+  is neither the Galactic floor nor the resolved scintillation screen (a strong
+  host/intervening screen). NE2025 Galactic electron-density model from
+  \citet{Ocker2026}.}
+  \label{fig:scint_screens}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{codetection_scint_excess}
+  \caption{Is the wilhelm scattering excess sightline-specific or systematic?
+  Scattering excess (NE2025 Milky-Way-floor $\Delta\nu_d$ divided by the measured
+  DSA diffractive $\Delta\nu_d$; excess${=}1$ is the MW floor, dashed) versus
+  Galactic latitude $|b|$ for the 12 CHIME--DSA co-detections. Error bars combine
+  the measurement error with NE2025's floor uncertainty ($\sigma\approx0.4$\,dex,
+  $\sim\!\times2.5$); the annotated $z$ is the significance above the MW floor.
+  $\Delta\nu_d$ is the narrowest consistent cluster of well-constrained
+  Lorentzian/Gen-Lorentz widths across all stored per-subband scintillation fits
+  (rejecting fits railed at the $0.060$\,MHz bound). Filled circles: cleanly-resolved
+  diffractive scales significant at $z>2$ -- zach ($10.7\times$), wilhelm
+  ($8.0\times$), hamilton ($7.2\times$), all in the shaded band. Open circle: casey
+  ($9.6\times$, single-subband, low confidence). Light-blue: clean but $z<2$
+  (chromatica $5.9\times$, oran $2.6\times$). Orange up-triangles: lower limits
+  (single-component or rail-only fits). The grey band ($|b|<14^\circ$) marks
+  sightlines where NE2025 intersects voids and the floor is unreliable (johndoeii,
+  isha, mahi fall below unity there). The excess clusters at $\sim7$--$11\times$ on
+  $3$--$4$ independent mid-$|b|$ sightlines where the floor is reliable and the
+  diffractive scale resolvable (three high-confidence: zach, wilhelm, hamilton;
+  casey adds a fourth at high $|b|$ but is low-confidence), and never the reverse --
+  evidence for a common (host/intervening) scattering enhancement rather than a
+  wilhelm-only peculiarity. Per-sightline significance is $\sim\!2\sigma$, dominated
+  by NE2025's floor uncertainty; because that error is a shared systematic across
+  sightlines (not independent), the result rests on the \emph{asymmetry} -- the
+  measurement is always in excess where the floor is reliable, never below -- rather
+  than on a stacked significance. NE2025 Galactic electron-density model from
+  \citet{Ocker2026}.}
+  \label{fig:codetection_excess}
+\end{figure}
+
 \subsubsection{The joint two-band fit}
 \label{sec:jointfit}
 
@@ -93,6 +141,31 @@ $\alpha$ held at the Kolmogorov value $4.4$ \citep{Rickett1990}, the two bands
 instead return $\tau_{1\,\mathrm{GHz}}$ estimates that disagree by up to an
 order of magnitude for the same sightline---evidence that $\alpha\neq4.4$ along
 these lines of sight.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{pbf_shapes}
+  \caption{Pulse-broadening function (PBF) shapes used in the joint fit. A Gaussian
+  intrinsic pulse convolved with a thin-screen exponential PBF (green) versus
+  power-law-spectrum PBFs with density index $\beta=3.00$ and $\beta=11/3$
+  (Kolmogorov). Smaller $\beta$ yields a heavier $t^{-\beta/2}$ tail; $\beta\to4$
+  recovers the exponential \citep[\S11.2]{Cordes2025}.}
+  \label{fig:pbf_shapes}
+\end{figure}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=0.95\textwidth]{wilhelm_pbf_evidence}
+  \caption{Band-dependent PBF preference for FRB~wilhelm. \emph{Left:} change in
+  log-evidence relative to the exponential PBF versus power-law index $\beta$ (best
+  single-component, per band). CHIME (400--800\,MHz) mildly prefers a Kolmogorov
+  tail ($\Delta\ln Z=+6.2$ at $\beta=11/3$); DSA (1.2--1.5\,GHz) rejects
+  heavier-than-exponential tails monotonically. \emph{Right:} joint CHIME+DSA
+  evidence (C1D1). A \emph{per-band} PBF (CHIME power-law, DSA exponential) beats the
+  all-exponential model by $\Delta\ln Z=+4.0$ ($\sim6\sigma$), whereas a global
+  power-law loses $84$. The two bands require different PBFs.}
+  \label{fig:pbf_evidence}
+\end{figure*}
 
 \subsubsection{Gain-marginalized likelihood}
 \label{sec:gainmarg}
