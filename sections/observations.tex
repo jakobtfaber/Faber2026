@@ -1,9 +1,72 @@
 \section{Observations and Sample}
 \label{sec:obs}
 
-% TODO: the 12 CHIME/FRB–DSA-110 co-detected bursts; baseband morphologies;
-% DSA-110 1.4 GHz scattering measurements; foreground-galaxy search along each
-% sightline (impact parameters, photometric/spectroscopic redshifts, stellar
-% masses). Reference the dsa110-FLITS pipeline (pipeline/) for reproducibility.
+Our sample is the twelve fast radio bursts detected simultaneously by CHIME/FRB
+\citep{CHIMEFRB2018} at $0.4$--$0.8$\,GHz and by DSA-110 \citep{Law2024} at
+$\sim$1.4\,GHz between 2022 February and 2024 February (MJD $59617$--$60369$).
+The defining asset of the sample is that each burst is seen twice across a
+$\sim$1\,GHz frequency baseline, which---as developed in
+Section~\ref{sec:jointfit}---breaks the degeneracy between the scattering time
+and its spectral index that defeats any single-band fit. The bursts span a
+dispersion measure range of $262$--$960$\,pc\,cm$^{-3}$; their nicknames, TNS
+designations, epochs, widths, and time-of-arrival residuals are listed in
+Table~\ref{tab:toa}. We report all twelve, noting per sightline the level at
+which each quantity is constrained rather than imposing a single detection
+threshold.
+
+\subsection{Dynamic spectra and reduction}
+\label{sec:data}
+
+For each co-detection we analyze a pair of total-intensity dynamic spectra---one
+per facility---derived from the CHIME/FRB and DSA-110 baseband recordings
+(24 spectra in total; provenance and array geometry in
+\texttt{DATA\_SOURCES.md} of the companion \texttt{dsa110-FLITS} archive). Each
+spectrum is loaded with its frequency axis standardized to ascending order and
+its per-channel bandpass normalized, so the fitted amplitudes are free of the
+band-edge rolloff. All fits, quality gates, and figures in this paper are
+produced by the open \texttt{dsa110-FLITS} pipeline (\texttt{pipeline/}), which
+we reference throughout for reproducibility. We do not catalog the fine
+baseband morphology of each burst here; the only morphological distinction the
+analysis depends on---whether a burst resolves into more than one temporal
+component---is treated where it matters, in the multi-component fit of
+Section~\ref{sec:multicomp}.
+
+\subsection{DSA-110 scattering fits}
+\label{sec:obs-scatt}
+
+The joint CHIME--DSA fit yields a $1.4$\,GHz pulse-broadening time
+$\tau_{1\,\mathrm{GHz}}$ wherever a scattering tail is resolved, measured against
+the NE2001 Galactic prediction along the sightline. Only three sightlines
+(Wilhelm, Freya, Casey) currently have an attempted scattering fit, and all three
+fail the reduced-$\chi^2$ quality gate; their scattering times are therefore
+withheld, and no quality-passing measured $\tau$ is locked in for any sightline.
+The remaining nine sightlines have no scattering fit on record. The predicted
+intervening contribution along every sightline---the quantity we can compute
+without a measurement---is presented in Section~\ref{sec:budget} and
+Figure~\ref{fig:budget}; closing the measured-versus-predicted comparison awaits
+quality-passing fits, which we identify as the principal remaining measurement
+for the sample.
+
+\subsection{Foreground-galaxy search}
+\label{sec:obs-fg}
+
+To establish which sightlines could carry an intervening dispersion or
+scattering contribution, we searched each of the twelve fields for foreground
+galaxies and clusters, cross-matching candidates against the DESI Legacy Imaging
+Survey DR9 with \citet{Zhou2021} photometric redshifts, DESI DR1 spectroscopic
+redshifts, the NASA/IPAC Extragalactic Database, and PS1-STRM \citep{Beck2021}.
+The search returns 49 candidate systems---34 galaxy halos and 15 clusters---along
+nine of the twelve sightlines (three fields yield no candidate). For each
+candidate we record the proper impact parameter (12--280\,kpc for the halos;
+clusters by $b/R_{500}$) and the best available redshift and its provenance
+(spectroscopic or photometric); the full catalog is Table~\ref{tab:foreground}.
+Spectroscopic host redshifts are available for nine of the twelve bursts
+($z=0.043$--$0.51$), while three (Freya, Mahi, Johndoeii) carry only a
+placeholder redshift and are excluded from any distance-dependent quantity. We measure no host stellar masses; the only masses entering the
+analysis are the halo-mass proxies of the intervening systems used by the
+circumgalactic dispersion model (Section~\ref{sec:dm}), whose confidence we flag
+per system. The verdict logic that classifies each candidate as foreground,
+background, or inconclusive, and the resulting dispersion budget, follow in
+Section~\ref{sec:budget}.
 
 \input{sections/toa.tex}
