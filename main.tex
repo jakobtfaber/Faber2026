@@ -8,7 +8,19 @@
 
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{dblfloatfix}
 \graphicspath{{figures/}}
+
+% Relax float placement for the figure-heavy co-detection sections.
+\setcounter{topnumber}{5}
+\setcounter{bottomnumber}{5}
+\setcounter{totalnumber}{12}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\extrafloats{24}
 
 \begin{document}
 
@@ -30,7 +42,7 @@ $(\tau_{1\,\mathrm{GHz}},\alpha)$. We decompose each observed DM into Milky-Way
 (disk and halo), cosmological (Macquart), intervening circumgalactic, and host
 contributions, sourcing the intervening term from a foreground-galaxy search that
 returns 49 candidate systems along nine sightlines (29 confirmed foreground). An
-intervening column is significant only for the three sightlines that pierce a
+intervening column is significant only for the two sightlines that pierce a
 foreground galaxy's interior, where the host residual turns formally negative and
 thereby bounds the circumgalactic model. For the eight sightlines with a
 spectroscopic host redshift we measure band-restricted isotropic-equivalent
@@ -56,6 +68,9 @@ with the final per-sightline adjudication in progress.
 \input{sections/results.tex}
 \input{sections/discussion.tex}
 \input{sections/conclusions.tex}
+
+\appendix
+\input{sections/appendix.tex}
 
 \bibliographystyle{aasjournal}
 \bibliography{bib/refs}
