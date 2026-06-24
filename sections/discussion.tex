@@ -1,8 +1,58 @@
 \section{Discussion}
 \label{sec:discussion}
 
-% TODO: the coherent-picture cases — an intersecting foreground galaxy near the
-% sightline midpoint with evidence for cool CGM gas, coincident with a heavily
-% scattered burst, as an argument that an intervening galaxy is the scattering
-% screen. Contrast with host- or Milky-Way-dominated sightlines where the
-% predicted intervening tau falls far below the measurement.
+The per-sightline budget lets us ask, for each burst, whether its scattering can
+be assigned to a specific screen. The clearest evidence for an extragalactic
+screen is the diffractive-scintillation excess of Section~\ref{sec:scattering}:
+on the mid-latitude sightlines where the Galactic floor is reliable, the measured
+diffractive bandwidth lies $\sim$7--11$\times$ below the NE2025 prediction, and
+never above it, so the dominant scattering screen is not the Milky Way. For the
+prototype FRB~20221203A the three separated scintillation scales
+(Figure~\ref{fig:scint_screens})---a Galactic floor far above and a
+pulse-broadening screen far below the resolved diffractive scale---localize that
+screen to the host or an intervening medium rather than the Galaxy.
+
+Whether that screen is intervening or intrinsic to the host is, in principle,
+decided by the foreground census. The three sightlines that pierce a foreground
+galaxy's interior (FRB~20220310F, FRB~20230307A, FRB~20230814B) carry both the
+largest predicted intervening dispersion and the largest predicted intervening
+pulse-broadening (Figure~\ref{fig:budget}, right), and are the natural candidates
+for an intervening scattering screen. The high-amplitude scintillation-excess
+sightlines, however, are not in general the galaxy-interior ones, so the present
+evidence favors a host-dominated screen for the strongly scattered bursts, with
+an intervening screen remaining viable only where a confirmed foreground galaxy
+lies at small impact parameter. Discriminating the two requires the
+measured-versus-predicted $\tau$ comparison that Figure~\ref{fig:budget} sets up
+but cannot yet close until the per-sightline $\tau$ set is finalized into the
+overlay; this is the test we identify as the principal remaining measurement for
+the sample.
+
+\subsection{Burst multiplicity as a systematic on the scattering index}
+\label{sec:disc-alpha}
+
+The result of Section~\ref{sec:results-alpha} is a cautionary systematic for any
+single-component scattering index. A temporal sub-component omitted from the model
+is partially absorbed into the scattering tail and biases $\alpha$---classically
+high, as a steeper slope and a larger scattering time mimic the unmodeled flux,
+but the bias can instead rail the fit against a prior bound when the multiplicity
+is split across the two bands, as in FRB~20220310F where an unmodeled DSA-110
+sub-pulse drives $\alpha$ to its \emph{lower} bound. Because $\alpha$ distinguishes
+a Kolmogorov turbulent screen ($\alpha\simeq4.4$; \citealp{Rickett1990}) from a
+shallower spectrum, an unrecognized companion can masquerade as anomalous
+scattering---a regime in which measured pulse-broadening indices already scatter
+well below the Kolmogorov value \citep{Bhat2004}. We verified that a favored
+second component is not an artifact of the likelihood: its evidence gain is flat
+across the gain-prior scale (so it is not prior-driven), reconstructing the
+single-component residual reproduces the whiteness statistic that flagged the
+burst, and the companion sits well inside the resolvable separation.
+
+A second systematic is the assumed PBF. A band-dependent PBF
+shape---formally favored for some bursts but unphysical for a single
+sightline---can shift a marginal, poorly-constrained burst's $\alpha$ by several
+tenths, while leaving the well-constrained sightlines unchanged at the $\le0.1$
+level (Section~\ref{sec:jointfit}). Multiplicity and PBF must therefore both be
+controlled before a per-sightline $\alpha$ is interpreted; the indices reported
+here come from a uniform re-fit of the sample under a single physical (exponential)
+PBF, modeling temporal multiplicity per band. For the marginal sightlines---those
+whose posterior rails or reaches a prior bound under either choice---we quote no
+index, treating them as unconstrained rather than anomalous.

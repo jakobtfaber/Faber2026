@@ -1,8 +1,40 @@
 \section{Introduction}
 \label{sec:intro}
 
-% TODO: FRB DM as a sum of Galactic, host, and cosmic contributions; scattering
-% as a probe of turbulent ionized gas along the line of sight; the leverage of
-% wide-baseline co-detection (CHIME/FRB at 400–800 MHz, DSA-110 at 1.4 GHz) for
-% breaking the DM/scattering degeneracy; the question this paper answers — which
-% medium contributes which observed feature, per sightline.
+The dispersion measure (DM) of a fast radio burst (FRB) is an integral of free
+electrons along the line of sight, and as such a sum of contributions from
+physically distinct media: the Milky-Way interstellar medium and halo, the
+intergalactic medium whose mean grows with redshift through the Macquart
+relation \citep{Macquart2020}, the circumgalactic medium of any intervening
+galaxy the sightline pierces, and the FRB's host galaxy
+\citep{CordesChatterjee2019}. The cosmological term makes the FRB DM a baryon
+probe, but only once the foreground and host contributions are separated;
+conversely, an intervening galaxy's circumgalactic column is itself a probe of
+cool halo gas, accessible only where it can be isolated from the other terms.
+
+Scattering carries complementary information. Multipath propagation through
+turbulent ionized gas broadens the pulse by a time
+$\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$, whose
+spectral index $\alpha$ encodes the turbulent density spectrum and the
+scattering geometry: a Kolmogorov thin screen predicts $\alpha\simeq4.4$
+\citep{Rickett1990}, while measured pulse-broadening indices frequently fall
+below this value \citep{Bhat2004}. Because $\tau$ and $\alpha$ enter a single
+observing band only through the broadening at that band's frequency, a
+single-band measurement cannot separate them: the same data are reproduced by a
+large $\tau$ with a steep index or a small $\tau$ with a shallow one.
+
+Simultaneous detection across a wide frequency baseline breaks this degeneracy.
+The twelve FRBs studied here were each recorded by both CHIME/FRB at
+$0.4$--$0.8$\,GHz \citep{CHIMEFRB2018} and DSA-110 at $\sim$1.4\,GHz
+\citep{Law2024}, a $\sim$1\,GHz lever arm over which the ratio of the two
+scattering times fixes $\alpha$ directly. We use this leverage to ask, sightline
+by sightline, which medium contributes which observed feature---decomposing each
+burst's DM into its Galactic, cosmological, intervening, and host terms
+(Section~\ref{sec:budget}), attributing its scattering to a Galactic,
+intervening, or host screen (Section~\ref{sec:scattering}), and measuring the
+shared $(\tau_{1\,\mathrm{GHz}},\alpha)$ with a joint two-band fit
+(Section~\ref{sec:jointfit}). Section~\ref{sec:obs} describes the sample,
+Section~\ref{sec:results} presents the per-sightline budget and the
+isotropic-equivalent energies, and Sections~\ref{sec:discussion}--%
+\ref{sec:conclusions} discuss the cases where an intervening galaxy is the likely
+scattering screen and what co-detection adds.
