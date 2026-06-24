@@ -36,16 +36,21 @@ Section~\ref{sec:multicomp}.
 
 The joint CHIME--DSA fit yields a $1.4$\,GHz pulse-broadening time
 $\tau_{1\,\mathrm{GHz}}$ wherever a scattering tail is resolved, measured against
-the NE2001 Galactic prediction along the sightline. Only three sightlines
-(FRB 20221203A, FRB 20230325A, FRB 20240229A) currently have an attempted scattering fit, and all three
-fail the reduced-$\chi^2$ quality gate; their scattering times are therefore
-withheld, and no quality-passing measured $\tau$ is locked in for any sightline.
-The remaining nine sightlines have no scattering fit on record. The predicted
-intervening contribution along every sightline---the quantity we can compute
-without a measurement---is presented in Section~\ref{sec:budget} and
-Figure~\ref{fig:budget}; closing the measured-versus-predicted comparison awaits
-quality-passing fits, which we identify as the principal remaining measurement
-for the sample.
+the NE2001 Galactic prediction along the sightline. We fit the joint two-band
+model across the co-detected sample under a single physical (exponential)
+pulse-broadening function, modeling temporal multiplicity per band
+(Sections~\ref{sec:results-alpha}, \ref{sec:disc-alpha}). The well-constrained
+single-screen sightlines return a shared $(\tau_{1\,\mathrm{GHz}},\alpha)$ stable
+to $\le0.1$ in $\alpha$ against the pulse-broadening-function and multiplicity
+choices; the marginal sightlines---those whose posterior rails or reaches a prior
+bound---we treat as unconstrained and quote no index rather than report an
+artifact of the prior. The final per-sightline $\tau$/$\alpha$ adjudication under
+this uniform re-fit is still being locked; until it is, the predicted intervening
+contribution along every sightline---the quantity we can compute without a
+measurement---is presented in Section~\ref{sec:budget} and
+Figure~\ref{fig:budget}, and we treat completing the direct
+measured-versus-predicted comparison as the principal remaining step for the
+sample.
 
 \subsection{Foreground-galaxy search}
 \label{sec:obs-fg}
