@@ -161,6 +161,26 @@ instead return $\tau_{1\,\mathrm{GHz}}$ estimates that disagree by up to an
 order of magnitude for the same sightline---evidence that $\alpha\neq4.4$ along
 these lines of sight.
 
+The shape of the scattering tail---the pulse-broadening function (PBF)---is set
+by the geometry of the scattering medium: a single thin screen produces an
+exponential tail, while an extended or shallow-spectrum medium produces a heavier
+power-law tail (Figure~\ref{fig:pbf_shapes}; \citealp[\S11.2]{Cordes2025}). Fit
+band by band, individual bursts can appear to prefer different PBFs in the two
+bands---for FRB~20221203A a Kolmogorov power-law improves the CHIME evidence while
+DSA-110 rejects any tail heavier than exponential (Figure~\ref{fig:pbf_evidence}),
+and a per-band PBF formally beats a single exponential by $\Delta\ln Z\approx+4$.
+A single sightline, however, samples one scattering screen, whose PBF \emph{shape}
+is fixed by its geometry; only the timescale $\tau$ scales with frequency. A PBF
+that switches functional form between $0.6$ and $1.4$\,GHz is therefore
+unphysical, and the per-band preference is better read as the fit absorbing
+band-specific profile structure---an unmodeled sub-component or intrinsic
+asymmetry---into the tail shape. We accordingly adopt a single exponential PBF for
+both bands. Re-fitting the full sample under this physical choice moves the
+well-constrained scattering indices by $\le0.1$ relative to the per-band fits---so
+the simplification costs nothing for the clean sightlines---while two marginal
+bursts shift by $\ge0.6$ in $\alpha$, confirming that the PBF must be fixed on
+physical grounds before a per-sightline index is quoted.
+
 \begin{figure}
   \centering
   \includegraphics[width=0.95\columnwidth]{pbf_shapes}
@@ -182,7 +202,8 @@ these lines of sight.
   heavier-than-exponential tails monotonically. \emph{Right:} joint CHIME+DSA
   evidence (C1D1). A \emph{per-band} PBF (CHIME power-law, DSA exponential) beats the
   all-exponential model by $\Delta\ln Z=+4.0$ ($\sim6\sigma$), whereas a global
-  power-law loses $84$. The two bands require different PBFs.}
+  power-law loses $84$. Taken at face value this favors a per-band PBF; we argue
+  in the text that it is an unphysical artifact and adopt a single exponential PBF.}
   \label{fig:pbf_evidence}
 \end{figure*}
 
