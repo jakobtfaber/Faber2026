@@ -91,7 +91,7 @@ contribution alone; the per-sightline $\mathrm{DM_{int}}$ and $\tau_{\mathrm{int
 of Table~\ref{tab:budget} additionally sum the lesser foreground halos along the
 same sightline.
 
-\begin{figure*}
+\begin{figure*}[!t]
   \centering
   \includegraphics[width=0.98\textwidth]{grand_galaxies_cgm}
   \caption{The three dominant intervening galaxies. For each sightline the hot
@@ -129,7 +129,7 @@ cluster's contribution real it would only deepen the already-negative host resid
 on the FRB~20230307A sightline, which---taken together with the core-extrapolated
 galaxy interior---bounds rather than sources the observed dispersion there.
 
-\begin{figure*}
+\begin{figure*}[!t]
   \centering
   \includegraphics[width=0.98\textwidth]{grand_clusters_icm}
   \caption{The four innermost foreground clusters of the FRB~20230307A field. For
@@ -156,23 +156,6 @@ medium, or a host galaxy, where the host can dominate the scattering of a
 heavily broadened burst \citep{Ocker2022}. The fits are produced by the
 \texttt{dsa110-FLITS} pipeline (\texttt{pipeline/}).
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.95\columnwidth]{wilhelm_scint_dnud_ne2025}
-  \caption{Scintillation decorrelation bandwidth $\Delta\nu_d$ versus frequency for
-  FRB~20221203A. DSA-resolved $\Delta\nu_d\approx0.13$\,MHz (blue; nearly flat,
-  $x=-0.23\pm0.19$ over the 10\% DSA lever arm); CHIME upper limits (red) since the
-  diffractive scale is sub-channel at native resolution. Purple stars: the NE2025
-  Milky-Way scattering floor, $\sim8\times$ \emph{above} the measurement. Green
-  dash-dot: the pulse-broadening screen ($2\pi\tau\,\Delta\nu_d=C_1=1$), $\sim85\times$
-  \emph{below}. The three separated scales imply the dominant pulse-broadening screen
-  is neither the Galactic floor nor the resolved scintillation screen (a strong
-  host/intervening screen). NE2025 Galactic electron-density model from
-  \citet{Ocker2026}.}
-  \label{fig:scint_screens}
-\end{figure}
-
-
 Figure~\ref{fig:scint_screens} shows the three separated scattering scales for the
 prototype sightline FRB~20221203A. Extending the Milky-Way-floor comparison to all
 twelve co-detections, the diffractive-scintillation excess relative to the modeled
@@ -191,6 +174,22 @@ systematic shared across sightlines---and therefore does not average down as $\s
 regard only the high-amplitude sightlines ($\sim\!7$--$11\times$) as robust evidence for an
 extragalactic scattering screen, with the lowest-amplitude cases ($\sim\!2.6$--$3\times$)
 remaining consistent with the floor uncertainty.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.95\columnwidth]{wilhelm_scint_dnud_ne2025}
+  \caption{Scintillation decorrelation bandwidth $\Delta\nu_d$ versus frequency for
+  FRB~20221203A. DSA-resolved $\Delta\nu_d\approx0.13$\,MHz (blue; nearly flat,
+  $x=-0.23\pm0.19$ over the 10\% DSA lever arm); CHIME upper limits (red) since the
+  diffractive scale is sub-channel at native resolution. Purple stars: the NE2025
+  Milky-Way scattering floor, $\sim8\times$ \emph{above} the measurement. Green
+  dash-dot: the pulse-broadening screen ($2\pi\tau\,\Delta\nu_d=C_1=1$), $\sim85\times$
+  \emph{below}. The three separated scales imply the dominant pulse-broadening screen
+  is neither the Galactic floor nor the resolved scintillation screen (a strong
+  host/intervening screen). NE2025 Galactic electron-density model from
+  \citet{Ocker2026}.}
+  \label{fig:scint_screens}
+\end{figure}
 
 \subsubsection{The joint two-band fit}
 \label{sec:jointfit}
@@ -234,7 +233,7 @@ grounds before a per-sightline index is quoted.
 
 
 
-\begin{figure}
+\begin{figure}[!htbp]
   \centering
   \includegraphics[width=\columnwidth]{alpha_pbf_systematic}
   \caption{Effect of the PBF choice on the per-sightline scattering index. For
@@ -252,27 +251,26 @@ A complementary, model-free check that the recovered index is not corrupted by
 unmodelled multiplicity is to resolve each burst's profile \emph{within} the CHIME
 band. Splitting the band into four $80\,\mathrm{MHz}$ sub-bands and tracking the
 on-pulse width with frequency separates genuine scattering, whose width grows as
-$\nu^{-\alpha}$, from frequency-independent intrinsic sub-structure, which does not
-(Figure~\ref{fig:chime_subband_compare}); a burst whose sub-band widths fail to
-scale is a candidate for hidden sub-components and is flagged before a single-screen
-index is quoted.
+$\nu^{-\alpha}$, from frequency-independent intrinsic sub-structure, which does not;
+a burst whose sub-band widths fail to scale is a candidate for hidden sub-components
+and is flagged before a single-screen index is quoted.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.95\columnwidth]{chime_subband_compare}
-  \caption{Within-CHIME sub-band profiles for the co-detected bursts
-  FRB~20230814B and FRB~20221203A, each split into four $80\,\mathrm{MHz}$ sub-bands across
-  $0.40$--$0.80\,\mathrm{GHz}$. Each panel shows the baseline-subtracted on-pulse
-  profile against time, annotated with the model-free rms width $w_{\mathrm{rms}}$
-  and the trailing-edge $e$-folding time $w_{\mathrm{tail}}$. A purely scattering
-  origin predicts both widths increasing toward lower frequency as $\nu^{-\alpha}$,
-  whereas frequency-independent intrinsic sub-structure does not; the empty
-  $0.40$--$0.48\,\mathrm{GHz}$ sub-band for FRB~20221203A is a data gap, not a
-  non-detection. This profile-shape evolution is the diagnostic used to flag
-  unmodelled temporal sub-components before a scattering index is quoted. Generated
-  by the \texttt{dsa110-FLITS} pipeline.}
-  \label{fig:chime_subband_compare}
-\end{figure}
+% \begin{figure}[!htbp]
+%   \centering
+%   \includegraphics[width=0.95\columnwidth]{chime_subband_compare}
+%   \caption{Within-CHIME sub-band profiles for the co-detected bursts
+%   FRB~20230814B and FRB~20221203A, each split into four $80\,\mathrm{MHz}$ sub-bands across
+%   $0.40$--$0.80\,\mathrm{GHz}$. Each panel shows the baseline-subtracted on-pulse
+%   profile against time, annotated with the model-free rms width $w_{\mathrm{rms}}$
+%   and the trailing-edge $e$-folding time $w_{\mathrm{tail}}$. A purely scattering
+%   origin predicts both widths increasing toward lower frequency as $\nu^{-\alpha}$,
+%   whereas frequency-independent intrinsic sub-structure does not; the empty
+%   $0.40$--$0.48\,\mathrm{GHz}$ sub-band for FRB~20221203A is a data gap, not a
+%   non-detection. This profile-shape evolution is the diagnostic used to flag
+%   unmodelled temporal sub-components before a scattering index is quoted. Generated
+%   by the \texttt{dsa110-FLITS} pipeline.}
+%   \label{fig:chime_subband_compare}
+% \end{figure}
 
 A stronger, quantitative version of this check fits the scattering time directly
 in each sub-band. We split each band into sub-bands (four across CHIME, three
@@ -300,7 +298,8 @@ $\alpha$ on their own---there the joint fit's cross-band lever does work that no
 single band can. We therefore use the sub-band reconstruction as a corroborating
 cross-check on the well-constrained indices, not as a primary estimator.
 
-\begin{figure*}
+\FloatBarrier
+\begin{figure*}[!t]
   \centering
   \includegraphics[width=0.98\textwidth]{subband_tau_validation_grid}
   \caption{Independent sub-band validation of the joint scattering index. For each
