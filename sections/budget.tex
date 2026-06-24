@@ -177,9 +177,10 @@ band-specific profile structure---an unmodeled sub-component or intrinsic
 asymmetry---into the tail shape. We accordingly adopt a single exponential PBF for
 both bands. Re-fitting the full sample under this physical choice moves the
 well-constrained scattering indices by $\le0.1$ relative to the per-band fits---so
-the simplification costs nothing for the clean sightlines---while two marginal
-bursts shift by $\ge0.6$ in $\alpha$, confirming that the PBF must be fixed on
-physical grounds before a per-sightline index is quoted.
+the simplification costs nothing for the clean sightlines---while a marginal,
+poorly-constrained sightline shifts by ${\approx}0.6$ in $\alpha$
+(Figure~\ref{fig:alpha_pbf}), confirming that the PBF must be fixed on physical
+grounds before a per-sightline index is quoted.
 
 \begin{figure}
   \centering
@@ -206,6 +207,20 @@ physical grounds before a per-sightline index is quoted.
   in the text that it is an unphysical artifact and adopt a single exponential PBF.}
   \label{fig:pbf_evidence}
 \end{figure*}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{alpha_pbf_systematic}
+  \caption{Effect of the PBF choice on the per-sightline scattering index. For
+  each burst the open marker is $\alpha$ under the (unphysical) per-band PBF and
+  the filled marker, with $1\sigma$ posterior, is $\alpha$ under the adopted
+  single-exponential PBF. The well-constrained single-screen sightlines (green)
+  are insensitive to the choice ($|\Delta\alpha|\le0.1$); only a marginal,
+  poorly-constrained sightline (orange) moves appreciably (${\approx}0.6$), and
+  two sightlines are pinned at the $\alpha=1.5$ prior floor under either PBF
+  (grey). The dashed line marks the Kolmogorov value $\alpha=4.4$.}
+  \label{fig:alpha_pbf}
+\end{figure}
 
 \subsubsection{Gain-marginalized likelihood}
 \label{sec:gainmarg}
