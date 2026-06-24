@@ -222,6 +222,32 @@ grounds before a per-sightline index is quoted.
   \label{fig:alpha_pbf}
 \end{figure}
 
+A complementary, model-free check that the recovered index is not corrupted by
+unmodelled multiplicity is to resolve each burst's profile \emph{within} the CHIME
+band. Splitting the band into four $80\,\mathrm{MHz}$ sub-bands and tracking the
+on-pulse width with frequency separates genuine scattering, whose width grows as
+$\nu^{-\alpha}$, from frequency-independent intrinsic sub-structure, which does not
+(Figure~\ref{fig:chime_subband_compare}); a burst whose sub-band widths fail to
+scale is a candidate for hidden sub-components and is flagged before a single-screen
+index is quoted.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{chime_subband_compare}
+  \caption{Within-CHIME sub-band profiles for the co-detected FRBs johndoeII and
+  wilhelm, each split into four $80\,\mathrm{MHz}$ sub-bands across
+  $0.40$--$0.80\,\mathrm{GHz}$. Each panel shows the baseline-subtracted on-pulse
+  profile against time, annotated with the model-free rms width $w_{\mathrm{rms}}$
+  and the trailing-edge $e$-folding time $w_{\mathrm{tail}}$. A purely scattering
+  origin predicts both widths increasing toward lower frequency as $\nu^{-\alpha}$,
+  whereas frequency-independent intrinsic sub-structure does not; the empty
+  $0.40$--$0.48\,\mathrm{GHz}$ sub-band for wilhelm is a data gap, not a
+  non-detection. This profile-shape evolution is the diagnostic used to flag
+  unmodelled temporal sub-components before a scattering index is quoted. Generated
+  by the \texttt{dsa110-FLITS} pipeline.}
+  \label{fig:chime_subband_compare}
+\end{figure}
+
 \subsubsection{Gain-marginalized likelihood}
 \label{sec:gainmarg}
 
