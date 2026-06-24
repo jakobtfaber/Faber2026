@@ -19,29 +19,30 @@ is predicted-only (Figure~\ref{fig:budget}). DM in $\mathrm{pc\,cm^{-3}}$.
 \colhead{$\mathrm{DM_{int}}$} & \colhead{regime} & \colhead{mass} &
 \colhead{$\mathrm{DM_{host}}$} & \colhead{$\tau_{\mathrm{int}}$ [ms]}}
 \startdata
-FRB 20220207C       & $0.043$ & 262 & 116 & 36  & 143          & CGM      & measured & $-33$  & $0.006$ \\
-FRB 20220310F    & $0.479$ & 462 & 86  & 427 & 200\tablenotemark{c} & interior & assumed  & $-251$ & $0.27$ \\
+FRB 20220207C       & $0.043$ & 262 & 116 & 36  & 0            & none     & \nodata  & $110$  & $0$ \\
+FRB 20220310F    & $0.479$ & 462 & 86  & 427 & 200\tablenotemark{c} & interior & assumed  & $-251$ & $0.54$ \\
 FRB 20220506D       & $0.300$ & 397 & 125 & 262 & 0            & none     & \nodata  & $10$   & $0$ \\
-FRB 20221113A       & $0.251$ & 411 & 132 & 217 & 23           & CGM      & assumed  & $40$   & $0.0015$ \\
-FRB 20221203A    & $0.510$ & 602 & 123 & 456 & 103          & CGM      & assumed  & $-80$  & $0.008$ \\
-FRB 20230307A    & $0.271$ & 610 & 78  & 235 & 368\tablenotemark{c} & interior & measured & $-70$  & $1.4$ \\
-FRB 20230325A      & \nodata\tablenotemark{p} & 912 & 108 & \nodata & 5 & CGM & assumed & \nodata & $3.5\times10^{-5}$ \\
-FRB 20230913A   & $0.302$ & 518 & 115 & 264 & 58           & CGM      & assumed  & $82$   & $0.022$ \\
+FRB 20221113A       & $0.251$ & 411 & 132 & 217 & 113          & CGM      & measured & $-50$  & $0.16$ \\
+FRB 20221203A    & $0.510$ & 602 & 123 & 456 & 0            & none     & \nodata  & $23$   & $0$ \\
+FRB 20230307A    & $0.271$ & 610 & 78  & 235 & 471\tablenotemark{c} & interior & measured & $-174$ & $1.9$ \\
+FRB 20230325A      & \nodata\tablenotemark{p} & 912 & 108 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
+FRB 20230913A   & $0.302$ & 518 & 115 & 264 & 0            & none     & \nodata  & $140$  & $0$ \\
 FRB 20240122A       & \nodata\tablenotemark{p} & 960 & 171 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
 FRB 20240203A & $0.074$ & 272 & 116 & 62  & 0            & none     & \nodata  & $94$   & $0$ \\
-FRB 20240229A      & $0.287$ & 491 & 78  & 250 & 0            & none     & \nodata  & $163$  & $0$ \\
-FRB 20230814B  & \nodata\tablenotemark{p} & 696 & 145 & \nodata & 213\tablenotemark{c} & interior & assumed & \nodata & $0.23$ \\
+FRB 20240229A      & $0.287$ & 491 & 78  & 250 & 0            & CGM      & measured & $163$  & $0$ \\
+FRB 20230814B  & \nodata\tablenotemark{p} & 696 & 145 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
 \enddata
 \tablenotetext{p}{Host redshift unknown (placeholder); the cosmological and host
 terms cannot be computed, so this sightline is excluded from any distance-dependent
 quantity.}
 \tablenotetext{c}{Sightline in the galaxy-interior regime ($b<0.1\,R_{\mathrm{vir}}$);
 $\mathrm{DM_{int}}$ is capped at the $b=0.1\,R_{\mathrm{vir}}$ value. The
-uncapped core-extrapolated columns are $364$ (FRB 20220310F), $712$ (FRB 20230307A), and $390$
-(FRB 20230814B)\,$\mathrm{pc\,cm^{-3}}$.}
-\tablecomments{A negative $\mathrm{DM_{host}}$ (FRB 20220207C, FRB 20220310F, FRB 20221203A, FRB 20230307A)
+uncapped core-extrapolated columns are $364$ (FRB 20220310F) and $733$
+(FRB 20230307A)\,$\mathrm{pc\,cm^{-3}}$.}
+\tablecomments{A negative $\mathrm{DM_{host}}$ (FRB 20220310F, FRB 20221113A, FRB 20230307A)
 means the modeled Galactic, cosmological, and intervening terms over-predict
-$\mathrm{DM_{obs}}$; this occurs for the galaxy-interior sightlines where the
-capped circumgalactic column is most uncertain, and the prior-predictive
-sensitivity analysis quantifies $P(\mathrm{DM_{host}}<0)$ per sightline.}
+$\mathrm{DM_{obs}}$; this occurs on the sightlines carrying a modeled intervening
+circumgalactic column, where that capped column is most uncertain, and the
+prior-predictive sensitivity analysis quantifies $P(\mathrm{DM_{host}}<0)$ per
+sightline.}
 \end{deluxetable*}
