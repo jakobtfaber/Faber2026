@@ -1,0 +1,194 @@
+\subsection{Time-of-Arrival Crossmatching}
+\label{sec:toa}
+
+Before attributing the dispersion and scattering budgets we verify that the
+twelve events are genuine co-detections---the same burst seen by both
+facilities, with arrival times consistent under the cold-plasma dispersion law
+and the geometric light-travel delay between the sites. The wide baseline
+between CHIME/FRB (400--800\,MHz) and DSA-110 ($\sim$1.4\,GHz) makes the
+co-detections a test of the $1/\nu^2$ dispersion scaling and of the relative
+timing alignment of the two facilities \citep{Lorimer2007, Thornton2013}.
+
+\subsubsection{Delay model}
+
+We translate the arrival times at the two central frequencies to a common
+reference frequency $\nu_{\mathrm{ref}}=400$\,MHz. The cold-plasma dispersion
+delay is
+\begin{equation}
+\Delta t_p = K_{\mathrm{DM}}\,\mathrm{DM}
+\left(\frac{1}{\nu_{\mathrm{ref}}^2}-\frac{1}{\nu_{\mathrm{obs}}^2}\right),
+\label{eq:dmdelay}
+\end{equation}
+with $K_{\mathrm{DM}} = 4.148808\times10^{3}\,\mathrm{MHz^2\,pc^{-1}\,cm^3\,s}$.
+The geometric light-travel difference between the observatories is
+\begin{equation}
+\tau_{\mathrm{geo}} = \frac{(\mathbf{p}_2-\mathbf{p}_1)\cdot\hat{\mathbf{s}}}{c},
+\label{eq:geodelay}
+\end{equation}
+where $\mathbf{p}_1$ and $\mathbf{p}_2$ are the GCRS position vectors of CHIME
+and DSA-110 and $\hat{\mathbf{s}}$ is the unit vector toward the source. The
+timing residual $\mathcal{R}=\Delta\tau_{\mathrm{obs}}-\tau_{\mathrm{geo}}$ is
+the difference between the frequency-corrected inter-site offset and the
+predicted geometric delay; a residual of zero indicates perfect agreement.
+
+\subsubsection{Residuals and systematics}
+
+Across the sample the residuals (Figure~\ref{fig:toa_resid}) have a mean of
+$2.42$\,ms, a standard deviation of $3.06$\,ms, and a median of $1.88$\,ms,
+consistent with the combined timing uncertainties of the two instruments, which
+are dominated by coarse time resolution and pulse-width variation. A systematic
+search for correlations between the residuals and burst properties
+(Figure~\ref{fig:toa_sys}) finds none that reach significance: the residual is
+uncorrelated with DM ($r=0.14$, $p=0.67$) over the observed range
+$262$--$959$\,pc\,cm$^{-3}$, confirming the adopted $1/\nu^2$ scaling and the
+value of $K_{\mathrm{DM}}$; the correlations with FWHM ($r=0.48$, $p=0.11$) and
+combined measurement uncertainty ($r=0.49$, $p=0.11$) are moderate but not
+significant, as expected since wider bursts time less precisely; and a
+suggestive anti-correlation with epoch ($r=-0.54$, $p=0.07$) warrants monitoring
+for long-term clock or baseline drift as the sample grows. The per-burst
+properties and residuals are listed in Table~\ref{tab:toa}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{toa_crossmatch_analysis_premium}
+\caption{Time-of-arrival residuals for the twelve co-detections. Left: residual
+(measured $-$ geometric) per burst, colored by DM, with the median $1\sigma$
+timing uncertainty ($\pm2.5$\,ms) shaded. Right: residual versus DM with a
+linear fit ($r=0.14$).}
+\label{fig:toa_resid}
+\end{figure}
+
+\begin{figure*}
+\centering
+\includegraphics[width=0.85\textwidth]{systematics_check_matrix}
+\caption{Systematic correlation search. Residuals versus DM, FWHM, combined
+measurement uncertainty, and epoch (MJD), with Pearson $r$ and trend lines. No
+correlation reaches significance ($p<0.05$).}
+\label{fig:toa_sys}
+\end{figure*}
+
+\begin{deluxetable*}{lrrrrrl}
+\tablecaption{Co-detected bursts: association diagnostics.
+\label{tab:toa}}
+\tablehead{\colhead{Burst} & \colhead{DM} & \colhead{MJD} &
+\colhead{Residual} & \colhead{Separation} & \colhead{$P_{\rm cc}$} &
+\colhead{DM status} \\
+\colhead{} & \colhead{(pc\,cm$^{-3}$)} & \colhead{} &
+\colhead{(ms)} & \colhead{(arcmin)} & \colhead{} & \colhead{}}
+\startdata
+FRB 20220207C & 262.37 & 59617.809 & 1.53 & 0.97 & $6.26\times10^{-9}$ & Constrained \\
+FRB 20220310F & 462.17 & 59648.242 & 2.24 & 0.70 & $5.40\times10^{-9}$ & Unconstrained \\
+FRB 20220506D & 396.88 & 59705.597 & 8.41 & 1.83 & $5.99\times10^{-9}$ & Unconstrained \\
+FRB 20221113A & 411.57 & 59896.387 & 0.58 & 0.90 & $5.87\times10^{-9}$ & Constrained \\
+FRB 20221203A & 602.35 & 59916.002 & 6.82 & 0.45 & $4.02\times10^{-9}$ & Constrained \\
+FRB 20230307A & 610.27 & 60010.379 & 3.45 & 0.36 & $3.95\times10^{-9}$ & Constrained \\
+FRB 20230325A & 912.40 & 60028.072 & 3.95 & 1.09 & $1.90\times10^{-9}$ & Constrained \\
+FRB 20230814B & 696.51 & 60170.361 & 4.55 & 1.02 & $3.22\times10^{-9}$ & Unconstrained \\
+FRB 20230913A & 518.80 & 60200.207 & 1.23 & 0.80 & $4.83\times10^{-9}$ & Constrained \\
+FRB 20240122A & 960.13 & 60331.104 & -0.76 & 2.26 & $1.69\times10^{-9}$ & Unconstrained \\
+FRB 20240203A & 272.66 & 60343.832 & -2.69 & 0.84 & $6.33\times10^{-9}$ & Constrained \\
+FRB 20240229A & 491.21 & 60369.371 & -0.32 & 0.62 & $5.11\times10^{-9}$ & Constrained \\
+\enddata
+\tablecomments{$P_{\rm cc}$ is the conservative per-burst chance-coincidence
+probability for the temporal, positional, and DM window. DM status indicates
+whether the independent CHIME-side DM estimate constrains the comparison.}
+\end{deluxetable*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_zach}
+\caption{Per-burst association card for FRB 20220207C. Left: timing residual
+at the 400\,MHz reference frequency with the combined timing budget shaded and
+the independent DM comparison inset where constrained. Right: position
+agreement, with the CHIME localization region, DSA position, and larger-scale
+beam-footprint inset.}
+\label{fig:assoc_zach}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_whitney}
+\caption{Per-burst association card for FRB 20220310F. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_whitney}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_oran}
+\caption{Per-burst association card for FRB 20220506D. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_oran}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_isha}
+\caption{Per-burst association card for FRB 20221113A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_isha}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_wilhelm}
+\caption{Per-burst association card for FRB 20221203A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_wilhelm}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_phineas}
+\caption{Per-burst association card for FRB 20230307A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_phineas}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_freya}
+\caption{Per-burst association card for FRB 20230325A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_freya}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_johndoeii}
+\caption{Per-burst association card for FRB 20230814B. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_johndoeii}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_hamilton}
+\caption{Per-burst association card for FRB 20230913A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_hamilton}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_mahi}
+\caption{Per-burst association card for FRB 20240122A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_mahi}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_chromatica}
+\caption{Per-burst association card for FRB 20240203A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_chromatica}
+\end{figure*}
+
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{association_cards/association_card_casey}
+\caption{Per-burst association card for FRB 20240229A. Symbols and panels are
+as in Figure~\ref{fig:assoc_zach}.}
+\label{fig:assoc_casey}
+\end{figure*}

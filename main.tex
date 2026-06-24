@@ -19,10 +19,31 @@ CHIME/FRB--DSA-110 Co-detected Fast Radio Bursts}
 \input{auth.tex}
 
 \begin{abstract}
-% TODO: 12 CHIME/FRB–DSA-110 co-detected sightlines; per-sightline attribution
-% of observed DM and scattering to Milky-Way ISM/halo, intervening foreground
-% CGM, the cosmic IGM (Macquart), and the host; coherent-picture cases where an
-% intervening galaxy is the likely scattering screen.
+We present a joint dispersion- and scattering-budget analysis of the twelve fast
+radio bursts (FRBs) co-detected by CHIME/FRB ($0.4$--$0.8$\,GHz) and DSA-110
+($\sim$1.4\,GHz) between 2022 February and 2024 February, spanning
+$\mathrm{DM_{obs}}=262$--$960\,\mathrm{pc\,cm^{-3}}$. The $\sim$1\,GHz baseline
+between the two detections breaks the degeneracy between the scattering time and
+its spectral index that defeats any single-band fit, which we exploit with a
+simultaneous two-band fit for a shared sightline pair
+$(\tau_{1\,\mathrm{GHz}},\alpha)$. We decompose each observed DM into Milky-Way
+(disk and halo), cosmological (Macquart), intervening circumgalactic, and host
+contributions, sourcing the intervening term from a foreground-galaxy search that
+returns 49 candidate systems along nine sightlines (29 confirmed foreground). An
+intervening column is significant only for the three sightlines that pierce a
+foreground galaxy's interior, where the host residual turns formally negative and
+thereby bounds the circumgalactic model. For the eight sightlines with a
+spectroscopic host redshift we measure band-restricted isotropic-equivalent
+energies of $5\times10^{38}$--$1\times10^{41}\,\mathrm{erg}$. A
+diffractive-scintillation excess of $\sim$7--11$\times$ the NE2025 Galactic floor
+on the mid-latitude sightlines, robust across scattering-calibrated
+electron-density models, indicates an extragalactic (host or intervening)
+scattering screen rather than a Milky-Way origin. Finally, we show that unmodeled
+temporal sub-components can bias the single-component scattering index by several
+units, and an unphysical band-dependent pulse-broadening function by several
+tenths; re-fitting the sample under a single physical pulse-broadening function
+with per-band multiplicity, the well-constrained sightlines yield stable indices,
+with the final per-sightline adjudication in progress.
 \end{abstract}
 
 \keywords{Radio transient sources (2008) --- Interstellar scattering (854)
@@ -30,6 +51,7 @@ CHIME/FRB--DSA-110 Co-detected Fast Radio Bursts}
 
 \input{sections/intro.tex}
 \input{sections/observations.tex}
+\input{sections/toa.tex}
 \input{sections/budget.tex}
 \input{sections/results.tex}
 \input{sections/discussion.tex}

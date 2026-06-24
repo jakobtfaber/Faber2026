@@ -16,5 +16,319 @@
 \subsection{Dispersion Measure Decomposition}
 \label{sec:dm}
 
+The observed dispersion measure of each co-detection separates into Galactic,
+cosmological, host, and (where the sightline intersects a foreground galaxy)
+intervening contributions \citep{CordesChatterjee2019},
+\begin{equation}
+\mathrm{DM_{obs}} = \mathrm{DM_{MW}} + \langle\mathrm{DM_{cosmic}}\rangle(z)
++ \mathrm{DM_{int}} + \mathrm{DM_{host}},
+\label{eq:dmbudget}
+\end{equation}
+with the Galactic term $\mathrm{DM_{MW}} = \mathrm{DM_{MW,ISM}} +
+\mathrm{DM_{MW,halo}}$ split between disk and halo. We estimate the disk
+contribution $\mathrm{DM_{MW,ISM}}$ from the NE2001 \citep{CordesLazio2002} and
+YMW16 \citep{YMW2017} electron-density models and adopt a
+$\sim$40\,pc\,cm$^{-3}$ Milky-Way halo prior \citep{YamasakiTotani2020}. The
+cosmological mean $\langle\mathrm{DM_{cosmic}}\rangle(z)$ follows the Macquart
+relation \citep{Macquart2020}. For the sightlines that cross a foreground
+galaxy we model the intervening circumgalactic column $\mathrm{DM_{int}}$ as a
+two-phase (hot modified-NFW plus clumpy cool) medium, taking the mNFW gas
+profile from \citet{ProchaskaZheng2019}. Such intervening halos can imprint
+measurable dispersion and, where the gas is turbulent, scattering on FRB
+sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
+yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
+The residual after the modeled terms are removed is attributed to the host.
+
+\subsection{Intervening Foreground Galaxies and Clusters}
+\label{sec:foreground}
+
+The intervening term $\mathrm{DM_{int}}$ is sourced only where a sightline
+actually intersects foreground circumgalactic or intracluster gas, so we first
+establish which candidate systems along the twelve sightlines are genuinely in
+the foreground. Each candidate is cross-matched against the DESI Legacy Imaging
+Survey DR9 with \citet{Zhou2021} photometric redshifts, DESI DR1 spectroscopic
+redshifts, the NASA/IPAC Extragalactic Database (NED), and PS1-STRM
+\citep{Beck2021}---by coordinate match (morphology and redshift) and, for the
+PS1-classified halos, by direct \texttt{objID} lookup. We label a candidate
+\emph{confirmed} foreground when its best catalog redshift lies below the FRB
+host redshift, \emph{background} when at or above it, and \emph{inconclusive}
+when the redshift straddles the host within $1\sigma$, the host lacks a
+spectroscopic redshift, or no trustworthy redshift exists (a PS1-STRM
+\texttt{UNSURE} classification or extrapolated photo-$z$). Of the 49 candidates
+in Table~\ref{tab:foreground}, 29 are confirmed foreground, 7 are background,
+and 13 remain inconclusive; the photometric redshifts in the source compilation
+are superseded by the catalog values reported here. Only one of the 15 clusters
+has an impact parameter inside its own $R_{500}$, so for the rest the sightline
+does not pierce the intracluster medium and the cluster contributes negligibly
+to $\mathrm{DM_{int}}$.
+
+\input{foreground_table.tex}
+
 \subsection{Scattering Attribution}
 \label{sec:scattering}
+
+We measure the pulse-broadening time and its frequency scaling from the
+co-detected dynamic spectra and compare them against the scattering predicted
+by each candidate screen: the Milky-Way ISM, an intervening circumgalactic
+medium, or a host galaxy, where the host can dominate the scattering of a
+heavily broadened burst \citep{Ocker2022}. The fits are produced by the
+\texttt{dsa110-FLITS} pipeline (\texttt{pipeline/}).
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{wilhelm_scint_dnud_ne2025}
+  \caption{Scintillation decorrelation bandwidth $\Delta\nu_d$ versus frequency for
+  FRB~20221203A. DSA-resolved $\Delta\nu_d\approx0.13$\,MHz (blue; nearly flat,
+  $x=-0.23\pm0.19$ over the 10\% DSA lever arm); CHIME upper limits (red) since the
+  diffractive scale is sub-channel at native resolution. Purple stars: the NE2025
+  Milky-Way scattering floor, $\sim8\times$ \emph{above} the measurement. Green
+  dash-dot: the pulse-broadening screen ($2\pi\tau\,\Delta\nu_d=C_1=1$), $\sim85\times$
+  \emph{below}. The three separated scales imply the dominant pulse-broadening screen
+  is neither the Galactic floor nor the resolved scintillation screen (a strong
+  host/intervening screen). NE2025 Galactic electron-density model from
+  \citet{Ocker2026}.}
+  \label{fig:scint_screens}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{codetection_scint_excess}
+  \caption{Is the FRB 20221203A scattering excess sightline-specific or systematic?
+  Scattering excess (NE2025 Milky-Way-floor $\Delta\nu_d$ divided by the measured
+  DSA diffractive $\Delta\nu_d$; excess${=}1$ is the MW floor, dashed) versus
+  Galactic latitude $|b|$ for the 12 CHIME--DSA co-detections. Error bars combine
+  the measurement error with NE2025's floor uncertainty ($\sigma\approx0.4$\,dex,
+  $\sim\!\times2.5$); the annotated $z$ is the significance above the MW floor.
+  $\Delta\nu_d$ is the narrowest consistent cluster of well-constrained
+  Lorentzian/Gen-Lorentz widths across all stored per-subband scintillation fits
+  (rejecting fits railed at the $0.060$\,MHz bound). Filled circles: cleanly-resolved
+  diffractive scales significant at $z>2$ -- FRB 20220207C ($10.7\times$), FRB 20221203A
+  ($8.0\times$), FRB 20230913A ($7.2\times$), all in the shaded band. Open circle: FRB 20240229A
+  ($9.6\times$, single-subband, low confidence). Light-blue: clean but $z<2$
+  (FRB 20240203A $5.9\times$, FRB 20220506D $2.6\times$). Orange up-triangles: lower limits
+  (single-component or rail-only fits). The grey band ($|b|<14^\circ$) marks
+  sightlines where NE2025 intersects voids and the floor is unreliable (FRB 20230814B,
+  FRB 20221113A, FRB 20240122A fall below unity there). The excess clusters at $\sim7$--$11\times$ on
+  $3$--$4$ independent mid-$|b|$ sightlines where the floor is reliable and the
+  diffractive scale resolvable (three high-confidence: FRB 20220207C, FRB 20221203A, FRB 20230913A;
+  FRB 20240229A adds a fourth at high $|b|$ but is low-confidence), and never the reverse --
+  evidence for a common (host/intervening) scattering enhancement rather than a
+  FRB 20221203A-only peculiarity. Per-sightline significance is $\sim\!2\sigma$, dominated
+  by NE2025's floor uncertainty; because that error is a shared systematic across
+  sightlines (not independent), the result rests on the \emph{asymmetry} -- the
+  measurement is always in excess where the floor is reliable, never below -- rather
+  than on a stacked significance. NE2025 Galactic electron-density model from
+  \citet{Ocker2026}.}
+  \label{fig:codetection_excess}
+\end{figure}
+
+Figure~\ref{fig:scint_screens} shows the three separated scattering scales for the
+prototype sightline FRB~20221203A, and Figure~\ref{fig:codetection_excess} extends the
+Milky-Way-floor comparison to all twelve co-detections. The diffractive-scintillation
+excess relative to the modeled Milky-Way floor is robust to the choice of Galactic
+electron-density model among the scattering-calibrated models of the same lineage:
+NE2025 \citep{Ocker2026} yields an excess on all six mid-latitude sightlines
+($2.6$--$10.7\times$) and NE2001 \citep{CordesLazio2002} confirms it ($6/6$,
+$2.2$--$7.3\times$), while YMW16 \citep{YMW2017} reverses it, predicting a floor below the
+measured value on five of the six. We attribute this reversal to YMW16's per-sightline
+scattering unreliability rather than to an absence of excess: by construction YMW16
+incorporates no interstellar-scattering data and derives $\tau$ from an empirical
+$\tau$--$\mathrm{DM}$ relation with $\sim\!1$\,dex scatter, whereas NE2025 and NE2001
+forward-model scattering from the electron-density-fluctuation field. Because the adopted
+NE2025 floor itself carries a factor $\sim\!2$--$3$ per-sightline uncertainty that acts as a
+systematic shared across sightlines---and therefore does not average down as $\sqrt{N}$---we
+regard only the high-amplitude sightlines ($\sim\!7$--$11\times$) as robust evidence for an
+extragalactic scattering screen, with the lowest-amplitude cases ($\sim\!2.6$--$3\times$)
+remaining consistent with the floor uncertainty.
+
+\subsubsection{The joint two-band fit}
+\label{sec:jointfit}
+
+A single-band scattering fit cannot separate the scattering index $\alpha$ from
+the scattering time, because the pulse broadening
+$\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$ enters a
+single band only through its value at that band's frequency: one band fixes the
+product, not the slope. Co-detection breaks this degeneracy. We fit the
+CHIME/FRB ($\sim$0.4--0.8\,GHz) and DSA-110 ($\sim$1.4\,GHz) dynamic spectra
+\emph{simultaneously} with a shared sightline pair
+$(\tau_{1\,\mathrm{GHz}},\alpha)$ and per-telescope pulse parameters (arrival
+time $t_0$, intrinsic width $\zeta$, and a residual dispersion
+$\delta\mathrm{DM}$). The $\sim$1\,GHz lever arm between the bands measures
+$\alpha$ directly: the ratio of the two scattering times pins the slope, while
+the shared normalization $\tau_{1\,\mathrm{GHz}}$ pins its value at 1\,GHz. With
+$\alpha$ held at the Kolmogorov value $4.4$ \citep{Rickett1990}, the two bands
+instead return $\tau_{1\,\mathrm{GHz}}$ estimates that disagree by up to an
+order of magnitude for the same sightline---evidence that $\alpha\neq4.4$ along
+these lines of sight.
+
+The shape of the scattering tail---the pulse-broadening function (PBF)---is set
+by the geometry of the scattering medium: a single thin screen produces an
+exponential tail, while an extended or shallow-spectrum medium produces a heavier
+power-law tail (Figure~\ref{fig:pbf_shapes}; \citealp[\S11.2]{Cordes2025}). Fit
+band by band, individual bursts can appear to prefer different PBFs in the two
+bands---for FRB~20221203A a Kolmogorov power-law improves the CHIME evidence while
+DSA-110 rejects any tail heavier than exponential (Figure~\ref{fig:pbf_evidence}),
+and a per-band PBF formally beats a single exponential by $\Delta\ln Z\approx+4$.
+A single sightline, however, samples one scattering screen, whose PBF \emph{shape}
+is fixed by its geometry; only the timescale $\tau$ scales with frequency. A PBF
+that switches functional form between $0.6$ and $1.4$\,GHz is therefore
+unphysical, and the per-band preference is better read as the fit absorbing
+band-specific profile structure---an unmodeled sub-component or intrinsic
+asymmetry---into the tail shape. We accordingly adopt a single exponential PBF for
+both bands. Re-fitting the full sample under this physical choice moves the
+well-constrained scattering indices by $\le0.1$ relative to the per-band fits---so
+the simplification costs nothing for the clean sightlines---while a marginal,
+poorly-constrained sightline shifts by ${\approx}0.6$ in $\alpha$
+(Figure~\ref{fig:alpha_pbf}), confirming that the PBF must be fixed on physical
+grounds before a per-sightline index is quoted.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{pbf_shapes}
+  \caption{Pulse-broadening function (PBF) shapes used in the joint fit. A Gaussian
+  intrinsic pulse convolved with a thin-screen exponential PBF (green) versus
+  power-law-spectrum PBFs with density index $\beta=3.00$ and $\beta=11/3$
+  (Kolmogorov). Smaller $\beta$ yields a heavier $t^{-\beta/2}$ tail; $\beta\to4$
+  recovers the exponential \citep[\S11.2]{Cordes2025}.}
+  \label{fig:pbf_shapes}
+\end{figure}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=0.95\textwidth]{wilhelm_pbf_evidence}
+  \caption{Band-dependent PBF preference for FRB~20221203A. \emph{Left:} change in
+  log-evidence relative to the exponential PBF versus power-law index $\beta$ (best
+  single-component, per band). CHIME (400--800\,MHz) mildly prefers a Kolmogorov
+  tail ($\Delta\ln Z=+6.2$ at $\beta=11/3$); DSA (1.2--1.5\,GHz) rejects
+  heavier-than-exponential tails monotonically. \emph{Right:} joint CHIME+DSA
+  evidence (C1D1). A \emph{per-band} PBF (CHIME power-law, DSA exponential) beats the
+  all-exponential model by $\Delta\ln Z=+4.0$ ($\sim6\sigma$), whereas a global
+  power-law loses $84$. Taken at face value this favors a per-band PBF; we argue
+  in the text that it is an unphysical artifact and adopt a single exponential PBF.}
+  \label{fig:pbf_evidence}
+\end{figure*}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{alpha_pbf_systematic}
+  \caption{Effect of the PBF choice on the per-sightline scattering index. For
+  each burst the open marker is $\alpha$ under the (unphysical) per-band PBF and
+  the filled marker, with $1\sigma$ posterior, is $\alpha$ under the adopted
+  single-exponential PBF. The well-constrained single-screen sightlines (green)
+  are insensitive to the choice ($|\Delta\alpha|\le0.1$); only a marginal,
+  poorly-constrained sightline (orange) moves appreciably (${\approx}0.6$), and
+  two sightlines are pinned at the $\alpha=1.5$ prior floor under either PBF
+  (grey). The dashed line marks the Kolmogorov value $\alpha=4.4$.}
+  \label{fig:alpha_pbf}
+\end{figure}
+
+A complementary, model-free check that the recovered index is not corrupted by
+unmodelled multiplicity is to resolve each burst's profile \emph{within} the CHIME
+band. Splitting the band into four $80\,\mathrm{MHz}$ sub-bands and tracking the
+on-pulse width with frequency separates genuine scattering, whose width grows as
+$\nu^{-\alpha}$, from frequency-independent intrinsic sub-structure, which does not
+(Figure~\ref{fig:chime_subband_compare}); a burst whose sub-band widths fail to
+scale is a candidate for hidden sub-components and is flagged before a single-screen
+index is quoted.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.95\columnwidth]{chime_subband_compare}
+  \caption{Within-CHIME sub-band profiles for the co-detected FRBs johndoeII and
+  wilhelm, each split into four $80\,\mathrm{MHz}$ sub-bands across
+  $0.40$--$0.80\,\mathrm{GHz}$. Each panel shows the baseline-subtracted on-pulse
+  profile against time, annotated with the model-free rms width $w_{\mathrm{rms}}$
+  and the trailing-edge $e$-folding time $w_{\mathrm{tail}}$. A purely scattering
+  origin predicts both widths increasing toward lower frequency as $\nu^{-\alpha}$,
+  whereas frequency-independent intrinsic sub-structure does not; the empty
+  $0.40$--$0.48\,\mathrm{GHz}$ sub-band for wilhelm is a data gap, not a
+  non-detection. This profile-shape evolution is the diagnostic used to flag
+  unmodelled temporal sub-components before a scattering index is quoted. Generated
+  by the \texttt{dsa110-FLITS} pipeline.}
+  \label{fig:chime_subband_compare}
+\end{figure}
+
+A stronger, quantitative version of this check fits the scattering time directly
+in each sub-band. We split each band into sub-bands (four across CHIME, three
+across DSA-110), collapse each to a one-dimensional profile, and fit a scattered
+pulse---a Gaussian intrinsic shape convolved with a one-sided exponential tail,
+the exponentially-modified Gaussian---to each sub-band independently, leaving the
+scattering time $\tau$ free at every frequency. Because each $\tau_i$ is measured
+per sub-band with no power law imposed, the slope of $\tau_i(\nu_i)$ is an estimate
+of $\alpha$ that shares neither parametrization nor likelihood with the joint
+two-dimensional fit, so its agreement with the joint value is an independent
+validation rather than a self-consistency check
+(Figure~\ref{fig:subband_tau}). For the well-constrained single-screen
+sightlines the sub-band $\tau(\nu)$ trace the joint power law and recover the joint
+index to within $1.6\sigma$ (e.g.\ FRB~20240229A, $\alpha=2.40$ versus
+$2.35\pm0.03$; FRB~20221203A, $2.56$ versus $2.45\pm0.07$). The check also
+localizes the one elevated band $\chi^2$ in our sample: the DSA profile of
+FRB~20221203A is imperfectly fit, but its sub-band $\tau(\nu)$ still follow the
+joint slope, so the residual reflects unmodeled profile sub-structure rather than a
+failure of the single-screen scattering law, and $\alpha$ is unaffected. The method
+has a built-in horizon: where a burst is faint and heavily scattered the per-sub-band
+fit cannot resolve the broad CHIME tail, and at the top of the DSA band $\tau$ falls
+below the time resolution, so the most strongly scattered sightlines (e.g.\
+FRB~20220506D) retain only DSA detections over too short a lever to constrain
+$\alpha$ on their own---there the joint fit's cross-band lever does work that no
+single band can. We therefore use the sub-band reconstruction as a corroborating
+cross-check on the well-constrained indices, not as a primary estimator.
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=0.98\textwidth]{subband_tau_validation_grid}
+  \caption{Independent sub-band validation of the joint scattering index. For each
+  burst the scattering time $\tau$ is fit directly in four CHIME (blue) and three
+  DSA-110 (red) sub-bands with $\tau$ free at every frequency, and compared to the
+  joint-fit power law $\tau_{1\,\mathrm{GHz}}\,\nu^{-\alpha}$ (black); each panel
+  lists the joint $\alpha$ and the slope $\alpha$ of the independent sub-band points.
+  \emph{Top:} three well-constrained sightlines whose sub-band $\tau(\nu)$ recover
+  the joint index to within $1.6\sigma$. \emph{Bottom:} two sightlines with a mild
+  ($\Delta\alpha\approx0.4$) offset traceable to the intrinsic-width--scattering
+  degeneracy in a single bright band (FRB~20230325A) and to a low DSA $\tau$
+  (FRB~20230307A), and one strongly-scattered sightline (FRB~20220506D) whose CHIME
+  tail is unresolved, leaving only DSA detections over too short a lever to constrain
+  $\alpha$. Downward triangles are $2\sigma$ upper limits; sub-bands where the
+  scattered-pulse model does not describe the profile are dropped rather than shown
+  as limits. Generated by the \texttt{dsa110-FLITS} pipeline.}
+  \label{fig:subband_tau}
+\end{figure*}
+
+\subsubsection{Gain-marginalized likelihood}
+\label{sec:gainmarg}
+
+The per-channel amplitude of an FRB spectrum is unknown and strongly modulated
+by scintillation; carried as a free spectral envelope it leaves correlated
+structure in the fit residuals and invalidates a $\chi^2$ goodness-of-fit test.
+We therefore marginalize the per-channel gain analytically. With a Gaussian
+prior on the gain the per-channel evidence is available in closed form (a
+matched-filter likelihood), and the recovered gain absorbs both the burst
+spectrum and the scintillation pattern. This removes the spectral and
+scintillation structure from the residual, so that the reduced $\chi^2$ and the
+lag-1 residual autocorrelation become meaningful quality gates, and it lowers
+the sampled dimensionality. We
+sample the posterior by nested sampling \citep{Skilling2004}, as implemented in
+\texttt{dynesty} \citep{Speagle2020}, and quality-gate each fit on its reduced
+$\chi^2$ and residual whiteness, treating $R^2$ and residual normality as
+informational.
+
+\subsubsection{Multiple temporal components}
+\label{sec:multicomp}
+
+Some bursts comprise more than one temporal sub-component, a common feature of
+the resolved FRB population \citep{Hessels2019, Pleunis2021}. An unmodeled
+second component is partially absorbed by a single scattered pulse---as a steeper slope
+and a larger scattering time---and so biases the inferred $\alpha$. We extend
+the likelihood to $N$ temporal components per band, each contributing its own
+$(t_0,\zeta)$ while $(\tau_{1\,\mathrm{GHz}},\alpha)$ remain shared across both
+bands and all components, and we select the number of components per band by
+Bayesian evidence. Because the evidence normalization differs between likelihood
+variants, the component counts are compared on a single matched grid in which
+even the one-component model is evaluated through the multi-component
+likelihood, so that evidence differences are meaningful. Component arrival times
+within a band are ordered and separated by a data-derived minimum spacing,
+keeping the fit identifiable at every prior sample. A clean single-component
+co-detection in our sample, for which the joint fit returns
+$\alpha=4.48\pm0.04$ with white residuals, validates the method; a
+multi-component case is presented in Section~\ref{sec:results-alpha}.
+% Validating clean case = burst internally labelled "FRB 20230325A" (swap to TNS name).
