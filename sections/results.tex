@@ -76,8 +76,10 @@ and FRB~20230913A is non-identifiable, because its single DSA-110 component cann
 be uniquely associated with one of the multiple CHIME sub-pulses---its DSA-110
 arrival-time uncertainty ($\pm2.4\,\mathrm{ms}$) exceeds the CHIME sub-pulse span
 ($1.0\,\mathrm{ms}$)---which leaves $\alpha$ bimodal between the shallow and steep
-prior rails. Population-level counts and median $\alpha$ are deferred until FINAL
-quality verdicts lock the unified roster.
+prior rails. Population-level counts and median $\alpha$ remain qualitative
+pending FINAL figure regeneration; fixed-s² grids now adjudicate component counts
+for FRB~20220506D (C2D1 favored), FRB~20221113A (C2D1 favored), FRB~20240122A
+(weak C2D1 preference), and FRB~20230307A (C3D3 not robust over C3D2).
 
 \input{alpha_table.tex}
 
@@ -181,12 +183,11 @@ band's radiometer flux calibration. $\gamma_C,\gamma_D$ are the per-band spectra
 indices; $E_{\mathrm{iso}}$ includes the $(1+z)$ k-correction. The quoted
 $1\sigma$ uncertainty combines the per-band $c_0$ posterior width with the
 absolute-scale systematic (SEFD and primary beam, ${\sim}0.25$ dex for CHIME and
-${\sim}0.20$ dex for DSA), added in quadrature across the two bands. Six of twelve
+${\sim}0.20$ dex for DSA), added in quadrature across the two bands. Eight of twelve
 co-detections are tabulated. Excluded: FRB~20240229A (no joint $c_0,\gamma$ fit);
-FRB~20230325A, FRB~20240122A, FRB~20230814B (no spectroscopic host redshift);
-FRB~20220506D and FRB~20220310F (withheld pending all-exp $c_0,\gamma$ re-export
-after the gate regen; the 2026-06-24 run omitted them when their scattering
-verdict was FAIL, now MARGINAL).
+FRB~20230325A, FRB~20240122A, FRB~20230814B (no spectroscopic host redshift).
+Per-band $c_0,\gamma$ amplitudes use the mixed-legacy joint-fit export (Pass 2
+N=8 roster); all-exp scattering-only HPCC fits do not yet supply $c_0,\gamma$.
 \label{tab:burst-energies}}
 \tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$D_L$ [Mpc]} &
   \colhead{$\gamma_C$} & \colhead{$\gamma_D$} & \colhead{$E_{\mathrm{iso}}$ [erg]}}
@@ -194,7 +195,9 @@ verdict was FAIL, now MARGINAL).
 FRB 20240203A\tablenotemark{a} & $0.0740$ & $346$  & $-3.74$ & $-4.98$ & $(1.73 \pm 0.62)\times10^{39}$ \\
 FRB 20230913A\tablenotemark{a} & $0.3024$ & $1617$ & $-1.81$ & $-4.91$ & $(6.71 \pm 2.68)\times10^{39}$ \\
 FRB 20221113A & $0.2505$ & $1304$ & $-4.82$ & $+0.95$ & $(4.20 \pm 2.51)\times10^{40}$ \\
+FRB 20220506D & $0.3005$ & $1606$ & $-4.48$ & $-4.85$ & $(4.30 \pm 2.29)\times10^{40}$ \\
 FRB 20230307A & $0.2710$ & $1426$ & $-2.45$ & $-5.00$ & $(1.85 \pm 0.68)\times10^{40}$ \\
+FRB 20220310F & $0.4790$ & $2774$ & $-1.00$ & $+2.91$ & $(7.24 \pm 3.06)\times10^{40}$ \\
 FRB 20221203A & $0.5100$ & $2990$ & $+0.95$ & $-1.99$ & $(1.11 \pm 0.47)\times10^{41}$ \\
 FRB 20220207C & $0.0430$ & $197$  & $-3.38$ & $-4.95$ & $(4.60 \pm 1.84)\times10^{38}$ \\
 \enddata
