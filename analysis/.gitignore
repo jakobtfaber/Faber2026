@@ -14,3 +14,6 @@
 
 # Built PDF of the manuscript itself (figures under figures/ ARE tracked).
 /main.pdf
+
+# Local layout prototypes (regenerate from pipeline/; promote winners to figures/).
+figures/prototypes/
