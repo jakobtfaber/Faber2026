@@ -30,9 +30,9 @@ $\tau_{\mathrm{int}}\sim0.2$--$1.9\,\mathrm{ms}$ at $1\,\mathrm{GHz}$ on the thr
 sightlines that carry a non-negligible intervening column, largest
 for the galaxy-interior sightlines (Figure~\ref{fig:budget}, right). A direct
 measured-versus-predicted comparison draws on the uniform multi-component
-re-fit of Section~\ref{sec:results-alpha}: its eight well-constrained sightlines
-now yield a measured $(\tau_{1\,\mathrm{GHz}},\alpha)$ (Table~\ref{tab:alpha}),
-while the marginal sightlines are withheld as unconstrained. We show the
+re-fit of Section~\ref{sec:results-alpha}: Table~\ref{tab:alpha} lists
+provisional $(\tau_{1\,\mathrm{GHz}},\alpha)$ for the citable sightlines, while
+the marginal sightlines are withheld as unconstrained. We show the
 predicted intervening contribution here (Figure~\ref{fig:budget}); overlaying the
 measured $\tau_{1\,\mathrm{GHz}}$ on it is the principal remaining visualization
 step for the sample.
@@ -63,22 +63,21 @@ step for the sample.
 
 Across the twelve co-detected sightlines, the uniform single-exponential-PBF
 joint re-fit (prior $\alpha\in[1.0,6.0]$; Section~\ref{sec:jointfit}) constrains
-the shared scattering index for eight, listed in Table~\ref{tab:alpha}; a ninth,
-FRB~20220310F, is constrained once its temporal multiplicity is modeled
-($\alpha=5.1\pm0.2$; discussed below). The measured indices are predominantly
-\emph{sub-Kolmogorov}: seven of the eight tabulated values fall below $\alpha=4$,
-with a median $\alpha\simeq2.9$ and a single steeply sub-Kolmogorov sightline,
-FRB~20230814B at $\alpha=1.53\pm0.09$, that is nonetheless well fit in both bands
-($\chi^2_\nu=1.04$ and $1.27$) and so reflects a genuine measurement rather than a
-prior rail. Only FRB~20230325A is consistent with the Kolmogorov value
-($\alpha=4.35\pm0.04$). The remaining three sightlines are withheld from the index
-sample: FRB~20221113A and FRB~20240122A return DSA-110 non-detections of
+the shared scattering index for the sightlines listed in
+Table~\ref{tab:alpha}. The measured indices are predominantly
+\emph{sub-Kolmogorov}, with FRB~20230814B at $\alpha=1.53\pm0.09$ the shallowest
+well-fit case ($\chi^2_\nu=1.04$ and $1.27$) and FRB~20230325A consistent with
+the Kolmogorov value ($\alpha=4.35\pm0.04$). FRB~20220310F requires a
+$2\times2$ temporal model ($\alpha=5.1\pm0.2$; Section~\ref{sec:results-alpha},
+Figure~\ref{fig:whitney_mult}). The remaining three sightlines are withheld from
+the index sample: FRB~20221113A and FRB~20240122A return DSA-110 non-detections of
 scattering, so their shared index rails to the prior bound and is unconstrained;
 and FRB~20230913A is non-identifiable, because its single DSA-110 component cannot
 be uniquely associated with one of the multiple CHIME sub-pulses---its DSA-110
 arrival-time uncertainty ($\pm2.4\,\mathrm{ms}$) exceeds the CHIME sub-pulse span
 ($1.0\,\mathrm{ms}$)---which leaves $\alpha$ bimodal between the shallow and steep
-prior rails.
+prior rails. Population-level counts and median $\alpha$ are deferred until FINAL
+quality verdicts lock the unified roster.
 
 \input{alpha_table.tex}
 
@@ -135,8 +134,9 @@ fixed before a marginal burst's $\alpha$ is quoted.
 \subsection{Isotropic-equivalent energies}
 \label{sec:burst-energies}
 
-For each sightline with a spectroscopic host redshift we estimate the
-isotropic-equivalent burst energy directly from the joint CHIME--DSA fit,
+For each sightline with a spectroscopic host redshift and a quality-passing joint
+fit we estimate the isotropic-equivalent burst energy directly from the joint
+CHIME--DSA fit,
 without extrapolating either band's spectrum beyond where it is constrained.
 The joint fit returns a per-band spectral amplitude and index,
 $F_X(\nu) = c_{0,X}\,(\nu/\nu_{\mathrm{ref},X})^{\gamma_X}$, which we place on an
@@ -158,7 +158,8 @@ E_{\mathrm{iso}} = \frac{4\pi D_L^2(z)}{1+z}\left[
 with $D_L(z)$ from the fiducial \textit{Planck}\,2018 cosmology
 \citep{Planck2018}, the $(1+z)$ bandwidth k-correction applied, and
 $1\,\mathrm{Jy\,ms\,Hz} = 10^{-29}\,\mathrm{J\,m^{-2}}$. Bursts whose hosts lack
-a spectroscopic redshift are omitted. This band-restricted integral constrains
+a spectroscopic redshift or for which no joint $c_0,\gamma$ fit exists are omitted
+(Table~\ref{tab:burst-energies} caption). This band-restricted integral constrains
 the energy released \emph{within the observed spectral envelope}: it avoids the
 large, model-dependent extrapolation that a single power-law fit across the full
 $0.4$--$1.5\,\mathrm{GHz}$ span would require, at the cost of not counting flux in
@@ -166,12 +167,11 @@ the unobserved $0.8$--$1.3\,\mathrm{GHz}$ gap, so the tabulated values are lower
 limits on the total $0.4$--$1.5\,\mathrm{GHz}$ energy
 (Table~\ref{tab:burst-energies}). The most distant sightline, FRB 20221203A
 ($z=0.51$), reaches $E_{\mathrm{iso}}\simeq1.1\times10^{41}\,\mathrm{erg}$, at the
-luminous end of the co-detected sample. The absolute flux scale is anchored to
-the DSA-110 catalog \citep{Law2024} for the three sightlines with a published
-catalog fluence (FRB 20220506D, FRB 20220310F, FRB 20220207C), which reproduce the catalog values to
-within a factor of two; the remaining bands rely on the radiometer model without
-an independent catalog cross-check, so their energies carry the additional,
-unquantified systematic of the absolute scale.
+luminous end of the co-detected sample. The absolute flux scale is anchored to the DSA-110 catalog \citep{Law2024} for
+FRB~20220207C, which reproduces the catalog value to within a factor of two; the
+remaining bands rely on the radiometer model without an independent catalog
+cross-check, so their energies carry the additional, unquantified systematic of
+the absolute scale.
 
 \begin{deluxetable*}{lccccc}
 \tablecaption{Isotropic-equivalent energies of the co-detected FRBs, integrated
@@ -181,7 +181,12 @@ band's radiometer flux calibration. $\gamma_C,\gamma_D$ are the per-band spectra
 indices; $E_{\mathrm{iso}}$ includes the $(1+z)$ k-correction. The quoted
 $1\sigma$ uncertainty combines the per-band $c_0$ posterior width with the
 absolute-scale systematic (SEFD and primary beam, ${\sim}0.25$ dex for CHIME and
-${\sim}0.20$ dex for DSA), added in quadrature across the two bands.
+${\sim}0.20$ dex for DSA), added in quadrature across the two bands. Six of twelve
+co-detections are tabulated. Excluded: FRB~20240229A (no joint $c_0,\gamma$ fit);
+FRB~20230325A, FRB~20240122A, FRB~20230814B (no spectroscopic host redshift);
+FRB~20220506D and FRB~20220310F (withheld pending all-exp $c_0,\gamma$ re-export
+after the gate regen; the 2026-06-24 run omitted them when their scattering
+verdict was FAIL, now MARGINAL).
 \label{tab:burst-energies}}
 \tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$D_L$ [Mpc]} &
   \colhead{$\gamma_C$} & \colhead{$\gamma_D$} & \colhead{$E_{\mathrm{iso}}$ [erg]}}
@@ -189,9 +194,7 @@ ${\sim}0.20$ dex for DSA), added in quadrature across the two bands.
 FRB 20240203A\tablenotemark{a} & $0.0740$ & $346$  & $-3.74$ & $-4.98$ & $(1.73 \pm 0.62)\times10^{39}$ \\
 FRB 20230913A\tablenotemark{a} & $0.3024$ & $1617$ & $-1.81$ & $-4.91$ & $(6.71 \pm 2.68)\times10^{39}$ \\
 FRB 20221113A & $0.2505$ & $1304$ & $-4.82$ & $+0.95$ & $(4.20 \pm 2.51)\times10^{40}$ \\
-FRB 20220506D & $0.3005$ & $1606$ & $-4.48$ & $-4.85$ & $(4.30 \pm 2.29)\times10^{40}$ \\
 FRB 20230307A & $0.2710$ & $1426$ & $-2.45$ & $-5.00$ & $(1.85 \pm 0.68)\times10^{40}$ \\
-FRB 20220310F & $0.4790$ & $2774$ & $-1.00$ & $+2.91$ & $(7.24 \pm 3.06)\times10^{40}$ \\
 FRB 20221203A & $0.5100$ & $2990$ & $+0.95$ & $-1.99$ & $(1.11 \pm 0.47)\times10^{41}$ \\
 FRB 20220207C & $0.0430$ & $197$  & $-3.38$ & $-4.95$ & $(4.60 \pm 1.84)\times10^{38}$ \\
 \enddata
