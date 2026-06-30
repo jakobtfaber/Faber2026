@@ -191,116 +191,95 @@ remaining consistent with the floor uncertainty.
 \subsubsection{The joint two-band fit}
 \label{sec:jointfit}
 
-A single-band scattering fit cannot separate the scattering index $\alpha$ from
-the scattering time, because the pulse broadening
+A single-band scattering fit cannot separate the scattering timescale from its
+frequency scaling, because the pulse broadening
 $\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$ enters a
 single band only through its value at that band's frequency: one band fixes the
-product, not the slope. Co-detection breaks this degeneracy. We fit the
-CHIME/FRB ($\sim$0.4--0.8\,GHz) and DSA-110 ($\sim$1.4\,GHz) dynamic spectra
-\emph{simultaneously} with a shared sightline pair
-$(\tau_{1\,\mathrm{GHz}},\alpha)$ and per-telescope pulse parameters (arrival
-time $t_0$, intrinsic width $\zeta$, and a residual dispersion
-$\delta\mathrm{DM}$). The $\sim$1\,GHz lever arm between the bands measures
-$\alpha$ directly: the ratio of the two scattering times pins the slope, while
-the shared normalization $\tau_{1\,\mathrm{GHz}}$ pins its value at 1\,GHz. With
-$\alpha$ held at the Kolmogorov value $4.4$ \citep{Rickett1990}, the two bands
-instead return $\tau_{1\,\mathrm{GHz}}$ estimates that disagree by up to an
-order of magnitude for the same sightline---evidence that $\alpha\neq4.4$ along
-these lines of sight.
+product, not the slope. Co-detection breaks this degeneracy---the $\sim$1\,GHz
+lever arm between CHIME/FRB ($\sim$0.4--0.8\,GHz) and DSA-110
+($\sim$1.4\,GHz) measures the frequency scaling directly---but breaking the
+degeneracy is not the same as measuring $\alpha$ in a physically consistent way.
 
-The shape of the scattering tail---the pulse-broadening function (PBF)---is set
-by the geometry of the scattering medium: a single thin screen produces an
-exponential tail, while an extended or shallow-spectrum medium produces a heavier
-power-law tail \citep[\S11.2]{Cordes2025}. Fit
-band by band, individual bursts can appear to prefer different PBFs in the two
-bands---for FRB~20221203A a Kolmogorov power-law improves the CHIME evidence while
-DSA-110 rejects any tail heavier than exponential, and a per-band PBF formally beats a single exponential by $\Delta\ln Z\approx+4$.
-A single sightline, however, samples one scattering screen, whose PBF \emph{shape}
-is fixed by its geometry; only the timescale $\tau$ scales with frequency. A PBF
-that switches functional form between $0.6$ and $1.4$\,GHz is therefore
-unphysical, and the per-band preference is better read as the fit absorbing
-band-specific profile structure---an unmodeled sub-component or intrinsic
-asymmetry---into the tail shape. We accordingly adopt a single exponential PBF for
-both bands. Re-fitting the full sample under this physical choice moves the
-well-constrained scattering indices by $\le0.1$ relative to the per-band fits---so
-the simplification costs nothing for the clean sightlines---while a marginal,
-poorly-constrained sightline shifts by ${\approx}0.6$ in $\alpha$
-(Figure~\ref{fig:alpha_pbf}), confirming that the PBF must be fixed on physical
-grounds before a per-sightline index is quoted.
+The pulse-broadening function (PBF) shape and the scattering index $\alpha$ are
+not independent observables. Both descend from the same turbulence spectrum: a
+power-law electron-density fluctuation spectrum
+$P_n(q)\propto q^{-\beta}$ produces a phase structure function
+$D_\phi(\rho)\propto\rho^{\beta-2}$, whose Fourier transform determines the
+angular brightness distribution and hence the PBF shape, while the diffractive
+scale and Fresnel arguments give the frequency scaling
+$\tau\propto\nu^{-2\beta/(\beta-2)}$ for a thin screen---i.e.\
+$\alpha=2\beta/(\beta-2)$ \citep{Rickett1990, Cordes2025}. The common
+one-sided exponential PBF,
+$p_E(t,\tau)=\tau^{-1}e^{-t/\tau}\,\Theta(t)$, corresponds to a square-law
+structure function $D_\phi(\rho)\propto\rho^2$ ($\beta=4$), for which
+$\alpha=4$. A Kolmogorov spectrum ($\beta=11/3$) instead yields a
+power-law PBF tail $p_d(t)\propto t^{-\beta/2}$ and $\alpha\approx4.4$
+\citep{Cordes2025}.
 
+Because $\beta$ determines both the PBF shape and $\alpha$, they must be
+co-modeled. Choosing a fixed PBF family and freely varying $\alpha$ inside it
+is physically inconsistent: the exponential PBF assumes square-law
+statistics, which already imply $\alpha\approx4$. If the true medium is
+Kolmogorov---or anything other than square-law---fitting an exponential PBF
+will absorb the shape mismatch into a biased $\alpha$ \citep{Cordes2025}.
 
+We therefore replace the phenomenological pair $(\tau_{1\,\mathrm{GHz}},\alpha)$
+with the turbulence spectral index $\beta$ as the fundamental parameter. For
+each $\beta$ in the fit, the PBF shape is computed directly from the
+corresponding phase structure function $D_\phi(\rho)\propto\rho^{\beta-2}$, and
+the frequency scaling index follows as $\alpha=2\beta/(\beta-2)$ under the
+thin-screen assumption. The free parameters of the joint fit are
+$(\tau_{1\,\mathrm{GHz}},\beta)$ and the per-telescope pulse parameters
+(arrival time $t_0$, intrinsic width $\zeta$, and a residual dispersion
+$\delta\mathrm{DM}$). The fit operates on the CHIME/FRB and DSA-110 dynamic
+spectra simultaneously, with the PBF shape and $\alpha$ both derived from
+$\beta$ at every likelihood evaluation rather than chosen independently.
 
-\begin{figure}[!htbp]
-  \centering
-  \includegraphics[width=\columnwidth]{alpha_pbf_systematic}
-  \caption{Effect of the PBF choice on the per-sightline scattering index. For
-  each burst the open marker is $\alpha$ under the (unphysical) per-band PBF and
-  the filled marker, with $1\sigma$ posterior, is $\alpha$ under the adopted
-  single-exponential PBF. The well-constrained single-screen sightlines (green)
-  are insensitive to the choice ($|\Delta\alpha|\le0.1$); PBF-sensitive sightlines
-  (orange) move appreciably; railed or withheld sightlines (grey) are pinned at
-  the prior floor or excluded from the citable roster. The dashed line marks the
-  Kolmogorov value $\alpha=4.4$. Burst labels are TNS designations
-  (Section~\ref{sec:obs}).}
-  \label{fig:alpha_pbf}
-\end{figure}
+Under this model, the Kolmogorov value $\beta=11/3$ ($\alpha\approx4.4$) and the
+square-law limit $\beta=4$ ($\alpha=4$, exponential PBF) are specific points in
+the physically allowed thin-screen inertial-range mapping. Because
+$\alpha=2\beta/(\beta-2)$ decreases as $\beta$ increases in this regime, a
+formally shallow empirical scaling is not interpreted by itself as a turbulence
+spectral index; it instead indicates that the assumed scattering family, burst
+morphology, or inertial-range closure is incomplete.
 
-A complementary, model-free check that the recovered index is not corrupted by
-unmodelled multiplicity is to resolve each burst's profile \emph{within} the CHIME
-band. Splitting the band into four $80\,\mathrm{MHz}$ sub-bands and tracking the
-on-pulse width with frequency separates genuine scattering, whose width grows as
-$\nu^{-\alpha}$, from frequency-independent intrinsic sub-structure, which does not;
-a burst whose sub-band widths fail to scale is a candidate for hidden sub-components
-and is flagged before a single-screen index is quoted.
+\subsubsection{Sub-band validation of the frequency scaling}
+\label{sec:subband}
 
-% \begin{figure}[!htbp]
-%   \centering
-%   \includegraphics[width=0.95\columnwidth]{chime_subband_compare}
-%   \caption{Within-CHIME sub-band profiles for the co-detected bursts
-%   FRB~20230814B and FRB~20221203A, each split into four $80\,\mathrm{MHz}$ sub-bands across
-%   $0.40$--$0.80\,\mathrm{GHz}$. Each panel shows the baseline-subtracted on-pulse
-%   profile against time, annotated with the model-free rms width $w_{\mathrm{rms}}$
-%   and the trailing-edge $e$-folding time $w_{\mathrm{tail}}$. A purely scattering
-%   origin predicts both widths increasing toward lower frequency as $\nu^{-\alpha}$,
-%   whereas frequency-independent intrinsic sub-structure does not; the empty
-%   $0.40$--$0.48\,\mathrm{GHz}$ sub-band for FRB~20221203A is a data gap, not a
-%   non-detection. This profile-shape evolution is the diagnostic used to flag
-%   unmodelled temporal sub-components before a scattering index is quoted. Generated
-%   by the \texttt{dsa110-FLITS} pipeline.}
-%   \label{fig:chime_subband_compare}
-% \end{figure}
-
-A stronger, quantitative version of this check fits the scattering time directly
-in each sub-band. We split each band into sub-bands (four across CHIME, three
-across DSA-110), collapse each to a one-dimensional profile, and fit a scattered
+The frequency scaling recovered by the joint fit can be validated independently
+of the PBF parametrization by fitting the scattering time directly in frequency
+sub-bands. We split each band into sub-bands (four across CHIME, three across
+DSA-110), collapse each to a one-dimensional profile, and fit a scattered
 pulse---a Gaussian intrinsic shape convolved with a one-sided exponential tail,
 the exponentially-modified Gaussian---to each sub-band independently, leaving the
 scattering time $\tau$ free at every frequency. Because each $\tau_i$ is measured
-per sub-band with no power law imposed, the slope of $\tau_i(\nu_i)$ is an estimate
-of $\alpha$ that shares neither parametrization nor likelihood with the joint
-two-dimensional fit, so its agreement with the joint value is an independent
-validation rather than a self-consistency check
+per sub-band with no power law imposed, the slope of $\tau_i(\nu_i)$ is an
+estimate of the frequency scaling that shares neither parametrization nor
+likelihood with the joint two-dimensional fit, so its agreement with the joint
+value is an independent validation rather than a self-consistency check
 (Figure~\ref{fig:subband_tau}). For the well-constrained single-screen
-sightlines the sub-band $\tau(\nu)$ trace the joint power law and recover the joint
-index to within $1.6\sigma$ (e.g.\ FRB~20240229A, $\alpha=2.40$ versus
-$2.35\pm0.03$; FRB~20221203A, $2.56$ versus $2.45\pm0.07$). The check also
+sightlines the sub-band $\tau(\nu)$ trace the joint power law and recover the
+joint scaling to within $1.6\sigma$ (e.g.\ FRB~20240229A, $\alpha=2.40$ versus
+$2.35\pm0.03$; FRB~20221203A, $2.56$ versus $2.45\pm0.07$; the joint $\alpha$
+values are provisional pending FINAL $\beta$ regeneration, while the
+model-independent sub-band slope does not depend on the PBF parametrization). The check also
 localizes the one elevated band $\chi^2$ in our sample: the DSA profile of
 FRB~20221203A is imperfectly fit, but its sub-band $\tau(\nu)$ still follow the
 joint slope, so the residual reflects unmodeled profile sub-structure rather than a
-failure of the single-screen scattering law, and $\alpha$ is unaffected. The method
+failure of the single-screen scattering law. The method
 has a built-in horizon: where a burst is faint and heavily scattered the per-sub-band
 fit cannot resolve the broad CHIME tail, and at the top of the DSA band $\tau$ falls
 below the time resolution, so the most strongly scattered sightlines (e.g.\
 FRB~20220506D) retain only DSA detections over too short a lever to constrain
-$\alpha$ on their own---there the joint fit's cross-band lever does work that no
+the scaling on their own---there the joint fit's cross-band lever does work that no
 single band can. We therefore use the sub-band reconstruction as a corroborating
-cross-check on the well-constrained indices, not as a primary estimator.
+cross-check on the well-constrained sightlines, not as a primary estimator.
 
 \FloatBarrier
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.98\textwidth]{subband_tau_validation_grid}
-  \caption{Independent sub-band validation of the joint scattering index. For each
+  \caption{Independent sub-band validation of the joint frequency scaling. For each
   burst the scattering time $\tau$ is fit directly in four CHIME (blue) and three
   DSA-110 (red) sub-bands with $\tau$ free at every frequency, and compared to the
   joint-fit power law $\tau_{1\,\mathrm{GHz}}\,\nu^{-\alpha}$ (black); each panel
@@ -311,7 +290,7 @@ cross-check on the well-constrained indices, not as a primary estimator.
   degeneracy in a single bright band (FRB~20230325A) and to a low DSA $\tau$
   (FRB~20230307A), and one strongly-scattered sightline (FRB~20220506D) whose CHIME
   tail is unresolved, leaving only DSA detections over too short a lever to constrain
-  $\alpha$. Downward triangles are $2\sigma$ upper limits; sub-bands where the
+  the scaling. Downward triangles are $2\sigma$ upper limits; sub-bands where the
   scattered-pulse model does not describe the profile are dropped rather than shown
   as limits. Generated by the \texttt{dsa110-FLITS} pipeline.}
   \label{fig:subband_tau}
@@ -340,18 +319,19 @@ informational.
 
 Some bursts comprise more than one temporal sub-component, a common feature of
 the resolved FRB population \citep{Hessels2019, Pleunis2021}. An unmodeled
-second component is partially absorbed by a single scattered pulse---as a steeper slope
-and a larger scattering time---and so biases the inferred $\alpha$. We extend
-the likelihood to $N$ temporal components per band, each contributing its own
-$(t_0,\zeta)$ while $(\tau_{1\,\mathrm{GHz}},\alpha)$ remain shared across both
-bands and all components, and we select the number of components per band by
-Bayesian evidence. Because the evidence normalization differs between likelihood
-variants, the component counts are compared on a single matched grid in which
-even the one-component model is evaluated through the multi-component
+second component is partially absorbed by a single scattered pulse---as a steeper
+frequency scaling and a larger scattering time---and so biases the inferred
+$\beta$, distorting both the fitted PBF shape and $\alpha$ simultaneously. We
+extend the likelihood to $N$ temporal components per band, each contributing its
+own $(t_0,\zeta)$ while $(\tau_{1\,\mathrm{GHz}},\beta)$ remain shared across
+both bands and all components, and we select the number of components per band
+by Bayesian evidence. Because the evidence normalization differs between
+likelihood variants, the component counts are compared on a single matched grid
+in which even the one-component model is evaluated through the multi-component
 likelihood, so that evidence differences are meaningful. Component arrival times
 within a band are ordered and separated by a data-derived minimum spacing,
 keeping the fit identifiable at every prior sample. A clean single-component
-co-detection in our sample, for which the joint fit returns
-$\alpha=4.356\pm0.04$ with white residuals, validates the method; a
-multi-component case is presented in Section~\ref{sec:results-alpha}.
+co-detection in our sample, for which the joint fit returns a well-constrained
+$\beta$ with white residuals, validates the method; a multi-component case is
+presented in Section~\ref{sec:results-alpha}.
 % Validating clean case = burst internally labelled "FRB 20230325A" (swap to TNS name).

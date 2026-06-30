@@ -35,9 +35,12 @@ radio bursts (FRBs) co-detected by CHIME/FRB ($0.4$--$0.8$\,GHz) and DSA-110
 ($\sim$1.4\,GHz) between 2022 February and 2024 February, spanning
 $\mathrm{DM_{obs}}=262$--$960\,\mathrm{pc\,cm^{-3}}$. The $\sim$1\,GHz baseline
 between the two detections breaks the degeneracy between the scattering time and
-its spectral index that defeats any single-band fit, which we exploit with a
+its frequency scaling that defeats any single-band fit, which we exploit with a
 simultaneous two-band fit for a shared sightline pair
-$(\tau_{1\,\mathrm{GHz}},\alpha)$. We decompose each observed DM into Milky-Way
+$(\tau_{1\,\mathrm{GHz}},\beta)$, where $\beta$ is the spectral index of the
+electron-density fluctuation spectrum $P_n(q)\propto q^{-\beta}$ from which both
+the pulse-broadening function shape and the frequency-scaling index
+$\alpha=2\beta/(\beta-2)$ follow. We decompose each observed DM into Milky-Way
 (disk and halo), cosmological (Macquart), intervening circumgalactic, and host
 contributions, sourcing the intervening term from a foreground-galaxy search that
 returns 49 candidate systems along nine sightlines (29 confirmed foreground). An
@@ -51,14 +54,13 @@ diffractive-scintillation excess of $\sim$7--11$\times$ the NE2025 Galactic floo
 on the mid-latitude sightlines, robust across scattering-calibrated
 electron-density models, indicates an extragalactic (host or intervening)
 scattering screen rather than a Milky-Way origin. Finally, we show that unmodeled
-temporal sub-components can bias the single-component scattering index by several
-units, and an unphysical band-dependent pulse-broadening function by several
-tenths; re-fitting the sample under a single physical pulse-broadening function
-with per-band multiplicity, the well-constrained sightlines yield predominantly
-sub-Kolmogorov indices stable to $\le0.1$ under the PBF choice. Fixed-s²
-component adjudication is complete for the four Tier-B sightlines; population-level
-$\alpha$ statistics and the measured-versus-predicted budget overlay remain
-qualitative pending FINAL figure regeneration in the \texttt{dsa110-FLITS} pipeline.
+temporal sub-components can bias the recovered turbulence spectrum by several
+units in $\beta$, because a missing component is absorbed into the scattering tail
+and distorts both the fitted pulse-broadening function shape and its frequency
+scaling simultaneously. Fixed-s² component adjudication is complete for the four
+Tier-B sightlines; population-level $\beta$ statistics and the
+measured-versus-predicted budget overlay remain qualitative pending FINAL figure
+regeneration in the \texttt{dsa110-FLITS} pipeline.
 \end{abstract}
 
 \keywords{Radio transient sources (2008) --- Interstellar scattering (854)
@@ -68,6 +70,7 @@ qualitative pending FINAL figure regeneration in the \texttt{dsa110-FLITS} pipel
 \input{sections/observations.tex}
 \input{sections/toa.tex}
 \input{sections/budget.tex}
+\input{sections/beta_scattering_methods.tex}
 \input{sections/results.tex}
 \input{sections/discussion.tex}
 \input{sections/conclusions.tex}
