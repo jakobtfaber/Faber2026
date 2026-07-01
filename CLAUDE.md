@@ -16,9 +16,12 @@ energies trust boundary). Its "Avoid" lines are hard constraints on wording.
   bump is a deliberate `build:` commit made only after the corresponding
   pipeline work has merged upstream. `git submodule update` realigns a drifted
   checkout.
-- **Pushing `main` publishes.** `.github/workflows/overleaf-sync.yml` mirrors
-  every push to `main` into the Overleaf project (one-way; GitHub is the source
-  of truth). Treat a push to `main` as outward-facing.
+- **Overleaf sync is manual, from the Overleaf UI.** The owner pulls GitHub
+  changes via Overleaf's GitHub Sync; the git-bridge mirror workflow
+  (`.github/workflows/overleaf-sync.yml`) is **disabled** (2026-07-01,
+  `gh workflow disable`) to keep a single writer — re-enable only if UI-based
+  sync is abandoned. GitHub `main` is still the source of truth, and a push to
+  `main` is still outward-facing (it is what Overleaf pulls).
 - **Figures are pipeline exports.** Never hand-edit files under `figures/`;
   regenerate in `pipeline/` and re-export. Layout prototypes go in
   `figures/prototypes/` (gitignored).
