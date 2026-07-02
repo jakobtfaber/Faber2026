@@ -15,24 +15,35 @@ cool halo gas, accessible only where it can be isolated from the other terms.
 Scattering carries complementary information. Multipath propagation through
 turbulent ionized gas broadens the pulse by a time
 $\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$, whose
-spectral index $\alpha$ encodes the turbulent density spectrum and the
-scattering geometry: a Kolmogorov thin screen predicts $\alpha\simeq4.4$
-\citep{Rickett1990}, while measured pulse-broadening indices frequently fall
-below this value \citep{Bhat2004}. Because $\tau$ and $\alpha$ enter a single
-observing band only through the broadening at that band's frequency, a
-single-band measurement cannot separate them: the same data are reproduced by a
-large $\tau$ with a steep index or a small $\tau$ with a shallow one.
+frequency-scaling index $\alpha$ is determined by the same turbulence spectrum
+that sets the pulse-broadening function (PBF) shape: an electron-density
+fluctuation spectrum $P_n(q)\propto q^{-\beta}$ yields both a PBF shape derived
+from the phase structure function $D_\phi(\rho)\propto\rho^{\beta-2}$ and a
+frequency scaling $\alpha=2\beta/(\beta-2)$ for a thin screen
+\citep{Rickett1990, Cordes2025}. A Kolmogorov spectrum ($\beta=11/3$) gives
+$\alpha\simeq4.4$ and a power-law PBF tail; square-law statistics ($\beta=4$)
+give $\alpha=4$ and an exponential PBF. Measured pulse-broadening indices
+frequently fall below the Kolmogorov value \citep{Bhat2004}, but because
+$\beta$---not $\alpha$---is the fundamental turbulence parameter, interpreting
+such deviations requires fitting $\beta$ directly so that the PBF shape and
+frequency scaling remain mutually consistent. Because $\tau$ and its frequency
+scaling enter a single observing band only through the broadening at that band's
+frequency, a single-band measurement cannot separate them: the same data are
+reproduced by a large $\tau$ with a steep scaling or a small $\tau$ with a
+shallow one.
 
 Simultaneous detection across a wide frequency baseline breaks this degeneracy.
 The twelve FRBs studied here were each recorded by both CHIME/FRB at
 $0.4$--$0.8$\,GHz \citep{CHIMEFRB2018} and DSA-110 at $\sim$1.4\,GHz
 \citep{Law2024}, a $\sim$1\,GHz lever arm over which the ratio of the two
-scattering times fixes $\alpha$ directly. We use this leverage to ask, sightline
-by sightline, which medium contributes which observed feature---decomposing each
-burst's DM into its Galactic, cosmological, intervening, and host terms
-(Section~\ref{sec:budget}), attributing its scattering to a Galactic,
-intervening, or host screen (Section~\ref{sec:scattering}), and measuring the
-shared $(\tau_{1\,\mathrm{GHz}},\alpha)$ with a joint two-band fit
+scattering times fixes the frequency scaling directly. We use this leverage to
+ask, sightline by sightline, which medium contributes which observed
+feature---decomposing each burst's DM into its Galactic, cosmological,
+intervening, and host terms (Section~\ref{sec:budget}), attributing its
+scattering to a Galactic, intervening, or host screen
+(Section~\ref{sec:scattering}), and fitting the turbulence spectral index
+$\beta$ from a joint two-band model in which the PBF shape and $\alpha$ are
+both derived from $\beta$ at each likelihood evaluation
 (Section~\ref{sec:jointfit}). Section~\ref{sec:obs} describes the sample,
 Section~\ref{sec:results} presents the per-sightline budget and the
 isotropic-equivalent energies, and Sections~\ref{sec:discussion}--%

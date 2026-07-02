@@ -1,0 +1,132 @@
+\subsubsection{Physically consistent scattering-kernel model}
+\label{sec:beta-scattering-methods}
+
+A single-band scattering fit cannot separate a scattering timescale from its
+frequency scaling. If the broadening time is written phenomenologically as
+\begin{equation}
+\tau(\nu)=\tau_{1\,\mathrm{GHz}}
+\left(\frac{\nu}{1\,\mathrm{GHz}}\right)^{-\alpha},
+\end{equation}
+then one observing band constrains only the value of $\tau$ across that band,
+not the scaling index $\alpha$ independently. The CHIME/FRB--DSA-110
+co-detections supply a $\sim$1\,GHz lever arm and therefore break this empirical
+degeneracy. The physical interpretation of the scaling, however, requires one
+more constraint: the pulse-broadening function (PBF) shape and $\alpha$ are not
+independent parameters.
+
+Both quantities follow from the same scattering physics. For an electron-density
+fluctuation spectrum
+\begin{equation}
+P_n(q)\propto q^{-\beta},
+\end{equation}
+the inertial-range phase structure function scales as
+\begin{equation}
+D_\phi(\rho)\propto \rho^{\beta-2}.
+\end{equation}
+The transverse mutual coherence is then
+$\Gamma(b)\simeq \exp[-D_\phi(b)/2]$; its Fourier transform gives the angular
+brightness distribution of the scattered image, and the geometric delay
+$t\propto\theta^2$ maps that angular distribution into the time-domain PBF. The
+same $D_\phi$ also sets the diffractive scale and hence the frequency scaling of
+the scattering time. For a thin screen in the inertial-range regime,
+\begin{equation}
+\alpha(\beta)=\frac{2\beta}{\beta-2},
+\end{equation}
+so Kolmogorov turbulence ($\beta=11/3$) gives
+$\alpha=22/5\simeq4.4$, while the square-law limit ($\beta=4$) gives
+$\alpha=4$ and a one-sided exponential PBF.
+
+We therefore do not treat $\alpha$ as a free parameter inside a fixed PBF
+family. A fixed exponential PBF already assumes square-law phase statistics and
+therefore a narrow physical scaling near $\alpha=4$; allowing arbitrary
+$\alpha$ values inside that kernel combines incompatible turbulence assumptions.
+In particular, if the true PBF is heavier-tailed than an exponential, an
+exponential fit can absorb the shape mismatch into a biased,
+frequency-dependent $\widehat{\tau}$ and hence a biased apparent
+$\widehat{\alpha}$ \citep{Cordes2025}.
+
+Our primary joint model is therefore parameterized by the scattering strength and
+the underlying scattering family, not by an independent PBF and independent
+$\alpha$. In the simplest thin-screen implementation the shared sightline
+parameters are
+\begin{equation}
+(\tau_{1\,\mathrm{GHz}},\beta),
+\end{equation}
+with the PBF shape and $\alpha(\beta)$ derived self-consistently at each
+likelihood evaluation. The remaining pulse parameters are allowed to differ by
+telescope: each band has its own arrival time $t_0$, intrinsic width $\zeta$,
+residual dispersion offset $\delta\mathrm{DM}$, and component amplitudes. This
+model is fit simultaneously to the CHIME/FRB and DSA-110 dynamic spectra.
+
+This thin-screen mapping is the fiducial physical closure used here. Departures
+from it---extended media, multiple screens, anisotropy, refraction, finite inner
+scale, or a transition out of the inertial range---change the allowed relation
+between PBF shape and frequency scaling. We treat such departures as model
+limitations rather than allowing an unconstrained $\alpha$ to compensate for
+them. Thus a formally shallow empirical scaling, especially one recovered under
+a fixed exponential kernel, is not interpreted by itself as a turbulence spectral
+index; it is evidence that the assumed scattering family or burst morphology is
+incomplete.
+
+\subsubsection{Gain-marginalized dynamic-spectrum likelihood}
+\label{sec:beta-gainmarg}
+
+The fit is performed on the two-dimensional dynamic spectra rather than on
+band-averaged profiles. The model intensity in each frequency channel is a
+scattered temporal profile multiplied by an unknown channel gain. This gain
+absorbs the intrinsic burst spectrum, bandpass residuals, and diffractive
+scintillation structure, none of which should be forced into the scattering
+kernel.
+
+We marginalize the per-channel gain analytically with a Gaussian prior. The
+resulting per-channel evidence is a matched-filter likelihood for the temporal
+shape after the unknown spectral amplitude has been integrated out. This reduces
+the sampled dimensionality and prevents unresolved spectral structure from
+appearing as correlated residuals in the time-domain scattering fit. We sample
+the posterior with nested sampling as implemented in \texttt{dynesty}, and
+quality-gate each fit using the reduced $\chi^2$ and lag-1 residual
+autocorrelation; $R^2$ and residual normality are retained as diagnostic rather
+than decisive gates.
+
+\subsubsection{Sub-band validation of the frequency scaling}
+\label{sec:beta-subband}
+
+As an empirical cross-check, we also measure the scattering time independently in
+frequency sub-bands. We split CHIME/FRB into four sub-bands and DSA-110 into
+three sub-bands, collapse each sub-band to a one-dimensional profile, and fit a
+scattered pulse with $\tau_i$ free in each sub-band. These sub-band fits do not
+impose a common power law and do not share the full two-dimensional likelihood
+used by the joint model.
+
+The slope of the measured $\tau_i(\nu_i)$ points is therefore a diagnostic of
+the observed frequency scaling. Agreement with the joint model supports the
+recovered scaling; disagreement flags either profile evolution, insufficient
+time resolution, low signal-to-noise, or a mismatch between the adopted
+scattering family and the data. We use this sub-band reconstruction only as a
+validation diagnostic, not as the primary estimator, because the CHIME tail can
+be unresolved in faint or heavily scattered bursts and the DSA scattering time
+can fall below the instrumental resolution at the top of the band.
+
+\subsubsection{Multiple temporal components}
+\label{sec:beta-multicomp}
+
+Some FRBs contain multiple temporal components. If a component is omitted, the
+fit can absorb it into the scattering tail, biasing both the recovered PBF shape
+and the inferred frequency scaling. This is especially dangerous in a cross-band
+fit: the apparent scaling can be driven by mismatched component structure
+between CHIME/FRB and DSA-110 rather than by propagation physics.
+
+We therefore extend the likelihood to allow $N$ temporal components per band.
+Each component has its own arrival time and intrinsic width within that band,
+while the scattering parameters describing the sightline are shared across all
+components and both telescopes. Component counts are selected by Bayesian
+evidence on a matched likelihood grid, so that one-component and multi-component
+models have comparable evidence normalizations. Component arrival times within a
+band are ordered and separated by a data-derived minimum spacing to keep the fit
+identifiable.
+
+When the evidence favors an additional component and the residuals whiten, we
+interpret the component as burst morphology rather than scattering structure. If
+the turbulence parameters rail or become multimodal in the one-component model
+but unrail after the additional component is included, the single-component
+result is rejected as a morphology-induced scattering bias.
