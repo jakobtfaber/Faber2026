@@ -13,8 +13,8 @@ pulse-broadening screen far below the resolved diffractive scale---localize that
 screen to the host or an intervening medium rather than the Galaxy.
 
 Whether that screen is intervening or intrinsic to the host is, in principle,
-decided by the foreground census. The three sightlines that pierce a foreground
-galaxy's interior (FRB~20220310F, FRB~20230307A, FRB~20230814B) carry both the
+decided by the foreground census. The two sightlines that pierce a foreground
+galaxy's interior (FRB~20220310F, FRB~20230307A) carry both the
 largest predicted intervening dispersion and the largest predicted intervening
 pulse-broadening (Figure~\ref{fig:budget}, right), and are the natural candidates
 for an intervening scattering screen. The high-amplitude scintillation-excess
@@ -27,32 +27,33 @@ but cannot yet close until the per-sightline $\tau$ set is finalized into the
 overlay; this is the test we identify as the principal remaining measurement for
 the sample.
 
-\subsection{Burst multiplicity as a systematic on the scattering index}
+\subsection{Burst multiplicity as a systematic on the turbulence spectrum}
 \label{sec:disc-alpha}
 
 The result of Section~\ref{sec:results-alpha} is a cautionary systematic for any
-single-component scattering index. A temporal sub-component omitted from the model
-is partially absorbed into the scattering tail and biases $\alpha$---classically
-high, as a steeper slope and a larger scattering time mimic the unmodeled flux,
-but the bias can instead rail the fit against a prior bound when the multiplicity
-is split across the two bands, as in FRB~20220310F where an unmodeled DSA-110
-sub-pulse drives $\alpha$ to its \emph{lower} bound. Because $\alpha$ distinguishes
-a Kolmogorov turbulent screen ($\alpha\simeq4.4$; \citealp{Rickett1990}) from a
-shallower spectrum, an unrecognized companion can masquerade as anomalous
-scattering---a regime in which measured pulse-broadening indices already scatter
-well below the Kolmogorov value \citep{Bhat2004}. We verified that a favored
+single-component fit to the turbulence spectrum. A temporal sub-component omitted
+from the model is partially absorbed into the scattering tail and biases
+$\beta$---classically toward steeper values, as a larger scattering time and
+steeper frequency scaling mimic the unmodeled flux, but the bias can instead rail
+the fit against a prior bound when the multiplicity is split across the two bands,
+as in FRB~20220310F where an unmodeled DSA-110 sub-pulse drives $\beta$ to a
+prior rail. Because $\beta$ determines both the PBF shape and the frequency
+scaling, an unrecognized companion distorts the entire scattering model
+simultaneously rather than shifting a single index. We verified that a favored
 second component is not an artifact of the likelihood: its evidence gain is flat
 across the gain-prior scale (so it is not prior-driven), reconstructing the
 single-component residual reproduces the whiteness statistic that flagged the
 burst, and the companion sits well inside the resolvable separation.
 
-A second systematic is the assumed PBF. A band-dependent PBF
-shape---formally favored for some bursts but unphysical for a single
-sightline---can shift a marginal, poorly-constrained burst's $\alpha$ by several
-tenths, while leaving the well-constrained sightlines unchanged at the $\le0.1$
-level (Section~\ref{sec:jointfit}). Multiplicity and PBF must therefore both be
-controlled before a per-sightline $\alpha$ is interpreted; the indices reported
-here come from a uniform re-fit of the sample under a single physical (exponential)
-PBF, modeling temporal multiplicity per band. For the marginal sightlines---those
-whose posterior rails or reaches a prior bound under either choice---we quote no
-index, treating them as unconstrained rather than anomalous.
+The $\beta$-based fit removes the PBF as an independent systematic, because the
+PBF shape and the frequency scaling are both derived from the same $\beta$ at
+each likelihood evaluation. A sightline whose posterior is consistent with
+$\beta=4$ is consistent with square-law statistics and an exponential PBF, while
+the Kolmogorov point is $\beta=11/3$ with $\alpha\approx4.4$. In the thin-screen
+inertial-range mapping, $\alpha=2\beta/(\beta-2)$ decreases as $\beta$ increases,
+so a formally shallow empirical scaling cannot be read by itself as a
+shallower-than-Kolmogorov turbulence spectrum; it instead indicates that the
+assumed scattering family, burst morphology, or inertial-range closure is
+incomplete. For the marginal sightlines---those whose posterior rails or reaches
+a prior bound---we quote no turbulence index, treating them as unconstrained
+rather than anomalous.
