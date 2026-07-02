@@ -1,0 +1,91 @@
+\section{An exponential pulse-broadening function implies $\alpha=4$}
+\label{app:emg-alpha4}
+
+Exponentially modified Gaussian (EMG) profiles---a Gaussian pulse of width
+$\sigma$ convolved with the one-sided exponential
+$p(t)=\tau^{-1}e^{-t/\tau}$ ($t\ge0$)---are the standard phenomenological
+scattering model in the pulsar and FRB literature, and they are the kernel our
+pipeline evaluates in its exponential limit,
+\begin{equation}
+\label{eq:emg}
+I(t)\;\propto\;\frac{1}{2\tau}\,
+\exp\!\left[\frac{\sigma^{2}}{2\tau^{2}}-\frac{t-t_{0}}{\tau}\right]
+\operatorname{erfc}\!\left[\frac{1}{\sqrt{2}}
+\left(\frac{\sigma}{\tau}-\frac{t-t_{0}}{\sigma}\right)\right].
+\end{equation}
+This appendix records why adopting an EMG kernel is not scaling-agnostic:
+within thin-screen scattering the exponential pulse-broadening function (PBF)
+is uniquely the $\beta=4$ member of the power-law family of
+Section~\ref{sec:beta-scattering-methods}, and $\beta=4$ fixes $\alpha=4$.
+Fixing $\alpha=4$ in an EMG fit is therefore a self-consistency requirement
+rather than a modeling choice, and conversely an EMG fit with $\alpha$ free
+combines incompatible turbulence assumptions.
+
+\subsection{Uniqueness of the exponential limit}
+
+For a thin screen with $P_n(q)\propto q^{-\beta}$, $2<\beta<4$, and a
+negligible inner scale, the PBF is exponential at small delays and develops a
+power-law tail at large delays \citep{Cordes2025}:
+\begin{equation}
+\label{eq:pbf-family}
+p(s)\;\propto\;
+\begin{cases}
+e^{-s}, & s\le s_{c},\\[2pt]
+e^{-s_{c}}\,(s/s_{c})^{-\beta/2}, & s>s_{c},
+\end{cases}
+\qquad
+s_{c}=2\ln\!\frac{2}{4-\beta},
+\end{equation}
+with $s=t/\tau$. The fraction of the unit-normalized PBF carried by the tail
+is
+\begin{equation}
+\label{eq:tailmass}
+M(\beta)\;=\;
+\int_{s_{c}}^{\infty} e^{-s_{c}}\!\left(\frac{s}{s_{c}}\right)^{-\beta/2} ds
+\;=\;\frac{(4-\beta)^{2}\,s_{c}}{2\,(\beta-2)},
+\end{equation}
+which is strictly positive for every $2<\beta<4$ (e.g.\ $M(3)=\ln 2$) and
+vanishes only in the limit $\beta\to4$, where $s_{c}\to\infty$ and the family
+degenerates to the pure exponential. The tail is normalizable for $\beta>2$
+while its mean delay converges only for $\beta>4$, so every $\beta<4$ member is
+qualitatively heavier-tailed than the exponential rather than a small
+perturbation of it. An exactly exponential PBF therefore corresponds to one and
+only one point of the family: the square-law limit $\beta=4$.
+
+\subsection{The scaling forced by $\beta=4$}
+
+The same $\beta$ sets the frequency scaling. With the inertial-range phase
+structure function $D_\phi(\rho)\propto\nu^{-2}\rho^{\beta-2}$
+(Section~\ref{sec:beta-scattering-methods}), the diffractive scale defined by
+$D_\phi(\rho_{\rm d})=1$ obeys $\rho_{\rm d}\propto\nu^{2/(\beta-2)}$, the
+scattering angle scales as $\theta_{\rm d}\propto(k\rho_{\rm d})^{-1}\propto
+\nu^{-\beta/(\beta-2)}$, and the geometric delay $\tau\propto\theta_{\rm d}^{2}$
+gives
+\begin{equation}
+\label{eq:alpha-closure-appendix}
+\tau\;\propto\;\nu^{-2\beta/(\beta-2)}
+\quad\Longrightarrow\quad
+\alpha(\beta)=\frac{2\beta}{\beta-2},
+\qquad \alpha(4)=4 .
+\end{equation}
+An EMG kernel thus commits a fit to $\tau\propto\nu^{-4}$ by definition.
+
+Two corollaries govern our fit design. First, the only fixed scattering index
+consistent with an exponential kernel is $\alpha=4$; fixing the Kolmogorov
+value $\alpha=22/5$ inside an EMG would be inconsistent, because $\beta=11/3$
+implies the tailed PBF of Equation~\ref{eq:pbf-family}, not an exponential.
+Second, an EMG fit with $\alpha$ free asserts $\beta=4$ through its shape while
+asserting $\beta\neq4$ through its scaling; a shallow apparent index recovered
+that way measures departure from the assumed scattering family---burst
+morphology, an extended medium, or a finite inner scale
+\citep{Bhat2004,Cordes2025}---rather than a turbulence spectral index. This is
+why our primary model samples $\beta$ directly and derives both the PBF shape
+and $\alpha(\beta)$ from it (Section~\ref{sec:beta-scattering-methods}).
+
+% The algebra in this appendix -- the closure values, the divergence of s_c,
+% the closed form and beta->4 limit of M(beta), the tail convergence
+% conditions, the tau(nu) exponent, and the equivalence of Eq. (eq:emg) with
+% the Gaussian (*) one-sided-exponential convolution and with the erfcx kernel
+% implemented in pipeline/scattering/scat_analysis/burstfit.py -- was verified
+% symbolically with WolframScript; script and outputs (12/12 True):
+% docs/rse/specs/emg_alpha4_verify.wls
