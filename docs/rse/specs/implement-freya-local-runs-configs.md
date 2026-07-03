@@ -27,9 +27,15 @@ local joint-fit driver's own `prepare()` step, with no driver changes.
 
 - **Deviation 1:** `alpha_fixed: 4.0` omitted from the freya configs despite literal
   field-mirroring of the whitney_fine precedent.
-  - **Reason:** The joint driver never reads it; production freya configs don't carry
-    it; freya is the roster's α > 4 sightline, so fixing α = 4 on any single-band
-    re-use of these configs would contradict the measurement they exist for.
+  - **Reason:** The joint driver never reads it in this prep path; production freya
+    configs don't carry it; and mirroring it as an inert field is not harmless — a
+    future single-band reuse of these YAMLs would read it as a fixed-α constraint.
+    freya's α/β must remain unconstrained because measuring whether the deprecated
+    exp-era fit's steep-α suggestion (free-α + fixed-exponential-PBF, α ≈ 4.36 —
+    invalid as ground truth per CONTEXT.md) survives under the β co-model is the
+    hypothesis this whole DAG tests. Epistemic status: "α > 4 for freya" is a
+    deprecated-fit suggestion and the target of validation, not a current-model
+    result.
   - **Impact:** None on the joint path; single-band re-use samples β instead of
     fixing it. Documented in the PR body.
 
