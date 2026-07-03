@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-03
 **Author:** AI Assistant
-**Status:** Complete pending merge (PR #114 open, Codex round-2 APPROVE; merge owner-gated)
+**Status:** Complete (merged 2026-07-03, squash `e09ac78b`, owner-authorized)
 **Plan Reference:** dsa110-FLITS issue #104 Agent Brief + PRD ([prd-freya-beta-comodel-real-data-fit.md](prd-freya-beta-comodel-real-data-fit.md)); #103 gate green (merged `41bfe977`)
 
 ---
@@ -110,9 +110,10 @@ and the top-level derived `alpha`.
 
 ## Next Steps
 
-1. **Merge PR #114** — owner-gated, not yet authorized.
-2. **#105** Route A cross-check fit (`run_beta_poc.py --real`) — after #114
-   merges; agreement band per the PRD.
+1. ~~Merge PR #114~~ — **merged** 2026-07-03 (squash `e09ac78b`,
+   owner-authorized); worktree/branch cleaned up, canonical clone synced.
+2. **#105** Route A cross-check fit (`run_beta_poc.py --real`) — agreement
+   band per the PRD.
 3. **#106** verdict artifact — must carry the truncation caveat verbatim.
 4. **Pin bump** in Faber2026 (deliberate `build:` commit, target ≥ #114's
    squash SHA) once the DAG's code has merged; manuscript motion only after
