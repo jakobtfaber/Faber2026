@@ -51,7 +51,7 @@
 
 - **Environment:** conda `flits` env; it editable-installs the **canonical clone** (`~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS`, now at `9ebe02cf`) — run from inside `pipeline/` to get pinned (`bffd875`) code instead; print `module.__file__` when in doubt
 - **Seeds:** new tests use fixed rngs (41 for crafted ACF; 17/23 in pre-existing synthetic helpers) — fully deterministic
-- **Data:** `scintillation/data/freya.npz` **absent from all checkouts** — the real-data run has never executed. CHIME-side inputs on h17: `chime_singlebeam/singlebeam_278720455.h5` exists; freya upchannelized products do **not** (`upchan_codetections/` lacks `freya_chime_upchan.npy`); upchannelization script at `h17:/data/research/astrophysics/frbs/chime-dsa-codetections/scripts/upchannelize_chime.py`
+- **Data:** raw freya waterfalls ARE local (verified 2026-07-03): `~/Data/Faber2026/dsa110/DSA_bursts/freya_dsa_I_912_4_2500b_cntr_bpc.npy` (117 MB) and `freya_chime_I_912_4067_32000b_cntr_bpc.npy` (125 MB). What's missing is only the scintillation-format conversion — an `.npz` with `power_2d`/`frequencies_mhz`/`times_s` keys (`DynamicSpectrum.from_numpy_file` contract); precedent: `~/Data/Faber2026/dsa110/scintillation-data/casey_chime{,_hi}.npz`. h17 matters only if CHIME-side scintillation needs 16k/upchannelized resolution beyond the local burst-fitting product: `chime_singlebeam/singlebeam_278720455.h5` exists there; `upchan_codetections/` lacks freya; script at `h17:/data/research/astrophysics/frbs/chime-dsa-codetections/scripts/upchannelize_chime.py`
 - **In-flight jobs:** none
 
 ## Verification State / Known-Broken
@@ -71,7 +71,7 @@
 
 ## Action Items & Next Steps
 
-1. [ ] **Stage freya DSA data and do the first real run:** locate/produce `scintillation/data/freya.npz` (check `~/Data/Faber2026/dsa110/` first per the ~/Data consolidation), then `conda run -n flits python -m scintillation.scint_analysis.freya_scintillation scintillation/configs/bursts/freya_dsa.yaml --out scintillation/plots/freya` and **inspect the three figures before citing any number** (dynamic spectrum+window, ACF+fit, structure function)
+1. [ ] **Convert + first real run (DSA side is unblocked):** build `freya.npz` (`power_2d`/`frequencies_mhz`/`times_s`, mirroring `scintillation-data/casey_chime.npz`) from `~/Data/Faber2026/dsa110/DSA_bursts/freya_dsa_I_912_4_2500b_cntr_bpc.npy` + the freya_dsa frequency/time axes (freya_dsa_run.yaml in `~/Data/Faber2026/dsa110/flits-runs/configs/` records them); place it where `freya_dsa.yaml`'s `input_data_path` points; then `conda run -n flits python -m scintillation.scint_analysis.freya_scintillation scintillation/configs/bursts/freya_dsa.yaml --out scintillation/plots/freya` and **inspect the three figures before citing any number** (dynamic spectrum+window, ACF+fit, structure function). Mind frequency resolution: scintillation needs the finest available channelization, not the fit-downsampled product
 2. [ ] If CHIME scintillation is wanted: add freya to the h17 upchannelization target list (script above) and generate the 16k products
 3. [ ] Install-side Numba cache check for the mixed-import risk (r4 residual): run the console entry `flits-scint-freya --help` and one synthetic pass in the installed `flits` env
 4. [ ] Faber2026 pin bump to `9ebe02cf` **only when** the manuscript starts citing scintillation numbers (deliberate `build:` commit per PIPELINE.md)
