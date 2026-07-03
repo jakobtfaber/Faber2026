@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-03
 **Author:** AI Assistant
-**Status:** Complete pending merge — PR #113 open, Codex APPROVE; merge owner-gated
+**Status:** Complete (merged 2026-07-03, squash `41bfe977`, owner-authorized)
 **Plan Reference:** dsa110-FLITS issue #103 Agent Brief (posted 2026-07-03) + the PRD's Implementation/Testing Decisions ([prd-freya-beta-comodel-real-data-fit.md](prd-freya-beta-comodel-real-data-fit.md), deep module 2)
 
 ---
@@ -14,7 +14,7 @@ The decisive, cheap, deterministic gate before the expensive #104 fit: Route A (
 
 **Result: PASS on freya's real prepared CHIME+DSA models — max_rel_diff = 0.0, exact bitwise agreement across all 260 θ points.**
 
-**Final Status:** PR https://github.com/jakobtfaber/dsa110-FLITS/pull/113 (`Closes #103`), branch `feat/103-likelihood-equivalence` off `d0d3592a`; Codex round-1 MAJOR fixed in-lane, round-2 **APPROVE, zero findings**. Merge awaits owner authorization.
+**Final Status:** ✅ Complete — PR https://github.com/jakobtfaber/dsa110-FLITS/pull/113 (`Closes #103`), branch `feat/103-likelihood-equivalence` off `d0d3592a`; Codex round-1 MAJOR fixed in-lane, round-2 **APPROVE, zero findings**; **merged** 2026-07-03 (squash `41bfe977`, owner-authorized). Worktree/branch cleaned up; upstream main now `41bfe977`.
 
 ## What changed
 
@@ -53,10 +53,9 @@ All in the `flits` conda env on jakob-mbp, from the `flits-103` worktree:
 
 ## Next Steps
 
-1. **Owner merge decision on PR #113** (merges are owner-gated).
-2. **#104** (production joint fit) — its #103 gate is now green pending merge; still needs the #101 preflight at adopted candidates and the CHIME window decision (`FLITS_ONPULSE_CROP`/`FLITS_ONPULSE_PAD`) first; hours-long dynesty run in background.
-3. #105 (Route A cross-check fit; quality-bearing post-#111), #106 (verdict artifact) per the DAG.
-4. Pin bump (deliberate `build:` commit in Faber2026) once the DAG's code has merged; target ≥ the #113 squash SHA.
+1. **#104** (production joint fit) — its #103 gate is green (merged); still needs the #101 preflight at adopted candidates and the CHIME window decision (`FLITS_ONPULSE_CROP`/`FLITS_ONPULSE_PAD`) first; hours-long dynesty run in background.
+2. #105 (Route A cross-check fit; quality-bearing post-#111), #106 (verdict artifact) per the DAG.
+3. Pin bump (deliberate `build:` commit in Faber2026) once the DAG's code has merged; target ≥ `41bfe977`.
 
 ## References
 
