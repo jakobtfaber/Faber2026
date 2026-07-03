@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-03
 **Author:** AI Assistant
-**Status:** Complete pending merge (PR #115 open, Codex round-2 APPROVE; merge owner-gated)
+**Status:** Complete (merged 2026-07-03, squash `b8c8ffe5`, owner-authorized)
 **Plan Reference:** dsa110-FLITS issue #105 Agent Brief (posted 2026-07-03) + PRD ([prd-freya-beta-comodel-real-data-fit.md](prd-freya-beta-comodel-real-data-fit.md)); blockers #100/#102/#104 all merged
 
 ---
@@ -78,7 +78,7 @@ marginals. Stop condition NOT triggered; #106 unblocked.
 
 ## Next Steps
 
-1. **Merge PR #115** — owner-gated, not yet authorized.
+1. ~~Merge PR #115~~ — **merged** 2026-07-03 (squash `b8c8ffe5`, owner-authorized); worktree/branch cleaned up, canonical clone synced.
 2. **#106** verdict artifact — comparator A-vs-B `agree` + Route B vs the
    exp-era α=4.355 suggestion, carrying the truncation caveat verbatim.
 3. **Pin bump** in Faber2026 (deliberate `build:` commit, target ≥ #115's
