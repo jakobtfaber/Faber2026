@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-03
 **Author:** AI Assistant
-**Status:** Complete — PR #119 open, Codex round-1 APPROVE; merge owner-gated
+**Status:** Complete (merged 2026-07-03, squash `9ebe02cf`, owner-authorized; issue #118 auto-closed)
 **Plan Reference:** dsa110-FLITS issue #118 (the issue body is the approved
 brief, per the #103–#106 lane pattern); findings originate from PR #117
 adversarial review round 1 (findings 3–5, unresolved at the #117
@@ -77,7 +77,7 @@ neighboring pipeline's.
 
 ## Next Steps
 
-1. Merge PR #119 — **owner-gated, not yet authorized**.
+1. ~~Merge PR #119~~ — **merged** 2026-07-03 (squash `9ebe02cf`, CI 4/4); worktree/branch cleaned up, canonical clone synced.
 2. After merge: Faber2026 pin bump to the merged SHA (deliberate `build:`
    commit) if the manuscript is to cite scintillation numbers from this code.
 3. Real-data freya run + figure inspection once `freya.npz` is staged
