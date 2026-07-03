@@ -17,7 +17,7 @@ local joint-fit driver's own `prepare()` step, with no driver changes.
 
 **Implementation Duration:** 2026-07-02, single session.
 
-**Final Status:** ✅ Complete — PR open, awaiting human review/merge.
+**Final Status:** ✅ Complete — merged to upstream main as `00a66262` (squash of PR #107, 2026-07-03), #99 auto-closed.
 
 ## Plan Adherence
 
@@ -88,9 +88,9 @@ environment-specific, not universal (independently reproduced by a Codex review,
 - ✅ `pytest -m "not slow"` on the file — 2 deselected (marker honored; `--strict-markers` active)
 - ✅ `pytest --collect-only -q` — 475 tests collected, no import errors, **in the `flits` env**. Caveat: a clean py312 runner fails collection on missing `ipywidgets` — on this branch *and* on upstream main alike (pre-existing environment gap, not a PR regression). Remote PR checks summarize as 4 passed.
 
-### Manual Verification (pending, human)
+### Manual Verification
 
-- [ ] Review PR https://github.com/jakobtfaber/dsa110-FLITS/pull/107 and merge (one-way door: merge is human-gated).
+- [x] PR https://github.com/jakobtfaber/dsa110-FLITS/pull/107 reviewed (owner delegated review to Codex: APPROVE, zero findings) and merged on owner instruction 2026-07-03 (`00a66262`).
 - [ ] Optional spot-check: run the smoke test from the pinned checkout context once the pin advances past this merge.
 
 ## Issues Encountered
@@ -119,9 +119,9 @@ No documentation updates required beyond config header comments (why-comments pe
 
 The rest of the #99–#106 DAG (this slice unblocks #101, #102):
 
-- [ ] #100 posterior comparator (`ready-for-agent`, independent — parallel-safe in its own worktree)
-- [ ] Re-triage #101/#102 → `ready-for-agent` with agent briefs once #99 merges
-- [ ] #103–#106 per the DAG; pin bump only after upstream merges (target ≥ `43f4c824`)
+- [x] #100 posterior comparator — merged as `424d724c` (PR #108); see `implement-posterior-comparator.md`
+- [x] Re-triage #101/#102 → `ready-for-agent` with agent briefs (done 2026-07-03, post-merge)
+- [ ] #103–#106 per the DAG; pin bump only after upstream merges (target now ≥ `424d724c`)
 
 ## Next Steps
 
