@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-03
 **Author:** AI Assistant
-**Status:** Complete pending merge (PR #116 open, Codex round-2 APPROVE; merge owner-gated)
+**Status:** Complete (merged 2026-07-03, squash `3d31db7e`, owner-authorized; pin bumped in `0346068`)
 **Plan Reference:** dsa110-FLITS issue #106 Agent Brief (posted 2026-07-03) + PRD ([prd-freya-beta-comodel-real-data-fit.md](prd-freya-beta-comodel-real-data-fit.md), story 13, deep module 3); blockers #100/#104/#105 all merged
 
 ---
@@ -84,10 +84,10 @@ one provenance-bearing source that Step 4 and the eventual β-table row cite.
 
 ## Next Steps
 
-1. **Merge PR #116** — owner-gated, not yet authorized.
-2. **Pin bump** — deliberate `build:` commit in Faber2026 moving `pipeline/`
-   from `6ce3e58` to ≥ #116's squash SHA; after that, every DAG number in the
-   manuscript is reproducible from the pin.
+1. ~~Merge PR #116~~ — **merged** 2026-07-03 (squash `3d31db7e`, owner-authorized); worktree/branch cleaned up, canonical clone synced.
+2. ~~Pin bump~~ — done: `build:` commit `0346068` moves `pipeline/` from
+   `6ce3e58` to `3d31db7e`; every DAG number in the manuscript is now
+   reproducible from the pin.
 3. Manuscript motion (β-table row, prose) — owner/Step 6, citing
    `freya_beta_verdict.json` as the provenance source.
 
