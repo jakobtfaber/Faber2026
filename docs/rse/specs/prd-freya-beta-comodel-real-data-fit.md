@@ -66,10 +66,13 @@ validated comparison against the deprecated exp-era posterior.
   power-law below); the driver's per-band PBF attributes are dead code. No physics
   changes required or permitted in this task.
 - **β bounds** enter through the driver's legacy α-vocabulary mapping (only α ≥ 4
-  reachable — acceptable: freya is the roster's only single-component (C1D1)
-  sightline with α > 4; whitney's α ≈ 5.1 is the multi-component multiplicity
-  exemplar, out of scope here. The extended-medium branch stays an open
-  `@decision` untouched).
+  reachable — acceptable: freya is the only single-component (C1D1) sightline whose
+  deprecated exp-era fit (free-α + fixed-exponential-PBF, roster α ≈ 4.36 — invalid
+  as β-conversion input per CONTEXT.md) *suggested* α > 4; whether that suggestion
+  survives under the β co-model is the hypothesis this fit tests, not established
+  physics. whitney's exp-era α ≈ 5.1 is the multi-component multiplicity exemplar,
+  out of scope here. The extended-medium branch stays an open `@decision`
+  untouched).
 - **New shallow artifact:** freya CHIME+DSA run-configs following the existing
   local-runs precedent, pointing at the pinned checkout's data symlinks (not the
   canonical clone — the whitney precedent's paths are a provenance trap to correct
