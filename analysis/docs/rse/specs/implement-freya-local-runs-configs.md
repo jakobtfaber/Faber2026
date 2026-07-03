@@ -73,10 +73,14 @@ No other deviations.
 
 ### Automated Verification
 
+All automated results below are from the `flits` conda env on jakob-mbp — they are
+environment-specific, not universal (independently reproduced by a Codex review,
+2026-07-02, which re-ran the smoke test: 2 passed in 7.58s).
+
 - ✅ `pytest tests/test_freya_local_runs_smoke.py` — 2 passed in 6.35s (real data, both bands; on-pulse crop engaged: DSA 875 → 472 samples)
-- ✅ `ruff check` + `ruff format --check` — clean
+- ✅ `ruff check` + `ruff format --check` — clean on the Python test file (the YAML configs are not a ruff surface)
 - ✅ `pytest -m "not slow"` on the file — 2 deselected (marker honored; `--strict-markers` active)
-- ✅ `pytest --collect-only -q` — 475 tests collected, no import errors (no regressions introduced)
+- ✅ `pytest --collect-only -q` — 475 tests collected, no import errors, **in the `flits` env**. Caveat: a clean py312 runner fails collection on missing `ipywidgets` — on this branch *and* on upstream main alike (pre-existing environment gap, not a PR regression). Remote PR checks summarize as 4 passed.
 
 ### Manual Verification (pending, human)
 
@@ -95,7 +99,7 @@ joint fit runs. Noted in the PR body.
 
 **Tests Added:** `tests/test_freya_local_runs_smoke.py::test_freya_band_prep_smoke[{chime,dsa}]` — real-data band-preparation smoke via the driver's `prepare()`.
 
-**All Tests Passing:** ✅ Yes (2/2; suite collection clean).
+**All Tests Passing:** ✅ Yes (2/2 in the `flits` env; see the environment caveat under Verification Results).
 
 ## Performance Observations
 
