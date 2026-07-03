@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-03
 **Author:** AI Assistant
-**Status:** Complete (PR open, merge owner-gated)
+**Status:** Complete (merged 2026-07-03, squash `37d76a49`)
 **Plan Reference:** dsa110-FLITS issue #102 + its Agent Brief (the tracker issues are the plan); PRD "Route A completion" in [prd-freya-beta-comodel-real-data-fit.md](prd-freya-beta-comodel-real-data-fit.md).
 
 ---
@@ -12,7 +12,7 @@
 
 Slice 8/8 of the freya β co-model DAG's ready pair: `analysis/beta_poc/run_beta_poc.py` migrated to the β-native `FRBParams` API, its dead per-model PBF attribute writes deleted, and its real-data stub completed via the joint driver's own `prepare()` + the #99 freya run-configs. Route A now exists as the independent-likelihood cross-check instrument for #103/#105.
 
-**Final Status:** ✅ Complete — PR https://github.com/jakobtfaber/dsa110-FLITS/pull/110 open (`Closes #102`), branch `feat/102-poc-beta-native` off `424d724c`. Merge is owner-gated.
+**Final Status:** ✅ Complete — PR https://github.com/jakobtfaber/dsa110-FLITS/pull/110 (`Closes #102`), branch `feat/102-poc-beta-native` off `424d724c`, **merged** 2026-07-03 (squash `37d76a49`, owner-authorized).
 
 ## Plan Adherence
 
@@ -46,10 +46,10 @@ All in the `flits` conda env on jakob-mbp (env-scoped):
 
 ## Next Steps
 
-1. Owner review/merge of PRs #109 (#101: Codex APPROVE, zero findings) and #110 (#102: Codex findings pre-existing, tracked as #111; in-scope checks all passed).
-2. Re-triage **#103** (likelihood equivalence) → `ready-for-agent` with a brief once both merge; it consumes Route A + the #99 configs.
+1. ~~Owner review/merge of PRs #109 and #110.~~ Both merged 2026-07-03 (`d8348f68`, `37d76a49`).
+2. ~~Re-triage **#103** (likelihood equivalence) → `ready-for-agent` with a brief once both merge.~~ Done 2026-07-03.
 3. #104 (production joint fit) — gated on #101 PASS at its adopted candidates + #103 PASS; must decide the CHIME window question first.
-4. **#111** (POC `_validate()` vs `classify_fit_quality`; diagnostic figures) — must land before Route A's real fit is quality-bearing at #105.
+4. ~~**#111** (POC `_validate()` vs `classify_fit_quality`; diagnostic figures).~~ Fixed via PR #112, merged (`d0d3592a`) — see [implement-poc-validate-diagnostics.md](implement-poc-validate-diagnostics.md).
 
 ## References
 

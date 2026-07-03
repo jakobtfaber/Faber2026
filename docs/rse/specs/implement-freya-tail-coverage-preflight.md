@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-03
 **Author:** AI Assistant
-**Status:** Complete (PR open, merge owner-gated)
+**Status:** Complete (merged 2026-07-03, squash `d8348f68`)
 **Plan Reference:** dsa110-FLITS issue #101 + its Agent Brief (the tracker issues are the plan); PRD "deep module 1" in [prd-freya-beta-comodel-real-data-fit.md](prd-freya-beta-comodel-real-data-fit.md).
 
 ---
@@ -12,7 +12,7 @@
 
 Slice 7/8 of the freya β co-model DAG: `analysis/scattering-refit-2026-06/tail_coverage.py` — a pure, deterministic function `(band geometry, τ₁GHz, β, prepared window[, t0]) → captured e-folds of the power-law PBF tail + hard-threshold PASS/FAIL`, plus the recorded preflight artifact on freya's real prepared CHIME+DSA windows. #104 gates on this check before any sampling.
 
-**Final Status:** ✅ Complete — PR https://github.com/jakobtfaber/dsa110-FLITS/pull/109 open (`Closes #101`), branch `feat/101-tail-coverage-preflight` off `424d724c`. Merge is owner-gated.
+**Final Status:** ✅ Complete — PR https://github.com/jakobtfaber/dsa110-FLITS/pull/109 (`Closes #101`), branch `feat/101-tail-coverage-preflight` off `424d724c`, **merged** 2026-07-03 (squash `d8348f68`, owner-authorized).
 
 ## What the math is
 
@@ -47,8 +47,8 @@ The τ grid **spans the deprecated exp-era fit's suggestion** (τ₁GHz ≈ 0.11
 
 ## Next Steps
 
-1. #102 (Route A completion) — parallel slice, separate lane (PR in flight this session).
-2. #103 (likelihood equivalence) → re-triage `ready-for-agent` once #101/#102 merge.
+1. ~~#102 (Route A completion) — parallel slice, separate lane (PR in flight this session).~~ Merged (PR #110, `37d76a49`).
+2. ~~#103 (likelihood equivalence) → re-triage `ready-for-agent` once #101/#102 merge.~~ Re-triaged 2026-07-03 with an Agent Brief.
 3. #104 must run this preflight at its adopted candidates and decide the CHIME window question (`FLITS_ONPULSE_PAD` widening vs accepting the near-exponential-only regime) **before** the hours-long dynesty run.
 
 ## References
