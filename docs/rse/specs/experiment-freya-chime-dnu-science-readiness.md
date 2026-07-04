@@ -260,6 +260,37 @@ e4_quenching.py, freya_chime_hi_gapless.npz, configs, out/freya_scintillation.js
 
 ---
 
+## ADDENDUM 2026-07-04: dedispersion defect found — headline number DEPRECATED pending product regeneration
+
+Owner figure inspection of the full-band view flagged the burst as too wide
+(~8 ms) with no inter-channel drift. Investigation confirmed **the upchan
+product was never coherently dedispersed**: the h17 script called
+`coherent_dedisp(data, dm, time_shift=True)` but the function operates on a
+COPY and returns the de-chirped array (write-back only with `write=True`) —
+the return value was discarded and the RAW `tiedbeam_baseband` was
+upchannelized. Evidence: (1) coarse-block-folded burst image shows a
+full-magnitude intra-channel sawtooth (arrival drift ≈ 10.7 ms @650 /
+7.0 ms @750 across each 64-fine-channel block, wrap at block edges), sign =
+natural dispersion (lower fine frequency later); (2) magnitudes match
+8.3 µs · DM · 0.390625 / ν³ exactly; (3) singlebeam metadata:
+`tiedbeam_baseband` has no `DM_coherent` attr (raw), while `tiedbeam_power`
+records `DM_coherent = 912.4699`.
+
+**This resolves E2's residual**: the 0.4024 MHz grid-locked, burst-locked,
+flat-field-surviving ripple is the on-pulse window (244–268) clipping the
+per-block sawtooth — captured burst energy modulated with one-coarse-block
+periodicity. Not PFB leakage.
+
+**Status downgrades:** Δν_d = 44.7 ± 7.9 kHz (and the fit-window scan, the
+half-band ratio, m_burst) were measured on the defective product — treat all
+as *deprecated-fit suggestions* until the product is regenerated with the
+de-chirp actually applied (`dedisp = coherent_dedisp(...)` →
+`_upchannel(dedisp, ...)`, or `write=True`). E1's grid conclusions and the
+#120/#121 code fixes are unaffected (the gapped-grid mislabeling is real and
+independent). Prediction for the causal test: on the fixed product the burst
+collapses to ~1–2 ms, the sawtooth vanishes, the 0.40 MHz ripple disappears,
+and spectral S/N rises substantially.
+
 ## Appendix: Raw Experiment Data
 
 ```
