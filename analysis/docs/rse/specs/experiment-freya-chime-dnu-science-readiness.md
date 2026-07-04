@@ -291,6 +291,46 @@ independent). Prediction for the causal test: on the fixed product the burst
 collapses to ~1–2 ms, the sawtooth vanishes, the 0.40 MHz ripple disappears,
 and spectral S/N rises substantially.
 
+### Outcome (2026-07-04): product regenerated — all four causal predictions confirmed
+
+The h17 script was fixed (`dedisp = coherent_dedisp(data, dm, time_shift=True)`
+→ `_upchannel(dedisp, ...)`; snapshot
+`upchannelize_chime_h17_snapshot_20260704_dedispfix.py`, md5
+`58c3f5b76a6b9cf9d12894e07db46e3d`), the product regenerated in the same docker
+image, and the npz pair rebuilt with the byte-validated builder. Defective
+originals quarantined in `DEFECTIVE_nodedisp_20260703/` (h17 + local, npy +
+npz). New `freya_chime_upchan.npy` md5 `39c329ce0866c0229f931acab6592e03`.
+
+1. **Burst collapse ✓** — ~8 ms → 0.66 ms FWHM-ish; peak z = 63 (600–800 MHz
+   flat-fielded profile). `time_shift=True` aligns to 400 MHz, moving the
+   burst to bin 386 (t = 126.5 ms); record-edge wrap artifacts at bins
+   ~421–436 (excluded from windows).
+2. **Sawtooth gone ✓** — folded (k,t) image: vertical stripe both subbands;
+   centroid drift +0.41/+0.23 ms vs |7.0|/|10.7| ms predictions, R² ≈ 0.1
+   (noise around zero).
+3. **Ripple suppressed ✓** — sinusoid amplitude 0.085 → 0.0155 (5.5×
+   absolute; ~14× relative to scintillation ACF amplitude); residual sits at
+   the native 0.390625 MHz coarse-block period, consistent with the periodic
+   RFI-mask/gap geometry, not the sawtooth.
+4. **Spectral contrast up ✓** — m 0.187 → 0.319 (m_acf 0.301); relative
+   statistical error 18% → 14%.
+
+**Pass-4 measurement** (windows updated to [385, 393] burst / [0, 180] noise;
+merged #120/#121 pipeline, grid regularization + flat-field on):
+
+- Δν_d(700 MHz) = **35.4 ± 5.1 (stat) ± 13.9 (fit-window) kHz**
+- fit-window scan: 35.4 / 45.6 / 49.3 kHz at 1.0 / 0.3 / 0.2 MHz — the window
+  systematic still dominates and stays with the measurement.
+- NE2025 MW-floor expectation at 700 MHz ≈ 76.6 kHz (1.6421 MHz @ 1.405 GHz
+  scaled ν^4.4): the measurement sits ~2× below it, a *current-model result*
+  to be interpreted in the two-screen framing (E4), not yet a claim.
+- Run artifacts: `flits-rerun scintillation/plots/freya_chime_pass4_dedispfix/`
+  (JSON + dynamic spectrum + ACF + structure-function figures).
+
+E3-style split-band/split-time consistency and the E4 quenching update have
+not yet been rerun on the fixed product; the E3/E4 numbers in this doc remain
+defective-product values.
+
 ## Appendix: Raw Experiment Data
 
 ```
