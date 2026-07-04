@@ -305,6 +305,16 @@ npz). New `freya_chime_upchan.npy` md5 `39c329ce0866c0229f931acab6592e03`.
    flat-fielded profile). `time_shift=True` aligns to 400 MHz, moving the
    burst to bin 386 (t = 126.5 ms); record-edge wrap artifacts at bins
    ~421–436 (excluded from windows).
+   *Low-band circular wrap (owner-spotted in the full-band figure, verified):*
+   the FFT phase-ramp shift is circular within each channel's valid buffer L,
+   which shrinks toward 400 MHz (~348 bins at 412 MHz); wherever L < 387 the
+   aligned burst index 386 wraps to bin (386 mod L) — predicted 38/24/13/4 vs
+   observed 40/33/18/8 at 412/437/462/487 MHz, streak widths 5.9/5.2/2.6 ms
+   matching the scattering law (5.6/3.5/2.7 ms) rather than the 25–42 ms
+   un-de-chirped smear. So below ~505 MHz the burst is correctly de-chirped
+   and aligned but circularly displaced into bins 2–40 (inside the [0, 180]
+   noise window!) — full-band analyses must mask < ~505 MHz or unwrap; the
+   600–800 MHz measurement band is unaffected (L ≥ 413 there).
 2. **Sawtooth gone ✓** — folded (k,t) image: vertical stripe both subbands;
    centroid drift +0.41/+0.23 ms vs |7.0|/|10.7| ms predictions, R² ≈ 0.1
    (noise around zero).
