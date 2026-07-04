@@ -337,6 +337,21 @@ merged #120/#121 pipeline, grid regularization + flat-field on):
 - Run artifacts: `flits-rerun scintillation/plots/freya_chime_pass4_dedispfix/`
   (JSON + dynamic spectrum + ACF + structure-function figures).
 
+**Band-extension check (2026-07-04, owner-prompted):** the 600–800 MHz
+measurement band was chosen for floor resolvability (NE2025 floor ∝ ν^4.4
+drops to 1–3 fine channels below ~500 MHz) and scattering S/N — not because
+of the low-band wrap, which only affects < ~505 MHz. Verified empirically: a
+505–800 MHz run (identical config; 40,173 channels, zero wrapped) gives
+Δν_d = 35.85 ± 4.76 kHz vs 35.43 ± 5.06 for 600–800 — identical central
+value, 6% statistical gain, but the dominant fit-window systematic inflates
+13.9 → 16.5 kHz (scan 35.8/49.5/52.3 vs 35.4/45.6/49.3), so total error
+worsens 14.8 → 17.2 kHz. The 505–600 MHz scintles (3–6 channels wide,
+marginally resolved) add window sensitivity, not information. 600–800 MHz
+stands. Unwrapped full-band display confirms the burst is continuous
+400–800 MHz with the scattering tail following τ ∝ ν⁻⁴·⁴ (display script
+`fullband_unwrap.py`, canvas identity: burst at absolute bin 386 regardless
+of per-channel capture offset).
+
 E3-style split-band/split-time consistency and the E4 quenching update have
 not yet been rerun on the fixed product; the E3/E4 numbers in this doc remain
 defective-product values.
