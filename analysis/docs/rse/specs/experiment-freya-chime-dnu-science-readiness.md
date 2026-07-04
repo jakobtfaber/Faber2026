@@ -352,6 +352,26 @@ stands. Unwrapped full-band display confirms the burst is continuous
 `fullband_unwrap.py`, canvas identity: burst at absolute bin 386 regardless
 of per-channel capture offset).
 
+**Generation 3 (2026-07-04, owner-requested "low band usable"):** the
+`time_shift=True` circular wrap made the low band unusable in the files, so
+the product was regenerated a third time with a new `--no-time-shift` script
+flag (pure per-channel de-chirp, no roll) and inter-channel alignment moved
+into the npz builder (`build_npz_aligned_20260704.py`): integer-bin placement
+onto a padded 446-bin canvas using the same delay formula and per-channel
+`fpga_count` capture times pulled from the singlebeam h5 (K_DM verified
+identical to baseband_analysis's constant). No circular wraps anywhere.
+Verification: sawtooth null (−0.71/−0.20 ms vs |7.0|/|10.7| predictions);
+burst peak flat at bin 254–255 across 600–800 MHz; low-band peaks lag by the
+expected ~0.3–0.4 τ(ν) scattering peak-shift + 0.07 pc/cm³ DM offset (912.4
+used vs CHIME structure DM 912.4699); **low band now z = 10.6–13.0 per
+25-MHz slice** (was 3–4 with the wrap polluting the flat-field off-window).
+Known narrowband RFI at 482–487 MHz near bin 391. **Pass-5 regression:
+Δν_d = 35.19 ± 4.42 (stat) ± 17.0 (fit-window) kHz, m_acf = 0.304 —
+consistent with pass-4 at 0.05σ; this is now the canonical measurement**
+(windows [253, 264]/[10, 200]). Generation 2 quarantined in
+`SUPERSEDED_timeshift_20260704/`. Full provenance:
+`upchan_codetections/PROVENANCE.md` (generation history section).
+
 E3-style split-band/split-time consistency and the E4 quenching update have
 not yet been rerun on the fixed product; the E3/E4 numbers in this doc remain
 defective-product values.
