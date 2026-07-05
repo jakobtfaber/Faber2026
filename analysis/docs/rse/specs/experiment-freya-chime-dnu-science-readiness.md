@@ -432,6 +432,25 @@ scintillation and consistent with an achromatic origin. The "consistent with
 ν^4.4 MW scintillation" clause of the gen-1 statement does not survive the
 defect fix and must not be quoted.
 
+### SUPERSEDED 2026-07-05: instrumental origin CONFIRMED — see the follow-up experiment
+
+The instrumental-origin experiment
+([experiment-freya-chime-instrumental-origin.md](experiment-freya-chime-instrumental-origin.md))
+settled the hypothesis left open above: the ~35 kHz scale appears in
+pure-noise off-pulse windows (12/12 slices, aggregate z = +24), scales as
+radiometer variance, has no Lorentzian wing (low-lag excision collapses the
+fit), and the burst carries no time-persistent spectral pattern at the
+implied amplitude (m_p ≲ 0.2). Mechanism (hypothesis, quantitatively
+supported): per-channel dispersion-alignment shifts render common-mode
+temporal noise as slanted spectro-temporal streaks (measured drift ~2 ch/bin
+vs 2.43 predicted, chromatic in the predicted direction). **The canonical
+CHIME Δν_d above is retracted as a scintillation measurement** (it remains
+the product's noise-correlation scale); the recoverable scintillation
+measurement is DSA-side: 448 ± 135 kHz @ 1405 MHz (excision-robust, off-pulse
+clean, needs its own window-systematic pass before citing). The E3 achromatic
+ratio is best read as a property of the artifact-dominated mixture and cannot
+be quoted as a property of the sky.
+
 ## Appendix: Raw Experiment Data
 
 ```
