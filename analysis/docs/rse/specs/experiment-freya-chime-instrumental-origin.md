@@ -81,8 +81,20 @@ no prior canonical md5).
 `~/Data/Faber2026/dsa110/scintillation-data/exp-instrumental-origin-2026-07-05/`
 (`a_offpulse_null.py`, `a2_offpulse_variants.py`, `b_onpulse_decomposition.py`,
 `b3_interleaved_ccf.py`, `b4_artifact_time_profile.py`, `c_dsa_side.py`,
-`out_{a,a2,b,b3,b4,c}.txt`). B4's pair subsampling is seeded (20260705);
-other arms are deterministic.
+`out_{a,a2,b,b3,b4,c}.txt`; arm D: `d_subband_400_800.py`,
+`d2_subband_flatfield.py`, `out_d{,2}.txt`; visual inspection:
+`e_acf_figures.py`, `e2_acf_lowlag_zoom.py`, `e3_subband_zoom.py` →
+`fig_acf_overview.png`, `fig_acf_lowlag_zoom.png`,
+`fig_subband_offpulse{,_zoom}.png`). B4's pair subsampling is seeded
+(20260705); other arms are deterministic. Visual inspection (2026-07-05,
+owner-prompted) confirms the numeric picture: the off-pulse mean ACF is a
+shape-matched ~×2.3-scaled copy of the on-pulse low-lag core (same
+~30–100 kHz decay; on-pulse additionally rides a ~0.0045 broadband pedestal
+the fit absorbs as baseline, and shows visible coarse-harmonic bumps at
+0.39/0.78 MHz); the DSA ACF shows a morphologically distinct resolved wing
+over ~2 MHz; the B4 ridge visibly marches ~2 ch per time bin; the sub-band
+off-pulse ACFs are structured and hi-band-broader in 600–800 and dead flat
+at 400–600.
 **Constraints:** freya redshift still the z = 1.0000 placeholder (unused
 here); CHIME on-pulse window is only 11 bins, so persistence tests at large
 Δt have few pairs (quantified below).
