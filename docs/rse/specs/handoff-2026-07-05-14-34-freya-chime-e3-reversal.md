@@ -58,7 +58,7 @@ On the gen-3 (defect-fixed) product the E3 discriminator **rejects the ν^4.4 di
 
 ## Reproducibility & Data State
 
-- **Environment:** conda `flits`. The `flits-rerun` worktree is GONE — for future measurement runs make a fresh worktree at FLITS main `a0a9c83e` (or run from the canonical clone *checked out* at it; clone currently sits on `feat/vo-halos-integration` @ `2931e1bf` with local main behind origin — pull deferred by convention). Rerun scripts hardcode `WT = ~/Developer/scratch/worktrees/flits-rerun` — edit `WT` to the new location.
+- **Environment:** conda `flits`. The `flits-rerun` worktree is GONE — for future measurement runs make a fresh worktree at `a0a9c83e` for exact parity with this session, or use the canonical clone, which now sits on `main` @ `030c159c` (in sync with origin after the parallel session merged #122; #122 adds `galaxies/foreground/vo`, the `scintillation/` measurement path is a superset of `a0a9c83e`). Rerun scripts hardcode `WT = ~/Developer/scratch/worktrees/flits-rerun` — edit `WT` to the new location.
 - **Data (canonical, unchanged):** `~/Data/Faber2026/dsa110/scintillation-data/freya_chime.npz` `0b3b423a…`, `freya_chime_hi.npz` `1f644b07…` (gen-3); quarantines intact.
 - **Archives this session:** `exp-dnu-gen3-2026-07-05/` (3 .py + 3 .txt) and `freya-chime-runs-2026-07/freya_chime_pass{4_dedispfix,5_v3aligned}/` (moved out of the worktree before removal, diff-verified identical).
 - **Determinism:** E3/E4/E3b have no seeds; repeat runs byte-identical on the printed numbers.
@@ -66,12 +66,12 @@ On the gen-3 (defect-fixed) product the E3 discriminator **rejects the ν^4.4 di
 ## Verification State / Known-Broken
 
 - **Verified:** all new doc numbers adversarially fact-checked by an independent subagent against raw outputs, git state, archives, and re-derived arithmetic — PASS, zero discrepancies. verify-gate recorded (`adversarial-review`, sha `ddc4e165424c`).
-- **Uncommitted / unpushed:** none in Faber2026 or FLITS for this lane. FLITS canonical clone: local main still behind origin (now by 2: `9ebe02cf` vs `a0a9c83e`) + `docs/entire-tracing-checkpoints.md` rides-dirty (convention — do not clean).
+- **Uncommitted / unpushed:** none in Faber2026 or FLITS for this lane. FLITS canonical clone: `main` in sync with origin @ `030c159c`; only `docs/entire-tracing-checkpoints.md` rides-dirty (convention — do not clean).
 - **Known-open (not broken):**
   - Fit-window systematic (±17 kHz) untreated and dominant; both half-band widths inflate at narrow windows too.
   - E4 two-screen numbers doubly conditional: placeholder z = 1.0000 AND the E3 interpretation question.
   - NOTHING citable yet; Faber2026 `pipeline/` pin still `bffd875` (intentional).
-- **Separate-active lanes (preserved, untouched):** FLITS worktree `flits-acf-lag-selector` (`feat/acf-lag-selector` @ `6d833410`); unregistered dirs `~/Developer/scratch/worktrees/flits-{gate,iso}-preserve/`; canonical clone's branch checkout.
+- **Separate-active lanes (preserved, untouched):** FLITS worktree `flits-acf-lag-selector` (`feat/acf-lag-selector` @ `6d833410`); unregistered dirs `~/Developer/scratch/worktrees/flits-{gate,iso}-preserve/`. The parallel session's `feat/vo-halos-integration` lane closed itself (PR #122 merged 2026-07-05 21:29Z, branch deleted, clone moved to `main`).
 
 ## Learnings
 
@@ -94,8 +94,9 @@ On the gen-3 (defect-fixed) product the E3 discriminator **rejects the ν^4.4 di
 ## Other Notes
 
 - Pushes to Faber2026 main are outward-facing (Overleaf pulls via manual GitHub Sync); oneway-guard sticky window was open this session — may have expired for the next.
-- Two pushes this session: FLITS main `2931e1bf` → `a0a9c83e`; Faber2026 main `5b0b125` → `fbc9855`.
-- A parallel Codex session historically works these repos — re-check `git status`/PR state immediately before any FLITS push/merge.
+- Two pushes this session: FLITS main `2931e1bf` → `a0a9c83e`; Faber2026 main `5b0b125` → `fbc9855` (+ this handoff).
+- A parallel Codex session actively works these repos — it merged FLITS #122 *during* this session (21:29Z, after `a0a9c83e` landed; no conflict, `a0a9c83e` is an ancestor of the new tip `030c159c`). Re-check `git status`/PR state immediately before any FLITS push/merge.
+- #122 may change the `foreground` import surface (`galaxies/foreground/vo`) — re-test the `build_scintillation_source_block` distance-key gotcha before relying on the Learnings bullet above.
 - ICM memory store failed this session (readonly database) — durable record is in the repo docs; worth a look if ICM persistence matters.
 
 ---
