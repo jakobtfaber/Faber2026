@@ -372,9 +372,65 @@ consistent with pass-4 at 0.05σ; this is now the canonical measurement**
 `SUPERSEDED_timeshift_20260704/`. Full provenance:
 `upchan_codetections/PROVENANCE.md` (generation history section).
 
-E3-style split-band/split-time consistency and the E4 quenching update have
-not yet been rerun on the fixed product; the E3/E4 numbers in this doc remain
-defective-product values.
+### E3/E4 rerun on generation 3 (2026-07-05) — ν^4.4 verdict REVERSES
+
+Identical protocols to the original E3/E4 (scripts adapted only for paths,
+the committed v3 windows `[253, 264]`/`[10, 200]`, and the gen-3 npz; archived
+with outputs at `~/Data/Faber2026/dsa110/scintillation-data/exp-dnu-gen3-2026-07-05/`;
+FLITS worktree @ `a0a9c83e`, merged #120/#121 pipeline).
+
+**E3 split-band (the ν^4.4 discriminator):**
+
+- band 600–700: Δν_d = 36.94 ± 4.79 kHz @ 650.0 MHz, m = 0.271
+- band 700–800: Δν_d = 31.57 ± 5.07 kHz @ 749.9 MHz, m = 0.271
+- **band ratio hi/lo = 0.85 ± 0.18 vs ν^4.4 prediction 1.88; achromatic
+  prediction 1.00** — the gen-1 result (1.95 ± 0.48, "consistent with MW
+  scintillation") REVERSES on the fixed product: the ratio is ~5.7σ below the
+  ν^4.4 prediction and within 1σ of achromatic.
+- Fit-window robustness (E3b, ratio vs `fit_lag_mhz`): 0.85 ± 0.18 (1.0) /
+  0.83 ± 0.19 (0.5) / 0.87 ± 0.10 (0.3) / 1.09 ± 0.12 (0.2) — the ratio never
+  approaches 1.88 at any window. Both half-band widths inflate at narrow
+  windows (same fit-window systematic as the full band), but the ratio is
+  window-stable: the reversal is not a window artifact.
+- Corroboration: the 505–800 band-extension run (35.85 ± 4.76 vs 35.43 ± 5.06
+  for 600–800) already showed that adding the band bottom leaves the width
+  unchanged — consistent with achromatic behavior.
+
+**E3 split-time:** halves (253, 258)/(258, 264): 30.96 ± 4.75 / 36.67 ± 3.84
+kHz, m = 0.402 / 0.322 — mutually consistent (~0.9σ), no time-evolution
+artifact (same conclusion as gen-1).
+
+**Epistemic status (per the science-claim classification):** the ratio is a
+*measured gen-3 result*. Its interpretation is a *hypothesis under test*: the
+~35 kHz decorrelation scale (≈ 5–6 fine channels, equal in both half-bands)
+does not follow the diffractive ν^4.4 scaling across 600–800 MHz, which
+disfavors the MW-scintillation reading of the canonical Δν_d and re-elevates
+an achromatic, channel-locked instrumental origin (e.g. PFB spectral leakage)
+— the very alternative E3 was designed to discriminate. Under the NE2025
+current-model expectation (≈ 55 kHz @ 650, ≈ 103 kHz @ 750), the measurement
+sits ~1.5× (lo) to ~3× (hi) below the floor with the discrepancy growing
+exactly where ν^4.4 predicts the fastest growth.
+
+**E4 rerun (gen-3 pass-5 ACF):** model(0) = 0.163, baseline = 0.071 →
+zero-lag amplitude 0.092 → **m_burst = 0.30**, now identical to the pipeline's
+m_acf = 0.304 (#121 reports the ACF-derived m directly, so the gen-1
+"reporting bug" framing is closed; the gen-1 m_burst ≈ 0.52 was a
+defective-product value). Host-screen side unchanged (β co-model τ, #104
+medians): Δν_host(700 MHz) = 0.339 kHz → scale separation 104×. Two-screen
+coherence constraint at the z = 1.0000 PLACEHOLDER (d_L = 6791.3 Mpc):
+d_⊕,MW × d_hostscr,src ≤ 1.12 × 10³ kpc² — permissive for all example
+geometries (MW screen 0.1/0.3/1/3 kpc → host limit 11227/3742/1123/374 kpc).
+**Conditional:** every E4 two-screen number assumes the ~35 kHz scale IS MW
+scintillation; E3 now disfavors that premise, so E4's outputs are parametric
+on both the placeholder redshift AND the E3 interpretation question.
+
+**Updated best statement (NOT citable):** Δν_d(freya, CHIME, 600–800 MHz)
+= 35.19 ± 4.42 (stat) ± 17.0 (fit-window) kHz @ 700 MHz, m_acf = 0.304, is a
+robust *decorrelation scale* of the gen-3 spectrum — but its half-band ratio
+0.85 ± 0.18 (window-stable) is inconsistent with ν^4.4 diffractive
+scintillation and consistent with an achromatic origin. The "consistent with
+ν^4.4 MW scintillation" clause of the gen-1 statement does not survive the
+defect fix and must not be quoted.
 
 ## Appendix: Raw Experiment Data
 
@@ -404,4 +460,25 @@ E4: ACF model(0) 0.348, baseline 0.081 -> amplitude 0.266 -> m_burst 0.52
     d_L(z=1 PLACEHOLDER) 6791.3 Mpc ->
     d_earth,MW x d_hostscr,src <= 1426.8 kpc^2
     examples: MW screen 0.3 kpc -> host limit 4756 kpc; 1.0 -> 1427; 3.0 -> 476
+
+--- generation-3 rerun (2026-07-05), windows [253,264]/[10,200], @ a0a9c83e ---
+
+E3 gen-3: band 600-700 -> 36.94 +/- 4.79 kHz @ 650.0, m 0.271;
+    band 700-800 -> 31.57 +/- 5.07 kHz @ 749.9, m 0.271;
+    band ratio hi/lo = 0.85 +/- 0.18 | nu^4.4 prediction 1.88 |
+    achromatic prediction 1.00
+    time (253,258) -> 30.96 +/- 4.75, m 0.402;
+    time (258,264) -> 36.67 +/- 3.84, m 0.322
+E3b gen-3 ratio vs fit_lag_mhz:
+    1.0 -> lo 36.94 +/- 4.79, hi 31.57 +/- 5.07, ratio 0.85 +/- 0.18
+    0.5 -> lo 36.36 +/- 5.03, hi 30.34 +/- 5.49, ratio 0.83 +/- 0.19
+    0.3 -> lo 53.94 +/- 4.23, hi 46.90 +/- 4.15, ratio 0.87 +/- 0.10
+    0.2 -> lo 49.85 +/- 4.50, hi 54.44 +/- 3.76, ratio 1.09 +/- 0.12
+E4 gen-3: ACF model(0) 0.163, baseline 0.071 -> amplitude 0.092 ->
+    m_burst 0.30 (= pipeline m_acf 0.304)
+    tau_host(700 MHz) 0.545 ms -> Dnu_host 0.3389 kHz; separation 104x
+    d_L(z=1 PLACEHOLDER) 6791.3 Mpc ->
+    d_earth,MW x d_hostscr,src <= 1.12e3 kpc^2
+    examples: MW screen 0.1 kpc -> host limit 11227 kpc; 0.3 -> 3742;
+    1.0 -> 1123; 3.0 -> 374
 ```

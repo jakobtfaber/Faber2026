@@ -76,8 +76,8 @@
 
 ## Action Items & Next Steps
 
-1. [ ] **Commit the v3 config windows to FLITS** (owner-gated): the two-yaml delta in `flits-rerun`; small PR or direct commit per owner preference. Include the provenance comments as written. Then remove the `flits-rerun` worktree (its only unique state is the yaml delta + archivable plots).
-2. [ ] **E3/E4 rerun on gen-3**: split-band ratio (ν^4.4 test), split-time consistency, quenching/m interpretation — the experiment doc's E3/E4 numbers are still defective-product values.
+1. [x] **Commit the v3 config windows to FLITS** — done 2026-07-05: direct commit `a0a9c83e` on FLITS main; pass-4/5 plots archived to `~/Data/.../freya-chime-runs-2026-07/`; worktree removed.
+2. [x] **E3/E4 rerun on gen-3** — done 2026-07-05: **ν^4.4 verdict reverses** (band ratio 0.85 ± 0.18 vs 1.88 predicted, window-stable → achromatic/instrumental origin favored); split-time consistent; m_burst = 0.30 = m_acf. See the experiment doc's gen-3 rerun section.
 3. [ ] **Fit-window systematic**: it now dominates (17.0 vs 4.42 stat). Options recorded in the experiment doc (ripple-period-aware fitting, window marginalization).
 4. [ ] **Other 4 co-detection targets** (casey, isha, mahi, phineas): regenerate straight to `--no-time-shift` + aligned builder (recipe above). Their existing products carry the gen-1 defect.
 5. [ ] Real freya redshift to replace z=1.0000 placeholder (E4 coherence limit + any budget use).
