@@ -187,6 +187,49 @@ here); CHIME on-pulse window is only 11 bins, so persistence tests at large
 - Cross-telescope: ν^4.4-scaling 448 kHz @1405 → **20.9 ± 6.3 kHz @ 700 MHz**
   = 3.4 CHIME fine channels; width in DSA channels 14.7 (not few-channel).
 
+### Arm D (owner-prompted follow-up, same day): 100-MHz sub-banded ACF fits, 400–800 MHz
+
+**Question:** is scintillation being washed out by Δν_d's ν^4.4 evolution
+across a wide fitting band — would 100-MHz sub-band ACFs (incl. the
+never-analyzed 400–500 / 500–600) recover it?
+
+**Execution:** `d_subband_400_800.py` (committed full-band `freya_chime.yaml`
+as-is — turned out to trace the static-bandpass layer: that config has no
+flat-fielding and poly-1 baseline ON, means near zero, m = −42 nonsense;
+retained as out_d.txt for the record) and `d2_subband_flatfield.py`
+(same npz, hi-protocol preprocessing: flat-field ON, baseline OFF, config
+overridden in-memory). Full-band gen-3 npz (`freya_chime.npz`, 65,472 ch,
+400–800 MHz), windows [253, 268]/[10, 200].
+
+**Results (D2, flat-fielded):**
+
+| subband | ON fit (1.0 MHz) | ON (0.3 MHz) | OFF median | OFF ACF(1–6 ch) z |
+|---|---|---|---|---|
+| 400–500 | 42.9 ± 12.9 kHz (7.0 ch) | 77.4 ± 21.3 | 5/10 fits, scattered | **−0.5 (null)** |
+| 500–600 | 68.2 ± 35.2 (11.2 ch) | 140.0 ± 68.1 | 45.4 kHz (8/10) | +4.4 (weak) |
+| 600–700 | 62.2 ± 4.0 (10.2 ch) | 97.4 ± 3.9 | 39.5 kHz (10/10) | +38.0 |
+| 700–800 | 68.5 ± 6.9 (11.2 ch) | 69.5 ± 6.4 | 90.1 kHz (10/10) | +16.8 |
+
+- ❌ **No washout rescue:** the on-pulse sub-band widths show no ν^4.4 family
+  (observed ~1.5× spread 450→750 vs the predicted 9.5×), and every subband
+  still "fits" at the tens-of-kHz artifact scale with strong fit-window
+  sensitivity.
+- **Resolution wall, not band-averaging:** DSA-anchored real scintillation is
+  0.5 ch @450 and 1.2 ch @550 (NE2025-anchored: 1.8 / 4.3 ch) — unresolvable
+  or marginal at the 6.1 kHz channelization, so sub-banding cannot recover a
+  real signal below ~600 MHz regardless of the artifact.
+- **Artifact chromaticity extends the mechanism evidence:** the off-pulse
+  correlation is strong and hi-band-broader in 600–800 (medians 39.5 → 90.1
+  kHz), weakens at 500–600, and *vanishes* at 400–500 (z = −0.5) — consistent
+  with the alignment-shift mechanism, whose correlation length falls below
+  one channel at low ν (shift gradient 1.55 bins/ch @450 vs 0.41 @700);
+  medians carry no uncertainties, direction-level evidence only.
+- ⚠️ Protocol sensitivity on display: this diagnostic config (RFI threshold
+  5.0, window [253, 268], full-band npz) gives 62.2 ± 4.0 kHz at 600–700
+  where the canonical hi-config (threshold 3.0, [253, 264], hi npz) gives
+  36.94 ± 4.79 — the on-pulse "width" moves by ~70% under masking/window
+  choices, further evidence it is not a stable astrophysical quantity.
+
 ## Comparison Matrix
 
 | Discriminator | Prediction: instrumental | Prediction: astrophysical | Measured (CHIME) | Measured (DSA) |
@@ -347,6 +390,17 @@ Arm C (DSA, 6144 ch, cw 30.5 kHz, 1311-1498 MHz):
     ratio 2.37+/-1.58 vs nu^4.4 1.34
   nu^4.4 scaling: 448+/-135 @1405 -> 20.9+/-6.3 kHz @700 (= 3.4 CHIME ch;
     14.7 DSA ch)
+
+Arm D2 (flat-fielded sub-bands, full-band npz, windows [253,268]):
+  400-500: ON 42.85+/-12.94 / 77.44+/-21.33 kHz; OFF 5/10 median 190.9,
+    ACF(1-6) -0.00002, z -0.5
+  500-600: ON 68.23+/-35.24 / 139.95+/-68.05; OFF 8/10 median 45.4,
+    ACF(1-6) +0.00016, z +4.4
+  600-700: ON 62.18+/-4.00 / 97.38+/-3.87; OFF 10/10 median 39.5,
+    ACF(1-6) +0.00553, z +38.0
+  700-800: ON 68.49+/-6.90 / 69.46+/-6.41; OFF 10/10 median 90.1,
+    ACF(1-6) +0.00526, z +16.8
+  (out_d.txt = committed-config run, static-bandpass layer, diagnostic only)
 
 Checksums: freya_chime_hi.npz 1f644b07... (matches handoff);
   freya_chime.npz 0b3b423a... (matches); freya.npz (DSA)
