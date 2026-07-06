@@ -12,20 +12,29 @@ The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
 _Avoid_: treating any subset table as implicitly covering all twelve.
 
-**Provisional-citable β**:
-A turbulence-spectrum row allowed in `tab:beta` before FINAL figure regen locks
-population statistics — un-railed, component count confirmed (fixed-s² for Tier-B
-sightlines), PASS or flagged MARGINAL. The PBF shape and frequency-scaling index
-α = 2β/(β−2) are both derived from β at each likelihood evaluation (co-model;
-§3.5). Population counts and exact median/fractions stay qualitative until FINAL
-regen.
-_Avoid_: quoting hard N or median β in abstract/conclusions while provisional.
+**Rail-aware citable β** (supersedes "provisional-citable", 2026-07-06):
+A `tab:beta` row's presentation follows its posterior's rail class from the
+β-coherent thin-screen campaign (pipeline ADR-0004/0006; grader
+`analysis/beta_campaign/grade_beta_campaign.py`): **interior** → measured β
+with percentile errors and derived α; **railed-hi (β=4)** →
+exponential-consistent, quoted ONLY as a geometry-conditioned α = 4 limit
+(table note d), never as a measurement, and an extended-medium (ADR-0007)
+re-analysis candidate; **railed-lo / unconstrained / gate-FAIL** → not citable,
+excluded from the table. The PBF shape and α = 2β/(β−2) are both derived from
+β at each likelihood evaluation (co-model; §3.5). Census counts (2 interior /
+9 railed rows / 1 gate-FAIL) are table facts and quotable; a population median
+or class fractions beyond the counts stay withheld while the thin-vs-extended
+geometry question (ADR-0007) is open.
+_Avoid_: quoting a railed row's α = 4 as a measurement; quoting median β.
 
 **Unified β roster**:
-One `tab:beta` listing every provisional-citable sightline (including
+One `tab:beta` listing every rail-aware-citable sightline (including
 multiplicity cases such as FRB 20220310F), not a split table.
-FRB 20220207C (zach) is **excluded** — fixed-s² C2D3 vs C2D2 not robust
-(Pass 2 grill, 2026-06-27).
+FRB 20220207C (zach) is **re-admitted** as a railed-hi Tier-B row — the
+campaign's PPC-verified C1D1 joint fit (roster re-lock 2026-07-06, pipeline
+PR #133) supersedes the Pass-2 fixed-s² C2D3-vs-C2D2 exclusion, which applied
+to the retired free-α framework. FRB 20240203A (chromatica) is **excluded**
+(joint-fit quality gate FAIL, χ²ᵣ ≈ 11.6/9.3).
 _Avoid_: separate prose-only β for bursts that belong in the table.
 
 **Energies trust boundary**:
@@ -40,26 +49,32 @@ Every analysis subset states its own burst list and exclusion reasons in text or
 caption; the twelve-burst co-detection set is never assumed as the denominator.
 
 **Explicit pending**:
-Abstract/conclusions state that population-level β statistics and the
-measured-versus-predicted budget overlay remain qualitative pending FINAL figure
-regeneration. Fixed-s² component adjudication is **complete** for the four Tier-B
-sightlines (oran C2D1, isha C2D1, mahi weak C2D1, phineas C3D3 not robust).
+(1) Extended-medium (ADR-0007) re-analysis of the nine β=4-railed rows —
+until it lands, their α = 4 stays a geometry-conditioned limit and population
+statistics beyond census counts stay withheld. (2) CHIME-band Δν_d (needs a
+fresh ACF pass; the two-screen table is DSA-band only). (3) Per-band
+systematics pass on the three elevated-χ² railed rows (wilhelm, hamilton,
+zach — roster Tier B). The measured-versus-predicted budget overlay is
+**complete** (fig:budget right panel carries the measured diamonds).
 
 **Pass 2 closeout (2026-06-27)**:
 Pipeline PR #74 merged @ `c0696a6`; Faber2026 stacked PR pins submodule and
 updates tex (8-row energies, zach out of `tab:alpha`, abstract/conclusions prose).
 
-**β-model revision (2026-06-29)**:
+**β-model revision (2026-06-29) — campaign complete (2026-07-06)**:
 Joint-fit methodology revised: the fundamental parameter is the turbulence
 spectral index β (P_n(q) ∝ q^(−β)), from which both the PBF shape (via
 D_φ(ρ) ∝ ρ^(β−2)) and the frequency-scaling index α = 2β/(β−2) follow. The
 old free-α + fixed-exponential-PBF approach is physically inconsistent (Cordes
-et al. 2025). `tab:alpha` → `tab:beta`; `fig:alpha_pbf` dropped. Pipeline
-re-run for β values is pending; table rows and component counts are preserved.
+et al. 2025). `tab:alpha` → `tab:beta`; `fig:alpha_pbf` dropped. The
+β-coherent thin-screen campaign (pipeline PRs #133/#134) re-fit all 12
+co-detections with PPC verification: freya β=3.72 and phineas β=3.23
+interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
+`pipeline/analysis/beta_campaign/CAMPAIGN_REPORT.md`.
 
 ## Relationships
 
-- **Provisional-citable β** rows populate **unified β roster** (`tab:beta`) while
+- **Rail-aware citable β** rows populate **unified β roster** (`tab:beta`) while
   **explicit pending** governs population prose.
 - **Energies trust boundary** is independent of the β roster (different quality
   inputs: c₀,γ vs τ,β).
@@ -67,16 +82,20 @@ re-run for β values is pending; table rows and component counts are preserved.
 
 ## Example dialogue
 
-> **Dev:** "tab:beta has eight rows but we haven't re-run the pipeline — ship it?"
-> **Domain expert:** "Not until FINAL regen under the β-based likelihood. Rows are
-> provisional-citable; population stats stay qualitative. Name fixed-s² completion
-> and FINAL regen in the abstract."
+> **Dev:** "Nine rows rail at β=4 — can we say the sample's median α is 4?"
+> **Domain expert:** "No. A railed row's α=4 is a geometry-conditioned limit of
+> the thin-screen closure, not a measurement — no median, no fractions, until
+> the extended-medium re-analysis (ADR-0007) settles whether those sightlines
+> rail at all. Census counts are fine; they're table facts."
 
 ## Flagged ambiguities
 
-- **"Well-constrained"** in figures — means provisional-citable under the β-based
-  co-model, not FINAL PASS. Pass 2 drops zach from `tab:beta`; profile-bias
+- **"Well-constrained"** in figures — means rail-aware citable under the β-based
+  co-model (interior, or railed-hi quoted as a limit). Profile-bias
   demonstrator claim remains withheld (ADR-0003).
-- **β values** — pending pipeline re-run with the turbulence-spectrum likelihood.
-  Old α values from the free-α + fixed-exponential-PBF model are not valid inputs
-  for conversion to β.
+- **Old α values** from the free-α + fixed-exponential-PBF model are retired;
+  where they survive (the sub-band validation figure) they are labeled as
+  exponential-parametrization cross-checks, not turbulence indices.
+- **johndoeII's interior crossing** — its z=0.77 dominant halo is foreground
+  only against a placeholder host redshift; the galaxy-interior attribution is
+  provisional until a spectroscopic host z exists.
