@@ -242,6 +242,29 @@ overridden in-memory). Full-band gen-3 npz (`freya_chime.npz`, 65,472 ch,
   36.94 ± 4.79 — the on-pulse "width" moves by ~70% under masking/window
   choices, further evidence it is not a stable astrophysical quantity.
 
+### Arm G (owner-prompted): right window edge at the 1/e time
+
+`g_1e_window.py` (out_g.txt). Band-mean 1/e crossing: bin 256.28 (0.75 ms
+after peak 254) → window [253, 258), 5 bins = 1.64 ms (per-band edges:
+[253, 258) at 600–700, [253, 257) at 700–800). Burst mean excess doubles
+(0.343 → 0.666); noise variance ×2.20.
+
+- Full band: **30.96 ± 4.75 kHz** (vs canonical 35.19 ± 4.42 — statistically
+  identical; equals the E3 split-time first-half value exactly, same window).
+  fit_lag 0.3 → 44.07 ± 3.08: the fit-window systematic persists.
+- Half-band ratio: 1.16 ± 0.28 (common edge) / 1.06 ± 0.26 (per-band 1/e
+  edges) — still ~2.6–3σ below the ν^4.4 prediction 1.88.
+- Off-pulse null at matched 5-bin width still FAILS: 20/21 slices fit, median
+  20.0 kHz, ACF(1–6 ch) +0.00567 (×1.72 the 11-bin amplitude, tracking the
+  ×2.20 noise-variance scaling), z(1–6) = +32. Note the artifact's *fitted
+  scale shrinks* with window length (20 kHz at 5 bins vs 37.7 at 11) —
+  consistent with the drifting-ridge mechanism: longer averaging mixes
+  drifted copies into a broader apparent channel scale.
+- Net: tightening to the 1/e time raises burst contrast ×1.9 but the
+  artifact-to-burst-squared contamination only improves ~×0.6, and every
+  verdict (achromatic ratio, off-pulse failure, window systematic) is
+  unchanged.
+
 ## Comparison Matrix
 
 | Discriminator | Prediction: instrumental | Prediction: astrophysical | Measured (CHIME) | Measured (DSA) |
