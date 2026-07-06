@@ -144,6 +144,15 @@ here); CHIME on-pulse window is only 11 bins, so persistence tests at large
   bound by N=8. A true Lorentzian of HWHM ≈ 5.8 ch keeps its wing; the
   on-pulse ACF has **no wing** — the "35 kHz Lorentzian" is carried entirely
   by lags ≲ 6 channels.
+- **Status update (2026-07-05):** the ±0.05 MHz coarse-harmonic mask from this
+  arm is now **config-default in the pinned pipeline** (FLITS PR #130, merge
+  `b4be9085`; config-CLI wiring `634920b`; Faber2026 pin ≥ `b4be9085`,
+  currently `028fa7c`). All four CHIME configs carry
+  `analysis.fitting.harmonic_mask {enable: true, spacing_mhz: 0.390625,
+  halfwidth_mhz: 0.05}`. Config-path A/B reproduced this arm's oracle exactly
+  (freya_chime_hi: 35.19 ± 4.42 off → 42.21 ± 2.76 on, re-confirmed at pin
+  `028fa7c`). Masked-default deltas for the remaining three configs are
+  recorded in `validation-harmonic-mask-chime-sweep.md`.
 
 **B2/B3 persistence CCF:**
 - Half-vs-half CCF positive (lag-0 z +5.5; mean 0.058 burst-referenced at
