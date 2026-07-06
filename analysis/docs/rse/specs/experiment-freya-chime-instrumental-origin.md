@@ -153,6 +153,12 @@ here); CHIME on-pulse window is only 11 bins, so persistence tests at large
   (freya_chime_hi: 35.19 ± 4.42 off → 42.21 ± 2.76 on, re-confirmed at pin
   `028fa7c`). Masked-default deltas for the remaining three configs are
   recorded in `validation-harmonic-mask-chime-sweep.md`.
+- **Quoting policy (owner decision, 2026-07-06):** the quoted reference value
+  remains the **unmasked 35.19 ± 4.42 kHz** — the number every arm of this
+  experiment analyzed. The masked **42.21 ± 2.76 kHz** is the config-default
+  *variant* that fresh pipeline runs now produce; cite it as such, never as a
+  revision of the reference. Both are retracted-as-instrumental scales, not
+  scintillation measurements.
 
 **B2/B3 persistence CCF:**
 - Half-vs-half CCF positive (lag-0 z +5.5; mean 0.058 burst-referenced at
@@ -390,7 +396,9 @@ the canonical w=11 minus mean width-matched off-window ACF, n=12) extended to
    landed on the instrumental side: it is in the pure-noise floor at the same
    scale, it scales as radiometer variance, it has no Lorentzian wing, and
    the burst carries no time-persistent spectral pattern at the implied
-   amplitude.
+   amplitude. (Quoting policy: the unmasked 35.19 stays the quoted reference;
+   fresh config-default runs return the masked 42.21 variant — see the arm-B1
+   status update. No tex currently quotes either.)
 2. **Mechanism (hypothesis, quantitatively supported, not yet
    forward-modeled):** per-channel dispersion-alignment shifts (gen-3
    builder; any CHIME upchan product needs them) convert common-mode
