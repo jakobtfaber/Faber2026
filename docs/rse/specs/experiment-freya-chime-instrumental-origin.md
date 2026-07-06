@@ -337,7 +337,30 @@ band-mean burst profile) and additive (w_t = 1). Corrected excess =
   spectral envelope, absorbed as "baseline" by the Lorentzian fit), not a
   decorrelation feature. *Scale caveat:* a pattern with HWHM ≳ 100 kHz would
   also look flat over dc 1–8 and is degenerate with the pedestal here — the
-  m ≲ 0.12 bound is specific to the 20–50 kHz scale in question.
+  m ≲ 0.12 bound is specific to the 20–50 kHz scale in question. (Closed by
+  arm I below.)
+
+### Arm I (owner-prompted): pedestal decorrelation scale — no escape at ≳ 100 kHz either
+
+`i_pedestal_scale.py` (out_i.txt). Burst-referenced excess (on-pulse ACF at
+the canonical w=11 minus mean width-matched off-window ACF, n=12) extended to
+5 MHz, log-binned:
+
+- 5–20 kHz: +0.088 | 20–50: +0.088 | 50–100: +0.070 | 100–200: +0.068 |
+  200–400: +0.075 | 400–800: +0.074 | 0.8–1.6 MHz: +0.072 | 1.6–3.2: +0.065
+  | 3.2–5: +0.052. **Flat from 50 kHz to ~1.6 MHz; no decorrelation on any
+  intermediate scale.** A full-range Lorentzian fit is degenerate upward
+  (HWHM 11.6 ± 10.1 MHz, offset at bound) — the residual decays only on
+  band-fraction scales, i.e. the burst's smooth spectral envelope.
+- The ≳ 100 kHz degeneracy left by H2 is therefore closed three ways:
+  (i) empirically — nothing decorrelates between 50 kHz and ~2 MHz;
+  (ii) B4's persistence cap is shape-independent — any frozen pattern with
+  HWHM ≥ ~20 kHz contributes at ch 1–3, where the Δt ≥ 4 pair CCF is
+  0 ± 0.03 → m ≲ 0.2 at *all* scales; (iii) cross-telescope — HWHM ≥
+  100 kHz at 700 MHz maps to ≥ 2.1 MHz at 1405 under ν^4.4, 4–25× the
+  measured DSA 448 ± 135 kHz.
+- Net: no HWHM anywhere in 20 kHz–2 MHz can host a genuine scintillation
+  pattern above m ≈ 0.1–0.2. The CHIME-band verdict is scale-complete.
 
 ## Comparison Matrix
 
@@ -513,6 +536,13 @@ Arm D2 (flat-fielded sub-bands, full-band npz, windows [253,268]):
   700-800: ON 68.49+/-6.90 / 69.46+/-6.41; OFF 10/10 median 90.1,
     ACF(1-6) +0.00526, z +16.8
   (out_d.txt = committed-config run, static-bandpass layer, diagnostic only)
+
+Arm I (excess to 5 MHz, w=11, burst-referenced, log-binned):
+  5-20 kHz +0.0878 | 20-50 +0.0878 | 50-100 +0.0695 | 100-200 +0.0678 |
+  200-400 +0.0751 | 400-800 +0.0738 | 800-1600 +0.0718 | 1600-3200 +0.0646 |
+  3200-5000 +0.0518 (sems 0.002-0.005)
+  Lorentzian over 5 MHz: amp 0.17+/-0.26, HWHM 11.6+/-10.1 MHz, offset at
+  bound (degenerate; decay is band-scale only)
 
 Arm H2 (kernel-composed subtraction, burst-referenced, lags 1-6):
   C1(1-6ch mean) by Dt=0..8: 0.00731 0.00697 0.00578 0.00386 0.00191
