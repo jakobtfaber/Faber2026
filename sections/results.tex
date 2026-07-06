@@ -9,33 +9,45 @@ Applying the decomposition of Section~\ref{sec:dm} (Eq.~\ref{eq:dmbudget}) to th
 twelve sightlines yields the budget of Table~\ref{tab:budget} and
 Figure~\ref{fig:budget}. The Galactic term is modest and similar across the
 sample ($\mathrm{DM_{MW}}=78$--$171\,\mathrm{pc\,cm^{-3}}$), while the
-cosmological mean grows with redshift to dominate the higher-$z$ sightlines. An
-intervening circumgalactic column is significant only where a sightline passes
-through a foreground galaxy's interior: two sightlines (FRB 20220310F, FRB 20230307A)
-fall in this galaxy-interior regime, where $\mathrm{DM_{int}}$ is
-capped at $b=0.1\,R_{\mathrm{vir}}$ (the uncapped core-extrapolated columns reach
-$364$--$733\,\mathrm{pc\,cm^{-3}}$), while most sightlines do not intersect a
-confirmed foreground system and carry no intervening term. The host contribution
-is the residual after the modeled terms are removed; for three sightlines (FRB 20220310F,
-FRB 20221113A, FRB 20230307A) it is formally negative---the modeled terms
-over-predict $\mathrm{DM_{obs}}$. This is concentrated on the sightlines carrying a
-modeled intervening column, where the capped circumgalactic column is most uncertain, and a
+cosmological mean grows with redshift to dominate the higher-$z$ sightlines.
+Confirmed foreground systems contribute a modeled circumgalactic column on
+eight sightlines ($\mathrm{DM_{int}}\approx10$--$241\,\mathrm{pc\,cm^{-3}}$),
+largest for FRB 20230307A, whose sightline threads six intersecting foreground
+halos and the one confirmed $R_{500}$-piercing cluster
+(Section~\ref{sec:dominant-systems}). One sightline (FRB 20230814B) passes
+through a foreground galaxy's interior ($b\approx4.6$\,kpc,
+$b<0.1\,R_{\mathrm{vir}}$), where $\mathrm{DM_{int}}$ is capped at the
+$b=0.1\,R_{\mathrm{vir}}$ value. Two sightlines (FRB 20220506D,
+FRB 20240122A) return no foreground system in the applicable catalogs but lie
+outside the deep-imaging survey footprints, so their intervening term is
+unconstrained by the searched surveys rather than excluded
+(Table~\ref{tab:budget}). The host contribution is the residual after the
+modeled terms are removed; for the two highest-redshift sightlines
+(FRB 20220310F, FRB 20221203A) it is formally negative---the modeled terms
+over-predict $\mathrm{DM_{obs}}$. Both budgets are dominated by the
+cosmological mean, so the negative residual bounds the sightline-to-sightline
+scatter about the Macquart relation rather than the host, and a
 prior-predictive sensitivity analysis quantifies the probability of a negative
 host term per sightline. Three sightlines (FRB 20230325A, FRB 20240122A, FRB 20230814B) lack a
 spectroscopic host redshift and are carried only through the
 redshift-independent Galactic term.
 
-The predicted intervening scattering spans
-$\tau_{\mathrm{int}}\sim0.2$--$1.9\,\mathrm{ms}$ at $1\,\mathrm{GHz}$ on the three
-sightlines that carry a non-negligible intervening column, largest
-for the galaxy-interior sightlines (Figure~\ref{fig:budget}, right). A direct
-measured-versus-predicted comparison draws on the uniform multi-component
-re-fit of Section~\ref{sec:results-alpha}: Table~\ref{tab:beta} lists
-provisional $(\tau_{1\,\mathrm{GHz}},\beta)$ for the citable sightlines, while
-the marginal sightlines are withheld as unconstrained. We show the
-predicted intervening contribution here (Figure~\ref{fig:budget}); overlaying the
-measured $\tau_{1\,\mathrm{GHz}}$ on it is the principal remaining visualization
-step for the sample.
+The predicted intervening scattering is small everywhere: it spans
+$\tau_{\mathrm{int}}\sim0.0005$--$0.024\,\mathrm{ms}$ at $1\,\mathrm{GHz}$ on
+the eight sightlines carrying a modeled column (Figure~\ref{fig:budget},
+right). The direct measured-versus-predicted comparison draws on the uniform
+$\beta$-based re-fit of Section~\ref{sec:results-alpha}: Table~\ref{tab:beta}
+supplies a citable $\tau_{1\,\mathrm{GHz}}$ for eleven of the twelve
+sightlines (FRB 20240203A is withheld by the joint-fit quality gate), and
+Figure~\ref{fig:budget} overlays each measurement on its predicted intervening
+contribution. On ten of the eleven measured sightlines the predicted
+intervening $\tau$ falls $1.5$--$3$ orders of magnitude below the measurement,
+so the observed pulse broadening must arise in the host (or, for the
+coverage-unconstrained pair, an unsearched intervening system). The single
+exception is FRB 20230913A, where the foreground-halo prediction reaches
+$\approx0.7$ of the measured value: the one sightline on which an identified
+intervening galaxy plausibly dominates the observed scattering
+(Section~\ref{sec:scattering}).
 
 \input{budget_table.tex}
 
@@ -47,12 +59,17 @@ step for the sample.
   burst decomposed into the Milky-Way ISM (NE2001) and halo, the cosmological mean
   (Macquart relation), the capped intervening circumgalactic column
   ($b<0.1\,R_{\mathrm{vir}}$), and the host residual; the placeholder-redshift
-  sightlines (FRB 20230325A, FRB 20240122A, FRB 20230814B) show only the redshift-independent Galactic
-  term. \emph{Right:} the predicted intervening pulse-broadening at $1\,\mathrm{GHz}$
-  per sightline; the per-sightline measured $\tau$ from the uniform re-fit
-  (Table~\ref{tab:beta}, Section~\ref{sec:results-alpha}) are not yet overlaid on
-  this figure, so only the predicted contribution is shown here.
-  Generated by the \texttt{dsa110-FLITS} pipeline
+  sightlines (FRB 20230325A, FRB 20240122A, FRB 20230814B) show only the
+  redshift-independent Galactic term, and a stacked bar extending past the
+  black tick marks a formally negative host residual. \emph{Right:} the
+  predicted intervening pulse-broadening at $1\,\mathrm{GHz}$ (orange) with the
+  measured $\tau_{1\,\mathrm{GHz}}$ from the uniform $\beta$-based re-fit
+  overlaid (black diamonds; Table~\ref{tab:beta},
+  Section~\ref{sec:results-alpha}). FRB 20240203A carries no diamond (measured
+  $\tau$ withheld by the joint-fit quality gate), and the two
+  coverage-unconstrained sightlines (FRB 20220506D, FRB 20240122A) carry no
+  prediction marker. Only FRB 20230913A's prediction approaches its
+  measurement. Generated by the \texttt{dsa110-FLITS} pipeline
   (\texttt{galaxies/foreground/sightline\_budget.py}).}
   \label{fig:budget}
 \end{figure*}
@@ -61,25 +78,35 @@ step for the sample.
 \subsection{Turbulence spectrum and burst multiplicity}
 \label{sec:results-alpha}
 
-Across the twelve co-detected sightlines, the joint $\beta$-based fit
-(Section~\ref{sec:jointfit}) constrains the turbulence spectral index for the
-sightlines listed in Table~\ref{tab:beta}. For the well-constrained sightlines,
-the recovered $\beta$---and the derived PBF shape and frequency-scaling index
-$\alpha=2\beta/(\beta-2)$ that follow from it---are internally consistent by
-construction. The Kolmogorov value $\beta=11/3$ ($\alpha\approx4.4$) and the
-square-law limit $\beta=4$ ($\alpha=4$, exponential PBF) are specific points in
-the continuous $\beta$ parameter space. Three sightlines are withheld from the
-index sample: FRB~20221113A and FRB~20240122A return DSA-110 non-detections of
-scattering, so $\beta$ rails to a prior bound and is unconstrained; and
-FRB~20230913A is non-identifiable, because its single DSA-110 component cannot
-be uniquely associated with one of the multiple CHIME sub-pulses---its DSA-110
-arrival-time uncertainty ($\pm2.4\,\mathrm{ms}$) exceeds the CHIME sub-pulse
-span ($1.0\,\mathrm{ms}$)---which leaves $\beta$ bimodal between the shallow and
-steep prior rails. Population-level counts and median $\beta$ remain qualitative
-pending FINAL figure regeneration; fixed-s² grids now adjudicate component
-counts for FRB~20220506D (C2D1 favored), FRB~20221113A (C2D1 favored),
-FRB~20240122A (weak C2D1 preference), and FRB~20230307A (C3D3 not robust over
-C3D2).
+Across the twelve co-detected sightlines, the uniform $\beta$-based joint fit
+(Section~\ref{sec:jointfit}) was run to completion on every burst, with the
+per-band component multiplicities (the $C\times D$ column of
+Table~\ref{tab:beta}) locked per sightline from the fixed-s² evidence grids
+where those are decisive (FRB~20220506D, FRB~20221113A, and FRB~20230814B at
+C2D1; FRB~20220310F at C2D2), and at the adopted campaign choice where the
+grid preference is weak (FRB~20240122A, fit at C1D1) or not robust between
+adjacent counts (FRB~20230307A, fit at C3D3); every fit is verified against
+its posterior-predictive check. Table~\ref{tab:beta} reports the eleven
+citable sightlines; FRB~20240203A is excluded by the joint-fit quality gate
+(catastrophic per-band misfit). The census divides cleanly in the continuous
+$\beta$ parameter space, where the Kolmogorov value $\beta=11/3$
+($\alpha\approx4.4$) and the square-law limit $\beta=4$ ($\alpha=4$,
+exponential PBF) are specific points. Two sightlines return interior
+posteriors---genuine power-law-tail members: FRB~20230325A
+($\beta=3.72\pm0.01$, $\alpha=4.32$, just above the Kolmogorov point) and
+FRB~20230307A ($\beta=3.23\pm0.02$, $\alpha=5.26$, the steepest frequency
+scaling in the sample). The remaining nine posteriors rail at the $\beta=4$
+bound: these sightlines are consistent with square-law statistics and an
+exponential PBF, and we quote $\alpha=4$ for them only as a
+geometry-conditioned limit under the thin-screen closure
+(Table~\ref{tab:beta}, note d), not as a measurement---an extended-medium PBF
+family may fit them without railing, and that re-analysis is deferred. No
+sightline rails to the steep ($\beta=3$, $\alpha=6$) bound. Three of the
+railed rows carry an elevated single-band $\chi^2_\nu$ (FRB~20221203A,
+FRB~20230913A, FRB~20220207C) and are provisional pending a per-band
+systematics pass; for FRB~20230913A in particular the single CHIME component
+under-models its multi-peaked profile ($\chi^2_\nu=3.96$), which resolves the
+earlier component-association ambiguity at the cost of that residual.
 
 \input{beta_table.tex}
 
@@ -121,8 +148,8 @@ turbulence spectrum is quoted.
   ($\chi^2_\nu=1.5$), and unrails $\beta$ to a well-constrained value. Both
   rows use the $\beta$-derived PBF of Section~\ref{sec:jointfit}; columns are
   the data, the gain-marginal model reconstruction, and the whitened residual on
-  a common scale. Rendered from the provisional-citable joint fits and
-  regenerated in FINAL form by the \texttt{dsa110-FLITS} joint-fit pipeline.}
+  a common scale. Rendered from the committed campaign joint fits by the
+  \texttt{dsa110-FLITS} joint-fit pipeline.}
   \label{fig:whitney_mult}
 \end{figure*}
 

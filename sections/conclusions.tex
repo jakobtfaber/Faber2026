@@ -8,22 +8,40 @@ that contribute to the observed dispersion and scattering.
 \begin{enumerate}
 \item The observed DM decomposes for most sightlines into a modest Milky-Way term
 ($\mathrm{DM_{MW}}=78$--$171\,\mathrm{pc\,cm^{-3}}$) and a cosmological mean that
-grows with redshift to dominate the higher-$z$ bursts, with no intervening
-contribution required (Section~\ref{sec:results-budget}).
-\item An intervening circumgalactic column is significant only for the two
-sightlines that pass through a foreground galaxy's interior
-($b<0.1\,R_{\mathrm{vir}}$); on three of the sightlines carrying an intervening
-column the host residual
-is formally negative, which bounds the most uncertain (capped) circumgalactic
-model rather than the host (Section~\ref{sec:foreground}).
+grows with redshift to dominate the higher-$z$ bursts; confirmed foreground
+systems add a modeled circumgalactic column on eight sightlines, only one of
+which (FRB~20230814B) pierces a galaxy interior
+(Section~\ref{sec:results-budget}).
+\item The host residual is formally negative only for the two highest-redshift
+sightlines (FRB~20220310F, FRB~20221203A), whose budgets are dominated by the
+cosmological mean, so the negative residual bounds the sightline-to-sightline
+scatter about the Macquart relation rather than the circumgalactic model
+(Section~\ref{sec:foreground}).
 \item A foreground search of the twelve fields returns 49 candidate systems
 (29 confirmed foreground), establishing which sightlines can carry an intervening
-dispersion or scattering term (Table~\ref{tab:foreground}).
+dispersion or scattering term (Table~\ref{tab:foreground}); two sightlines lie
+outside the deep-imaging footprints, where the intervening term is
+unconstrained by the searched surveys rather than excluded.
+\item The uniform $\beta$-based joint re-fit is complete across the sample
+(Table~\ref{tab:beta}): two sightlines return interior turbulence spectra
+(FRB~20230325A, $\beta=3.72$, just above Kolmogorov; FRB~20230307A,
+$\beta=3.23$, the steepest frequency scaling in the sample), nine rail at the
+square-law limit and are quoted as geometry-conditioned $\alpha=4$ limits, and
+one fails the joint-fit quality gate (Section~\ref{sec:results-alpha}).
+\item The measured $\tau_{1\,\mathrm{GHz}}$ exceeds the predicted intervening
+pulse-broadening by $1.5$--$3$ orders of magnitude on ten of the eleven
+measured sightlines, pointing to host-dominated scattering; the exception,
+FRB~20230913A, is nominated as intervening-dominated by two independent
+diagnostics---its foreground halo predicts $\approx0.7$ of the measured
+$\tau$, and it is the only sightline whose scintillation--scattering product
+is consistent with a single screen (Section~\ref{sec:discussion}).
 \item A diffractive-scintillation excess of $\sim$7--11$\times$ the NE2025
 Galactic floor on the mid-latitude sightlines, robust across
 scattering-calibrated electron-density models, points to an extragalactic (host
-or intervening) scattering screen rather than a Milky-Way origin
-(Section~\ref{sec:scattering}).
+or intervening) scattering screen rather than a Milky-Way origin; sample-wide,
+the single-screen product $\tau\,\Delta\nu_d$ shows the resolved scintillation
+and the pulse broadening arise on different screens for every sightline but
+FRB~20230913A (Section~\ref{sec:scattering}).
 \item Modeling hidden temporal sub-components is essential to an unbiased
 turbulence spectrum: an unmodeled companion is absorbed into the scattering tail
 and biases $\beta$ away from its true value, distorting both the fitted PBF
@@ -34,11 +52,11 @@ energies of $5\times10^{38}$--$1\times10^{41}\,\mathrm{erg}$
 (Table~\ref{tab:burst-energies}).
 \end{enumerate}
 
-Fixed-s² component adjudication is complete for the Tier-B sightlines. The
-principal step still outstanding is to complete the measured-versus-predicted
-overlay of Figure~\ref{fig:budget} and lock population-level $\beta$
-statistics after FINAL figure regeneration: the uniform multi-component re-fit
-already lists provisional $(\tau_{1\,\mathrm{GHz}},\beta)$ in
-Table~\ref{tab:beta}, and overlaying the measured $\tau$ on the predicted
-intervening pulse-broadening will turn the budget into a direct, per-sightline
-test of where each burst is scattered.
+The principal open item is physical rather than observational: the nine
+$\beta=4$-railed sightlines are consistent with the square-law
+(exponential-PBF) limit of the thin-screen family, and deciding whether an
+extended-medium pulse-broadening function fits them without railing---turning
+the geometry-conditioned $\alpha=4$ limits into measurements---is the natural
+next analysis. Population-level $\beta$ statistics beyond the census counts
+reported here (a median, or fractions by class) are deliberately withheld
+while that geometry question is open.
