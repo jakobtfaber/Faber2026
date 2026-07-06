@@ -41,36 +41,38 @@ model across the co-detected sample with the turbulence spectral index $\beta$ a
 the fundamental parameter, from which both the PBF shape and the frequency-scaling
 index $\alpha=2\beta/(\beta-2)$ follow (Section~\ref{sec:jointfit}), modeling
 temporal multiplicity per band (Sections~\ref{sec:results-alpha},
-\ref{sec:disc-alpha}). The well-constrained single-screen sightlines return a
-shared $(\tau_{1\,\mathrm{GHz}},\beta)$; the marginal sightlines---those whose
-posterior rails or reaches a prior bound---we treat as unconstrained and quote no
-turbulence index rather than report an artifact of the prior. The final
-per-sightline $(\tau_{1\,\mathrm{GHz}},\beta)$ from this uniform re-fit is
-reported in Table~\ref{tab:beta} (provisional-citable sightlines); the predicted
-intervening contribution along every sightline---the quantity we can compute
-without a measurement---is presented in Section~\ref{sec:budget} and
-Figure~\ref{fig:budget}, and overlaying the measured $\tau_{1\,\mathrm{GHz}}$ on
-that prediction is the principal remaining step for the sample.
+\ref{sec:disc-alpha}). Sightlines with interior posteriors return a measured
+$(\tau_{1\,\mathrm{GHz}},\beta)$ pair; sightlines whose posterior rails at the
+$\beta=4$ bound are consistent with the square-law (exponential-PBF) limit and
+are quoted only as geometry-conditioned $\alpha=4$ limits, never as
+measurements, while a posterior railing at the steep bound or failing the
+quality gate is withheld entirely. The final per-sightline result of this
+uniform re-fit is reported in Table~\ref{tab:beta} (eleven of twelve
+sightlines; one gate failure), and Figure~\ref{fig:budget} overlays every
+measured $\tau_{1\,\mathrm{GHz}}$ on the predicted intervening contribution
+along its sightline (Section~\ref{sec:budget}).
 Figure~\ref{fig:jointmodel_montage} shows the recovered joint model against the
-DSA dynamic spectrum for every co-detection with a two-band fit. Panels are
-ordered by burst nickname; each pair is [data~|~model] on a common color scale,
-with the derived $\alpha$ and DSA $\chi^2_\nu$ annotated. FRB~20220310F retains
-the dedicated multiplicity demonstration of Figure~\ref{fig:whitney_mult}.
+DSA dynamic spectrum for every co-detection. Panels are ordered by burst
+nickname; each pair is [data~|~model] on a common color scale, with the fitted
+$\beta$ and DSA $\chi^2_\nu$ annotated. FRB~20220310F retains the dedicated
+multiplicity demonstration of Figure~\ref{fig:whitney_mult}.
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=\textwidth]{jointmodel_montage}
   \caption{Joint-fit model vs.\ data on the DSA-110 band for all twelve
   co-detections. Each row pair shows the on-pulse dynamic spectrum (left) and the
-  gain-marginal model reconstruction (right) from the canonical two-band fit
-  (PBF shape and frequency scaling both derived from the fitted turbulence index
-  $\beta$; Section~\ref{sec:jointfit}). The derived scattering index $\alpha$ and
-  DSA reduced $\chi^2$ are listed per panel. Hamilton (FRB~20230913A) and Whitney
-  (FRB~20220310F) use the committed single-component joint fits; the latter's
-  $\beta$---and hence the derived $\alpha$---depends on multiplicity
-  (Figure~\ref{fig:whitney_mult}). Rendered from the provisional-citable joint
-  fits and regenerated in FINAL form by \texttt{dsa110-FLITS}
-  (\texttt{batch\_jointmodel.py}).}
+  gain-marginal model reconstruction (right) from the uniform $\beta$-based
+  two-band fit (PBF shape and frequency scaling both derived from the fitted
+  turbulence index $\beta$; Section~\ref{sec:jointfit}), at the per-burst
+  component multiplicities of Table~\ref{tab:beta}. The fitted $\beta$ and
+  DSA reduced $\chi^2$ are listed per panel; FRB~20220310F is shown with its
+  committed two-component (C2D2) fit, whose multiplicity dependence is
+  demonstrated in Figure~\ref{fig:whitney_mult}, and FRB~20240203A's flat
+  model panel against strongly structured data visualizes its quality-gate
+  failure (Table~\ref{tab:beta}). Rendered from the campaign joint fits by
+  \texttt{dsa110-FLITS}
+  (\texttt{analysis/scattering-refit-2026-06/plot\_jointmodel\_montage.py}).}
   \label{fig:jointmodel_montage}
 \end{figure*}
 
