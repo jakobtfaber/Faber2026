@@ -43,7 +43,7 @@
 ## Recent Changes
 
 - `docs/rse/specs/validation-harmonic-mask-chime-sweep.md` — new (commit `d3f27d3`)
-- `docs/rse/specs/experiment-freya-chime-instrumental-origin.md:147-156` — B1 status-update bullet: mask config-default since FLITS #130, oracle reproduced at pin `028fa7c` (same commit)
+- `docs/rse/specs/experiment-freya-chime-instrumental-origin.md:147-155` — B1 status-update bullet: mask config-default since FLITS #130, oracle reproduced at pin `028fa7c` (same commit)
 - No code changes anywhere; `pipeline/` submodule untouched by this session (pin advanced `028fa7c → 25b8cc6` by the parallel lane, FLITS #132 = ADR-0007 docs, no fit-code impact)
 
 ## Reproducibility & Data State
