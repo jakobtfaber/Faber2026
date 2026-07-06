@@ -265,6 +265,32 @@ after peak 254) → window [253, 258), 5 bins = 1.64 ms (per-band edges:
   verdict (achromatic ratio, off-pulse failure, window systematic) is
   unchanged.
 
+### Arm H (owner-prompted): cropping-width sweep — no width-stable feature at any crop
+
+`h_width_sweep.py` (out_h.txt, `fig_width_sweep.png`). Left edge 253 fixed,
+right edge 255–268 (widths 2–15 bins); per width: on-pulse fit + width-matched
+off-pulse artifact level + burst-referenced on−off excess.
+
+- **The fitted Δν_d is a monotonic function of window length for burst AND
+  pure noise alike**: on-pulse 22.7 → 42.6 kHz as off-pulse slides 13.6 →
+  46.7 kHz (w = 2 → 15), the two converging at the canonical width. No crop
+  yields a window-independent width — the "measurement" inherits its scale
+  from the crop length, as the drifting-ridge mechanism predicts
+  (time-averaging mixes drifted correlation copies into a broader apparent
+  channel scale).
+- The burst-referenced on−off excess ACF(1–6 ch) plateaus at ~0.085–0.095
+  for w ≥ 6 — numerically at m_acf² = 0.092 — but **rises steeply at w ≤ 4**
+  (0.22 at w = 2), which a frozen pattern cannot do. That width-dependence is
+  the burst SELF-NOISE signature (per-realization emission speckle, channel-
+  correlated over a few fine channels by upchan leakage; its burst-referenced
+  variance grows as the crop clips the burst). The Δt-resolved persistence
+  test (B4), which self-noise cannot pass, already capped the truly frozen
+  part at ≲ 0.03–0.05 — so the plateau decomposes as mostly self-noise (+
+  artifact-scaling residual), locating where the apparent m_acf ≈ 0.30
+  "modulation" actually lives.
+- m_on falls 0.64 → 0.23 across the sweep (noise + self-noise dilution); no
+  stable modulation index either.
+
 ## Comparison Matrix
 
 | Discriminator | Prediction: instrumental | Prediction: astrophysical | Measured (CHIME) | Measured (DSA) |
