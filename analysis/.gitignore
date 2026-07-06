@@ -17,3 +17,5 @@
 
 # Local layout prototypes (regenerate from pipeline/; promote winners to figures/).
 figures/prototypes/
+# Local grit coordination state (locks/worktrees for concurrent agents).
+.grit/
