@@ -12,20 +12,35 @@ The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
 _Avoid_: treating any subset table as implicitly covering all twelve.
 
-**Rail-aware citable β** (supersedes "provisional-citable", 2026-07-06):
-A `tab:beta` row's presentation follows its posterior's rail class from the
-β-coherent thin-screen campaign (pipeline ADR-0004/0006; grader
-`analysis/beta_campaign/grade_beta_campaign.py`): **interior** → measured β
-with percentile errors and derived α; **railed-hi (β=4)** →
-exponential-consistent, quoted ONLY as a geometry-conditioned α = 4 limit
-(table note d), never as a measurement, and an extended-medium (ADR-0007)
-re-analysis candidate; **railed-lo / unconstrained / gate-FAIL** → not citable,
-excluded from the table. The PBF shape and α = 2β/(β−2) are both derived from
-β at each likelihood evaluation (co-model; §3.5). Census counts (2 interior /
-9 railed rows / 1 gate-FAIL) are table facts and quotable; a population median
-or class fractions beyond the counts stay withheld while the thin-vs-extended
-geometry question (ADR-0007) is open.
-_Avoid_: quoting a railed row's α = 4 as a measurement; quoting median β.
+**Geometry-adjudicated β** (supersedes "rail-aware citable", owner decision
+2026-07-06):
+Rail classes from the β-coherent thin-screen campaign (interior / railed-hi /
+railed-lo / unconstrained / gate-FAIL) are fit-campaign QA vocabulary and do
+NOT appear in manuscript prose or tables. A posterior railing at β=4 is
+evidence against the thin-screen closure for that sightline (ADR-0007's
+re-open trigger — fired for nine of twelve), not a square-law detection. The
+former "geometry-conditioned α = 4 limit" is retired: **no α is quoted in any
+form for an ex-railed row** until per-sightline geometry model selection
+(thin screen vs extended medium, informed by the CHIME+DSA two-screen
+scintillation constraints) adjudicates. What survives for those rows is the
+descriptive data statement — PBF consistent with the exponential limit in both
+bands — with no turbulence index attached. The two interior sightlines
+(freya β=3.72, phineas β=3.23) remain quotable as thin-screen-conditioned
+measurements with the geometry named, pending the same adjudication. Census
+counts remain quotable as campaign facts. The PBF shape and α = 2β/(β−2) are
+both derived from β at each likelihood evaluation (co-model; §3.5).
+_Avoid_: α = 4 quoted for an ex-railed row in any form, including as a limit;
+rail-class vocabulary in manuscript text; thin-screen as an unstated default
+geometry; quoting median β or class fractions.
+
+**Scint→scattering coupling** (owner decision 2026-07-06):
+Scintillation is not a parallel product. The two-screen analysis (τ·Δν_d,
+screen placement) built on the completed CHIME+DSA scintillation campaign
+feeds the per-sightline scattering geometry choice; scattering re-fits and
+any restructured β presentation are sequenced after scintillation completes
+on both bands. Preferred mechanism (pending confirmation): scint products as
+constraints/priors adjudicating geometry, not extra free fit parameters.
+_Avoid_: presenting scintillation and scattering as independent result silos.
 
 **Unified β roster**:
 One `tab:beta` listing every rail-aware-citable sightline (including
@@ -49,13 +64,22 @@ Every analysis subset states its own burst list and exclusion reasons in text or
 caption; the twelve-burst co-detection set is never assumed as the denominator.
 
 **Explicit pending**:
-(1) Extended-medium (ADR-0007) re-analysis of the nine β=4-railed rows —
-until it lands, their α = 4 stays a geometry-conditioned limit and population
-statistics beyond census counts stay withheld. (2) CHIME-band Δν_d (needs a
-fresh ACF pass; the two-screen table is DSA-band only). (3) Per-band
-systematics pass on the three elevated-χ² railed rows (wilhelm, hamilton,
-zach — roster Tier B). The measured-versus-predicted budget overlay is
-**complete** (fig:budget right panel carries the measured diamonds).
+(1) Geometry-selection campaign (extended-medium kernel + per-sightline model
+selection, scint-informed) — supersedes the narrower "ADR-0007 re-analysis of
+the nine railed rows"; blocks any α quoting for the nine ex-railed rows and
+the restructured abstract/§3.5/results language. (2) CHIME-band scintillation
+campaign: burst configs + first measurements for whitney/phineas/mahi/isha;
+U sizing + regeneration for the six never-generated co-detections; ACF/Δν_d
+across the sample (the two-screen table is DSA-band only until then).
+(3) Per-band systematics pass on the three elevated-χ² rows (wilhelm,
+hamilton, zach). (4) Two-screen treatment decision — scint products as
+geometry-adjudicating constraints vs a fitted two-screen model (constraint
+route preferred; owner confirmation pending). (5) **Manuscript not yet
+reconciled to this contract** — abstract, §3.5, results, and `tab:beta` still
+carry rail-class language and α = 4 limits; reconciliation is scheduled after
+the geometry campaign (see `docs/rse/specs/plan-circulation-readiness.md`).
+The measured-versus-predicted budget overlay is **complete** (fig:budget
+right panel carries the measured diamonds).
 
 **Pass 2 closeout (2026-06-27)**:
 Pipeline PR #74 merged @ `c0696a6`; Faber2026 stacked PR pins submodule and
@@ -74,8 +98,9 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 
 ## Relationships
 
-- **Rail-aware citable β** rows populate **unified β roster** (`tab:beta`) while
-  **explicit pending** governs population prose.
+- **Geometry-adjudicated β** governs what `tab:beta` (**unified β roster**) may
+  quote, while **explicit pending** governs population prose;
+  **scint→scattering coupling** sequences the re-fit that will repopulate it.
 - **Energies trust boundary** is independent of the β roster (different quality
   inputs: c₀,γ vs τ,β).
 - **Per-section sample rule** applies to both tables and narrative subsets.
@@ -83,16 +108,20 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 ## Example dialogue
 
 > **Dev:** "Nine rows rail at β=4 — can we say the sample's median α is 4?"
-> **Domain expert:** "No. A railed row's α=4 is a geometry-conditioned limit of
-> the thin-screen closure, not a measurement — no median, no fractions, until
-> the extended-medium re-analysis (ADR-0007) settles whether those sightlines
-> rail at all. Census counts are fine; they're table facts."
+> **Domain expert:** "No — and we no longer quote α=4 for those rows at all,
+> not even as a limit. A rail is evidence the thin-screen closure is wrong for
+> that sightline, so what's citable is only the descriptive statement (PBF
+> exponential-consistent in both bands) until geometry model selection,
+> informed by the two-screen scintillation constraints, adjudicates. Census
+> counts are fine; they're campaign facts."
 
 ## Flagged ambiguities
 
-- **"Well-constrained"** in figures — means rail-aware citable under the β-based
-  co-model (interior, or railed-hi quoted as a limit). Profile-bias
-  demonstrator claim remains withheld (ADR-0003).
+- **"Well-constrained"** in figures — under the 2026-07-06 decision this can
+  only mean an interior thin-screen measurement (freya, phineas) until the
+  geometry campaign lands; figures using it for ex-railed rows need relabeling
+  during reconciliation. Profile-bias demonstrator claim remains withheld
+  (ADR-0003).
 - **Old α values** from the free-α + fixed-exponential-PBF model are retired;
   where they survive (the sub-band validation figure) they are labeled as
   exponential-parametrization cross-checks, not turbulence indices.
