@@ -72,7 +72,7 @@
 ## Action Items & Next Steps
 
 1. [ ] **Owner decision (item 1, unchanged):** which CHIME Δν number (masked vs unmasked) the experiment doc's comparison matrix and any tex quote, and why. The mask-is-default fact is now documented; only the quoting policy is open. Both freya_chime_hi numbers (35.19 unmasked / 42.21 masked) are in the validation report.
-2. [ ] **Optional (item 3, unchanged):** regenerate the DSA γ(ν) summary figure via `plot_subband_gamma_summary` from the pinned pipeline into `figures/` as a manuscript export.
+2. [x] **Done (2026-07-06, follow-up session):** `figures/freya_dsa_gamma_summary.{pdf,png}` exported via `plot_subband_gamma_summary` from the pinned pipeline (code = pinned submodule, verified via `scint_analysis.__file__`); all four sub-band γ and χ²_r match the arm-J oracle exactly (917±198 / 1190±231 / 1164±582 / 1421±389 kHz); visual match against the archived `fig_pub_dsa_gamma_summary_module.png`. Not yet referenced by any tex.
 3. [ ] **Before any casey CHIME number is used anywhere:** regenerate the casey npz pair from a de-dispersion-fixed h17 product (defect lane; regeneration not yet requested — same for isha/mahi/phineas).
 
 **Recommended Next Skill:** none required for the open items — 1 is a human decision, 2–3 are small self-contained tasks. If item 3 is picked up, `ai-research-workflows:implementing-plans` is overkill; just do it and review the figure.
