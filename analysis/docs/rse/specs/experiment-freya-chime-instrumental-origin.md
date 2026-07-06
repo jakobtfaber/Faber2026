@@ -290,6 +290,54 @@ off-pulse artifact level + burst-referenced on−off excess.
   "modulation" actually lives.
 - m_on falls 0.64 → 0.23 across the sweep (noise + self-noise dilution); no
   stable modulation index either.
+- *Caveat (resolved by arm H2):* the on−off subtraction here assumes the
+  noise artifact has the same fractional (mean²-normalized) amplitude on- and
+  off-pulse. Arm H2 replaces that assumption with a composed prediction from
+  the measured artifact kernel and confirms the excess curve to ≤ 1.5%.
+
+### Arm H2 (owner-prompted): amplitude-accurate artifact subtraction — the residual excess is lag-flat, not a 35 kHz feature
+
+`h2_amplitude_corrected.py` (out_h2.txt, `fig_width_sweep_corrected.png`).
+Fixes the amplitude inaccuracy in arm H's excess estimator. Instead of
+subtracting the width-matched off-pulse ACF (equal-fractional-amplitude
+assumption), measure the single-bin off-pulse pair cross-covariance kernel
+C1(Δc, Δt) (Δc = 0–12 ch, Δt = 0–8 bins, 120 random off-pulse pairs per Δt,
+seed 20260705) and *compose* the artifact covariance of any window from it:
+A(Δc; w) = Σ_{t,t'} w_t w_t' C1(Δc, |t−t'|) / (w²μ²), under two bracketing
+scalings — multiplicative (artifact ∝ total power, w_t = 1 + b_t from the
+band-mean burst profile) and additive (w_t = 1). Corrected excess =
+[ACF_on − A] × μ²/(μ−1)² at lags 1–6.
+
+- Kernel C1(1–6 ch mean) by Δt: 0.00731, 0.00697, 0.00578, 0.00386, 0.00191,
+  0.00048, then ≈ −0.0006 at Δt = 6–8 — the same temporal-correlation profile
+  B4 measured, recovered independently from raw pair covariances.
+- **Validation passed** before any subtraction was trusted: composing over
+  off-pulse windows (w_t = 1) reproduces the directly measured off-window
+  ACF(1–6): w=5 composed +0.00585 vs direct +0.00567 (n=21); w=11 +0.00332
+  vs +0.00330 (n=12).
+- **The amplitude-scaling ambiguity is a ≤ 1.5% effect, not a loophole**:
+  multiplicative vs additive corrected excess at the canonical w=11 is
+  0.0881 ± 0.0005 vs 0.0893 ± 0.0004; the two curves are near-identical at
+  every width (w=2: 0.2256 both; w=15: 0.0822/0.0833). Because the artifact's
+  temporal correlation dies by Δt ≈ 5 and the window mean is burst-dominated,
+  the on-pulse artifact level barely depends on how it couples to signal
+  power. Arm H's excess curve is confirmed as-is: steep rise at w ≤ 4
+  (self-noise), plateau ~0.082–0.10 at w ≥ 6.
+- **New discriminating fact — the corrected excess is FLAT in channel lag.**
+  At w=11 (multiplicative), dc = 1..8: +0.079, +0.092, +0.083, +0.097,
+  +0.087, +0.090, +0.086, +0.083 — no decay out to ≥ 8 channels (≳ 50 kHz);
+  w=5 is equally flat (~0.093–0.116). A real ~35 kHz Lorentzian at the
+  matched amplitude 0.092 would fall to ~0.030 by dc = 8 (fig, red dotted).
+  Contrast mean(dc 1–3) − mean(dc 6–8) = −0.002 vs +0.045 predicted for the
+  Lorentzian: **any lag-decaying 20–50 kHz-scale component in the residual is
+  consistent with zero, amplitude ≲ 0.015 → m ≲ 0.12** — tighter than, and
+  independent of, B4's persistence cap (m_p ≲ 0.2). The 35-kHz-*shaped* part
+  of the on-pulse ACF is therefore fully accounted for by the noise-artifact
+  kernel; what remains is a broadband pedestal (burst self-noise / smooth
+  spectral envelope, absorbed as "baseline" by the Lorentzian fit), not a
+  decorrelation feature. *Scale caveat:* a pattern with HWHM ≳ 100 kHz would
+  also look flat over dc 1–8 and is degenerate with the pedestal here — the
+  m ≲ 0.12 bound is specific to the 20–50 kHz scale in question.
 
 ## Comparison Matrix
 
@@ -301,6 +349,7 @@ off-pulse artifact level + burst-referenced on−off excess.
 | Frozen pattern (CCF vs Δt) | decays like artifact ρ_t | Δt-independent ≈ m² | **decays; m_p ≲ 0.2** | — (not needed) |
 | Coarse-harmonic masking | (either) minor | minor | +20–28% shift | — |
 | Chromaticity of noise scale | ∝ν³ (alignment mechanism) | n/a | **ratio 2.0 vs 1.54 pred.; drift ~2 ch/bin ≈ 2.4 pred.** | — |
+| Excess lag profile after kernel subtraction (H2) | flat (broadband pedestal) | Lorentzian decay at ~35 kHz | **flat to ≥8 ch; narrow component ≲0.015 (m ≲ 0.12)** | — |
 
 ## Key Insights
 
@@ -328,7 +377,9 @@ off-pulse artifact level + burst-referenced on−off excess.
    448 ± 135 kHz @ 1405 MHz, excision-robust, off-pulse-clean. Scaled to
    700 MHz it predicts ~21 ± 6 kHz (3.4 fine channels — resolved). Note a
    fully-developed diffractive pattern at that scale would have m ~ 1, which
-   the B4 persistence bound (m_p ≲ 0.2) excludes: cross-telescope
+   the B4 persistence bound (m_p ≲ 0.2) and the tighter H2 shape bound
+   (m ≲ 0.12 at 20–50 kHz, from the lag-flat corrected excess) exclude:
+   cross-telescope
    consistency therefore *requires* strong modulation suppression at 700 MHz
    (e.g. two-screen quenching, finite source size) — a constraint to carry
    into the E4 framework, not a settled consistency.
@@ -462,6 +513,17 @@ Arm D2 (flat-fielded sub-bands, full-band npz, windows [253,268]):
   700-800: ON 68.49+/-6.90 / 69.46+/-6.41; OFF 10/10 median 90.1,
     ACF(1-6) +0.00526, z +16.8
   (out_d.txt = committed-config run, static-bandpass layer, diagnostic only)
+
+Arm H2 (kernel-composed subtraction, burst-referenced, lags 1-6):
+  C1(1-6ch mean) by Dt=0..8: 0.00731 0.00697 0.00578 0.00386 0.00191
+    0.00048 -0.00055 -0.00076 -0.00075
+  validation (s_t=1): w=5 composed +0.00585 vs direct +0.00567 (n=21);
+    w=11 +0.00332 vs +0.00330 (n=12)
+  excess mult/add: w=2 0.2256/0.2256 | w=5 0.1047/0.1057 | w=11
+    0.0881+/-0.0005 / 0.0893+/-0.0004 | w=15 0.0822/0.0833
+  lag profile w=11 mult, dc 1..8: +0.079 +0.092 +0.083 +0.097 +0.087
+    +0.090 +0.086 +0.083 (flat; 35 kHz Lorentzian at amp 0.092 predicts
+    decay to ~0.030 by dc=8)
 
 Checksums: freya_chime_hi.npz 1f644b07... (matches handoff);
   freya_chime.npz 0b3b423a... (matches); freya.npz (DSA)
