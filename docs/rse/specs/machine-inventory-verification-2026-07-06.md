@@ -49,12 +49,37 @@ there is not evidence of a role here.
 3. **iacobus data root grew** 218 → 244 GB since the 2026-06-26 inventory
    snapshot (expected: 2026-07-06 upchan regeneration campaign).
 
-## Still open (owned by plan §V Phase 2)
+## Follow-up closures (same night, later session)
 
-- **P2.2**: sha256 the cubes on h17/arc and cross-check against the local
-  hashes — local hashes alone don't prove lineage; the manifest xfail
-  stays until then.
-- **P2.1**: locate the cube *builder* on h17 (`rg -l "cntr_bpc"` over
-  `/data/research/...` + `/data/jfaber`) — still `UNVERIFIED_BUILDER`.
-- gdrive↔iacobus content-level parity was NOT checked here (structure
-  only); the authority decision assumed staged uploads continue.
+All three "still open" items were closed 2026-07-06 late evening
+(worktree branch `provenance/data-manifest`):
+
+- **P2.2 CLOSED** (`80966d6`): h17 turns out to hold **no** manifest
+  cubes (only a stray `phineas_dsa_…_5121b` variant in the arc-trash
+  archive), so the plan's "h17-resident rows" premise was wrong — the
+  real archive side is arc. VOSpace exposes no MD5 node property, so all
+  24 cubes were downloaded (`vcp`, serial, temp-deleted) and sha256'd:
+  **24/24 byte-identical to the local replica**, every hash equal to the
+  manifest value. Manifest status → `ARC_BYTE_MATCH`; xfail removed;
+  a new test pins the verified state.
+- **P2.1 CLOSED as UNVERIFIED_BUILDER** (`7cc07b9`): the CHIME Stokes-I
+  production stage (`get_stokes.ipynb` + `utils.py`, captured verbatim
+  from arc into `scattering/scat_analysis/builders_arc/` with full hunt
+  log in its `ORIGIN.md`) uses the **safe**
+  `coherent_dedisp(time_shift=False, write=True)` convention. The final
+  centered-window/bandpass step writing `*_cntr_bpc.npy` was found on
+  none of h17/h23/iacobus/arc; manifest rows carry
+  `builder=UNVERIFIED_BUILDER` and cube trust rung (i) falls to P2.3
+  direct-data checks + lane-B regeneration, per the plan's sanctioned
+  fallback.
+- **gdrive↔iacobus parity SAMPLED**: `metadata/` 7/7 md5-identical;
+  251 MB `burst_npys/I_240104aaab_mike.npy` byte-identical. (gdrive
+  carries a `wrong_npys/` subdir with a different-md5 variant of the
+  same name — deliberate quarantine-by-naming, untouched.) Full-tree
+  parity remains unchecked; sampled evidence only.
+
+Machine-wide side-fix, same session: the Entire CLI installer had
+re-clobbered the chezmoi-managed `~/.git-hooks-global/push-gate-dispatch`
+into its pre-push stub (mechanism documented in that file's header),
+producing `[entire] Pushing … to 0` spam on every commit. Restored from
+chezmoi source and re-locked `uchg`; scratch-repo commit test clean.
