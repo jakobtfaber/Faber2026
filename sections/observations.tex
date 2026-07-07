@@ -70,20 +70,23 @@ As shown in Figure~\ref{fig:ne2025_mw}, the sightlines exhibit a strong latitude
 Before the intervening dispersion and scattering terms can be computed, each
 sightline must be searched for foreground galaxies and clusters, and every
 candidate assigned a redshift and a foreground/background verdict. We run the
-search in two stages---wide-net discovery followed by external-catalog
+search in two stages---discovery followed by external-catalog
 validation---and record the result in Table~\ref{tab:foreground}.
 
-Discovery casts a deliberately wide cone around each localized burst. At the
+The discovery stage searches a wide cone around each localized burst. At the
 sample's high declination ($+70^\circ$ to $+74^\circ$) only all-sky or northern
 catalogs provide coverage. For galaxy-scale halos we query the DESI Legacy
 Imaging Surveys photometric-redshift catalog \citep[the deep-learning estimator
 of][]{Zhou2021}, GLADE+, and SDSS~DR12, supplemented by the
 WISE--PanSTARRS--STRM photometric classifier \citep{Beck2021} for sources
-without a Legacy match; for clusters we query the all-sky Planck
-Sunyaev--Zel'dovich catalog \citep[PSZ2;][]{Planck2018} and the X-ray--selected
-MCXC and MCXC-II catalogs, which report $M_{500}$ and $R_{500}$ directly. Galaxy
-cones are sized to a fixed proper impact parameter and cluster cones to several
-$R_{500}$, so a sightline that grazes a cluster outskirt is still recovered.
+without a Legacy match; for clusters we query the DESI Legacy/WISE cluster
+catalog of \citet{WenHan2024}---which supplies $M_{500}$, $R_{500}$, and,
+through its DESI members, a spectroscopic redshift---together with the all-sky
+Planck Sunyaev--Zel'dovich (PSZ2) and X-ray (MCXC, MCXC-II) catalogs; at the
+sample's declination every matched cluster comes from the optical catalog.
+Galaxy cones are sized to a fixed proper impact parameter and cluster cones to
+several $R_{500}$, so a sightline that grazes a cluster outskirt is still
+recovered.
 
 Validation cross-matches every candidate, by coordinate, against three
 independent redshift sources: the DESI Legacy Survey DR9 photometric redshifts
@@ -101,12 +104,16 @@ $1\sigma$ of the host, when the host redshift is a placeholder, or when no
 trustworthy redshift or galaxy classification exists (including the
 PanSTARRS-STRM ``unsure'' class).
 
-The search returns 49 candidate systems along the twelve sightlines---29
-confirmed foreground, 7 refuted background, and 13 inconclusive
-(Table~\ref{tab:foreground})---every one present in at least one public catalog.
-Because only wide-field catalogs reach this declination, a sightline with no
-confirmed system is unconstrained by survey depth rather than demonstrably
-foreground-free; the budget of Section~\ref{sec:foreground} treats such
-sightlines accordingly.
+The census presents 35 systems along the twelve sightlines---15 confirmed
+foreground (14 galaxy halos and the single cluster whose sightline passes within
+$R_{500}$), 7 refuted background, and 13 inconclusive
+(Table~\ref{tab:foreground}). A further 14 spectroscopically confirmed
+foreground clusters lie along these sightlines at impact parameters beyond
+$R_{500}$; dynamically irrelevant to the dispersion budget, they are omitted from
+the table---the \citet{WenHan2024} catalog reaches group scale
+($M_{500}>0.47\times10^{14}\,M_\odot$), so several are low-mass systems. Because
+only wide-field catalogs reach this declination, a sightline with no confirmed
+system is unconstrained by survey depth rather than demonstrably foreground-free;
+the budget of Section~\ref{sec:foreground} treats such sightlines accordingly.
 
 \input{foreground_table}
