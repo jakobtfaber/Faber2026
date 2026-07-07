@@ -1,354 +1,97 @@
 \section{Results}
 \label{sec:results}
 
+The results in this section are intentionally withheld pending re-validation.
+The present structure is a scaffold for inserting results only after the
+corresponding analysis has passed the trust-restoration checks described in
+\texttt{CONTEXT.md} and the circulation-readiness plan.
+
 \FloatBarrier
-\subsection{The per-sightline dispersion and scattering budget}
+\subsection{Per-sightline dispersion and scattering budget}
 \label{sec:results-budget}
 \label{sec:budget}
 
-Applying the decomposition of Section~\ref{sec:dm} (Eq.~\ref{eq:dmbudget}) to the
-twelve sightlines yields the budget of Table~\ref{tab:budget} and
-Figure~\ref{fig:budget}. The Galactic term is modest and similar across the
-sample ($\mathrm{DM_{MW}}=78$--$171\,\mathrm{pc\,cm^{-3}}$), while the
-cosmological mean grows with redshift to dominate the higher-$z$ sightlines.
-Confirmed foreground systems contribute a modeled circumgalactic column on
-eight sightlines ($\mathrm{DM_{int}}\approx10$--$241\,\mathrm{pc\,cm^{-3}}$),
-largest for FRB 20230307A, whose sightline threads six intersecting foreground
-halos and the one confirmed $R_{500}$-piercing cluster
-(Section~\ref{sec:dominant-systems}). One sightline (FRB 20230814B) passes
-through a foreground galaxy's interior ($b\approx4.6$\,kpc,
-$b<0.1\,R_{\mathrm{vir}}$), where $\mathrm{DM_{int}}$ is capped at the
-$b=0.1\,R_{\mathrm{vir}}$ value. Two sightlines (FRB 20220506D,
-FRB 20240122A) return no foreground system in the applicable catalogs but lie
-outside the deep-imaging survey footprints, so their intervening term is
-unconstrained by the searched surveys rather than excluded
-(Table~\ref{tab:budget}). The host contribution is the residual after the
-modeled terms are removed; for the two highest-redshift sightlines
-(FRB 20220310F, FRB 20221203A) it is formally negative---the modeled terms
-over-predict $\mathrm{DM_{obs}}$. Both budgets are dominated by the
-cosmological mean, so the negative residual bounds the sightline-to-sightline
-scatter about the Macquart relation rather than the host, and a
-prior-predictive sensitivity analysis quantifies the probability of a negative
-host term per sightline. Three sightlines (FRB 20230325A, FRB 20240122A, FRB 20230814B) lack a
-spectroscopic host redshift and are carried only through the
-redshift-independent Galactic term.
+% TODO(results-budget): Insert only after the foreground census and DM-budget
+% analyses pass their re-validation gates. This subsection should report the
+% per-sightline DM budget, the foreground/intervening contribution, host
+% residuals, and any measured-vs-predicted scattering comparison that has been
+% re-established.
+%
+% Required before filling:
+% - V4 census re-validation: candidate provenance, foreground/background/
+%   inconclusive verdicts, impact parameters, and halo-mass proxies.
+% - V5 DM-budget re-validation: Galactic, halo, cosmic, intervening, and host
+%   terms, including any negative-residual interpretation.
+% - Fit re-validation for any scattering measurement used in a budget figure.
+%
+% Candidate future artifacts, once trusted:
+% - tab:budget
+% - fig:budget
 
-The predicted intervening scattering is small everywhere: it spans
-$\tau_{\mathrm{int}}\sim0.0005$--$0.024\,\mathrm{ms}$ at $1\,\mathrm{GHz}$ on
-the eight sightlines carrying a modeled column (Figure~\ref{fig:budget},
-right). The direct measured-versus-predicted comparison draws on the uniform
-$\beta$-based re-fit of Section~\ref{sec:results-alpha}: Table~\ref{tab:beta}
-supplies a citable $\tau_{1\,\mathrm{GHz}}$ for eleven of the twelve
-sightlines (FRB 20240203A is withheld by the joint-fit quality gate), and
-Figure~\ref{fig:budget} overlays each measurement on its predicted intervening
-contribution. On ten of the eleven measured sightlines the predicted
-intervening $\tau$ falls $1.5$--$3$ orders of magnitude below the measurement,
-so the observed pulse broadening must arise in the host (or, for the
-coverage-unconstrained pair, an unsearched intervening system). The single
-exception is FRB 20230913A, where the foreground-halo prediction reaches
-$\approx0.7$ of the measured value: the one sightline on which an identified
-intervening galaxy plausibly dominates the observed scattering
-(Section~\ref{sec:results-scintillation}).
-
-\subsubsection{The dominant intervening systems}
+\subsubsection{Dominant intervening systems}
 \label{sec:dominant-systems}
 
-Of the confirmed foreground census, eight sightlines carry a modeled
-intervening column, but most contributions are modest
-($\mathrm{DM_{int}}\approx10$--$84\,\mathrm{pc\,cm^{-3}}$;
-Table~\ref{tab:budget}). Figure~\ref{fig:galaxies_cgm} characterizes the
-dominant foreground galaxy along each of the three largest-column sightlines:
-for each, the projected hot modified-NFW dispersion column
-\citep{ProchaskaZheng2019} is shown as a function of impact parameter, with
-the sightline's actual impact, the $R_{\mathrm{vir}}$ truncation, and the
-$b=0.1\,R_{\mathrm{vir}}$ floor at which the smooth column is capped before it
-is extrapolated through the galaxy interior. The largest total column is
-FRB~20230307A's $\mathrm{DM_{int}}=241\,\mathrm{pc\,cm^{-3}}$, assembled from
-six intersecting foreground halos plus the one confirmed $R_{500}$-piercing
-cluster (below) rather than any single system---its dominant galaxy halo is a
-$z=0.11$ grazer at $b\approx102$\,kpc contributing only
-$14\,\mathrm{pc\,cm^{-3}}$. FRB~20221203A carries
-$84\,\mathrm{pc\,cm^{-3}}$, dominated by a $z=0.46$ halo at $b\approx32$\,kpc
-($b/R_{\mathrm{vir}}=0.27$). FRB~20230814B hosts the sample's only
-galaxy-interior crossing: a $z=0.77$ halo pierced at $b\approx4.6$\,kpc
-($b/R_{\mathrm{vir}}=0.04$), whose capped column is
-$63\,\mathrm{pc\,cm^{-3}}$---with the caveat that this burst lacks a
-spectroscopic host redshift, so the halo's foreground status is provisional
-against the placeholder. Halo masses on all three sightlines are assumed
-($L_\star$-scaled); the largest \emph{measured}-mass column is
-FRB~20221113A's $z=0.047$ GLADE+ halo, grazing at $b\approx16$\,kpc
-($b/R_{\mathrm{vir}}=0.14$) for $41\,\mathrm{pc\,cm^{-3}}$. Each panel plots
-the dominant halo, so its annotated dispersion and pulse-broadening are that
-halo's contribution alone; the per-sightline $\mathrm{DM_{int}}$ and
-$\tau_{\mathrm{int}}$ of Table~\ref{tab:budget} sum every confirmed foreground
-system along the same sightline.
-
-\begin{figure*}[!t]
-  \centering
-  \includegraphics[width=0.98\textwidth]{galaxies_cgm}
-  \caption{Dominant intervening galaxies along the three largest-column
-  sightlines (selected live from the budget of Table~\ref{tab:budget}). For
-  each sightline the hot modified-NFW circumgalactic dispersion column
-  \citep{ProchaskaZheng2019} of the dominant foreground halo is plotted
-  against projected impact parameter $b$ (blue); the orange line marks the
-  sightline's actual impact and the dispersion the halo contributes there, the
-  dotted red line the $b=0.1\,R_{\mathrm{vir}}$ floor below which the smooth
-  column is capped (shaded interior region), and the dashed line
-  $R_{\mathrm{vir}}$. Annotations give the halo redshift, mass, scaled impact
-  and regime, the raw$\to$capped hot column, the predicted $1\,\mathrm{GHz}$
-  pulse-broadening, and the mass provenance. FRB~20230814B pierces the galaxy
-  interior ($b\approx4.6$\,kpc); FRB~20230307A and FRB~20221203A graze the
-  outer CGM of their dominant halos. Generated by the \texttt{dsa110-FLITS}
-  pipeline (\texttt{galaxies/v2\_0/systems\_figures.py}), which self-checks
-  its inputs against the tabulated budget before rendering.}
-  \label{fig:galaxies_cgm}
-\end{figure*}
-
-Three sightlines carry spectroscopically-confirmed foreground clusters
-(Table~\ref{tab:foreground}), but FRB~20230307A is the only one whose sightline
-pierces a cluster within $R_{500}$. That field hosts eight confirmed clusters, of
-which Figure~\ref{fig:clusters_icm} characterizes the four innermost with the
-FRB modified-NFW hot-baryon column, converting the catalog $M_{500}$ to an
-approximate $M_{200}$. Only the nearest,
-J115120.4+714435 ($z=0.200$, $\log(M_{500}/M_\odot)\approx14.1$), lies inside
-its own $R_{500}$ ($b/R_{500}=0.83$), where the modified-NFW column gives
-$\mathrm{DM}_{\rm cl}\approx160\,\mathrm{pc\,cm^{-3}}$; the next,
-J115128.2+713637, passes just outside $R_{500}$ at $1.25\,R_{500}$
-($\approx95\,\mathrm{pc\,cm^{-3}}$), and the remaining two cross at
-$3$--$3.3\,R_{500}$, beyond the adopted virial truncation. The innermost
-cluster contribution is folded into the intervening budget as a foreground-cluster
-term; because the FRB~20230307A host residual remains small and positive after the
-foreground subtraction, the cluster column should be read as a plausible budget
-component rather than a unique attribution.
-
-\begin{figure*}[!t]
-  \centering
-  \includegraphics[width=0.98\textwidth]{clusters_icm}
-  \caption{The four innermost foreground clusters of the FRB~20230307A field, the
-  only field with a confirmed cluster crossing inside $R_{500}$. For each cluster
-  the modified-NFW hot-baryon dispersion column is plotted against impact parameter
-  $b$ (blue); $R_{500}$ is the dashed line (shaded interior) and the solid line the
-  sightline's impact, red where it falls inside $R_{500}$ and orange where outside.
-  Only J115120.4+714435 (top left) lies inside $R_{500}$ ($b/R_{500}=0.83$); the
-  others pass at $1.25$--$3.3\,R_{500}$. $R_{500}$ and $M_{500}$ are recovered from
-  the tabulated impact and $b/R_{500}$ at the cluster redshift, and the plotted
-  profile uses $M_{200}\approx1.3M_{500}$ and the FRB modified-NFW virial
-  truncation. Generated by the \texttt{dsa110-FLITS} pipeline
-  (\texttt{galaxies/v2\_0/systems\_figures.py}).}
-  \label{fig:clusters_icm}
-\end{figure*}
-
-\input{budget_table.tex}
-
-\begin{figure*}[!t]
-  \centering
-  \includegraphics[width=0.95\textwidth]{sightline_dm_scattering_budget}
-  \caption{Per-sightline dispersion and scattering budget for the twelve
-  co-detections. \emph{Left:} the observed dispersion measure (black bar) of each
-  burst decomposed into the Milky-Way ISM (NE2001) and halo, the cosmological mean
-  (Macquart relation), the capped intervening circumgalactic column
-  ($b<0.1\,R_{\mathrm{vir}}$), and the host residual; the placeholder-redshift
-  sightlines (FRB 20230325A, FRB 20240122A, FRB 20230814B) show only the
-  redshift-independent Galactic term, and a stacked bar extending past the
-  black tick marks a formally negative host residual. \emph{Right:} the
-  predicted intervening pulse-broadening at $1\,\mathrm{GHz}$ (orange) with the
-  measured $\tau_{1\,\mathrm{GHz}}$ from the uniform $\beta$-based re-fit
-  overlaid (black diamonds; Table~\ref{tab:beta},
-  Section~\ref{sec:results-alpha}). FRB 20240203A carries no diamond (measured
-  $\tau$ withheld by the joint-fit quality gate), and the two
-  coverage-unconstrained sightlines (FRB 20220506D, FRB 20240122A) carry no
-  prediction marker. Only FRB 20230913A's prediction approaches its
-  measurement. Generated by the \texttt{dsa110-FLITS} pipeline
-  (\texttt{galaxies/foreground/sightline\_budget.py}).}
-  \label{fig:budget}
-\end{figure*}
+% TODO(results-dominant-systems): Insert after the census and budget products
+% are trusted. This slot should summarize only the systems that dominate the
+% validated intervening column or scattering prediction, with their provenance
+% and exclusion caveats.
+%
+% Candidate future artifacts, once trusted:
+% - fig:galaxies_cgm
+% - fig:clusters_icm
 
 \FloatBarrier
 \subsection{Scintillation and screen attribution}
 \label{sec:results-scintillation}
 
-Figure~\ref{fig:scint_screens} shows the three separated scattering scales for the
-prototype sightline FRB~20221203A. Extending the Milky-Way-floor comparison to all
-twelve co-detections, the diffractive-scintillation excess relative to the modeled
-Milky-Way floor is robust to the choice of Galactic
-electron-density model among the scattering-calibrated models of the same lineage:
-NE2025 \citep{Ocker2026} yields an excess on all six mid-latitude sightlines
-($2.6$--$10.7\times$) and NE2001 \citep{CordesLazio2002} confirms it ($6/6$,
-$2.2$--$7.3\times$), while YMW16 \citep{YMW2017} reverses it, predicting a floor below the
-measured value on five of the six. We attribute this reversal to YMW16's per-sightline
-scattering unreliability rather than to an absence of excess: by construction YMW16
-incorporates no interstellar-scattering data and derives $\tau$ from an empirical
-$\tau$--$\mathrm{DM}$ relation with $\sim\!1$\,dex scatter, whereas NE2025 and NE2001
-forward-model scattering from the electron-density-fluctuation field. Because the adopted
-NE2025 floor itself carries a factor $\sim\!2$--$3$ per-sightline uncertainty that acts as a
-systematic shared across sightlines---and therefore does not average down as $\sqrt{N}$---we
-regard only the high-amplitude sightlines ($\sim\!7$--$11\times$) as robust evidence for an
-extragalactic scattering screen, with the lowest-amplitude cases ($\sim\!2.6$--$3\times$)
-remaining consistent with the floor uncertainty.
-
-\begin{figure}[!htbp]
-  \centering
-  \includegraphics[width=0.95\columnwidth]{wilhelm_scint_dnud_ne2025}
-  \caption{Scintillation decorrelation bandwidth $\Delta\nu_d$ versus frequency for
-  FRB~20221203A. DSA-resolved $\Delta\nu_d\approx0.13$\,MHz (blue; nearly flat,
-  $x=-0.23\pm0.19$ over the 10\% DSA lever arm); CHIME upper limits (red) since the
-  diffractive scale is sub-channel at native resolution. Purple stars: the NE2025
-  Milky-Way scattering floor, $\sim8\times$ \emph{above} the measurement. Green
-  dash-dot: the pulse-broadening screen ($2\pi\tau\,\Delta\nu_d=C_1=1$), $\sim85\times$
-  \emph{below}. The three separated scales imply the dominant pulse-broadening screen
-  is neither the Galactic floor nor the resolved scintillation screen (a strong
-  host/intervening screen). NE2025 Galactic electron-density model from
-  \citet{Ocker2026}.}
-  \label{fig:scint_screens}
-\end{figure}
-
-The three-scale separation of Figure~\ref{fig:scint_screens} generalizes to a
-sample-wide consistency test. For every sightline with a resolved DSA-band
-decorrelation bandwidth we form the single-screen product
-$\tau(1.4\,\mathrm{GHz})\,\Delta\nu_d(1.4\,\mathrm{GHz})$, taking $\tau$ from
-the uniform joint re-fit (Table~\ref{tab:beta}) and $\Delta\nu_d$ from the
-per-sub-band autocorrelation fits scaled to a common $1.4\,\mathrm{GHz}$ with
-each burst's own fitted index; if one screen produces both the pulse
-broadening and the scintillation, this product must lie between
-$1/(2\pi)\approx0.16$ (thin screen) and $\approx1$ (extended medium)
-\citep{Cordes2025}. Exactly one sightline satisfies it: FRB~20230913A
-($\tau\,\Delta\nu_d=1.6$, within a factor of two of the extended-medium
-value)---the same burst whose foreground halo supplies $\approx0.7$ of its
-measured $\tau$ (Section~\ref{sec:results-budget}). Every other sightline
-exceeds the single-screen range by a factor of $\sim$5 to
-$\sim4\times10^{3}$ (FRB~20230325A is marginal at $2.6$), which means the
-resolved diffractive scintillation and the pulse broadening arise on
-\emph{different} screens, the scintillation screen being the nearer of the
-two---the FRB~20221203A pattern of Figure~\ref{fig:scint_screens}, now seen
-to be generic across the co-detected sample. The CHIME band lacks stored
-sub-channel decorrelation fits, so this test is DSA-band only.
+% TODO(results-scintillation): Insert after the scintillation products and
+% scattering fits are re-run under the re-validation contract. This subsection
+% should connect the decorrelation-bandwidth measurements, single-screen tests,
+% and screen-attribution claims only after both ingredients are trusted.
+%
+% Required before filling:
+% - Re-run DSA-band scintillation products under the validation contract.
+% - Complete CHIME-band scintillation campaign where needed.
+% - Re-establish the scattering fits used in any tau * Delta-nu product.
+% - Decide whether scintillation acts as a geometry-selection constraint or as
+%   part of a fitted two-screen model.
+%
+% Candidate future artifact, once trusted:
+% - fig:scint_screens
 
 \FloatBarrier
 \subsection{Turbulence spectrum and burst multiplicity}
 \label{sec:results-alpha}
 
-Across the twelve co-detected sightlines, the uniform $\beta$-based joint fit
-(Section~\ref{sec:jointfit}) was run to completion on every burst, with the
-per-band component multiplicities (the $C\times D$ column of
-Table~\ref{tab:beta}) locked per sightline from the fixed-s² evidence grids
-where those are decisive (FRB~20220506D, FRB~20221113A, and FRB~20230814B at
-C2D1; FRB~20220310F at C2D2), and at the adopted campaign choice where the
-grid preference is weak (FRB~20240122A, fit at C1D1) or not robust between
-adjacent counts (FRB~20230307A, fit at C3D3); every fit is verified against
-its posterior-predictive check. Table~\ref{tab:beta} reports the eleven
-citable sightlines; FRB~20240203A is excluded by the joint-fit quality gate
-(catastrophic per-band misfit). The census divides cleanly in the continuous
-$\beta$ parameter space, where the Kolmogorov value $\beta=11/3$
-($\alpha\approx4.4$) and the square-law limit $\beta=4$ ($\alpha=4$,
-exponential PBF) are specific points. Two sightlines return interior
-posteriors---genuine power-law-tail members: FRB~20230325A
-($\beta=3.72\pm0.01$, $\alpha=4.32$, just above the Kolmogorov point) and
-FRB~20230307A ($\beta=3.23\pm0.02$, $\alpha=5.26$, the steepest frequency
-scaling in the sample). The remaining nine posteriors rail at the $\beta=4$
-bound: these sightlines are consistent with square-law statistics and an
-exponential PBF, and we quote $\alpha=4$ for them only as a
-geometry-conditioned limit under the thin-screen closure
-(Table~\ref{tab:beta}, note d), not as a measurement---an extended-medium PBF
-family may fit them without railing, and that re-analysis is deferred. No
-sightline rails to the steep ($\beta=3$, $\alpha=6$) bound. Three of the
-railed rows carry an elevated single-band $\chi^2_\nu$ (FRB~20221203A,
-FRB~20230913A, FRB~20220207C) and are provisional pending a per-band
-systematics pass; for FRB~20230913A in particular the single CHIME component
-under-models its multi-peaked profile ($\chi^2_\nu=3.96$), which resolves the
-earlier component-association ambiguity at the cost of that residual.
-
-\input{beta_table.tex}
-
-A subset of our co-detected bursts resolves into more than one temporal
-component \citep{Pleunis2021}, and in these cases the inferred turbulence
-spectrum depends on whether that multiplicity is modeled. The clearest case is
-FRB~20220310F, whose DSA-110 profile resolves into two narrow sub-pulses
-$0.34$\,ms apart while its CHIME/FRB profile is a broad, multi-peaked burst
-that fails the residual-whiteness gate. A fit that models only one DSA-110
-component cannot place a single scattered pulse under both sub-pulses and the
-broad CHIME burst at once, and the shared $\beta$ rails against a prior
-bound, leaving strong correlated residuals at both sub-pulse times
-(Figure~\ref{fig:whitney_mult}, top; DSA whitened $\chi^2_\nu=16.1$). Adding
-the second DSA-110 component is favored decisively and, critically,
-\emph{stably}: on the matched-normalization grid the evidence gain is
-$\Delta\ln Z\approx+2.7\times10^{3}$ and flat across the gain-prior variance
-($+2706/+2683/+2671$ at $s^2=1/10/100$), so the component is real rather than
-an artifact of the prior. With the second component in place, the fit unrails
-to a well-constrained $\beta$ with white residuals in both bands
-(Figure~\ref{fig:whitney_mult}, bottom; $\chi^2_\nu=1.1$ and $1.5$). The
-inferred turbulence spectrum for this burst depends strongly on the
-multiplicity: a missing sub-component drives $\beta$ to a prior rail,
-distorting both the fitted PBF shape and $\alpha$ simultaneously. This
-sensitivity does not afflict the well-constrained single-screen sightlines,
-whose $\beta$ shift by $\le0.1$ in derived $\alpha$ under the same choices,
-but it makes plain that multiplicity must be fixed before a marginal burst's
-turbulence spectrum is quoted.
-
-\begin{figure*}[!t]
-  \centering
-  \includegraphics[width=0.92\textwidth]{whitney_multiplicity}
-  \caption{Burst multiplicity drives the recovered turbulence spectrum for
-  FRB~20220310F, shown in the DSA-110 band ($1.31$--$1.50\,\mathrm{GHz}$, where
-  the two sub-pulses are resolved). \emph{Top:} a single DSA-110 component
-  forces one heavily scattered pulse to span both $0.34$\,ms sub-pulses, railing
-  the shared $\beta$ to a prior bound and leaving strong correlated residuals at
-  both sub-pulse times (whitened $\chi^2_\nu=16.1$). \emph{Bottom:} adding the
-  second component reproduces both sub-pulses, whitens the residual
-  ($\chi^2_\nu=1.5$), and unrails $\beta$ to a well-constrained value. Both
-  rows use the $\beta$-derived PBF of Section~\ref{sec:jointfit}; columns are
-  the data, the gain-marginal model reconstruction, and the whitened residual on
-  a common scale. Rendered from the committed campaign joint fits by the
-  \texttt{dsa110-FLITS} joint-fit pipeline.}
-  \label{fig:whitney_mult}
-\end{figure*}
+% TODO(results-turbulence): Insert only after the joint scattering fits pass
+% the fit re-validation ladder and the geometry-selection campaign has decided
+% which model family is citable per sightline. Do not quote rail classes,
+% alpha=4 limits, class fractions, median beta, or campaign-era fit values as
+% sky results.
+%
+% This slot should eventually report:
+% - the validated per-sightline turbulence parameters, if any;
+% - the model family under which each value is citable;
+% - multiplicity decisions that survive re-validation;
+% - any morphology-induced bias demonstration that is re-established.
+%
+% Candidate future artifacts, once trusted:
+% - tab:beta
+% - fig:whitney_mult
 
 \FloatBarrier
-\subsection{Isotropic-equivalent energies}
+\subsection{Band-restricted burst energies}
 \label{sec:burst-energies}
 
-Applying the band-restricted energy calculation of
-Section~\ref{sec:methods-energies}, the eight sightlines with a spectroscopic
-host redshift and a quality-passing joint fit span
-$E_{\mathrm{iso}}=5\times10^{38}$--$1\times10^{41}\,\mathrm{erg}$
-(Table~\ref{tab:burst-energies}). Bursts whose hosts lack a spectroscopic
-redshift or for which no joint $c_0,\gamma$ fit exists are omitted
-(Table~\ref{tab:burst-energies} caption). The most distant sightline,
-FRB~20221203A ($z=0.51$), reaches
-$E_{\mathrm{iso}}\simeq1.1\times10^{41}\,\mathrm{erg}$, at the luminous end of
-the co-detected sample. The absolute flux scale is anchored to the DSA-110
-catalog \citep{Law2024} for FRB~20220207C, which reproduces the catalog value to
-within a factor of two; the remaining bands rely on the radiometer model without
-an independent catalog cross-check, so their energies carry the additional,
-unquantified systematic of the absolute scale. Because Eq.~\ref{eq:eiso} omits
-the unobserved $0.8$--$1.3\,\mathrm{GHz}$ gap, the tabulated values are lower
-limits on the total $0.4$--$1.5\,\mathrm{GHz}$ energy.
-
-\begin{deluxetable*}{lccccc}
-\tablecaption{Isotropic-equivalent energies of the co-detected FRBs, integrated
-over the CHIME ($0.4$--$0.8\,\mathrm{GHz}$) and DSA ($1.31$--$1.50\,\mathrm{GHz}$)
-bands from the joint scattering fit and placed on an absolute scale with each
-band's radiometer flux calibration. $\gamma_C,\gamma_D$ are the per-band spectral
-indices; $E_{\mathrm{iso}}$ includes the $(1+z)$ k-correction. The quoted
-$1\sigma$ uncertainty combines the per-band $c_0$ posterior width with the
-absolute-scale systematic (SEFD and primary beam, ${\sim}0.25$ dex for CHIME and
-${\sim}0.20$ dex for DSA), added in quadrature across the two bands. Eight of twelve
-co-detections are tabulated. Excluded: FRB~20240229A (no joint $c_0,\gamma$ fit);
-FRB~20230325A, FRB~20240122A, FRB~20230814B (no spectroscopic host redshift).
-Per-band $c_0,\gamma$ amplitudes use the mixed-legacy joint-fit export (Pass 2
-N=8 roster); all-exp scattering-only HPCC fits do not yet supply $c_0,\gamma$.
-\label{tab:burst-energies}}
-\tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$D_L$ [Mpc]} &
-  \colhead{$\gamma_C$} & \colhead{$\gamma_D$} & \colhead{$E_{\mathrm{iso}}$ [erg]}}
-\startdata
-FRB 20240203A\tablenotemark{a} & $0.0740$ & $346$  & $-3.74$ & $-4.98$ & $(1.73 \pm 0.62)\times10^{39}$ \\
-FRB 20230913A\tablenotemark{a} & $0.3024$ & $1617$ & $-1.81$ & $-4.91$ & $(6.71 \pm 2.68)\times10^{39}$ \\
-FRB 20221113A & $0.2505$ & $1304$ & $-4.82$ & $+0.95$ & $(4.20 \pm 2.51)\times10^{40}$ \\
-FRB 20220506D & $0.3005$ & $1606$ & $-4.48$ & $-4.85$ & $(4.30 \pm 2.29)\times10^{40}$ \\
-FRB 20230307A & $0.2710$ & $1426$ & $-2.45$ & $-5.00$ & $(1.85 \pm 0.68)\times10^{40}$ \\
-FRB 20220310F & $0.4790$ & $2774$ & $-1.00$ & $+2.91$ & $(7.24 \pm 3.06)\times10^{40}$ \\
-FRB 20221203A & $0.5100$ & $2990$ & $+0.95$ & $-1.99$ & $(1.11 \pm 0.47)\times10^{41}$ \\
-FRB 20220207C & $0.0430$ & $197$  & $-3.38$ & $-4.95$ & $(4.60 \pm 1.84)\times10^{38}$ \\
-\enddata
-\tablenotetext{a}{Host redshift not yet published; value provisional (no host-galaxy
-  spectroscopic redshift in the literature as of this writing).}
-\end{deluxetable*}
+% TODO(results-energies): Insert only after the energy re-validation pass.
+% A citable row requires a trusted host redshift, trusted per-band spectral
+% amplitudes, a checked calibration path, and a resolved inclusion rule.
+%
+% Required before filling:
+% - Re-establish c0 and gamma values from trusted fits or an energy-specific
+%   trusted export.
+% - Resolve any prior-rail or selection-rule issues.
+% - State the burst list and exclusion reasons explicitly.
+%
+% Candidate future artifact, once trusted:
+% - tab:burst-energies
