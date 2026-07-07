@@ -41,25 +41,20 @@ The residual after the modeled terms are removed is attributed to the host.
 
 The intervening term $\mathrm{DM_{int}}$ is sourced only where a sightline
 actually intersects foreground circumgalactic or intracluster gas, so we first
-establish which candidate systems along the twelve sightlines are genuinely in
-the foreground. Each candidate is cross-matched against the DESI Legacy Imaging
-Survey DR9 with \citet{Zhou2021} photometric redshifts, DESI DR1 spectroscopic
-redshifts, the NASA/IPAC Extragalactic Database (NED), and PS1-STRM
-\citep{Beck2021}---by coordinate match (morphology and redshift) and, for the
-PS1-classified halos, by direct \texttt{objID} lookup. We label a candidate
-\emph{confirmed} foreground when its best catalog redshift lies below the FRB
-host redshift, \emph{background} when at or above it, and \emph{inconclusive}
-when the redshift straddles the host within $1\sigma$, the host lacks a
-spectroscopic redshift, or no trustworthy redshift exists (a PS1-STRM
-\texttt{UNSURE} classification or extrapolated photo-$z$). Of the 49 candidates
-in Table~\ref{tab:foreground}, 29 are confirmed foreground, 7 are background,
-and 13 remain inconclusive; the photometric redshifts in the source compilation
-are superseded by the catalog values reported here. Only one of the 15 clusters
-has an impact parameter inside its own $R_{500}$, so for the rest the sightline
-does not pierce the intracluster medium and the cluster contributes negligibly
-to $\mathrm{DM_{int}}$.
+need a foreground-census layer before computing the budget. The foreground
+search records candidate systems, catalog redshift provenance, impact
+parameters, and the verdict logic that determines whether a system can
+contribute to $\mathrm{DM_{int}}$.
 
-\input{foreground_table.tex}
+The foreground-census table is intentionally withheld pending re-validation.
+Once restored, this subsection should report only the validated census products
+and should state which sightlines are unconstrained by survey coverage rather
+than treating non-detections as foreground-free.
+
+% TODO(methods-foreground-census): Restore a foreground-census artifact only
+% after V4 re-validation. The restored artifact should replace the retired
+% tab:foreground and should include candidate provenance, verdicts, impact
+% parameters, halo or cluster classification, and coverage limitations.
 
 \subsection{Scattering Attribution}
 \label{sec:scattering}
@@ -140,56 +135,14 @@ the exponentially-modified Gaussian---to each sub-band independently, leaving th
 scattering time $\tau$ free at every frequency. Because each $\tau_i$ is measured
 per sub-band with no power law imposed, the slope of $\tau_i(\nu_i)$ is an
 estimate of the frequency scaling that shares neither parametrization nor
-likelihood with the joint two-dimensional fit, so its agreement with the joint
-value is an independent validation rather than a self-consistency check
-(Figure~\ref{fig:subband_tau}). The sub-band traces follow a declining power
-law in every band where $\tau$ is resolved, and their slopes reproduce the
-retired free-$\alpha$ exponential-PBF joint fits they were designed to
-cross-check (e.g.\ FRB~20240229A, sub-band $\alpha=2.40$ versus joint
-$2.35\pm0.03$; FRB~20221203A, $2.56$ versus $2.45\pm0.07$). Under the
-$\beta$-based co-model both of those sightlines rail at the square-law limit,
-whose closure admits no $\alpha<4$
-(Section~\ref{sec:disc-alpha}), so the shallow empirical sub-band slopes are
-not read as turbulence indices: they are the same
-exponential-parametrization scaling the retired model measured, and their
-distance below the $\alpha=4$ closure floor quantifies the burst-morphology
-and scattering-family incompleteness that the $\beta$ co-model instead
-absorbs into a prior rail. The check also
-localizes the one elevated band $\chi^2$ in our sample: the DSA profile of
-FRB~20221203A is imperfectly fit, but its sub-band $\tau(\nu)$ still follow the
-joint slope, so the residual reflects unmodeled profile sub-structure rather than a
-failure of the single-screen scattering law. The method
-has a built-in horizon: where a burst is faint and heavily scattered the per-sub-band
-fit cannot resolve the broad CHIME tail, and at the top of the DSA band $\tau$ falls
-below the time resolution, so the most strongly scattered sightlines (e.g.\
-FRB~20220506D) retain only DSA detections over too short a lever to constrain
-the scaling on their own---there the joint fit's cross-band lever does work that no
-single band can. We therefore use the sub-band reconstruction as a corroborating
-cross-check on the well-constrained sightlines, not as a primary estimator.
+likelihood with the joint two-dimensional fit. The sub-band validation figure
+and any event-level sub-band comparisons are withheld until the underlying fits
+have passed re-validation.
 
-\FloatBarrier
-\begin{figure*}[!t]
-  \centering
-  \includegraphics[width=0.98\textwidth]{subband_tau_validation_grid}
-  \caption{Independent sub-band validation of the joint frequency scaling. For each
-  burst the scattering time $\tau$ is fit directly in four CHIME (blue) and three
-  DSA-110 (red) sub-bands with $\tau$ free at every frequency, and compared to the
-  joint-fit power law $\tau_{1\,\mathrm{GHz}}\,\nu^{-\alpha}$ (black); each panel
-  lists the joint $\alpha$ and the slope $\alpha$ of the independent sub-band
-  points. Both are exponential-PBF (retired free-$\alpha$ model) quantities and
-  serve as an empirical cross-check on the $\tau(\nu)$ decline, not as
-  turbulence indices (Section~\ref{sec:subband}).
-  \emph{Top:} three well-constrained sightlines whose sub-band $\tau(\nu)$ recover
-  the joint index to within $1.6\sigma$. \emph{Bottom:} two sightlines with a mild
-  ($\Delta\alpha\approx0.4$) offset traceable to the intrinsic-width--scattering
-  degeneracy in a single bright band (FRB~20230325A) and to a low DSA $\tau$
-  (FRB~20230307A), and one strongly-scattered sightline (FRB~20220506D) whose CHIME
-  tail is unresolved, leaving only DSA detections over too short a lever to constrain
-  the scaling. Downward triangles are $2\sigma$ upper limits; sub-bands where the
-  scattered-pulse model does not describe the profile are dropped rather than shown
-  as limits. Generated by the \texttt{dsa110-FLITS} pipeline.}
-  \label{fig:subband_tau}
-\end{figure*}
+% TODO(methods-subband-validation): Restore a sub-band validation artifact only
+% after fit re-validation. The restored figure should state the included bursts,
+% exclusion reasons, fit family, and whether the sub-band slopes are used as a
+% validation diagnostic or as physical turbulence constraints.
 
 \subsubsection{Gain-marginalized likelihood}
 \label{sec:gainmarg}

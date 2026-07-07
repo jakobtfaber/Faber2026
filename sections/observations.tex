@@ -48,20 +48,14 @@ underlying burst-data fits.
 \label{sec:obs-fg}
 
 To establish which sightlines could carry an intervening dispersion or
-scattering contribution, we searched each of the twelve fields for foreground
-galaxies and clusters, cross-matching candidates against the DESI Legacy Imaging
-Survey DR9 with \citet{Zhou2021} photometric redshifts, DESI DR1 spectroscopic
-redshifts, the NASA/IPAC Extragalactic Database, and PS1-STRM \citep{Beck2021}.
-The search returns 49 candidate systems---34 galaxy halos and 15 clusters---along
-nine of the twelve sightlines (three fields yield no candidate). For each
-candidate we record the proper impact parameter (12--280\,kpc for the halos;
-clusters by $b/R_{500}$) and the best available redshift and its provenance
-(spectroscopic or photometric); the full catalog is Table~\ref{tab:foreground}.
-Spectroscopic host redshifts are available for nine of the twelve bursts
-($z=0.043$--$0.51$), while three (FRB 20230325A, FRB 20240122A, FRB 20230814B) carry only a
-placeholder redshift and are excluded from any distance-dependent quantity. We measure no host stellar masses; the only masses entering the
-analysis are the halo-mass proxies of the intervening systems used by the
-circumgalactic dispersion model (Section~\ref{sec:dm}), whose confidence we flag
-per system. The verdict logic that classifies each candidate as foreground,
-background, or inconclusive, and the resulting dispersion budget, follow in
-Sections~\ref{sec:foreground} and~\ref{sec:results-budget}.
+scattering contribution, the analysis must first identify candidate foreground
+galaxies and clusters, assign redshift provenance, and decide whether each
+candidate is foreground, background, or inconclusive. The catalog search,
+verdict logic, impact parameters, halo-mass proxies, and any derived
+foreground table are withheld until the foreground-census re-validation ladder
+has restored trust in those products.
+
+% TODO(obs-foreground): Restore this subsection after the foreground census has
+% passed re-validation. The restored text should state the candidate list, the
+% redshift provenance, the foreground/background/inconclusive verdict logic, and
+% the per-section burst list without quoting revoked candidate counts.
