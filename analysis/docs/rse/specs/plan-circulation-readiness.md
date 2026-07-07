@@ -14,7 +14,10 @@ content, not future work; (d) 2026-07-06 evening: trust revoked for all
 burst-data fits performed to date — the §V re-validation ladder governs
 re-entry; (e) 2026-07-06 evening, second wave: trust also revoked for the
 foreground census and the DM budget decomposition (V4/V5) — only TOA
-association arithmetic and DM_obs remain trusted.
+association arithmetic and DM_obs remain trusted; (f) 2026-07-06: rail
+tallies dropped from the manuscript; codetections_polarization/ stays as
+companion-paper materials; co-author list to be drafted from Law2024 +
+CHIME/FRB overlap for pruning.
 ---
 
 Lanes: **[FLITS]** pipeline repo (separate lane — changes land as FLITS PRs,
@@ -150,10 +153,11 @@ fig:jointmodel_montage, and fig:scint_screens.
 - [ ] F4 **[ms]** Referee-mode full read-through. Sensible after F1; a
       structural pass on intro/observations/toa/budget can run now.
 - [ ] F5 **[ms]** Prose polish (line-level), after F3/F4 triage.
-- [ ] F6 **[ms]** `auth.tex`: core co-author list (names/order/affiliations —
-      owner input pending).
-- [ ] F7 **[decision]** `codetections_polarization/` disposition (companion
-      materials? wire in, relocate, or leave).
+- [ ] F6 **[ms]** `auth.tex`: draft a candidate core co-author list from the
+      Law2024 (DSA-110) and CHIME/FRB 2018 author lists for owner pruning
+      (approach decided 2026-07-06), then typeset the pruned list.
+- [x] F7 **[decision]** `codetections_polarization/` — resolved 2026-07-06:
+      companion-paper materials, intentionally parked; keep as-is, no action.
 
 ## G. Release mechanics (last)
 

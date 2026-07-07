@@ -66,8 +66,9 @@ either until the fits are re-established. Rail-class tallies of the retired
 fit campaign (2 interior / 9 railed / 1 gate-FAIL) remain quotable only as
 facts about that campaign, never about the sky — these tallies are distinct
 from the *foreground census*, which is wave-2 revoked; class fractions stay
-withheld, and whether the tallies appear in manuscript prose is an owner
-call at reconciliation. The PBF shape and α = 2β/(β−2) are both derived
+withheld. Owner decision 2026-07-06: the tallies are **dropped from the
+manuscript** — methods may describe the thin-screen campaign qualitatively
+as model-family diagnosis, but no tally is quoted as a fact. The PBF shape and α = 2β/(β−2) are both derived
 from β at each likelihood evaluation (co-model; sec:jointfit).
 _Avoid_: α = 4 quoted for an ex-railed row in any form, including as a limit;
 rail-class vocabulary in manuscript text beyond the campaign tallies;
