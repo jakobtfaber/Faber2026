@@ -1,43 +1,44 @@
 % Derived from the analysis results used in this work. DM is in pc\,cm$^{-3}$;
-% $\tau_{\mathrm{int}}$ is the predicted intervening pulse-broadening at 1\,GHz and
-% $\tau_{\mathrm{obs}}$ is the measured joint-fit value. Update by regenerating the
-% table from the analysis outputs, not by hand.
-\begin{deluxetable*}{lrrrrrllrrr}
+% $\tau_{\mathrm{int}}$ is the predicted intervening pulse-broadening at 1\,GHz.
+% Update by regenerating the table from the analysis outputs, not by hand.
+% NOTE(V1 gate): the measured tau_obs column (joint-fit tau_1GHz) and its
+% tab:beta cross-reference are withheld until the fit re-validation ladder (V1)
+% clears; restore them by regenerating the full table, not by hand-editing.
+\begin{deluxetable*}{lrrrrrllrr}
 \tabletypesize{\scriptsize}
-\tablecaption{Per-sightline dispersion and scattering budget for the twelve
-co-detections, from the decomposition of Eq.~\ref{eq:dmbudget}. $\mathrm{DM_{MW}}$
-is the NE2001 disk plus a $40\,\mathrm{pc\,cm^{-3}}$ halo; $\langle\mathrm{DM_{cos}}\rangle$
-is the Macquart mean at the host redshift; $\mathrm{DM_{int}}$ is the intervening
+\tablecaption{Per-sightline dispersion budget for the twelve co-detections,
+from the decomposition of Eq.~\ref{eq:dmbudget}. $\mathrm{DM_{obs}}$ is the
+DSA-110 catalog dispersion measure under the shared DSA-DM reference
+convention of Section~\ref{sec:toa}. $\mathrm{DM_{MW}}$ is the NE2001 disk
+plus a $40\,\mathrm{pc\,cm^{-3}}$ halo; $\langle\mathrm{DM_{cos}}\rangle$ is
+the Macquart mean at the host redshift; $\mathrm{DM_{int}}$ is the intervening
 circumgalactic column summed over the confirmed foreground systems (two-phase
 hot mNFW + cool, capped at $b=0.1\,R_{\mathrm{vir}}$ in the galaxy-interior
-regime); $\mathrm{DM_{host}}$ is the residual. ``regime'' and ``mass'' give the
-intervening column's geometry (CGM, galaxy-interior, or none) and whether the
-dominant halo's mass is measured or assumed. $\tau_{\mathrm{int}}$ is the
-predicted intervening pulse-broadening at $1\,\mathrm{GHz}$ and
-$\tau_{\mathrm{obs}}$ the measured $\tau_{1\,\mathrm{GHz}}$ from the uniform
-$\beta$-based joint re-fit (Table~\ref{tab:beta}); all measured values carry a
-MARGINAL quality grade (Section~\ref{sec:jointfit}) and FRB~20240203A's
-measurement is withheld (joint-fit quality gate). DM in $\mathrm{pc\,cm^{-3}}$,
-$\tau$ in ms.
+regime); $\mathrm{DM_{host}}$ is the residual. ``regime'' and ``mass'' give
+the intervening column's geometry (CGM, galaxy-interior, or none) and whether
+the dominant halo's mass is measured or assumed. $\tau_{\mathrm{int}}$ is the
+predicted intervening pulse-broadening at $1\,\mathrm{GHz}$ from the
+thin-screen two-phase model (Section~\ref{sec:scattering}); the measured
+scattering comparison is deferred to the re-validated joint fits. DM in
+$\mathrm{pc\,cm^{-3}}$, $\tau$ in ms.
 \label{tab:budget}}
 \tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$\mathrm{DM_{obs}}$} &
 \colhead{$\mathrm{DM_{MW}}$} & \colhead{$\langle\mathrm{DM_{cos}}\rangle$} &
 \colhead{$\mathrm{DM_{int}}$} & \colhead{regime} & \colhead{mass} &
-\colhead{$\mathrm{DM_{host}}$} & \colhead{$\tau_{\mathrm{int}}$} &
-\colhead{$\tau_{\mathrm{obs}}$}}
+\colhead{$\mathrm{DM_{host}}$} & \colhead{$\tau_{\mathrm{int}}$}}
 \startdata
-FRB 20220207C & $0.043$ & 262 & 116 & 36  & 70  & CGM      & measured & $41$   & $0.0012$  & $0.294$ \\
-FRB 20220310F & $0.479$ & 462 & 86  & 427 & 11  & CGM      & assumed  & $-62$  & $0.0011$  & $1.18$ \\
-FRB 20220506D\tablenotemark{u} & $0.300$ & 397 & 125 & 262 & 0 & none & \nodata & $10$ & $0$ & $0.843$ \\
-FRB 20221113A & $0.251$ & 411 & 132 & 217 & 41  & CGM      & measured & $22$   & $0.020$   & $0.314$ \\
-FRB 20221203A & $0.510$ & 602 & 123 & 456 & 84  & CGM      & assumed  & $-61$  & $0.011$   & $0.269$ \\
-FRB 20230307A & $0.271$ & 610 & 78  & 235 & 241 & CGM      & assumed  & $56$   & $0.0079$  & $0.469$ \\
-FRB 20230325A & \nodata\tablenotemark{p} & 912 & 108 & \nodata & 10 & CGM & assumed & \nodata & $0.00052$ & $0.119$ \\
-FRB 20230913A & $0.302$ & 518 & 115 & 264 & 41  & CGM      & assumed  & $98$   & $0.017$   & $0.0245$ \\
-FRB 20240122A\tablenotemark{u} & \nodata\tablenotemark{p} & 960 & 171 & \nodata & 0 & none & \nodata & \nodata & $0$ & $0.219$ \\
-FRB 20240203A & $0.074$ & 272 & 116 & 62  & 0   & CGM      & assumed  & $94$   & $0$       & \nodata \\
-FRB 20240229A & $0.287$ & 491 & 78  & 250 & 0   & CGM      & assumed  & $163$  & $0$       & $0.0186$ \\
-FRB 20230814B & \nodata\tablenotemark{p} & 696 & 145 & \nodata & 70\tablenotemark{c} & interior & assumed & \nodata & $0.024$ & $2.19$ \\
+FRB 20220207C & $0.043$ & 262 & 116 & 36  & 70  & CGM      & measured & $41$   & $0.0012$ \\
+FRB 20220310F & $0.479$ & 462 & 86  & 427 & 11  & CGM      & assumed  & $-62$  & $0.0011$ \\
+FRB 20220506D\tablenotemark{u} & $0.300$ & 397 & 125 & 262 & 0 & none & \nodata & $10$ & $0$ \\
+FRB 20221113A & $0.251$ & 411 & 132 & 217 & 41  & CGM      & measured & $22$   & $0.020$ \\
+FRB 20221203A & $0.510$ & 602 & 123 & 456 & 84  & CGM      & assumed  & $-61$  & $0.011$ \\
+FRB 20230307A & $0.271$ & 610 & 78  & 235 & 241 & CGM      & assumed  & $56$   & $0.0079$ \\
+FRB 20230325A & \nodata\tablenotemark{p} & 912 & 108 & \nodata & 10 & CGM & assumed & \nodata & $0.00052$ \\
+FRB 20230913A & $0.302$ & 518 & 115 & 264 & 41  & CGM      & assumed  & $98$   & $0.017$ \\
+FRB 20240122A\tablenotemark{u} & \nodata\tablenotemark{p} & 960 & 171 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
+FRB 20240203A & $0.074$ & 272 & 116 & 62  & 0   & CGM      & assumed  & $94$   & $0$ \\
+FRB 20240229A & $0.287$ & 491 & 78  & 250 & 0   & CGM      & assumed  & $163$  & $0$ \\
+FRB 20230814B & \nodata\tablenotemark{p} & 696 & 145 & \nodata & 70\tablenotemark{c} & interior & assumed & \nodata & $0.024$ \\
 \enddata
 \tablenotetext{p}{Host redshift unknown (placeholder); the cosmological and host
 terms cannot be computed, so this sightline is excluded from any distance-dependent

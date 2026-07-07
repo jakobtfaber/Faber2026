@@ -1,34 +1,70 @@
 \section{Results}
 \label{sec:results}
 
-The foreground census and its intervening-column consequences have passed
-re-validation and are reported below. Other results remain withheld: scattering
-fits for individual sightlines, scintillation products, turbulence parameters,
-burst energies, and the measured-versus-predicted scattering comparison. Those
-products still depend on the checks in \texttt{CONTEXT.md} and the
+The association tests, the foreground census, and the dispersion-budget
+decomposition have passed re-validation and are reported below. Other results
+remain withheld: scattering fits for individual sightlines, scintillation
+products, turbulence parameters, burst energies, and the measured-versus-predicted
+scattering comparison. Those products still depend on the checks in the
 circulation-readiness plan.
 
 \FloatBarrier
-\subsection{Per-sightline dispersion and scattering budget}
+\subsection{Association of the co-detections}
+\label{sec:results-association}
+
+All twelve candidate pairs pass the association tests of
+Section~\ref{sec:toa}. Under the conservative baseline association window,
+every pair has a chance-coincidence probability $P_{\rm cc}<10^{-8}$ and
+passes the positional-coincidence check; the timing residuals, referenced to
+400\,MHz under the shared DSA-DM convention, are consistent with the
+predicted inter-site geometric delay (Table~\ref{tab:sample}). The eight
+bursts with constrained CHIME-side dispersion measures also pass the
+CHIME--DSA DM-agreement check; the remaining four are retained as
+position-and-timing associations, since their CHIME sub-band fits do not
+provide a constraining independent DM. We therefore treat all twelve pairs as
+genuine co-detections in what follows.
+
+\FloatBarrier
+\subsection{Per-sightline dispersion budget}
 \label{sec:results-budget}
 \label{sec:budget}
 
-% TODO(results-budget): Insert only once the foreground census and dispersion/
-% scattering budget analyses are ready to be described and cited. This
-% subsection should report the per-sightline DM budget, the
-% foreground/intervening contribution, host residuals, and any
-% measured-vs-predicted scattering comparisons.
-%
-% Prerequisites before filling:
-% - Candidate provenance, verdicts (foreground/background/inconclusive), impact
-%   parameters, and halo-mass proxies are finalized.
-% - The Galactic/halo/cosmic/intervening/host budget terms (and any
-%   negative-residual interpretation) are finalized.
-% - Any scattering measurements used in a budget figure have been cross-checked.
-%
-% Candidate future artifacts, once trusted:
-% - tab:budget
-% - fig:budget
+Table~\ref{tab:budget} reports the decomposition of Eq.~\ref{eq:dmbudget}
+along the twelve sightlines. Three features organize the sample. First, the
+intervening term is strongly concentrated: summed over the confirmed
+foreground systems of Section~\ref{sec:obs-fg}, $\mathrm{DM_{int}}$ exceeds
+$100\,\mathrm{pc\,cm^{-3}}$ on only one sightline (FRB~20230307A,
+$241\,\mathrm{pc\,cm^{-3}}$, dominated by the intracluster column of
+Section~\ref{sec:dominant-systems}), while the remaining sightlines carry
+$\lesssim 85\,\mathrm{pc\,cm^{-3}}$ and four carry no confirmed intervening
+column at all. One sightline (FRB~20230814B) crosses a foreground halo in the
+galaxy-interior regime ($b \approx 4.6$\,kpc), where the reported column is
+capped at its $b=0.1\,R_{\rm vir}$ value rather than extrapolated through the
+core. Second, the host residuals of the redshift-constrained sightlines are
+modest: $\mathrm{DM_{host}} \lesssim 100\,\mathrm{pc\,cm^{-3}}$ for all but
+one (FRB~20240229A, $163\,\mathrm{pc\,cm^{-3}}$), consistent with hosts that
+contribute a minority of the extragalactic column. Third, the two
+highest-redshift sightlines (FRB~20220310F, FRB~20221203A) return small
+negative residuals; as quantified in the table notes, at these redshifts the
+Macquart mean dominates the budget, so the negative values bound the
+sightline-to-sightline scatter about the cosmological mean rather than
+implying an unphysical host. The three sightlines without spectroscopic host
+redshifts are excluded from all distance-dependent terms, and the two
+sightlines outside the deep-survey footprints have intervening terms that are
+unconstrained rather than zero (Table~\ref{tab:budget}, notes p and u).
+
+The predicted intervening pulse broadening from the thin-screen two-phase
+model is small everywhere: $\tau_{\mathrm{int}} \le 0.024$\,ms at 1\,GHz,
+with the largest values on the sightlines whose confirmed halos are crossed
+at the smallest impact parameters. The comparison of these predictions with
+the measured scattering times is deferred until the joint fits pass
+re-validation.
+
+% TODO(results-budget-scattering): Restore the measured-vs-predicted
+% scattering comparison (fig:budget overlay, tau_obs column) only after the
+% V1 fit ladder clears.
+
+\input{budget_table}
 
 \subsubsection{Dominant intervening systems}
 \label{sec:dominant-systems}
