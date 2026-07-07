@@ -12,7 +12,9 @@ re-fit: sightline analysis, galaxy/cluster foreground comparison, and a
 synthesized propagation-vs-intrinsic interpretation are all pre-circulation
 content, not future work; (d) 2026-07-06 evening: trust revoked for all
 burst-data fits performed to date — the §V re-validation ladder governs
-re-entry.
+re-entry; (e) 2026-07-06 evening, second wave: trust also revoked for the
+foreground census and the DM budget decomposition (V4/V5) — only TOA
+association arithmetic and DM_obs remain trusted.
 ---
 
 Lanes: **[FLITS]** pipeline repo (separate lane — changes land as FLITS PRs,
@@ -56,15 +58,20 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       (gen-2 md5s, h17 path), commit the h17-side tooling
       (`extract_time0_metadata.py`, generic npz builder) into the FLITS tree.
 
-## V. Fit-trust reset & re-validation framework (owner decision 2026-07-06 evening)
+## V. Trust reset & re-validation framework (owner decisions 2026-07-06 evening, two waves)
 
-Trust revoked for ALL burst-data fits to date: joint scattering fits (every
-β, τ₁GHz, multiplicity, PPC verdict — interior rows included), sub-band EMG
-fits, scintillation ACF fits (Δν_d), spectral amplitudes c₀,γ and all
-energies. Retained: TOA association arithmetic, DM_obs, foreground census,
-external-model DM terms. Downstream: the host-dominated 10/11 comparison,
-the τ·Δν_d two-screen test, and the scintillation excess are unsupported
-until their inputs are re-established.
+Wave 1: trust revoked for ALL burst-data fits to date — joint scattering
+fits (every β, τ₁GHz, multiplicity, PPC verdict, interior rows included),
+sub-band EMG fits, scintillation ACF fits (Δν_d), spectral amplitudes c₀,γ
+and all energies. Wave 2: trust also revoked for the foreground census
+(cross-matches, verdicts, impact parameters, halo-mass proxies) and the DM
+budget decomposition (Galactic disk/halo terms, Macquart mean, mNFW DM_int
+columns, host residuals). Retained: TOA association arithmetic and DM_obs
+only. Downstream, now unsupported until inputs re-qualify: tab:budget,
+tab:foreground, fig:budget both panels, the dominant-systems and cluster
+analyses, the host-dominated 10/11 comparison, the τ·Δν_d two-screen test,
+the scintillation excess, the FRB 20230913A attribution (both diagnostics
+revoked), tab:beta, tab:burst-energies.
 
 - [ ] V1 **[FLITS]** Author the re-trust validation contract (ADR): a fit is
       citable only with (i) verified input-data lineage (gen-2+,
@@ -84,6 +91,19 @@ until their inputs are re-established.
       selection-rule contradiction (gate-FAIL 20240203A tabulated under a
       "quality-passing" criterion; note-a redshift provenance vs §2's
       placeholder trio).
+- [ ] V4 **[FLITS]** Census re-validation: per-candidate provenance audit
+      (coordinate match, objID lookups, redshift class and source, PS1-STRM
+      reliability), independent re-derivation of impact parameters and
+      b/R_vir · b/R_500, re-run of the foreground/background/inconclusive
+      verdict logic, halo-mass proxy provenance. Deliverable: a re-verified
+      tab:foreground with per-candidate evidence, plus per-sightline audit
+      figures.
+- [ ] V5 **[FLITS]** DM-budget re-validation: verify model implementations
+      against references (NE2001/YMW16 per sightline, halo prior, Macquart
+      relation with stated f_IGM/χ_e, mNFW/two-phase columns vs published
+      profiles), re-derive host residuals and the prior-predictive
+      negative-residual analysis on the V4-verified census. Deliverable: a
+      re-verified tab:budget + fig:budget left panel.
 
 ## C. Scattering re-fit under geometry selection (needs V + A + B)
 
@@ -95,7 +115,7 @@ until their inputs are re-established.
       hamilton, zach — is the starting hypothesis, re-derived by C1).
 - [ ] C3 **[ms]** Pin bump + table/figure regeneration from the campaign.
 
-## D. Sightline analysis & foreground comparison (needs C)
+## D. Sightline analysis & foreground comparison (needs C + V4/V5)
 
 - [ ] D1 Re-derive measured-vs-predicted foreground scattering per sightline
       under the adjudicated geometries (currently thin-screen-conditioned).
@@ -137,8 +157,9 @@ until their inputs are re-established.
 ## Dependency spine
 
 V1/V2 → every scattering and scintillation re-fit · V1/V3 → energies ·
+V4 → every census-derived claim (and V5) · V5 → every budget-derived claim ·
 A1 → A2/A3 · B1–B4 → B5 (B measurements themselves run under the V1
 contract) · (V, A, B5) → C1+C2 → C3 (C2 resolves per-band misfits before
-the pin bump) · C3 → {F2, D} · D → E → F1 → F4/F5 → G. V1, V2, V3, F3, and
-a structural F4 pass on non-β sections are parallelizable now; A4, B6,
+the pin bump) · C3 + V4/V5 → {F2, D} · D → E → F1 → F4/F5 → G. V1–V5, F3,
+and a structural F4 pass on non-β sections are parallelizable now; A4, B6,
 F6/F7 anytime.
