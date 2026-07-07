@@ -48,18 +48,23 @@ underlying burst-data fits.
 \subsection{Milky Way foreground contributions}
 \label{sec:obs-mw}
 
-To characterize the expected propagation effects contributed by the Milky Way, we query the NE2025 Galactic electron density model \citep{Cordes2025} along each of the twelve co-detection sightlines. The expected Galactic dispersion measure ($\text{DM}_{\text{MW}}$) is integrated to a distance of 30\,kpc. The pulse-broadening timescale ($\tau_{\text{MW}}$) and scintillation bandwidth ($\Delta\nu_{\text{MW}}$) are scaled from the NE2025 output at 1\,GHz to the center of the CHIME/FRB band (600\,MHz) and the DSA-110 band (1.4\,GHz) assuming Kolmogorov scaling ($\tau \propto \nu^{-4.4}$ and $\Delta\nu_d \propto \nu^{4.4}$).
+To characterize the expected propagation effects contributed by the Milky Way, we query the NE2025 Galactic electron density model \citep{Ocker2026} along each of the twelve co-detection sightlines. The expected Galactic dispersion measure ($\text{DM}_{\text{MW}}$) is integrated to a distance of 30\,kpc. The pulse-broadening timescale ($\tau_{\text{MW}}$) and scintillation bandwidth ($\Delta\nu_{\text{MW}}$) are scaled from the NE2025 output at 1\,GHz to the center of the CHIME/FRB band (600\,MHz) and the DSA-110 band (1.4\,GHz) assuming Kolmogorov scaling ($\tau \propto \nu^{-4.4}$ and $\Delta\nu_d \propto \nu^{4.4}$).
 
-As shown in Figure~\ref{fig:ne2025_mw}, the sightlines exhibit a strong latitude-dependent behavior:
-\begin{itemize}
-    \item High-latitude sightlines ($|b| > 30^\circ$) present minimal Galactic contamination, with expected Milky Way dispersion contributions $\text{DM}_{\text{MW}} \lesssim 41$\,pc\,cm$^{-3}$ and sub-microsecond scattering broadenings at CHIME frequencies ($\tau_{\text{MW}} \lesssim 0.1\,\mu$s).
-    \item Low-latitude sightlines ($|b| < 15^\circ$) have substantial Galactic contributions, with $\text{DM}_{\text{MW}}$ values reaching $\approx 95$\,pc\,cm$^{-3}$ and predicted CHIME-band scattering timescales of $\tau_{\text{MW}} \gtrsim 30\,\mu$s, which can potentially dominate or mask the intrinsic extragalactic scattering.
-\end{itemize}
+As shown in Figure~\ref{fig:ne2025_mw}, the sightlines exhibit strongly
+latitude-dependent behavior. High-latitude sightlines ($|b| > 30^\circ$)
+present minimal Galactic contamination, with expected Milky Way dispersion
+contributions $\text{DM}_{\text{MW}} \lesssim 41$\,pc\,cm$^{-3}$ and
+sub-microsecond scattering broadening at CHIME frequencies
+($\tau_{\text{MW}} \lesssim 0.1\,\mu$s). Low-latitude sightlines
+($|b| < 15^\circ$) carry substantial Galactic contributions, with
+$\text{DM}_{\text{MW}}$ reaching $\approx 95$\,pc\,cm$^{-3}$ and predicted
+CHIME-band scattering timescales of $\tau_{\text{MW}} \gtrsim 30\,\mu$s,
+which can dominate or mask the intrinsic extragalactic scattering.
 
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/ne2025_mw_characterization.pdf}
-    \caption{NE2025 Galactic electron density model predictions. Top row: All-sky Mollweide maps (in Galactic coordinates) showing predicted dispersion measure ($\text{DM}_{\text{MW}}$, left), pulse-broadening timescale ($\tau_{\text{MW}}$ at 1\,GHz, middle), and scintillation bandwidth ($\Delta\nu_{\text{MW}}$ at 1\,GHz, right). Yellow stars indicate the positions of the twelve sightlines. Bottom row: Individual sightline values plotted against absolute Galactic latitude $|b|$ for dispersion (left), scaled scattering timescale (middle; CHIME at 600\,MHz in orange, DSA-110 at 1.4\,GHz in blue), and scaled scintillation bandwidth (right). Scatter plots show values calculated assuming Kolmogorov scaling ($\alpha = 4.4$) (\citealt{Ocker2026}; \citeauthor{mwprop}).}
+    \caption{NE2025 Galactic electron density model predictions. Top row: All-sky Mollweide maps (in Galactic coordinates) showing predicted dispersion measure ($\text{DM}_{\text{MW}}$, left), pulse-broadening timescale ($\tau_{\text{MW}}$ at 1\,GHz, middle), and scintillation bandwidth ($\Delta\nu_{\text{MW}}$ at 1\,GHz, right). Yellow stars indicate the positions of the twelve sightlines. Bottom row: Individual sightline values plotted against absolute Galactic latitude $|b|$ for dispersion (left), scaled scattering timescale (middle; CHIME at 600\,MHz in orange, DSA-110 at 1.4\,GHz in blue), and scaled scintillation bandwidth (right). Scatter plots show values calculated assuming Kolmogorov scaling ($\alpha = 4.4$) \citep{Ocker2026}.}
     \label{fig:ne2025_mw}
 \end{figure*}
 
@@ -114,5 +119,27 @@ the table---the \citet{WenHan2024} catalog reaches group scale
 only wide-field catalogs reach this declination, a sightline with no confirmed
 system is unconstrained by survey depth rather than demonstrably foreground-free;
 the budget of Section~\ref{sec:foreground} treats such sightlines accordingly.
+
+\begin{figure*}[tp]
+    \centering
+    \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{figures/sightline_halo_grid.pdf}
+    \caption{Foreground-halo census along the co-detection sightlines. Each panel
+    is one FRB sightline (labeled with its host redshift), showing every
+    foreground halo ($z<z_{\rm host}$) recovered from the DESI Legacy/WISE and
+    GLADE+ catalogs as a function of redshift and signed projected impact
+    parameter. Each halo is a soft disk whose radius is its projected virial
+    radius ($R_{200}$) and whose color encodes halo mass
+    $\log_{10}(M_{\rm halo}/M_\odot)$; the shaded horizontal band marks the inner
+    $\pm300$\,kpc impact corridor and the black star is the FRB host at
+    $(z_{\rm host},0)$. The single halo the sightline pierces within $R_{500}$ at
+    cluster mass ($M_{200}>10^{14}\,M_\odot$)---the intervening system that
+    enters the dispersion budget of Section~\ref{sec:foreground}---is ringed in
+    black; it lies in the dense field toward FRB~20230307A, the one such crossing
+    in the sample. Panels are ordered by host redshift; sightlines with no
+    recovered foreground halo (e.g. the low-redshift FRB~20220207C) are shown
+    empty, and sightlines without a spectroscopic host redshift are omitted. The
+    key panel gives the $R_{200}$ size scale and marker legend.}
+    \label{fig:sightline_halo_grid}
+\end{figure*}
 
 \input{foreground_table}
