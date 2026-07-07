@@ -77,6 +77,7 @@ if __name__ == '__main__':
         notext=True,
         unit=r"$\mathrm{DM}_{\mathrm{MW}}\ (\mathrm{pc\ cm}^{-3})$"
     )
+    hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
     hp.projscatter(
         df["l_deg"],
         df["b_deg"],
@@ -100,6 +101,7 @@ if __name__ == '__main__':
         notext=True,
         unit=r"$\log_{10}(\tau_{1\mathrm{GHz}} / \mu\mathrm{s})$"
     )
+    hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
     hp.projscatter(
         df["l_deg"],
         df["b_deg"],
@@ -123,6 +125,7 @@ if __name__ == '__main__':
         notext=True,
         unit=r"$\log_{10}(\Delta\nu_{1\mathrm{GHz}} / \mathrm{MHz})$"
     )
+    hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
     hp.projscatter(
         df["l_deg"],
         df["b_deg"],
