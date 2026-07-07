@@ -25,7 +25,10 @@ verdicts, impact parameters, and halo-mass proxies) and for the entire DM
 budget decomposition (NE2001/YMW16 disk terms, the 40 pc cm⁻³ halo prior,
 the Macquart mean, the mNFW/two-phase DM_int columns, host residuals, and
 the negative-residual Macquart-scatter bound).
-What retains trust: TOA association arithmetic and DM_obs only.
+What retains trust, among analysis products: TOA association arithmetic and
+DM_obs only. Observational inputs (positions, nicknames, published host
+spectroscopic redshifts) are inputs rather than revoked products; V3/V4
+audit their provenance where consumed.
 Manuscript claims consuming any revoked quantity are unsupported until
 re-established — that now includes `tab:budget`, `tab:foreground`,
 fig:budget (both panels), the dominant-systems and cluster analyses, the
@@ -33,8 +36,8 @@ host-dominated 10/11 comparison, the τ·Δν_d two-screen test, the
 scintillation excess, the FRB 20230913A intervening attribution (both of its
 supporting diagnostics sit on revoked strands), `tab:beta`, and
 `tab:burst-energies`. Trust is restored only through the re-validation
-ladders of `docs/rse/specs/plan-circulation-readiness.md` §V (V1 fits, V4
-census, V5 DM budget).
+ladders of `docs/rse/specs/plan-circulation-readiness.md` §V (V1 fits, V3
+energies, V4 census, V5 DM budget).
 _Avoid_: citing any fit-, census-, or budget-derived number from the current
 tables in new prose; treating a PPC pass under the old campaign as evidence
 of trust.
@@ -59,14 +62,17 @@ fit-derived, so it too awaits §V re-validation before use. The two interior sig
 (freya β=3.72, phineas β=3.23) remain quotable as thin-screen-conditioned
 measurements with the geometry named, pending the same adjudication —
 **suspended**: under the fit-trust reset the interior rows are not quotable
-either until the fits are re-established. Census counts remain quotable only
-as facts about the (now-untrusted) campaign, not about the sky; class
-fractions stay withheld, and whether counts appear in manuscript prose is an
-owner call at reconciliation. The PBF shape and α = 2β/(β−2) are both derived
-from β at each likelihood evaluation (co-model; §3.5).
+either until the fits are re-established. Rail-class tallies of the retired
+fit campaign (2 interior / 9 railed / 1 gate-FAIL) remain quotable only as
+facts about that campaign, never about the sky — these tallies are distinct
+from the *foreground census*, which is wave-2 revoked; class fractions stay
+withheld, and whether the tallies appear in manuscript prose is an owner
+call at reconciliation. The PBF shape and α = 2β/(β−2) are both derived
+from β at each likelihood evaluation (co-model; sec:jointfit).
 _Avoid_: α = 4 quoted for an ex-railed row in any form, including as a limit;
-rail-class vocabulary in manuscript text beyond the census counts; thin-screen
-as an unstated default geometry; quoting median β or class fractions.
+rail-class vocabulary in manuscript text beyond the campaign tallies;
+thin-screen as an unstated default geometry; quoting median β or class
+fractions.
 
 **Scint→scattering coupling** (owner decision 2026-07-06):
 Scintillation is not a parallel product. The two-screen analysis (τ·Δν_d,
@@ -106,13 +112,13 @@ caption; the twelve-burst co-detection set is never assumed as the denominator.
 **Explicit pending**:
 (0) Re-validation framework (plan §V) — the trust reset makes this the first
 gate: no fit-, census-, or budget-derived quantity is citable until its
-producing analysis passes the corresponding re-trust ladder (V1 fits, V4
-census, V5 DM budget); includes verifying whether the scattering-fit CHIME
+producing analysis passes the corresponding re-trust ladder (V1 fits, V3
+energies, V4 census, V5 DM budget); includes verifying whether the scattering-fit CHIME
 inputs share the gen-1 de-chirp defect lineage found in the scintillation
 products. (1) Geometry-selection campaign (extended-medium kernel + per-sightline model
 selection, scint-informed) — supersedes the narrower "ADR-0007 re-analysis of
 the nine railed rows"; blocks any α quoting for the nine ex-railed rows and
-the restructured abstract/§3.5/results language. (2) CHIME-band scintillation
+the restructured abstract/co-model-methods/results language. (2) CHIME-band scintillation
 campaign: burst configs + first measurements for whitney/phineas/mahi/isha;
 U sizing + regeneration for the six never-generated co-detections; ACF/Δν_d
 across the sample (the existing DSA-band Δν_d fits and two-screen table are
@@ -122,13 +128,19 @@ with elevated per-band χ² (the revoked campaign's trio — wilhelm, hamilton,
 zach — is the starting hypothesis, re-derived by plan C1). (4) Two-screen treatment decision — scint products as
 geometry-adjudicating constraints vs a fitted two-screen model (constraint
 route preferred; owner confirmation pending). (5) **Manuscript not yet
-reconciled to this contract** — abstract, observations (§2), §3.5, results,
-discussion, conclusions, and `tab:beta` all still carry rail-class language
-and/or α = 4 limits; reconciliation is scheduled after the geometry campaign
-(see `docs/rse/specs/plan-circulation-readiness.md`).
-The measured-versus-predicted budget overlay exists in the draft (fig:budget
-right panel), but its measured diamonds are revoked τ fits — re-derived
-post-C (plan D1).
+reconciled to this contract** — wave 1: abstract, observations (§2), the
+co-model methods (sec:jointfit / sec:beta-scattering-methods), results,
+discussion, conclusions, and `tab:beta` still carry rail-class language
+and/or α = 4 limits, and the multiplicity-bias demonstration
+(fig:whitney_mult, the abstract's closing claim, conclusions item 7) plus
+fig:jointmodel_montage and fig:scint_screens are built on revoked fits;
+wave 2: the budget section (§3 — census verdicts, dominant-systems and
+cluster analyses, scint excess, τ·Δν_d test), results §4.1, and conclusions
+items 1–3/5–6 carry census/budget claims now unsupported. Reconciliation is
+scheduled per plan F1 (see `docs/rse/specs/plan-circulation-readiness.md`).
+The measured-versus-predicted budget overlay exists in the draft, but both
+sides are now revoked (measured diamonds = wave-1 τ fits; predicted bars =
+wave-2 census/budget products) — re-derived after C + V4/V5 (plan D1).
 
 **Pass 2 closeout (2026-06-27)**:
 Pipeline PR #74 merged @ `c0696a6`; Faber2026 stacked PR pins submodule and
@@ -161,8 +173,8 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 > fits is citable at all, not even the descriptive statement. The fits must
 > first pass the plan-§V re-trust ladder on verified inputs; then geometry
 > model selection, informed by re-validated two-screen scintillation
-> constraints, decides what any surviving statement or index means. Census
-> counts describe the retired campaign, not the sky."
+> constraints, decides what any surviving statement or index means. The
+> rail tallies describe the retired fit campaign, not the sky."
 
 ## Flagged ambiguities
 
