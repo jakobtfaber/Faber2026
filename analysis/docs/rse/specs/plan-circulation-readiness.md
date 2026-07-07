@@ -23,7 +23,10 @@ escalation trigger (text under A1 below); (h) 2026-07-06, same night:
 owner re-opened every locked decision — (b)–(g) stand as **working
 choices, all revisable**, none final until the owner closes them. §V
 expansion:
-[plan-trust-reset-revalidation.md](plan-trust-reset-revalidation.md).
+[plan-trust-reset-revalidation.md](plan-trust-reset-revalidation.md);
+(i) 2026-07-06 night, third wave: trust also revoked for TOA association
+arithmetic and DM_obs (all twelve, both telescopes) — the retained set is
+now empty; V6 added.
 ---
 
 Lanes: **[FLITS]** pipeline repo (separate lane — changes land as FLITS PRs,
@@ -86,7 +89,7 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       (gen-2 md5s, h17 path), commit the h17-side tooling
       (`extract_time0_metadata.py`, generic npz builder) into the FLITS tree.
 
-## V. Trust reset & re-validation framework (owner decisions 2026-07-06 evening, two waves)
+## V. Trust reset & re-validation framework (owner decisions 2026-07-06 evening→night, three waves)
 
 Wave 1: trust revoked for ALL burst-data fits to date — joint scattering
 fits (every β, τ₁GHz, multiplicity, PPC verdict, interior rows included),
@@ -94,8 +97,13 @@ sub-band EMG fits, scintillation ACF fits (Δν_d), spectral amplitudes c₀,γ
 and all energies. Wave 2: trust also revoked for the foreground census
 (cross-matches, verdicts, impact parameters, halo-mass proxies) and the DM
 budget decomposition (Galactic disk/halo terms, Macquart mean, mNFW DM_int
-columns, host residuals). Retained: TOA association arithmetic and DM_obs
-only. Downstream, now unsupported until inputs re-qualify: tab:budget,
+columns, host residuals). Wave 3: trust also revoked for the TOA
+association arithmetic (residuals, P_cc, verdicts) and DM_obs (all twelve,
+both telescopes — per-telescope values, their agreement, and their
+acquisition method are undocumented). Retained: nothing among analysis
+products; raw observational inputs only. The twelve-burst set stays the
+working roster; its citable association evidence awaits V6.
+Downstream, now unsupported until inputs re-qualify: tab:budget,
 tab:foreground, fig:budget both panels, the dominant-systems and cluster
 analyses, the host-dominated 10/11 comparison, the τ·Δν_d two-screen test,
 the scintillation excess, the FRB 20230913A attribution (both diagnostics
@@ -134,6 +142,16 @@ fig:jointmodel_montage, and fig:scint_screens.
       profiles), re-derive host residuals and the prior-predictive
       negative-residual analysis on the V4-verified census. Deliverable: a
       re-verified tab:budget + fig:budget left panel.
+- [ ] V6 **[FLITS]** Association + DM_obs re-validation (wave 3): document
+      per-burst, per-telescope DM_obs provenance (instrument pipeline,
+      dedispersion method — e.g. structure-maximizing vs S/N-maximizing —
+      producing artifact, uncertainty); quantify CHIME-vs-DSA DM agreement
+      per burst (ΔDM with uncertainties, figure); re-derive the TOA
+      association arithmetic (residuals, P_cc) from raw positions and
+      timestamps under the V1 contract. Deliverable: per-burst DM/TOA
+      provenance table + agreement figure; re-certifies the co-detection
+      sample membership itself. Expanded as Phase 6 of
+      [plan-trust-reset-revalidation.md](plan-trust-reset-revalidation.md).
 
 ## C. Scattering re-fit under geometry selection (needs V + A + B)
 
@@ -195,8 +213,10 @@ fig:jointmodel_montage, and fig:scint_screens.
 V1/V2 → every scattering and scintillation re-fit · V1/V3 → energies ·
 V4 → every census-derived claim and V5's host-residual re-derivation
 (V5's implementation checks can start now) · V5 → every budget-derived
-claim · A1 → A2/A3 · B1–B4 → B5 (B measurements themselves run under the
-V1 contract) · (V, A, B5) → C1+C2 → C3 (C2 resolves per-band misfits
-before the pin bump) · C3 → F2 · C3 + V4/V5 → D · D → E → F1 → F4/F5 → G.
-V1–V4, V5's implementation half, F3, and a structural F4 pass on non-β
+claim · V6 → every association/DM_obs quote and the citable sample
+membership (parallelizable now) · A1 → A2/A3 · B1–B4 → B5 (B measurements
+themselves run under the V1 contract) · (V, A, B5) → C1+C2 → C3 (C2
+resolves per-band misfits before the pin bump) · C3 → F2 · C3 + V4/V5 → D
+· D → E → F1 → F4/F5 → G.
+V1–V4, V6, V5's implementation half, F3, and a structural F4 pass on non-β
 sections are parallelizable now; A4, B6, F6/F7 anytime.

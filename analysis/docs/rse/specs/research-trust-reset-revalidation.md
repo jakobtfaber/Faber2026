@@ -182,6 +182,24 @@ FREYA_REF=3.6838±0.05 `run_fleet.py:54-55`) but joint fits outside discovery.
   Macquart-curve point. Internal priors (halo 40, A=1e-6, boost 10, k_eff,
   caps) are audit-only by design.
 
+## V6 — association + DM_obs (wave 3; inventory pending P6.1)
+
+Wave 3 (2026-07-06 night) revoked the last retained products — TOA
+association arithmetic and DM_obs — after the V1–V5 exploration sweep, so
+this section holds only the anchors known going in; plan P6.1 completes it.
+- `crossmatching/chime_side_inputs.json` — per-burst `dm_dsa`, `dm_chime`,
+  `dm_chime_err` (e.g. one burst: dm_dsa 262.368 vs dm_chime
+  261.524 ± 0.0198): both-telescope DMs exist per burst at the pin, but
+  their producers and the manuscript's single-DM_obs collapse are
+  undocumented.
+- `crossmatching/association_report.json` — keys `inputs`,
+  `expected_chance_associations`, `bursts` (the chance-association
+  arithmetic's committed output).
+- Code: `crossmatching/association.py`, `toa_crossmatch.py`,
+  `chime_singlebeam.py`. Tests: `tests/test_association.py`,
+  `test_chime_dm.py`, `test_chime_singlebeam_toa.py`,
+  `test_crossmatching_notebook_reproduction.py`.
+
 ## Cross-cutting themes
 
 1. **Provenance is the systemic hole**: unpinned inputs, off-repo builders,
