@@ -17,7 +17,7 @@ The predicted properties (dispersion, scattering, scintillation) show a strong l
 ## Visualization
 
 ![NE2025 MW properties vs Galactic latitude](../../../figures/ne2025_mw_characterization.png)
-*Figure: NE2025 Galactic electron density model predictions for the 12 CHIME/DSA co-detection sightlines as a function of Galactic latitude $|b|$. Left: Milky Way dispersion contribution $\text{DM}_{\text{MW}}$ integrated to 30 kpc. Middle: Pulse broadening timescale $\tau_{\text{MW}}$ scaled to CHIME (600 MHz, orange circles) and DSA-110 (1.4 GHz, blue squares) bands. Right: Scintillation bandwidth $\Delta\nu_{\text{MW}}$ scaled to CHIME and DSA-110 bands. Values are computed assuming Kolmogorov scaling ($\alpha = 4.4$).*
+*Figure: NE2025 Galactic electron density model predictions. Top row: All-sky Mollweide maps (in Galactic coordinates) showing predicted dispersion measure ($\text{DM}_{\text{MW}}$, left), pulse-broadening timescale ($\tau_{\text{MW}}$ at 1 GHz, middle), and scintillation bandwidth ($\Delta\nu_{\text{MW}}$ at 1 GHz, right). Yellow stars indicate the positions of the 12 sightlines. Bottom row: Individual sightline values plotted against absolute Galactic latitude $|b|$ for dispersion (left), scaled scattering timescale (middle; CHIME at 600 MHz in orange, DSA-110 at 1.4 GHz in blue), and scaled scintillation bandwidth (right). Scatter plots show values calculated assuming Kolmogorov scaling ($\alpha = 4.4$).*
 
 ## Characterization Table
 
