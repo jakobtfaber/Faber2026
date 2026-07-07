@@ -51,10 +51,38 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       (gen-2 md5s, h17 path), commit the h17-side tooling
       (`extract_time0_metadata.py`, generic npz builder) into the FLITS tree.
 
-## C. Scattering re-fit under geometry selection (needs A + B)
+## V. Fit-trust reset & re-validation framework (owner decision 2026-07-06 evening)
 
-- [ ] C1 **[FLITS]** Re-fit campaign across the twelve co-detections with
-      geometry adjudication; PPC verification as in the thin-screen campaign.
+Trust revoked for ALL burst-data fits to date: joint scattering fits (every
+β, τ₁GHz, multiplicity, PPC verdict — interior rows included), sub-band EMG
+fits, scintillation ACF fits (Δν_d), spectral amplitudes c₀,γ and all
+energies. Retained: TOA association arithmetic, DM_obs, foreground census,
+external-model DM terms. Downstream: the host-dominated 10/11 comparison,
+the τ·Δν_d two-screen test, and the scintillation excess are unsupported
+until their inputs are re-established.
+
+- [ ] V1 **[FLITS]** Author the re-trust validation contract (ADR): a fit is
+      citable only with (i) verified input-data lineage (gen-2+,
+      md5-provenanced), (ii) synthetic-injection recovery of known truth
+      under each candidate geometry (`simulation/` + `sim_fit_bridge`),
+      (iii) prior-rail behavior test — a rail is model-family rejection,
+      never a quotable limit, (iv) PPC pass, (v) an independent cross-check
+      (sub-band slope or τ·Δν_d consistency).
+- [ ] V2 **[data]** Verify whether the CHIME dynamic spectra consumed by the
+      scattering joint fits share the gen-1 de-chirp defect lineage found in
+      the upchannelized scintillation products; per-burst scattering-input
+      provenance table.
+- [ ] V3 **[FLITS]** Energies pipeline under the same contract; resolve the
+      γ_D ≈ −5 pile-up (prior-bound check) and the tab:burst-energies
+      selection-rule contradiction (gate-FAIL 20240203A tabulated under a
+      "quality-passing" criterion; note-a redshift provenance vs §2's
+      placeholder trio).
+
+## C. Scattering re-fit under geometry selection (needs V + A + B)
+
+- [ ] C1 **[FLITS]** Re-fit campaign from scratch across all twelve
+      co-detections under the V1 contract with geometry adjudication — a
+      fresh campaign on verified inputs, not a patch of the nine railed rows.
 - [ ] C2 **[FLITS]** Per-band systematics pass on the elevated-χ² trio
       (wilhelm, hamilton, zach).
 - [ ] C3 **[ms]** Pin bump + table/figure regeneration from the campaign.
@@ -100,7 +128,8 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 
 ## Dependency spine
 
-A1 → A2/A3 · B1–B4 → B5 · (A, B5) → C1+C2 → C3 (C2 gates Tier B→A
-promotion, so it precedes the pin bump) · C3 → {F2, D} · D → E → F1 →
-F4/F5 → G. F3 and a structural F4 pass on non-β sections are parallelizable
-now; F6/F7 anytime.
+V1/V2 → everything fit-derived · A1 → A2/A3 · B1–B4 → B5 (B measurements
+themselves run under the V1 contract) · (V, A, B5) → C1+C2 → C3 (C2 gates
+Tier B→A promotion, so it precedes the pin bump) · C3 → {F2, D} · D → E →
+F1 → F4/F5 → G. V1, V2, F3, and a structural F4 pass on non-β sections are
+parallelizable now; F6/F7 anytime.
