@@ -34,7 +34,6 @@ c_dm = "tab:purple"
 ax0 = axes[0]
 ax0.scatter(df["abs_b"], df["dm_mw_pc_cm3"], color=c_dm, s=60, edgecolor="k", zorder=3)
 ax0.set_ylabel(r"$\mathrm{DM}_{\mathrm{MW}}$ ($\mathrm{pc\ cm}^{-3}$)")
-ax0.set_title("Galactic Dispersion Floor")
 ax0.grid(True, linestyle="--", alpha=0.5)
 
 # 2. Middle Panel: tau vs |b|
@@ -43,7 +42,6 @@ ax1.scatter(df["abs_b"], df["tau_chime_us"], color=c_chime, marker="o", s=60, ed
 ax1.scatter(df["abs_b"], df["tau_dsa_us"], color=c_dsa, marker="s", s=60, edgecolor="k", label="DSA-110 (1.4 GHz)", zorder=3)
 ax1.set_yscale("log")
 ax1.set_ylabel(r"$\tau_{\mathrm{MW}}$ ($\mu\mathrm{s}$)")
-ax1.set_title("Galactic Scattering Floor")
 ax1.legend(loc="upper right")
 ax1.grid(True, linestyle="--", alpha=0.5, which="both")
 
@@ -53,7 +51,6 @@ ax2.scatter(df["abs_b"], df["sbw_chime_khz"], color=c_chime, marker="o", s=60, e
 ax2.scatter(df["abs_b"], df["sbw_dsa_khz"], color=c_dsa, marker="s", s=60, edgecolor="k", label="DSA-110 (1.4 GHz)", zorder=3)
 ax2.set_yscale("log")
 ax2.set_ylabel(r"$\Delta\nu_{\mathrm{MW}}$ ($\mathrm{kHz}$)")
-ax2.set_title("Scintillation Bandwidth")
 ax2.legend(loc="lower right")
 ax2.grid(True, linestyle="--", alpha=0.5, which="both")
 
