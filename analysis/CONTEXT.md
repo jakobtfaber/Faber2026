@@ -75,14 +75,28 @@ rail-class vocabulary in manuscript text beyond the campaign tallies;
 thin-screen as an unstated default geometry; quoting median β or class
 fractions.
 
-**Scint→scattering coupling** (owner decision 2026-07-06):
+**Scint→scattering coupling** (owner decision 2026-07-06; mechanism locked
+as A1, 2026-07-06 late evening):
 Scintillation is not a parallel product. The two-screen analysis (τ·Δν_d,
 screen placement) built on the CHIME+DSA scintillation campaign — once it is
 complete on both bands — feeds the per-sightline scattering geometry choice;
 scattering re-fits and any restructured β presentation are sequenced behind
-that completion. Preferred mechanism (pending confirmation): scint products as
-constraints/priors adjudicating geometry, not extra free fit parameters.
-_Avoid_: presenting scintillation and scattering as independent result silos.
+that completion. Mechanism (A1, locked): a modular constraint layer — scint
+products enter as frozen posterior/limit products with quality flags (never
+point estimates); τ·Δν_d is used probabilistically to count screens and
+derive τ_near/τ_dom; no second broadening component is fitted unless the
+re-validated posterior makes it temporally resolvable (escalation trigger:
+Pr(τ_near/τ_dom > 0.1) > 0.1, median ratio > 0.03, same-screen ambiguity,
+or predicted-scale PPC residuals); for extended host media, quenching
+constrains an effective source-proximate scattering-depth distribution, not
+a point screen distance; scint geometry sets **prior odds** on the PBF
+kernel family (thin vs extended) with final selection by
+evidence/model-comparison; a joint burst-shape+ACF likelihood is deferred
+unless modular products conflict on a high-S/N sightline. Full decision
+text: plan-circulation-readiness A1.
+_Avoid_: presenting scintillation and scattering as independent result
+silos; treating a scint verdict as a hard geometry cut rather than prior
+odds; fitting a second broadening component without the escalation trigger.
 
 **Unified β roster** (suspended by the fit-trust reset — the row facts below
 are history of the revoked campaign, not citable trust states):
@@ -126,9 +140,10 @@ across the sample (the existing DSA-band Δν_d fits and two-screen table are
 themselves revoked pending §V; the campaign re-establishes both bands).
 (3) Per-band systematics pass on the sightlines the fresh campaign flags
 with elevated per-band χ² (the revoked campaign's trio — wilhelm, hamilton,
-zach — is the starting hypothesis, re-derived by plan C1). (4) Two-screen treatment decision — scint products as
-geometry-adjudicating constraints vs a fitted two-screen model (constraint
-route preferred; owner confirmation pending). (5) **Manuscript not yet
+zach — is the starting hypothesis, re-derived by plan C1). (4) ~~Two-screen
+treatment decision~~ — **resolved 2026-07-06** (A1 locked: modular
+constraint layer with prior-odds geometry and a posterior escalation
+trigger; see "Scint→scattering coupling" above). (5) **Manuscript not yet
 reconciled to this contract** — wave 1: abstract, observations (§2), the
 co-model methods (sec:jointfit / sec:beta-scattering-methods), results,
 discussion, conclusions, and `tab:beta` still carry rail-class language

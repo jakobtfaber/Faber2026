@@ -17,7 +17,10 @@ foreground census and the DM budget decomposition (V4/V5) — only TOA
 association arithmetic and DM_obs remain trusted; (f) 2026-07-06: rail
 tallies dropped from the manuscript; codetections_polarization/ stays as
 companion-paper materials; co-author list to be drafted from Law2024 +
-CHIME/FRB overlap for pruning.
+CHIME/FRB overlap for pruning; (g) 2026-07-06 late evening: A1 locked —
+modular constraint layer, prior-odds geometry, posterior escalation
+trigger (decision text under A1 below). §V expansion:
+[plan-trust-reset-revalidation.md](plan-trust-reset-revalidation.md).
 ---
 
 Lanes: **[FLITS]** pipeline repo (separate lane — changes land as FLITS PRs,
@@ -26,9 +29,26 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 
 ## A. Methodology reset — geometry selection replaces rail taxonomy
 
-- [ ] A1 **[decision]** Two-screen treatment: scint products (τ·Δν_d, screen
-      placement) as geometry-adjudicating constraints/priors (recommended) vs
-      a fitted two-screen scattering model. Blocks A2 design.
+- [x] A1 **[decision]** Two-screen treatment — **locked 2026-07-06** after
+      adversarial iteration (Codex GPT-5.5 review; amended text adopted
+      verbatim as the record):
+      > Adopt A1 as a modular scintillation-to-scattering constraint layer,
+      > not a hard two-screen fit by default. Scintillation products enter
+      > as frozen posterior/limit products with quality flags, not point
+      > estimates. The τΔν statistic is used probabilistically to count
+      > screens and derive τ_near/τ_dom, marginalized over geometry
+      > constants and censoring. A second broadening component is not
+      > fitted unless the re-validated posterior makes it temporally
+      > resolvable: Pr(τ_near/τ_dom > 0.1) > 0.1, median ratio > 0.03,
+      > same-screen ambiguity, or predicted-scale PPC residuals. For
+      > extended host media, quenching constrains an effective
+      > source-proximate scattering-depth distribution, not a point screen
+      > distance. Scintillation geometry informs prior odds for thin vs
+      > extended PBF families; final kernel selection remains
+      > evidence/model-comparison based. Joint burst-shape+ACF likelihood
+      > is deferred unless modular products conflict on a high-S/N
+      > sightline.
+      A2/A3 design unblocked.
 - [ ] A2 **[FLITS]** Extended-medium (Williamson uniform-LOS) PBF kernel,
       β-coupled, per band (ADR-0007 un-deferred by the rail evidence: 10/12
       posteriors hit its re-open trigger — the nine tabled railed rows plus
