@@ -18,32 +18,37 @@ Rail classes from the β-coherent thin-screen campaign (interior / railed-hi /
 railed-lo / unconstrained / gate-FAIL) are fit-campaign QA vocabulary and do
 NOT appear in manuscript prose or tables. A posterior railing at β=4 is
 evidence against the thin-screen closure for that sightline (ADR-0007's
-re-open trigger — fired for nine of twelve), not a square-law detection. The
+re-open trigger — fired for ten of twelve posteriors: the nine railed
+`tab:beta` rows plus gate-FAIL chromatica, the campaign report's 10-member
+candidate set), not a square-law detection. The
 former "geometry-conditioned α = 4 limit" is retired: **no α is quoted in any
 form for an ex-railed row** until per-sightline geometry model selection
 (thin screen vs extended medium, informed by the CHIME+DSA two-screen
 scintillation constraints) adjudicates. What survives for those rows is the
 descriptive data statement — PBF consistent with the exponential limit in both
-bands — with no turbulence index attached. The two interior sightlines
+bands (for the elevated-χ² trio, subject to pending (3)'s per-band systematics
+caveat) — with no turbulence index attached. The two interior sightlines
 (freya β=3.72, phineas β=3.23) remain quotable as thin-screen-conditioned
 measurements with the geometry named, pending the same adjudication. Census
-counts remain quotable as campaign facts. The PBF shape and α = 2β/(β−2) are
-both derived from β at each likelihood evaluation (co-model; §3.5).
+counts remain quotable as campaign facts; class fractions beyond the counts
+stay withheld, and whether even the counts appear in manuscript prose is an
+owner call at reconciliation. The PBF shape and α = 2β/(β−2) are both derived
+from β at each likelihood evaluation (co-model; §3.5).
 _Avoid_: α = 4 quoted for an ex-railed row in any form, including as a limit;
-rail-class vocabulary in manuscript text; thin-screen as an unstated default
-geometry; quoting median β or class fractions.
+rail-class vocabulary in manuscript text beyond the census counts; thin-screen
+as an unstated default geometry; quoting median β or class fractions.
 
 **Scint→scattering coupling** (owner decision 2026-07-06):
 Scintillation is not a parallel product. The two-screen analysis (τ·Δν_d,
-screen placement) built on the completed CHIME+DSA scintillation campaign
-feeds the per-sightline scattering geometry choice; scattering re-fits and
-any restructured β presentation are sequenced after scintillation completes
-on both bands. Preferred mechanism (pending confirmation): scint products as
+screen placement) built on the CHIME+DSA scintillation campaign — once it is
+complete on both bands — feeds the per-sightline scattering geometry choice;
+scattering re-fits and any restructured β presentation are sequenced behind
+that completion. Preferred mechanism (pending confirmation): scint products as
 constraints/priors adjudicating geometry, not extra free fit parameters.
 _Avoid_: presenting scintillation and scattering as independent result silos.
 
 **Unified β roster**:
-One `tab:beta` listing every rail-aware-citable sightline (including
+One `tab:beta` listing every geometry-adjudicated-citable sightline (including
 multiplicity cases such as FRB 20220310F), not a split table.
 FRB 20220207C (zach) is **re-admitted** as a railed-hi Tier-B row — the
 campaign's PPC-verified C1D1 joint fit (roster re-lock 2026-07-06, pipeline
@@ -75,9 +80,10 @@ across the sample (the two-screen table is DSA-band only until then).
 hamilton, zach). (4) Two-screen treatment decision — scint products as
 geometry-adjudicating constraints vs a fitted two-screen model (constraint
 route preferred; owner confirmation pending). (5) **Manuscript not yet
-reconciled to this contract** — abstract, §3.5, results, and `tab:beta` still
-carry rail-class language and α = 4 limits; reconciliation is scheduled after
-the geometry campaign (see `docs/rse/specs/plan-circulation-readiness.md`).
+reconciled to this contract** — abstract, observations (§2), §3.5, results,
+discussion, conclusions, and `tab:beta` all still carry rail-class language
+and/or α = 4 limits; reconciliation is scheduled after the geometry campaign
+(see `docs/rse/specs/plan-circulation-readiness.md`).
 The measured-versus-predicted budget overlay is **complete** (fig:budget
 right panel carries the measured diamonds).
 
