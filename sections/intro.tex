@@ -1,34 +1,30 @@
 \section{Introduction}
 \label{sec:intro}
 
-% TODO(intro): Fill this section after the Results and Discussion are stable.
-% Keep the Introduction as a dependency-ordered argument rather than a detailed
-% methods preview. Suggested structure:
-%
-% 1. Why these observables matter.
-%    Introduce FRB dispersion and scattering as complementary line-of-sight
-%    probes of ionized gas. Keep this broad: DM traces electron column;
-%    scattering traces turbulent structure and screen geometry.
-%
-% 2. What is hard about the interpretation.
-%    Explain that DM is a sum over Milky-Way, cosmic, foreground, and host
-%    media, while scattering can arise in different screens. State the core
-%    ambiguity without reproducing the full budget model.
-%
-% 3. Why co-detection changes the problem.
-%    Motivate the CHIME/FRB--DSA-110 frequency baseline as the reason this
-%    sample can separate timing, scattering, and frequency-scaling information
-%    better than a single-band analysis.
-%
-% 4. What this paper does.
-%    Once the final result language is settled, summarize the analysis in one
-%    paragraph: association checks, DM budget, foreground classification,
-%    beta-based scattering model, validation checks, and energy estimates.
-%
-% 5. What the main result is.
-%    Insert the final take-home result after the Results and Discussion are
-%    locked. Keep this to the final claims only, not intermediate numbers.
-%
-% 6. Roadmap.
-%    Close with a short guide to the paper structure: observations, methods,
-%    results, discussion, and conclusions.
+Fast radio bursts (FRBs) provide compact, bright backlights through ionized gas
+on Galactic, circumgalactic, intergalactic, and host-galaxy scales. Their
+dispersion measures trace integrated electron column, while pulse broadening and
+diffractive scintillation respond to turbulent structure and screen geometry
+\citep[e.g.,][]{CordesChatterjee2019}. Interpreting those observables together is
+powerful but underconstrained: the same observed dispersion measure can be
+partitioned among several media, and the same scattering time can arise from
+different screen locations and turbulence spectra.
+
+Co-detections by CHIME/FRB and DSA-110 change that problem. CHIME/FRB samples
+the lower-frequency part of the burst, where scattering and dispersion delays
+are larger, while DSA-110 observes near 1.4 GHz, where the same event is less
+broadened. The combined frequency baseline gives a direct lever arm on timing,
+scattering, and frequency scaling that is not available from either band alone.
+It also creates a stringent association problem: the two detections must be
+shown to be the same astrophysical burst before their dispersion and scattering
+information can be combined.
+
+This paper is organized around that joint interpretation. We first define the
+candidate co-detection sample and the data products used for each telescope. We
+then describe the association test, the dispersion-budget model, the foreground
+census needed to identify intervening screens, the two-band scattering model,
+the scintillation connection, and the band-restricted energy calculation. The
+Results and Discussion are deliberately scaffolded in this circulation draft:
+they identify the result slots and validation dependencies, while withholding
+numerical conclusions until the producing analyses pass the trust-restoration
+checks.

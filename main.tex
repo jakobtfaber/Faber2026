@@ -30,50 +30,37 @@ CHIME/FRB--DSA-110 Co-detected Fast Radio Bursts}
 \input{auth.tex}
 
 \begin{abstract}
-We present a joint dispersion- and scattering-budget analysis of the twelve fast
-radio bursts (FRBs) co-detected by CHIME/FRB ($0.4$--$0.8$\,GHz) and DSA-110
-($\sim$1.4\,GHz) between 2022 February and 2024 February, spanning
-$\mathrm{DM_{obs}}=262$--$960\,\mathrm{pc\,cm^{-3}}$. The $\sim$1\,GHz baseline
-between the two detections breaks the degeneracy between the scattering time and
-its frequency scaling that defeats any single-band fit, which we exploit with a
-simultaneous two-band fit for a shared sightline pair
-$(\tau_{1\,\mathrm{GHz}},\beta)$, where $\beta$ is the spectral index of the
-electron-density fluctuation spectrum $P_n(q)\propto q^{-\beta}$ from which both
-the pulse-broadening function shape and the frequency-scaling index
-$\alpha=2\beta/(\beta-2)$ follow. We decompose each observed DM into Milky-Way
-(disk and halo), cosmological (Macquart), intervening circumgalactic, and host
-contributions, sourcing the intervening term from a foreground-galaxy search that
-returns 49 candidate systems along nine sightlines (29 confirmed foreground);
-sightlines outside a survey's footprint are treated as unconstrained by that
-survey, never as foreground-free. The host residual is formally negative only
-for the two highest-redshift sightlines, bounding the sightline-to-sightline
-scatter about the Macquart mean. The uniform $\beta$-based re-fit is complete
-across the sample: two sightlines return interior turbulence spectra
-($\beta=3.72$ and $\beta=3.23$, bracketing the Kolmogorov value), nine are
-consistent with the square-law limit and are quoted as geometry-conditioned
-$\alpha=4$ limits under the thin-screen closure, and one fails the joint-fit
-quality gate. Comparing each measured $\tau_{1\,\mathrm{GHz}}$ against the
-scattering predicted for its confirmed foreground systems, the prediction
-falls $1.5$--$3$ orders of magnitude short on ten of eleven sightlines,
-pointing to host-dominated scattering---except FRB~20230913A, where the
-foreground halo predicts $\approx$70\% of the measurement and, uniquely in
-the sample, the scintillation--scattering product
-$\tau\,\Delta\nu_d$ is consistent with a single screen. A
-diffractive-scintillation excess of $\sim$7--11$\times$ the NE2025 Galactic floor
-on the mid-latitude sightlines, robust across scattering-calibrated
-electron-density models, likewise indicates an extragalactic scattering screen
-rather than a Milky-Way origin. For eight sightlines with a spectroscopic host
-redshift and a quality-passing joint fit we measure band-restricted
-isotropic-equivalent energies of
-$5\times10^{38}$--$1\times10^{41}\,\mathrm{erg}$. Finally, we show that unmodeled
-temporal sub-components can bias the recovered turbulence spectrum by several
-units in $\beta$, because a missing component is absorbed into the scattering tail
-and distorts both the fitted pulse-broadening function shape and its frequency
-scaling simultaneously.
+This circulation draft describes the planned joint dispersion- and
+scattering-budget analysis of the CHIME/FRB--DSA-110 co-detection sample. The
+central opportunity is the wide frequency baseline between CHIME/FRB
+($0.4$--$0.8$\,GHz) and DSA-110 ($\sim$1.4\,GHz), which lets the analysis test
+whether a single-band scattering interpretation survives when the pulse
+broadening, frequency scaling, dispersion measure, and foreground environment
+are constrained together. The draft lays out the association checks, dispersion
+budget, foreground-census layer, two-band scattering model, scintillation
+connection, and band-restricted energy calculation that will be used in the
+final manuscript. It is intentionally conservative: previously generated fit,
+foreground-census, dispersion-budget, association, DM-observation, scintillation,
+and energy products are withheld until they pass the re-validation gates
+described in the project context and circulation-readiness plan. As a result,
+this version should be read as a collaborator-review draft of the argument,
+scope, and analysis contract, not as a final presentation of citable numerical
+results.
 \end{abstract}
 
 \keywords{Radio transient sources (2008) --- Interstellar scattering (854)
 --- Intergalactic medium (813) --- Circumgalactic medium (1879)}
+
+\section*{Circulation-status note}
+
+This draft is being circulated to check the manuscript structure, analysis
+contract, terminology, and missing collaborator inputs before the numerical
+results are restored. The current Results, Discussion, and Conclusions sections
+therefore mark which products are withheld rather than quoting values from the
+retired analysis campaign. Comments are most useful if they flag missing
+physical assumptions, unclear validation requirements, author-list corrections,
+or places where the eventual re-validated results need a different narrative
+slot.
 
 \input{sections/intro.tex}
 \input{sections/observations.tex}
@@ -84,7 +71,9 @@ scaling simultaneously.
 
 \appendix
 \input{sections/appendix.tex}
-\input{sections/emg_alpha4_appendix.tex}
+% The exponential-PBF appendix is parked for this circulation draft because the
+% manuscript is not yet ready to quote any alpha-limit result language.
+% \input{sections/emg_alpha4_appendix.tex}
 
 \bibliographystyle{aasjournal}
 \bibliography{bib/refs}
