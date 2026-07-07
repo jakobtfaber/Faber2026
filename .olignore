@@ -1,0 +1,19 @@
+# Local agent/runtime state.
+.agents/
+.claude/
+.codex/
+.cursor/
+.entire/
+.remember/
+.superpowers/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+
+# Repository metadata not needed by Overleaf.
+.github/
+pipeline/
+.git/
+.gitignore
+.gitmodules
+.olignore
