@@ -46,7 +46,8 @@ form for an ex-railed row** until per-sightline geometry model selection
 scintillation constraints) adjudicates. What survives for those rows is the
 descriptive data statement — PBF consistent with the exponential limit in both
 bands (for the elevated-χ² trio, subject to pending (3)'s per-band systematics
-caveat) — with no turbulence index attached. The two interior sightlines
+caveat) — with no turbulence index attached; the statement is itself
+fit-derived, so it too awaits §V re-validation before use. The two interior sightlines
 (freya β=3.72, phineas β=3.23) remain quotable as thin-screen-conditioned
 measurements with the geometry named, pending the same adjudication —
 **suspended**: under the fit-trust reset the interior rows are not quotable
@@ -68,7 +69,8 @@ that completion. Preferred mechanism (pending confirmation): scint products as
 constraints/priors adjudicating geometry, not extra free fit parameters.
 _Avoid_: presenting scintillation and scattering as independent result silos.
 
-**Unified β roster**:
+**Unified β roster** (suspended by the fit-trust reset — the row facts below
+are history of the revoked campaign, not citable trust states):
 One `tab:beta` listing every geometry-adjudicated-citable sightline (including
 multiplicity cases such as FRB 20220310F), not a split table.
 FRB 20220207C (zach) is **re-admitted** as a railed-hi Tier-B row — the
@@ -104,17 +106,20 @@ the nine railed rows"; blocks any α quoting for the nine ex-railed rows and
 the restructured abstract/§3.5/results language. (2) CHIME-band scintillation
 campaign: burst configs + first measurements for whitney/phineas/mahi/isha;
 U sizing + regeneration for the six never-generated co-detections; ACF/Δν_d
-across the sample (the two-screen table is DSA-band only until then).
-(3) Per-band systematics pass on the three elevated-χ² rows (wilhelm,
-hamilton, zach). (4) Two-screen treatment decision — scint products as
+across the sample (the existing DSA-band Δν_d fits and two-screen table are
+themselves revoked pending §V; the campaign re-establishes both bands).
+(3) Per-band systematics pass on the sightlines the fresh campaign flags
+with elevated per-band χ² (the revoked campaign's trio — wilhelm, hamilton,
+zach — is the starting hypothesis, re-derived by plan C1). (4) Two-screen treatment decision — scint products as
 geometry-adjudicating constraints vs a fitted two-screen model (constraint
 route preferred; owner confirmation pending). (5) **Manuscript not yet
 reconciled to this contract** — abstract, observations (§2), §3.5, results,
 discussion, conclusions, and `tab:beta` all still carry rail-class language
 and/or α = 4 limits; reconciliation is scheduled after the geometry campaign
 (see `docs/rse/specs/plan-circulation-readiness.md`).
-The measured-versus-predicted budget overlay is **complete** (fig:budget
-right panel carries the measured diamonds).
+The measured-versus-predicted budget overlay exists in the draft (fig:budget
+right panel), but its measured diamonds are revoked τ fits — re-derived
+post-C (plan D1).
 
 **Pass 2 closeout (2026-06-27)**:
 Pipeline PR #74 merged @ `c0696a6`; Faber2026 stacked PR pins submodule and
@@ -143,23 +148,23 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 ## Example dialogue
 
 > **Dev:** "Nine rows rail at β=4 — can we say the sample's median α is 4?"
-> **Domain expert:** "No — and we no longer quote α=4 for those rows at all,
-> not even as a limit. A rail is evidence the thin-screen closure is wrong for
-> that sightline, so what's citable is only the descriptive statement (PBF
-> exponential-consistent in both bands) until geometry model selection,
-> informed by the two-screen scintillation constraints, adjudicates. Census
-> counts are fine; they're campaign facts."
+> **Domain expert:** "No — and under the fit-trust reset nothing from those
+> fits is citable at all, not even the descriptive statement. The fits must
+> first pass the plan-§V re-trust ladder on verified inputs; then geometry
+> model selection, informed by re-validated two-screen scintillation
+> constraints, decides what any surviving statement or index means. Census
+> counts describe the retired campaign, not the sky."
 
 ## Flagged ambiguities
 
-- **"Well-constrained"** in figures — under the 2026-07-06 decision this can
-  only mean an interior thin-screen measurement (freya, phineas) until the
-  geometry campaign lands; figures using it for ex-railed rows need relabeling
-  during reconciliation. Profile-bias demonstrator claim remains withheld
-  (ADR-0003).
+- **"Well-constrained"** in figures — after the fit-trust reset the term has
+  no citable referent: nothing qualifies until a fit passes §V and geometry
+  adjudication. Figures using it need relabeling during reconciliation.
+  Profile-bias demonstrator claim remains withheld (ADR-0003).
 - **Old α values** from the free-α + fixed-exponential-PBF model are retired;
   where they survive (the sub-band validation figure) they are labeled as
-  exponential-parametrization cross-checks, not turbulence indices.
+  exponential-parametrization cross-checks, not turbulence indices; under the
+  fit-trust reset the sub-band fits themselves are also uncitable pending §V.
 - **johndoeII's interior crossing** — its z=0.77 dominant halo is foreground
   only against a placeholder host redshift; the galaxy-interior attribution is
   provisional until a spectroscopic host z exists.
