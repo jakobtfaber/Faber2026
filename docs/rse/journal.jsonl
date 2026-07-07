@@ -275,3 +275,4 @@
 {"ts": "2026-07-07T12:22:57-0700", "agent": "codex-gpt-5/overleaf-agent-files-2026-07-07", "lane": "repo", "state": "done", "note": "removed agent-local config from parent Git/Overleaf payload via rm --cached, git/olignore rules, and workflow rsync excludes; local files preserved"}
 {"ts": "2026-07-07T12:33:23-0700", "agent": "codex-gpt-5/overleaf-agent-files-2026-07-07", "lane": "repo", "state": "working", "note": "adding explicit purge of stale agent-local paths from Overleaf clone before rsync"}
 {"ts": "2026-07-07T12:33:46-0700", "agent": "codex-gpt-5/overleaf-agent-files-2026-07-07", "lane": "repo", "state": "done", "note": "workflow now explicitly purges stale agent-local paths from Overleaf clone and verifies none remain after rsync"}
+{"ts": "2026-07-07T12:41:02-0700", "agent": "codex-gpt-5.5/cli-2026-07-07", "lane": "repo", "state": "working", "note": "cleaning PR branch whitespace after origin/main reconciliation"}
