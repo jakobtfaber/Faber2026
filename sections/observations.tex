@@ -9,10 +9,10 @@ wide frequency baseline, which---as developed in Section~\ref{sec:jointfit}---ca
 separate scattering time from frequency scaling more strongly than a single-band
 fit once the association and per-telescope dispersion-measure provenance are
 re-validated. The twelve bursts, their TNS designations, sky positions,
-detection epochs, and V6-restored association diagnostics are listed in
+detection epochs, and association diagnostics are listed in
 Table~\ref{tab:sample}. The timing residuals in that table use the shared
 DSA-DM reference convention; per-telescope DM agreement is documented separately
-in the V6 validation artifacts.
+in our internal validation materials.
 
 \input{sample_table.tex}
 
@@ -21,13 +21,12 @@ in the V6 validation artifacts.
 
 For each co-detection we analyze a pair of total-intensity dynamic spectra---one
 per facility---derived from the CHIME/FRB and DSA-110 baseband recordings
-(24 spectra in total; provenance and array geometry in
-\texttt{DATA\_SOURCES.md} of the companion \texttt{dsa110-FLITS} archive). Each
-spectrum is loaded with its frequency axis standardized to ascending order and
-its per-channel bandpass normalized, so the fitted amplitudes are free of the
-band-edge rolloff. All fits, quality gates, and figures in this paper are
-produced by the open \texttt{dsa110-FLITS} pipeline (\texttt{pipeline/}), which
-we reference throughout for reproducibility. We do not catalog the fine
+(24 spectra in total; provenance and array geometry are documented in the
+companion software archive). Each spectrum is loaded with its frequency axis
+standardized to ascending order and its per-channel bandpass normalized, so the
+fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
+and figures in this paper are produced with a common open-source reduction and
+fitting pipeline, which we reference throughout for reproducibility. We do not catalog the fine
 baseband morphology of each burst here; the only morphological distinction the
 analysis depends on---whether a burst resolves into more than one temporal
 component---is treated where it matters, in the multi-component fit of
