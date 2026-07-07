@@ -175,13 +175,24 @@ $\beta$, distorting both the fitted PBF shape and $\alpha$ simultaneously. We
 extend the likelihood to $N$ temporal components per band, each contributing its
 own $(t_0,\zeta)$ while $(\tau_{1\,\mathrm{GHz}},\beta)$ remain shared across
 both bands and all components, and we select the number of components per band
-by Bayesian evidence. Because the evidence normalization differs between
+by Bayesian evidence subject to a residual check. Because the evidence
+normalization differs between
 likelihood variants, the component counts are compared on a single matched grid
 in which even the one-component model is evaluated through the multi-component
 likelihood, so that evidence differences are meaningful. Component arrival times
 within a band are ordered and separated by a data-derived minimum spacing,
-keeping the fit identifiable at every prior sample. A clean single-component
-co-detection in our sample, for which the joint fit returns a well-constrained
-$\beta$ with white residuals, validates the method; a multi-component case is
-presented in Section~\ref{sec:results-alpha}.
+keeping the fit identifiable at every prior sample.
+
+The evidence comparison is not by itself the final acceptance gate. For each
+candidate multiplicity we inspect the two-dimensional data, best-fit model, and
+whitened residual dynamic spectra in both bands. A component choice is rejected
+and re-fit if coherent burst power remains in the residuals, or if the collapsed
+profiles show a resolved sub-component that is absent from the model, even when
+the scalar goodness-of-fit statistics are otherwise acceptable. This visual and
+residual audit is part of the fit re-validation ladder: current rows with
+missed sub-components remain diagnostic only until their higher-multiplicity
+fits pass the same check. A clean single-component co-detection in our sample,
+for which the joint fit returns a well-constrained $\beta$ with white residuals,
+validates the method; accepted multi-component cases will be presented in
+Section~\ref{sec:results-alpha} after re-validation.
 % Validating clean case = burst internally labelled "FRB 20230325A" (swap to TNS name).
