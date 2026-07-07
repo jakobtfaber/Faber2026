@@ -34,40 +34,15 @@ Section~\ref{sec:multicomp}.
 \subsection{Scattering fits}
 \label{sec:obs-scatt}
 
-The joint CHIME--DSA fit yields a $1.4$\,GHz pulse-broadening time
-$\tau_{1\,\mathrm{GHz}}$ wherever a scattering tail is resolved, measured against
-the NE2001 Galactic prediction along the sightline. The Methods section defines
-the joint two-band model, the $\beta$-based scattering closure, the temporal
-multiplicity treatment, and the quality gates used to decide which
-per-sightline quantities are citable (Sections~\ref{sec:jointfit} and
-\ref{sec:multicomp}). Results from the uniform re-fit are reported in
-Table~\ref{tab:beta}, and Figure~\ref{fig:budget} overlays the measured
-$\tau_{1\,\mathrm{GHz}}$ values on the predicted intervening contribution along
-each sightline.
-Figure~\ref{fig:jointmodel_montage} shows the recovered joint model against the
-DSA dynamic spectrum for every co-detection. Panels are ordered by burst
-nickname; each pair is [data~|~model] on a common color scale, with the fitted
-$\beta$ and DSA $\chi^2_\nu$ annotated. FRB~20220310F retains the dedicated
-multiplicity demonstration of Figure~\ref{fig:whitney_mult}.
+The Methods section defines the joint two-band model, the $\beta$-based
+scattering closure, the temporal multiplicity treatment, and the quality gates
+used to decide which per-sightline quantities are citable
+(Sections~\ref{sec:jointfit} and~\ref{sec:multicomp}). Scattering-fit results
+are withheld until the fit re-validation ladder has restored trust in the
+underlying burst-data fits.
 
-\begin{figure*}[!t]
-  \centering
-  \includegraphics[width=\textwidth]{jointmodel_montage}
-  \caption{Joint-fit model vs.\ data on the DSA-110 band for all twelve
-  co-detections. Each row pair shows the on-pulse dynamic spectrum (left) and the
-  gain-marginal model reconstruction (right) from the uniform $\beta$-based
-  two-band fit (PBF shape and frequency scaling both derived from the fitted
-  turbulence index $\beta$; Section~\ref{sec:jointfit}), at the per-burst
-  component multiplicities of Table~\ref{tab:beta}. The fitted $\beta$ and
-  DSA reduced $\chi^2$ are listed per panel; FRB~20220310F is shown with its
-  committed two-component (C2D2) fit, whose multiplicity dependence is
-  demonstrated in Figure~\ref{fig:whitney_mult}, and FRB~20240203A's flat
-  model panel against strongly structured data visualizes its quality-gate
-  failure (Table~\ref{tab:beta}). Rendered from the campaign joint fits by
-  \texttt{dsa110-FLITS}
-  (\texttt{analysis/scattering-refit-2026-06/plot\_jointmodel\_montage.py}).}
-  \label{fig:jointmodel_montage}
-\end{figure*}
+% TODO(obs-scattering): Reinsert any joint-fit montage only after the fit
+% products shown in the figure have passed the re-validation contract.
 
 \subsection{Foreground-galaxy search}
 \label{sec:obs-fg}
