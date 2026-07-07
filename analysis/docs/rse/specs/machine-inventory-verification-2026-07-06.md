@@ -89,16 +89,20 @@ chezmoi source and re-locked `uchg`; scratch-repo commit test clean.
 **Author:** codex-gpt-5.5 + cursor follow-up probes (SSH h17, iacobus, h23)
 
 **Inventory correction:** `h23:/dataz/dsa110/T3` is **not** the 59T data
-store — live `du` ≈ 99K (maintenance scripts only). Pipeline output lives
-under `/dataz/dsa110/candidates/<event>/` (Level2/Level3/filterbank) and,
-for pre-2023 events, under the h23 quarantine
-`…/OLD_CHIME_DSA_Codetections/bursts/`. Update `machine_inventory.yaml`
-when the FLITS provenance branch lands.
+store — live `du` ≈ 99K (maintenance scripts only). For the seven 2023+
+co-detections, h23 pipeline output lives under
+`/dataz/dsa110/candidates/<event>/` with Level2/Level3/filterbank products.
+The five pre-2023 h23 products were **not** found at the previously named
+quarantine paths (`/dataz/dsa110/OLD_CHIME_DSA_Codetections/bursts`,
+`/dataz/OLD_CHIME_DSA_Codetections/bursts`,
+`/dataz/dsa110/T3/OLD_CHIME_DSA_Codetections/bursts`) in the 2026-07-07
+probe; keep that tier unverified until a live path is recovered. Update
+`machine_inventory.yaml` when the FLITS provenance branch lands.
 
-| Host | Tier | 12-burst coverage |
-|------|------|-------------------|
-| **h17** | Derived filterbanks (`dsa_filterbanks/Codetections_DSA_Filterbanks/`) | 12/12 `*_dev_polcal_I.fil`; no `/dataz` mount |
-| **iacobus** | Derived filterbanks (Dropbox-Migration path) | 12/12 full Stokes `I,Q,U,V` `.fil` |
-| **h23** | Full candidates (2023+) or quarantine archive (2022) | 12/12 equivalent products; 7 newer bursts have full `candidates/<event>/` trees (~130–220G each) |
+| Host | Tier | Live coverage check |
+|------|------|---------------------|
+| **h17** | Derived filterbank tier not located | no `/dataz` mount; bounded searches found no `Codetections_DSA_Filterbanks` directory and no matching `*_dev_polcal_I.fil` files before timeout |
+| **iacobus** | Derived filterbanks (Dropbox-Migration path) | 12/12 full Stokes `I,Q,U,V` `.fil` verified (48 files) |
+| **h23** | Full candidates (2023+) | 7/7 newer bursts have full `candidates/<event>/` trees with Level2/Level3/filterbank products (~133–222G each); the five 2022 bursts are not present under `/dataz/dsa110/candidates/<event>/` and the named old-quarantine paths were missing |
 
 Per-burst event codes: see `pipeline/crossmatching/notebook_reproduction_fixture.json`.
