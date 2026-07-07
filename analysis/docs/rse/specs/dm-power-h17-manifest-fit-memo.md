@@ -158,4 +158,3 @@ Constrained fits: 0/24
 ### zach dsa
 
 ![zach dsa DM-power curve](figures/zach_dsa_dm_power.png)
-
