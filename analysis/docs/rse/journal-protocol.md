@@ -73,11 +73,28 @@ the readiness board renders it.
    what each layer guarantees — an instruction file has no clock, so
    only hooks and the watchdog are *mechanical*; `AGENTS.md` is
    *advisory only* and enforces nothing:
-   - **Codex** (mechanical, best-effort): both hooks mirrored in
+   - **Codex** (mechanical, VERIFIED 2026-07-06): both hooks mirrored in
      `.codex/hooks.json` (PostToolUse cadence + UserPromptSubmit
      staleness; scripts resolve the repo root via
-     `git rev-parse --show-toplevel`). Unverified that Codex ingests
-     the injected JSON — the watchdog is the guaranteed floor.
+     `git rev-parse --show-toplevel`). Verified end-to-end by live
+     headless `codex exec` canary tests: gpt-5.5 quoted both injected
+     reminders verbatim (Codex's hooks engine is Claude-compatible —
+     `ClaudeHooksEngine` in openai/codex). Two operational constraints
+     learned from source + testing:
+     1. **Trust gate.** Codex runs a project hook only if
+        `~/.codex/config.toml` has a matching
+        `[hooks.state."<hooks.json path>:<event>:<group>:<index>"]`
+        `trusted_hash` entry (machine-local, normally written by
+        interactive approval). Both journal hooks are trusted+enabled
+        on jakob-mbp. If a hook **command string** in
+        `.codex/hooks.json` changes, the hash changes and the hook
+        silently stops running until re-trusted — editing the target
+        *script's contents* does not affect the hash.
+     2. **Output must be JSON-safe.** Codex drops UserPromptSubmit
+        stdout that starts with `[` or `{` but isn't valid wire JSON
+        (marks the hook Failed). The staleness hook therefore emits
+        the `hookSpecificOutput` JSON shape, which both Claude and
+        Codex parse.
    - **Cursor** (mechanical): `.cursor/hooks.json` registers
      `scripts/journal-cadence-cursor-hook.sh` (postToolUse — same
      10-min trigger, Cursor's `additional_context` output shape) and
