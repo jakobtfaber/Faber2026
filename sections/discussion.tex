@@ -1,72 +1,139 @@
 \section{Discussion}
 \label{sec:discussion}
 
-The per-sightline budget lets us ask, for each burst, whether its scattering can
-be assigned to a specific screen. The clearest evidence for an extragalactic
-screen is the diffractive-scintillation excess of
-Section~\ref{sec:results-scintillation}:
-on the mid-latitude sightlines where the Galactic floor is reliable, the measured
-diffractive bandwidth lies $\sim$7--11$\times$ below the NE2025 prediction, and
-never above it, so the dominant scattering screen is not the Milky Way. For the
-prototype FRB~20221203A the three separated scintillation scales---a Galactic
-floor far above and a
-pulse-broadening screen far below the resolved diffractive scale---localize that
-screen to the host or an intervening medium rather than the Galaxy.
+This section is intentionally held as an interpretation scaffold until the
+Results section is repopulated from re-validated analyses. Once those results
+are trusted, the discussion should interpret them sightline by sightline before
+returning to the population-level claims.
 
-Whether that screen is intervening or intrinsic to the host is, in principle,
-decided by the foreground census, and the measured-versus-predicted comparison
-in Section~\ref{sec:results-budget} now closes that test for eleven of the twelve
-sightlines. The verdict is one-sided: on ten of the eleven measured
-sightlines the predicted intervening pulse-broadening falls $1.5$--$3$ orders
-of magnitude below the measurement, so no identified foreground system can
-supply the observed scattering and the host medium is the natural screen (on
-the two coverage-unconstrained sightlines an unsearched intervening system
-remains possible). The single exception is
-FRB~20230913A, whose $z=0.22$ foreground halo at $b\approx35$\,kpc predicts
-$\approx0.7$ of the measured $\tau$---and the same sightline is the only one
-whose scintillation--scattering product is consistent with a single screen
-(Section~\ref{sec:results-scintillation}), so both diagnostics independently nominate
-that intervening galaxy as the plausible dominant screen. This convergence,
-an intervening attribution on exactly the sightline where the two independent
-tests agree, is the per-sightline discrimination the budget was built to
-deliver.
+\subsection{Physical interpretation after re-validation}
+\label{sec:disc-interpretation}
 
-\subsection{Burst multiplicity as a systematic on the turbulence spectrum}
+% TODO(disc-interpretation): Open with the small set of result statements that
+% survive re-validation. State what each result means physically before making
+% any sample-level claim. This paragraph should depend on, in order:
+% 1. Section~\ref{sec:results-budget}: revalidated DM and scattering budgets.
+% 2. Section~\ref{sec:dominant-systems}: trusted dominant foreground systems.
+% 3. Section~\ref{sec:results-scintillation}: trusted scintillation constraints.
+% 4. Section~\ref{sec:results-alpha}: trusted turbulence or morphology results.
+% 5. Section~\ref{sec:burst-energies}: trusted energy measurements.
+%
+% Avoid restating the old revoked campaign results here. In particular, do not
+% quote the retired host-dominated 10/11 comparison, the FRB 20230913A
+% intervening attribution, scintillation-excess factors, rail-class tallies,
+% alpha=4 limits, beta values, burst energies, or DM-budget residuals until the
+% producing analysis has passed its trust-restoration gate.
+
+\subsection{Screen attribution from the budget and scintillation constraints}
+\label{sec:disc-screen-attribution}
+
+% TODO(disc-screen-attribution): Explain how a screen attribution is made after
+% the relevant Results entries exist. The logic should be:
+% - first ask whether the Galactic contribution can explain the scattering;
+% - then ask whether a validated foreground system can explain the scattering;
+% - then use revalidated scintillation products to decide whether a one-screen
+%   or two-screen interpretation is favored;
+% - only then assign the remaining contribution to the host or to an unknown
+%   intervening system.
+%
+% This subsection should turn the budget and scintillation products into a
+% physical statement, not introduce new numbers. It should also name any
+% sightline whose attribution remains coverage-limited or model-limited.
+
+\subsection{Event-by-event interpretation ledger}
+\label{sec:disc-sightline-ledger}
+
+Each co-detection should receive a short interpretation only after its relevant
+budget, foreground, scintillation, fit, and energy entries have been restored.
+
+% TODO(disc-zach / FRB 20220207C): Interpret after revalidation. Check whether
+% the restored budget gives a foreground, host, Galactic, or unresolved
+% attribution; state any coverage or fit-quality caveat.
+
+% TODO(disc-whitney / FRB 20220310F): Interpret after revalidation. This slot
+% should connect the multi-component modeling decision to any budget, screen, or
+% energy statement that survives the new analysis.
+
+% TODO(disc-oran / FRB 20220506D): Interpret after revalidation. Make the survey
+% coverage status explicit before saying whether the lack of a foreground term
+% is informative.
+
+% TODO(disc-isha / FRB 20221113A): Interpret after revalidation. Separate the
+% foreground-census meaning from any scattering-fit or energy result.
+
+% TODO(disc-wilhelm / FRB 20221203A): Interpret after revalidation. Do not reuse
+% the old scintillation or negative-residual language unless both strands are
+% re-established.
+
+% TODO(disc-phineas / FRB 20230307A): Interpret after revalidation. If the
+% restored analysis finds multiple foreground systems or a cluster contribution,
+% explain which ingredient dominates and which is secondary.
+
+% TODO(disc-freya / FRB 20230325A): Interpret after revalidation. Keep any
+% redshift-placeholder limitation explicit before using this event in
+% distance-dependent statements.
+
+% TODO(disc-johndoeii / FRB 20230814B): Interpret after revalidation. If the
+% galaxy-interior classification survives, explain the cap/extrapolation choice
+% and whether the host-redshift limitation changes the conclusion.
+
+% TODO(disc-hamilton / FRB 20230913A): Interpret after revalidation. Treat the
+% intervening-screen claim as open until the foreground, budget, scattering, and
+% scintillation strands all independently pass trust restoration.
+
+% TODO(disc-mahi / FRB 20240122A): Interpret after revalidation. State the
+% coverage limitation before using any zero-foreground or host statement.
+
+% TODO(disc-chromatica / FRB 20240203A): Interpret after revalidation. If a
+% quality gate still fails, explain what can be said from association, DM, and
+% foreground information alone.
+
+% TODO(disc-casey / FRB 20240229A): Interpret after revalidation. State whether
+% this sightline is used as a clean comparison case, a budget constraint, or an
+% energy-only point.
+
+\subsection{Burst morphology as a systematic on the turbulence spectrum}
 \label{sec:disc-alpha}
 
-The result of Section~\ref{sec:results-alpha} is a cautionary systematic for any
-single-component fit to the turbulence spectrum. A temporal sub-component omitted
-from the model is partially absorbed into the scattering tail and biases
-$\beta$---classically toward steeper values, as a larger scattering time and
-steeper frequency scaling mimic the unmodeled flux, but the bias can instead rail
-the fit against a prior bound when the multiplicity is split across the two bands,
-as in FRB~20220310F where an unmodeled DSA-110 sub-pulse drives $\beta$ to a
-prior rail. Because $\beta$ determines both the PBF shape and the frequency
-scaling, an unrecognized companion distorts the entire scattering model
-simultaneously rather than shifting a single index. We verified that a favored
-second component is not an artifact of the likelihood: its evidence gain is flat
-across the gain-prior scale (so it is not prior-driven), reconstructing the
-single-component residual reproduces the whiteness statistic that flagged the
-burst, and the companion sits well inside the resolvable separation.
+% TODO(disc-alpha): Rebuild this subsection only after Section~\ref{sec:results-alpha}
+% contains trusted fit results. The interpretation should distinguish:
+% - what is learned about burst morphology;
+% - what is learned about the scattering geometry;
+% - what is learned about the turbulence spectrum;
+% - which claims are method diagnostics rather than sky measurements.
+%
+% Do not quote old beta values, alpha limits, rail classes, class fractions, or
+% the retired multiplicity-bias demonstration as results. If a revalidated
+% multi-component case remains, explain why the extra component changes the
+% physical interpretation rather than merely improving the fit statistic.
 
-The $\beta$-based fit removes the PBF as an independent systematic, because the
-PBF shape and the frequency scaling are both derived from the same $\beta$ at
-each likelihood evaluation. A sightline whose posterior is consistent with
-$\beta=4$ is consistent with square-law statistics and an exponential PBF, while
-the Kolmogorov point is $\beta=11/3$ with $\alpha\approx4.4$. In the thin-screen
-inertial-range mapping, $\alpha=2\beta/(\beta-2)$ decreases as $\beta$ increases,
-bottoming out at $\alpha=4$ in the $\beta\to4$ square-law limit, and steeper
-spectra ($\beta\ge4$) remain pinned at $\alpha=4$; the closure therefore admits
-no $\alpha<4$ at all (Section~\ref{sec:beta-scattering-methods};
-Appendix~\ref{app:emg-alpha4}). A formally shallow empirical scaling
-($\alpha<4$) consequently cannot be read as a
-shallower-than-Kolmogorov turbulence spectrum under any parameter choice; it
-instead indicates that the
-assumed scattering family, burst morphology, or inertial-range closure is
-incomplete. This closure also dictates how we quote the railed posteriors:
-a posterior railing at $\beta=4$ is
-exponential-consistent, so its $\alpha=4$ is a geometry-conditioned limit of
-the thin-screen family---informative, but contingent on the closure, and a
-standing candidate for an extended-medium re-analysis---whereas a posterior
-railing at the steep bound would be quoted not at all. Nine of the eleven
-citable sightlines fall in the first class; none fall in the second.
+\subsection{Energy interpretation}
+\label{sec:disc-energies}
+
+% TODO(disc-energies): Fill after Section~\ref{sec:burst-energies} is restored.
+% Explain what the band-restricted energies do and do not mean. Separate
+% calibration, spectral-shape, host-redshift, and selection-rule limitations.
+% Avoid using an energy row to support a population statement unless the
+% inclusion rule is explicit.
+
+\subsection{Population limits and selection effects}
+\label{sec:disc-population-limits}
+
+% TODO(disc-population-limits): State which sample denominator applies to each
+% claim. The twelve co-detections are the full association sample, but budget,
+% foreground, scintillation, turbulence, and energy claims each have their own
+% validated subset and exclusion reasons.
+%
+% Use this subsection to prevent over-reading the sample. Discuss redshift
+% incompleteness, foreground-catalog coverage, fit-quality gates, and band
+% selection effects only after the relevant Results text has named the affected
+% sightlines.
+
+\subsection{Implications for the next analysis pass}
+\label{sec:disc-next-pass}
+
+% TODO(disc-next-pass): Close the Discussion by naming the analysis that the
+% revalidated results require next. Candidate topics include geometry selection,
+% two-screen treatment, foreground-census sensitivity, burst-morphology
+% modeling, or energy-selection rules. The closing paragraph should follow from
+% the restored Results, not from the revoked campaign narrative.
