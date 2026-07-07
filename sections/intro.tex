@@ -1,51 +1,34 @@
 \section{Introduction}
 \label{sec:intro}
 
-The dispersion measure (DM) of a fast radio burst (FRB) is an integral of free
-electrons along the line of sight, and as such a sum of contributions from
-physically distinct media: the Milky-Way interstellar medium and halo, the
-intergalactic medium whose mean grows with redshift through the Macquart
-relation \citep{Macquart2020}, the circumgalactic medium of any intervening
-galaxy the sightline pierces, and the FRB's host galaxy
-\citep{CordesChatterjee2019}. The cosmological term makes the FRB DM a baryon
-probe, but only once the foreground and host contributions are separated;
-conversely, an intervening galaxy's circumgalactic column is itself a probe of
-cool halo gas, accessible only where it can be isolated from the other terms.
-
-Scattering carries complementary information. Multipath propagation through
-turbulent ionized gas broadens the pulse by a time
-$\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$, whose
-frequency-scaling index $\alpha$ is determined by the same turbulence spectrum
-that sets the pulse-broadening function (PBF) shape: an electron-density
-fluctuation spectrum $P_n(q)\propto q^{-\beta}$ yields both a PBF shape derived
-from the phase structure function $D_\phi(\rho)\propto\rho^{\beta-2}$ and a
-frequency scaling $\alpha=2\beta/(\beta-2)$ for a thin screen
-\citep{Rickett1990, Cordes2025}. A Kolmogorov spectrum ($\beta=11/3$) gives
-$\alpha\simeq4.4$ and a power-law PBF tail; square-law statistics ($\beta=4$)
-give $\alpha=4$ and an exponential PBF. Measured pulse-broadening indices
-frequently fall below the Kolmogorov value \citep{Bhat2004}, but because
-$\beta$---not $\alpha$---is the fundamental turbulence parameter, interpreting
-such deviations requires fitting $\beta$ directly so that the PBF shape and
-frequency scaling remain mutually consistent. Because $\tau$ and its frequency
-scaling enter a single observing band only through the broadening at that band's
-frequency, a single-band measurement cannot separate them: the same data are
-reproduced by a large $\tau$ with a steep scaling or a small $\tau$ with a
-shallow one.
-
-Simultaneous detection across a wide frequency baseline breaks this degeneracy.
-The twelve FRBs studied here were each recorded by both CHIME/FRB at
-$0.4$--$0.8$\,GHz \citep{CHIMEFRB2018} and DSA-110 at $\sim$1.4\,GHz
-\citep{Law2024}, a $\sim$1\,GHz lever arm over which the ratio of the two
-scattering times fixes the frequency scaling directly. We use this leverage to
-ask, sightline by sightline, which medium contributes which observed
-feature---decomposing each burst's DM into its Galactic, cosmological,
-intervening, and host terms (Section~\ref{sec:dm}), attributing its
-scattering to a Galactic, intervening, or host screen
-(Section~\ref{sec:scattering}), and fitting the turbulence spectral index
-$\beta$ from a joint two-band model in which the PBF shape and $\alpha$ are
-both derived from $\beta$ at each likelihood evaluation
-(Section~\ref{sec:jointfit}). Section~\ref{sec:obs} describes the sample,
-Section~\ref{sec:results} presents the per-sightline budget and the
-isotropic-equivalent energies, and Sections~\ref{sec:discussion}--%
-\ref{sec:conclusions} discuss the cases where an intervening galaxy is the likely
-scattering screen and what co-detection adds.
+% TODO(intro): Fill this section after the Results and Discussion are stable.
+% Keep the Introduction as a dependency-ordered argument rather than a detailed
+% methods preview. Suggested structure:
+%
+% 1. Why these observables matter.
+%    Introduce FRB dispersion and scattering as complementary line-of-sight
+%    probes of ionized gas. Keep this broad: DM traces electron column;
+%    scattering traces turbulent structure and screen geometry.
+%
+% 2. What is hard about the interpretation.
+%    Explain that DM is a sum over Milky-Way, cosmic, foreground, and host
+%    media, while scattering can arise in different screens. State the core
+%    ambiguity without reproducing the full budget model.
+%
+% 3. Why co-detection changes the problem.
+%    Motivate the CHIME/FRB--DSA-110 frequency baseline as the reason this
+%    sample can separate timing, scattering, and frequency-scaling information
+%    better than a single-band analysis.
+%
+% 4. What this paper does.
+%    Once the final result language is settled, summarize the analysis in one
+%    paragraph: association checks, DM budget, foreground classification,
+%    beta-based scattering model, validation checks, and energy estimates.
+%
+% 5. What the main result is.
+%    Insert the final take-home result after the Results and Discussion are
+%    locked. Keep this to the final claims only, not intermediate numbers.
+%
+% 6. Roadmap.
+%    Close with a short guide to the paper structure: observations, methods,
+%    results, discussion, and conclusions.
