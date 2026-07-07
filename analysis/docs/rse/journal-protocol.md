@@ -114,10 +114,6 @@ the readiness board renders it.
      then shows the honest gap even if the writer never self-reports.
      Detection only: it cannot make a session self-report intent.
      Log: `~/logs/faber2026-journal-watchdog.log`.
-   (A CLAUDE.md pointer to this protocol is still pending: the file was
-   held open in the owner's editor when the protocol landed, 2026-07-06
-   ~21:00.)
-
 ## Backfill convention
 
 Entries reconstructed after the fact carry a `[backfill]` prefix in

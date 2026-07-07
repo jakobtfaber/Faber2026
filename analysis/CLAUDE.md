@@ -46,6 +46,9 @@ validating pinned behavior, run from inside `pipeline/`; when in doubt, print
 
 ## Cross-agent notes
 
+- Full journal protocol: `docs/rse/journal-protocol.md`. While actively
+  working here, append `docs/rse/journal.jsonl` every <=10 minutes and at
+  substantive step boundaries (start, finish, block, decision, commit).
 - Codex config lives in `.codex/` (entire-tracing hooks, `entire-search` agent);
   keep Claude and Codex hook surfaces in parity when changing either.
 - The pipeline repo has its own agent setup (`pipeline/.claude/`,
