@@ -1,43 +1,46 @@
 #!/usr/bin/env python
 """Generate sample_table.tex (Table 1: the co-detection sample roster).
 
-Reads only trust-safe raw observational inputs from the pinned dsa110-FLITS
-submodule and emits an AASTeX deluxetable. Per CONTEXT.md's trust reset,
-per-burst designations, epochs, and sky positions are raw inputs (not revoked),
-whereas DM_obs, TOA residuals, chance-coincidence probabilities, and association
-verdicts are Wave-3 revoked pending V6 -- those columns are intentionally
-omitted here.
+Reads trust-safe raw observational inputs plus V6-revalidated association
+diagnostics from the pinned dsa110-FLITS submodule and emits an AASTeX
+deluxetable.
 
 Sources (pinned submodule pipeline/):
-  - configs/bursts.yaml                      -> MJD, UTC, RA/Dec (source of truth)
-  - scattering/scat_analysis/burst_metadata.py::_FALLBACK_TNS  -> nickname -> TNS
+  - configs/bursts.yaml                       -> MJD, UTC, RA/Dec
+  - scattering/scat_analysis/burst_metadata.py::_FALLBACK_TNS -> nickname -> TNS
+  - crossmatching/toa_crossmatch_results.json -> shared-DM timing residuals
+  - crossmatching/association_report.json     -> P_cc and association verdict inputs
 
-Regenerate with:  python scripts/make_sample_table.py
+Regenerate with: python scripts/make_sample_table.py
+For an isolated FLITS worktree, set FABER2026_PIPELINE_SOURCE=/path/to/worktree.
 """
 from __future__ import annotations
 
 import importlib.util
+import json
+import math
+import os
+import subprocess
 from pathlib import Path
 
 import yaml
 
 REPO = Path(__file__).resolve().parent.parent
 PIPELINE = REPO / "pipeline"
-REGISTRY = PIPELINE / "configs" / "bursts.yaml"
-META = PIPELINE / "scattering" / "scat_analysis" / "burst_metadata.py"
+PIPELINE_SOURCE = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", PIPELINE))
+REGISTRY = PIPELINE_SOURCE / "configs" / "bursts.yaml"
+META = PIPELINE_SOURCE / "scattering" / "scat_analysis" / "burst_metadata.py"
+TOA_RESULTS = PIPELINE_SOURCE / "crossmatching" / "toa_crossmatch_results.json"
+ASSOCIATION_REPORT = PIPELINE_SOURCE / "crossmatching" / "association_report.json"
 OUT = REPO / "sample_table.tex"
 
 
-def _pinned_commit() -> str:
-    head = (PIPELINE / ".git").read_text().strip() if (PIPELINE / ".git").is_file() else ""
-    # submodule .git is a gitdir pointer; read the actual HEAD sha from the superproject
-    import subprocess
-
+def _source_commit() -> str:
     try:
-        sha = subprocess.check_output(
-            ["git", "-C", str(PIPELINE), "rev-parse", "--short", "HEAD"], text=True
+        return subprocess.check_output(
+            ["git", "-C", str(PIPELINE_SOURCE), "rev-parse", "--short", "HEAD"],
+            text=True,
         ).strip()
-        return sha
     except Exception:
         return "unknown"
 
@@ -49,13 +52,50 @@ def _load_tns_map() -> dict[str, str]:
     return {k.lower(): v for k, v in mod._FALLBACK_TNS.items()}
 
 
+def _tex_scientific(value: float) -> str:
+    exponent = math.floor(math.log10(value))
+    mantissa = value / 10**exponent
+    return rf"${mantissa:.1f}\times10^{{{exponent}}}$"
+
+
+def _association_verdict(row: dict) -> str:
+    pcc_ok = row["chance_coincidence_P"] < 1e-3
+    pos_ok = row["position"]["consistent"] is True
+    dm_ok = row["dm_agreement"]["consistent"]
+    if pcc_ok and pos_ok and dm_ok is True:
+        return "assoc. (DM+pos.)"
+    if pcc_ok and pos_ok and dm_ok is None:
+        return "assoc. (pos.)"
+    return "review"
+
+
+def _load_association_diagnostics() -> dict[str, dict[str, str]]:
+    toa = {k.lower(): v for k, v in json.loads(TOA_RESULTS.read_text()).items()}
+    assoc = {
+        row["name"].lower(): row
+        for row in json.loads(ASSOCIATION_REPORT.read_text())["bursts"]
+    }
+    diagnostics = {}
+    for nick, assoc_row in assoc.items():
+        toa_row = toa[nick]
+        residual_ms = toa_row["measured_offset_ms"] - toa_row["geometric_delay_ms"]
+        diagnostics[nick] = {
+            "toa_residual_ms": f"${residual_ms:+.2f}$",
+            "pcc": _tex_scientific(assoc_row["chance_coincidence_P"]),
+            "verdict": _association_verdict(assoc_row),
+        }
+    return diagnostics
+
+
 def main() -> None:
     registry = yaml.safe_load(REGISTRY.read_text())["bursts"]
     tns = _load_tns_map()
-    commit = _pinned_commit()
+    diagnostics = _load_association_diagnostics()
+    commit = _source_commit()
 
     rows = []
     for nick, rec in registry.items():
+        diag = diagnostics[nick.lower()]
         rows.append(
             {
                 "tns": tns.get(nick.lower(), nick.upper()),
@@ -64,45 +104,46 @@ def main() -> None:
                 "dec": rec["dec_deg"],
                 "mjd": rec["mjd"],
                 "utc": rec["utc"].replace("T", " "),
+                **diag,
             }
         )
-    rows.sort(key=lambda r: r["mjd"])  # chronological
+    rows.sort(key=lambda r: r["mjd"])
 
     body = []
     for r in rows:
         body.append(
             f"{r['tns']} & \\textit{{{r['nick']}}} & "
             f"${r['ra']:.4f}$ & ${r['dec']:+.4f}$ & "
-            f"${r['mjd']:.3f}$ & {r['utc']} \\\\"
+            f"${r['mjd']:.3f}$ & {r['utc']} & "
+            f"{r['toa_residual_ms']} & {r['pcc']} & {r['verdict']} \\\\"
         )
 
-    tex = f"""% Rows generated by scripts/make_sample_table.py from the pinned dsa110-FLITS
-% submodule (pipeline/, commit {commit}): configs/bursts.yaml (MJD/UTC/RA/Dec,
-% source of truth) and scattering/scat_analysis/burst_metadata.py::_FALLBACK_TNS
-% (nickname -> TNS). Trust-safe columns only -- designations, epochs, and sky
-% positions are raw observational inputs (CONTEXT.md trust reset). DM_obs, TOA
-% residuals, chance-coincidence probabilities, and association verdicts are
-% Wave-3 revoked and intentionally excluded pending V6. Do not hand-edit;
-% regenerate with: python scripts/make_sample_table.py
-\\begin{{deluxetable*}}{{llcccc}}
+    tex = f"""% Rows generated by scripts/make_sample_table.py from dsa110-FLITS
+% source commit {commit}: configs/bursts.yaml (MJD/UTC/RA/Dec), burst_metadata.py
+% (nickname -> TNS), crossmatching/toa_crossmatch_results.json (shared-DSA-DM
+% TOA residuals), and crossmatching/association_report.json (P_cc/verdict).
+% V6 restored the association diagnostics under the shared DSA-DM reference.
+% Do not hand-edit; regenerate with: python scripts/make_sample_table.py
+\\begin{{deluxetable*}}{{llccccccc}}
 \\tablecaption{{The CHIME/FRB--DSA-110 co-detection sample: twelve fast radio
 bursts detected by both facilities between 2022 February and 2024 February.
-Columns list the TNS designation, the internal nickname used throughout this
-paper, the J2000 sky position (decimal degrees), and the burst detection epoch
-(MJD and UTC, referenced to 400\\,MHz). This table lists only the raw
-observational identification of the sample; the association diagnostics---per-burst
-$\\mathrm{{DM}}_{{\\mathrm{{obs}}}}$, timing residuals, and chance-coincidence
-probabilities---are withheld pending the Section~\\ref{{sec:toa}} re-validation
-(V6). \\label{{tab:sample}}}}
+Columns list the TNS designation, the internal nickname, J2000 sky position
+(decimal degrees), burst detection epoch (MJD and UTC, referenced to
+400\\,MHz), and the Section~\\ref{{sec:toa}} association diagnostics restored by
+V6: the shared-DSA-DM timing residual $\\Delta t$, chance-coincidence
+probability $P_{{\\rm cc}}$, and association verdict. \\label{{tab:sample}}}}
+\\tabletypesize{{\\scriptsize}}
 \\tablehead{{\\colhead{{TNS}} & \\colhead{{Nickname}} & \\colhead{{R.A.}} &
-  \\colhead{{Decl.}} & \\colhead{{MJD}} & \\colhead{{UTC}}}}
+  \\colhead{{Decl.}} & \\colhead{{MJD}} & \\colhead{{UTC}} &
+  \\colhead{{$\\Delta t$ (ms)}} & \\colhead{{$P_{{\\rm cc}}$}} &
+  \\colhead{{Verdict}}}}
 \\startdata
 {chr(10).join(body)}
 \\enddata
 \\end{{deluxetable*}}
 """
     OUT.write_text(tex)
-    print(f"wrote {OUT.relative_to(REPO)} ({len(rows)} rows, pinned commit {commit})")
+    print(f"wrote {OUT.relative_to(REPO)} ({len(rows)} rows, source commit {commit})")
 
 
 if __name__ == "__main__":
