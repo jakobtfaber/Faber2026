@@ -32,26 +32,31 @@ distinguish the CHIME-side from the DSA-side measurement, their level of
 agreement has never been quantified, and how each DM_obs was obtained
 (instrument pipeline, dedispersion method, reference artifact) is
 undocumented.
-What retains trust, among analysis products: **nothing** — every analysis
-product is revoked. Raw observational inputs (positions, nicknames,
-published host spectroscopic redshifts) remain inputs rather than revoked
-products; the V ladders audit their provenance where consumed. The
-twelve-burst co-detection set stays the *working roster*, but its citable
-association evidence awaits V6.
+**Status 2026-07-07:** V6 has revalidated this lane for manuscript use.
+Association residuals, P_cc, and verdicts may be quoted from the pinned V6
+artifacts under the shared DSA-DM reference convention; the residual is a
+timing/geometry consistency check, not a per-telescope-DM-corrected residual.
+DM_obs provenance and CHIME--DSA agreement are documented in the V6 artifacts.
+Outside lanes that have passed their V re-validation, no analysis product
+retains trust. Raw observational inputs (positions, nicknames, published host
+spectroscopic redshifts) remain inputs rather than revoked products; the V
+ladders audit their provenance where consumed. The twelve-burst co-detection set
+stays the *working roster*, with citable association evidence now restored by V6.
 Manuscript claims consuming any revoked quantity are unsupported until
 re-established — that now includes `tab:budget`, `tab:foreground`,
 fig:budget (both panels), the dominant-systems and cluster analyses, the
 host-dominated 10/11 comparison, the τ·Δν_d two-screen test, the
 scintillation excess, the FRB 20230913A intervening attribution (both of its
 supporting diagnostics sit on revoked strands), `tab:beta`,
-`tab:burst-energies`, and (wave 3) every quoted TOA residual, P_cc, and
-DM_obs value. Trust is restored only through the re-validation ladders of
-`docs/rse/specs/plan-circulation-readiness.md` §V (V1 fits, V3 energies,
-V4 census, V5 DM budget, V6 association + DM_obs).
+`tab:burst-energies`, and any association or DM_obs value not tied to the V6
+artifacts and shared-DSA-DM convention. Trust is restored only through the
+re-validation ladders of `docs/rse/specs/plan-circulation-readiness.md` §V
+(V1 fits, V3 energies, V4 census, V5 DM budget, V6 association + DM_obs).
 _Avoid_: citing any fit-, census-, budget-, association-, or DM-derived
-number from the current tables in new prose; treating a PPC pass under the
-old campaign as evidence of trust; quoting a single undifferentiated
-DM_obs as if CHIME and DSA agree.
+number from the current tables in new prose unless its lane has passed the
+corresponding V ladder and the table/prose states the relevant convention;
+treating a PPC pass under the old campaign as evidence of trust; quoting a
+single undifferentiated DM_obs as if CHIME and DSA agree.
 
 **Geometry-adjudicated β** (supersedes "rail-aware citable", owner decision
 2026-07-06; quoting provisions suspended by the fit-trust reset above):
