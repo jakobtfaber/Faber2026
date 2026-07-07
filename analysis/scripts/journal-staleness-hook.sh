@@ -1,7 +1,7 @@
 #!/bin/bash
 # UserPromptSubmit hook: remind the active agent when the journal cadence
 # has lapsed (docs/rse/journal-protocol.md; default cadence 10 minutes).
-J="${CLAUDE_PROJECT_DIR:-$(pwd)}/docs/rse/journal.jsonl"
+J="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}/docs/rse/journal.jsonl"
 [ -f "$J" ] || exit 0
 last=$(tail -1 "$J" | sed -E 's/.*"ts": ?"([^"]+)".*/\1/')
 last_s=$(date -j -f "%Y-%m-%dT%H:%M:%S%z" "$last" +%s 2>/dev/null || echo 0)
