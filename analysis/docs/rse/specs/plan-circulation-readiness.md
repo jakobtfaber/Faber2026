@@ -17,9 +17,12 @@ foreground census and the DM budget decomposition (V4/V5) — only TOA
 association arithmetic and DM_obs remain trusted; (f) 2026-07-06: rail
 tallies dropped from the manuscript; codetections_polarization/ stays as
 companion-paper materials; co-author list to be drafted from Law2024 +
-CHIME/FRB overlap for pruning; (g) 2026-07-06 late evening: A1 locked —
-modular constraint layer, prior-odds geometry, posterior escalation
-trigger (decision text under A1 below). §V expansion:
+CHIME/FRB overlap for pruning; (g) 2026-07-06 late evening: A1 working
+draft adopted — modular constraint layer, prior-odds geometry, posterior
+escalation trigger (text under A1 below); (h) 2026-07-06, same night:
+owner re-opened every locked decision — (b)–(g) stand as **working
+choices, all revisable**, none final until the owner closes them. §V
+expansion:
 [plan-trust-reset-revalidation.md](plan-trust-reset-revalidation.md).
 ---
 
@@ -29,9 +32,10 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 
 ## A. Methodology reset — geometry selection replaces rail taxonomy
 
-- [x] A1 **[decision]** Two-screen treatment — **locked 2026-07-06** after
-      adversarial iteration (Codex GPT-5.5 review; amended text adopted
-      verbatim as the record):
+- [ ] A1 **[decision]** Two-screen treatment — **working draft, open**
+      (adopted 2026-07-06 after adversarial iteration — Codex GPT-5.5
+      review, amended text below — then re-opened the same night: owner
+      keeps all design decisions unlocked; every element revisable):
       > Adopt A1 as a modular scintillation-to-scattering constraint layer,
       > not a hard two-screen fit by default. Scintillation products enter
       > as frozen posterior/limit products with quality flags, not point
@@ -48,7 +52,8 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       > evidence/model-comparison based. Joint burst-shape+ACF likelihood
       > is deferred unless modular products conflict on a high-S/N
       > sightline.
-      A2/A3 design unblocked.
+      A2/A3 design work may proceed against the draft, tracking its
+      revisions.
 - [ ] A2 **[FLITS]** Extended-medium (Williamson uniform-LOS) PBF kernel,
       β-coupled, per band (ADR-0007 un-deferred by the rail evidence: 10/12
       posteriors hit its re-open trigger — the nine tabled railed rows plus
