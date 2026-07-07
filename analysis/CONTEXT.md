@@ -12,8 +12,27 @@ The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
 _Avoid_: treating any subset table as implicitly covering all twelve.
 
+**Fit-trust reset** (owner decision 2026-07-06, evening — supersedes every
+quoting carve-out below):
+Trust is revoked for ALL burst-data fits performed to date: the joint
+scattering fits (every β, τ₁GHz, component multiplicity, and PPC verdict —
+interior posteriors included, so freya β=3.72 and phineas β=3.23 are NOT
+quotable), the sub-band EMG fits, the scintillation ACF fits (Δν_d), and the
+spectral amplitudes c₀,γ with every derived energy. Manuscript claims that
+consume these quantities (host-dominated scattering on 10/11, the τ·Δν_d
+two-screen test, the scintillation excess, `tab:beta`, `tab:burst-energies`)
+are unsupported until re-established. What retains trust: TOA association
+arithmetic, DM_obs, the foreground census, and the external-model DM budget
+terms (NE2001/YMW16, Macquart mean, mNFW columns). Trust is restored only
+through the re-validation ladder of
+`docs/rse/specs/plan-circulation-readiness.md` §V (verified data lineage,
+synthetic-injection recovery per geometry, rail-as-rejection prior tests,
+PPC, independent cross-checks).
+_Avoid_: citing any fit-derived number from the current tables in new prose;
+treating a PPC pass under the old campaign as evidence of trust.
+
 **Geometry-adjudicated β** (supersedes "rail-aware citable", owner decision
-2026-07-06):
+2026-07-06; quoting provisions suspended by the fit-trust reset above):
 Rail classes from the β-coherent thin-screen campaign (interior / railed-hi /
 railed-lo / unconstrained / gate-FAIL) are fit-campaign QA vocabulary and do
 NOT appear in manuscript prose or tables. A posterior railing at β=4 is
@@ -29,9 +48,11 @@ descriptive data statement — PBF consistent with the exponential limit in both
 bands (for the elevated-χ² trio, subject to pending (3)'s per-band systematics
 caveat) — with no turbulence index attached. The two interior sightlines
 (freya β=3.72, phineas β=3.23) remain quotable as thin-screen-conditioned
-measurements with the geometry named, pending the same adjudication. Census
-counts remain quotable as campaign facts; class fractions beyond the counts
-stay withheld, and whether even the counts appear in manuscript prose is an
+measurements with the geometry named, pending the same adjudication —
+**suspended**: under the fit-trust reset the interior rows are not quotable
+either until the fits are re-established. Census counts remain quotable only
+as facts about the (now-untrusted) campaign, not about the sky; class
+fractions stay withheld, and whether counts appear in manuscript prose is an
 owner call at reconciliation. The PBF shape and α = 2β/(β−2) are both derived
 from β at each likelihood evaluation (co-model; §3.5).
 _Avoid_: α = 4 quoted for an ex-railed row in any form, including as a limit;
@@ -57,11 +78,15 @@ to the retired free-α framework. FRB 20240203A (chromatica) is **excluded**
 (joint-fit quality gate FAIL, χ²ᵣ ≈ 11.6/9.3).
 _Avoid_: separate prose-only β for bursts that belong in the table.
 
-**Energies trust boundary**:
+**Energies trust boundary** (suspended by the fit-trust reset):
 A row in `tab:burst-energies` requires spectroscopic host redshift and a joint
 c₀,γ fit with physical per-band amplitudes. Scattering joint-fit FAIL is
 informational (energy is β-independent). Pass 2 re-admits FRB 20220506D and
-FRB 20220310F via mixed-legacy c₀,γ export (eight rows total).
+FRB 20220310F via mixed-legacy c₀,γ export (eight rows total). Under the
+fit-trust reset no energy is currently citable; the fresh-read audit also
+flagged a γ_D pile-up at ≈−5 (possible prior rail) and a selection-rule
+contradiction (gate-FAIL 20240203A tabulated under a "quality-passing"
+criterion) — both must be resolved in the re-validation pass.
 _Avoid_: "six energies" or "FAIL-gated" exclusion for oran/whitney.
 
 **Per-section sample rule**:
@@ -69,7 +94,11 @@ Every analysis subset states its own burst list and exclusion reasons in text or
 caption; the twelve-burst co-detection set is never assumed as the denominator.
 
 **Explicit pending**:
-(1) Geometry-selection campaign (extended-medium kernel + per-sightline model
+(0) Re-validation framework (plan §V) — the fit-trust reset makes this the
+first gate: no fit-derived quantity is citable until its producing fit passes
+the re-trust ladder; includes verifying whether the scattering-fit CHIME
+inputs share the gen-1 de-chirp defect lineage found in the scintillation
+products. (1) Geometry-selection campaign (extended-medium kernel + per-sightline model
 selection, scint-informed) — supersedes the narrower "ADR-0007 re-analysis of
 the nine railed rows"; blocks any α quoting for the nine ex-railed rows and
 the restructured abstract/§3.5/results language. (2) CHIME-band scintillation
