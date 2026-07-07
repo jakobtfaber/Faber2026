@@ -46,20 +46,20 @@ build $\mathrm{DM_{int}}$ from the confirmed foreground systems of the census
 whose impact parameter places the sightline inside the gas: for galaxies we
 integrate the column to the halo and cap the reported value at $b = 0.1\,R_{\rm
 vir}$, the galaxy-interior regime; for clusters we require the sightline to pass
-within $R_{500}$ ($b/R_{500}\le 1$), using the proper impact parameter listed
-for each system in Table~\ref{tab:foreground}. Refuted (background) and
-inconclusive systems, and confirmed systems whose sightline passes outside the
-gas, do not contribute.
+within $R_{500}$ ($b/R_{500}\le 1$), a conservative aperture that across the
+whole sample selects a single cluster (FRB~20230307A, J115120.4$+$714435 at
+$b/R_{500}=0.83$). Refuted and inconclusive systems, and confirmed systems whose
+sightline passes outside this aperture, do not contribute.
 
 For each retained system we model the gas as a two-phase medium---a hot
 modified-NFW component \citep{ProchaskaZheng2019} plus a clumpy cool
 component---and integrate the electron column along the impact-parameter chord.
-Cluster contributions use $M_{500}$ and $R_{500}$ from the X-ray and SZ catalogs
-to fix the halo, evaluating the intracluster dispersion on the modified-NFW
-profile at the sightline's impact parameter. Figure~\ref{fig:clusters_icm}
-illustrates this column for the clusters along one sightline: the predicted
-dispersion is large only where the sightline pierces the halo, and falls to zero
-once the impact parameter exceeds the modified-NFW virial radius.
+The cluster contribution uses the $M_{500}$ and $R_{500}$ of the
+\citet{WenHan2024} catalog to fix the halo, evaluating the intracluster
+dispersion on the modified-NFW profile at the sightline's impact parameter.
+Figure~\ref{fig:clusters_icm} shows this column for the foreground clusters along
+the FRB~20230307A sightline, where the $b\le R_{500}$ cut retains just the one
+cluster that pierces the halo.
 
 \begin{figure*}
     \centering
@@ -69,11 +69,13 @@ once the impact parameter exceeds the modified-NFW virial radius.
     modified-NFW hot-baryon dispersion column $\mathrm{DM}(b)$ against projected
     impact parameter $b$ (blue); the vertical marker is the sightline's measured
     impact parameter, the dashed line is $R_{500}$, and the shaded region is
-    inside $R_{500}$. Only J115120.4$+$714435 ($b/R_{500}=0.83$) pierces the
-    intracluster medium, contributing $\sim$160\,pc\,cm$^{-3}$; the others are
-    grazed near or beyond $R_{500}$ and add little or nothing. Cluster masses
-    ($\log M_{500}$) and radii are from the X-ray (MCXC, MCXC-II) and SZ (PSZ2)
-    catalogs listed in Table~\ref{tab:foreground}.}
+    inside $R_{500}$. Only J115120.4$+$714435 ($b/R_{500}=0.83$) meets the
+    $b\le R_{500}$ budget cut and enters $\mathrm{DM_{int}}$
+    ($\sim$160\,pc\,cm$^{-3}$; Table~\ref{tab:foreground}); the others lie beyond
+    $R_{500}$ and are excluded even where the profile remains formally nonzero
+    (J115128.2$+$713637 at $b/R_{500}=1.25$, $\sim$95\,pc\,cm$^{-3}$). Cluster
+    masses ($\log M_{500}$) and radii are from the \citet{WenHan2024} DESI
+    Legacy/WISE catalog.}
     \label{fig:clusters_icm}
 \end{figure*}
 

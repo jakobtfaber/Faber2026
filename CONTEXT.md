@@ -37,19 +37,34 @@ Association residuals, P_cc, and verdicts may be quoted from the pinned V6
 artifacts under the shared DSA-DM reference convention; the residual is a
 timing/geometry consistency check, not a per-telescope-DM-corrected residual.
 DM_obs provenance and CHIME--DSA agreement are documented in the V6 artifacts.
+**Status 2026-07-07 (V4+V5):** the owner has cleared the foreground-census (V4)
+and DM-budget (V5) ladders on the strength of the DR9/DESI-DR1/NED/PS1-STRM
+re-validation of the candidate catalog — including the DESI-STAR redshift
+contaminant fix on the phineas cluster J114928.5+712526 and the discovery that
+all census clusters come from the Wen \& Han 2024 DESI Legacy/WISE catalog (not
+the X-ray/SZ catalogs the pinned code lists). The census now presents 35 systems
+(34 halos + the single cluster within $R_{500}$; 14 further foreground clusters
+at $b>R_{500}$ omitted). `tab:foreground`, the census verdicts/impact
+parameters, the two-phase mNFW `DM_int` columns, and `fig:clusters_icm` are
+restored for manuscript use. **Still revoked** (not unlocked by V4/V5): the
+measured-scattering side of fig:budget and its measured-vs-predicted overlay
+(wave-1 τ fits, V1 / plan D1), the τ·Δν_d two-screen test and scintillation
+excess (pending the CHIME-band scint campaign), the FRB 20230913A intervening
+attribution (rides on revoked scint strands), `tab:beta`, and
+`tab:burst-energies`.
 Outside lanes that have passed their V re-validation, no analysis product
 retains trust. Raw observational inputs (positions, nicknames, published host
 spectroscopic redshifts) remain inputs rather than revoked products; the V
 ladders audit their provenance where consumed. The twelve-burst co-detection set
 stays the *working roster*, with citable association evidence now restored by V6.
 Manuscript claims consuming any revoked quantity are unsupported until
-re-established — that now includes `tab:budget`, `tab:foreground`,
-fig:budget (both panels), the dominant-systems and cluster analyses, the
-host-dominated 10/11 comparison, the τ·Δν_d two-screen test, the
-scintillation excess, the FRB 20230913A intervening attribution (both of its
-supporting diagnostics sit on revoked strands), `tab:beta`,
-`tab:burst-energies`, and any association or DM_obs value not tied to the V6
-artifacts and shared-DSA-DM convention. Trust is restored only through the
+re-established — after the V4+V5 clearance above that still includes the
+measured-scattering side of fig:budget and its measured-vs-predicted overlay
+(wave-1 τ fits, V1 / plan D1), the τ·Δν_d two-screen test, the scintillation
+excess, the FRB 20230913A intervening attribution (both of its supporting
+diagnostics sit on revoked scint strands), `tab:beta`, `tab:burst-energies`,
+and any association or DM_obs value not tied to the V6 artifacts and
+shared-DSA-DM convention. Trust is restored only through the
 re-validation ladders of `docs/rse/specs/plan-circulation-readiness.md` §V
 (V1 fits, V3 energies, V4 census, V5 DM budget, V6 association + DM_obs).
 _Avoid_: citing any fit-, census-, budget-, association-, or DM-derived
