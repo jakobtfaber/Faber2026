@@ -1,5 +1,9 @@
 # CLAUDE.md — Faber2026 manuscript
 
+Use straightforward language. Avoid corporate jargon, buzzwords, and invented
+acronyms. Explain technical concepts in plain English unless I explicitly ask
+for deeper jargon.
+
 AASTeX631 manuscript for the CHIME/FRB–DSA-110 co-detection dispersion- and
 scattering-budget paper. Layout, build, and repo conventions: `README.md`.
 Pipeline-pin semantics: `PIPELINE.md`.

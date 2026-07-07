@@ -83,3 +83,22 @@ re-clobbered the chezmoi-managed `~/.git-hooks-global/push-gate-dispatch`
 into its pre-push stub (mechanism documented in that file's header),
 producing `[entire] Pushing … to 0` spam on every commit. Restored from
 chezmoi source and re-locked `uchg`; scratch-repo commit test clean.
+
+## Addendum — DSA raw / filterbank tier (2026-07-07)
+
+**Author:** codex-gpt-5.5 + cursor follow-up probes (SSH h17, iacobus, h23)
+
+**Inventory correction:** `h23:/dataz/dsa110/T3` is **not** the 59T data
+store — live `du` ≈ 99K (maintenance scripts only). Pipeline output lives
+under `/dataz/dsa110/candidates/<event>/` (Level2/Level3/filterbank) and,
+for pre-2023 events, under the h23 quarantine
+`…/OLD_CHIME_DSA_Codetections/bursts/`. Update `machine_inventory.yaml`
+when the FLITS provenance branch lands.
+
+| Host | Tier | 12-burst coverage |
+|------|------|-------------------|
+| **h17** | Derived filterbanks (`dsa_filterbanks/Codetections_DSA_Filterbanks/`) | 12/12 `*_dev_polcal_I.fil`; no `/dataz` mount |
+| **iacobus** | Derived filterbanks (Dropbox-Migration path) | 12/12 full Stokes `I,Q,U,V` `.fil` |
+| **h23** | Full candidates (2023+) or quarantine archive (2022) | 12/12 equivalent products; 7 newer bursts have full `candidates/<event>/` trees (~130–220G each) |
+
+Per-burst event codes: see `pipeline/crossmatching/notebook_reproduction_fixture.json`.
