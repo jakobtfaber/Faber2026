@@ -1,10 +1,13 @@
 \section{Results}
 \label{sec:results}
 
-The results in this section are intentionally withheld pending re-validation.
-The present structure is a scaffold for inserting results only after the
-corresponding analysis has passed the trust-restoration checks described in
-\texttt{CONTEXT.md} and the circulation-readiness plan.
+The foreground census and its consequences for the intervening column have
+passed re-validation and are reported below. The remaining results---the
+per-sightline scattering fits, the scintillation products, the turbulence
+parameters, and the burst energies---stay withheld pending their own
+trust-restoration checks (\texttt{CONTEXT.md}, circulation-readiness plan), as
+does the measured-versus-predicted scattering comparison, which rests on the
+still-unrestored fits.
 
 \FloatBarrier
 \subsection{Per-sightline dispersion and scattering budget}
@@ -31,14 +34,26 @@ corresponding analysis has passed the trust-restoration checks described in
 \subsubsection{Dominant intervening systems}
 \label{sec:dominant-systems}
 
-% TODO(results-dominant-systems): Insert after the census and budget products
-% are trusted. This slot should summarize only the systems that dominate the
-% validated intervening column or scattering prediction, with their provenance
-% and exclusion caveats.
-%
-% Candidate future artifacts, once trusted:
-% - fig:galaxies_cgm
-% - fig:clusters_icm
+Of the twelve sightlines, only one crosses a foreground cluster within its
+characteristic radius. The FRB~20230307A sightline passes at $b/R_{500}=0.83$
+from the \citet{WenHan2024} cluster J115120.4$+$714435 ($z=0.200$,
+$\log M_{500}=14.1$), for which the two-phase modified-NFW model predicts an
+intracluster column of order $160\,\mathrm{pc\,cm^{-3}}$
+(Figure~\ref{fig:clusters_icm}). This is the single dominant intervening system
+in the sample. The other foreground clusters recovered along this and the two
+other cluster-bearing sightlines all lie beyond $R_{500}$, where the modeled
+column drops steeply; they are excluded from the budget even where the profile
+remains formally nonzero, and none approaches the FRB~20230307A cluster in
+predicted contribution.
+
+The confirmed foreground galaxies lie at impact parameters of tens to a few
+hundred kpc, in the outer circumgalactic medium rather than the galaxy interior.
+Each therefore adds only a small dispersion, and no single galaxy halo dominates
+its sightline's intervening column.
+The intervening dispersion in this sample is thus concentrated almost entirely on
+the one cluster-crossing sightline and is small on the rest; the sightlines
+carrying no confirmed within-aperture system are limited by survey depth
+(Section~\ref{sec:obs-fg}), not shown to be free of foreground gas.
 
 \FloatBarrier
 \subsection{Scintillation and screen attribution}
