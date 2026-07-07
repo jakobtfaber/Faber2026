@@ -19,3 +19,8 @@
 figures/prototypes/
 # Local grit coordination state (locks/worktrees for concurrent agents).
 .grit/
+
+# Graphify knowledge-graph outputs (regenerable via /graphify; large + ephemeral
+# scratch/cache). A prior run accidentally committed the scratch dotfiles and the
+# AST cache; keep the whole dir out of git.
+graphify-out/
