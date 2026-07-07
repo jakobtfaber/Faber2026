@@ -48,6 +48,14 @@ suggestive anti-correlation with epoch ($r=-0.54$, $p=0.07$) warrants monitoring
 for long-term clock or baseline drift as the sample grows. The per-burst
 properties and residuals are listed in Table~\ref{tab:toa}.
 
+% Figure provenance:
+% - Artifact: figures/toa_crossmatch_analysis_premium.pdf
+% - Generator: pipeline/crossmatching/plotting.py, plot_toa_analysis()
+% - Inputs: pipeline/crossmatching/toa_crossmatch_results.json
+% - Regeneration command: from pipeline/, run `python crossmatching/plotting.py`,
+%   then copy crossmatching/toa_crossmatch_analysis_premium.pdf to figures/.
+% - Trust status: retained because time-of-arrival association arithmetic remains
+%   inside the trusted surface after the fit/census/budget reset.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{toa_crossmatch_analysis_premium}
@@ -58,14 +66,11 @@ linear fit ($r=0.14$).}
 \label{fig:toa_resid}
 \end{figure}
 
-% \begin{figure*}[!t]
-% \centering
-% \includegraphics[width=0.85\textwidth]{systematics_check_matrix}
-% \caption{Systematic correlation search. Residuals versus DM, FWHM, combined
-% measurement uncertainty, and epoch (MJD), with Pearson $r$ and trend lines. No
-% correlation reaches significance ($p<0.05$).}
-% \label{fig:toa_sys}
-% \end{figure*}
+% Removed figure candidate:
+% - Artifact: figures/systematics_check_matrix.pdf
+% - Generator: pipeline/crossmatching/plotting.py, plot_systematics_matrix()
+% - Reason withheld: not needed for the scaffolded manuscript. Restore only if a
+%   later Results/Discussion pass needs a compact timing-systematics diagnostic.
 
 \begin{deluxetable*}{lrrrrrl}
 \tablecaption{Co-detected bursts: association diagnostics.
@@ -95,5 +100,5 @@ whether the independent CHIME-side DM estimate constrains the comparison.}
 \end{deluxetable*}
 
 Each burst's timing residual, independent DM comparison (where available), and
-positional agreement are shown in
-Appendix~\ref{app:assoc-cards} (Figures~\ref{fig:assoc_grid_a} and~\ref{fig:assoc_grid_b}).
+positional agreement are shown in Appendix~\ref{app:assoc-cards}
+(Figures~\ref{fig:assoc_grid_a} and~\ref{fig:assoc_grid_b}).
