@@ -6,6 +6,13 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 J="$ROOT/docs/rse/journal.jsonl"
 agent="$1"; lane="$2"; state="$3"; shift 3; note="$*"
+case "$state" in
+  working|done|blocked|info) ;;
+  *)
+    echo "journal-append: invalid state '$state' (expected: working, done, blocked, info)" >&2
+    exit 2
+    ;;
+esac
 ts="$(date +%Y-%m-%dT%H:%M:%S%z)"
 python3 - "$J" "$ts" "$agent" "$lane" "$state" "$note" <<'EOF'
 import json, sys
