@@ -12,8 +12,8 @@ The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
 _Avoid_: treating any subset table as implicitly covering all twelve.
 
-**Trust reset** (owner decisions 2026-07-06, evening, two waves — supersedes
-every quoting carve-out below):
+**Trust reset** (owner decisions 2026-07-06, evening→night, three waves —
+supersedes every quoting carve-out below):
 *Wave 1 (fits):* trust is revoked for ALL burst-data fits performed to date —
 the joint scattering fits (every β, τ₁GHz, component multiplicity, and PPC
 verdict; interior posteriors included, so freya β=3.72 and phineas β=3.23 are
@@ -25,22 +25,33 @@ verdicts, impact parameters, and halo-mass proxies) and for the entire DM
 budget decomposition (NE2001/YMW16 disk terms, the 40 pc cm⁻³ halo prior,
 the Macquart mean, the mNFW/two-phase DM_int columns, host residuals, and
 the negative-residual Macquart-scatter bound).
-What retains trust, among analysis products: TOA association arithmetic and
-DM_obs only. Observational inputs (positions, nicknames, published host
-spectroscopic redshifts) are inputs rather than revoked products; V3/V4
-audit their provenance where consumed.
+*Wave 3 (association + DM_obs):* trust is also revoked for the TOA
+association arithmetic (residuals, P_cc, the association verdicts) and for
+DM_obs across all twelve bursts. Grounds: the tabulated DM_obs does not
+distinguish the CHIME-side from the DSA-side measurement, their level of
+agreement has never been quantified, and how each DM_obs was obtained
+(instrument pipeline, dedispersion method, reference artifact) is
+undocumented.
+What retains trust, among analysis products: **nothing** — every analysis
+product is revoked. Raw observational inputs (positions, nicknames,
+published host spectroscopic redshifts) remain inputs rather than revoked
+products; the V ladders audit their provenance where consumed. The
+twelve-burst co-detection set stays the *working roster*, but its citable
+association evidence awaits V6.
 Manuscript claims consuming any revoked quantity are unsupported until
 re-established — that now includes `tab:budget`, `tab:foreground`,
 fig:budget (both panels), the dominant-systems and cluster analyses, the
 host-dominated 10/11 comparison, the τ·Δν_d two-screen test, the
 scintillation excess, the FRB 20230913A intervening attribution (both of its
-supporting diagnostics sit on revoked strands), `tab:beta`, and
-`tab:burst-energies`. Trust is restored only through the re-validation
-ladders of `docs/rse/specs/plan-circulation-readiness.md` §V (V1 fits, V3
-energies, V4 census, V5 DM budget).
-_Avoid_: citing any fit-, census-, or budget-derived number from the current
-tables in new prose; treating a PPC pass under the old campaign as evidence
-of trust.
+supporting diagnostics sit on revoked strands), `tab:beta`,
+`tab:burst-energies`, and (wave 3) every quoted TOA residual, P_cc, and
+DM_obs value. Trust is restored only through the re-validation ladders of
+`docs/rse/specs/plan-circulation-readiness.md` §V (V1 fits, V3 energies,
+V4 census, V5 DM budget, V6 association + DM_obs).
+_Avoid_: citing any fit-, census-, budget-, association-, or DM-derived
+number from the current tables in new prose; treating a PPC pass under the
+old campaign as evidence of trust; quoting a single undifferentiated
+DM_obs as if CHIME and DSA agree.
 
 **Geometry-adjudicated β** (supersedes "rail-aware citable", owner decision
 2026-07-06; quoting provisions suspended by the fit-trust reset above):
@@ -128,9 +139,10 @@ caption; the twelve-burst co-detection set is never assumed as the denominator.
 
 **Explicit pending**:
 (0) Re-validation framework (plan §V) — the trust reset makes this the first
-gate: no fit-, census-, or budget-derived quantity is citable until its
-producing analysis passes the corresponding re-trust ladder (V1 fits, V3
-energies, V4 census, V5 DM budget); includes verifying whether the scattering-fit CHIME
+gate: no fit-, census-, budget-, association-, or DM-derived quantity is
+citable until its producing analysis passes the corresponding re-trust
+ladder (V1 fits, V3 energies, V4 census, V5 DM budget, V6 association +
+DM_obs); includes verifying whether the scattering-fit CHIME
 inputs share the gen-1 de-chirp defect lineage found in the scintillation
 products. (1) Geometry-selection campaign (extended-medium kernel + per-sightline model
 selection, scint-informed) — supersedes the narrower "ADR-0007 re-analysis of
