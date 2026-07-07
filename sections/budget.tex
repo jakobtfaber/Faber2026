@@ -1,4 +1,4 @@
-% Core methods section. The observed DM decomposes as
+, P% Core methods section. The observed DM decomposes as
 %   DM_obs = DM_MW,ISM + DM_MW,halo + <DM_cosmic>(z) + DM_intervening + DM_host,
 % with DM_MW,ISM from NE2001/YMW16 (pygedm), DM_MW,halo a 40 pc/cm^3 prior
 % (Yamasaki & Totani 2020), <DM_cosmic>(z) the Macquart relation
@@ -52,9 +52,10 @@ and should state which sightlines are unconstrained by survey coverage rather
 than treating non-detections as foreground-free.
 
 % TODO(methods-foreground-census): Restore a foreground-census artifact only
-% after V4 re-validation. The restored artifact should replace the retired
-% tab:foreground and should include candidate provenance, verdicts, impact
-% parameters, halo or cluster classification, and coverage limitations.
+% once the census products are ready to be described and cited. The restored
+% artifact should replace the retired tab:foreground and should include
+% candidate provenance, verdicts, impact parameters, halo/cluster
+% classification, and coverage limitations.
 
 \subsection{Scattering Attribution}
 \label{sec:scattering}
@@ -63,8 +64,8 @@ We measure the pulse-broadening time and its frequency scaling from the
 co-detected dynamic spectra and compare them against the scattering predicted
 by each candidate screen: the Milky-Way ISM, an intervening circumgalactic
 medium, or a host galaxy, where the host can dominate the scattering of a
-heavily broadened burst \citep{Ocker2022}. The fits are produced by the
-\texttt{dsa110-FLITS} pipeline (\texttt{pipeline/}).
+heavily broadened burst \citep{Ocker2022}. The fits are produced with a common
+open-source reduction and fitting pipeline.
 
 \subsubsection{The joint two-band fit}
 \label{sec:jointfit}
