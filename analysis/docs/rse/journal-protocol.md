@@ -56,13 +56,22 @@ the readiness board renders it.
    this repo gets this protocol stated in its prompt (agent tag +
    cadence). The dispatcher journals the dispatch and the landing.
 
-5. **Enforcement:** `.claude/settings.json` runs
-   `scripts/journal-staleness-hook.sh` on every user prompt and injects a
-   reminder when the last entry is older than 10 min. (Codex-side parity
-   pending — `.codex/` hook surface; see Cross-agent notes in CLAUDE.md.
-   A CLAUDE.md pointer to this protocol is also pending: the file was
-   held open in the owner's editor when the protocol landed, 2026-07-06
-   ~21:00.)
+5. **Enforcement — two hooks in `.claude/settings.json`** (verified live
+   pickup: settings changes take effect without a session restart):
+   - `scripts/journal-staleness-hook.sh` (UserPromptSubmit): reminder on
+     each user prompt when the last entry is >10 min old.
+   - `scripts/journal-cadence-posttool-hook.sh` (PostToolUse, all tools):
+     the every-10-minutes trigger for **active** sessions — fires after
+     every tool call, and once the journal is ≥10 min stale it injects a
+     mid-turn instruction to append an entry covering what is being
+     worked on right now. Throttled to one reminder per 3 min (state:
+     `.git/journal-last-nag`, untracked). An active session therefore
+     journals every ~10 min even during long autonomous turns; an idle
+     session triggers nothing (nothing is being worked on).
+   (Codex-side parity pending — `.codex/` hook surface; see Cross-agent
+   notes in CLAUDE.md. A CLAUDE.md pointer to this protocol is also
+   pending: the file was held open in the owner's editor when the
+   protocol landed, 2026-07-06 ~21:00.)
 
 ## Backfill convention
 
