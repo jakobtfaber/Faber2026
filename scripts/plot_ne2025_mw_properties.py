@@ -59,22 +59,32 @@ def run_pixel(args):
     return Dv["DM"], Dv["TAU"], Dv["SBW"]
 
 if __name__ == '__main__':
-    # 1. Precompute All-Sky Maps using HEALPix in parallel
+    # 1. Precompute All-Sky Maps using HEALPix in parallel, with caching
     nside = 8
     npix = hp.nside2npix(nside)
     theta, phi = hp.pix2ang(nside, np.arange(npix))
     gls = np.degrees(phi)
     gbs = 90.0 - np.degrees(theta)
 
-    print(f"Precomputing NE2025 all-sky maps for {npix} pixels using Multiprocessing...")
-    inputs = list(zip(gls, gbs))
-    
-    with Pool(4) as pool:
-        results = pool.map(run_pixel, inputs)
-    
-    dm_map = np.array([r[0] for r in results])
-    tau_map = np.array([r[1] for r in results])
-    sbw_map = np.array([r[2] for r in results])
+    cache_path = Path(__file__).resolve().parent / "ne2025_allsky_cache.npz"
+    if cache_path.exists():
+        print(f"Loading precomputed NE2025 all-sky maps from cache: {cache_path}")
+        cache = np.load(cache_path)
+        dm_map = cache["dm_map"]
+        tau_map = cache["tau_map"]
+        sbw_map = cache["sbw_map"]
+    else:
+        print(f"Precomputing NE2025 all-sky maps for {npix} pixels using Multiprocessing...")
+        inputs = list(zip(gls, gbs))
+        with Pool(4) as pool:
+            results = pool.map(run_pixel, inputs)
+        
+        dm_map = np.array([r[0] for r in results])
+        tau_map = np.array([r[1] for r in results])
+        sbw_map = np.array([r[2] for r in results])
+        
+        np.savez_compressed(cache_path, dm_map=dm_map, tau_map=tau_map, sbw_map=sbw_map)
+        print(f"Saved precomputed maps to cache: {cache_path}")
 
     # Convert tau from ms to us for better scale
     tau_map_us = tau_map * 1000.0
@@ -219,7 +229,7 @@ if __name__ == '__main__':
     except ImportError:
         print("adjustText not available, using simple text alignment")
 
-    plt.tight_layout()
+    plt.tight_layout(h_pad=4.5, w_pad=2.0)
     out_dir = Path(__file__).resolve().parent.parent / "figures"
     out_dir.mkdir(exist_ok=True)
 
