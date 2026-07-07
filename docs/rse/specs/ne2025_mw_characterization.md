@@ -14,6 +14,11 @@ Milky Way interstellar medium (ISM) propagation properties were characterized al
 
 The predicted properties (dispersion, scattering, scintillation) show a strong latitude-dependent split. High-latitude sightlines ($|b| > 30^\circ$) present minimal MW contamination, with an expected MW dispersion floor of $\text{DM}_{\text{MW}} \lesssim 41\text{ pc cm}^{-3}$ and sub-microsecond scattering floors at CHIME bands. In contrast, low-latitude sightlines ($|b| < 15^\circ$) have substantial Galactic contributions, with $\text{DM}_{\text{MW}} \approx 95\text{ pc cm}^{-3}$ and a CHIME scattering floor of $\tau_{\text{MW}} \gtrsim 30\text{ }\mu\text{s}$, potentially masking extragalactic contributions.
 
+## Visualization
+
+![NE2025 MW properties vs Galactic latitude](../../../figures/ne2025_mw_characterization.png)
+*Figure: NE2025 Galactic electron density model predictions for the 12 CHIME/DSA co-detection sightlines as a function of Galactic latitude $|b|$. Left: Milky Way dispersion contribution $\text{DM}_{\text{MW}}$ integrated to 30 kpc. Middle: Pulse broadening timescale $\tau_{\text{MW}}$ scaled to CHIME (600 MHz, orange circles) and DSA-110 (1.4 GHz, blue squares) bands. Right: Scintillation bandwidth $\Delta\nu_{\text{MW}}$ scaled to CHIME and DSA-110 bands. Values are computed assuming Kolmogorov scaling ($\alpha = 4.4$).*
+
 ## Characterization Table
 
 The full output of the NE2025 model toward each sightline (including scaled scattering and scintillation properties at CHIME and DSA-110 band centers assuming Kolmogorov scaling, $\alpha = 4.4$) is presented below:

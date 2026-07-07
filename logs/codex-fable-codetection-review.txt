@@ -1,0 +1,50 @@
+## 1. Overall impression
+
+**Design: manuscript-ready. Data handling: not yet.** The template itself (connected waterfalls, hatched gap, marginals, band strips) is clean, consistent, and publication-grade — casey is the benchmark. But three systematic data-level problems appear across the set, and 3–4 bursts fail to visually demonstrate co-detection at all. Fix those and this becomes a strong figure set.
+
+## 2. Cross-burst consistency
+
+Three systematic issues:
+
+- **TOA alignment doesn't hold.** The spec says TOA-aligned, but in 9 of 12 figures the DSA and CHIME components sit at different times: casey −1 vs +1 ms, chromatica −2.7 vs +2.5, freya +1.9 vs −2, hamilton ±6, wilhelm −2.2 vs +2, zach +1.3 vs −1.3, and **phineas/whitney at ~25–27 ms apart**. Sign varies, so it's not a single sign error. Only isha and johndoeII co-locate near 0. Either the alignment in `codetection_data.py` is applying per-instrument TOAs/DMs inconsistently, or these are genuine arrival-time differences from DM disagreement — in which case the caption must say so, because "TOA-aligned" plus a 25 ms gap reads as a bug. (25 ms between 1.4 GHz and 600 MHz ≈ ΔDM ~2.7 pc cm⁻³, so plausible, but verify.)
+- **The 3 ms padding rule is violated on the long-window bursts.** mahi's window runs −10 to +38 ms: the DSA spike is jammed against the left edge with <1 ms of pre-burst padding, and ~30 ms of empty noise trails it. oran (peak at −3.5, window to +29) and phineas/whitney (±16–21) similarly carry 15–25 ms of dead space. Sub-burst detection is likely triggering on spurious late structure, or the window is being taken from the union of raw snippet lengths rather than from sub-bursts.
+- **Two-tone background artifact.** In phineas the DSA band changes texture sharply at ~−6 ms (noisy left, flat dark right); in whitney the CHIME band does the same at ~−10 ms. This looks like one instrument's snippet ending before the common window and the remainder being filled with zeros. A referee will read that hard texture boundary as an instrumental problem — trim the shared window to the overlap, or hatch the no-data region like the frequency gap.
+
+## 3. Layout / readability
+
+- **Gap hatch:** works well — unambiguous, consistent, correctly mirrored in the spectrum panel. Keep it. One consideration: the 800–1310 MHz gap eats ~40% of panel height in every figure; a broken/compressed axis would give the data bands more room, at the cost of true frequency scale. Author's call.
+- **Band labels:** legible but small; fine at single-column, check at print size.
+- **Spectrum marginal is not per-band scaled.** In isha, oran, mahi, and johndoeII the DSA spectrum fills the panel while the CHIME spectrum is a flat line at zero — the panel actively argues *against* co-detection. Normalize the spectrum per band to match `per_band_scale` in the waterfalls.
+- **Time profile hides the fainter band.** It appears to be a raw sum, so in zach the clearly visible CHIME component barely registers as a bump, and in whitney the CHIME emission at −13.5 ms is nearly invisible in the profile. Consider per-band-normalized overlaid profiles, or at least note the convention in the caption.
+- **RFI markers:** CHIME masked channels render as thin white lines plus wide grey bands — acceptable — but DSA masked channels render as *white* lines (hamilton ~1380 MHz, isha ×2, phineas ~1410), inconsistent with the "grey markers" spec and easily mistaken for saturation.
+- **Colormap:** the dark magma-style map is fine on screen but the faint components (chromatica DSA, hamilton DSA, johndoeII both bands) will vanish in print. A per-band percentile clip on vmax would help.
+- **Ticks:** mostly fine; mahi has only two time labels (0, 20) — too sparse. Mixed decimal formats (−5.0 vs −5) across figures, cosmetic.
+
+## 4. Per-burst notes
+
+- **casey** — reference quality; use as the template benchmark.
+- **freya, wilhelm, chromatica** — good; wilhelm's three-component structure (DSA ×2 + CHIME) reads nicely.
+- **hamilton** — DSA counterpart marginal; noisy profile baseline; white RFI line.
+- **isha** — CHIME counterpart invisible in waterfall *and* spectrum; burst at +1.8 ms, not 0.
+- **johndoeII** — properly aligned at 0, but both bands need more contrast.
+- **mahi** — worst of the set: burst at the left edge, ~30 ms dead space, CHIME invisible, red-tinted artifact line in the grey masked strip (~730 MHz).
+- **oran** — ~25 ms trailing dead space; CHIME invisible.
+- **phineas** — DSA two-tone background; 25 ms cross-band offset.
+- **whitney** — CHIME two-tone background; ~27 ms offset; otherwise both components visible.
+- **zach** — large grey masked block below ~540 MHz (verify it's a real mask, not a plotting fill); CHIME component missing from the summed profile.
+
+## 5. Prioritized recommendations
+
+**Must-fix**
+1. Audit the TOA-alignment path in `codetection_data.py`; either co-locate components at t=0 or define the alignment reference explicitly in the caption.
+2. Enforce the 3 ms padding rule — rebuild windows for mahi, oran, phineas, whitney from actual first/last sub-bursts.
+3. Handle unequal snippet lengths: trim to overlap or hatch no-data regions (phineas, whitney).
+4. Make the faint CHIME counterparts visible (time/frequency downsampling) in isha, oran, mahi — otherwise those panels don't show a co-detection.
+
+**Nice-to-have**
+5. Per-band normalized spectrum marginal.
+6. Percentile-clipped color scale per band for print.
+7. Grey (not white) DSA masked-channel rendering.
+8. Consider a compressed/broken frequency axis for the gap; denser time ticks on long windows.
+
+Plan-mode note: review is complete and read-only as requested; the findings are mirrored at `~/.claude/plans/you-are-reviewing-prototyped-bright-rabin.md`. No `ExitPlanMode`/`AskUserQuestion` tool is available in this session, so ending with the deliverable directly.
