@@ -172,3 +172,4 @@
 {"ts": "2026-07-07T08:09:02-0700", "agent": "codex-gpt-5.5/Faber2026-codex", "lane": "repo", "state": "working", "note": "Submodule branch agent/codetection-dm-power-20260707 pushed at 2d62ac8 and canonical FLITS main pushed at 5ff3ae2; staging parent repo local commits, artifacts, logs, journal, figures, and submodule pointer for push."}
 {"ts": "2026-07-07T08:09:50-0700", "agent": "codex-gpt-5/h17-dm-power", "lane": "h17", "state": "working", "note": "checking local manifest and h17 /data product mapping for DM-power run"}
 {"ts": "2026-07-07T08:10:45-0700", "agent": "cursor-composer", "lane": "repo", "state": "done", "note": "Fable 5 label-design quota hit; Opus plan + logs/codex-fable-codetection-label-design.txt"}
+{"ts": "2026-07-07T08:11:33-0700", "agent": "codex-gpt-5/h17-dm-power", "lane": "h17", "state": "working", "note": "bounded manifest-cube existence check on h17 before any rsync"}
