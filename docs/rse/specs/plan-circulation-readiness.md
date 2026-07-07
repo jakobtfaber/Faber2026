@@ -71,7 +71,9 @@ only. Downstream, now unsupported until inputs re-qualify: tab:budget,
 tab:foreground, fig:budget both panels, the dominant-systems and cluster
 analyses, the host-dominated 10/11 comparison, the τ·Δν_d two-screen test,
 the scintillation excess, the FRB 20230913A attribution (both diagnostics
-revoked), tab:beta, tab:burst-energies.
+revoked), tab:beta, tab:burst-energies, the multiplicity-bias demonstration
+(fig:whitney_mult, the abstract's closing claim, conclusions item 7),
+fig:jointmodel_montage, and fig:scint_screens.
 
 - [ ] V1 **[FLITS]** Author the re-trust validation contract (ADR): a fit is
       citable only with (i) verified input-data lineage (gen-2+,
@@ -131,10 +133,15 @@ revoked), tab:beta, tab:burst-energies.
 
 ## F. Manuscript reconciliation & polish
 
-- [ ] F1 **[ms]** Restructure abstract, observations (§2), §3.5, results,
+- [ ] F1 **[ms]** Restructure abstract, observations (§2), the co-model
+      methods (sec:jointfit / sec:beta-scattering-methods), results,
       discussion, conclusions around geometry selection; purge rail-class
-      vocabulary and all α=4-limit quoting (CONTEXT.md contract). β-language
-      purge unblocks post-C; final content pass needs D/E (spine).
+      vocabulary and all α=4-limit quoting (CONTEXT.md contract); rewrite
+      the census/budget prose (budget §3.2–3.4, results §4.1, discussion
+      opening, conclusions items 1–3/5–6, abstract census/budget sentences)
+      on the V4/V5-re-verified products. β-language purge unblocks post-C;
+      census/budget rewrite post-V4/V5 + D; final content pass needs D/E
+      (spine).
 - [ ] F2 **[ms]** `tab:beta` rework: geometry-adjudicated quoting; descriptive
       exponential-consistency statements for ex-railed rows. Post-C3.
 - [ ] F3 **[ms]** Consistency audit (mechanical): per-section sample counts,
@@ -157,9 +164,10 @@ revoked), tab:beta, tab:burst-energies.
 ## Dependency spine
 
 V1/V2 → every scattering and scintillation re-fit · V1/V3 → energies ·
-V4 → every census-derived claim (and V5) · V5 → every budget-derived claim ·
-A1 → A2/A3 · B1–B4 → B5 (B measurements themselves run under the V1
-contract) · (V, A, B5) → C1+C2 → C3 (C2 resolves per-band misfits before
-the pin bump) · C3 + V4/V5 → {F2, D} · D → E → F1 → F4/F5 → G. V1–V5, F3,
-and a structural F4 pass on non-β sections are parallelizable now; A4, B6,
-F6/F7 anytime.
+V4 → every census-derived claim and V5's host-residual re-derivation
+(V5's implementation checks can start now) · V5 → every budget-derived
+claim · A1 → A2/A3 · B1–B4 → B5 (B measurements themselves run under the
+V1 contract) · (V, A, B5) → C1+C2 → C3 (C2 resolves per-band misfits
+before the pin bump) · C3 → F2 · C3 + V4/V5 → D · D → E → F1 → F4/F5 → G.
+V1–V4, V5's implementation half, F3, and a structural F4 pass on non-β
+sections are parallelizable now; A4, B6, F6/F7 anytime.
