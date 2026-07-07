@@ -24,3 +24,16 @@ figures/prototypes/
 # scratch/cache). A prior run accidentally committed the scratch dotfiles and the
 # AST cache; keep the whole dir out of git.
 graphify-out/
+
+# Local agent/runtime state. Keep these on this machine, but do not publish them
+# to GitHub or mirror them into Overleaf.
+/.agents/
+/.claude/
+/.codex/
+/.cursor/
+/.entire/
+/.remember/
+/.superpowers/
+/AGENTS.md
+/CLAUDE.md
+/GEMINI.md
