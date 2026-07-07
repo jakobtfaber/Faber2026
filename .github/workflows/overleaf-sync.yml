@@ -55,6 +55,7 @@ jobs:
             /tmp/overleaf/.codex \
             /tmp/overleaf/.cursor \
             /tmp/overleaf/.entire \
+            /tmp/overleaf/.github \
             /tmp/overleaf/.remember \
             /tmp/overleaf/.superpowers \
             /tmp/overleaf/AGENTS.md \
@@ -82,8 +83,8 @@ jobs:
 
           if find /tmp/overleaf -maxdepth 1 \
             \( -name '.agents' -o -name '.claude' -o -name '.codex' \
-            -o -name '.cursor' -o -name '.entire' -o -name '.remember' \
-            -o -name '.superpowers' -o -name 'AGENTS.md' \
+            -o -name '.cursor' -o -name '.entire' -o -name '.github' \
+            -o -name '.remember' -o -name '.superpowers' -o -name 'AGENTS.md' \
             -o -name 'CLAUDE.md' -o -name 'GEMINI.md' \) \
             -print -quit | grep -q .; then
             echo "Agent-local paths remain in Overleaf clone after sync." >&2
