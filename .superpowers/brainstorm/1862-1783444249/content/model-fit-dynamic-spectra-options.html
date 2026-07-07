@@ -1,0 +1,73 @@
+<h2>Dynamic Spectra for 2D Model Fits</h2>
+<p class="subtitle">Pick the output style. The implementation can reuse the existing joint-model dump plus the codetection panel renderer.</p>
+
+<div class="cards">
+  <div class="card" data-choice="model_only" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="display:grid;grid-template-columns:1fr 80px;grid-template-rows:48px 1fr;gap:8px;height:230px;padding:10px;background:#f8f8f8">
+        <div style="border:2px solid #111;background:white;position:relative">
+          <div style="height:3px;background:#222;width:38%;position:absolute;top:14px;left:20%"></div>
+          <div style="height:3px;background:#b2182b;width:22%;position:absolute;top:30px;left:63%"></div>
+        </div>
+        <div style="grid-row:1/3;border-left:0">
+          <div style="font-family:serif;font-size:22px;line-height:1.25;margin-top:4px">CHIME/FRB<br><span style="color:#b2182b">DSA-110</span></div>
+        </div>
+        <div style="border:2px solid #111;background:linear-gradient(180deg,#20102c 0 18%,#fff 18% 64%,#080512 64%);position:relative;overflow:hidden">
+          <div style="position:absolute;left:0;right:0;top:18%;height:46%;background:repeating-linear-gradient(135deg,white 0 5px,#888 5px 7px);opacity:.75"></div>
+          <div style="position:absolute;left:63%;top:0;width:14px;height:18%;background:#fff3d2;box-shadow:0 0 12px #ffde7a"></div>
+          <div style="position:absolute;left:34%;bottom:0;width:18px;height:36%;background:#ffd568;box-shadow:0 0 14px #e052ff"></div>
+          <div style="position:absolute;left:50%;top:42%;font-family:serif;font-size:20px;color:#222">Model</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Model-Only Codetection Panel</h3>
+      <p>Same visual grammar as the Casey codetection figure, but waterfall and marginals are the recovered best-fit model. Best for manuscript inspection and quick comparison across bursts.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="data_model_pair" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;height:230px;padding:10px;background:#f8f8f8">
+        <div style="display:grid;grid-template-rows:36px 1fr;gap:7px">
+          <div style="font-size:13px;text-align:center">Data</div>
+          <div style="border:2px solid #111;background:linear-gradient(180deg,#1c1129 0 18%,#fff 18% 64%,#060512 64%);position:relative;overflow:hidden">
+            <div style="position:absolute;left:0;right:0;top:18%;height:46%;background:repeating-linear-gradient(135deg,white 0 5px,#888 5px 7px);opacity:.75"></div>
+            <div style="position:absolute;left:34%;bottom:0;width:20px;height:38%;background:#ffd568;box-shadow:12px 10px 18px #e052ff"></div>
+            <div style="position:absolute;left:63%;top:0;width:14px;height:18%;background:#fff3d2;box-shadow:0 0 12px #ffde7a"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-rows:36px 1fr;gap:7px">
+          <div style="font-size:13px;text-align:center">Model</div>
+          <div style="border:2px solid #111;background:linear-gradient(180deg,#1c1129 0 18%,#fff 18% 64%,#060512 64%);position:relative;overflow:hidden">
+            <div style="position:absolute;left:0;right:0;top:18%;height:46%;background:repeating-linear-gradient(135deg,white 0 5px,#888 5px 7px);opacity:.75"></div>
+            <div style="position:absolute;left:35%;bottom:0;width:16px;height:34%;background:#ffd568;box-shadow:10px 10px 14px #e052ff"></div>
+            <div style="position:absolute;left:64%;top:0;width:11px;height:17%;background:#fff3d2;box-shadow:0 0 9px #ffde7a"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Data and Model Pair</h3>
+      <p>Two connected codetection-style panels per burst: observed data next to recovered model. Best for visual validation, but heavier for all 12 bursts.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="diagnostic_triptych" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;height:230px;padding:10px;background:#f8f8f8">
+        <div style="display:grid;grid-template-rows:28px 1fr"><div style="font-size:12px;text-align:center">Data</div><div style="border:2px solid #111;background:#160d25"></div></div>
+        <div style="display:grid;grid-template-rows:28px 1fr"><div style="font-size:12px;text-align:center">Model</div><div style="border:2px solid #111;background:#160d25"></div></div>
+        <div style="display:grid;grid-template-rows:28px 1fr"><div style="font-size:12px;text-align:center">Residual</div><div style="border:2px solid #111;background:linear-gradient(90deg,#2166ac,#f7f7f7,#b2182b)"></div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Diagnostic Triptych</h3>
+      <p>Adapts the existing jointmodel diagnostics: data, model, and residual. Best for debugging fits; least similar to the Casey figure.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <p><strong>My recommendation:</strong> generate A first, with optional B/C scripts sharing the same loader. A directly answers your request: model-fit dynamic spectra in a style similar to the codetection preview.</p>
+</div>

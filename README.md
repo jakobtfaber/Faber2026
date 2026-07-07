@@ -1,7 +1,7 @@
 # Faber2026
 
-Manuscript: **Disentangling the Dispersion and Scattering Budgets of
-CHIME/FRB–DSA-110 Co-detected Fast Radio Bursts.**
+Manuscript: **Scattering, Scintillation, and Energetics of Fast Radio Bursts Codetected by CHIME/FRB and
+DSA-110.**
 
 Per-sightline attribution of the observed DM and scattering of 12 CHIME/FRB–
 DSA-110 co-detected FRBs to the responsible medium (Milky-Way ISM/halo,
