@@ -50,6 +50,17 @@ jobs:
             --exclude '.git/' \
             --exclude 'pipeline/' \
             --exclude '.github/' \
+            --exclude '.agents/' \
+            --exclude '.claude/' \
+            --exclude '.codex/' \
+            --exclude '.cursor/' \
+            --exclude '.entire/' \
+            --exclude '.remember/' \
+            --exclude '.superpowers/' \
+            --exclude 'AGENTS.md' \
+            --exclude 'CLAUDE.md' \
+            --exclude 'GEMINI.md' \
+            --exclude '.olignore' \
             --exclude '*.pdf' --exclude '*.aux' --exclude '*.log' --exclude '*.bbl' \
             --exclude '*.blg' --exclude '*.out' --exclude '*.toc' --exclude '*.synctex.gz' \
             ./ /tmp/overleaf/
