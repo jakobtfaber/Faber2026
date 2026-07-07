@@ -2,6 +2,15 @@
   "hooks": {
     "PostToolUse": [
       {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/scripts/journal-cadence-posttool-hook.sh\""
+          }
+        ]
+      },
+      {
         "matcher": "Task",
         "hooks": [
           {
