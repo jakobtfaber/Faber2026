@@ -1,0 +1,26 @@
+Implemented the four MUST-FIX items and did not commit.
+
+Changes are in [codetection_data.py](/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/flits/batch/codetection_data.py), [codetection_plots.py](/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/flits/batch/codetection_plots.py), [codetection_joint.py](/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/flits/batch/codetection_joint.py), plus the new focused tests in [test_codetection_data.py](/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/tests/test_codetection_data.py).
+
+What changed:
+- Audited TOA semantics: `measured_offset_ms` is `CHIME_TOA_400 - DSA_TOA_400`, so the existing CHIME shift by `-offset` is consistent. I documented that residual CHIME/DSA peak separation is intentionally preserved after midpoint centering.
+- Capped the last subburst trailing reference at `last_peak + 6 ms` before applying `SUBBURST_PAD_MS = 3.0`, preventing mahi/oran-style long noise tails from owning the right crop.
+- Preserved exact requested crop endpoints and pads missing snippet time with `NaN`; the plotter hatches all-NaN no-data time spans instead of showing edge-filled/flat texture.
+- Made per-band spectrum normalization active when `per_band_scale=True`; observation plots also use per-band normalized top profiles.
+
+Before/after highlights:
+- `mahi`: xlim `(-9.006, 37.199)` -> `(-11.711, 17.711)`, width `46.205 -> 29.423`; left/right pads now `3.000/3.000 ms`.
+- `oran`: xlim `(-6.305, 29.005)` -> `(-6.313, 12.313)`, width `35.310 -> 18.627`; left/right pads now `3.000/3.000 ms`.
+- `phineas`: xlim stays wide because the peaks are genuinely separated (`±12.373 ms`), but padding is exact and DSA no-data is hatched instead of edge-filled.
+- `whitney`: xlim `(-15.169, 16.813)` -> `(-16.503, 16.831)`; this restores the missing 3 ms left pad and hatches CHIME no-data.
+- `isha`: xlim/peaks are essentially unchanged, but CHIME now appears in normalized spectrum/profile instead of being dwarfed by DSA.
+
+Verification run:
+- `conda run -n flits pytest tests/test_codetection_data.py -q` -> `3 passed`
+- `conda run -n flits ruff check flits/batch/codetection_data.py flits/batch/codetection_plots.py flits/batch/codetection_joint.py tests/test_codetection_data.py` -> passed
+- `FLITS_DATA=~/Data/Faber2026/dsa110 conda run -n flits python analysis/scattering-refit-2026-06/batch_codetection_data.py ../figures/prototypes/codetection` -> rendered `12/12`
+- Follow-up audit printed `left_pad=3.000` and `right_pad=3.000` for all 12 bursts.
+- `agent-closeout-check` passed with `/tmp/faber2026-codetection-closeout.json`.
+
+Dirty state note: there were pre-existing unrelated DM-power files and a pre-existing untracked codetection batch driver before this task. I left those uncommitted and untouched except for using the batch driver for verification.
+
