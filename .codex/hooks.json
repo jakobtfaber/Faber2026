@@ -8,6 +8,11 @@
             "type": "command",
             "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks codex post-tool-use'",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "sh -c 'ROOT=$(git rev-parse --show-toplevel 2>/dev/null) && [ -x \"$ROOT/scripts/journal-cadence-posttool-hook.sh\" ] && exec \"$ROOT/scripts/journal-cadence-posttool-hook.sh\"; exit 0'",
+            "timeout": 15
           }
         ]
       }
@@ -44,6 +49,11 @@
             "type": "command",
             "command": "sh -c 'if ! command -v entire >/dev/null 2>&1; then exit 0; fi; exec entire hooks codex user-prompt-submit'",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "sh -c 'ROOT=$(git rev-parse --show-toplevel 2>/dev/null) && [ -x \"$ROOT/scripts/journal-staleness-hook.sh\" ] && exec \"$ROOT/scripts/journal-staleness-hook.sh\"; exit 0'",
+            "timeout": 15
           }
         ]
       }
