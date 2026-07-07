@@ -10,7 +10,9 @@ rail-taxonomy presentation is retired — geometry model selection replaces it
 coupling"); (c) after the
 re-fit: sightline analysis, galaxy/cluster foreground comparison, and a
 synthesized propagation-vs-intrinsic interpretation are all pre-circulation
-content, not future work.
+content, not future work; (d) 2026-07-06 evening: trust revoked for all
+burst-data fits performed to date — the §V re-validation ladder governs
+re-entry.
 ---
 
 Lanes: **[FLITS]** pipeline repo (separate lane — changes land as FLITS PRs,
@@ -43,10 +45,13 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       co-detections: zach, oran, wilhelm, johndoeii, hamilton, chromatica.
 - [ ] B3 **[data]** mahi 700–725 MHz RFI inspection before any measurement
       uses that sub-band range.
-- [ ] B4 **[FLITS/data]** CHIME-band ACF/Δν_d measurements across the sample
-      (two-screen table is DSA-band only until this lands).
+- [ ] B4 **[FLITS/data]** CHIME-band ACF/Δν_d measurements across the sample,
+      run under the V1 contract (the existing DSA-band-only two-screen table
+      rests on revoked fits).
 - [ ] B5 **[FLITS]** Two-screen analysis rebuilt on joint CHIME+DSA scint
-      (τ·Δν_d per band, screen-placement constraints per sightline).
+      (τ·Δν_d per band, screen-placement constraints per sightline);
+      includes re-running the revoked DSA-band ACF fits under the V1
+      contract so the τ·Δν_d cross-check of V1(v) is itself re-validated.
 - [ ] B6 **[FLITS]** Housekeeping: refresh `scintillation/DATA_PROVENANCE.md`
       (gen-2 md5s, h17 path), commit the h17-side tooling
       (`extract_time0_metadata.py`, generic npz builder) into the FLITS tree.
@@ -67,7 +72,9 @@ until their inputs are re-established.
       under each candidate geometry (`simulation/` + `sim_fit_bridge`),
       (iii) prior-rail behavior test — a rail is model-family rejection,
       never a quotable limit, (iv) PPC pass, (v) an independent cross-check
-      (sub-band slope or τ·Δν_d consistency).
+      (sub-band slope or τ·Δν_d consistency) itself produced under this
+      contract — cross-checks are re-run, never inherited from the revoked
+      campaign.
 - [ ] V2 **[data]** Verify whether the CHIME dynamic spectra consumed by the
       scattering joint fits share the gen-1 de-chirp defect lineage found in
       the upchannelized scintillation products; per-burst scattering-input
@@ -83,8 +90,9 @@ until their inputs are re-established.
 - [ ] C1 **[FLITS]** Re-fit campaign from scratch across all twelve
       co-detections under the V1 contract with geometry adjudication — a
       fresh campaign on verified inputs, not a patch of the nine railed rows.
-- [ ] C2 **[FLITS]** Per-band systematics pass on the elevated-χ² trio
-      (wilhelm, hamilton, zach).
+- [ ] C2 **[FLITS]** Per-band systematics pass on the sightlines C1 flags
+      with elevated per-band χ² (the revoked campaign's trio — wilhelm,
+      hamilton, zach — is the starting hypothesis, re-derived by C1).
 - [ ] C3 **[ms]** Pin bump + table/figure regeneration from the campaign.
 
 ## D. Sightline analysis & foreground comparison (needs C)
@@ -128,8 +136,9 @@ until their inputs are re-established.
 
 ## Dependency spine
 
-V1/V2 → everything fit-derived · A1 → A2/A3 · B1–B4 → B5 (B measurements
-themselves run under the V1 contract) · (V, A, B5) → C1+C2 → C3 (C2 gates
-Tier B→A promotion, so it precedes the pin bump) · C3 → {F2, D} · D → E →
-F1 → F4/F5 → G. V1, V2, F3, and a structural F4 pass on non-β sections are
-parallelizable now; F6/F7 anytime.
+V1/V2 → every scattering and scintillation re-fit · V1/V3 → energies ·
+A1 → A2/A3 · B1–B4 → B5 (B measurements themselves run under the V1
+contract) · (V, A, B5) → C1+C2 → C3 (C2 resolves per-band misfits before
+the pin bump) · C3 → {F2, D} · D → E → F1 → F4/F5 → G. V1, V2, V3, F3, and
+a structural F4 pass on non-β sections are parallelizable now; A4, B6,
+F6/F7 anytime.
