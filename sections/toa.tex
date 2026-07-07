@@ -33,35 +33,22 @@ agreement.
 
 \subsubsection{Residuals and systematics}
 
-Table~\ref{tab:sample} restores the association diagnostics after the V6
-re-validation pass. The tabulated residuals use the shared DSA-DM convention:
-the CHIME and DSA arrivals are both referenced to 400\,MHz with the DSA catalog
-DM, so the residual is a timing/geometry consistency check rather than an
-independent per-telescope-DM comparison. Re-referencing the CHIME arrivals with
-their independently measured DMs would inject millisecond-scale shifts for the
-largest CHIME--DSA DM offsets, so those shifts are kept in the DM-provenance
-audit rather than folded into the association residual.
+Table~\ref{tab:sample} summarizes the association diagnostics. The tabulated
+residuals use the shared DSA-DM convention: the CHIME and DSA arrivals are both
+referenced to 400\,MHz with the DSA catalog DM, so the residual is a
+timing/geometry consistency check rather than an independent per-telescope-DM
+comparison. Re-referencing the CHIME arrivals with their independently measured
+DMs would inject millisecond-scale shifts for the largest CHIME--DSA DM offsets,
+so those shifts are tracked separately rather than folded into the association
+residual.
 
-All twelve bursts have chance-coincidence probabilities
-$P_{\rm cc}<10^{-8}$ under the conservative baseline association window and
-pass the positional-coincidence check. The eight bursts with constrained
-CHIME-side DMs also pass the CHIME--DSA DM-agreement check; the four remaining
-bursts are marked as position-only associations because their CHIME sub-band
-fits did not provide a constraining independent DM.
+All twelve bursts have chance-coincidence probabilities $P_{\rm cc}<10^{-8}$
+under the conservative baseline association window and pass the
+positional-coincidence check. The eight bursts with constrained CHIME-side DMs
+also pass the CHIME--DSA DM-agreement check; the four remaining bursts are
+marked as position-only associations because their CHIME sub-band fits did not
+provide a constraining independent DM.
 
-% Removed figure candidate:
-% - Artifact: figures/toa_crossmatch_analysis_premium.pdf
-% - Generator: pipeline/crossmatching/plotting.py, plot_toa_analysis()
-% - Inputs: pipeline/crossmatching/toa_crossmatch_results.json
-% - Reason withheld: all figures are withheld pending intentional re-addition
-%   with current trust/provenance comments.
-%
-% Removed figure candidate:
-% - Artifact: figures/systematics_check_matrix.pdf
-% - Generator: pipeline/crossmatching/plotting.py, plot_systematics_matrix()
-% - Reason withheld: not needed for the scaffolded manuscript. Restore only if a
-%   later Results/Discussion pass needs a compact timing-systematics diagnostic.
-
-The independent DM comparison and positional agreement are documented in the V6
-validation artifacts; Table~\ref{tab:sample} carries the manuscript-facing
-timing residual, $P_{\rm cc}$, and association verdict columns.
+Additional cross-checks and intermediate diagnostics are retained in companion
+materials; Table~\ref{tab:sample} carries the manuscript-facing timing residual,
+$P_{\rm cc}$, and association verdict columns.
