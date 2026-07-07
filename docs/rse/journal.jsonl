@@ -132,3 +132,5 @@
 {"ts": "2026-07-07T06:49:10-0700", "agent": "cursor-composer", "lane": "repo", "state": "working", "note": "Codex gpt-5.5 running Fable must-fix on codetection (logs/codex-codetection-mustfix-*)"}
 {"ts": "2026-07-07T06:50:38-0700", "agent": "codex-gpt-5.5/dm-power-2026-07-07", "lane": "V6", "state": "info", "note": "completed full lightweight DM-power run for 24 telescope rows; inspecting constrained/unconstrained outcomes"}
 {"ts": "2026-07-07T06:51:06-0700", "agent": "antigravity-gemini/session-2026-07-07", "lane": "repo", "state": "done", "note": "added figures and updated spec + artifact files with ne2025 visualization"}
+{"ts": "2026-07-07T06:55:35-0700", "agent": "codex-gpt-5.5/dm-power-2026-07-07", "lane": "V6", "state": "info", "note": "completed higher-resolution CHIME/DSA DM-power refinements; Wilhelm CHIME now constrained"}
+{"ts": "2026-07-07T07:01:56-0700", "agent": "antigravity-gemini/session-2026-07-07", "lane": "repo", "state": "done", "note": "removed sub-panel figure titles and regenerated figures"}
