@@ -1,18 +1,11 @@
 # Faber2026
 
-Manuscript: **Disentangling the Dispersion and Scattering Budgets of
-CHIME/FRB–DSA-110 Co-detected Fast Radio Bursts.**
+Manuscript: **Scattering, Scintillation, and Energetics of Fast Radio Bursts Codetected by CHIME/FRB and
+DSA-110**
 
 Per-sightline attribution of the observed DM and scattering of 12 CHIME/FRB–
-DSA-110 co-detected FRBs to the responsible medium (Milky-Way ISM/halo,
-intervening foreground-galaxy CGM, the cosmic IGM, and the host).
-
-## Convention
-
-This repo follows the `Faber<YEAR>` first-author manuscript convention: one repo
-per paper, LaTeX at the root (`main.tex`), Overleaf-synced via GitHub Integration.
-The niche scientific scope lives in the title/abstract, **not** the repo name —
-the repo is named for the author and year, not for the pipeline that feeds it.
+DSA-110 co-detected FRBs to the relevant foreground medium (Milky-Way ISM/halo,
+intervening foreground-galaxy CGM, the IGM, and the host).
 
 ## Layout
 
