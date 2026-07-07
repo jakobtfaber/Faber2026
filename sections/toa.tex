@@ -33,7 +33,7 @@ predicted geometric delay; a residual of zero indicates perfect agreement.
 
 \subsubsection{Residuals and systematics}
 
-Across the sample the residuals (Figure~\ref{fig:toa_resid}) have a mean of
+Across the sample the residuals have a mean of
 $2.42$\,ms, a standard deviation of $3.06$\,ms, and a median of $1.88$\,ms,
 consistent with the combined timing uncertainties of the two instruments, which
 are dominated by coarse time resolution and pulse-width variation. A systematic
@@ -48,24 +48,13 @@ suggestive anti-correlation with epoch ($r=-0.54$, $p=0.07$) warrants monitoring
 for long-term clock or baseline drift as the sample grows. The per-burst
 properties and residuals are listed in Table~\ref{tab:toa}.
 
-% Figure provenance:
+% Removed figure candidate:
 % - Artifact: figures/toa_crossmatch_analysis_premium.pdf
 % - Generator: pipeline/crossmatching/plotting.py, plot_toa_analysis()
 % - Inputs: pipeline/crossmatching/toa_crossmatch_results.json
-% - Regeneration command: from pipeline/, run `python crossmatching/plotting.py`,
-%   then copy crossmatching/toa_crossmatch_analysis_premium.pdf to figures/.
-% - Trust status: retained because time-of-arrival association arithmetic remains
-%   inside the trusted surface after the fit/census/budget reset.
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=\columnwidth]{toa_crossmatch_analysis_premium}
-\caption{Time-of-arrival residuals for the twelve co-detections. Left: residual
-(measured $-$ geometric) per burst, colored by DM, with the median $1\sigma$
-timing uncertainty ($\pm2.5$\,ms) shaded. Right: residual versus DM with a
-linear fit ($r=0.14$).}
-\label{fig:toa_resid}
-\end{figure}
-
+% - Reason withheld: all figures are withheld pending intentional re-addition
+%   with current trust/provenance comments.
+%
 % Removed figure candidate:
 % - Artifact: figures/systematics_check_matrix.pdf
 % - Generator: pipeline/crossmatching/plotting.py, plot_systematics_matrix()
@@ -100,5 +89,5 @@ whether the independent CHIME-side DM estimate constrains the comparison.}
 \end{deluxetable*}
 
 Each burst's timing residual, independent DM comparison (where available), and
-positional agreement are shown in Appendix~\ref{app:assoc-cards}
-(Figures~\ref{fig:assoc_grid_a} and~\ref{fig:assoc_grid_b}).
+positional agreement remain withheld pending the association and DM-observation
+re-validation pass.
