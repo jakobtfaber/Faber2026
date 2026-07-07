@@ -22,6 +22,37 @@ if rc_path.exists():
 import healpy as hp
 from mwprop.nemod.NE2025 import ne2025
 
+
+def add_mollweide_degree_labels():
+    label_style = dict(
+        fontsize=8,
+        color="0.18",
+        ha="center",
+        va="center",
+        bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.65),
+    )
+
+    for lon in [0, 60, 120, 180, 240, 300]:
+        hp.projtext(
+            lon,
+            -8,
+            rf"${lon}^\circ$",
+            lonlat=True,
+            zorder=20,
+            **label_style,
+        )
+
+    for lat in [-60, -30, 30, 60]:
+        hp.projtext(
+            0,
+            lat,
+            rf"${lat:+d}^\circ$",
+            lonlat=True,
+            zorder=20,
+            **label_style,
+        )
+
+
 def run_pixel(args):
     gl, gb = args
     Dk, Dv, Du, Dd = ne2025(ldeg=gl, bdeg=gb, dmd=30.0, ndir=-1, classic=False, dmd_only=False, do_analysis=False, verbose=False)
@@ -78,6 +109,7 @@ if __name__ == '__main__':
         unit=r"$\mathrm{DM}_{\mathrm{MW}}\ (\mathrm{pc\ cm}^{-3})$"
     )
     hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
+    add_mollweide_degree_labels()
     hp.projscatter(
         df["l_deg"],
         df["b_deg"],
@@ -102,6 +134,7 @@ if __name__ == '__main__':
         unit=r"$\log_{10}(\tau_{1\mathrm{GHz}} / \mu\mathrm{s})$"
     )
     hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
+    add_mollweide_degree_labels()
     hp.projscatter(
         df["l_deg"],
         df["b_deg"],
@@ -126,6 +159,7 @@ if __name__ == '__main__':
         unit=r"$\log_{10}(\Delta\nu_{1\mathrm{GHz}} / \mathrm{MHz})$"
     )
     hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
+    add_mollweide_degree_labels()
     hp.projscatter(
         df["l_deg"],
         df["b_deg"],
