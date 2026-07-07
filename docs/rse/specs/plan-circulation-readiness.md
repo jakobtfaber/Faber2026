@@ -6,7 +6,8 @@
 **Owner decisions recorded:** (a) circulation waits on the full scintillation
 campaign (DSA **and** CHIME) and the two-screen analysis built on it; (b) the
 rail-taxonomy presentation is retired — geometry model selection replaces it
-(objections 1–4, see CONTEXT.md "Geometry-adjudicated β"); (c) after the
+(objections 1–4; CONTEXT.md "Geometry-adjudicated β" + "Scint→scattering
+coupling"); (c) after the
 re-fit: sightline analysis, galaxy/cluster foreground comparison, and a
 synthesized propagation-vs-intrinsic interpretation are all pre-circulation
 content, not future work.
@@ -22,8 +23,9 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       placement) as geometry-adjudicating constraints/priors (recommended) vs
       a fitted two-screen scattering model. Blocks A2 design.
 - [ ] A2 **[FLITS]** Extended-medium (Williamson uniform-LOS) PBF kernel,
-      β-coupled, per band (ADR-0007 un-deferred by the rail evidence: 9/12
-      posteriors hit its re-open trigger).
+      β-coupled, per band (ADR-0007 un-deferred by the rail evidence: 10/12
+      posteriors hit its re-open trigger — the nine tabled railed rows plus
+      gate-FAIL chromatica; CAMPAIGN_REPORT's 10-member candidate set).
 - [ ] A3 **[FLITS]** Per-sightline geometry model selection (thin vs extended,
       evidence/BIC), scint-informed per A1. Interior rows (freya, phineas)
       re-adjudicated under the same machinery.
@@ -39,7 +41,8 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 - [ ] B2 **[data]** U sizing (NE2025 MW-floor rule, freya precedent in
       PROVENANCE.md) + CHIME regeneration for the six never-generated
       co-detections: zach, oran, wilhelm, johndoeii, hamilton, chromatica.
-- [ ] B3 **[data]** mahi 700–725 MHz RFI inspection before any sub-band use.
+- [ ] B3 **[data]** mahi 700–725 MHz RFI inspection before any measurement
+      uses that sub-band range.
 - [ ] B4 **[FLITS/data]** CHIME-band ACF/Δν_d measurements across the sample
       (two-screen table is DSA-band only until this lands).
 - [ ] B5 **[FLITS]** Two-screen analysis rebuilt on joint CHIME+DSA scint
@@ -72,11 +75,12 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 
 ## F. Manuscript reconciliation & polish
 
-- [ ] F1 **[ms]** Restructure abstract, §3.5, results, discussion,
-      conclusions around geometry selection; purge rail-class vocabulary and
-      all α=4-limit quoting (CONTEXT.md contract). Post-C.
+- [ ] F1 **[ms]** Restructure abstract, observations (§2), §3.5, results,
+      discussion, conclusions around geometry selection; purge rail-class
+      vocabulary and all α=4-limit quoting (CONTEXT.md contract). β-language
+      purge unblocks post-C; final content pass needs D/E (spine).
 - [ ] F2 **[ms]** `tab:beta` rework: geometry-adjudicated quoting; descriptive
-      exponential-consistency statements for ex-railed rows pending C.
+      exponential-consistency statements for ex-railed rows. Post-C3.
 - [ ] F3 **[ms]** Consistency audit (mechanical): per-section sample counts,
       retired-language sweep, table/figure provenance vs pinned pipeline,
       cross-refs. Can run now on non-β sections.
@@ -96,5 +100,7 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 
 ## Dependency spine
 
-A1 → A2/A3 · B1–B4 → B5 · (A, B5) → C1 → C3 → D → E → F1/F2 → F4/F5 → G.
-F3 and a structural F4 pass are parallelizable now; F6/F7 anytime.
+A1 → A2/A3 · B1–B4 → B5 · (A, B5) → C1+C2 → C3 (C2 gates Tier B→A
+promotion, so it precedes the pin bump) · C3 → {F2, D} · D → E → F1 →
+F4/F5 → G. F3 and a structural F4 pass on non-β sections are parallelizable
+now; F6/F7 anytime.
