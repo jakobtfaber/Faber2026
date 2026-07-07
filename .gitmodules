@@ -1,3 +1,3 @@
 [submodule "pipeline"]
 	path = pipeline
-	url = git@github.com:jakobtfaber/dsa110-FLITS.git
+	url = https://github.com/dsa110/dsa110-FLITS.git
