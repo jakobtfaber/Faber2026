@@ -173,3 +173,6 @@
 {"ts": "2026-07-07T08:09:50-0700", "agent": "codex-gpt-5/h17-dm-power", "lane": "h17", "state": "working", "note": "checking local manifest and h17 /data product mapping for DM-power run"}
 {"ts": "2026-07-07T08:10:45-0700", "agent": "cursor-composer", "lane": "repo", "state": "done", "note": "Fable 5 label-design quota hit; Opus plan + logs/codex-fable-codetection-label-design.txt"}
 {"ts": "2026-07-07T08:11:33-0700", "agent": "codex-gpt-5/h17-dm-power", "lane": "h17", "state": "working", "note": "bounded manifest-cube existence check on h17 before any rsync"}
+{"ts": "2026-07-07T08:21:45-0700", "agent": "cursor-composer/codetection-labels", "lane": "ms", "state": "working", "note": "Alt B outboard bracket labels preview on casey"}
+{"ts": "2026-07-07T08:22:30-0700", "agent": "cursor-composer/codetection-labels", "lane": "ms", "state": "done", "note": "casey outboard bracket label preview: casey_codetection_outboard_preview.png"}
+{"ts": "2026-07-07T08:23:57-0700", "agent": "antigravity-gemini/session-2026-07-07", "lane": "repo", "state": "done", "note": "cached all-sky maps to NPZ and widened vertical row spacing"}
