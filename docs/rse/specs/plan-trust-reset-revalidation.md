@@ -9,15 +9,18 @@
 
 ## Overview
 
-Owner decisions of 2026-07-06 revoked trust in every analysis product except
-TOA association arithmetic and DM_obs (CONTEXT.md "Trust reset", two waves).
-This plan is the re-validation program that restores trust: it freezes and
-pins all provenance (Phase 0), authors the re-trust contract and builds its
-missing machinery (Phase 1, V1), runs the scattering-input defect forensics
+Owner decisions of 2026-07-06 revoked trust in every analysis product
+(CONTEXT.md "Trust reset", three waves — wave 3, same night, took the last
+two retained items: TOA association arithmetic and DM_obs). This plan is
+the re-validation program that restores trust: it freezes and pins all
+provenance (Phase 0), authors the re-trust contract and builds its missing
+machinery (Phase 1, V1), runs the scattering-input defect forensics
 (Phase 2, V2), re-derives the foreground census (Phase 3, V4), re-verifies
-the DM budget implementations (Phase 4, V5), and audits the energies chain
-(Phase 5, V3). It does **not** re-run the scattering/scintillation fits —
-that is the C lane, gated on this plan plus A and B.
+the DM budget implementations (Phase 4, V5), audits the energies chain
+(Phase 5, V3), and re-derives the association arithmetic + per-telescope
+DM_obs provenance (Phase 6, V6). It does **not** re-run the
+scattering/scintillation fits — that is the C lane, gated on this plan
+plus A and B.
 
 Why this shape: the five explorations found the systemic hole is
 *provenance* (unpinned inputs, off-repo builders, removed scripts,
@@ -97,6 +100,10 @@ Load-bearing facts (paths relative to `pipeline/` = dsa110-FLITS @ `7e77437`):
 - The γ_D ≈ −5 pile-up is explained (rail study run at GAMMA_FLOOR=−10), the
   energies exporter enforces an explicit selection rule, and the chromatica
   gate contradiction has a single recorded resolution.
+- A per-burst, per-telescope DM_obs provenance table exists (value, error,
+  method, producing artifact, CHIME−DSA agreement in σ) and the TOA
+  association arithmetic is re-derived from raw inputs against the
+  committed report — the co-detection sample membership is re-certified.
 - All of the above lands as FLITS PRs; Faber2026 takes one `build:` pin bump
   at the end.
 
@@ -1358,6 +1365,98 @@ trustworthy so those re-fits can flow through it.)
 and violin figure, the enforced selection rule, the chromatica resolution
 note, flux-constant citations.
 
+## Phase 6 — V6 association + DM_obs re-validation [FLITS] (wave 3)
+
+**Objective:** per-burst, per-telescope DM_obs provenance with quantified
+CHIME↔DSA agreement; TOA association arithmetic re-derived from raw
+inputs. Re-certifies the co-detection sample membership. Runs any time
+after Phase 0; no dependence on Phases 1–5 beyond ADR-0008 acceptance.
+
+### P6.1 Anchor inventory (read-only exploration)
+
+1. The V1–V5 phases were grounded by five explorer reports; wave 3 arrived
+   after that sweep, so Phase 6 starts with its own scoped exploration.
+   Known anchors going in: `crossmatching/association.py`,
+   `toa_crossmatch.py`, `chime_singlebeam.py`;
+   `crossmatching/chime_side_inputs.json` (per-burst `dm_dsa`, `dm_chime`,
+   `dm_chime_err` — both-telescope DMs already exist here);
+   `crossmatching/association_report.json` (keys: `inputs`,
+   `expected_chance_associations`, `bursts`); tests
+   `tests/test_association.py`, `tests/test_chime_dm.py`,
+   `tests/test_chime_singlebeam_toa.py`,
+   `tests/test_crossmatching_notebook_reproduction.py`.
+2. The exploration answers, with file:line: (a) where each burst's DSA-side
+   DM comes from (which pipeline, which dedispersion criterion) and where
+   the CHIME-side values in `chime_side_inputs.json` were produced;
+   (b) which manuscript surfaces quote DM_obs and TOA
+   residuals/P_cc (sections/toa.tex, the budget table's DM_obs column,
+   observations §2); (c) whether the association arithmetic in
+   `association.py`/`toa_crossmatch.py` reproduces
+   `association_report.json` at the pin. Findings appended to
+   [research-trust-reset-revalidation.md](research-trust-reset-revalidation.md)
+   as a V6 section.
+
+### P6.2 Per-burst DM provenance table + agreement figure
+
+1. Failing test `tests/test_dm_provenance.py` (new file):
+
+   ```python
+   import csv
+   import pathlib
+
+   ROOT = pathlib.Path(__file__).parents[1]
+   TAB = ROOT / "crossmatching/dm_provenance.csv"
+
+   REQUIRED = {"nickname",
+               "dm_dsa", "dm_dsa_err", "dm_dsa_method", "dm_dsa_source",
+               "dm_chime", "dm_chime_err", "dm_chime_method",
+               "dm_chime_source", "delta_dm", "delta_dm_sigma"}
+
+
+   def test_dm_provenance_covers_all_twelve():
+       rows = list(csv.DictReader(TAB.open()))
+       assert len(rows) == 12
+       assert REQUIRED <= set(rows[0])
+       assert all(r["dm_dsa_method"] and r["dm_chime_method"]
+                  for r in rows)
+       assert all(r["dm_dsa_source"] and r["dm_chime_source"]
+                  for r in rows)
+   ```
+
+2. Implement `scripts/build_dm_provenance.py`: join
+   `chime_side_inputs.json`'s per-burst `dm_chime`/`dm_chime_err` with the
+   DSA-side DM source located in P6.1; `*_method` states the dedispersion
+   criterion (structure-maximizing vs S/N-maximizing vs catalog value),
+   `*_source` cites the producing artifact (path or DOI); `delta_dm` and
+   `delta_dm_sigma` quantify per-burst CHIME−DSA agreement. Where a value
+   has no locatable producer, the method/source cells read
+   `UNDOCUMENTED` and the row is a finding — the test still passes
+   (cells non-empty) while the report flags it.
+3. Figure (visibility): per-burst ΔDM with error bars, zero line, and a
+   σ-agreement axis — the direct answer to "by how much do they agree."
+
+### P6.3 TOA association re-derivation
+
+1. Failing check first: run the existing oracles at the pin —
+   `conda run -n flits python -m pytest tests/test_association.py
+   tests/test_chime_singlebeam_toa.py
+   tests/test_crossmatching_notebook_reproduction.py -q` — record
+   pass/fail as the baseline.
+2. Re-derive: execute `crossmatching/toa_crossmatch.py` and
+   `association.py` from their raw inputs (positions, timestamps,
+   `chime_side_inputs.json`) and diff the regenerated report against the
+   committed `crossmatching/association_report.json` (per-burst residuals,
+   `expected_chance_associations`). Byte/value parity ⇒ the arithmetic is
+   reproducible at the pin; any mismatch is a finding resolved before the
+   sample membership is re-certified.
+3. Deliverable: re-derived association table (per burst: TOA residual,
+   chance-association expectation, verdict) with the P6.2 figure in a
+   `docs/rse/specs/` report (Faber2026), closing V6.
+
+**Phase 6 deliverable (visibility):** association + DM report — the
+provenance table, the ΔDM agreement figure, the re-derived association
+table, and the list of `UNDOCUMENTED` cells (if any) as named findings.
+
 ## Success Criteria
 
 ### Automated
@@ -1373,7 +1472,8 @@ note, flux-constant citations.
   tests/test_rails_is_ssot.py tests/test_ppc.py
   tests/test_recovery_campaign.py tests/test_census_replay.py
   tests/test_census_audit.py tests/test_impact_params_independent.py
-  tests/test_macquart_oracle.py tests/test_energies_selection_rule.py -q`
+  tests/test_macquart_oracle.py tests/test_energies_selection_rule.py
+  tests/test_dm_provenance.py -q`
 - `FLITS_DATA=~/Data/Faber2026 conda run -n flits python -m pytest
   tests/test_cube_integrity.py -q` green on jakob-mbp.
 - `node .claude/workflows/fit-verify.js --list-coverage | rg -q joint_gate`.
