@@ -1,7 +1,31 @@
-\section{Withheld association-card figures}
+\section{Association cards}
 \label{app:assoc-cards}
 
-The per-burst association-card figures are intentionally withheld pending the
-association and DM-observation re-validation pass.
+This appendix collects the per-burst association-card figures referenced in the
+main text. Each card is a compact, at-a-glance cross-check that the CHIME/FRB and
+DSA-110 triggers correspond to the same astrophysical burst, and that the
+association used throughout the manuscript is internally consistent.
+
+Across the sample, the cards summarize (i) the timing consistency between the
+two pipelines after accounting for barycentric corrections and dispersion, (ii)
+sky-position consistency between the candidate localizations (to the extent
+available for each burst), and (iii) dispersion-measure consistency and
+bookkeeping (e.g., the CHIME/FRB-reported DM compared to any independently
+reconstructed DM used in downstream analysis). Many cards also include catalog
+context (nearby galaxies, foreground structures, or survey footprints) that is
+used as a qualitative sanity check on the association and as a pointer to the
+foreground-census layer described in the main text.
+
+When reading the cards, the most important failure modes they are designed to
+catch are: a mis-identified counterpart between instruments, a bookkeeping
+mismatch (wrong TOA, wrong DM, or wrong metadata version), or an association
+that is only explainable by implausible timing/DM offsets. We treat the cards as
+validation artifacts: they motivate which bursts advance to the joint
+DM/scattering analysis, but we avoid over-interpreting any individual panel
+beyond confirming that the association inputs are coherent.
+
+\clearpage
+\input{sections/association_cards.tex}
+\clearpage
 
 \FloatBarrier
