@@ -21,9 +21,15 @@ Full protocol: `docs/rse/journal-protocol.md`. Summary:
 
 - The journal (`docs/rse/journal.jsonl`) is append-only; corrections are
   new entries. It rides along in every doc/code commit.
-- Codex sessions get hook reminders via `.codex/hooks.json`; a launchd
-  watchdog (`scripts/journal-watchdog.sh`) logs unattributed activity for
-  anything else. Do not rely on the watchdog — self-report.
+- This file is advisory — it has no clock and enforces nothing. The
+  mechanical layers: Codex hook reminders (`.codex/hooks.json`), Cursor
+  hooks (`.cursor/hooks.json`: cadence reminder + an afterFileEdit
+  fallback that auto-appends an `[auto]` entry when you edit while the
+  journal is ≥10 min stale), and a launchd watchdog
+  (`scripts/journal-watchdog.sh`) that logs unattributed activity for
+  everything else. Do not rely on the fallbacks — self-report; an
+  `[auto]`/unattributed entry on the shared board means your session
+  failed the protocol.
 - git authorship does not identify agents here; the journal `agent` field
   is the only attribution. Unattributed work gets flagged on the shared
   readiness board.

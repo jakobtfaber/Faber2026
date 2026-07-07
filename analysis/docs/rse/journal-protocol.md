@@ -68,13 +68,26 @@ the readiness board renders it.
      `.git/journal-last-nag`, untracked). An active session therefore
      journals every ~10 min even during long autonomous turns; an idle
      session triggers nothing (nothing is being worked on).
-6. **Non-Claude harnesses** (parity landed 2026-07-06 ~21:30):
-   - **Codex**: both hooks mirrored in `.codex/hooks.json`
-     (PostToolUse cadence + UserPromptSubmit staleness; scripts resolve
-     the repo root via `git rev-parse --show-toplevel`, no
-     Claude-specific env needed).
-   - **Cursor / Antigravity / anything reading AGENTS.md**: instruction
-     layer in root `AGENTS.md` (no mechanical hook surface — behavioral).
+6. **Non-Claude harnesses** (parity landed 2026-07-06 ~21:30; Cursor
+   mechanical layer + honesty pass 2026-07-06 ~21:45). Be clear about
+   what each layer guarantees — an instruction file has no clock, so
+   only hooks and the watchdog are *mechanical*; `AGENTS.md` is
+   *advisory only* and enforces nothing:
+   - **Codex** (mechanical, best-effort): both hooks mirrored in
+     `.codex/hooks.json` (PostToolUse cadence + UserPromptSubmit
+     staleness; scripts resolve the repo root via
+     `git rev-parse --show-toplevel`). Unverified that Codex ingests
+     the injected JSON — the watchdog is the guaranteed floor.
+   - **Cursor** (mechanical): `.cursor/hooks.json` registers
+     `scripts/journal-cadence-cursor-hook.sh` (postToolUse — same
+     10-min trigger, Cursor's `additional_context` output shape) and
+     `scripts/journal-cursor-afteredit-hook.sh` (afterFileEdit —
+     self-journaling fallback: if a Cursor session edits a file while
+     the journal is ≥10 min stale, the hook itself appends an
+     attributed `[auto]` entry; no model cooperation needed).
+   - **Antigravity / Gemini / anything else**: no hook surface —
+     watchdog detection is the ceiling. Root `AGENTS.md` states the
+     protocol for them, but it is a courtesy sign, not a trigger.
    - **Wall-clock backstop, all harnesses**: launchd agent
      `com.jakobfaber.faber2026-journal-watchdog` (plist source:
      `scripts/launchd/`, installed to `~/Library/LaunchAgents/`) runs
@@ -82,6 +95,7 @@ the readiness board renders it.
      in the last 10 min while the journal is ≥10 min stale, it appends an
      `unattributed activity` entry naming the touched files — the board
      then shows the honest gap even if the writer never self-reports.
+     Detection only: it cannot make a session self-report intent.
      Log: `~/logs/faber2026-journal-watchdog.log`.
    (A CLAUDE.md pointer to this protocol is still pending: the file was
    held open in the owner's editor when the protocol landed, 2026-07-06
