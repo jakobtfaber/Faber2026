@@ -2,11 +2,10 @@
 \label{sec:results}
 
 The association tests, the foreground census, and the dispersion-budget
-decomposition have passed re-validation and are reported below. Other results
-remain withheld: scattering fits for individual sightlines, scintillation
-products, turbulence parameters, burst energies, and the measured-versus-predicted
-scattering comparison. Those products still depend on the checks in the
-circulation-readiness plan.
+decomposition are reported below. The scattering fits for individual sightlines,
+the scintillation products, the turbulence parameters, the burst energies, and
+the measured-versus-predicted scattering comparison are presented in the
+following subsections as they are finalized.
 
 \FloatBarrier
 \subsection{Association of the co-detections}
@@ -15,7 +14,7 @@ circulation-readiness plan.
 All twelve candidate pairs pass the association tests of
 Section~\ref{sec:toa}. Under the conservative, chance-maximizing windows of
 Section~\ref{sec:toa-pcc}, every pair has a chance-coincidence probability
-$P_{\rm cc}<10^{-8}$---fewer than one in ten million such pairings would be
+$P_{\rm cc}<10^{-8}$---fewer than one in a hundred million such pairings would be
 expected to arise by chance---and passes the positional-coincidence check; the
 timing residuals, referenced to
 400\,MHz under the shared DSA-DM convention, are consistent with the
@@ -50,16 +49,19 @@ and FRB~20240203A is additionally outside the deep footprints. One sightline
 (FRB~20230814B) crosses a foreground halo in the
 galaxy-interior regime ($b \approx 4.6$\,kpc), where the reported column is
 capped at its $b=0.1\,R_{\rm vir}$ value rather than extrapolated through the
-core. Second, the host residuals of the redshift-constrained sightlines are
-modest: $\mathrm{DM_{host}} \lesssim 100\,\mathrm{pc\,cm^{-3}}$ for all but
-one (FRB~20240229A, $167\,\mathrm{pc\,cm^{-3}}$), consistent with hosts that
-contribute a minority of the extragalactic column. Third, the two
-highest-redshift sightlines (FRB~20220310F, FRB~20221203A) return small
-negative residuals; as quantified in the table notes, at these redshifts the
-Macquart mean dominates the budget, so the negative values bound the
-sightline-to-sightline scatter about the cosmological mean rather than
-implying an unphysical host. The three sightlines without spectroscopic host
-redshifts are excluded from all distance-dependent terms
+core. Second, the forward-modeled host posteriors
+(Section~\ref{sec:dm}, Appendix~\ref{app:host-forward-model}) are broad and
+asymmetric, dominated by the cosmological scatter: their medians span
+$\mathrm{DM_{host}}\approx10$--$210\,\mathrm{pc\,cm^{-3}}$, the largest on
+FRB~20240229A ($211^{+46}_{-112}\,\mathrm{pc\,cm^{-3}}$), and every sightline is
+consistent with a host contributing a minority of the extragalactic column once
+the width of the cosmological term is folded in. Third, the two
+highest-redshift sightlines (FRB~20220310F, FRB~20221203A), whose
+mean-subtracted point residuals were negative, have host posteriors consistent
+with zero ($P(\mathrm{DM_{host}}<0)\approx0.45$; Table~\ref{tab:budget}); those
+negative point values reflected the skew of $P(\mathrm{DM_{cosmic}}\,|\,z)$ at
+these redshifts, not an unphysical host. The three sightlines without
+spectroscopic host redshifts are excluded from all distance-dependent terms
 (Table~\ref{tab:budget}, note p).
 
 The predicted intervening pulse broadening from the thin-screen two-phase
@@ -83,8 +85,17 @@ characteristic radius. The FRB~20230307A sightline passes at $b/R_{500}=0.83$
 from the \citet{WenHan2024} cluster J115120.4$+$714435 ($z=0.200$,
 $\log M_{500}=14.1$), for which the two-phase modified-NFW model predicts an
 intracluster column of order $160\,\mathrm{pc\,cm^{-3}}$
-(Figure~\ref{fig:clusters_icm}). This is the single dominant intervening system
-in the sample. The other foreground clusters recovered along this and the two
+(Figure~\ref{fig:clusters_icm}). This column is uncertain at the factor-of-two
+level: an X-ray/SZ-motivated isothermal $\beta$-model with the same $M_{500}$
+and a cosmic gas fraction gives a somewhat higher central value
+($\approx250\,\mathrm{pc\,cm^{-3}}$), and propagating the richness-based
+$M_{500}$ ($\sim\!0.2$\,dex scatter), the gas fraction ($f_{\rm gas}=0.10$--$0.16$),
+and the profile shape spans $\approx100$--$560\,\mathrm{pc\,cm^{-3}}$
+(Appendix~\ref{app:host-forward-model}). The mNFW profile is calibrated on
+$\sim\!L_\star$ halos \citep{ProchaskaZheng2019} and is not guaranteed to hold at
+$\log M_{500}=14.1$; its value sits near the low end of the $\beta$-model range
+and should be read as a conservative estimate. This is nonetheless the single
+dominant intervening system in the sample. The other foreground clusters recovered along this and the two
 other cluster-bearing sightlines all lie beyond $R_{500}$, where the modeled
 column drops steeply; they are excluded from the budget even where the profile
 remains formally nonzero, and none approaches the FRB~20230307A cluster in

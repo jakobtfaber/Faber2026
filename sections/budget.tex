@@ -37,7 +37,21 @@ profile from \citet{ProchaskaZheng2019}. Such intervening halos can imprint
 measurable dispersion and, where the gas is turbulent, scattering on FRB
 sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
 yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
-The residual after the modeled terms are removed is attributed to the host.
+
+Rather than attribute the arithmetic residual of the mean-subtracted budget to
+the host, we forward-model $\mathrm{DM_{host}}$ as a posterior. The cosmological
+term is drawn from the full, skewed conditional distribution
+$P(\mathrm{DM_{cosmic}}\,|\,z)$---the \citet{Macquart2020} functional form with
+fractional scatter $\sigma_{\rm DM}=F\,z^{-1/2}$, $F\in[0.25,0.40]$
+\citep{McQuinn2014, James2022}---and the Galactic-disk, Galactic-halo, and
+intervening columns are drawn from their own priors
+(Appendix~\ref{app:host-forward-model}). We evaluate
+$\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-\mathrm{DM_{cosmic}}-
+\mathrm{DM_{int}}$ per draw. Because $P(\mathrm{DM_{cosmic}})$ is right-skewed,
+subtracting its \emph{mean}---as an arithmetic residual does---biases the
+inferred host low; sampling the full distribution removes that bias and returns
+an asymmetric posterior with a well-defined $P(\mathrm{DM_{host}}<0)$ per
+sightline (Table~\ref{tab:budget}, Appendix~\ref{app:host-forward-model}).
 
 \subsection{Intervening Foreground Galaxies and Clusters}
 \label{sec:foreground}
@@ -131,6 +145,20 @@ formally shallow empirical scaling is not interpreted by itself as a turbulence
 spectral index; it instead indicates that the assumed scattering family, burst
 morphology, or inertial-range closure is incomplete.
 
+The square-law endpoint requires a further caution that we build into the
+results rather than append as a caveat. When the diffractive scale drops below
+the turbulence inner scale, the phase structure function is locally quadratic
+and $\alpha\to4$ regardless of the underlying spectral index, so an
+inner-scale-dominated medium and a genuine $\beta=4$ spectrum are observationally
+degenerate \citep{Cordes2016, Cordes2025}. A posterior that concentrates at
+$\beta=4$ is therefore \emph{not} reported as a measurement of square-law
+turbulence: it marks the closure regime in which the thin-screen inertial-range
+mapping no longer determines $\beta$. Accordingly, the per-sightline results
+table (Section~\ref{sec:results-alpha}) will carry an explicit closure-regime
+label---interior (a resolved $\beta$ within the inertial range) versus
+square-law/inner-scale limited---alongside each entry, so that no square-law
+endpoint is read as an inertial-range spectral index.
+
 \subsubsection{Sub-band validation of the frequency scaling}
 \label{sec:subband}
 \label{sec:beta-subband}
@@ -144,9 +172,22 @@ the exponentially-modified Gaussian---to each sub-band independently, leaving th
 scattering time $\tau$ free at every frequency. Because each $\tau_i$ is measured
 per sub-band with no power law imposed, the slope of $\tau_i(\nu_i)$ is an
 estimate of the frequency scaling that shares neither parametrization nor
-likelihood with the joint two-dimensional fit. The sub-band validation figure
-and any event-level sub-band comparisons are withheld until the underlying fits
-have passed re-validation.
+likelihood with the joint two-dimensional fit.
+
+This cross-check is a slope diagnostic, not an independent turbulence
+measurement, and we treat it as such for a specific reason. Each sub-band $\tau_i$
+is itself fit with an exponential (EMG) kernel---the $\beta=4$ family the joint
+fit is designed to avoid privileging---so each $\tau_i$ inherits a shape-mismatch
+bias wherever the true PBF is not exponential. The sub-band \emph{slope} is
+informative only insofar as that bias is common to all sub-bands and cancels in
+the ratio; it does not cancel when the mismatch is frequency-dependent, which is
+the generic case (the fraction of the pulse in the power-law tail, and hence the
+bias on a per-band exponential $\tau_i$, itself varies with frequency). We
+therefore report the sub-band slope as a validation diagnostic---a consistency
+check on the joint-fit frequency scaling---and never as a measurement of the
+turbulence spectral index. The sub-band validation figure and any event-level
+sub-band comparisons are withheld until the underlying fits have passed
+re-validation.
 
 % TODO(methods-subband-validation): Restore a sub-band validation artifact only
 % after fit re-validation. The restored figure should state the included bursts,
@@ -166,7 +207,20 @@ matched-filter likelihood), and the recovered gain absorbs both the burst
 spectrum and the scintillation pattern. This removes the spectral and
 scintillation structure from the residual, so that the reduced $\chi^2$ and the
 lag-1 residual autocorrelation become meaningful quality gates, and it lowers
-the sampled dimensionality. We
+the sampled dimensionality.
+
+Because the marginalization deliberately absorbs the scintillation pattern into
+the gain, the scattering fit does not measure scintillation: the
+decorrelation-bandwidth products used later
+(Section~\ref{sec:results-scintillation}) come from a separate
+autocorrelation-function analysis path applied to the same dynamic spectra, not
+from this likelihood. The one interaction to guard against is at low
+signal-to-noise, where a fully free per-channel gain can absorb genuine
+scattering-induced spectral smearing into the spectral envelope and thereby bias
+the scattering time low; we therefore keep the gain prior informative (finite
+width) rather than flat, and verify on the re-validated fits that the
+$\tau_{1\,\mathrm{GHz}}$ posterior is stable against the gain-prior width before
+quoting any low-$\tau$ result. We
 sample the posterior by nested sampling \citep{Skilling2004}, as implemented in
 \texttt{dynesty} \citep{Speagle2020}, and quality-gate each fit on its reduced
 $\chi^2$ and residual whiteness, treating $R^2$ and residual normality as
@@ -204,4 +258,3 @@ fits pass the same check. A clean single-component co-detection in our sample,
 for which the joint fit returns a well-constrained $\beta$ with white residuals,
 validates the method; accepted multi-component cases will be presented in
 Section~\ref{sec:results-alpha} after re-validation.
-% Validating clean case = burst internally labelled "FRB 20230325A" (swap to TNS name).

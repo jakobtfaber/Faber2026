@@ -49,12 +49,88 @@ impact-parameter threshold rather than a hand-picked selection.
     impact parameter, the dashed line is $R_{500}$, and the shaded region is
     inside $R_{500}$. Only J115120.4$+$714435 ($b/R_{500}=0.83$) meets the
     $b\le R_{500}$ budget cut and enters $\mathrm{DM_{int}}$
-    ($\sim$160\,pc\,cm$^{-3}$; Table~\ref{tab:foreground}); the others lie beyond
+    ($\sim$160\,pc\,cm$^{-3}$ from this mNFW profile, factor-of-two uncertain across
+    profile and cluster-parameter systematics,
+    Appendix~\ref{app:host-forward-model}; Table~\ref{tab:foreground}); the
+    others lie beyond
     $R_{500}$ and are excluded even where the profile remains formally nonzero
     (J115128.2$+$713637 at $b/R_{500}=1.25$, $\sim$95\,pc\,cm$^{-3}$). Cluster
     masses ($\log M_{500}$) and radii are from the \citet{WenHan2024} DESI
     Legacy/WISE catalog.}
     \label{fig:clusters_icm}
+\end{figure*}
+
+\clearpage
+\FloatBarrier
+
+\section{Forward-modeled host dispersion}
+\label{app:host-forward-model}
+
+The host term of Table~\ref{tab:budget} is a forward-modeled posterior rather
+than an arithmetic residual (Section~\ref{sec:dm}). For each redshift-constrained
+sightline we draw $N=2\times10^{5}$ Monte-Carlo samples of
+$\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW,ISM}}-\mathrm{DM_{MW,halo}}
+-\mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$, propagating priors on the non-host
+terms:
+\begin{itemize}
+\item \emph{Cosmological.} $\mathrm{DM_{cosmic}}=\Delta\,\langle\mathrm{DM_{cosmic}}
+\rangle(z)$ with $\Delta$ from the \citet{Macquart2020} probability density
+$p(\Delta)\propto\Delta^{-\beta'}\exp[-(\Delta^{-\alpha'}-C_0)^2/(2\alpha'^2
+\sigma_{\rm DM}^2)]$, $\alpha'=\beta'=3$, $\sigma_{\rm DM}=F\,z^{-1/2}$, and $F$
+uniform on $[0.25,0.40]$ \citep{McQuinn2014, James2022}; $C_0$ is fixed so
+$\langle\Delta\rangle=1$.
+\item \emph{Galactic disk.} The NE2025 disk column with a $30\%$ lognormal
+uncertainty.
+\item \emph{Galactic halo.} $40\,\mathrm{pc\,cm^{-3}}$ median, lognormal with a
+factor-$\sim\!2$ span ($2\sigma$ range $\approx[20,80]\,\mathrm{pc\,cm^{-3}}$;
+\citealt{YamasakiTotani2020, KeatingPen2020, Cook2023}).
+\item \emph{Intervening.} The Table~\ref{tab:foreground} column with a $40\%$
+(measured-mass halo), factor-$2$ (assumed-mass halo), or $30\%$ (cluster)
+lognormal uncertainty.
+\end{itemize}
+The resulting posteriors are broad and asymmetric, dominated at higher redshift
+by the cosmological scatter (Figure~\ref{fig:dm_host_posteriors},
+Table~\ref{tab:host-forward-model}); their medians exceed the mean-subtracted
+residuals because $P(\mathrm{DM_{cosmic}})$ is right-skewed. The prior widths
+above are fiducial and are documented so they can be revised; the analysis and
+both artifacts are reproduced by \texttt{scripts/dm\_budget\_uncertainty.py}.
+
+\begin{deluxetable}{lccc}
+\tabletypesize{\footnotesize}
+\tablecaption{Forward-modeled host-dispersion posteriors for the nine
+redshift-constrained sightlines: median with $16$th--$84$th-percentile interval,
+and $P(\mathrm{DM_{host}}<0)$. DM in $\mathrm{pc\,cm^{-3}}$.
+\label{tab:host-forward-model}}
+\tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$\mathrm{DM_{host}}$} &
+  \colhead{$P(\mathrm{DM_{host}}<0)$}}
+\startdata
+FRB 20220207C & $0.043$ & $51^{+37}_{-49}$   & $0.15$ \\
+FRB 20220310F & $0.479$ & $12^{+69}_{-167}$  & $0.45$ \\
+FRB 20220506D & $0.300$ & $61^{+54}_{-117}$  & $0.26$ \\
+FRB 20221113A & $0.251$ & $65^{+54}_{-102}$  & $0.23$ \\
+FRB 20221203A & $0.510$ & $14^{+97}_{-196}$  & $0.46$ \\
+FRB 20230307A & $0.271$ & $95^{+87}_{-138}$  & $0.23$ \\
+FRB 20230913A & $0.302$ & $146^{+61}_{-123}$ & $0.14$ \\
+FRB 20240203A & $0.074$ & $109^{+29}_{-45}$  & $0.04$ \\
+FRB 20240229A & $0.287$ & $211^{+46}_{-112}$ & $0.08$ \\
+\enddata
+\end{deluxetable}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/dm_host_posteriors.pdf}
+    \caption{\emph{Left:} forward-modeled host-dispersion posteriors (median and
+    $16$th--$84$th-percentile interval, dark points) for the nine
+    redshift-constrained sightlines, compared with the arithmetic
+    mean-subtracted residual (orange crosses). Sampling the full, skewed
+    $P(\mathrm{DM_{cosmic}}\,|\,z)$ shifts the posterior median above the
+    mean-subtracted value and turns the two formerly negative residuals
+    (FRB 20220310F, FRB 20221203A) into posteriors consistent with zero.
+    \emph{Right:} the FRB 20230307A intracluster column from an X-ray-motivated
+    isothermal $\beta$-model Monte Carlo (over $M_{500}$, $f_{\rm gas}$, and
+    profile shape); the vertical line marks the two-phase mNFW value
+    ($\sim\!160\,\mathrm{pc\,cm^{-3}}$) adopted in the budget.}
+    \label{fig:dm_host_posteriors}
 \end{figure*}
 
 \clearpage
