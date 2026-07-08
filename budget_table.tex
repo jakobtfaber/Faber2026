@@ -36,8 +36,8 @@ FRB 20230307A & $0.271$ & 610 & 78  & 235 & 241 & CGM      & assumed  & $56$   &
 FRB 20230325A & \nodata\tablenotemark{p} & 912 & 108 & \nodata & 10 & CGM & assumed & \nodata & $0.00052$ \\
 FRB 20230913A & $0.302$ & 518 & 115 & 264 & 41  & CGM      & assumed  & $98$   & $0.017$ \\
 FRB 20240122A\tablenotemark{u} & \nodata\tablenotemark{p} & 960 & 171 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
-FRB 20240203A & $0.074$ & 272 & 116 & 62  & 0   & CGM      & assumed  & $94$   & $0$ \\
-FRB 20240229A & $0.287$ & 491 & 78  & 250 & 0   & CGM      & assumed  & $163$  & $0$ \\
+FRB 20240203A\tablenotemark{u} & $0.074$ & 272 & 116 & 62  & 0\tablenotemark{m}   & CGM      & assumed  & $94$   & $0$ \\
+FRB 20240229A & $0.287$ & 491 & 78  & 250 & 0\tablenotemark{m}   & CGM      & assumed  & $163$  & $0$ \\
 FRB 20230814B & \nodata\tablenotemark{p} & 696 & 145 & \nodata & 70\tablenotemark{c} & interior & assumed & \nodata & $0.024$ \\
 \enddata
 \tablenotetext{p}{Host redshift unknown (placeholder); the cosmological and host
@@ -47,10 +47,17 @@ quantity.}
 $b\approx4.6$\,kpc); $\mathrm{DM_{int}}$ is capped at the $b=0.1\,R_{\mathrm{vir}}$
 value (raw core-extrapolated column $71\,\mathrm{pc\,cm^{-3}}$).}
 \tablenotetext{u}{Position lies outside the deep-imaging survey footprints
-(DESI Legacy DR8-North; SDSS DR12 returns no redshifts here), and the all-sky
-catalogs return no foreground system: the intervening term is
-\emph{unconstrained by the searched surveys}, not excluded---absence of
-coverage is not absence of foreground (Section~\ref{sec:obs-fg}).}
+(DESI Legacy DR8-North; SDSS DR12 returns no redshifts here), so only the
+shallow all-sky catalogs (NED, GLADE+) constrain the sightline: the
+intervening term is \emph{unconstrained by the searched surveys}, not
+excluded---absence of coverage is not absence of foreground
+(Section~\ref{sec:obs-fg}).}
+\tablenotetext{m}{Confirmed foreground halos are present but lie beyond the
+virial radii implied by their assumed halo masses
+($b/R_{\mathrm{vir}}\approx1.3$--$1.8$ at the fallback mass), so the modeled
+two-phase column vanishes. $\mathrm{DM_{int}}=0$ here is conditional on the
+assumed masses, not evidence of a gas-free sightline; a measured mass for any
+of these halos could make the column nonzero.}
 \tablecomments{A negative $\mathrm{DM_{host}}$ (FRB 20220310F, FRB 20221203A)
 means the modeled Galactic, cosmological, and intervening terms over-predict
 $\mathrm{DM_{obs}}$. These are the two highest-redshift sightlines
