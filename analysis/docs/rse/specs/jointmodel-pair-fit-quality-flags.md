@@ -40,6 +40,13 @@ band-integrated peak check did not split the DSA structure cleanly for this
 row, so the original flag was intentionally metadata/visual rather than an
 unmatched-peak claim.
 
+`zach` was flagged because the beta-campaign `_C1D1` artifact captured only
+the leading DSA structure and missed the trailing DSA sub-burst complex. That
+flag is now retired for the manuscript morphology-audit panel. The promoted
+diagnostic product is a corrected `_C2D4_cwin` fit with a trailing CHIME
+component and a DSA one-plus-three component structure; the rendered panel uses
+extra Zach-specific time padding so the trailing DSA complex is not cropped.
+
 ## Interpretation
 
 - `whitney_fine`: the current beta-native `_C2D2` artifact has two DSA
@@ -47,8 +54,6 @@ unmatched-peak claim.
   sub-burst structure (`t0_D1 ~= 6.87 ms`, `zeta_D1 ~= 48.2 ms`; `t0_D2 ~=
   28.56 ms`, `zeta_D2 ~= 0.033 ms`). The rendered model therefore does not
   account for both visible DSA sub-bursts.
-- `zach`: only a `_C1D1` beta-native artifact is present locally; it captures
-  the leading DSA structure but misses the trailing DSA components.
 - `hamilton`: the current shared-zeta fit behaves as a one-component CHIME
   model and misses the leading CHIME component.
 - `wilhelm`: the current shared-zeta fit misses leading DSA structure and has a
@@ -61,6 +66,11 @@ Retired flag:
 - `johndoeII`: fixed by the promoted beta-native `_C2D2` product
   (`beta=3.936`, `alpha=4.07` as a railed-hi limit, `tau_1GHz=2.219 ms`,
   `chi2_C/D=1.09/1.23`). The old `_C2D1` product is superseded.
+- `zach`: fixed for the morphology-audit figure by the promoted `_C2D4_cwin`
+  diagnostic product (`beta=3.990`, `alpha=4.00` as a beta-limit product,
+  `tau_1GHz=0.186 ms`, `chi2_C/D=1.35/1.02`). The old `_C1D1` panel is
+  superseded. The DSA initial-pulse residual remains a caveat, but the trailing
+  DSA cluster is no longer missed by the model.
 
 ## Required follow-up
 
