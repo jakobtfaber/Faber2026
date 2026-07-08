@@ -7,7 +7,7 @@ DSA-110 triggers correspond to the same astrophysical burst, and that the
 association used throughout the manuscript is internally consistent.
 
 Across the sample, the cards summarize (i) the timing consistency between the
-two pipelines after accounting for barycentric corrections and dispersion, (ii)
+two pipelines after accounting for barycentric corrections and dispersive delays, (ii)
 sky-position consistency between the candidate localizations (to the extent
 available for each burst), and (iii) dispersion-measure consistency and
 bookkeeping (e.g., the CHIME/FRB-reported DM compared to any independently
@@ -30,10 +30,10 @@ beyond confirming that the association inputs are coherent.
 
 \FloatBarrier
 
-\section{Intracluster dispersion for foreground clusters}
+\section{Intracluster dispersion measures for foreground clusters}
 \label{app:clusters}
 
-This appendix collects the per-cluster hot-gas dispersion columns behind the
+This appendix collects the per-cluster hot-gas dispersion-measure columns behind the
 $b\le R_{500}$ budget cut described in the main text. Only the single cluster
 that pierces the halo enters $\mathrm{DM_{int}}$; the remaining panels show the
 excluded clusters and the near-miss that motivate the cut being a principled
@@ -42,9 +42,9 @@ impact-parameter threshold rather than a hand-picked selection.
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/clusters_icm.pdf}
-    \caption{Predicted intracluster hot-gas dispersion for the four foreground
+    \caption{Predicted intracluster hot-gas dispersion measure for the four foreground
     clusters along the FRB~20230307A sightline. Each panel plots the
-    modified-NFW hot-baryon dispersion column $\mathrm{DM}(b)$ against projected
+    modified-NFW hot-baryon dispersion-measure column $\mathrm{DM}(b)$ against projected
     impact parameter $b$ (blue); the vertical marker is the sightline's measured
     impact parameter, the dashed line is $R_{500}$, and the shaded region is
     inside $R_{500}$. Only J115120.4$+$714435 ($b/R_{500}=0.83$) meets the
@@ -63,7 +63,7 @@ impact-parameter threshold rather than a hand-picked selection.
 \clearpage
 \FloatBarrier
 
-\section{Forward-modeled host dispersion}
+\section{Forward-modeled host dispersion measure}
 \label{app:host-forward-model}
 
 The host term of Table~\ref{tab:budget} is a forward-modeled posterior rather
@@ -97,7 +97,7 @@ both artifacts are reproduced by \texttt{scripts/dm\_budget\_uncertainty.py}.
 
 \begin{deluxetable}{lccc}
 \tabletypesize{\footnotesize}
-\tablecaption{Forward-modeled host-dispersion posteriors for the nine
+\tablecaption{Forward-modeled host-DM posteriors for the nine
 redshift-constrained sightlines: median with $16$th--$84$th-percentile interval,
 and $P(\mathrm{DM_{host}}<0)$. DM in $\mathrm{pc\,cm^{-3}}$.
 \label{tab:host-forward-model}}
@@ -119,7 +119,7 @@ FRB 20240229A & $0.287$ & $211^{+46}_{-112}$ & $0.08$ \\
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/dm_host_posteriors.pdf}
-    \caption{\emph{Left:} forward-modeled host-dispersion posteriors (median and
+    \caption{\emph{Left:} forward-modeled host-DM posteriors (median and
     $16$th--$84$th-percentile interval, dark points) for the nine
     redshift-constrained sightlines, compared with the arithmetic
     mean-subtracted residual (orange crosses). Sampling the full, skewed

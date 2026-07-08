@@ -33,8 +33,8 @@ cosmological mean $\langle\mathrm{DM_{cosmic}}\rangle(z)$ follows the Macquart
 relation \citep{Macquart2020}. For the sightlines that cross a foreground
 galaxy we model the intervening circumgalactic column $\mathrm{DM_{int}}$ as a
 two-phase (hot modified-NFW plus clumpy cool) medium, taking the mNFW gas
-profile from \citet{ProchaskaZheng2019}. Such intervening halos can imprint
-measurable dispersion and, where the gas is turbulent, scattering on FRB
+profile from \citet{ProchaskaZheng2019}. Such intervening halos can add a
+measurable DM contribution and, where the gas is turbulent, scattering on FRB
 sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
 yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
 
@@ -72,10 +72,10 @@ For each retained system we model the gas as a two-phase medium---a hot
 modified-NFW component \citep{ProchaskaZheng2019} plus a clumpy cool
 component---and integrate the electron column along the impact-parameter chord.
 The cluster contribution uses the $M_{500}$ and $R_{500}$ of the
-\citet{WenHan2024} catalog to fix the halo, evaluating the intracluster
-dispersion on the modified-NFW profile at the sightline's impact parameter.
+\citet{WenHan2024} catalog to fix the halo, computing the intracluster DM from
+the modified-NFW profile at the sightline's impact parameter.
 The $b\le R_{500}$ cut retains just the one cluster that pierces the halo; the
-per-cluster dispersion columns for all four foreground clusters along the
+per-cluster DM columns for all four foreground clusters along the
 FRB~20230307A sightline are shown in Figure~\ref{fig:clusters_icm}
 (Appendix~\ref{app:clusters}).
 
@@ -132,7 +132,7 @@ corresponding phase structure function $D_\phi(\rho)\propto\rho^{\beta-2}$, and
 the frequency scaling index follows as $\alpha=2\beta/(\beta-2)$ under the
 thin-screen assumption. The free parameters of the joint fit are
 $(\tau_{1\,\mathrm{GHz}},\beta)$ and the per-telescope pulse parameters
-(arrival time $t_0$, intrinsic width $\zeta$, and a residual dispersion
+(arrival time $t_0$, intrinsic width $\zeta$, and a residual DM offset
 $\delta\mathrm{DM}$). The fit operates on the CHIME/FRB and DSA-110 dynamic
 spectra simultaneously, with the PBF shape and $\alpha$ both derived from
 $\beta$ at every likelihood evaluation rather than chosen independently.

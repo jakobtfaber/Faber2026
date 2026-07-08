@@ -1,7 +1,7 @@
 \subsection{Time-of-Arrival Crossmatching}
 \label{sec:toa}
 
-Before attributing the dispersion and scattering budgets we verify that the
+Before attributing the dispersion-measure and scattering budgets we verify that the
 twelve events are genuine co-detections---the same burst seen by both
 facilities, with arrival times consistent under the cold-plasma dispersion law
 and the geometric light-travel delay between the sites. The wide baseline
@@ -53,7 +53,7 @@ $\Omega_{\rm win}$ is the sky area of the positional window, $2\,\Delta t$ is th
 full arrival-time window (a $\pm\Delta t$ coincidence gate), and
 $f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM})$ is the fraction of the CHIME DM
 distribution lying within $\pm\Delta\mathrm{DM}$ of the burst's DM---the factor
-that additionally requires a chance interloper to match in dispersion, not only in
+that additionally requires a chance interloper to match in DM, not only in
 time and position. For such a rare-event Poisson process the probability that
 \emph{at least one} unrelated burst falls in the window is
 \begin{equation}
@@ -113,7 +113,7 @@ baseline, $|\tau_{\rm geo}| \le |\mathbf{p}_2-\mathbf{p}_1|/c \approx 4.5\,$ms f
 any source direction. The residual is therefore not error-free but carries a
 per-burst systematic of order the inter-site clock/timestamp alignment
 ($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight DM-constrained bursts, the
-residual dispersion left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
+residual dispersive delay left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
 CHIME-referenced shift for the largest offset (FRB~20220207C, $\Delta\mathrm{DM}
 =-0.84\,\mathrm{pc\,cm^{-3}}$) were the CHIME arrival re-referenced at its own DM,
 a convention-dependent term reported separately rather than folded in. We accept
@@ -142,7 +142,7 @@ also pass the CHIME--DSA DM-agreement check; the four remaining bursts are marke
 `assoc.~(pos.)' in Table~\ref{tab:sample}: their association rests on
 position and timing alone, because their CHIME sub-band fits did not provide
 a constraining independent DM. For those four we set $f_{\rm DM}=1$ in
-Eq.~\eqref{eq:pcc_mu}---the dispersion criterion is not imposed, so their
+Eq.~\eqref{eq:pcc_mu}---the DM criterion is not imposed, so their
 $P_{\rm cc}$ is a time-and-position bound only, consistent with the
 position-only verdict; the eight DM-constrained bursts carry the full
 $f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM})<1$ factor. The reported
