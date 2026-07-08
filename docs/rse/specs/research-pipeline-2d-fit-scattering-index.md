@@ -233,10 +233,13 @@ Several layers constrain the index, in different vocabularies:
   (aggregate `joint_gate_verdicts.{md,csv}`).
 - **ADR-0004** (accepted 2026-06-24): joint-gate α floor lowered 1.5 → 1.0;
   [1.0, 2.0) reclassified sub-Kolmogorov MARGINAL rather than FAIL; motivated
-  by johndoeII (α ≈ 1.37 mixed-era, 1.53 all-exp).
-- **ADR-0005** (locked 2026-06-26): citable-α roster. Tier A (fully
+  by the now-retired JohnDoeII C2D1/free-α row (α ≈ 1.37 mixed-era, 1.53
+  all-exp). The current beta-native JohnDoeII product is C2D2 and rails at the
+  β=4 exponential limit (`alpha=4` as a geometry-conditioned limit).
+- **ADR-0005** (locked 2026-06-26): legacy citable-α roster. Tier A (fully
   adjudicated): casey 2.40, wilhelm 2.56, chromatica 3.28, zach 3.32,
-  freya 4.36. Tier B (provisional): johndoeII 1.53, oran 2.66, phineas 3.32.
+  freya 4.36. Tier B (provisional): the old johndoeII 1.53 row is superseded,
+  while oran 2.66 and phineas 3.32 remain legacy free-α rows.
   whitney 5.12 is the multiplicity exemplar. Machine-readable:
   `analysis/scattering-refit-2026-06/citable_alpha_roster.json`, consumed by
   `galaxies/foreground/tau_consistency.py` (path constant `:23`, roster read
@@ -263,7 +266,8 @@ Several layers constrain the index, in different vocabularies:
 
 1. **Central open science decision — α < 4 is unrepresentable in the
    implemented closure.** dα/dβ < 0 on the thin-screen branch, so α ≥ 4 always;
-   yet 6 of the 8 roster sightlines have α < 4 (casey 2.40 … johndoeII 1.53).
+   the legacy free-α roster included several α < 4 rows (e.g. casey 2.40; the
+   old JohnDoeII 1.53 row is now superseded by C2D2 β=4-limit morphology/τ).
    A shallow empirical α is therefore *not* a sub-Kolmogorov β; it signals
    extended-medium/thick-screen geometry, whose branch α = 8/(6−β) for β > 4 is
    documented in the repo's paper notes

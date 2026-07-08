@@ -1,6 +1,6 @@
 # Jointmodel Pair Fit-Quality Flags
 
-During visual review of the data/model/residual triptychs, four current
+During visual review of the data/model/residual triptychs, current
 beta-campaign fit artifacts were flagged as missing visible sub-burst
 structure.
 
@@ -29,12 +29,16 @@ model peaks [-0.425]
 unmatched   [-0.732]
 ```
 
-`johndoeII` is also flagged from visual review and fit metadata. Its current
-artifact is `_C2D1`, so the DSA side is represented by only one model
-component even though the DSA dynamic spectrum shows multi-component burst
-structure. The simple band-integrated peak check does not split the DSA
-structure cleanly for this row, so this flag is intentionally metadata/visual
-rather than an unmatched-peak claim.
+`johndoeII` was also flagged from visual review and fit metadata in the first
+pass: the beta-campaign artifact was `_C2D1`, so the DSA side was represented
+by only one model component even though the DSA dynamic spectrum shows
+multi-component burst structure. That flag is now retired. The promoted
+beta-native product is `_C2D2`; scratch pilots on 2026-07-07 gave nearly
+identical PPC residuals for C2D2 and C2D3 (`chi2_C/D ~= 1.095/1.234` vs
+`1.094/1.231`), so the simpler C2D2 model was adopted. The simple
+band-integrated peak check did not split the DSA structure cleanly for this
+row, so the original flag was intentionally metadata/visual rather than an
+unmatched-peak claim.
 
 ## Interpretation
 
@@ -47,11 +51,19 @@ rather than an unmatched-peak claim.
   the leading DSA structure but misses the trailing DSA components.
 - `hamilton`: the current shared-zeta fit behaves as a one-component CHIME
   model and misses the leading CHIME component.
-- `johndoeII`: the current `_C2D1` artifact uses only one DSA component; the
-  DSA burst should be re-fit with higher DSA multiplicity.
+- `wilhelm`: the current shared-zeta fit misses leading DSA structure and has a
+  coherent bright-pulse residual. This should be described as residual
+  pulse-profile structure within the beta≈4 exponential/EMG-preferred branch,
+  not as evidence that the EMG/exponential branch is disfavored.
+
+Retired flag:
+
+- `johndoeII`: fixed by the promoted beta-native `_C2D2` product
+  (`beta=3.936`, `alpha=4.07` as a railed-hi limit, `tau_1GHz=2.219 ms`,
+  `chi2_C/D=1.09/1.23`). The old `_C2D1` product is superseded.
 
 ## Required follow-up
 
-These four bursts need multiplicity re-fitting before their current
-data/model/residual triptychs are treated as accepted model figures. Until
-then, keep the generated figures as diagnostics only.
+The remaining flagged bursts need multiplicity or residual-structure re-fitting
+before their current data/model/residual triptychs are treated as accepted model
+figures. Until then, keep those generated figures as diagnostics only.
