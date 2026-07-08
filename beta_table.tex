@@ -1,5 +1,8 @@
 % Table rows generated programmatically from the analysis results used in this
 % work. Do not hand-edit numeric values; notemarks a--d are annotation only.
+% NOTE(2026-07-07 trust reset): this campaign-era table shell is not currently
+% input by sections/results.tex. Reconcile rail/alpha-limit wording against
+% CONTEXT.md before restoring it.
 \begin{deluxetable*}{lccccc}
 \tablecaption{Turbulence spectral index $\beta$ from the uniform $\beta$-based
 joint re-fit (Section~\ref{sec:jointfit}) of the co-detected sample. Eleven of
@@ -30,7 +33,7 @@ FRB 20240122A & $1\times1$ & $\to 4$\tablenotemark{d} & $4$ (limit) & $0.219$ & 
 FRB 20220207C & $1\times1$ & $\to 4$\tablenotemark{d} & $4$ (limit) & $0.294$ & 2.51/1.31 \\
 FRB 20220506D & $2\times1$ & $\to 4$\tablenotemark{d} & $4$ (limit) & $0.843$ & 1.02/1.22 \\
 FRB 20221113A & $2\times1$ & $\to 4$\tablenotemark{d} & $4$ (limit) & $0.314$ & 1.05/0.91 \\
-FRB 20230814B & $2\times1$ & $\to 4$\tablenotemark{d} & $4$ (limit) & $2.19$ & 1.09/1.27 \\
+FRB 20230814B & $2\times2$ & $\to 4$\tablenotemark{d} & $4$ (limit) & $2.22$ & 1.09/1.23 \\
 FRB 20220310F\tablenotemark{c} & $2\times2$ & $\to 4$\tablenotemark{d} & $4$ (limit) & $1.18$ & 1.09/1.42 \\
 FRB 20230307A & $3\times3$ & $3.228^{+0.020}_{-0.018}$ & $5.26^{+0.05}_{-0.05}$ & $0.469$ & 1.06/1.24 \\
 % excluded (not citable): FRB 20240203A (gate FAIL: L2 catastrophic chi2_C=11.59 chi2_D=9.25)
@@ -38,12 +41,13 @@ FRB 20230307A & $3\times3$ & $3.228^{+0.020}_{-0.018}$ & $5.26^{+0.05}_{-0.05}$ 
 \tablenotetext{a}{Interior posterior near the Kolmogorov point; well fit in
 both bands, so the measurement is a constraint rather than a prior-rail
 artifact.}
-\tablenotetext{b}{The elevated DSA-110 $\chi^2_\nu$ is a coherent shape misfit
+\tablenotetext{b}{The elevated DSA-110 $\chi^2_\nu$ is a coherent residual
 localized at the bright pulse peak---off-peak residuals are white (RMS $\approx1$)
-while the on-peak frequency-summed whitened residual reaches $\pm15\sigma$---where
-a single scattered component does not fully reproduce the DSA-110 pulse shape.
-The rail classification is nonetheless robust to the intrinsic-width
-parametrization.}
+while the on-peak frequency-summed whitened residual reaches $\pm15\sigma$.
+This is not evidence against the $\beta=4$ exponential/EMG branch; it means
+the adopted component model leaves bright-pulse profile structure within that
+preferred exponential-tail description. The rail classification is nonetheless
+robust to the intrinsic-width parametrization.}
 \tablenotetext{c}{Multiplicity exemplar: C2D2 fit after local re-prep
 (Section~\ref{sec:results-alpha}, Figure~\ref{fig:whitney_mult}). Fixed-s²
 evidence confirms the second DSA-110 component.}
