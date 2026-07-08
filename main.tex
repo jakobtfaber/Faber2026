@@ -77,24 +77,24 @@ The authors thank the CHIME/FRB and DSA-110 collaborations.
 \end{acknowledgments}
 
 \section*{Data Availability}
-% TODO(data-availability): replace with the final statement. Requirements:
-% (i) archive the reduction/fitting pipeline release used for the accepted
-% version (Zenodo DOI); (ii) state where the dynamic spectra and fit products
-% live and under what access policy; (iii) replace all in-text references to
-% "internal validation materials" / "companion software archive" with pointers
-% to this section.
+% TODO(data-availability): before submission: (i) make the pipeline repo
+% public and pin the release tag used for the accepted version; (ii) state
+% where the dynamic spectra and fit products live and under what access
+% policy; (iii) replace all in-text references to "internal validation
+% materials" / "companion software archive" with pointers to this section.
 The dynamic spectra, fit products, and foreground-census tables supporting
 this work will be made available upon publication. The reduction and fitting
-pipeline is open source; a versioned release accompanies the accepted
-manuscript.
+pipeline is publicly available at
+\url{https://github.com/jakobtfaber/dsa110-FLITS}; the accepted version of
+this manuscript corresponds to a tagged release of that repository.
 
 \facilities{CHIME, OVRO:DSA-110}
 
 \software{\texttt{astropy}, \texttt{dynesty} \citep{Speagle2020},
 \texttt{numpy}, \texttt{scipy}, \texttt{matplotlib},
 \texttt{mwprop} \citep{Ocker2026}
-% TODO(software): add the co-detection reduction/fitting pipeline citation
-% (Zenodo DOI) and pygedm (NE2001/YMW16 wrapper) used in Section 3.
+% TODO(software): cite the pipeline by its public GitHub repo + release tag
+% (dsa110-FLITS), and add pygedm (NE2001/YMW16 wrapper) used in Section 3.
 }
 
 \appendix
