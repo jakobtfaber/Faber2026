@@ -3,6 +3,8 @@
 # journal-cadence-posttool-hook.sh, but emitting Cursor's output shape
 # ({"additional_context": ...}) instead of Claude's hookSpecificOutput.
 # (docs/rse/journal-protocol.md)
+# Codex streams hook stdin; drain it before early exit to avoid EPIPE.
+[ ! -t 0 ] && cat >/dev/null
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 J="$ROOT/docs/rse/journal.jsonl"
 [ -f "$J" ] || exit 0
