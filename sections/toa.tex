@@ -44,10 +44,28 @@ residual.
 
 All twelve bursts have chance-coincidence probabilities $P_{\rm cc}<10^{-8}$
 under the conservative baseline association window and pass the
-positional-coincidence check. The eight bursts with constrained CHIME-side DMs
-also pass the CHIME--DSA DM-agreement check; the four remaining bursts are
-marked as position-only associations because their CHIME sub-band fits did not
-provide a constraining independent DM.
+positional-coincidence check. Here $P_{\rm cc}$ is the Poisson probability that
+an unrelated burst would satisfy our temporal and positional association
+criteria. We estimate an expected number of accidental associations
+\begin{equation}
+N_{\rm exp} = R\,\Delta t_{\rm win}\,p_{\rm pos},
+\end{equation}
+where $R$ is the relevant all-sky detection rate for the telescope providing
+potential interlopers (after applying the same quality cuts as for the
+co-detection search), $\Delta t_{\rm win}$ is the total association time window
+(including the dispersion correction to $\nu_{\mathrm{ref}}$ and the geometric
+baseline correction; Section~\ref{sec:toa}), and $p_{\rm pos}$ is the probability
+that a random event would also pass the positional-consistency requirement
+(e.g., from the fractional overlap of the CHIME/FRB localization region with
+the DSA localization/beam footprint). We then report
+\begin{equation}
+P_{\rm cc} = 1 - \exp(-N_{\rm exp}).
+\end{equation}
+
+The eight bursts with constrained CHIME-side DMs also pass the CHIME--DSA
+DM-agreement check; the four remaining bursts are marked as position-only
+associations because their CHIME sub-band fits did not provide a constraining
+independent DM.
 
 Additional cross-checks and intermediate diagnostics are retained in companion
 materials; Table~\ref{tab:sample} carries the manuscript-facing timing residual 
