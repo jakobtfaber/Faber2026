@@ -61,8 +61,21 @@ P_{{\rm cc},i} = 1 - e^{-\mu_i} \simeq \mu_i \qquad (\mu_i \ll 1),
 \label{eq:pcc_p}
 \end{equation}
 so $P_{\rm cc}$ is, to excellent approximation, just the expected number of chance
-matches. The expected number of chance associations across the whole sample is
-$\sum_i \mu_i$.
+matches.
+
+Equation~\eqref{eq:pcc_mu} conditions on a single DSA burst, so the sample-level
+false-alarm expectation is the sum $\sum_j \mu_j$ over the \emph{trial set}: the
+complete list of DSA-110 triggers searched for a CHIME/FRB counterpart over the
+2022~February--2024~February overlap, not merely the twelve that matched. The
+look-elsewhere penalty is therefore carried explicitly by that sum. Because each
+per-event expectation is only $\mu_j\sim5\times10^{-9}$ under the
+chance-maximizing windows below, the trial sum stays orders of magnitude below
+unity even when the entire DSA-110 detection list---of order $10^{2}$--$10^{3}$
+events across the two-year window---is taken as the denominator
+($\sum_j\mu_j\lesssim10^{-5}$). The value $\sum_i\mu_i$ reported below is summed
+over the twelve reported pairs; extending it to the full trial set multiplies it
+by at most the ratio of the searched-to-matched count and leaves the conclusion
+unchanged.
 
 We evaluate Eq.~\eqref{eq:pcc_mu} with deliberately conservative,
 chance-\emph{maximizing} inputs, so the reported $P_{\rm cc}$ is an upper bound on
@@ -89,21 +102,59 @@ DMs would inject millisecond-scale shifts for the largest CHIME--DSA DM offsets,
 so those shifts are tracked separately rather than folded into the association
 residual.
 
+We adopt the sign convention $\Delta t = \Delta t_{\rm inter\text{-}site} -
+\tau_{\rm geo}$, where $\Delta t_{\rm inter\text{-}site}$ is the DSA-minus-CHIME
+arrival offset after both are referenced to 400\,MHz (Eq.~\ref{eq:dmdelay}) and
+$\tau_{\rm geo}$ is the predicted geometric delay (Eq.~\ref{eq:geodelay}); a
+positive residual means the DSA arrival is later than the shared-DM geometric
+prediction relative to CHIME, and $\Delta t=0$ is exact agreement. The geometric
+term is itself bounded: for the $1345\,\mathrm{km}$ CHIME (DRAO)--DSA-110 (OVRO)
+baseline, $|\tau_{\rm geo}| \le |\mathbf{p}_2-\mathbf{p}_1|/c \approx 4.5\,$ms for
+any source direction. The residual is therefore not error-free but carries a
+per-burst systematic of order the inter-site clock/timestamp alignment
+($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight DM-constrained bursts, the
+residual dispersion left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
+CHIME-referenced shift for the largest offset (\textit{zach}, $\Delta\mathrm{DM}
+=-0.84\,\mathrm{pc\,cm^{-3}}$) were the CHIME arrival re-referenced at its own DM,
+a convention-dependent term reported separately rather than folded in. We accept
+a pair when its residual is consistent with the geometric delay to within this
+combined budget---order several ms, and up to $\sim\!10$\,ms where the CHIME--DSA
+DM offset is largest; all twelve residuals ($-2.7$ to $+8.4$\,ms) satisfy it,
+whereas a residual of several tens of ms, inconsistent with the
+$\lesssim\!4.5$\,ms geometric delay and the timing budget, would fail. We stress
+that the association verdict does not rest on the timing residual alone: the
+decisive gates are the chance-coincidence probability, positional coincidence,
+and (for the DM-constrained bursts) DM agreement, for which the residual is a
+supporting consistency diagnostic.
+
 Evaluated with the conservative windows above, all twelve bursts have
 per-burst chance-coincidence probabilities of order $10^{-9}$ and thus
 $P_{\rm cc}<10^{-8}$ individually; the expected number of chance associations
-across the full sample is $\sum_i\mu_i \approx 5\times10^{-8}$. In other words,
-even under windows chosen to overstate the false-alarm rate, fewer than one in ten
-million such pairings would be expected to arise by chance. Because the estimate is
-so far below any plausible threshold, the chance-coincidence test on its own
-establishes the co-detections; the positional-coincidence and DM-agreement checks
-only tighten an already-decisive result. All twelve pass the
+across the full sample is $\sum_i\mu_i \approx 5.5\times10^{-8}$. In other words,
+even under windows chosen to overstate the false-alarm rate, fewer than one in a
+hundred million such pairings would be expected to arise by chance per pair
+(and the sample-summed expectation is about one in twenty million). Because the
+estimate is so far below any plausible threshold, the chance-coincidence test on
+its own establishes the co-detections; the positional-coincidence and
+DM-agreement checks only tighten an already-decisive result. All twelve pass the
 positional-coincidence check. The eight bursts with constrained CHIME-side DMs
 also pass the CHIME--DSA DM-agreement check; the four remaining bursts are marked
 `assoc.~(pos.)' in Table~\ref{tab:sample}: their association rests on
 position and timing alone, because their CHIME sub-band fits did not provide
-a constraining independent DM.
+a constraining independent DM. For those four we set $f_{\rm DM}=1$ in
+Eq.~\eqref{eq:pcc_mu}---the dispersion criterion is not imposed, so their
+$P_{\rm cc}$ is a time-and-position bound only, consistent with the
+position-only verdict; the eight DM-constrained bursts carry the full
+$f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM})<1$ factor. The reported
+$P_{\rm cc}$ values are thus computed per association class, and the
+position-only $P_{\rm cc}$ are, if anything, conservative relative to the
+DM-constrained ones.
 
-Additional cross-checks and intermediate diagnostics are retained in companion
-materials; Table~\ref{tab:sample} carries the manuscript-facing timing residual 
-$P_{\rm cc}$ and association verdict columns.
+The per-burst DM provenance (per-telescope DM, method, and CHIME--DSA agreement)
+and the intermediate association diagnostics are provided as a machine-readable
+table in the archival data release (Section~\ref{sec:data-availability});
+Table~\ref{tab:sample} carries the manuscript-facing timing residual, $P_{\rm cc}$,
+and association-verdict columns. We note in passing that the eight
+DM-constrained bursts show CHIME reading systematically low relative to DSA by
+$\approx0.4\,\mathrm{pc\,cm^{-3}}$ on average---a coherent, sub-floor offset that
+does not affect any association verdict.

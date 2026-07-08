@@ -11,8 +11,9 @@ fit once the association and per-telescope dispersion-measure provenance are
 re-validated. The twelve bursts, their TNS designations, sky positions,
 detection epochs, and association diagnostics are listed in
 Table~\ref{tab:sample}. The timing residuals in that table use the shared
-DSA-DM reference convention; per-telescope DM agreement is documented separately
-in our internal validation materials.
+DSA-DM reference convention; the per-telescope DM values and their CHIME--DSA
+agreement are provided as a machine-readable provenance table in the archival
+data release (Section~\ref{sec:data-availability}).
 
 \input{sample_table.tex}
 
@@ -21,8 +22,9 @@ in our internal validation materials.
 
 For each co-detection we analyze a pair of total-intensity dynamic spectra---one
 per facility---derived from the CHIME/FRB and DSA-110 baseband recordings
-(24 spectra in total; provenance and array geometry are documented in the
-companion software archive). Each spectrum is loaded with its frequency axis
+(24 spectra in total; per-spectrum provenance and array geometry accompany the
+archival data release, Section~\ref{sec:data-availability}). Each spectrum is
+loaded with its frequency axis
 standardized to ascending order and its per-channel bandpass normalized, so the
 fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
 and figures in this paper are produced with a common open-source reduction and
@@ -50,6 +52,20 @@ underlying burst-data fits.
 
 To characterize the expected propagation effects contributed by the Milky Way, we query the NE2025 Galactic electron density model \citep{Ocker2026} along each of the twelve co-detection sightlines. The expected Galactic dispersion measure ($\text{DM}_{\text{MW}}$) is integrated to a distance of 30\,kpc. The pulse-broadening timescale ($\tau_{\text{MW}}$) and scintillation bandwidth ($\Delta\nu_{\text{MW}}$) are scaled from the NE2025 output at 1\,GHz to the center of the CHIME/FRB band (600\,MHz) and the DSA-110 band (1.4\,GHz) assuming Kolmogorov scaling ($\tau \propto \nu^{-4.4}$ and $\Delta\nu_d \propto \nu^{4.4}$).
 
+We flag one methodological asymmetry deliberately. This Galactic prediction
+uses a \emph{fixed} Kolmogorov frequency index ($\alpha=4.4$) to scale
+$\tau_{\text{MW}}$ between bands, whereas the extragalactic scattering analysis
+of Section~\ref{sec:jointfit} co-models the frequency scaling with the pulse
+shape through the turbulence index $\beta$ rather than fixing $\alpha$. We keep
+the fixed-$\alpha$ Kolmogorov value here as a fiducial for the \emph{Galactic}
+term because NE2025 is itself calibrated on a Kolmogorov medium and because the
+predicted Galactic broadening is sub-microsecond on every high-latitude
+sightline (below), so the choice of Galactic scaling index cannot affect the
+extragalactic attribution there. On the low-latitude sightlines, where
+$\tau_{\text{MW}}$ is non-negligible, we carry this as an explicit systematic
+rather than propagate the fitted $\beta$ posterior through a model (NE2025) that
+does not itself expose one.
+
 As shown in Figure~\ref{fig:ne2025_mw}, the sightlines exhibit strongly
 latitude-dependent behavior. High-latitude sightlines ($|b| > 30^\circ$)
 present minimal Galactic contamination, with expected Milky Way dispersion
@@ -61,9 +77,17 @@ $\text{DM}_{\text{MW}}$ reaching $\approx 95$\,pc\,cm$^{-3}$ and predicted
 CHIME-band scattering timescales of $\tau_{\text{MW}} \gtrsim 30\,\mu$s,
 which can dominate or mask the intrinsic extragalactic scattering.
 
+The $\text{DM}_{\text{MW}}$ quoted in this section is the NE2025 \emph{disk}
+(ISM) column alone. In the dispersion budget of
+Section~\ref{sec:dm} (Table~\ref{tab:budget}) we add the
+$40\,\mathrm{pc\,cm^{-3}}$ Milky-Way halo prior to this disk term, so the
+$\mathrm{DM_{MW}}$ column there ($74$--$137\,\mathrm{pc\,cm^{-3}}$) is larger
+than the $\lesssim95\,\mathrm{pc\,cm^{-3}}$ disk-only values here by that fixed
+halo offset; the two are consistent once the halo term is accounted for.
+
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{figures/ne2025_mw_characterization.pdf}
+    \includegraphics[width=\textwidth]{figures/ne2025_mw_characterization_nside32.pdf}
     \caption{NE2025 Galactic electron density model predictions. Top row: All-sky Mollweide maps (in Galactic coordinates) showing predicted dispersion measure ($\text{DM}_{\text{MW}}$, left), pulse-broadening timescale ($\tau_{\text{MW}}$ at 1\,GHz, middle), and scintillation bandwidth ($\Delta\nu_{\text{MW}}$ at 1\,GHz, right). Yellow stars indicate the positions of the twelve sightlines. Bottom row: Individual sightline values plotted against absolute Galactic latitude $|b|$ for dispersion (left), scaled scattering timescale (middle; CHIME at 600\,MHz in orange, DSA-110 at 1.4\,GHz in blue), and scaled scintillation bandwidth (right). Scatter plots show values calculated assuming Kolmogorov scaling ($\alpha = 4.4$) \citep{Ocker2026}.}
     \label{fig:ne2025_mw}
 \end{figure*}
@@ -88,9 +112,16 @@ catalog of \citet{WenHan2024}---which supplies $M_{500}$, $R_{500}$, and,
 through its DESI members, a spectroscopic redshift---together with the all-sky
 Planck Sunyaev--Zel'dovich (PSZ2) and X-ray (MCXC, MCXC-II) catalogs; at the
 sample's declination every matched cluster comes from the optical catalog.
-Galaxy cones are sized to a fixed proper impact parameter and cluster cones to
-several $R_{500}$, so a sightline that grazes a cluster outskirt is still
-recovered.
+The search apertures set the census completeness and are fixed in physical
+units. Galaxy cones extend to a fixed proper impact parameter at the
+circumgalactic scale, and the recovered foreground galaxies span
+$b\approx60$--$280\,\mathrm{kpc}$; cluster cones are far wider
+($\sim\!5\,\mathrm{Mpc}$), and a cluster is retained when the sightline passes
+within twice its virial radius ($\lesssim2\,R_{200}\approx3\,R_{500}$), so a
+sightline that grazes a cluster outskirt is still recovered. Only crossings
+within $R_{500}$ enter the dispersion budget (Section~\ref{sec:foreground}); the
+wider retention aperture exists so the excluded near-misses can be shown
+explicitly (Appendix~\ref{app:clusters}).
 
 Validation cross-matches every candidate, by coordinate, against three
 independent redshift sources: the DESI Legacy Survey DR9 photometric redshifts
@@ -124,6 +155,22 @@ omitted---the \citet{WenHan2024} catalog reaches group scale
 only wide-field catalogs reach this declination, a sightline with no confirmed
 system is unconstrained by survey depth rather than demonstrably foreground-free;
 the budget of Section~\ref{sec:foreground} treats such sightlines accordingly.
+
+Of the 15 confirmed foreground systems, nine carry a DESI or NED spectroscopic
+(or the single cluster's DESI-member) redshift; the remaining six rest on a
+DESI Legacy DR9 photometric redshift alone. Our confirmation criterion
+($z_{\rm phot}+1\sigma < z_{\rm host}$) admits, per object, the $\sim16\%$
+Gaussian probability that the true redshift exceeds $z_{\rm phot}+1\sigma$, plus
+the few-percent catastrophic-outlier rate characteristic of Legacy DR9
+photometric redshifts. Across the six photometric confirmations this amounts to
+of order one expected misclassification of a background galaxy as foreground.
+Each of these six lies in the outer circumgalactic medium
+($b\approx105$--$280\,\mathrm{kpc}$) and contributes only a small dispersion
+column, so a misclassification would remove at most that object's column from
+$\mathrm{DM_{int}}$; we therefore carry the summed photometric-confirmation
+column as a one-sided systematic on $\mathrm{DM_{int}}$ for the affected
+sightlines (Section~\ref{sec:foreground}) rather than treating those
+confirmations as exact.
 Figure~\ref{fig:sightline_halo_grid} shows the foreground-halo population used
 for this census as a function of redshift and signed impact parameter.
 
@@ -142,10 +189,11 @@ for this census as a function of redshift and signed impact parameter.
     cluster mass ($M_{200}>10^{14}\,M_\odot$)---the intervening system that
     enters the dispersion budget of Section~\ref{sec:foreground}---is ringed in
     black; it lies in the dense field toward FRB~20230307A, the one such crossing
-    in the sample. Panels are ordered by host redshift; sightlines with no
-    recovered foreground halo (e.g. the low-redshift FRB~20220207C) are shown
-    empty, and sightlines without a spectroscopic host redshift are omitted. The
-    key panel gives the $R_{200}$ size scale and marker legend.}
+    in the sample. Nine of the twelve sightlines are shown, ordered by host
+    redshift; the three without a spectroscopic host redshift
+    (FRB~20230325A, FRB~20240122A, FRB~20230814B) are omitted, and sightlines
+    with no recovered foreground halo (e.g. the low-redshift FRB~20220207C) are
+    shown empty. The key panel gives the $R_{200}$ size scale and marker legend.}
     \label{fig:sightline_halo_grid}
 \end{figure*}
 

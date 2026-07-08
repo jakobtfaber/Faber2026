@@ -1,5 +1,6 @@
 import os
 import sys
+import argparse
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -59,14 +60,25 @@ def run_pixel(args):
     return Dv["DM"], Dv["TAU"], Dv["SBW"]
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="NE2025 Milky Way all-sky characterization figure")
+    parser.add_argument("--nside", type=int, default=8,
+                        help="HEALPix nside for the all-sky maps (default: 8 => 7.3 deg pixels)")
+    parser.add_argument("--nproc", type=int, default=os.cpu_count(),
+                        help="Number of worker processes for the sightline sweep (default: all cores)")
+    parser.add_argument("--xsize", type=int, default=None,
+                        help="mollview raster width in px (default: 2000 for nside>8, else healpy default)")
+    args = parser.parse_args()
+
     # 1. Precompute All-Sky Maps using HEALPix in parallel, with caching
-    nside = 8
+    nside = args.nside
     npix = hp.nside2npix(nside)
     theta, phi = hp.pix2ang(nside, np.arange(npix))
     gls = np.degrees(phi)
     gbs = 90.0 - np.degrees(theta)
 
-    cache_path = Path(__file__).resolve().parent / "ne2025_allsky_cache.npz"
+    # nside-keyed cache so different resolutions don't clobber each other
+    suffix = "" if nside == 8 else f"_nside{nside}"
+    cache_path = Path(__file__).resolve().parent / f"ne2025_allsky_cache{suffix}.npz"
     if cache_path.exists():
         print(f"Loading precomputed NE2025 all-sky maps from cache: {cache_path}")
         cache = np.load(cache_path)
@@ -74,9 +86,9 @@ if __name__ == '__main__':
         tau_map = cache["tau_map"]
         sbw_map = cache["sbw_map"]
     else:
-        print(f"Precomputing NE2025 all-sky maps for {npix} pixels using Multiprocessing...")
+        print(f"Precomputing NE2025 all-sky maps for {npix} pixels using {args.nproc} processes...")
         inputs = list(zip(gls, gbs))
-        with Pool(4) as pool:
+        with Pool(args.nproc) as pool:
             results = pool.map(run_pixel, inputs)
         
         dm_map = np.array([r[0] for r in results])
@@ -85,6 +97,9 @@ if __name__ == '__main__':
         
         np.savez_compressed(cache_path, dm_map=dm_map, tau_map=tau_map, sbw_map=sbw_map)
         print(f"Saved precomputed maps to cache: {cache_path}")
+
+    # Raster width for mollview: bump for finer maps so the display doesn't undersample
+    mollview_xsize = args.xsize if args.xsize is not None else (2000 if nside > 8 else 800)
 
     # Convert tau from ms to us for better scale
     tau_map_us = tau_map * 1000.0
@@ -116,6 +131,7 @@ if __name__ == '__main__':
         cmap="Purples",
         cbar=True,
         notext=True,
+        xsize=mollview_xsize,
         unit=r"$\mathrm{DM}_{\mathrm{MW}}\ (\mathrm{pc\ cm}^{-3})$"
     )
     hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
@@ -141,6 +157,7 @@ if __name__ == '__main__':
         cmap="Oranges",
         cbar=True,
         notext=True,
+        xsize=mollview_xsize,
         unit=r"$\log_{10}(\tau_{1\mathrm{GHz}} / \mu\mathrm{s})$"
     )
     hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
@@ -166,6 +183,7 @@ if __name__ == '__main__':
         cmap="Blues",
         cbar=True,
         notext=True,
+        xsize=mollview_xsize,
         unit=r"$\log_{10}(\Delta\nu_{1\mathrm{GHz}} / \mathrm{MHz})$"
     )
     hp.graticule(dpar=30, dmer=60, color="gray", lw=0.5, alpha=0.5)
@@ -233,8 +251,8 @@ if __name__ == '__main__':
     out_dir = Path(__file__).resolve().parent.parent / "figures"
     out_dir.mkdir(exist_ok=True)
 
-    png_path = out_dir / "ne2025_mw_characterization.png"
-    pdf_path = out_dir / "ne2025_mw_characterization.pdf"
+    png_path = out_dir / f"ne2025_mw_characterization{suffix}.png"
+    pdf_path = out_dir / f"ne2025_mw_characterization{suffix}.pdf"
 
     plt.savefig(png_path, dpi=300)
     plt.savefig(pdf_path)

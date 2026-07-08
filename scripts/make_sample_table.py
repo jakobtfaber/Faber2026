@@ -112,7 +112,7 @@ def main() -> None:
     body = []
     for r in rows:
         body.append(
-            f"{r['tns']} & \\textit{{{r['nick']}}} & "
+            f"{r['tns']} & "
             f"${r['ra']:.4f}$ & ${r['dec']:+.4f}$ & "
             f"${r['mjd']:.3f}$ & {r['utc']} & "
             f"{r['toa_residual_ms']} & {r['pcc']} & {r['verdict']} \\\\"
@@ -124,16 +124,19 @@ def main() -> None:
 % TOA residuals), and crossmatching/association_report.json (P_cc/verdict).
 % V6 restored the association diagnostics under the shared DSA-DM reference.
 % Do not hand-edit; regenerate with: python scripts/make_sample_table.py
-\\begin{{deluxetable*}}{{llccccccc}}
+\\begin{{deluxetable*}}{{lccccccc}}
 \\tablecaption{{The CHIME/FRB--DSA-110 co-detection sample: twelve fast radio
 bursts detected by both facilities between 2022 February and 2024 February.
-Columns list the TNS designation, the internal nickname, J2000 sky position
-(decimal degrees), burst detection epoch (MJD and UTC, referenced to
-400\\,MHz), and the Section~\\ref{{sec:toa}} association diagnostics restored by
-V6: the shared-DSA-DM timing residual $\\Delta t$, chance-coincidence
-probability $P_{{\\rm cc}}$, and association verdict. \\label{{tab:sample}}}}
+Columns list the TNS designation, J2000 sky position (decimal degrees), burst
+detection epoch (MJD and UTC, referenced to 400\\,MHz), and the
+Section~\\ref{{sec:toa}} association diagnostics restored by V6: the shared-DSA-DM
+timing residual $\\Delta t$, chance-coincidence probability $P_{{\\rm cc}}$, and
+association verdict. The residual carries a per-burst systematic of
+$\\sim\\!1$\\,ms (inter-site clock alignment) plus a convention-dependent
+DM-reference term; its sign convention and the acceptance criterion are defined
+in Section~\\ref{{sec:toa}}. \\label{{tab:sample}}}}
 \\tabletypesize{{\\scriptsize}}
-\\tablehead{{\\colhead{{TNS}} & \\colhead{{Nickname}} & \\colhead{{R.A.}} &
+\\tablehead{{\\colhead{{TNS}} & \\colhead{{R.A.}} &
   \\colhead{{Decl.}} & \\colhead{{MJD}} & \\colhead{{UTC}} &
   \\colhead{{$\\Delta t$ (ms)}} & \\colhead{{$P_{{\\rm cc}}$}} &
   \\colhead{{Verdict}}}}
