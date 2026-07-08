@@ -1,6 +1,8 @@
 #!/bin/bash
 # UserPromptSubmit hook: remind the active agent when the journal cadence
 # has lapsed (docs/rse/journal-protocol.md; default cadence 10 minutes).
+# Codex streams hook stdin; drain it before early exit to avoid EPIPE.
+[ ! -t 0 ] && cat >/dev/null
 J="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}/docs/rse/journal.jsonl"
 [ -f "$J" ] || exit 0
 last=$(tail -1 "$J" | sed -E 's/.*"ts": ?"([^"]+)".*/\1/')

@@ -106,6 +106,13 @@ rail-class vocabulary in manuscript text beyond the campaign tallies;
 thin-screen as an unstated default geometry; quoting median β or class
 fractions.
 
+**Wilhelm / EMG wording guardrail (2026-07-07):** For FRB 20221203A
+(`wilhelm`), do not describe the residual morphology as evidence against the
+right-sided exponential/EMG branch. The beta-coherent fits drive this sightline
+to the β≈4 exponential limit. The remaining issue is a coherent high-S/N DSA
+bright-pulse profile residual within that preferred exponential-tail model, not
+a rejected EMG/PBF family.
+
 **Scint→scattering coupling** (owner decision 2026-07-06; A1 mechanism
 below adopted as a **working draft** 2026-07-06 late evening and re-opened
 the same night — owner keeps all design decisions unlocked; treat every
