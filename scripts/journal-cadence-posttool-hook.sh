@@ -5,6 +5,8 @@
 # entry covering what it is working on right now. Throttled to one
 # reminder per 3 min so a stale turn is not spammed on every tool call.
 # (docs/rse/journal-protocol.md)
+# Codex streams hook stdin; drain it before early exit to avoid EPIPE.
+[ ! -t 0 ] && cat >/dev/null
 ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 J="$ROOT/docs/rse/journal.jsonl"
 [ -f "$J" ] || exit 0
