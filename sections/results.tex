@@ -114,20 +114,59 @@ carrying no confirmed within-aperture system are limited by survey depth
 \subsection{Scintillation and screen attribution}
 \label{sec:results-scintillation}
 
-% TODO(results-scintillation): Insert after the scintillation products and
-% scattering fits are re-run under the re-validation contract. This subsection
-% should connect the decorrelation-bandwidth measurements, single-screen tests,
-% and screen-attribution claims only after both ingredients are trusted.
-%
-% Required before filling:
-% - Re-run DSA-band scintillation products under the validation contract.
-% - Complete CHIME-band scintillation campaign where needed.
-% - Re-establish the scattering fits used in any tau * Delta-nu product.
-% - Decide whether scintillation acts as a geometry-selection constraint or as
-%   part of a fitted two-screen model.
-%
-% Candidate future artifact, once trusted:
-% - fig:scint_screens
+We report here the DSA-band diffractive-scintillation products that have been
+re-derived under the validation contract; the CHIME-band scintillation
+campaign, the scattering fits that enter any $\tau\,\Delta\nu_d$ screen
+product, and the resulting one- versus two-screen attribution are deferred to
+Section~\ref{sec:disc-screen-attribution} once their prerequisite strands are
+independently trusted.
+
+For each burst we recompute the spectral autocorrelation function (ACF) of the
+DSA-110 dynamic spectrum in equal-signal-to-noise frequency sub-bands and fit
+it with a sum of Lorentzian components, whose half-width at half-maximum defines
+the diffractive decorrelation bandwidth $\gamma$
+\citep{Rickett1990, Cordes2016}. The number of sub-bands and the number of
+Lorentzian components per sub-band are selected internally, from fixed
+model-comparison and viability gates rather than inherited fit choices, as
+described in Section~\ref{sec:methods}; components that fail the bandwidth,
+modulation, or fractional-uncertainty quality flags are retained in the
+component tables but excluded from the summary measurements.
+
+All twelve co-detections yield at least one clean (unflagged) DSA-band
+decorrelation-bandwidth measurement, for a total of 41 clean Lorentzian
+components across the sample. The per-burst clean-component median $\gamma$
+spans roughly $0.24\,$MHz (FRB~20230913A) to $23\,$MHz (FRB~20220310F), with
+individual clean components ranging from $\sim0.13$ to $\sim23\,$MHz across the
+$1.28$--$1.53\,$GHz DSA band---comparable to and in several cases exceeding the
+Galactic diffractive bandwidths predicted by NE2025 along these sightlines
+(Figure~\ref{fig:ne2025_mw}). Figure~\ref{fig:dsa_scint_gamma} summarizes the
+clean measurements as one bandwidth-versus-frequency panel per burst. For the
+nine bursts with clean measurements at two or more distinct sub-band
+frequencies, we overlay a fixed $\gamma\propto\nu^4$ guide anchored to the
+measurements; the three single-frequency bursts (FRB~20230325A, FRB~20221113A,
+and FRB~20220310F) carry no guide, since a single frequency does not constrain
+the scaling. We do not fit a per-burst scaling index here: the frequency lever
+arm within the DSA band alone is short, and a physically meaningful measurement
+of the scaling requires the CHIME-band anchor, which is deferred with the rest
+of the two-band analysis.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/dsa_lorentzian_summary.pdf}
+    \caption{DSA-110 diffractive decorrelation bandwidths for the twelve
+    co-detections. Each panel shows the clean (unflagged) Lorentzian
+    decorrelation bandwidth $\gamma$ against DSA sub-band center frequency for
+    one burst, on a logarithmic bandwidth axis. Filled purple circles are clean
+    selected components with $1\sigma$ fit uncertainties; the dashed gray guide
+    is the fixed $\gamma\propto\nu^4$ scaling anchored to the measurements,
+    shown only for the nine bursts constrained at two or more distinct clean
+    sub-band frequencies. Components carrying quality flags are excluded here but
+    retained in the component tables. The full per-burst ACF diagnostics, showing
+    the stacked sub-band autocorrelation functions with their fitted total
+    Lorentzian models, are provided in
+    Appendix~\ref{app:dsa-scint-acf}.}
+    \label{fig:dsa_scint_gamma}
+\end{figure*}
 
 \FloatBarrier
 \subsection{Turbulence spectrum and burst multiplicity}
