@@ -103,9 +103,9 @@ validation---and record the result in Table~\ref{tab:foreground}.
 The discovery stage searches a wide cone around each localized burst. At the
 sample's high declination ($+70^\circ$ to $+74^\circ$) only all-sky or northern
 catalogs provide coverage. For galaxy-scale halos we query the DESI Legacy
-Imaging Surveys photometric-redshift catalog \citep[the deep-learning estimator
-of][]{Zhou2021}, GLADE+, and SDSS~DR12, supplemented by the
-WISE--PanSTARRS--STRM photometric classifier \citep{Beck2021} for sources
+Imaging Surveys DR8 North photometric-redshift catalog \citep[the random-forest
+estimator of][]{Zhou2021}, GLADE+, and SDSS~DR12, supplemented by the
+PS1-STRM photometric classifier \citep{Beck2021} for sources
 without a Legacy match; for clusters we query the DESI Legacy/WISE cluster
 catalog of \citet{WenHan2024}---which supplies $M_{500}$, $R_{500}$, and,
 through its DESI members, a spectroscopic redshift---together with the all-sky
@@ -136,7 +136,7 @@ redshift (or photometric redshift plus $1\sigma$) lies below the host,
 \emph{refuted} when it lies above, and \emph{inconclusive} when it falls within
 $1\sigma$ of the host, when the host redshift is a placeholder, or when no
 trustworthy redshift or galaxy classification exists (including the
-PanSTARRS-STRM ``unsure'' class).
+PS1-STRM ``unsure'' class).
 
 The census evaluated 35 candidate systems along the twelve sightlines.
 Table~\ref{tab:foreground} lists the 28 that remain relevant to the budget:
