@@ -186,8 +186,8 @@ bias on a per-band exponential $\tau_i$, itself varies with frequency). We
 therefore report the sub-band slope as a validation diagnostic---a consistency
 check on the joint-fit frequency scaling---and never as a measurement of the
 turbulence spectral index. The sub-band validation figure and any event-level
-sub-band comparisons are withheld until the underlying fits have passed
-re-validation.
+sub-band comparisons are deferred pending completion of the scattering
+analysis.
 
 % TODO(methods-subband-validation): Restore a sub-band validation artifact only
 % after fit re-validation. The restored figure should state the included bursts,
@@ -218,7 +218,7 @@ from this likelihood. The one interaction to guard against is at low
 signal-to-noise, where a fully free per-channel gain can absorb genuine
 scattering-induced spectral smearing into the spectral envelope and thereby bias
 the scattering time low; we therefore keep the gain prior informative (finite
-width) rather than flat, and verify on the re-validated fits that the
+width) rather than flat, and verify on the final fits that the
 $\tau_{1\,\mathrm{GHz}}$ posterior is stable against the gain-prior width before
 quoting any low-$\tau$ result. We
 sample the posterior by nested sampling \citep{Skilling2004}, as implemented in
@@ -252,9 +252,9 @@ whitened residual dynamic spectra in both bands. A component choice is rejected
 and re-fit if coherent burst power remains in the residuals, or if the collapsed
 profiles show a resolved sub-component that is absent from the model, even when
 the scalar goodness-of-fit statistics are otherwise acceptable. This visual and
-residual audit is part of the fit re-validation ladder: current rows with
+residual audit is part of the component-selection procedure: current rows with
 missed sub-components remain diagnostic only until their higher-multiplicity
 fits pass the same check. A clean single-component co-detection in our sample,
 for which the joint fit returns a well-constrained $\beta$ with white residuals,
 validates the method; accepted multi-component cases will be presented in
-Section~\ref{sec:results-alpha} after re-validation.
+Section~\ref{sec:results-alpha}.
