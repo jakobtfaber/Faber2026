@@ -1,6 +1,6 @@
 {
   "burst": "hamilton",
-  "fit_note": "C2D1: leading CHIME component at ~-0.31 ms (69 sig prominence); third trailing CHIME peak (+0.98 ms, 10.7 sig) deliberately left out of this first pass. Sandbox refit 2026-07-07 (bad-fit remediation).",
+  "fit_note": "C3D1: three-component CHIME model captures the leading component, main component, and third trailing CHIME peak; DSA remains one component. Sandbox refit 2026-07-07 (bad-fit remediation).",
   "marginalize_gain": false,
   "marginalize_gain_gp": false,
   "shared_zeta": false,
