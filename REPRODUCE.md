@@ -26,12 +26,17 @@ own environment.
 
 One wrinkle worth knowing before you go looking for a pipeline commit. The
 `.gitmodules` URL above is what a fresh `git submodule update --init` clones,
-and it does resolve the pinned SHA. But **pipeline development happens on the
-`jakobtfaber/dsa110-FLITS` fork**, and the pinned commit is *not* an ancestor of
-either repo's `main` — it sits 310 commits along a divergent line, on the branch
-`fix/budget-table-data-post-igm-lognormal`. A pipeline fix is therefore PR'd
-against that branch, not against `main` (see FLITS #146, #147, #148). Check
-`git merge-base --is-ancestor` before ever bumping the pin.
+and it resolves the pinned SHA. **Pipeline development happens on the
+`jakobtfaber/dsa110-FLITS` fork.** Since FLITS #151 merged the old divergent
+line (`fix/budget-table-data-post-igm-lognormal`) into the fork's `main`, the
+pin base is an ancestor of fork `main`; the pin itself sits 1–2 replayed
+commits off it. The full pin lineage is published on the fork branch
+**`pin/faber2026`** (since 2026-07-09), so pinned SHAs are reachable by ref,
+not just as fork-network dangling objects. A pipeline fix is PR'd against fork
+`main`, then replayed onto the pin (see FLITS #149 → Faber2026 #71, and
+FLITS #156 → the guards pin bump, for the pattern); advance `pin/faber2026` on
+every bump, and check `git merge-base --is-ancestor` before ever bumping the
+pin.
 
 ## Environment
 
@@ -147,12 +152,14 @@ Three of the four tables are generated from a data file + an emitter; edit the
 **data file**, never the `.tex`. Each root `.tex` also carries a
 `% !! GENERATED FILE` banner with its own regenerate line.
 
-Both are safe to regenerate at the currently pinned submodule (`79eaf7e`);
+Both are safe to regenerate at the currently pinned submodule (`14e0d1f`);
 regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
 untrue — see hazard 1 for what went wrong and why the pin matters. (The pin
-reached `79eaf7e` in two steps: `6c87890 → 334cc74` as Faber2026 #68, then
+reached `14e0d1f` in three steps: `6c87890 → 334cc74` as Faber2026 #68, then
 `334cc74 → 79eaf7e` as Faber2026 #71, a single commit promoting the `zach`
-C2D4 beta fit. Across the whole `6c87890 → 79eaf7e` range no `*_table_data.json`
+C2D4 beta fit, then `79eaf7e → 14e0d1f` as the guards pin-bump PR, a single
+commit promoting the CHIME artifact-control guards (FLITS #156; scintillation
+lane only). Across the whole `6c87890 → 14e0d1f` range no `*_table_data.json`
 and neither table emitter is touched, so the byte-exact regeneration of
 `budget_table.tex` and `foreground_table.tex` is unchanged from the earlier
 verification. `beta_table.tex` is a separate matter — see the note below.)
