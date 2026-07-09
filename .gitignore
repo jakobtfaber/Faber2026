@@ -15,6 +15,9 @@
 # Built PDF of the manuscript itself (figures under figures/ ARE tracked).
 /main.pdf
 
+# Python bytecode caches from running scripts/ and tests/.
+__pycache__/
+
 # Local layout prototypes (regenerate from pipeline/; promote winners to figures/).
 figures/prototypes/
 # Local grit coordination state (locks/worktrees for concurrent agents).

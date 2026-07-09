@@ -90,7 +90,14 @@ $\ln(f_{\rm IGM}/f_{\rm IGM,TNG})$ with $f_{\rm IGM,TNG}=0.797$. This supersedes
 the \citet{Macquart2020} $p(\Delta)$ form with $\sigma_{\rm DM}=F\,z^{-1/2}$:
 \citet{Connor2024} show that the diffuse scatter is set by non-Poissonian
 intersection of IGM filaments and sheets rather than by halo Poisson statistics,
-and does not follow the $z^{-1/2}$ scaling \citep{McQuinn2014, James2022}.
+and does not follow the $z^{-1/2}$ scaling \citep{McQuinn2014, James2022}. The
+TNG-300 calibration is tabulated for $z\ge0.1$; for the two sightlines below
+that redshift (FRB~20220207C, FRB~20240203A) we continue $\mu(z)$ along the
+\citet{Macquart2020} redshift dependence,
+$\langle\mathrm{DM_{IGM}}\rangle\propto\int_0^z(1+z')/E(z')\,\mathrm{d}z'$,
+rather than extrapolating the spline, and hold $\sigma$ at its grid-edge value.
+The continuation is exact in the $z\rightarrow0$ limit and reproduces the
+tabulated log-median increments to $1.5\%$ over $0.1<z<0.3$.
 \item \emph{Galactic disk.} The NE2025 disk column with a $30\%$ lognormal
 uncertainty.
 \item \emph{Galactic halo.} $40\,\mathrm{pc\,cm^{-3}}$ median, lognormal with a
@@ -102,7 +109,7 @@ lognormal uncertainty.
 \end{itemize}
 The resulting posteriors are asymmetric, dominated at higher redshift by the
 diffuse cosmic scatter (Figure~\ref{fig:dm_host_posteriors},
-Table~\ref{tab:host-forward-model}); their medians generally exceed the
+Table~\ref{tab:host-forward-model}); their medians exceed the
 mean-subtracted residuals because the log-normal $P(\mathrm{DM_{IGM}})$ is
 right-skewed. Two sightlines, FRB~20220310F and FRB~20221203A, carry median
 posteriors marginally below zero with $P(\mathrm{DM_{host}}<0)\simeq0.5$; both
@@ -121,14 +128,14 @@ and $P(\mathrm{DM_{host}}<0)$. DM in $\mathrm{pc\,cm^{-3}}$.
 \tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$\mathrm{DM_{host}}$} &
   \colhead{$P(\mathrm{DM_{host}}<0)$}}
 \startdata
-FRB 20220207C & $0.043$ & $41^{+37}_{-46}$   & $0.18$ \\
+FRB 20220207C & $0.043$ & $51^{+36}_{-43}$   & $0.13$ \\
 FRB 20220310F & $0.479$ & $-10^{+88}_{-107}$ & $0.54$ \\
 FRB 20220506D & $0.300$ & $48^{+65}_{-80}$   & $0.27$ \\
 FRB 20221113A & $0.251$ & $55^{+61}_{-75}$   & $0.23$ \\
 FRB 20221203A & $0.510$ & $-2^{+106}_{-131}$ & $0.51$ \\
 FRB 20230307A & $0.271$ & $90^{+87}_{-107}$  & $0.20$ \\
 FRB 20230913A & $0.302$ & $136^{+69}_{-88}$  & $0.07$ \\
-FRB 20240203A & $0.074$ & $102^{+31}_{-37}$  & $0.01$ \\
+FRB 20240203A & $0.074$ & $106^{+30}_{-36}$  & $0.01$ \\
 FRB 20240229A & $0.287$ & $197^{+60}_{-75}$  & $0.01$ \\
 \enddata
 \end{deluxetable}
@@ -140,7 +147,7 @@ FRB 20240229A & $0.287$ & $197^{+60}_{-75}$  & $0.01$ \\
     $16$th--$84$th-percentile interval, dark points) for the nine
     redshift-constrained sightlines, compared with the arithmetic
     mean-subtracted residual (orange crosses). Sampling the full, skewed
-    $P(\mathrm{DM_{IGM}}\,|\,z)$ generally shifts the posterior median above the
+    $P(\mathrm{DM_{IGM}}\,|\,z)$ shifts the posterior median above the
     mean-subtracted value and turns the two formerly negative residuals
     (FRB 20220310F, FRB 20221203A) into posteriors consistent with zero.
     \emph{Right:} the FRB 20230307A intracluster column from an X-ray-motivated

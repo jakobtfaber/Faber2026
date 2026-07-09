@@ -19,7 +19,11 @@ fits f_IGM to the DSA-110 + literature FRB sample. This supersedes the earlier
 Macquart P(Delta) form with fixed sigma_DM = F z^{-1/2}: Connor et al. (2025)
 show sigma_DM does NOT follow the z^{-1/2} halo-Poisson scaling, and that the
 diffuse scatter is dominated by non-Poissonian intersection of IGM filaments and
-sheets. Because this budget already carries identified intervening halos in the
+sheets. The TNG calibration is tabulated only for z >= 0.1; below that we continue
+it along the Macquart relation rather than extrapolating the spline (see
+``igm_lognormal_shape``).
+
+Because this budget already carries identified intervening halos in the
 separate DM_int census term, we map our cosmic term onto the *IGM* marginal
 (DM_IGM, gas outside virialized halos, f_IGM = 0.76 from Connor et al. 2025)
 rather than the total DM_cos = DM_IGM + DM_X; using DM_cos would double-count the
@@ -109,8 +113,57 @@ TNG_MU_IGM = np.array([4.37380909, 5.07264111, 5.4962193, 5.80209722, 6.04344301
 TNG_SIG_IGM = np.array([0.33479241, 0.29198339, 0.25434913, 0.22449515, 0.20123352,
                         0.17974651, 0.16545537, 0.14851468, 0.13239113, 0.11009793,
                         0.09384749, 0.08155763])
+TNG_ZMIN = float(TNG_ZGRID[0])
+TNG_ZMAX = float(TNG_ZGRID[-1])
 _MU_IGM_SPL = interpolate.UnivariateSpline(TNG_ZGRID, TNG_MU_IGM, s=0)
 _SIG_IGM_SPL = interpolate.UnivariateSpline(TNG_ZGRID, TNG_SIG_IGM, s=0)
+
+# Low-z continuation below the TNG grid (z < 0.1). Two of the nine sightlines
+# (z = 0.043, 0.074) lie below the tabulated range, where a cubic spline with
+# scipy's default extrapolation is unconstrained: it flattens to a spurious
+# DM_IGM(z->0) -> 25 pc cm^-3 floor and overestimates the median by ~30% at
+# z = 0.043, enough to push DM_IGM above the total <DM_cos> = DM_IGM + DM_X.
+# Instead we continue mu(z) along the Macquart relation's own redshift
+# dependence, <DM_IGM(z)> propto int_0^z (1+z')/E(z') dz' (Macquart et al. 2020,
+# Eq. 2; Deng & Zhang 2014), which vanishes linearly as z -> 0. Sanity: this
+# scaling reproduces the tabulated mu increments to 1.5% over 0.1 < z < 0.3
+# (ln[I(0.2)/I(0.1)] = 0.713 vs the tabulated 0.699), so it is continuous with,
+# and consistent with, the calibration it extends.
+# sigma is held at its grid-edge value: TNG does not constrain the IGM scatter
+# below z = 0.1, and holding it fixed is the minimal assumption (the cubic
+# extrapolation gave 0.360 at z = 0.043 vs 0.335 here -- a negligible difference
+# next to the mu error it accompanied).
+OMEGA_M, OMEGA_LAMBDA = 0.3111, 0.6889   # flat LCDM, Planck 2018 (TT,TE,EE+lowE+lensing)
+
+
+def _macquart_integral(z: float) -> float:
+    """int_0^z (1+z')/E(z') dz', the redshift dependence of <DM_IGM>."""
+    val, _ = integrate.quad(
+        lambda x: (1.0 + x) / math.sqrt(OMEGA_M * (1.0 + x) ** 3 + OMEGA_LAMBDA),
+        0.0, z, limit=200,
+    )
+    return val
+
+
+_MACQUART_I_ZMIN = _macquart_integral(TNG_ZMIN)
+
+
+def igm_lognormal_shape(z: float):
+    """TNG-calibrated (mu, sigma) of DM_IGM at redshift z, at f_IGM = f_IGM,TNG.
+
+    Interpolates the tabulated grid for 0.1 <= z <= 5, and continues below the
+    grid along the Macquart relation (see the note above). Raises above z = 5,
+    where nothing constrains the calibration and no sightline in this budget
+    lives."""
+    if not 0.0 < z <= TNG_ZMAX:
+        raise ValueError(
+            f"z={z} outside the supported range (0, {TNG_ZMAX}]: the TNG-300 IGM "
+            "calibration is tabulated on 0.1 <= z <= 5 and must not be extrapolated above it."
+        )
+    if z >= TNG_ZMIN:
+        return float(_MU_IGM_SPL(z)), float(_SIG_IGM_SPL(z))
+    mu = TNG_MU_IGM[0] + math.log(_macquart_integral(z) / _MACQUART_I_ZMIN)
+    return mu, float(TNG_SIG_IGM[0])
 
 
 def igm_lognormal_params(z: float, f_igm: float = FIGM_MED):
@@ -118,9 +171,8 @@ def igm_lognormal_params(z: float, f_igm: float = FIGM_MED):
 
     mu is the natural-log median; the f_igm rescaling shifts the log-mean by
     log(f_igm / f_igm,TNG) (Connor et al. 2025, Methods)."""
-    mu = float(_MU_IGM_SPL(z)) + np.log(f_igm / FIGM_TNG)
-    sigma = float(_SIG_IGM_SPL(z))
-    return mu, sigma
+    mu, sigma = igm_lognormal_shape(z)
+    return mu + np.log(f_igm / FIGM_TNG), sigma
 
 
 def _draw_figm(n: int) -> np.ndarray:
@@ -138,8 +190,8 @@ def sample_dm_cosmic(z: float, dm_cosmic_mean: float, n: int) -> np.ndarray:
     SIGHTLINES table for provenance but is NOT used to set the scale: the scale
     now comes from the TNG log-median mu(z), rescaled by the sampled f_IGM."""
     figm = _draw_figm(n)
-    mu = float(_MU_IGM_SPL(z)) + np.log(figm / FIGM_TNG)
-    sigma = float(_SIG_IGM_SPL(z))
+    mu_tng, sigma = igm_lognormal_shape(z)
+    mu = mu_tng + np.log(figm / FIGM_TNG)
     out = RNG.lognormal(mu, sigma)
     return out
 
