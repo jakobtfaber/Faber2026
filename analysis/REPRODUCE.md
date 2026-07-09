@@ -78,26 +78,20 @@ Three of the four tables are generated from a data file + an emitter; edit the
 **data file**, never the `.tex`. Each root `.tex` also carries a
 `% !! GENERATED FILE` banner with its own regenerate line.
 
-> **STOP — `budget_table.tex` is currently NOT safe to regenerate.** Its data
-> file has fallen behind the forward model it is supposed to track, so running
-> the emitter today would silently *revert* the manuscript's DM_host column to
-> superseded values. See hazard 1 below. `foreground_table.tex` is in sync and
-> is safe to regenerate.
+Both are safe to regenerate at the currently pinned submodule (`c69d043`);
+regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
+untrue — see hazard 1 for what went wrong and why the pin matters.
 
 ```bash
 cd pipeline
 # budget table: values in galaxies/foreground/budget_table_data.json
-# !! DO NOT RUN until the drift in hazard 1 is reconciled -- this overwrites
-#    ../budget_table.tex with values that predate PR #40 and PR #42.
-# uv run python -m galaxies.foreground.budget_table_emitter   --out ../budget_table.tex
+uv run python -m galaxies.foreground.budget_table_emitter     --out ../budget_table.tex
 # foreground census: values in galaxies/foreground/foreground_table_data.json
 uv run python -m galaxies.foreground.foreground_table_emitter --out ../foreground_table.tex
 # verify (byte-exact vs exports/ + value cross-checks against upstream products)
 uv run pytest galaxies/foreground/test_budget_table_emitter.py \
               galaxies/foreground/test_foreground_table_emitter.py
-# ^ as of 2026-07-09 this is 8 passed, 1 failed:
-#   test_dm_host_matches_forward_model fails on all 9 non-placeholder rows
-#   (the assert short-circuits, so pytest names only the first).
+# ^ green at pipeline pin c69d043 (verified 2026-07-09).
 ```
 
 Each emitter also writes a canonical copy to `pipeline/exports/<table>.tex` (the
@@ -110,15 +104,15 @@ keeps building. `sample_table.tex` uses its own generator
 `analysis/beta_campaign/export_beta_table.py`.
 
 The parity tests are the substantive guarantee — they tie each table to a
-*recomputable* upstream product, not just to its own export. This is what makes
-them worth having: the budget cross-check is **currently failing**, and it is
-failing because it correctly detected a real drift (hazard 1).
+*recomputable* upstream product, not just to its own export. They have already
+earned their keep once: they are what caught the drift described in hazard 1.
 - **budget** — the DM_host `median^{+p84}_{-p16}` column is cross-checked
   value-for-value against the forward-model posteriors in
   `scripts/dm_budget_uncertainty.csv` (emitted by `scripts/dm_budget_uncertainty.py`),
-  over the 9 non-placeholder sightlines. **Status 2026-07-09: RED — all 9 rows
-  mismatch.** The byte-exact check against `exports/budget_table.tex` still
-  passes; it is the forward-model cross-check that fails.
+  over the 9 non-placeholder sightlines. Green at pin `c69d043` (9/9), verified
+  2026-07-09. Note the test spans **both repositories**: it reads a super-repo
+  CSV from a submodule test, so it is only meaningful for a matched
+  (super-repo commit, submodule pin) pair.
 - **foreground** — every numeric object ID's verdict is cross-checked against
   the census registry `pipeline/galaxies/foreground/data/intervening_census_registry.csv`
   (27/27 registry-resident rows). The table is a curated subset of the registry's
@@ -127,39 +121,45 @@ failing because it correctly detected a real drift (hazard 1).
 
 ## Caveats and hazards (the things worth fixing)
 
-1. **`budget_table.tex` has drifted from its generator, in the dangerous
-   direction. (OPEN — blocks regeneration; needs an author decision.)**
+1. **The budget-table parity test spans two repositories, so the submodule pin
+   is part of the result. (RESOLVED 2026-07-09 by PR #48 — recorded as a
+   standing trap.)**
 
-   The emitter is *behind* the manuscript, not ahead of it. Two PRs revised the
-   forward model without regenerating the emitter's data file:
+   `test_dm_host_matches_forward_model` lives in the submodule but reads
+   `scripts/dm_budget_uncertainty.csv` from the **super-repo**. Its verdict is
+   therefore a property of the *pair* (super-repo commit, `pipeline` pin), not
+   of either repo alone. That let a drift open up silently:
+
    - **PR #40** re-based the cosmic DM term on the TNG-calibrated IGM log-normal
-     (Connor 2025), rewriting `scripts/dm_budget_uncertainty.csv`.
+     (Connor 2025), rewriting `dm_budget_uncertainty.csv`.
    - **PR #42** further corrected the low-z IGM spline.
+   - `budget_table.tex` was updated to follow. `budget_table_data.json`, in the
+     submodule, was not — and the pin stayed at `f9e1c24`.
 
-   `budget_table.tex` in the manuscript was updated by hand to follow them.
-   `pipeline/galaxies/foreground/budget_table_data.json` was not, and still
-   holds the pre-#40 numbers. Concretely, for FRB 20220207C:
+   For a window on 2026-07-09 the emitter was therefore *behind* the manuscript:
+   at pin `f9e1c24` all 9 non-placeholder sightlines mismatched, and running the
+   documented regenerate command would have rewritten 35 lines of
+   `budget_table.tex`, reverting the DM_host column to pre-#40 values. The
+   `% !! GENERATED FILE -- do not edit by hand` banner pointed exactly the wrong
+   way: for that window, the hand edits were the correct ones.
 
-   | source | DM_host |
-   |---|---|
-   | `budget_table_data.json` (emitter input, submodule `f9e1c24`) | `51^{+37}_{-49}` |
-   | `budget_table.tex` on `origin/main` (what the paper shows) | `51^{+36}_{-43}` |
-   | `dm_budget_uncertainty.csv` on `origin/main` (the model) | `51^{+36}_{-43}` |
+   **PR #48 closed it** by bumping the pin to `c69d043`, which carries a
+   regenerated `budget_table_data.json`. Verified at `c69d043`: the parity test
+   is 9/9 green, `--check` exits 0, and the emitter's output is byte-identical
+   to the committed `budget_table.tex`.
 
-   So **running the documented regenerate command today rewrites 35 lines of
-   `budget_table.tex` and reverts the DM_host column to superseded values.** The
-   `% !! GENERATED FILE -- do not edit by hand` banner is, for this one file,
-   currently a trap: the hand edits are the *correct* ones.
+   The lesson worth keeping: **a green parity test in the submodule proves
+   nothing until the super-repo pins the commit that made it green.** When you
+   change `dm_budget_uncertainty.py` / `.csv`, regenerate
+   `budget_table_data.json` in `dsa110-FLITS` and bump the gitlink in the same
+   breath, or the next person to run the "safe" regenerate command silently
+   reverts your numbers.
 
-   *Fixing it is not mechanical.* Regenerating `budget_table_data.json` from the
-   current forward model yields a **negative** DM_host median for two sightlines
-   — FRB 20220310F (`-10`) and FRB 20221203A (`-2`). A negative host contribution
-   is unphysical as printed, so how to present those rows (censor at zero, quote
-   an upper limit, revisit the priors) is an author/science call, not a
-   regeneration. It belongs with the other open DM-prior decisions.
-
-   Until then: **edit `budget_table.tex` by hand and do not run its emitter.**
-   `foreground_table.tex` is unaffected — it regenerates byte-identically.
+   (Two sightlines — FRB 20220310F and FRB 20221203A, both $z\approx0.5$ — carry
+   *negative* DM_host medians. This is intended, not a defect: their posteriors
+   are consistent with zero, `P(DM_host<0)≈0.5`, and `budget_table.tex`'s own
+   `\tablecomments` explains that the marginally negative medians reflect scatter
+   about the cosmological normalization. Do not "fix" them by censoring at zero.)
 
 2. **The two hand-maintained tables are now generated. (RESOLVED 2026-07-08,
    with the caveat in hazard 1.)**
