@@ -147,9 +147,20 @@ Three of the four tables are generated from a data file + an emitter; edit the
 **data file**, never the `.tex`. Each root `.tex` also carries a
 `% !! GENERATED FILE` banner with its own regenerate line.
 
-Both are safe to regenerate at the currently pinned submodule (`6c87890`);
+Both are safe to regenerate at the currently pinned submodule (`79eaf7e`);
 regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
-untrue — see hazard 1 for what went wrong and why the pin matters.
+untrue — see hazard 1 for what went wrong and why the pin matters. (The pin
+reached `79eaf7e` in two steps: `6c87890 → 334cc74` as Faber2026 #68, then
+`334cc74 → 79eaf7e` as Faber2026 #71, a single commit promoting the `zach`
+C2D4 beta fit. Across the whole `6c87890 → 79eaf7e` range no `*_table_data.json`
+and neither table emitter is touched, so the byte-exact regeneration of
+`budget_table.tex` and `foreground_table.tex` is unchanged from the earlier
+verification. `beta_table.tex` is a separate matter — see the note below.)
+
+`#71` did change the submodule's `analysis/beta_campaign/beta_table_rows.tex`
+(the `zach` row moved from `_C1D1` to `_C2D4_cwin`). The root `beta_table.tex`
+is hand-maintained, is not `\input` by the manuscript, and is deliberately left
+untouched: `tab:beta` is deferred. Do not treat that file as regenerable-and-current.
 
 ```bash
 cd pipeline
@@ -229,9 +240,13 @@ earned their keep once: they are what caught the drift described in hazard 1.
    CSV, could see it.
 
    **PRs #48 and #53 closed it** by bumping the pin to a commit that carries a
-   regenerated `budget_table_data.json`. Verified at the current pin `6c87890`:
-   the parity test is 9/9 green, `--check` exits 0, and the emitter's output is
-   byte-identical to the committed `budget_table.tex`.
+   regenerated `budget_table_data.json`. Verified at pin `6c87890`: the parity
+   test is 9/9 green, `--check` exits 0, and the emitter's output is
+   byte-identical to the committed `budget_table.tex`. This still holds at the
+   current pin `79eaf7e` (Faber2026 #68 then #71): the `6c87890 → 79eaf7e` range
+   does not touch `budget_table_data.json` or either table emitter, so the 9/9
+   parity result carries over unchanged. The `parity` CI job re-ran the emitters
+   against the super-repo at each pin bump and was green on both.
 
    Closing it took two tries, and the misfire is the more useful half of the
    story. **`f9e1c24` — the pin this repo had carried since #39 — is not an
@@ -312,9 +327,11 @@ earned their keep once: they are what caught the drift described in hazard 1.
      never committed. Needs author confirmation.
 
 5. **Two `galaxies/v2_0/` modules defaulted their output to a hardcoded personal
-   Overleaf path — and one of them was not saved by its `run_command`.
-   (Code fix merged as FLITS `334cc74` on `fix/budget-table-data-post-igm-lognormal`;
-   reaches this repo at the next pin bump, which is its own reviewed step.)**
+   Overleaf path — and one of them was not saved by its `run_command`. FIXED at
+   the current pin. (Code fix landed as FLITS #148, first reaching this repo at
+   pin `334cc74` via the `6c87890 → 334cc74` bump, Faber2026 #68. The current
+   pin `79eaf7e` — Faber2026 #71 — is a descendant of `334cc74` and carries the
+   fix unchanged.)**
 
    Hazard 3 fixed `plot_association_cards.py`. It did not fix its neighbours:
 
@@ -329,11 +346,16 @@ earned their keep once: they are what caught the drift described in hazard 1.
    outside the repository, and on any other machine into a freshly `makedirs`'d
    path nobody will look in. This was found on 2026-07-09 by executing the
    command and then noticing the six modified files in the *Overleaf* checkout
-   (restored). **FLITS PR #148** replaces both defaults with
+   (restored). **FLITS PR #148** replaced both defaults with
    `os.path.join(os.path.dirname(_REPO), "figures")` — the same `_REPO`-derived
-   form hazard 3 used. Until the pin is bumped past `334cc74`, the manifest's
-   `run_command` passes `--out-dir ../figures` so the documented invocation is
-   safe at the current pin.
+   form hazard 3 used — and that fix is now in the pinned submodule (present
+   since `334cc74`, verified again at the current pin `79eaf7e`:
+   `DEFAULT_OUT_DIR` is repo-derived at
+   `sightline_halo_grid.py:63` and `systems_figures.py:80`). A bare run therefore
+   lands `clusters_icm.*` / `galaxies_cgm.*` inside the repository. The manifest's
+   `run_command` still passes `--out-dir ../figures` explicitly, so the documented
+   invocation was already safe and remains so. The undeclared ordering dependency
+   below is unaffected by #148 and still stands.
 
    The same run exposed an **undeclared ordering dependency**: `systems_figures.py`
    reads `pipeline/results/sightline_dm_scattering_budget.csv`, which nothing in
@@ -389,10 +411,14 @@ earned their keep once: they are what caught the drift described in hazard 1.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,
   and `plot_association_cards.py`'s output path is now a repo-relative default
   with `--manuscript-dir` / `--no-manuscript-copy` overrides.
-- **Hazards (5) and (6) are open.** (5) is a small submodule fix: make
-  `DEFAULT_OUT_DIR` repo-relative in the two `galaxies/v2_0/` modules, and add
-  the missing `build_unified_records` to `sightline_budget.py`'s fallback import.
-  (6) is a data-deposition decision, not a code fix.
+- **Hazard (5) is partly closed; (6) is open.** (5)'s `DEFAULT_OUT_DIR` half is
+  **done** — FLITS #148 made it repo-relative in the two `galaxies/v2_0/` modules,
+  in the pinned submodule since `334cc74` (Faber2026 #68) and still present at the
+  current pin `79eaf7e` (Faber2026 #71). Still open in (5): add
+  the missing `build_unified_records` to `sightline_budget.py`'s fallback import
+  (confirmed still absent at `79eaf7e` — neither #148 nor #71 touches
+  `sightline_budget.py`). (6) is a data-deposition decision,
+  not a code fix.
 - Once producers are confirmed, this manifest can back a top-level `Makefile`
   target (`make figures`) that regenerates the embedded set end-to-end. The
   `clone_verified = reproduced*` rows are exactly the set that target can cover
