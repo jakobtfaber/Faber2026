@@ -4,7 +4,7 @@
 **Date:** 2026-07-08 22:49 PDT
 **Author:** AI Assistant
 **Status:** Handoff — my pipeline lane is complete, verified, and pushed. **Two `claude` sessions are sharing one working tree**; the repo is mid-flight in another lane.
-**Branch:** `Faber2026` on `main` at `4a00aa0` (behind `origin/main` `64158aa` by 4, ahead by 1)
+**Branch:** `Faber2026` on `main` at `4a00aa0` (behind `origin/main` `64158aa` by 4, ahead by 1) *(note: a later rebase at 23:01 replayed `4a00aa0` to `681cfe2`, same content; `4a00aa0` is now reachable only via `backup/main-pre-rebase-20260708`. Its content has since landed on `main` via PR #46 (squash `f7fcbb2`), with PR #51 correcting a stale hazard note.)*
 **Commit:** pipeline `agent/sightline-halo-grid-figure`, my last commit `e223b90`; **branch tip is now `f9e1c24`** (not mine)
 
 ---
@@ -110,7 +110,7 @@ python analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.
 
 3. **`Faber2026` submodule gitlink is stale**: records `386e886`, tip is `f9e1c24`. Five+ commits behind.
 
-4. **`Faber2026` `main` is behind `origin/main`** by 4, ahead by 1 (`4a00aa0` vs `64158aa`). The other lane's handoff cites yet another origin SHA (`700f231`) — the remote is moving fast.
+4. **`Faber2026` `main` is behind `origin/main`** by 4, ahead by 1 (`4a00aa0` vs `64158aa`) *(later rebased to `681cfe2`, same content; `4a00aa0` now lives only on `backup/main-pre-rebase-20260708`. Its content has since landed on `main` via PR #46 (squash `f7fcbb2`), with PR #51 correcting a stale hazard note.)*. The other lane's handoff cites yet another origin SHA (`700f231`) — the remote is moving fast.
 
 5. **Uncommitted, not mine, in the pipeline worktree** *(observed, unverified)*: `run_dsa_lorentzian_fits.py`, +127/−4, adding `_harmonic_keep_mask()` — a de-comb for the CHIME upchannelization ripple (400 MHz / 1024 = 0.390625 MHz). It is **opt-in per config**: all 12 `*_chime.yaml` set `harmonic_mask`, **no** `*_dsa.yaml` does. So it does **not** invalidate the DSA figures in `1e2c507`. I did not run, test, or review it.
 

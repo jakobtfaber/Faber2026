@@ -4,7 +4,7 @@
 **Date:** 2026-07-08 18:42 PDT
 **Author:** AI Assistant
 **Status:** Handoff
-**Branch:** `main` (local `4a00aa0`, **behind** `origin/main` `700f231`)
+**Branch:** `main` (local `4a00aa0`, **behind** `origin/main` `700f231`) *(note: a later rebase at 23:01 replayed `4a00aa0` to `681cfe2`, same content; `4a00aa0` is now reachable only via `backup/main-pre-rebase-20260708`. Its content has since landed on `main` via PR #46 (squash `f7fcbb2`), with PR #51 correcting a stale hazard note.)*
 **Commit (origin/main):** `700f231`
 
 ---
@@ -87,9 +87,10 @@ All landed on `origin/main` (`700f231`) via merged PRs this session:
 The next session must reconcile before doing new work:
 
 - **Local `main` is 1 ahead / 3 behind `origin/main`.** Local `4a00aa0` ("docs: update
-  reproducibility spine…") is a local-only commit; the three origin-only commits are the
-  merges of PRs #37/#38/#39. A `git pull --rebase` (or fast-forward after checking the
-  local commit is wanted) is needed.
+  reproducibility spine…") is a local-only commit *(later rebased to `681cfe2`, same
+  title/content; `4a00aa0` itself now lives only on `backup/main-pre-rebase-20260708`. Its content has since landed on `main` via PR #46 (squash `f7fcbb2`), with PR #51 correcting a stale hazard note.)*; the
+  three origin-only commits are the merges of PRs #37/#38/#39. A `git pull --rebase` (or
+  fast-forward after checking the local commit is wanted) is needed.
 - **Uncommitted working-tree changes:**
   - The 12 `figures/dsa_scint_acf/*.pdf` + `figures/dsa_lorentzian_summary.{pdf,png}` show
     as `M` but are **byte-identical to `origin/main`** (verified: all 14 files hash-compared
@@ -137,8 +138,9 @@ The next session must reconcile before doing new work:
 ## Action Items & Next Steps
 
 1. [ ] **Reconcile local `main` with `origin/main` (`700f231`).** `git fetch` then rebase/FF;
-       decide whether local-only commit `4a00aa0` (reproducibility-spine doc) is still wanted or
-       already superseded by what merged.
+       decide whether local-only commit `681cfe2` (reproducibility-spine doc; rebased from
+       `4a00aa0` at 23:01 — `4a00aa0` itself now lives only on `backup/main-pre-rebase-20260708`)
+       is still wanted or already superseded by what merged.
 2. [ ] **Decide on the uncommitted `figures/dm_host_posteriors.{pdf,png}`** — they differ from
        `origin/main` and are committed nowhere. Commit (new PR) or discard.
 3. [ ] **Overleaf rebuild** to verify the refreshed DSA figures and the regenerated
