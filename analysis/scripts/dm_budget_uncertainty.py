@@ -9,6 +9,24 @@ et al. 2022). Here we instead sample the full P(DM_cosmic | z) and the nuisance
 priors on the Galactic disk, Galactic halo, and intervening columns, and report
 DM_host as a posterior (p16/p50/p84) together with P(DM_host < 0) per sightline.
 
+The diffuse cosmic term is modeled as the IGM column DM_IGM ~ LogNormal(mu(z),
+sigma(z)), with mu(z) and sigma(z) the redshift-dependent log-normal parameters
+of a bivariate (IGM, halo) fit to a mock FRB survey in IllustrisTNG-300 by
+Walker et al. (2024); we adopt the tabulated values (columns [A, mu_X, mu_IGM,
+sig_X, sig_IGM, rho]) via the reproduction package of Connor et al. (2025,
+arXiv:2409.16952; tng_params_new.npy), whose analysis uses this calibration and
+fits f_IGM to the DSA-110 + literature FRB sample. This supersedes the earlier
+Macquart P(Delta) form with fixed sigma_DM = F z^{-1/2}: Connor et al. (2025)
+show sigma_DM does NOT follow the z^{-1/2} halo-Poisson scaling, and that the
+diffuse scatter is dominated by non-Poissonian intersection of IGM filaments and
+sheets. Because this budget already carries identified intervening halos in the
+separate DM_int census term, we map our cosmic term onto the *IGM* marginal
+(DM_IGM, gas outside virialized halos, f_IGM = 0.76 from Connor et al. 2025)
+rather than the total DM_cos = DM_IGM + DM_X; using DM_cos would double-count the
+census halos. The halo-Poisson sigma_DM = F z^{-1/2} form overstated the diffuse
+width by ~3x (CV ~60-80% vs ~20-37% here), which is exactly the halo scatter that
+DM_int handles here.
+
 For the single R500-piercing cluster (FRB 20230307A) we bracket the mNFW column
 against an X-ray/SZ-motivated beta-model (Cavaliere & Fusco-Femiano 1976; the
 GNFW pressure calibration of Arnaud et al. 2010 motivates f_gas), propagating
@@ -26,7 +44,7 @@ import math
 from pathlib import Path
 
 import numpy as np
-from scipy import integrate, optimize
+from scipy import integrate, interpolate
 
 REPO = Path(__file__).resolve().parent.parent
 OUT_CSV = REPO / "scripts" / "dm_budget_uncertainty.csv"
@@ -54,10 +72,15 @@ SIGHTLINES = [
 ]
 
 # --- Nuisance priors -----------------------------------------------------------
-# Macquart cosmic-scatter amplitude: sigma_DM = F z^{-1/2}, F ~ 0.32 fiducial
-# (Macquart 2020; James 2022 measure F ~ 0.3). We marginalize F over
-# [0.25, 0.40] to carry the feedback uncertainty.
-F_LO, F_HI = 0.25, 0.40
+# Diffuse cosmic (IGM) column: Connor et al. (2025) fit the IGM baryon fraction
+# f_IGM = 0.76 (+0.10/-0.11) from the DSA-110 + literature FRB sample. We
+# marginalize f_IGM over this (asymmetric-normal, clipped to (0, 0.98]) to carry
+# the feedback/partition uncertainty; it shifts the IGM log-mean by
+# log(f_IGM / f_IGM,TNG). The redshift-dependent log-normal shape (mu, sigma) is
+# fixed to the TNG-300 calibration below.
+FIGM_MED, FIGM_SIG_LO, FIGM_SIG_HI = 0.76, 0.11, 0.10
+FIGM_TNG = 0.797          # TNG-300 baseline f_IGM in Connor et al. calibration
+FIGM_CLIP = (0.30, 0.98)  # keep draws physical (f_IGM + f_X <= 1)
 # Galactic disk (NE2025) fractional uncertainty: electron-density models are good
 # to tens of percent along a sightline; 30% lognormal is a standard budget value.
 SIGMA_DISK_FRAC = 0.30
@@ -70,49 +93,54 @@ HALO_SIGMA_LN = 0.35
 INT_SIGMA_LN = {"measured": 0.40, "assumed": 0.69, "cluster": 0.30, "none": 0.0}
 
 
-def macquart_pdf(delta: np.ndarray, sigma_dm: float, c0: float,
-                 alpha: float = 3.0, beta: float = 3.0) -> np.ndarray:
-    """Unnormalized cosmic-DM PDF P(Delta), Delta = DM_cosmic/<DM_cosmic>
-    (Macquart 2020 functional form; McQuinn 2014 scatter)."""
-    out = np.zeros_like(delta)
-    m = delta > 0
-    d = delta[m]
-    out[m] = d ** (-beta) * np.exp(-((d ** (-alpha) - c0) ** 2) / (2.0 * alpha ** 2 * sigma_dm ** 2))
-    return out
+# --- TNG-300 IGM log-normal calibration (Walker et al. 2024) -------------------
+# Bivariate (IGM, halo) log-normal fit to a mock FRB survey in IllustrisTNG-300
+# by Walker et al. (2024); tabulated in the Connor et al. (2025) reproduction
+# package (tng_params_new.npy), columns [A, mu_X, mu_IGM, sig_X, sig_IGM, rho] at
+# the 12 snapshot redshifts below. We use the IGM marginal (mu_IGM, sig_IGM)
+# only, since identified intervening halos (the DM_X / halo term of the bivariate
+# model) are already carried by this budget's separate DM_int census. Values
+# reproduced verbatim so the script stays self-contained (numpy + scipy only);
+# regenerate from the .npy if the calibration is updated.
+TNG_ZGRID = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 1.5, 2.0, 3.0, 4.0, 5.0])
+TNG_MU_IGM = np.array([4.37380909, 5.07264111, 5.4962193, 5.80209722, 6.04344301,
+                       6.40614181, 6.78312432, 7.19849362, 7.48250248, 7.86255147,
+                       8.11920163, 8.30542453])
+TNG_SIG_IGM = np.array([0.33479241, 0.29198339, 0.25434913, 0.22449515, 0.20123352,
+                        0.17974651, 0.16545537, 0.14851468, 0.13239113, 0.11009793,
+                        0.09384749, 0.08155763])
+_MU_IGM_SPL = interpolate.UnivariateSpline(TNG_ZGRID, TNG_MU_IGM, s=0)
+_SIG_IGM_SPL = interpolate.UnivariateSpline(TNG_ZGRID, TNG_SIG_IGM, s=0)
 
 
-def _delta_grid(sigma_dm: float, alpha=3.0, beta=3.0):
-    """Grid + C0 solved so E[Delta]=1; returns (grid, normalized pdf, cdf)."""
-    grid = np.linspace(1e-3, 6.0, 4000)
+def igm_lognormal_params(z: float, f_igm: float = FIGM_MED):
+    """Log-normal (mu, sigma) of DM_IGM at redshift z, adjusted to f_igm.
 
-    def mean_minus_one(c0):
-        p = macquart_pdf(grid, sigma_dm, c0, alpha, beta)
-        norm = np.trapezoid(p, grid)
-        return np.trapezoid(grid * p, grid) / norm - 1.0
+    mu is the natural-log median; the f_igm rescaling shifts the log-mean by
+    log(f_igm / f_igm,TNG) (Connor et al. 2025, Methods)."""
+    mu = float(_MU_IGM_SPL(z)) + np.log(f_igm / FIGM_TNG)
+    sigma = float(_SIG_IGM_SPL(z))
+    return mu, sigma
 
-    c0 = optimize.brentq(mean_minus_one, -5.0, 5.0)
-    p = macquart_pdf(grid, sigma_dm, c0, alpha, beta)
-    p /= np.trapezoid(p, grid)
-    cdf = integrate.cumulative_trapezoid(p, grid, initial=0.0)
-    cdf /= cdf[-1]
-    return grid, p, cdf
+
+def _draw_figm(n: int) -> np.ndarray:
+    """f_IGM draws: two-sided normal (0.76 +0.10/-0.11), clipped to physical."""
+    u = RNG.normal(0.0, 1.0, n)
+    scale = np.where(u < 0.0, FIGM_SIG_LO, FIGM_SIG_HI)
+    return np.clip(FIGM_MED + u * scale, *FIGM_CLIP)
 
 
 def sample_dm_cosmic(z: float, dm_cosmic_mean: float, n: int) -> np.ndarray:
-    """Draw DM_cosmic from the physical P(DM_cosmic|z), marginalizing F."""
-    fvals = RNG.uniform(F_LO, F_HI, n)
-    out = np.empty(n)
-    edges = np.linspace(F_LO, F_HI, 9)
-    for lo, hi in zip(edges[:-1], edges[1:]):
-        m = (fvals >= lo) & (fvals <= hi if hi >= F_HI else fvals < hi)
-        if not m.any():
-            continue
-        fmid = 0.5 * (lo + hi)
-        sigma_dm = fmid * z ** -0.5
-        grid, _, cdf = _delta_grid(sigma_dm)
-        u = RNG.uniform(0, 1, m.sum())
-        delta = np.interp(u, cdf, grid)
-        out[m] = delta * dm_cosmic_mean
+    """Draw the diffuse cosmic (IGM) column from the Walker et al. (2024)
+    TNG-calibrated LogNormal(mu(z), sigma(z)), marginalizing f_IGM (Connor 2025).
+
+    ``dm_cosmic_mean`` (the old Macquart point estimate) is retained in the
+    SIGHTLINES table for provenance but is NOT used to set the scale: the scale
+    now comes from the TNG log-median mu(z), rescaled by the sampled f_IGM."""
+    figm = _draw_figm(n)
+    mu = float(_MU_IGM_SPL(z)) + np.log(figm / FIGM_TNG)
+    sigma = float(_SIG_IGM_SPL(z))
+    out = RNG.lognormal(mu, sigma)
     return out
 
 
