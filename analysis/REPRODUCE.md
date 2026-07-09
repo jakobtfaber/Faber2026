@@ -53,9 +53,11 @@ prefer `uv run` where the script is `uv`-clean.
   figure *set*; or (b) the producing function is confirmed but no committed CLI
   caller passes this stem (e.g. `freya_dsa_gamma_summary`). Confirm the
   individual target before relying on it in the DA statement.
-- **hand** — no generator exists; the file is hand-maintained. This is a
-  reproducibility hazard, not a verified writer (see caveats 1 and 2).
 - **unresolved** — no producer found anywhere in the current tree.
+
+(The **hand** status used in earlier versions is now retired: the two
+hand-maintained tables were converted to generated emitters — see the table
+regeneration section below.)
 
 ## Status: what's embedded now vs. staged
 
@@ -70,36 +72,122 @@ is the default-resolution (`--nside 8`) sibling of the embedded `_nside32`
 variant and is not referenced anywhere. Both classes are tracked so nothing is
 lost when a SLOT is filled.
 
+## Regenerating the tables
+
+Three of the four tables are generated from a data file + an emitter; edit the
+**data file**, never the `.tex`. Each root `.tex` also carries a
+`% !! GENERATED FILE` banner with its own regenerate line.
+
+> **STOP — `budget_table.tex` is currently NOT safe to regenerate.** Its data
+> file has fallen behind the forward model it is supposed to track, so running
+> the emitter today would silently *revert* the manuscript's DM_host column to
+> superseded values. See hazard 1 below. `foreground_table.tex` is in sync and
+> is safe to regenerate.
+
+```bash
+cd pipeline
+# budget table: values in galaxies/foreground/budget_table_data.json
+# !! DO NOT RUN until the drift in hazard 1 is reconciled -- this overwrites
+#    ../budget_table.tex with values that predate PR #40 and PR #42.
+# uv run python -m galaxies.foreground.budget_table_emitter   --out ../budget_table.tex
+# foreground census: values in galaxies/foreground/foreground_table_data.json
+uv run python -m galaxies.foreground.foreground_table_emitter --out ../foreground_table.tex
+# verify (byte-exact vs exports/ + value cross-checks against upstream products)
+uv run pytest galaxies/foreground/test_budget_table_emitter.py \
+              galaxies/foreground/test_foreground_table_emitter.py
+# ^ as of 2026-07-09 this is 8 passed, 1 failed:
+#   test_dm_host_matches_forward_model fails on all 9 non-placeholder rows
+#   (the assert short-circuits, so pytest names only the first).
+```
+
+Each emitter also writes a canonical copy to `pipeline/exports/<table>.tex` (the
+byte-exact regression anchor) and supports `--check` (non-zero exit on drift),
+suitable for CI. The `\input{budget_table}` / `\input{foreground_table}` paths
+in `sections/` are unchanged: the emitters overwrite the manuscript's root
+`.tex` files in place, so the Overleaf lane (which has no `pipeline/` submodule)
+keeps building. `sample_table.tex` uses its own generator
+(`scripts/make_sample_table.py`); `beta_table.tex` uses
+`analysis/beta_campaign/export_beta_table.py`.
+
+The parity tests are the substantive guarantee — they tie each table to a
+*recomputable* upstream product, not just to its own export. This is what makes
+them worth having: the budget cross-check is **currently failing**, and it is
+failing because it correctly detected a real drift (hazard 1).
+- **budget** — the DM_host `median^{+p84}_{-p16}` column is cross-checked
+  value-for-value against the forward-model posteriors in
+  `scripts/dm_budget_uncertainty.csv` (emitted by `scripts/dm_budget_uncertainty.py`),
+  over the 9 non-placeholder sightlines. **Status 2026-07-09: RED — all 9 rows
+  mismatch.** The byte-exact check against `exports/budget_table.tex` still
+  passes; it is the forward-model cross-check that fails.
+- **foreground** — every numeric object ID's verdict is cross-checked against
+  the census registry `pipeline/galaxies/foreground/data/intervening_census_registry.csv`
+  (27/27 registry-resident rows). The table is a curated subset of the registry's
+  confirmed+inconclusive systems (refuted candidates omitted; the cluster row's
+  ID comes from the WenHan2024 catalog, not the registry).
+
 ## Caveats and hazards (the things worth fixing)
 
-1. **Two manuscript tables are hand-maintained — no generator emits them.**
-   - `foreground_table.tex` — its own header says so. Values transcribed by
-     hand from the dsa110-FLITS foreground validation (LS DR9 / DESI DR1 / NED /
-     PS1-STRM; WenHan2024 cluster catalog).
-   - `budget_table.tex` — its header says "regenerate, not by hand," but
-     `docs/rse/specs/plan-trust-reset-revalidation.md` confirms it is *currently
-     a hand transcription*; the emitter (`exports/budget_table.tex` with a
-     parity test against the manuscript copy) is planned, not built. The
-     upstream numbers exist — `sightline_budget.py` emits
-     `sightline_dm_scattering_budget.md`/`.csv` (markdown, **not** `.tex`), and
-     `scripts/dm_budget_uncertainty.py` supplies the skew-corrected
-     uncertainties — but the `.tex` itself is assembled by hand. Its measured
-     `tau_obs` column is withheld pending the V1 re-validation ladder.
+1. **`budget_table.tex` has drifted from its generator, in the dangerous
+   direction. (OPEN — blocks regeneration; needs an author decision.)**
 
-   These are the least reproducible objects in the manuscript: a referee cannot
-   regenerate them, and a hand edit can silently drift from the pipeline (the
-   `language_audit.md` already caught a DR8/DR9 drift in `budget_table.tex`).
-   *Recommendation:* build the planned `budget_table.tex` emitter + parity test,
-   and add an equivalent exporter for `foreground_table.tex`, both mirroring the
-   existing `export_beta_table.py` pattern.
+   The emitter is *behind* the manuscript, not ahead of it. Two PRs revised the
+   forward model without regenerating the emitter's data file:
+   - **PR #40** re-based the cosmic DM term on the TNG-calibrated IGM log-normal
+     (Connor 2025), rewriting `scripts/dm_budget_uncertainty.csv`.
+   - **PR #42** further corrected the low-z IGM spline.
 
-2. **`plot_association_cards.py` hardcoded a machine-specific output path.**
-   `MANUSCRIPT_OUTDIR` pointed at `/Users/jakobfaber/Developer/overleaf/Faber2026/...`
-   (L40) — worked on one laptop only. **Fixed 2026-07-08** to the repo-local
-   `figures/association_cards`. *Remaining recommendation:* promote it to a CLI
-   arg / repo-relative path so it survives a clone to any location.
+   `budget_table.tex` in the manuscript was updated by hand to follow them.
+   `pipeline/galaxies/foreground/budget_table_data.json` was not, and still
+   holds the pre-#40 numbers. Concretely, for FRB 20220207C:
 
-3. **Producer resolution for the two burst-nickname figures:**
+   | source | DM_host |
+   |---|---|
+   | `budget_table_data.json` (emitter input, submodule `f9e1c24`) | `51^{+37}_{-49}` |
+   | `budget_table.tex` on `origin/main` (what the paper shows) | `51^{+36}_{-43}` |
+   | `dm_budget_uncertainty.csv` on `origin/main` (the model) | `51^{+36}_{-43}` |
+
+   So **running the documented regenerate command today rewrites 35 lines of
+   `budget_table.tex` and reverts the DM_host column to superseded values.** The
+   `% !! GENERATED FILE -- do not edit by hand` banner is, for this one file,
+   currently a trap: the hand edits are the *correct* ones.
+
+   *Fixing it is not mechanical.* Regenerating `budget_table_data.json` from the
+   current forward model yields a **negative** DM_host median for two sightlines
+   — FRB 20220310F (`-10`) and FRB 20221203A (`-2`). A negative host contribution
+   is unphysical as printed, so how to present those rows (censor at zero, quote
+   an upper limit, revisit the priors) is an author/science call, not a
+   regeneration. It belongs with the other open DM-prior decisions.
+
+   Until then: **edit `budget_table.tex` by hand and do not run its emitter.**
+   `foreground_table.tex` is unaffected — it regenerates byte-identically.
+
+2. **The two hand-maintained tables are now generated. (RESOLVED 2026-07-08,
+   with the caveat in hazard 1.)**
+   Both `budget_table.tex` and `foreground_table.tex` — previously the least
+   reproducible objects in the manuscript — are now emitted from structured
+   single-source data files with parity tests. See *Regenerating the tables*
+   below. What used to be the hazard, for the record:
+   - `budget_table.tex` had a "regenerate, not by hand" header but was in fact
+     a hand transcription; a DR8/DR9 drift had already slipped through
+     (`language_audit.md`).
+   - `foreground_table.tex`'s own header stated no generator existed.
+
+   Now each `.tex` carries a `% !! GENERATED FILE` banner naming its data source
+   and regenerate command, and a hand edit that drifts from the source data is
+   caught by the parity tests. `budget_table.tex`'s measured `tau_obs` column is
+   still withheld pending the V1 re-validation ladder (a data-content decision,
+   independent of the emitter).
+
+3. **`plot_association_cards.py` machine-specific output path. (RESOLVED 2026-07-08.)**
+   `MANUSCRIPT_OUTDIR` was a hardcoded absolute path (originally an
+   `overleaf/Faber2026/...` mirror, then a repo-absolute path) — worked on one
+   laptop only. It is now a **repo-relative default derived from the file
+   location** (`ROOT.parent/figures/association_cards`), overridable with
+   `--manuscript-dir`, and `--no-manuscript-copy` skips the copy entirely for a
+   standalone submodule checkout. No absolute machine path remains; the script
+   survives a clone to any location.
+
+4. **Producer resolution for the two burst-nickname figures:**
    - `freya_dsa_gamma_summary.pdf` (freya = FRB 20230325A) — **resolved** to the
      producing function `plot_subband_gamma_summary` in
      `scintillation/scint_analysis/plotting.py`, confirmed by commit `18fbe98`
@@ -119,7 +207,8 @@ lost when a SLOT is filled.
 
 - Fill the two unresolved producers (author knowledge) and promote their rows
   to `writer_verified = yes`.
-- Fix hazards (1) and (2) — both are small and both directly serve the DA
-  statement.
+- Hazards (1) and (2) are both **done**: the two tables are generated + tested,
+  and `plot_association_cards.py`'s output path is now a repo-relative default
+  with `--manuscript-dir` / `--no-manuscript-copy` overrides.
 - Once producers are confirmed, this manifest can back a top-level `Makefile`
   target (`make figures`) that regenerates the embedded set end-to-end.
