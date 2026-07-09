@@ -11,7 +11,7 @@ two repos relate, and the caveats that a CSV cell can't carry.
 ## The two-repository structure (read this first)
 
 Faber2026 is **not** a monolith. `pipeline/` is a **git submodule** pointing at
-`https://github.com/jakobtfaber/dsa110-FLITS.git` — a separate repository with
+`https://github.com/dsa110/dsa110-FLITS.git` — a separate repository with
 its own history, remote, and lifecycle. Outputs therefore fall into two classes:
 
 - **Faber2026-local producers** live under `scripts/` in this repo. Edit and
@@ -24,11 +24,22 @@ The `run_command` column reflects this: `scripts/…` producers run from the rep
 root; `pipeline/…` producers run from inside `pipeline/` under the submodule's
 own environment.
 
+One wrinkle worth knowing before you go looking for a pipeline commit. The
+`.gitmodules` URL above is what a fresh `git submodule update --init` clones,
+and it does resolve the pinned SHA. But **pipeline development happens on the
+`jakobtfaber/dsa110-FLITS` fork**, and the pinned commit is *not* an ancestor of
+either repo's `main` — it sits 310 commits along a divergent line, on the branch
+`fix/budget-table-data-post-igm-lognormal`. A pipeline fix is therefore PR'd
+against that branch, not against `main` (see FLITS #146, #147, #148). Check
+`git merge-base --is-ancestor` before ever bumping the pin.
+
 ## Environment
 
-The pipeline pins its environment with `uv` (`pipeline/uv.lock`,
-`requires-python >=3.12`). The reproducible invocation is `uv run` from within
-`pipeline/`:
+There are **two** environments, and which one you need depends on where the
+producer lives.
+
+**Submodule producers (`pipeline/…`)** use the `uv` lock
+(`pipeline/uv.lock`, `requires-python >=3.12`), invoked from within `pipeline/`:
 
 ```bash
 cd pipeline
@@ -36,10 +47,68 @@ uv sync            # once, materializes the locked environment
 uv run python <producer.py> [args]
 ```
 
-A few older campaign scripts under `analysis/scattering-refit-2026-06/` were
-authored against a conda env named `flits` and their docstrings say
-`conda run -n flits python …`. Both paths are recorded per-row in the manifest;
-prefer `uv run` where the script is `uv`-clean.
+**Faber2026-local producers (`scripts/…`)** have no lockfile of their own, and
+bare `python` is not a defined interpreter for them — on a clean shell it is
+simply `command not found`. They run under the conda env named **`flits`**,
+whose spec is `pipeline/environment.yml`:
+
+```bash
+conda env create -f pipeline/environment.yml   # once; creates `flits`
+conda run -n flits python scripts/<producer.py> [args]
+```
+
+`flits` is required rather than merely convenient: `plot_ne2025_mw_properties.py`
+imports `healpy`, which is in `pipeline/environment.yml` but **not** in
+`pipeline/uv.lock`. The older campaign scripts under
+`analysis/scattering-refit-2026-06/` were also authored against `flits` and say
+so in their docstrings. Prefer `uv run` where the script is `uv`-clean; every
+row's `run_command` names the environment it actually needs.
+
+## How to read `clone_verified`
+
+`writer_verified` is a **reading** standard — someone read the `savefig` line.
+`clone_verified` is an **execution** standard: on 2026-07-09 every distinct
+`run_command` was executed from a fresh `git clone` + `git submodule update
+--init` at super-repo `733a369` × pipeline `6c87890`. The two disagree often
+enough that the DA statement should rest on the second.
+
+"Executed" here means more than *exit 0*. For each command a marker file is
+touched immediately before the run, and the verdict asks which files anywhere
+under the clone are newer than that marker. The first pass of this audit instead
+compared each output's mtime against `README.md`'s — but `git clone` writes every
+file within the same second, so that comparison reported "written" for outputs no
+producer had touched. It scored three rows `reproduced` whose producers write
+somewhere else entirely. **A generator that exits 0 while writing nothing at the
+declared path is the single most common failure here**, and it is invisible to
+both a `savefig` read and a return code.
+
+- **reproduced** — the command as written exits 0 and writes the declared
+  output into the clone.
+- **reproduced_fixed_cmd** — the command *as previously written* did not work;
+  the corrected command now in the `run_command` cell was executed and does.
+- **wrong_output_path** — the command exits 0 but does not write the declared
+  output at the declared path. Exit status alone would have hidden this.
+- **blocked_external_data** — the producer needs inputs that exist in neither
+  repository (an HPC scratch tree, or a data directory with zero tracked
+  files). Not reproducible from a clone by anyone, including the author on a
+  fresh machine.
+- **no_command** — nothing runnable is recorded.
+
+Result: of the manifest's 25 rows, **12 regenerate from a fresh clone** (5 as
+written, 7 only after correcting the command), **4 exit 0 while writing nothing
+at the declared path**, 7 are blocked on data outside both repos, and 2 have no
+command.
+
+All 9 rows marked `embedded_in_manuscript = yes` do regenerate — but **5 of the 9
+needed their `run_command` corrected first**, so the pre-audit manifest could not
+have rebuilt the manuscript. Every blocked or command-less row is a *staged*
+output waiting on a result SLOT; those cannot be promoted into the manuscript
+until their inputs are published alongside the code.
+
+⚠️ **This is a statement about the manifest, not about the manuscript.** The
+manifest does not enumerate every embedded output — see hazard 7. Until it does,
+"all embedded outputs reproduce" is *not* a claim the Data Availability statement
+can make.
 
 ## How to read `writer_verified`
 
@@ -210,13 +279,21 @@ earned their keep once: they are what caught the drift described in hazard 1.
    independent of the emitter).
 
 3. **`plot_association_cards.py` machine-specific output path. (RESOLVED 2026-07-08.)**
-   `MANUSCRIPT_OUTDIR` was a hardcoded absolute path (originally an
-   `overleaf/Faber2026/...` mirror, then a repo-absolute path) — worked on one
-   laptop only. It is now a **repo-relative default derived from the file
-   location** (`ROOT.parent/figures/association_cards`), overridable with
-   `--manuscript-dir`, and `--no-manuscript-copy` skips the copy entirely for a
-   standalone submodule checkout. No absolute machine path remains; the script
-   survives a clone to any location.
+   `MANUSCRIPT_OUTDIR` was `/Users/jakobfaber/Developer/overleaf/Faber2026/figures/association_cards`
+   (`b19a3d3`) — worked on one laptop only. `ae67f4f` replaced it with a
+   **repo-relative default derived from the file location**
+   (`ROOT.parent/figures/association_cards`), overridable with
+   `--manuscript-dir`; `--no-manuscript-copy` skips the copy entirely for a
+   standalone submodule checkout. No absolute machine path remains *in this
+   script*; it survives a clone to any location.
+
+   (An earlier revision of this file said the constant passed through a
+   "repo-absolute path" on its way to repo-relative. It did not: no version of
+   `plot_association_cards.py` in any ref of `dsa110-FLITS` ever held a
+   `/Users/jakobfaber/Developer/repos/...` literal. The fix went from the
+   Overleaf absolute path straight to `ROOT.parent`. Corrected 2026-07-09 —
+   and note that the fix was never carried across to the two `galaxies/v2_0/`
+   modules that share the same defect. See hazard 5.)
 
 4. **Producer resolution for the two burst-nickname figures:**
    - `freya_dsa_gamma_summary.pdf` (freya = FRB 20230325A) — **resolved** to the
@@ -234,12 +311,89 @@ earned their keep once: they are what caught the drift described in hazard 1.
      canonical at α≈5.1). Almost certainly a local/HPC `burstfit` run that was
      never committed. Needs author confirmation.
 
+5. **Two `galaxies/v2_0/` modules defaulted their output to a hardcoded personal
+   Overleaf path — and one of them was not saved by its `run_command`.
+   (Code fix merged as FLITS `334cc74` on `fix/budget-table-data-post-igm-lognormal`;
+   reaches this repo at the next pin bump, which is its own reviewed step.)**
+
+   Hazard 3 fixed `plot_association_cards.py`. It did not fix its neighbours:
+
+   - `galaxies/v2_0/sightline_halo_grid.py:59`
+   - `galaxies/v2_0/systems_figures.py:76`
+
+   both set `DEFAULT_OUT_DIR = "/Users/jakobfaber/Developer/overleaf/Faber2026/figures"`.
+   `sightline_halo_grid.py` is harmless *only* because its `run_command` passes
+   `--out-dir ../figures` explicitly. `systems_figures.py`'s command did not, so
+   running it as documented exits **0** while writing `clusters_icm.*` and
+   `galaxies_cgm.*` into a directory that exists on exactly one laptop — silently
+   outside the repository, and on any other machine into a freshly `makedirs`'d
+   path nobody will look in. This was found on 2026-07-09 by executing the
+   command and then noticing the six modified files in the *Overleaf* checkout
+   (restored). **FLITS PR #148** replaces both defaults with
+   `os.path.join(os.path.dirname(_REPO), "figures")` — the same `_REPO`-derived
+   form hazard 3 used. Until the pin is bumped past `334cc74`, the manifest's
+   `run_command` passes `--out-dir ../figures` so the documented invocation is
+   safe at the current pin.
+
+   The same run exposed an **undeclared ordering dependency**: `systems_figures.py`
+   reads `pipeline/results/sightline_dm_scattering_budget.csv`, which nothing in
+   the manifest produced before it. That CSV comes from `sightline_budget`, which
+   in turn only runs in **module** form — as a script its direct-execution import
+   fallback (`galaxies/foreground/sightline_budget.py:61-65`) imports
+   `MASS_PRIORITY` but drops `build_unified_records`, so line 494 raises
+   `NameError`. Both are fixed in the manifest's commands and neither was
+   detectable by reading a `savefig` line.
+
+6. **Seven staged figures are not reproducible from a clone by anyone.**
+   `chime_subband_compare.py`, `joint_ladder/_subband_tau_validation.py` and
+   `plot_jointmodel_montage.py` read from `/central/scratch/jfaber/flits-runs/…`,
+   an HPC scratch tree; `scint_census/figbank.py` reads
+   `scint_census/data/scint/…`, a directory with **zero tracked files**. All seven
+   are `embedded_in_manuscript = no`. Any of them that later enters the
+   manuscript must have its inputs published — a committed data file, or a
+   deposited archive — before the DA statement can cover it.
+
+7. **The manifest does not enumerate every embedded output. (OPEN — this is the
+   weakest link in the DA statement.)**
+
+   `repro_manifest.csv` is treated as the authoritative list of manuscript
+   outputs, but the built manuscript `\includegraphics` two families for which it
+   has **no rows at all**:
+
+   - `figures/dsa_lorentzian_summary.pdf` — `sections/results.tex:157`
+   - `figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf` — 12 committed panels,
+     pulled in via `sections/appendix.tex:193` → `sections/dsa_scint_acf.tex`
+
+   That is **13 embedded files with zero reproducibility evidence.** A producer
+   does exist in the submodule —
+   `pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py`
+   — but it has never been given a manifest row, a `run_command`, or a
+   `clone_verified` verdict, and this audit did **not** execute it.
+
+   The consequence is worse than a gap: because the manifest defines the set it
+   audits, a green sweep over its 25 rows reads as "the manuscript reproduces"
+   while silently skipping the scintillation figures. Any future coverage check
+   must derive the output set from the manuscript's `\includegraphics` and
+   `\input` directives, not from the manifest's own row list. Until these rows
+   exist and are executed, the DA statement can claim only that *the outputs the
+   manifest tracks* regenerate.
+
 ## Suggested next steps
 
+- **Close hazard 7 first.** Add rows for `dsa_lorentzian_summary.pdf` and the 12
+  `dsa_scint_acf/` panels, run their producer from a fresh clone, and record a
+  `clone_verified` verdict. Nothing else in this file matters to the DA statement
+  as much as this.
 - Fill the two unresolved producers (author knowledge) and promote their rows
   to `writer_verified = yes`.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,
   and `plot_association_cards.py`'s output path is now a repo-relative default
   with `--manuscript-dir` / `--no-manuscript-copy` overrides.
+- **Hazards (5) and (6) are open.** (5) is a small submodule fix: make
+  `DEFAULT_OUT_DIR` repo-relative in the two `galaxies/v2_0/` modules, and add
+  the missing `build_unified_records` to `sightline_budget.py`'s fallback import.
+  (6) is a data-deposition decision, not a code fix.
 - Once producers are confirmed, this manifest can back a top-level `Makefile`
-  target (`make figures`) that regenerates the embedded set end-to-end.
+  target (`make figures`) that regenerates the embedded set end-to-end. The
+  `clone_verified = reproduced*` rows are exactly the set that target can cover
+  today.
