@@ -1,9 +1,15 @@
 # Handoff: the mahi/nikhil TNS mislabel, and the `pipeline` pin is red
 
+> **⚠️ SUPERSEDED by [`handoff-2026-07-09-05-05-session-closeout.md`](handoff-2026-07-09-05-05-session-closeout.md).**
+> Its Action Items 1–3 are **done**: dsa110-FLITS #147 and #146 both merged, and
+> the `pipeline` gitlink was bumped `6c87890 → b6d2d14` by Faber2026 #68. Do not
+> work from the action list below. The Learnings section remains accurate and is
+> still worth reading.
+
 ---
 **Date:** 2026-07-09 04:14
 **Author:** AI Assistant
-**Status:** Handoff
+**Status:** Superseded
 **Branch:** `docs/handoff-mahi-tns-and-pin-red` (off `origin/main` @ `733a369`)
 **Commit:** `733a369` — *docs: mark B4 done in referee-response matrix (#62)*
 **Pin:** `pipeline` gitlink = `6c87890`
