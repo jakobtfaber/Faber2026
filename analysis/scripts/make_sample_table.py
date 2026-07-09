@@ -34,6 +34,14 @@ TOA_RESULTS = PIPELINE_SOURCE / "crossmatching" / "toa_crossmatch_results.json"
 ASSOCIATION_REPORT = PIPELINE_SOURCE / "crossmatching" / "association_report.json"
 OUT = REPO / "sample_table.tex"
 
+# Inter-site clock/timestamp alignment term (ms), added in quadrature to the
+# per-burst timing budget. Stated in Section~\ref{sec:toa}; matches the
+# clock_ms term of the pipeline's timing_budget_ms (association.py).
+CLOCK_MS = 1.0
+# Acceptance criterion: a residual is consistent with the geometric delay when
+# it lies within this many per-burst timing budgets of zero.
+N_SIGMA_ACCEPT = 3.0
+
 
 def _source_commit() -> str:
     try:
@@ -79,8 +87,18 @@ def _load_association_diagnostics() -> dict[str, dict[str, str]]:
     for nick, assoc_row in assoc.items():
         toa_row = toa[nick]
         residual_ms = toa_row["measured_offset_ms"] - toa_row["geometric_delay_ms"]
+        # Per-burst timing budget (1 sigma), in quadrature: DM-uncertainty term
+        # (combined CHIME+DSA arrival error under the shared-DM reference),
+        # intrinsic pulse width, and the inter-site clock term. This is the
+        # timing_budget_ms of association.py with baseline/intrachannel folded
+        # into the DM term already carried by combined_dm_uncertainty_ms.
+        dm_unc_ms = toa_row.get("combined_dm_uncertainty_ms") or 0.0
+        fwhm_ms = toa_row.get("fwhm_ms") or 0.0
+        sigma_ms = math.sqrt(dm_unc_ms**2 + fwhm_ms**2 + CLOCK_MS**2)
+        n_sigma = abs(residual_ms) / sigma_ms if sigma_ms > 0 else float("inf")
         diagnostics[nick] = {
-            "toa_residual_ms": f"${residual_ms:+.2f}$",
+            "toa_residual_ms": f"${residual_ms:+.2f} \\pm {sigma_ms:.2f}$",
+            "toa_nsigma": n_sigma,
             "pcc": _tex_scientific(assoc_row["chance_coincidence_P"]),
             "verdict": _association_verdict(assoc_row),
         }
@@ -109,6 +127,9 @@ def main() -> None:
         )
     rows.sort(key=lambda r: r["mjd"])
 
+    nsig_max = max(r["toa_nsigma"] for r in rows)
+    n_accept = N_SIGMA_ACCEPT
+
     body = []
     for r in rows:
         body.append(
@@ -130,15 +151,19 @@ bursts detected by both facilities between 2022 February and 2024 February.
 Columns list the TNS designation, J2000 sky position (decimal degrees), burst
 detection epoch (MJD and UTC, referenced to 400\\,MHz), and the
 Section~\\ref{{sec:toa}} association diagnostics restored by V6: the shared-DSA-DM
-timing residual $\\Delta t$, chance-coincidence probability $P_{{\\rm cc}}$, and
-association verdict. The residual carries a per-burst systematic of
-$\\sim\\!1$\\,ms (inter-site clock alignment) plus a convention-dependent
-DM-reference term; its sign convention and the acceptance criterion are defined
-in Section~\\ref{{sec:toa}}. \\label{{tab:sample}}}}
+timing residual $\\Delta t$ with its per-burst $1\\sigma$ timing budget,
+chance-coincidence probability $P_{{\\rm cc}}$, and
+association verdict. The quoted uncertainty is the quadrature sum of the
+combined CHIME+DSA arrival error under the shared-DM reference, the intrinsic
+pulse width, and a $\\sim\\!1$\\,ms inter-site clock term
+(Section~\\ref{{sec:toa}}); it is dominated by the pulse width for the two
+broadest bursts. A pair is accepted when $|\\Delta t| \\le {n_accept:.0f}\\sigma$;
+all twelve satisfy this (maximum $|\\Delta t|/\\sigma = {nsig_max:.1f}$), and the
+sign convention is defined in Section~\\ref{{sec:toa}}. \\label{{tab:sample}}}}
 \\tabletypesize{{\\scriptsize}}
 \\tablehead{{\\colhead{{TNS}} & \\colhead{{R.A.}} &
   \\colhead{{Decl.}} & \\colhead{{MJD}} & \\colhead{{UTC}} &
-  \\colhead{{$\\Delta t$ (ms)}} & \\colhead{{$P_{{\\rm cc}}$}} &
+  \\colhead{{$\\Delta t \\pm \\sigma$ (ms)}} & \\colhead{{$P_{{\\rm cc}}$}} &
   \\colhead{{Verdict}}}}
 \\startdata
 {chr(10).join(body)}
