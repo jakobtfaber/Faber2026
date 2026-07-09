@@ -3,9 +3,43 @@
 ---
 **Date:** 2026-07-09 01:45
 **Author:** AI Assistant
-**Status:** Handoff — one unpushed commit awaiting a landing decision; one machine-config fix written but not active
+**Status:** SUPERSEDED 2026-07-09 03:0x — see the update block below before acting on anything here
 **Branch:** `ms/appendix-c-sync-pr40`
 **Commit:** `35abbbd`
+
+---
+
+> ## Update (2026-07-09, later the same session) — most of this document is now history
+>
+> Everything below was true when written. Three things have since changed, and
+> acting on the original text would now be wrong:
+>
+> 1. **The spine commit landed.** `681cfe2` (rebased successor of `4a00aa0`) was
+>    cherry-picked and merged via **PR #46** (squash `f7fcbb2`). Nothing is
+>    stranded. `4a00aa0` survives only on `backup/main-pre-rebase-20260708`.
+>
+> 2. **The parity tests were NOT green, and then were.** Re-running them at pin
+>    `f9e1c24` gave 8 passed / 1 failed — all 9 non-placeholder sightlines
+>    mismatched. Cause: `budget_table_data.json` in the submodule predated PR #40
+>    and #42, which rewrote `scripts/dm_budget_uncertainty.csv`. **PR #48** fixed
+>    it by bumping the pin to `c69d043`. Parity is now 9/9 green and regenerating
+>    `budget_table.tex` reproduces it byte-for-byte. PR #46 briefly carried a
+>    "DO NOT REGENERATE" warning that was already stale at merge; **PR #51**
+>    reversed it. `REPRODUCE.md` hazard 1 now records the real, durable lesson:
+>    that test reads a super-repo CSV from a submodule test, so its verdict
+>    belongs to the (super-repo commit, pin) *pair*.
+>
+> 3. **`data/` and the handoff tracking were settled by someone else.** PR #43
+>    tracked these handoff docs and added `/data/` to `.gitignore`.
+>
+> Also corrected: the negative DM_host medians for FRB 20220310F and
+> FRB 20221203A are **intentional** (posteriors consistent with zero,
+> `P(DM_host<0)≈0.5`, explained in `budget_table.tex`'s `\tablecomments`). An
+> earlier version of this session called them unphysical. Do not censor them.
+>
+> **Still open, and still cannot be done by an agent:** the iTerm Diff-pane fix
+> (item 3 below). It needs iTerm2 quit, which kills every Claude session running
+> under it. Prefs are already written correctly; see `~/bin/iterm-claude-diff-pane`.
 
 ---
 
