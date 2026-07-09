@@ -55,15 +55,41 @@ bookkeeping mismatch in the co-detection sample itself." **It is not.** Resolved
 - 10 rows have a non-empty `chime_event_no`, but one (`220521aaat`, *benjy*) is a
   literal `-`. So there are **9 real event IDs.**
 - **8** of those 9 are among the twelve accepted pairs.
-- The 9th, `220726aabn` (**FRB20220726A**, *gertrude*), is listed in the imported
-  co-detection sheets as a **rejected / no-baseband candidate**, alongside `pingu`
-  and `FRB20220912A2`. It was never an accepted pair.
+- The 9th, `220726aabn` (**FRB20220726A**, *gertrude*), is a near-miss: it was
+  never an accepted pair.
 - The remaining **4** accepted pairs (*phineas*, *mahi*, *chromatica*, *casey*)
   simply carry no `chime_event_no` in the master spreadsheet.
 
-The catalog's `chime_event_no` column is incomplete *and* contains a rejected
-candidate. **It is not the authority for the co-detection sample.**
+The catalog's `chime_event_no` column is incomplete *and* contains a near-miss.
+**It is not the authority for the co-detection sample.**
 `pipeline/analysis/chance-coincidence/bursts.json` is, and it holds exactly twelve.
+
+### Correction (2026-07-09, later the same day)
+
+The paragraph above originally described *gertrude* as a "rejected / no-baseband
+candidate, alongside `pingu` and `FRB20220912A2`." **That was wrong on two
+counts,** and the correct picture matters if a referee asks why twelve.
+
+Read directly from the co-detection working sheet
+(`DSA-110_CHIME Codetections - DSA-CHIME Burst Properties.csv`): it holds **16**
+candidate rows and **every one carries a CHIME `event_no`**. The accept criterion
+is `Processed baseband? = Yes`. Four rows fail it, each for a *different*
+data-availability reason — none astrophysical:
+
+| burst | candname | CHIME event_no | why excluded |
+|---|---|---|---|
+| *gertrude* (FRB20220726A) | `220726aabn` | 237537161 | baseband **exists**; processing found **no signal** in it |
+| *pingu* (FRB20230712A) | `230712aadj` | 302686966 | CHIME baseband **and** intensity data missing |
+| FRB20220912A2 | `221025aanu` | 247683525 / 247683548 / 247683922 | repeater; sheet flags "need to double check which event id is the actual co-detection" |
+| *benjy* | `220521aaat` | 226301826 | CHIME side processed fine; **DSA-110 has no voltage data** |
+
+So: *pingu* is the no-baseband case, not *gertrude*; *benjy* was omitted from the
+near-miss list entirely and its catalog `-` was misread as "no event ID" when in
+fact its ID is 226301826; and the exclusion count is **four**, not three.
+
+The `~/Data` catalog's `chime_event_no` column has since been completed from the
+sheet (15 of 16 filled; FRB20220912A2 left blank pending the repeater
+disambiguation). `bursts.json` is unaffected — it still holds exactly the twelve.
 
 ### `N = 64` is right — but not for the reason the README gave
 
@@ -198,10 +224,12 @@ correct the five stale `c69d043` references #51 had written into `REPRODUCE.md` 
 ## Action Items & Next Steps
 
 1. [ ] **Nothing is blocking.** The board is clear.
-2. [ ] Consider whether `FRB20220726A` (*gertrude*) deserves a sentence in the
-   manuscript. It is a real DSA detection with a CHIME event ID inside the trial
-   window, rejected only for lack of baseband. A referee who finds the catalog may
-   ask why the sample is twelve and not thirteen.
+2. [ ] Consider whether the **four** near-misses (*gertrude*, *pingu*,
+   FRB20220912A2, *benjy*) deserve a sentence in the manuscript. All four are real
+   DSA detections carrying CHIME event IDs inside the trial window, excluded on
+   data availability alone (see the Correction in §1). A referee who finds the
+   catalog may ask why the sample is twelve and not sixteen; the honest answer is
+   one clause per row.
 3. [ ] The `pipeline` pin lives on `agent/sightline-halo-grid-figure`, permanently
    divergent from FLITS `main`. That is a standing hazard, not a bug — but someone
    should decide whether the manuscript's line ever merges upstream.

@@ -139,9 +139,13 @@ Checked surfaces included:
 - Local data and Drive/iCloud mirrors under `~/Data/Faber2026/dsa110/` and
   `~/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections/`.
 - Imported co-detection sheets in `~/Developer/scratch/2026-06/_downloads-import/`.
-  These give 12 accepted pairs plus rejected/no-baseband candidate rows
-  (`gertrude`, `pingu`, `FRB20220912A2`), but they are **not** the full DSA
-  trigger denominator requested here.
+  These give 12 accepted pairs plus near-miss rows, but they are **not** the full
+  DSA trigger denominator requested here.
+  (Correction, 2026-07-09: this line originally read "rejected/no-baseband
+  candidate rows (`gertrude`, `pingu`, `FRB20220912A2`)". There are **four**
+  near-misses, not three — `benjy` was omitted — and only `pingu` is the
+  no-baseband case. See the Correction in
+  `handoff-2026-07-09-03-05-closeout-b3-parity-and-pin-misfire.md` §1.)
 - Local Python env `py312` has no `dsautils`, `realfast`, `psycopg`, `psycopg2`,
   or `pymongo`; no local DSA database client/config was found.
 
