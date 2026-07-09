@@ -95,8 +95,17 @@ uv run pytest galaxies/foreground/test_budget_table_emitter.py \
 ```
 
 Each emitter also writes a canonical copy to `pipeline/exports/<table>.tex` (the
-byte-exact regression anchor) and supports `--check` (non-zero exit on drift),
-suitable for CI. The `\input{budget_table}` / `\input{foreground_table}` paths
+byte-exact regression anchor) and supports `--check` (non-zero exit on drift).
+**`--check` is not a sufficient CI gate on its own** — it compares the emitter's
+output to `exports/<table>.tex`, and both are derived from the *same*
+submodule-local data file, so it cannot see the cross-repository drift of
+hazard 1. Measured at pin `f9e1c24`: both emitters' `--check` exited 0 while
+`test_dm_host_matches_forward_model` failed. (That test's row loop uses a bare
+`assert`, so one run reports only the first mismatching sightline —
+FRB 20220207C; replaying the comparison without short-circuiting shows all nine
+differed.) CI must run the **parity tests**, not just `--check`.
+The `\input{budget_table}` /
+`\input{foreground_table}` paths
 in `sections/` are unchanged: the emitters overwrite the manuscript's root
 `.tex` files in place, so the Overleaf lane (which has no `pipeline/` submodule)
 keeps building. `sample_table.tex` uses its own generator
@@ -142,6 +151,13 @@ earned their keep once: they are what caught the drift described in hazard 1.
    `budget_table.tex`, reverting the DM_host column to pre-#40 values. The
    `% !! GENERATED FILE -- do not edit by hand` banner pointed exactly the wrong
    way: for that window, the hand edits were the correct ones.
+
+   Note what did *not* fire: throughout that window both emitters' `--check`
+   exited 0, because the emitter and its `exports/` anchor were regenerated from
+   the same stale `budget_table_data.json`. A drift guard that compares a
+   generator to its own output is blind by construction to an upstream input
+   going stale. Only the parity test, which reaches across into the super-repo's
+   CSV, could see it.
 
    **PRs #48 and #53 closed it** by bumping the pin to a commit that carries a
    regenerated `budget_table_data.json`. Verified at the current pin `6c87890`:
