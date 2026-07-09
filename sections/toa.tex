@@ -65,13 +65,13 @@ matches.
 
 Equation~\eqref{eq:pcc_mu} conditions on a single DSA burst, so the sample-level
 false-alarm expectation is the sum $\sum_j \mu_j$ over the \emph{trial set}: the
-complete list of DSA-110 FRB detections searched for a CHIME/FRB counterpart over
-the 2022~February--2024~February overlap, not merely the twelve that matched. The
+complete list of DSA-110 triggers searched for a CHIME/FRB counterpart over the
+2022~February--2024~February overlap, not merely the twelve that matched. The
 look-elsewhere penalty is therefore carried explicitly by that sum. Because each
 per-event expectation is only $\mu_j\sim5\times10^{-9}$ under the
 chance-maximizing windows below, the trial sum stays orders of magnitude below
-unity even when the entire DSA-110 detection list---the 64 FRBs detected in that
-window---is taken as the denominator
+unity even when the entire DSA-110 detection list---the 64 FRBs detected across
+the 2022~February--2024~February overlap---is taken as the denominator
 ($\sum_j\mu_j\approx3\times10^{-7}$). The value $\sum_i\mu_i$ reported below is
 summed over the twelve reported pairs; extending it to the full 64-burst trial
 set multiplies it by at most the searched-to-matched ratio ($64/12\approx5$) and
@@ -116,12 +116,18 @@ per-burst systematic of order the inter-site clock/timestamp alignment
 residual dispersive delay left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
 CHIME-referenced shift for the largest offset (FRB~20220207C, $\Delta\mathrm{DM}
 =-0.84\,\mathrm{pc\,cm^{-3}}$) were the CHIME arrival re-referenced at its own DM,
-a convention-dependent term reported separately rather than folded in. We accept
-a pair when its residual is consistent with the geometric delay to within this
-combined budget---order several ms, and up to $\sim\!10$\,ms where the CHIME--DSA
-DM offset is largest; all twelve residuals ($-2.7$ to $+8.4$\,ms) satisfy it,
-whereas a residual of several tens of ms, inconsistent with the
-$\lesssim\!4.5$\,ms geometric delay and the timing budget, would fail. We stress
+a convention-dependent term reported separately rather than folded in. We
+assign each pair a $1\sigma$ timing budget $\sigma_i$ by combining, in
+quadrature, the shared-DM combined CHIME+DSA arrival error, the intrinsic pulse
+width, and the $\sigma_{\rm clock}\sim1$\,ms term, and accept a pair when its
+residual is consistent with the geometric delay to within $|\Delta t_i| \le
+3\sigma_i$. The budget is dominated by the pulse width for the two broadest
+bursts, so the largest raw residual---$+8.4$\,ms for FRB~20220506D, a $74$\,ms-wide
+burst---is only $0.1\sigma$. All twelve residuals ($-2.7$ to $+8.4$\,ms,
+tabulated with their $\sigma_i$ in Table~\ref{tab:sample}) satisfy the criterion;
+the tightest is FRB~20221203A at $2.6\sigma$. A residual of several tens of ms
+for a narrow, well-localized burst---inconsistent with both its few-ms budget and
+the $\lesssim\!4.5$\,ms geometric delay---would fail. We stress
 that the association verdict does not rest on the timing residual alone: the
 decisive gates are the chance-coincidence probability, positional coincidence,
 and (for the DM-constrained bursts) DM agreement, for which the residual is a
