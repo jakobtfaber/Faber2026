@@ -110,16 +110,30 @@ catalog of \citet{WenHan2024}---which supplies $M_{500}$, $R_{500}$, and,
 through its DESI members, a spectroscopic redshift---together with the all-sky
 Planck Sunyaev--Zel'dovich (PSZ2) and X-ray (MCXC, MCXC-II) catalogs; at the
 sample's declination every matched cluster comes from the optical catalog.
-The search apertures set the census completeness and are fixed in physical
-units. Galaxy cones extend to a fixed proper impact parameter at the
-circumgalactic scale, and the recovered foreground galaxies span
-$b\approx60$--$280\,\mathrm{kpc}$; cluster cones are far wider
-($\sim\!5\,\mathrm{Mpc}$), and a cluster is retained when the sightline passes
-within twice its virial radius ($\lesssim2\,R_{200}\approx3\,R_{500}$), so a
-sightline that grazes a cluster outskirt is still recovered. Only crossings
-within $R_{500}$ enter the dispersion-measure budget (Section~\ref{sec:foreground}); the
-wider retention aperture exists so the excluded near-misses can be shown
-explicitly (Appendix~\ref{app:clusters}).
+The search apertures set the census completeness and are keyed to each
+object's virial extent rather than to a universal projected radius, so that
+completeness tracks the physical scale on which each population's gas is
+distributed. A galaxy is admitted as an intervening system when it has a
+foreground redshift and an impact parameter within its halo virial radius,
+$b\le R_{\mathrm{vir}}$, where $R_{\mathrm{vir}}=R_{200c}$ is set by the halo
+mass abundance-matched to the photometric stellar mass through the
+\citet{Moster2013} stellar-to-halo-mass relation. Because $R_{\mathrm{vir}}$
+grows with halo mass, this criterion admits genuine circumgalactic sightlines
+well beyond any fixed circumgalactic radius: the recovered confirmed foreground
+halos span $b\approx102$--$243\,\mathrm{kpc}$---each within $R_{\mathrm{vir}}$ of
+its host ($\log(M_{\mathrm{halo}}/M_\odot)\gtrsim12.3$ suffices even for the
+widest, $243\,\mathrm{kpc}$ crossing)---while the full non-refuted census reaches
+$b\approx60$--$280\,\mathrm{kpc}$. Clusters are treated on the complementary
+scale on which their intracluster medium is characterized: a cluster is retained
+when the sightline passes within twice its virial radius
+($\lesssim2\,R_{200}\approx3\,R_{500}$, a $\sim\!5\,\mathrm{Mpc}$ cone) so that
+outskirt near-misses can be shown explicitly (Appendix~\ref{app:clusters}), but
+only crossings within $R_{500}$ enter the dispersion-measure budget
+(Section~\ref{sec:foreground}), where the intracluster column is densest and best
+modeled. The cluster masses and radii ($M_{500}$, $R_{500}$) are optical richness
+estimates from \citet{WenHan2024} rather than X-ray or Sunyaev--Zel'dovich
+measurements, and the associated mass uncertainty propagates into the
+intervening-column prior.
 
 Validation cross-matches every candidate, by coordinate, against three
 independent redshift sources: the DESI Legacy Survey DR9 photometric redshifts
