@@ -78,7 +78,7 @@ Three of the four tables are generated from a data file + an emitter; edit the
 **data file**, never the `.tex`. Each root `.tex` also carries a
 `% !! GENERATED FILE` banner with its own regenerate line.
 
-Both are safe to regenerate at the currently pinned submodule (`c69d043`);
+Both are safe to regenerate at the currently pinned submodule (`6c87890`);
 regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
 untrue — see hazard 1 for what went wrong and why the pin matters.
 
@@ -91,7 +91,7 @@ uv run python -m galaxies.foreground.foreground_table_emitter --out ../foregroun
 # verify (byte-exact vs exports/ + value cross-checks against upstream products)
 uv run pytest galaxies/foreground/test_budget_table_emitter.py \
               galaxies/foreground/test_foreground_table_emitter.py
-# ^ green at pipeline pin c69d043 (verified 2026-07-09).
+# ^ green at pipeline pin 6c87890 (verified 2026-07-09).
 ```
 
 Each emitter also writes a canonical copy to `pipeline/exports/<table>.tex` (the
@@ -109,7 +109,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
 - **budget** — the DM_host `median^{+p84}_{-p16}` column is cross-checked
   value-for-value against the forward-model posteriors in
   `scripts/dm_budget_uncertainty.csv` (emitted by `scripts/dm_budget_uncertainty.py`),
-  over the 9 non-placeholder sightlines. Green at pin `c69d043` (9/9), verified
+  over the 9 non-placeholder sightlines. Green at pin `6c87890` (9/9), verified
   2026-07-09. Note the test spans **both repositories**: it reads a super-repo
   CSV from a submodule test, so it is only meaningful for a matched
   (super-repo commit, submodule pin) pair.
@@ -122,8 +122,8 @@ earned their keep once: they are what caught the drift described in hazard 1.
 ## Caveats and hazards (the things worth fixing)
 
 1. **The budget-table parity test spans two repositories, so the submodule pin
-   is part of the result. (RESOLVED 2026-07-09 by PR #48 — recorded as a
-   standing trap.)**
+   is part of the result. (RESOLVED 2026-07-09 by PRs #48 and #53 — recorded as
+   a standing trap.)**
 
    `test_dm_host_matches_forward_model` lives in the submodule but reads
    `scripts/dm_budget_uncertainty.csv` from the **super-repo**. Its verdict is
@@ -143,10 +143,25 @@ earned their keep once: they are what caught the drift described in hazard 1.
    `% !! GENERATED FILE -- do not edit by hand` banner pointed exactly the wrong
    way: for that window, the hand edits were the correct ones.
 
-   **PR #48 closed it** by bumping the pin to `c69d043`, which carries a
-   regenerated `budget_table_data.json`. Verified at `c69d043`: the parity test
-   is 9/9 green, `--check` exits 0, and the emitter's output is byte-identical
-   to the committed `budget_table.tex`.
+   **PRs #48 and #53 closed it** by bumping the pin to a commit that carries a
+   regenerated `budget_table_data.json`. Verified at the current pin `6c87890`:
+   the parity test is 9/9 green, `--check` exits 0, and the emitter's output is
+   byte-identical to the committed `budget_table.tex`.
+
+   Closing it took two tries, and the misfire is the more useful half of the
+   story. **`f9e1c24` — the pin this repo had carried since #39 — is not an
+   ancestor of `dsa110-FLITS` `main`.** It sits on `agent/sightline-halo-grid-figure`,
+   22 commits divergent since the fork at `6647753`, and the budget-table emitter
+   exists *only* on that line; `main` has never carried it. #48 bumped to
+   `c69d043`, a squash produced by merging the pin's branch into FLITS `main` —
+   which silently dragged the whole 127-file fork delta upstream, rolled back an
+   unrelated `johndoeII` promotion, and turned FLITS CI red. FLITS #145 reverted
+   it; #53 re-pinned here to `6c87890` = `f9e1c24` + the three intended files.
+
+   Second lesson, then: **before bumping the pin, check that the new commit is a
+   descendant of the old one** (`git merge-base --is-ancestor <old> <new>`).
+   A submodule pin that lives off the upstream default branch — as this one does —
+   makes "just merge it upstream" the wrong reflex.
 
    The lesson worth keeping: **a green parity test in the submodule proves
    nothing until the super-repo pins the commit that made it green.** When you
