@@ -2,7 +2,10 @@
 %   DM_obs = DM_MW,ISM + DM_MW,halo + <DM_cosmic>(z) + DM_intervening + DM_host,
 % with DM_MW,ISM from NE2001/YMW16 (pygedm), DM_MW,halo a 40 pc/cm^3 prior
 % (Yamasaki & Totani 2020), <DM_cosmic>(z) the Macquart relation
-% (Macquart et al. 2020; f_IGM=0.84, chi_e=0.875), and DM_intervening a two-phase
+% (Macquart et al. 2020; f_IGM=0.84, chi_e=0.875) for the point estimate; the
+% forward-modeled cosmic term is drawn from the TNG-300 IGM log-normal
+% (Walker et al. 2024) via the Connor et al. (2025) reproduction package,
+% and DM_intervening a two-phase
 % (hot mNFW + clumpy cool) CGM column for each intersecting foreground galaxy,
 % reported raw and capped at b = 0.1 R_vir (the galaxy-interior regime).
 %
@@ -39,13 +42,23 @@ sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
 yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
 
 Rather than attribute the arithmetic residual of the mean-subtracted budget to
-the host, we forward-model $\mathrm{DM_{host}}$ as a posterior. The cosmological
-term is drawn from the full, skewed conditional distribution
-$P(\mathrm{DM_{cosmic}}\,|\,z)$---the \citet{Macquart2020} functional form with
-fractional scatter $\sigma_{\rm DM}=F\,z^{-1/2}$, $F\in[0.25,0.40]$
-\citep{McQuinn2014, James2022}---and the Galactic-disk, Galactic-halo, and
-intervening columns are drawn from their own priors
-(Appendix~\ref{app:host-forward-model}). We evaluate
+the host, we forward-model $\mathrm{DM_{host}}$ as a posterior. The diffuse
+cosmic term is drawn as the intergalactic column
+$\mathrm{DM_{IGM}}\sim\mathrm{LogNormal}(\mu(z),\sigma(z))$, with $\mu(z)$ and
+$\sigma(z)$ the redshift-dependent parameters of the bivariate (IGM, halo)
+log-normal fit to a mock FRB survey in IllustrisTNG-300 \citep{Walker2024},
+adopted through the \citet{Connor2024} reproduction package and rescaled to the
+IGM baryon fraction $f_{\rm IGM}=0.76^{+0.10}_{-0.11}$ that \citet{Connor2024}
+infer from the DSA-110 sample. We use the IGM marginal rather than the total
+cosmic column $\mathrm{DM_{cos}}=\mathrm{DM_{IGM}}+\mathrm{DM_X}$ because the
+identified intervening halos ($\mathrm{DM_X}$) are already carried by our
+separate $\mathrm{DM_{int}}$ census; adopting the total would double-count them.
+This calibration replaces the earlier fixed-scaling
+$\sigma_{\rm DM}=F\,z^{-1/2}$ form \citep{Macquart2020, McQuinn2014, James2022},
+which \citet{Connor2024} show overstates the diffuse scatter because
+$\sigma_{\rm DM}$ does not follow the $z^{-1/2}$ halo-Poisson scaling. The
+Galactic-disk, Galactic-halo, and intervening columns are drawn from their own
+priors (Appendix~\ref{app:host-forward-model}). We evaluate
 $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-\mathrm{DM_{cosmic}}-
 \mathrm{DM_{int}}$ per draw. Because $P(\mathrm{DM_{cosmic}})$ is right-skewed,
 subtracting its \emph{mean}---as an arithmetic residual does---biases the
