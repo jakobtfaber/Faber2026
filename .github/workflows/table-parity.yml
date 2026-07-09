@@ -1,0 +1,61 @@
+name: table-parity
+
+# The budget-table parity test spans BOTH repositories: it lives in the
+# `pipeline` submodule but reads `scripts/dm_budget_uncertainty.csv` from this
+# one. Its verdict is a property of the (super-repo commit, submodule pin) pair,
+# so it can only run in a checkout that has both — which is what this workflow
+# provides.
+#
+# Do NOT replace this with the emitters' `--check` flag. `--check` compares an
+# emitter to its own `pipeline/exports/<table>.tex` anchor, and both derive from
+# the same submodule-local data file, so it cannot observe this repo's CSV going
+# stale underneath it. During the 2026-07-09 drift window both emitters'
+# `--check` exited 0 while the parity test was failing. See REPRODUCE.md,
+# hazard 1.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Materializes `pipeline` at the gitlink SHA recorded in this commit —
+          # the pin under test, not the submodule's floating main.
+          submodules: recursive
+
+      - name: Report the pair under test
+        run: |
+          echo "super-repo: $(git rev-parse --short HEAD)"
+          echo "pipeline pin: $(git -C pipeline rev-parse --short HEAD)"
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Parity tests (cross-repo)
+        working-directory: pipeline
+        run: |
+          uv run --frozen pytest -q \
+            galaxies/foreground/test_budget_table_emitter.py \
+            galaxies/foreground/test_foreground_table_emitter.py
+
+      # The submodule's own tests only compare the emitter against
+      # `pipeline/exports/`. The artifact the manuscript actually \input's is the
+      # root `<table>.tex`, so point `--check` at that instead of its default
+      # anchor. `--check` compares against whatever `--out` names.
+      - name: Emitter output matches the manuscript's committed table
+        working-directory: pipeline
+        run: |
+          uv run --frozen python -m galaxies.foreground.budget_table_emitter \
+            --check --out ../budget_table.tex
+          uv run --frozen python -m galaxies.foreground.foreground_table_emitter \
+            --check --out ../foreground_table.tex
