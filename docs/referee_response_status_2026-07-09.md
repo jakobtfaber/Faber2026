@@ -1,14 +1,12 @@
 # Referee-response status matrix — Faber et al. (2026)
 
-**Compiled:** 2026-07-09 &nbsp;·&nbsp; **Referee report:** `docs/referee_report_2026-07-07.md` &nbsp;·&nbsp; **origin/main:** `75630c4`
+**Compiled:** 2026-07-09 &nbsp;·&nbsp; **Referee report:** `docs/referee_report_2026-07-07.md` &nbsp;·&nbsp; **origin/main:** `9884baf`
 
-Every item from the referee report, its current status, and the PR / commit / file:line that resolves it. Compiled by tracing the merged PR history (#26–#44) and the current working tree against each referee point.
+Every item from the referee report, its current status, and the PR / commit / file:line that resolves it. Compiled by tracing the merged PR history (#26–#61) and the current working tree against each referee point.
 
 **Legend:** ✓ done &nbsp; △ partial (minimum ask met; remainder blocked or submission-time) &nbsp; ✗ blocked
 
-**Summary:** of 27 referee items, **16 are fully resolved and merged**, **4 are partial** (the minimum ask is met but a numeric/archival/design piece remains), and **7 are blocked** on either (a) the pending scattering/scintillation sections the referee itself flagged as to-be-added, (b) author-only design decisions (D2–D5), or (c) submission-time actions (Zenodo DOI mint, abstract-slot fill).
-
-> **Note on B4:** the sign convention and geometric |τ_geo| range are in the text, but the referee's core B4 ask — a *per-burst residual uncertainty* in Table `tab:sample` and a *numeric acceptance threshold* ('what residual would have failed?') — is not yet addressed. B4 is therefore **partial**, not done.
+**Summary:** of 27 referee items, **17 are fully resolved and merged**, **3 are partial** (the minimum ask is met but a design/archival piece remains), and **7 are blocked** on either (a) the pending scattering/scintillation sections the referee itself flagged as to-be-added, (b) author-only design decisions (D2–D5), or (c) submission-time actions (Zenodo DOI mint, abstract-slot fill).
 
 ## Blocking items (B1–B5)
 
@@ -17,7 +15,7 @@ Every item from the referee report, its current status, and the PR / commit / fi
 | ✓ | **B1** | Uncertainties in the dispersion budget (DM_host as posterior) | DONE | PR #40 (re-base cosmic DM on TNG IGM log-normal) + #41 (appendix/table sync) + #42 (low-z spline guard); forward model in scripts/dm_budget_uncertainty.py |
 | ✓ | **B2** | Cluster (FRB 20230307A) intracluster column with uncertainty | DONE | c330d77 + budget_table.tex: beta-model p50=252, [p16,p84]=[159,383], 95% CI [96,561] |
 | ✓ | **B3** | P_cc trials-factor denominator (searched-vs-matched) | DONE | PR #44: 64 DSA-110 FRBs in window; toa.tex:73 Sigma mu_j ~ 3e-7 |
-| △ | **B4** | Timing residuals: errors, acceptance criterion, sign convention, geometric range | PARTIAL / BLOCKED | Sign convention + geometric range DONE (toa.tex:19-31 |tau_geo|<=4.5 ms; Residuals & systematics L94). NOT DONE: per-burst residual uncertainty column in tab:sample and a numeric acceptance threshold ('what residual would have failed?') are still absent. |
+| ✓ | **B4** | Timing residuals: errors, acceptance criterion, sign convention, geometric range | DONE | PR #61: per-burst 1-sigma timing budget sigma_i=sqrt(dm_unc^2+fwhm^2+clock^2) added to tab:sample as 'Delta t +/- sigma'; numeric acceptance |Delta t|<=3 sigma (max 2.6 sigma, +8.41 ms residual = 0.1 sigma at 74 ms width); sign convention + |tau_geo|<=4.5 ms in toa.tex. |
 | △ | **B5** | Non-citable internal materials -> archival release | PARTIAL / BLOCKED | All internal-materials refs now point to Sec Data Availability (obs.tex:14,25; toa.tex:155; main.tex:82). Actual Zenodo DOI mint is a submission-time author action. |
 
 ## Design decisions for the incoming scattering sections (D1–D5)
@@ -74,7 +72,6 @@ Every item from the referee report, its current status, and the PR / commit / fi
 
 ## What is genuinely still open, and why it is not autonomously completable
 
-- **B4 (partial).** Adding a per-burst timing-residual uncertainty and a numeric pass/fail threshold to `tab:sample` — a small but real author/coding task, not yet done.
 - **D2–D5 (design decisions).** Lock choices the per-sightline attribution ledger inherits (closure-regime column, sub-band diagnostic labeling, scintillation double-use, energetics comparability). Author judgement, not code.
 - **Scattering / scintillation / turbulence / energetics sections.** Board phases V/A/B/C/D: the fit re-validation ladder, geometry-selection campaign, and two-screen analysis on joint CHIME+DSA scintillation. New data analysis on real burst products — the paper's central contribution — and cannot be written without running that campaign.
 - **Submission-time actions.** B5/M11 Zenodo DOI mint, M16 abstract-slot fill from frozen B2 numbers, MW4 NE2025 publication-status watch. Each is a one-step author action at submission.
