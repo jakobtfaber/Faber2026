@@ -82,12 +82,12 @@ situation.*
   - Row-by-row vs pre-fix `main`: **only** FRB 20220207C (`P(<0)` 0.185→0.125) and FRB 20240203A (0.010→0.007) moved; seven on-grid rows bit-identical.
   - `budget_table.tex` cells match the CSV (`$51^{+36}_{-43}$`, `$106^{+30}_{-36}$`).
 - **Uncommitted / unpushed:** local checkout on `ms/appendix-c-sync-pr40` @ `ad04f61`, behind `main`, carrying an `M sections/toa.tex` that is **redundant with #44 on main** (verified byte-identical to `main:sections/toa.tex`) and untracked `__pycache__/`. Not mine; left untouched.
-- **Open PRs at handoff (all the other session's, MERGEABLE):**
+- **Open PRs at handoff (all the other session's; each polled `mergeable=True, mergeable_state=clean` via the single-PR API at 2026-07-09T11:2x UTC — note the list-PRs endpoint returns `mergeable=null` because GitHub computes it lazily, so poll each PR individually):**
   - **#59** `ci/table-parity-gate` — CI gate on cross-repo parity; its own `parity` check is green. Files: `.github/workflows/table-parity.yml`, `.gitignore`.
   - **#63** `docs/agent-identity-runbook` — docs-only; step 3 depends on #59 landing first.
   - **#64** `docs/handoff-open-items` — the open-items handoff itself.
 - **Weakest claim in the repo (from PR #64, unverified by anyone):** `repro_manifest.csv`'s `run_command` column — 25 rows, none executed from a fresh clone. This backs the ApJ Data Availability statement.
-- **This handoff is NOT yet on `main`** — written to the workspace only; I did not push it while the live session is writing. See Action Items.
+- **This handoff was landed on `main`** additively at commit `a569d59` (parent `8146b11`, clean fast-forward) after the owner approved; it touches only this file + one `journal.jsonl` line and no submodule pin.
 
 ## Learnings
 
