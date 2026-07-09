@@ -39,7 +39,11 @@ graphify-out/
 /.codex/
 /.cursor/
 /.entire/
-/.github/
+# Agent tooling under .github/ stays out of the repo, but CI workflows must be
+# tracked. Git cannot re-include a path whose parent dir is excluded, so exclude
+# the contents (/.github/*) rather than the directory itself.
+/.github/*
+!/.github/workflows/
 /.remember/
 /.superpowers/
 /AGENTS.md
