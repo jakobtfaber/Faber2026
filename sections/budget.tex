@@ -60,13 +60,18 @@ The intervening term $\mathrm{DM_{int}}$ is sourced only where a sightline
 actually crosses foreground circumgalactic or intracluster gas. We therefore
 build $\mathrm{DM_{int}}$ from the confirmed foreground systems of the census
 (Section~\ref{sec:obs-fg}, Table~\ref{tab:foreground}), and only from those
-whose impact parameter places the sightline inside the gas: for galaxies we
-integrate the column to the halo and cap the reported value at $b = 0.1\,R_{\rm
-vir}$, the galaxy-interior regime; for clusters we require the sightline to pass
-within $R_{500}$ ($b/R_{500}\le 1$), a conservative aperture that across the
-whole sample selects a single cluster (FRB~20230307A, J115120.4$+$714435 at
-$b/R_{500}=0.83$). Refuted and inconclusive systems, and confirmed systems whose
-sightline passes outside this aperture, do not contribute.
+whose impact parameter places the sightline inside the gas. For galaxies we
+require the sightline to pierce the virial radius ($b\le R_{\rm vir}$) and
+integrate the column to the halo, capping the reported value at $b = 0.1\,R_{\rm
+vir}$ to exclude the galaxy-interior regime. For clusters we require the
+sightline to pass within $R_{500}$ ($b/R_{500}\le 1$), a conservative aperture
+that across the whole sample selects a single cluster (FRB~20230307A,
+J115120.4$+$714435 at $b/R_{500}=0.83$). Eleven of the fourteen confirmed foreground galaxy halos
+satisfy $b\le R_{\rm vir}$ and contribute; the remaining three---all along the
+FRB~20230307A sightline---graze just outside their virial radii
+($b/R_{\rm vir}\approx1.05$--$1.7$), beyond the $R_{\rm vir}$ truncation of the
+modelled circumgalactic profile, and are excluded. Refuted and inconclusive systems, and confirmed
+systems whose sightline passes outside this aperture, do not contribute.
 
 For each retained system we model the gas as a two-phase medium---a hot
 modified-NFW component \citep{ProchaskaZheng2019} plus a clumpy cool
@@ -84,9 +89,9 @@ FRB~20230307A sightline are shown in Figure~\ref{fig:clusters_icm}
 
 We measure the pulse-broadening time and its frequency scaling from the
 co-detected dynamic spectra and compare them against the scattering predicted
-by each candidate screen: the Milky-Way ISM, an intervening circumgalactic
-medium, or a host galaxy, where the host can dominate the scattering of a
-heavily broadened burst \citep{Ocker2022}. The fits are produced with a common
+by each candidate screen. The candidate screens are the Milky-Way ISM, an
+intervening circumgalactic medium, and a host galaxy, where the host can
+dominate the scattering of a heavily broadened burst \citep{Ocker2022}. The fits are produced with a common
 open-source reduction and fitting pipeline.
 
 \subsubsection{The joint two-band fit}
@@ -96,14 +101,14 @@ open-source reduction and fitting pipeline.
 A single-band scattering fit cannot separate the scattering timescale from its
 frequency scaling, because the pulse broadening
 $\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$ enters a
-single band only through its value at that band's frequency: one band fixes the
-product, not the slope. Co-detection breaks this degeneracy---the $\sim$1\,GHz
+single band only through its value at that band's frequency, so one band fixes
+the product and not the slope. Co-detection breaks this degeneracy---the $\sim$1\,GHz
 lever arm between CHIME/FRB ($\sim$0.4--0.8\,GHz) and DSA-110
 ($\sim$1.4\,GHz) measures the frequency scaling directly---but breaking the
 degeneracy is not the same as measuring $\alpha$ in a physically consistent way.
 
 The pulse-broadening function (PBF) shape and the scattering index $\alpha$ are
-not independent observables. Both descend from the same turbulence spectrum: a
+not independent observables. Both descend from the same turbulence spectrum. A
 power-law electron-density fluctuation spectrum
 $P_n(q)\propto q^{-\beta}$ produces a phase structure function
 $D_\phi(\rho)\propto\rho^{\beta-2}$, whose Fourier transform determines the
@@ -120,7 +125,7 @@ power-law PBF tail $p_d(t)\propto t^{-\beta/2}$ and $\alpha\approx4.4$
 
 Because $\beta$ determines both the PBF shape and $\alpha$, they must be
 co-modeled. Choosing a fixed PBF family and freely varying $\alpha$ inside it
-is physically inconsistent: the exponential PBF assumes square-law
+is physically inconsistent, because the exponential PBF assumes square-law
 statistics, which already imply $\alpha\approx4$. If the true medium is
 Kolmogorov---or anything other than square-law---fitting an exponential PBF
 will absorb the shape mismatch into a biased $\alpha$ \citep{Cordes2025}.
@@ -152,8 +157,8 @@ and $\alpha\to4$ regardless of the underlying spectral index, so an
 inner-scale-dominated medium and a genuine $\beta=4$ spectrum are observationally
 degenerate \citep{Cordes2016, Cordes2025}. A posterior that concentrates at
 $\beta=4$ is therefore \emph{not} reported as a measurement of square-law
-turbulence: it marks the closure regime in which the thin-screen inertial-range
-mapping no longer determines $\beta$. Accordingly, the per-sightline results
+turbulence. It instead marks the closure regime in which the thin-screen
+inertial-range mapping no longer determines $\beta$. Accordingly, the per-sightline results
 table (Section~\ref{sec:results-alpha}) will carry an explicit closure-regime
 label---interior (a resolved $\beta$ within the inertial range) versus
 square-law/inner-scale limited---alongside each entry, so that no square-law
@@ -210,7 +215,7 @@ lag-1 residual autocorrelation become meaningful quality gates, and it lowers
 the sampled dimensionality.
 
 Because the marginalization deliberately absorbs the scintillation pattern into
-the gain, the scattering fit does not measure scintillation: the
+the gain, the scattering fit does not measure scintillation. The
 decorrelation-bandwidth products used later
 (Section~\ref{sec:results-scintillation}) come from a separate
 autocorrelation-function analysis path applied to the same dynamic spectra, not
@@ -252,7 +257,7 @@ whitened residual dynamic spectra in both bands. A component choice is rejected
 and re-fit if coherent burst power remains in the residuals, or if the collapsed
 profiles show a resolved sub-component that is absent from the model, even when
 the scalar goodness-of-fit statistics are otherwise acceptable. This visual and
-residual audit is part of the component-selection procedure: a fit with
+residual audit is part of the component-selection procedure, in which a fit with
 missed sub-components is treated as diagnostic and re-fit at higher multiplicity
 until it passes the same check. A clean single-component co-detection in our sample,
 for which the joint fit returns a well-constrained $\beta$ with white residuals,

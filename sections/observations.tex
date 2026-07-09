@@ -110,36 +110,55 @@ catalog of \citet{WenHan2024}---which supplies $M_{500}$, $R_{500}$, and,
 through its DESI members, a spectroscopic redshift---together with the all-sky
 Planck Sunyaev--Zel'dovich (PSZ2) and X-ray (MCXC, MCXC-II) catalogs; at the
 sample's declination every matched cluster comes from the optical catalog.
-The search apertures set the census completeness and are keyed to each
-object's virial extent rather than to a universal projected radius, so that
-completeness tracks the physical scale on which each population's gas is
-distributed. A galaxy is admitted as an intervening system when it has a
-foreground redshift and an impact parameter within its halo virial radius,
-$b\le R_{\mathrm{vir}}$, where $R_{\mathrm{vir}}=R_{200c}$ is set by the halo
-mass abundance-matched to the photometric stellar mass through the
-\citet{Moster2013} stellar-to-halo-mass relation. Because $R_{\mathrm{vir}}$
-grows with halo mass, this criterion admits genuine circumgalactic sightlines
-well beyond any fixed circumgalactic radius: the recovered confirmed foreground
-halos span $b\approx102$--$243\,\mathrm{kpc}$---each within $R_{\mathrm{vir}}$ of
-its host ($\log(M_{\mathrm{halo}}/M_\odot)\gtrsim12.3$ suffices even for the
-widest, $243\,\mathrm{kpc}$ crossing)---while the full non-refuted census reaches
-$b\approx60$--$280\,\mathrm{kpc}$. Clusters are treated on the complementary
-scale on which their intracluster medium is characterized: a cluster is retained
-when the sightline passes within twice its virial radius
-($\lesssim2\,R_{200}\approx3\,R_{500}$, a $\sim\!5\,\mathrm{Mpc}$ cone) so that
-outskirt near-misses can be shown explicitly (Appendix~\ref{app:clusters}), but
-only crossings within $R_{500}$ enter the dispersion-measure budget
-(Section~\ref{sec:foreground}), where the intracluster column is densest and best
-modeled. The cluster masses and radii ($M_{500}$, $R_{500}$) are optical richness
-estimates from \citet{WenHan2024} rather than X-ray or Sunyaev--Zel'dovich
-measurements, and the associated mass uncertainty propagates into the
-intervening-column prior.
+The wide discovery cone sets only the search completeness; galaxy retention is
+then physical, keyed to each candidate's own circumgalactic scale rather than to
+a single fixed impact parameter. For every galaxy candidate we estimate a
+stellar mass---from Pan-STARRS1 $g-i$ colour \citep[the][relation]{Taylor2011}
+where a clean optical detection exists, and otherwise from the WISE $W1$
+luminosity \citep{Cluver2014}---convert it to a halo mass through the
+stellar-to-halo-mass relation of \citet{Moster2013}, and assign a virial radius
+$R_{\rm vir}=R_{200c}$ with the concentration--mass relation of
+\citet{DuttonMaccio2014}. A galaxy is
+retained as a circumgalactic intersector when the sightline passes within that
+virial radius, $b \le R_{\rm vir}$. Because $R_{\rm vir}$ grows with halo mass,
+this criterion admits genuine circumgalactic sightlines well beyond any fixed
+circumgalactic radius. Among the confirmed foreground galaxy halos
+the recovered $R_{\rm vir}$ span $\sim\!90$--$700\,\mathrm{kpc}$, and eleven of
+the fourteen are pierced within $R_{\rm vir}$ (impact parameters
+$b\approx102$--$243\,\mathrm{kpc}$); the three exceptions---all toward
+FRB~20230307A---graze just outside their virial radii
+($b/R_{\rm vir}\approx1.05$--$1.7$) and are flagged accordingly. The full
+non-refuted galaxy census reaches $b\approx60$--$280\,\mathrm{kpc}$. Cluster
+retention is unchanged from the fixed-aperture scheme. Cluster cones are far
+wider ($\sim\!5\,\mathrm{Mpc}$), and a cluster is kept when the sightline passes
+within twice its virial radius ($\lesssim2\,R_{200}\approx3\,R_{500}$), so a
+grazing outskirt is still recovered. Only crossings within $R_{500}$ enter the
+dispersion-measure budget (Section~\ref{sec:foreground}), and the wider
+retention aperture exists so the excluded near-misses can be shown explicitly
+(Appendix~\ref{app:clusters}). The cluster masses and radii ($M_{500}$,
+$R_{500}$) are optical-richness estimates from \citet{WenHan2024} rather than
+X-ray or Sunyaev--Zel'dovich measurements, and the associated mass uncertainty
+propagates into the intervening-column prior.
+
+The virial-radius criterion is applied only \emph{after} redshift confirmation,
+not in its place. Applied on its own, the geometric test would admit refuted
+background galaxies whose sightlines happen to fall within an (often
+mass-overestimated) virial radius. Stellar masses derived from WISE $W1$ without an optical
+corroborating colour can be inflated by source blending or nuclear emission at
+the sample's redshifts ($z\sim0.3$--0.6). Seven candidates have a WISE mass with
+no usable Pan-STARRS1 colour to corroborate it; for five of these the WISE
+estimate is implausibly large for an individual galaxy
+($\log M_\star=11.7$--13.0), and the other two, though nominally lower, remain
+uncorroborated. Their circumgalactic intersection is therefore formally
+indeterminate. All seven are already inconclusive or refuted by the redshift
+validation and none enters the confirmed budget; we report them as
+mass-indeterminate rather than force a virial radius onto an uncorroborated mass.
 
 Validation cross-matches every candidate, by coordinate, against three
-independent redshift sources: the DESI Legacy Survey DR9 photometric redshifts
-(the \citealt{Zhou2021} random-forest estimator, which supplies a per-object
-redshift error and a morphological type), DESI~DR1 spectroscopic redshifts, and
-the NASA/IPAC Extragalactic Database (NED). Matches use a $5''$ radius for
+independent redshift sources. These are the DESI Legacy Survey DR9 photometric
+redshifts (the \citealt{Zhou2021} random-forest estimator, which supplies a
+per-object redshift error and a morphological type), DESI~DR1 spectroscopic
+redshifts, and the NASA/IPAC Extragalactic Database (NED). Matches use a $5''$ radius for
 galaxies and a $90''$ radius for cluster centroids. The adopted redshift follows
 a fixed priority---DESI spectroscopic, then Legacy spectroscopic, then Legacy
 photometric (carrying its $1\sigma$ error), then NED---and a DESI spectrum
