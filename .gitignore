@@ -15,6 +15,10 @@
 # Built PDF of the manuscript itself (figures under figures/ ARE tracked).
 /main.pdf
 
+# Research data lives in ~/Data/Faber2026/; data/ holds machine-local absolute
+# symlinks into it, which would not resolve on another machine or in CI.
+/data/
+
 # Python bytecode caches from running scripts/ and tests/.
 __pycache__/
 
