@@ -99,16 +99,24 @@ both a `savefig` read and a return code.
   fresh machine.
 - **no_command** — nothing runnable is recorded.
 
-Result: of the manifest's 25 rows, **12 regenerate from a fresh clone** (5 as
+Result: of the manifest's 26 rows, **12 regenerate from a fresh clone** (5 as
 written, 7 only after correcting the command), **4 exit 0 while writing nothing
-at the declared path**, 7 are blocked on data outside both repos, and 2 have no
-command.
+at the declared path**, 8 are blocked on data outside both repos, and 2 have no
+command. (The 2026-07-09 execution sweep ran the 25 rows then present; the
+26th, `figures/codetection_gallery.pdf`, was added the same day with its
+verdict assigned by inspection rather than execution — its inputs are the 24
+`~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` products, which exist in
+neither repo, so it is `blocked_external_data` without needing a run.)
 
-All 9 rows marked `embedded_in_manuscript = yes` do regenerate — but **5 of the 9
-needed their `run_command` corrected first**, so the pre-audit manifest could not
-have rebuilt the manuscript. Every blocked or command-less row is a *staged*
-output waiting on a result SLOT; those cannot be promoted into the manuscript
-until their inputs are published alongside the code.
+9 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **5 of
+those 9 needed their `run_command` corrected first**, so the pre-audit manifest
+could not have rebuilt the manuscript. The tenth, `codetection_gallery.pdf`,
+is the first row that is *both* embedded and blocked: the committed manuscript
+now includes one figure that cannot be rebuilt from a fresh clone until the
+burst waterfall products are deposited (see hazard 6). Every other blocked or
+command-less row is a *staged* output waiting on a result SLOT; those cannot
+be promoted into the manuscript until their inputs are published alongside the
+code.
 
 ⚠️ **This is a statement about the manifest, not about the manuscript.** The
 manifest does not enumerate every embedded output — see hazard 7. Until it does,
@@ -135,9 +143,11 @@ regeneration section below.)
 
 ## Status: what's embedded now vs. staged
 
-The manuscript is mid-draft. Of 25 tracked outputs (21 figures + 4 tables),
-nine are currently `\input`/`\includegraphics`'d (the
-`embedded_in_manuscript = yes` rows); the other 16 (fifteen figures + the
+The manuscript is mid-draft. Of 26 tracked outputs (22 figures + 4 tables),
+ten are currently `\input`/`\includegraphics`'d (the
+`embedded_in_manuscript = yes` rows — most recently
+`figures/codetection_gallery.pdf`, the unified 12-burst dynamic-spectra
+gallery added 2026-07-09); the other 16 (fifteen figures + the
 staged `beta_table.tex`) are produced and sit in the repo but are not yet
 placed — they are waiting on the abstract's bracketed result SLOTs (joint
 two-band scattering, scintillation attribution, band-restricted energies). One
@@ -382,6 +392,14 @@ earned their keep once: they are what caught the drift described in hazard 1.
    manuscript must have its inputs published — a committed data file, or a
    deposited archive — before the DA statement can cover it.
 
+   **2026-07-09 update: this class now has its first embedded member.**
+   `figures/codetection_gallery.pdf` (fig:codetection-gallery, row 26) reads
+   the 24 `~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` waterfall
+   products and is `embedded_in_manuscript = yes` while `blocked_external_data`
+   — the deposition requirement above is no longer hypothetical. The burst
+   waterfall products (or a subset sufficient to re-render the gallery) must be
+   part of the data release before the DA statement can cover this figure.
+
 7. **The manifest does not enumerate every embedded output. (OPEN — this is the
    weakest link in the DA statement.)**
 
@@ -400,7 +418,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
    `clone_verified` verdict, and this audit did **not** execute it.
 
    The consequence is worse than a gap: because the manifest defines the set it
-   audits, a green sweep over its 25 rows reads as "the manuscript reproduces"
+   audits, a green sweep over its 26 rows reads as "the manuscript reproduces"
    while silently skipping the scintillation figures. Any future coverage check
    must derive the output set from the manuscript's `\includegraphics` and
    `\input` directives, not from the manifest's own row list. Until these rows
@@ -413,6 +431,9 @@ earned their keep once: they are what caught the drift described in hazard 1.
   `dsa_scint_acf/` panels, run their producer from a fresh clone, and record a
   `clone_verified` verdict. Nothing else in this file matters to the DA statement
   as much as this.
+- Deposit the `DSA_bursts` `_cntr_bpc.npy` products (or a gallery-sufficient
+  subset): `figures/codetection_gallery.pdf` is now the only embedded row the
+  DA statement cannot cover, and data deposition is the only way to close it.
 - Fill the two unresolved producers (author knowledge) and promote their rows
   to `writer_verified = yes`.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,
