@@ -6,7 +6,7 @@ Every item from the referee report, its current status, and the PR / commit / fi
 
 **Legend:** ✓ done &nbsp; △ partial (minimum ask met; remainder blocked or submission-time) &nbsp; ✗ blocked
 
-**Summary:** of 27 referee items, **17 are fully resolved and merged**, **3 are partial** (the minimum ask is met but a design/archival piece remains), and **7 are blocked** on either (a) the pending scattering/scintillation sections the referee itself flagged as to-be-added, (b) author-only design decisions (D2–D5), or (c) submission-time actions (Zenodo DOI mint, abstract-slot fill).
+**Summary:** of 27 referee items, **21 are fully resolved** (17 merged + 4 design locks D2–D5 owner-accepted 2026-07-10), **3 are partial** (the minimum ask is met but a design/archival piece remains), and **3 remain blocked** on pending science sections or submission-time actions (Zenodo DOI mint, abstract-slot fill, M15/M16). Table/Results fill for scattering still waits on V/A/C.
 
 ## Blocking items (B1–B5)
 
@@ -23,10 +23,10 @@ Every item from the referee report, its current status, and the PR / commit / fi
 | | Ref | Item | Status | Evidence |
 |---|---|---|---|---|
 | △ | **D1** | Galactic-vs-extragalactic alpha inconsistency | DONE (min. ask) / BLOCKED (full) | 'At minimum acknowledge in Obs-MW': DONE, observations.tex:53-62 states the deliberate asymmetry. Full resolution (fixed-alpha vs beta-posterior in screen attribution) is a % TODO in discussion.tex:29, blocked on the scattering sections. |
-| ✗ | **D2** | beta=4 / inner-scale degeneracy -> closure-regime column | BLOCKED | Design decision for the pending results table; scattering campaign is board phase C (blocked on V/A/B5). |
-| ✗ | **D3** | Sub-band EMG validation labeled as diagnostic, not turbulence constraint | BLOCKED | Belongs to the pending Sub-band section (results.tex TODO). |
-| ✗ | **D4** | Scintillation double-use (gain marginalization vs observable) | BLOCKED | Belongs to the pending Methods/Results-scintillation sections. |
-| ✗ | **D5** | Energetics comparability (fixed rest-frame band variant) | BLOCKED | Belongs to the pending Energetics section (results.tex:207 TODO). |
+| ✓ | **D2** | beta=4 / inner-scale degeneracy -> closure-regime column | DONE (design lock) | Owner accepted 2026-07-10. Memo `decision-d2-d5-scattering-design-locks.md`; Methods vocab `inertial`/`endpoint-degenerate` in `budget.tex`. Table fill still blocked on V/A/C. |
+| ✓ | **D3** | Sub-band EMG validation labeled as diagnostic, not turbulence constraint | DONE (design lock) | Owner accepted 2026-07-10. Diagnostic-only; Methods argument in `budget.tex` §subband. Figure restore still post-V. |
+| ✓ | **D4** | Scintillation double-use (gain marginalization vs observable) | DONE (design lock) | Owner accepted 2026-07-10. Separate ACF path + finite gain prior + τ–prior-width stability; A1-consistent. Methods in `budget.tex` §gainmarg. |
+| ✓ | **D5** | Energetics comparability (fixed rest-frame band variant) | DONE (design lock) | Owner accepted 2026-07-10. Disclaimer + rest-frame intervals only; fixed-band variant dropped unless elected under V3. `methods.tex` amended. Results fill still post-V3. |
 
 ## Association (§ToA) — non-blocking
 
@@ -72,7 +72,7 @@ Every item from the referee report, its current status, and the PR / commit / fi
 
 ## What is genuinely still open, and why it is not autonomously completable
 
-- **D2–D5 (design decisions).** Lock choices the per-sightline attribution ledger inherits (closure-regime column, sub-band diagnostic labeling, scintillation double-use, energetics comparability). Author judgement, not code.
+- **D2–D5 (design decisions).** Owner-accepted 2026-07-10 (`decision-d2-d5-scattering-design-locks.md`). Presentation contracts locked; table/Results fill still blocked on V/A/C (and V3 for energies).
 - **Scattering / scintillation / turbulence / energetics sections.** Board phases V/A/B/C/D: the fit re-validation ladder, geometry-selection campaign, and two-screen analysis on joint CHIME+DSA scintillation. New data analysis on real burst products — the paper's central contribution — and cannot be written without running that campaign.
 - **Submission-time actions.** B5/M11 Zenodo DOI mint, M16 abstract-slot fill from frozen B2 numbers, MW4 NE2025 publication-status watch. Each is a one-step author action at submission.
 

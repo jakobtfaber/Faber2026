@@ -76,6 +76,22 @@ the measured scattering times is deferred to the scattering analysis
 % TODO(results-budget-scattering): Restore the measured-vs-predicted
 % scattering comparison (fig:budget overlay, tau_obs column) only after the
 % V1 fit ladder clears.
+% Draft box: docs/rse/specs/figure-wishlist.md (W1). Gate V1+C+D1.
+\begin{figure*}
+  \centering
+  \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
+  \textbf{[DRAFT PLACEHOLDER --- fig:budget]}\\[0.6em]
+  Measured-vs-predicted scattering budget ($\tau$ overlay).\\
+  Gate: V1 + C + plan D1.\\
+  Candidate on disk (measured side revoked):
+  \texttt{figures/sightline\_dm\_scattering\_budget.pdf}\\
+  \vspace{1.6cm}}}
+  \caption{Per-sightline dispersion and scattering budget with measured
+  $\tau$ overlaid on intervening predictions.
+  \emph{Draft placeholder --- measured overlay withheld until the fit
+  re-validation ladder and geometry-adjudicated campaign clear.}}
+  \label{fig:budget}
+\end{figure*}
 
 \input{budget_table}
 
@@ -156,6 +172,22 @@ arm within the DSA band alone is short, and a physically meaningful measurement
 of the scaling requires the CHIME-band anchor, which is deferred with the rest
 of the two-band analysis.
 
+% Draft box: docs/rse/specs/figure-wishlist.md (W5). Gate B5+V1 scint+A1.
+\begin{figure*}
+  \centering
+  \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
+  \textbf{[DRAFT PLACEHOLDER --- fig:scint\_screens]}\\[0.6em]
+  Two-screen / screen-attribution summary (CHIME+DSA).\\
+  Gate: B5 + V1 scintillation + A1.\\
+  Candidate on disk (regenerate): \texttt{figures/codetection\_scint\_excess.pdf}\\
+  \vspace{1.6cm}}}
+  \caption{Two-screen / screen-attribution summary from joint CHIME+DSA
+  scintillation products.
+  \emph{Draft placeholder --- fill after the both-band scintillation campaign
+  and two-screen analysis (B5).}}
+  \label{fig:scint_screens}
+\end{figure*}
+
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/dsa_lorentzian_summary.pdf}
@@ -192,7 +224,25 @@ of the two-band analysis.
 %
 % Candidate future artifacts, once trusted:
 % - tab:beta
-% - fig:whitney_mult
+% - fig:subband_tau_validation
+% (fig:whitney_mult dropped 2026-07-10 --- outdated multiplicity demo; use
+%  appendix jointmodel-pair panels / a re-validated demo if needed later)
+%
+% Draft box: docs/rse/specs/figure-wishlist.md (W4).
+\begin{figure*}
+  \centering
+  \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
+  \textbf{[DRAFT PLACEHOLDER --- fig:subband\_tau\_validation]}\\[0.6em]
+  Sub-band EMG $\tau$-slope validation diagnostic (D3: diagnostic only).\\
+  Gate: V1.\\
+  Candidates on disk: \texttt{figures/subband\_tau\_validation\_grid.pdf},
+  \texttt{chime\_subband\_compare.pdf}\\
+  \vspace{1.6cm}}}
+  \caption{Sub-band EMG $\tau$-slope validation diagnostic.
+  \emph{Draft placeholder --- slopes are a consistency check only, never a
+  turbulence-index measurement (D3).}}
+  \label{fig:subband_tau_validation}
+\end{figure*}
 
 The component-multiplicity audit provides a validation of the joint-fit
 morphology independent of the turbulence-parameter values themselves.
@@ -220,3 +270,8 @@ quote the fitted scattering or turbulence parameters from them.
 %
 % Candidate future artifact, once trusted:
 % - tab:burst-energies
+%
+% TODO(energies-fixed-band-variant): Optional under V3 (D5 lock 2026-07-10) —
+% elect a fixed rest-frame-band companion E_iso for luminosity-function
+% comparison only if needed; not required for submission. See methods.tex
+% TODO and decision-d2-d5-scattering-design-locks.md.
