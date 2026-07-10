@@ -27,11 +27,30 @@ loaded with its frequency axis
 standardized to ascending order and its per-channel bandpass normalized, so the
 fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
 and figures in this paper are produced with a common open-source reduction and
-fitting pipeline, which we reference throughout for reproducibility. We do not
-catalog the fine-scale baseband morphology of each burst here; the analysis
+fitting pipeline, which we reference throughout for reproducibility.
+Figure~\ref{fig:codetection-gallery} presents the dedispersed dynamic spectra
+of all twelve co-detections in both bands. We do not further catalog the
+fine-scale baseband morphology of each burst; the analysis
 only depends on whether a burst resolves into more than one temporal component,
 which is treated in the multi-component fit of
 Section~\ref{sec:multicomp}.
+
+\begin{figure*}[t!]
+\centering
+\includegraphics[width=\textwidth]{figures/codetection_gallery.pdf}
+\caption{Dedispersed total-intensity dynamic spectra of the full twelve-burst
+co-detection sample, ordered by detection epoch. Each panel pairs the DSA-110
+waterfall (1.31--1.50\,GHz, top) with the CHIME/FRB waterfall
+(0.40--0.80\,GHz, bottom); the upper strip shows the band-summed profiles
+(DSA-110 black, CHIME/FRB blue), each normalized to its peak. Every spectrum
+is shown at its instrument-optimized dispersion measure as recorded in the
+archival data products (the per-telescope DM values and their agreement
+accompany the data release, Section~\ref{sec:data-availability}); times are
+relative to each band's profile peak. Data are bandpass-corrected and
+block-averaged for display ($163.84\,\mu$s; 256 channels per band); masked
+channels are gray. No model curves are overlaid.}
+\label{fig:codetection-gallery}
+\end{figure*}
 
 \subsection{Scattering fits}
 \label{sec:obs-scatt}

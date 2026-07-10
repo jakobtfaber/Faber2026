@@ -135,9 +135,11 @@ regeneration section below.)
 
 ## Status: what's embedded now vs. staged
 
-The manuscript is mid-draft. Of 25 tracked outputs (21 figures + 4 tables),
-nine are currently `\input`/`\includegraphics`'d (the
-`embedded_in_manuscript = yes` rows); the other 16 (fifteen figures + the
+The manuscript is mid-draft. Of 26 tracked outputs (22 figures + 4 tables),
+ten are currently `\input`/`\includegraphics`'d (the
+`embedded_in_manuscript = yes` rows — most recently
+`figures/codetection_gallery.pdf`, the unified 12-burst dynamic-spectra
+gallery added 2026-07-09); the other 16 (fifteen figures + the
 staged `beta_table.tex`) are produced and sit in the repo but are not yet
 placed — they are waiting on the abstract's bracketed result SLOTs (joint
 two-band scattering, scintillation attribution, band-restricted energies). One
