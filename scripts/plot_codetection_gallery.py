@@ -67,10 +67,13 @@ FILE_NICK = {"johndoeii": "johndoeII"}
 # Band geometry: pipeline/scattering/configs/telescopes.yaml (GHz, ms).
 # Both products are stored frequency-descending; flipped to ascending on load.
 BANDS = {
-    "dsa": dict(f_lo=1.31125, f_hi=1.49875, dt_ms=32.768e-3, f_factor=24, t_factor=5),
-    "chime": dict(f_lo=0.40019, f_hi=0.80019, dt_ms=2.56e-3, f_factor=4, t_factor=64),
+    "dsa": dict(f_lo=1.31125, f_hi=1.49875, dt_ms=32.768e-3, f_factor=12, t_factor=1),
+    "chime": dict(f_lo=0.40019, f_hi=0.80019, dt_ms=2.56e-3, f_factor=2, t_factor=13),
 }
-# Display resolution after block averaging: 163.84 us, 256 channels per band.
+# Display resolution after block averaging: ~33 us and 512 channels per band
+# (DSA native time; CHIME averaged to match), sized for the adaptive tight
+# windows -- the previous 163.84 us / 256-channel grid left only ~30 columns
+# across a narrow burst.
 
 WINDOW_MS_DEFAULT = 25.0  # hard clamp on the adaptive half-window
 # Per-burst symmetric half-window overrides (ms): escape hatch when the
