@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DM Measurement Campaign — Phases 0–1</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <script type="module">
+            import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: "dark",
+                flowchart: {
+                    nodeSpacing: 80,
+                    rankSpacing: 80,
+                    useMaxWidth: false,
+                },
+                themeVariables: {
+                    fontSize: "24px",
+                    primaryColor: "#303340",
+                    primaryTextColor: "#a6accd",
+                    primaryBorderColor: "#5c6078",
+                    lineColor: "#ADD7FF",
+                    secondaryColor: "#1b1e28",
+                    tertiaryColor: "#1b1e28",
+                    background: "#1b1e28",
+                    mainBkg: "#303340",
+                    nodeBorder: "#5c6078",
+                    clusterBkg: "#1b1e28",
+                    titleColor: "#ffffff",
+                    edgeLabelBackground: "#1b1e28",
+                },
+            });
+            window.mermaid = mermaid;
+        </script>
+        <style>
+            :root {
+                --bg: #1b1e28;
+                --bg-alt: #303340;
+                --fg: #a6accd;
+                --fg-bright: #ffffff;
+                --fg-dim: #5c6078;
+                --selection: #717cb425;
+                --accent: #add7ff;
+                --border: #303340;
+                --green: #5de4c7;
+                --yellow: #fffac2;
+                --pink: #d0679d;
+                --cyan: #89ddff;
+                --magenta: #f087bd;
+            }
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body {
+                font-family: "IBM Plex Mono", monospace;
+                background: var(--bg);
+                color: var(--fg);
+                line-height: 1.6;
+            }
+            .slide {
+                display: none;
+                min-height: 100vh;
+                padding: 60px 80px;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .slide.active { display: flex; }
+            .slide.centered { align-items: center; text-align: center; }
+            .slide.top { justify-content: flex-start; padding-top: 100px; }
+            .slide h1 { font-size: 3rem; font-weight: 600; margin-bottom: 1rem; color: var(--fg-bright); }
+            .slide h2 { font-size: 2.2rem; font-weight: 500; margin-bottom: 1.5rem; color: var(--fg-bright); }
+            .slide h3 { font-size: 1.5rem; font-weight: 500; margin-bottom: 1rem; color: var(--fg); }
+            .slide p { font-size: 1.3rem; margin-bottom: 1rem; color: var(--fg); }
+            .slide .subtitle { font-size: 1.4rem; color: var(--fg-dim); margin-top: 0.5rem; }
+            .slide .small { font-size: 1rem; }
+            .slide ul, .slide ol { font-size: 1.3rem; margin-left: 0; color: var(--fg); list-style: none; }
+            .slide li { margin-bottom: 0.75rem; position: relative; padding-left: 1.8rem; }
+            .slide ul li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+            .slide ol { counter-reset: item; }
+            .slide ol li::before {
+                content: counter(item) ".";
+                counter-increment: item;
+                position: absolute;
+                left: 0;
+                color: var(--accent);
+                font-weight: 500;
+            }
+            .accent { color: var(--accent); }
+            .green { color: var(--green); }
+            .yellow { color: var(--yellow); }
+            .pink { color: var(--pink); }
+            .cyan { color: var(--cyan); }
+            .magenta { color: var(--magenta); }
+            .muted { color: var(--fg-dim); }
+            .bright { color: var(--fg-bright); }
+            .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; width: 100%; }
+            .columns.narrow-left { grid-template-columns: 1fr 2fr; }
+            .columns.narrow-right { grid-template-columns: 2fr 1fr; }
+            .split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; width: 100%; }
+            .slide img { max-width: 100%; max-height: 65vh; border-radius: 6px; }
+            .slide img.full { max-height: 75vh; }
+            .slide img.bordered { border: 1px solid var(--border); }
+            .slide img.shadow { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); }
+            .big-number { font-size: 8rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 1rem; }
+            .big-number.green { color: var(--green); }
+            .big-number.pink { color: var(--pink); }
+            .quote {
+                font-size: 1.8rem;
+                font-style: italic;
+                color: var(--fg);
+                border-left: 3px solid var(--accent);
+                padding-left: 1.5rem;
+                margin: 1rem 0;
+            }
+            .quote-author { font-size: 1.1rem; color: var(--fg-dim); margin-top: 1rem; }
+            .code {
+                background: var(--bg-alt);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                padding: 1.5rem;
+                font-size: 1.1rem;
+                overflow-x: auto;
+                margin: 1rem 0;
+                white-space: pre;
+            }
+            .mermaid-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; margin: 2rem 0; }
+            .mermaid svg { max-width: none !important; }
+            .gallery { display: flex; gap: 40px; align-items: center; justify-content: center; flex-wrap: wrap; }
+            .gallery img { max-height: 200px; max-width: 280px; }
+            .gallery-item { text-align: center; }
+            .gallery-item p { font-size: 0.9rem; color: var(--fg-dim); margin-top: 0.75rem; }
+            .badge {
+                display: inline-block;
+                background: var(--bg-alt);
+                border: 1px solid var(--border);
+                padding: 0.3rem 0.8rem;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                margin-right: 0.5rem;
+            }
+            .badge.accent { background: rgba(173, 215, 255, 0.15); border-color: var(--accent); }
+            .badge.green { background: rgba(93, 228, 199, 0.15); border-color: var(--green); }
+            hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+            .nav { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 10px; }
+            .nav button {
+                font-family: "IBM Plex Mono", monospace;
+                background: var(--bg-alt);
+                color: var(--fg);
+                border: 1px solid var(--border);
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                cursor: pointer;
+                border-radius: 4px;
+                transition: all 0.15s;
+            }
+            .nav button:hover { background: #3a3f52; color: var(--fg-bright); }
+            .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+            .progress { position: fixed; bottom: 0; left: 0; height: 2px; background: var(--accent); transition: width 0.3s; }
+            .slide-number { position: fixed; bottom: 35px; left: 30px; color: var(--fg-dim); font-size: 0.85rem; }
+            .slide[data-progressive] { justify-content: flex-start; padding-top: 15vh; }
+            .slide[data-progressive] li,
+            .slide[data-progressive] .reveal { opacity: 0; transition: opacity 0.3s ease; }
+            .slide[data-progressive] li.visible,
+            .slide[data-progressive] .reveal.visible { opacity: 1; }
+        </style>
+    </head>
+    <body>
+        <!-- 1: Title -->
+        <section class="slide centered">
+            <h1>Measuring &Delta;DM across the 12 co-detections</h1>
+            <p class="subtitle">DM measurement campaign &mdash; Phase 0 (injection validation) + Phase 1 (uniform battery)</p>
+            <p class="small muted" style="margin-top: 3rem">Faber2026 &middot; July 2026 &middot; PR dsa110-FLITS#157</p>
+        </section>
+
+        <!-- 2: The problem -->
+        <section class="slide" data-progressive>
+            <h2>The problem</h2>
+            <ul>
+                <li>The DM budget needs <span class="accent">one uniform &Delta;DM method</span> across all 12 bursts &mdash; per-burst or per-instrument method choice is off the table</li>
+                <li>In-tree DM-phase / DM-power results were <span class="pink">implementation-suspect</span>: are the failures the algorithm's, or ours?</li>
+                <li>Science requirement: resolve &Delta;DM to <span class="green">&le; &plusmn;0.5 pc cm&#8315;&sup3;, unbiased</span>, with an honest quoted &sigma;</li>
+                <li>Standing rule: verdicts come from <span class="yellow">visual vetting of diagnostics</span>, never numeric gates alone</li>
+            </ul>
+        </section>
+
+        <!-- 3: Campaign design -->
+        <section class="slide centered">
+            <h2>Campaign design</h2>
+            <div class="mermaid-wrapper">
+                <pre class="mermaid">
+graph LR
+    A[Phase 0<br/>known-truth injections<br/>360 cells, both geometries] --> B[Phase 1<br/>vendor published packages<br/>+ adapter contract]
+    B --> C[Phase 1<br/>uniform battery<br/>5 methods x 24 products]
+    C --> D[Phase 2<br/>fix DSA gate,<br/>joint-model dDM layer]
+    D --> E[Phase 3<br/>synthesis, owner picks<br/>ONE sample-wide primary]
+                </pre>
+            </div>
+            <p class="small muted">Five estimators behind one adapter contract: arrival regression &middot; in-tree DM-phase &middot; in-tree DM-power &middot; published DM_phase &middot; published DM-power</p>
+        </section>
+
+        <!-- 4: Phase 0 design -->
+        <section class="slide" data-progressive>
+            <h2>Phase 0 &mdash; injection validation</h2>
+            <ul>
+                <li>Synthetic EMG bursts with <span class="accent">known &Delta;DM</span> on both instrument geometries (DSA 1.31&ndash;1.50 GHz, CHIME 0.40&ndash;0.80 GHz)</li>
+                <li>360 cells: S/N {8, 25, 80} &times; width {0.3, 2 ms} &times; &tau;&#8320;&#8320;&#8320; {0, 5, 20 ms} &times; {1, 2} components &times; 5 seeds &mdash; full matrix on h17 (40 cores, 98 min)</li>
+                <li>Two <span class="yellow">orthogonal verdicts</span> per method/geometry: <span class="green">accuracy</span> vs the &plusmn;0.5 requirement, and <span class="cyan">&sigma; calibration</span> (miscalibration is correctable; coarseness is not)</li>
+                <li>BLAS thread pinning after a 4-worker all-core run froze the laptop <span class="muted">(the freeze you saw)</span></li>
+            </ul>
+        </section>
+
+        <!-- 5: Phase 0 contact sheet -->
+        <section class="slide centered">
+            <h2>Phase 0 verdicts (full 360-cell matrix)</h2>
+            <img src="phase0_contact_sheet.png" alt="Phase 0 injection recovery contact sheet" class="shadow full" />
+            <p class="small muted" style="margin-top: 1rem">Green = resolves &Delta;DM to &le;&plusmn;0.5 unbiased. No verdict flips between quick and full matrices.</p>
+        </section>
+
+        <!-- 6: Phase 0 verdict -->
+        <section class="slide" data-progressive>
+            <h2>Phase 0 verdict</h2>
+            <ul>
+                <li><span class="green">Arrival regression is the only both-geometry candidate</span>: DSA &plusmn;0.27 with honest &sigma; (&times;0.9), CHIME &plusmn;0.03 with a correctable 2.3&times; under-quote</li>
+                <li>DM-phase family: accurate in median &mdash; supports <span class="accent">"incorrectly implemented, not ineffective"</span> &mdash; but morphology-fragile (wide / 2-component bursts scatter to &plusmn;5 even at S/N 80) with overconfident &sigma;</li>
+                <li>DM-power: green on CHIME, <span class="pink">too coarse on DSA</span> (&plusmn;2.17, bias +0.23)</li>
+                <li>Root cause is geometric: the DSA full-band dispersion sweep is <span class="yellow">~3.5 samples per unit DM</span> at product resolution &mdash; structure metrics have almost nothing to grip</li>
+            </ul>
+        </section>
+
+        <!-- 7: Phase 1 vendoring -->
+        <section class="slide" data-progressive>
+            <h2>Phase 1 &mdash; published packages, as released</h2>
+            <ul>
+                <li>Vendored <span class="accent">DM_phase</span> (b7cf5fd, GPL-3) and <span class="accent">DM-power</span> (f778735, no published license &mdash; internal use only) into <span class="muted">pipeline/external/</span></li>
+                <li>Run <span class="yellow">exactly as released</span> &mdash; only import-environment shims (mpi4py stub, CLI-globals setup), all documented</li>
+                <li>Uniform adapter contract: every method takes the same waterfall, returns dm &plusmn; &sigma; + a search curve on one <span class="cyan">normalized residual-DM axis</span> &mdash; 19 contract tests green</li>
+                <li><span class="green">Key evidence:</span> published DM-power passes the DSA bright-injection case where the in-tree variant failed &mdash; implementation, not algorithm</li>
+            </ul>
+        </section>
+
+        <!-- 8: Battery -->
+        <section class="slide centered">
+            <div class="big-number green">112/120</div>
+            <h2>The uniform battery</h2>
+            <p class="muted">5 methods &times; 24 products (12 bursts &times; 2 bands), one config, runs constrained.<br/>8 unconstrained: 7 arrival-regression subband-gate rejections + 1 deterministic SVD failure.</p>
+        </section>
+
+        <!-- 9: Battery arrival sheet -->
+        <section class="slide centered">
+            <h2>Battery &mdash; arrival regression on all 24 products</h2>
+            <img src="battery_arrival.png" alt="Arrival regression battery contact sheet" class="shadow full" />
+            <p class="small muted" style="margin-top: 1rem">Red line = candidate residual. The "unconstrained" panels still show clearly peaked curves &mdash; that is the gate, not the data.</p>
+        </section>
+
+        <!-- 10: Battery published DM-power sheet -->
+        <section class="slide centered">
+            <h2>Battery &mdash; published DM-power</h2>
+            <img src="battery_dmpower_pub.png" alt="Published DM-power battery contact sheet" class="shadow full" />
+            <p class="small muted" style="margin-top: 1rem">23/24 constrained; weak-geometry DSA products get honestly large &sigma;. CHIME non-detections (mahi, oran, isha, phineas) self-flag across methods.</p>
+        </section>
+
+        <!-- 11: Fit quality zach -->
+        <section class="slide">
+            <div class="split">
+                <div>
+                    <img src="fit_zach_chime.png" alt="zach CHIME regression fit panel" class="bordered shadow" />
+                </div>
+                <div>
+                    <h2>Where the &sigma; under-quote lives</h2>
+                    <ul>
+                        <li>zach/CHIME: 8/8 subbands, formal errors tiny, arrivals deviate <span class="pink">systematically with frequency</span> &mdash; &plusmn;20&sigma; residuals, &chi;&sup2;<sub>&nu;</sub> = 173</li>
+                        <li>That is <span class="yellow">profile evolution across the band</span>, not a DM error</li>
+                        <li>&chi;&sup2;-inflation absorbs scatter but <span class="accent">not a systematic trend</span> &mdash; the injection-derived correction stays necessary</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12: Fit quality casey -->
+        <section class="slide">
+            <div class="split">
+                <div>
+                    <img src="fit_casey_dsa.png" alt="casey DSA regression fit panel" class="bordered shadow" />
+                    <p class="small muted" style="margin-top: 0.5rem">casey/DSA: 0/8 subbands survive &mdash; at coarse peak S/N 158</p>
+                </div>
+                <div>
+                    <h2>The DSA gate paradox</h2>
+                    <ul>
+                        <li>6 DSA products + mahi/CHIME rejected by the <span class="pink">8-subband S/N &ge; 4 gate</span> while their coarse curves peak cleanly</li>
+                        <li>Bursts are plainly visible in the waterfalls &mdash; <span class="accent">config sensitivity, not non-detections</span></li>
+                        <li>This is <span class="green">Phase 2's entry point</span>: retune subbanding for the DSA band, recover the 7 runs</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13: Gallery at joint arrival DMs -->
+        <section class="slide centered">
+            <h2>All 12 co-detections at ONE joint arrival-regression DM</h2>
+            <img src="gallery_arrival_dm.png" alt="Co-detection gallery dedispersed to one joint arrival-regression DM per burst" class="shadow full" />
+            <p class="small muted" style="margin-top: 1rem">Per burst: inverse-variance mean of the constrained bands' absolute DMs (stem + &Delta;DM); both bands shifted to it. Where both bands constrain they agree (chromatica 272.656 vs 272.662). Red = no arrival DM (mahi), shown as stored.</p>
+        </section>
+
+        <!-- 14: Reworked manuscript gallery -->
+        <section class="slide centered">
+            <h2>The manuscript gallery, reworked</h2>
+            <img src="codetection_gallery.png" alt="Reworked 12-burst co-detection gallery: shared frequency axis with hatched bandpass gap, on-pulse spectrum marginals, adaptive time windows" class="shadow full" />
+            <p class="small muted" style="margin-top: 1rem">fig:codetection-gallery &mdash; both bands to scale, <span class="accent">hatched 0.80&ndash;1.31 GHz gap</span>, on-pulse spectrum marginals, adaptive windows. Raw data, stored DMs (6e451c2).</p>
+        </section>
+
+        <!-- 15: Findings -->
+        <section class="slide" data-progressive>
+            <h2>Findings so far</h2>
+            <ol>
+                <li><span class="green">Arrival regression is the leading sample-wide primary candidate</span> &mdash; the only method accurate on both geometries (owner adjudicates in Phase 3)</li>
+                <li>The in-tree DM-phase/DM-power failures were <span class="accent">implementation artifacts</span>; the released algorithms behave</li>
+                <li>Quoted &sigma;'s need <span class="yellow">injection-derived inflation</span>; the mechanism (band-dependent profile evolution) is now visible per product with &chi;&sup2;<sub>&nu;</sub> recorded</li>
+                <li>The 7 unconstrained runs are a <span class="cyan">fixable gate configuration issue</span>, not missing signal</li>
+                <li>Cross-method residual scatter concentrates on the 4 known CHIME non-detections &mdash; everywhere else the methods agree</li>
+            </ol>
+        </section>
+
+        <!-- 16: Next steps -->
+        <section class="slide" data-progressive>
+            <h2>Next</h2>
+            <ul>
+                <li><span class="accent">Phase 2</span>: retune the arrival-regression subband gate for DSA geometry; harden the degenerate subband-fit S/N; extract the joint-model per-band &delta;DM layer (read-only)</li>
+                <li><span class="accent">Phase 3</span>: synthesis memo; owner picks <span class="bright">ONE</span> primary method sample-wide; inter-method scatter becomes the per-burst systematic</li>
+                <li>Everything so far is on <span class="green">PR dsa110-FLITS#157</span> &mdash; injection harness, vendored packages, adapters, battery, fit diagnostics; all figures visually reviewed</li>
+            </ul>
+        </section>
+
+        <!-- 17: End -->
+        <section class="slide centered">
+            <h1>Questions / adjudication</h1>
+            <p class="subtitle">Artifacts: pipeline/results/dm_campaign/ &middot; readiness board &middot; PR #157</p>
+            <hr style="width: 100px; margin: 2rem auto" />
+            <p class="small muted">deck: docs/rse/decks/dm-campaign-2026-07/</p>
+        </section>
+
+        <!-- Navigation -->
+        <div class="nav">
+            <button id="prev">&larr; Prev</button>
+            <button id="next">Next &rarr;</button>
+        </div>
+
+        <div class="progress" id="progress"></div>
+        <div class="slide-number" id="slideNum"></div>
+
+        <script>
+            const slides = document.querySelectorAll(".slide");
+            let current = 0;
+
+            function getSlideFromHash() {
+                const hash = window.location.hash;
+                const match = hash.match(/#(\d+)/);
+                if (match) {
+                    return Math.max(0, Math.min(parseInt(match[1]) - 1, slides.length - 1));
+                }
+                return 0;
+            }
+
+            function getProgressiveItems(slide) {
+                if (!slide.hasAttribute('data-progressive')) return [];
+                return Array.from(slide.querySelectorAll('li, .reveal'));
+            }
+
+            function revealAllItems(slide) {
+                getProgressiveItems(slide).forEach(el => el.classList.add('visible'));
+            }
+
+            function hideAllItems(slide) {
+                getProgressiveItems(slide).forEach(el => el.classList.remove('visible'));
+            }
+
+            function getNextHiddenItem(slide) {
+                return getProgressiveItems(slide).find(el => !el.classList.contains('visible'));
+            }
+
+            function advance() {
+                const slide = slides[current];
+                const nextHidden = getNextHiddenItem(slide);
+                if (nextHidden) {
+                    nextHidden.classList.add('visible');
+                } else if (current < slides.length - 1) {
+                    showSlide(current + 1);
+                }
+            }
+
+            function goBack() {
+                if (current > 0) {
+                    showSlide(current - 1, true);
+                }
+            }
+
+            async function showSlide(n, showAll = false) {
+                slides[current].classList.remove("active");
+                current = Math.max(0, Math.min(n, slides.length - 1));
+                slides[current].classList.add("active");
+
+                if (showAll) {
+                    revealAllItems(slides[current]);
+                } else {
+                    hideAllItems(slides[current]);
+                }
+
+                history.replaceState(null, null, `#${current + 1}`);
+
+                document.getElementById("prev").disabled = current === 0;
+                document.getElementById("next").disabled =
+                    current === slides.length - 1;
+                document.getElementById("progress").style.width =
+                    ((current + 1) / slides.length) * 100 + "%";
+                document.getElementById("slideNum").textContent =
+                    current + 1 + " / " + slides.length;
+
+                const mermaidEls = slides[current].querySelectorAll(
+                    ".mermaid:not([data-processed])",
+                );
+                if (mermaidEls.length > 0 && window.mermaid) {
+                    await window.mermaid.run({ nodes: mermaidEls });
+                }
+            }
+
+            document.getElementById("prev").onclick = () => goBack();
+            document.getElementById("next").onclick = () => advance();
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowRight" || e.key === " ") advance();
+                if (e.key === "ArrowLeft") goBack();
+                if (e.key === "Home") showSlide(0);
+                if (e.key === "End") showSlide(slides.length - 1, true);
+            });
+
+            window.addEventListener("hashchange", () => {
+                showSlide(getSlideFromHash());
+            });
+
+            showSlide(getSlideFromHash());
+        </script>
+    </body>
+</html>
