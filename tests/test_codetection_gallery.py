@@ -11,6 +11,7 @@ from plot_codetection_gallery import (
     block_mean,
     dead_channel_mask,
     discover_products,
+    onpulse_span,
     peak_window,
 )
 
@@ -48,6 +49,32 @@ def test_peak_window_clips_at_edges():
     prof[2] = 1.0
     i0, i1 = peak_window(prof, dt_ms=1.0, window_ms=25.0)
     assert i0 == 0 and i1 == 28
+
+
+def test_onpulse_span_brackets_a_scattered_pulse():
+    rng = np.random.default_rng(1)
+    t = np.arange(2000) * 0.16384
+    prof = 10.0 * np.exp(-np.clip(t - 150.0, 0, None) / 3.0) * (t >= 150.0)
+    prof += rng.normal(0, 0.2, t.size)
+    lo, hi, pk = onpulse_span(prof, dt_ms=0.16384)
+    assert abs(t[pk] - 150.0) < 1.5
+    assert t[lo] > 140.0 and 155.0 < t[hi] < 180.0  # tail kept, noise floor excluded
+
+
+def test_onpulse_span_merges_close_components():
+    t = np.arange(2000) * 0.16384
+    prof = np.exp(-0.5 * ((t - 150.0) / 0.4) ** 2)
+    prof += 0.6 * np.exp(-0.5 * ((t - 151.5) / 0.4) ** 2)  # 1.5 ms apart < gap_ms
+    lo, hi, _ = onpulse_span(prof, dt_ms=0.16384)
+    assert t[lo] < 150.0 and t[hi] > 151.5
+
+
+def test_onpulse_span_noise_only_stays_tight():
+    rng = np.random.default_rng(2)
+    prof = rng.normal(0, 1.0, 2000)
+    lo, hi, pk = onpulse_span(prof, dt_ms=0.16384)
+    assert lo <= pk <= hi
+    assert (hi - lo) * 0.16384 < 25.0  # never blows out to the full array
 
 
 def test_discover_products_parses_dm_stems(tmp_path):
