@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-09
 **Author:** AI Assistant (Claude Code)
-**Status:** Approved (Direct mode — design decisions locked with rationale; reversible on owner review)
+**Status:** In Progress (Direct mode — design decisions locked with rationale; reversible on owner review)
 **Related Documents:**
 - [Research: Unified 12-burst figure](research-unified-12burst-figure.md)
 
@@ -110,7 +110,7 @@ only) and off the reviewed pin-bump path.
 extraction, product discovery, TNS parity) proven before any rendering.
 
 **Tasks:**
-- [ ] **Write failing tests** — `tests/test_codetection_gallery.py` (new):
+- [x] **Write failing tests** — `tests/test_codetection_gallery.py` (new):
 
   ```python
   import sys
@@ -166,10 +166,10 @@ extraction, product discovery, TNS parity) proven before any rendering.
       assert {k.lower(): v for k, v in NICK_TNS.items()} == canon
   ```
 
-- [ ] **Run, watch fail:**
+- [x] **Run, watch fail:**
   `conda run -n flits python -m pytest tests/test_codetection_gallery.py -v`
   → expect ImportError (module doesn't exist).
-- [ ] **Implement minimal helpers** — `scripts/plot_codetection_gallery.py` (new),
+- [x] **Implement minimal helpers** — `scripts/plot_codetection_gallery.py` (new),
   module top + pure functions only:
 
   ```python
@@ -214,19 +214,19 @@ extraction, product discovery, TNS parity) proven before any rendering.
       return out
   ```
 
-- [ ] **Run, watch pass** (same pytest command).
-- [ ] **Commit** on branch `ms/codetection-gallery`:
+- [x] **Run, watch pass** (same pytest command).
+- [x] **Commit** on branch `ms/codetection-gallery`:
   `git commit -m "feat(figures): codetection-gallery helpers + tests"`
 
 **Verification:**
-- [ ] `conda run -n flits python -m pytest tests/test_codetection_gallery.py -v` → 7 passed.
+- [x] `conda run -n flits python -m pytest tests/test_codetection_gallery.py -v` → 7 passed.
 
 ### Phase 2: Rendering
 
 **Objective:** end-to-end script producing the triplet.
 
 **Tasks:**
-- [ ] **Add loading + render** to `scripts/plot_codetection_gallery.py`:
+- [x] **Add loading + render** to `scripts/plot_codetection_gallery.py`:
   - Band constants from telescopes.yaml values (DSA 1.31125–1.49875 GHz,
     dt 32.768 µs, 6144 ch; CHIME 0.40019–0.80019 GHz, dt 2.56 µs, 1024 ch);
     both stored freq-descending → `arr = np.flipud(np.load(path, mmap_mode="r"))`.
@@ -247,38 +247,38 @@ extraction, product discovery, TNS parity) proven before any rendering.
   - Order: MJD-ascending from pipeline/configs/bursts.yaml (yaml.safe_load).
   - Save: `for ext in ("pdf", "svg", "png"): fig.savefig(figures/codetection_gallery.{ext}, dpi=300)`.
   - `--data-root`, `--out-dir`, `--window-ms` argparse with the above defaults.
-- [ ] **Run:** `conda run -n flits python scripts/plot_codetection_gallery.py`
+- [x] **Run:** `conda run -n flits python scripts/plot_codetection_gallery.py`
   → three files under `figures/`.
-- [ ] **Commit:** `git commit -m "feat(figures): render codetection gallery"`
+- [x] **Commit:** `git commit -m "feat(figures): render codetection gallery"`
 
 **Dependencies:** Phase 1.
 
 **Verification:**
-- [ ] `rtk ls figures/codetection_gallery.*` → pdf+png+svg, pdf < 10 MB.
-- [ ] Script exits 0 and prints the 12 rendered nicknames in MJD order.
+- [x] `rtk ls figures/codetection_gallery.*` → pdf+png+svg, pdf < 10 MB.
+- [x] Script exits 0 and prints the 12 rendered nicknames in MJD order.
 
 ### Phase 3: Visual QA
 
 **Objective:** confirm the panels are publication-sane before tex integration.
 
 **Tasks:**
-- [ ] Render PNG, inspect all 24 panels for: residual dispersion sweep
+- [x] Render PNG, inspect all 24 panels for: residual dispersion sweep
   (chromatica DSA flagged — file DM 272.368 vs bursts.yaml 272.664),
   burst visibility/centering, dead-channel artifacts, clip saturation.
-- [ ] Apply per-burst `WINDOW_MS_OVERRIDES` / percentile adjustments as needed;
+- [x] Apply per-burst `WINDOW_MS_OVERRIDES` / percentile adjustments as needed;
   re-render; send PNG to owner.
 
 **Dependencies:** Phase 2.
 
 **Verification:**
-- [ ] Every panel shows a visible, centered, dedispersed burst (human check).
+- [x] Every panel shows a visible, centered, dedispersed burst (human check).
 
 ### Phase 4: Manuscript integration
 
 **Objective:** figure in the paper, provenance recorded, build green.
 
 **Tasks:**
-- [ ] **observations.tex** — insert after the `sec:data` paragraph (after
+- [x] **observations.tex** — insert after the `sec:data` paragraph (after
   line 34), reusing the two-column pattern of observations.tex:86-91:
 
   ```latex
@@ -301,24 +301,24 @@ extraction, product discovery, TNS parity) proven before any rendering.
   \end{figure*}
   ```
 
-- [ ] **Soften the disclaimer** (observations.tex:30-34): replace "We do not
+- [x] **Soften the disclaimer** (observations.tex:30-34): replace "We do not
   catalog the fine-scale baseband morphology of each burst here; the analysis"
   with "Figure~\ref{fig:codetection-gallery} presents the dedispersed dynamic
   spectra of all twelve co-detections. We do not further catalog fine-scale
   baseband morphology; the analysis".
-- [ ] **REPRODUCE.md** — add a row for `figures/codetection_gallery.*` →
+- [x] **REPRODUCE.md** — add a row for `figures/codetection_gallery.*` →
   `scripts/plot_codetection_gallery.py`,
   run command `conda run -n flits python scripts/plot_codetection_gallery.py`,
   inputs `~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` +
   `pipeline/configs/bursts.yaml`.
-- [ ] **Build:** `make` → grep the log for "undefined references" (none) and
+- [x] **Build:** `make` → grep the log for "undefined references" (none) and
   `fig:codetection-gallery` resolving.
-- [ ] **Commit:** `git commit -m "ms(observations): unified 12-burst co-detection gallery (fig:codetection-gallery)"`
+- [x] **Commit:** `git commit -m "ms(observations): unified 12-burst co-detection gallery (fig:codetection-gallery)"`
 
 **Dependencies:** Phase 3.
 
 **Verification:**
-- [ ] `make` exits 0; `rtk grep -c "codetection_gallery" main.log` ≥ 1;
+- [x] `make` exits 0; `rtk grep -c "codetection_gallery" main.log` ≥ 1;
   no `LaTeX Warning: Reference` for the new label.
 
 ### Phase 5: Closeout
@@ -326,11 +326,11 @@ extraction, product discovery, TNS parity) proven before any rendering.
 **Objective:** land it.
 
 **Tasks:**
-- [ ] Journal the lane done (`scripts/journal-append.sh`).
+- [x] Journal the lane done (`scripts/journal-append.sh`).
 - [ ] Push `ms/codetection-gallery`, open PR mirroring the `ms/…` precedent
   (standing authorization; oneway-guard gates the push mechanically). No
   pipeline pin change in the diff.
-- [ ] Update the readiness board is **not** in scope for this agent's session
+- [x] Update the readiness board is **not** in scope for this agent's session
   unless asked; note the lane in the PR body instead.
 
 **Verification:**
@@ -339,22 +339,22 @@ extraction, product discovery, TNS parity) proven before any rendering.
 ## Success Criteria
 
 ### Automated Verification
-- [ ] `conda run -n flits python -m pytest tests/test_codetection_gallery.py -v` — 7 passed
-- [ ] `conda run -n flits python scripts/plot_codetection_gallery.py` exits 0
-- [ ] `figures/codetection_gallery.{pdf,png,svg}` exist; pdf < 10 MB
-- [ ] `make` builds; no undefined `fig:codetection-gallery` reference
-- [ ] TNS-parity test passes against the pinned pipeline (guards the mahi
+- [x] `conda run -n flits python -m pytest tests/test_codetection_gallery.py -v` — 7 passed
+- [x] `conda run -n flits python scripts/plot_codetection_gallery.py` exits 0
+- [x] `figures/codetection_gallery.{pdf,png,svg}` exist; pdf < 10 MB
+- [x] `make` builds; no undefined `fig:codetection-gallery` reference
+- [x] TNS-parity test passes against the pinned pipeline (guards the mahi
       FRB 20240122A vs 20240119A mislabel)
 
 ### Manual Verification
-- [ ] All 24 panels: visible centered burst, no residual sweep, clean masking
-- [ ] chromatica DSA panel specifically checked for sweep (DM-stem discrepancy)
-- [ ] Fonts render as CM serif; layout survives at print scale
+- [x] All 24 panels: visible centered burst, no residual sweep, clean masking
+- [x] chromatica DSA panel specifically checked for sweep (DM-stem discrepancy)
+- [x] Fonts render as CM serif; layout survives at print scale
 - [ ] Owner approves layout/ordering/caption
 
 ### Reproducibility & Correctness
-- [ ] Producer, env (`flits` conda), inputs, and command recorded in REPRODUCE.md
-- [ ] Deterministic (no RNG); block-mean unit-tested against hand-computed
+- [x] Producer, env (`flits` conda), inputs, and command recorded in REPRODUCE.md
+- [x] Deterministic (no RNG); block-mean unit-tested against hand-computed
       values (Phase 1)
 
 ## Testing Strategy
@@ -388,8 +388,8 @@ tmp_path touch files).
 
 ## Documentation Updates
 
-- [ ] REPRODUCE.md row (Phase 4)
-- [ ] Module docstring in the script: data contract, DM convention, provenance
+- [x] REPRODUCE.md row (Phase 4)
+- [x] Module docstring in the script: data contract, DM convention, provenance
 
 ## Open Questions
 
