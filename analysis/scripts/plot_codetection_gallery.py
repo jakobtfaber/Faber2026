@@ -164,7 +164,7 @@ def load_band(path: Path, band: dict) -> tuple[np.ndarray, np.ndarray]:
     """Load one product -> (windowless waterfall [ascending freq, display res],
     band profile). Baseline: per-channel median over the outer quartiles."""
     raw = np.load(path, mmap_mode="r")
-    arr = np.flipud(np.asarray(raw, dtype=np.float32))  # ascending frequency
+    arr = np.flipud(np.array(raw, dtype=np.float32, copy=True))  # ascending freq
     dead = dead_channel_mask(arr)
     arr[dead] = np.nan
     ds = block_mean(arr, band["f_factor"], band["t_factor"])
@@ -261,7 +261,7 @@ def render(data_root: Path, out_dir: Path, window_ms: float) -> list[str]:
         ax_prof.set_ylim(-0.15, 1.1)
         ax_prof.set_xticks([])
         ax_prof.set_yticks([])
-        ax_prof.set_title(NICK_TNS[nick].replace("FRB ", "FRB "), fontsize=7, pad=2)
+        ax_prof.set_title(NICK_TNS[nick], fontsize=7, pad=2)
         ax_dsa.set_yticks([1.35, 1.45])
         ax_chime.set_yticks([0.5, 0.7])
         ax_dsa.set_xticklabels([])
