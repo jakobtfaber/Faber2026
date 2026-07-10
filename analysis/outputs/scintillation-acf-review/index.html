@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Faber2026 — Representative ACF outputs</title>
+<style>
+html,body{margin:0;background:#111;color:#fff;font-family:Inter,system-ui,sans-serif;height:100%;overflow:hidden}
+.deck{height:100%;display:grid;place-items:center}.slide{display:none;max-width:96vw;max-height:92vh;box-shadow:0 12px 60px #000}.slide.active{display:block}
+.controls{position:fixed;left:0;right:0;bottom:12px;text-align:center;font-size:14px;color:#ddd}.controls button{font-size:18px;margin:0 8px;padding:7px 15px}.hint{opacity:.7;margin-left:12px}
+</style></head><body><main class="deck">
+<img class="slide active" src="slide-01.png" alt="Slide 1">
+<img class="slide" src="slide-02.png" alt="Slide 2">
+<img class="slide" src="slide-03.png" alt="Slide 3">
+<img class="slide" src="slide-04.png" alt="Slide 4">
+</main><div class="controls"><button id="prev">←</button><span id="counter">1 / 4</span><button id="next">→</button><span class="hint">Arrow keys · F for fullscreen</span></div>
+<script>const s=[...document.querySelectorAll('.slide')],c=document.querySelector('#counter');let i=0;function show(n){s[i].classList.remove('active');i=(n+s.length)%s.length;s[i].classList.add('active');c.textContent=(i+1)+' / '+s.length}prev.onclick=()=>show(i-1);next.onclick=()=>show(i+1);addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1);if(e.key.toLowerCase()==='f')document.documentElement.requestFullscreen?.()});</script></body></html>
