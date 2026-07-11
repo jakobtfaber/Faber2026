@@ -99,25 +99,23 @@ both a `savefig` read and a return code.
   fresh machine.
 - **no_command** — nothing runnable is recorded.
 
-Result: of the manifest's 27 rows, **12 regenerate from a fresh clone** (5 as
+Result: of the manifest's 28 rows, **12 regenerate from a fresh clone** (5 as
 written, 7 only after correcting the command), **4 exit 0 while writing nothing
-at the declared path**, 9 are blocked on data outside both repos, and 2 have no
-command. The 2026-07-09 execution sweep ran the 25 rows then present. The 26th,
-`figures/codetection_gallery.pdf`, and 27th,
-`figures/codetection_triptych/*_triptych.pdf`, were added later with verdicts
-assigned by inspection rather than execution. The triptych sequence is the
-embedded opening figure product; the compact gallery remains diagnostic only.
-Both producers depend on the 24
-`~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` products, which exist in
-neither repo, so both are `blocked_external_data` without needing a run. The
-triptychs additionally require 11 local fit-delivery NPZ artifacts.
+at the declared path**, 10 are blocked on data outside both repos, and 2 have
+no command. The 2026-07-09 execution sweep ran the 25 rows then present. The
+compact archival gallery, the Figure 1 fit-grid data overview, and the
+main-text-plus-appendix triptych family were added later with verdicts assigned
+by inspection rather than execution. Figure 1 and the triptychs require eleven
+local fit-delivery NPZ artifacts plus Chromatica's two archival waterfall
+products; the compact gallery remains diagnostic only and requires all 24
+archival waterfalls.
 
-8 of the 9 rows marked `embedded_in_manuscript = yes` regenerate — **4 of
+8 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **4 of
 those 8 needed their `run_command` corrected first**, so the pre-audit manifest
-could not have rebuilt the manuscript. The ninth, the codetection triptych
-sequence, is the one row that is *both* embedded and blocked: it cannot be
-rebuilt from a fresh clone until the fit artifacts and all 24 raw waterfall
-products are deposited (see hazard 6). Every other blocked or
+could not have rebuilt the manuscript. The two blocked embedded rows are the
+codetection data grid and triptych family; neither can be rebuilt from a fresh
+clone until the fit artifacts and Chromatica waterfall products are deposited
+(see hazard 6). Every other blocked or
 command-less row is a *staged* output waiting on a result SLOT; those cannot
 be promoted into the manuscript until their inputs are published alongside the
 code.
@@ -147,10 +145,10 @@ regeneration section below.)
 
 ## Status: what's embedded now vs. staged
 
-The manuscript is mid-draft. Of 27 tracked outputs (23 figures + 4 tables),
-nine are currently `\input`/`\includegraphics`'d (the
-`embedded_in_manuscript = yes` rows, most recently the opening codetection
-triptych sequence); the other 18 (seventeen figures + the
+The manuscript is mid-draft. Of 28 tracked outputs (24 figures + 4 tables),
+ten are currently `\input`/`\includegraphics`'d (the
+`embedded_in_manuscript = yes` rows, most recently the Figure 1 data grid and
+the redistributed triptych family); the other 18 (seventeen figures + the
 staged `beta_table.tex`) are produced and sit in the repo but are not yet
 placed — they are waiting on the abstract's bracketed result SLOTs (joint
 two-band scattering, scintillation attribution, band-restricted energies). One
@@ -396,12 +394,13 @@ earned their keep once: they are what caught the drift described in hazard 1.
    deposited archive — before the DA statement can cover it.
 
    **2026-07-11 update: this class has one embedded member.** The codetection
-   triptych sequence (row 27) reads 11 fit-delivery NPZ artifacts and all 24
-   local CHIME/DSA `_cntr_bpc.npy` waterfalls. It is
-   `embedded_in_manuscript = yes` while `blocked_external_data`; the gallery
-   (row 26) uses the same waterfall tree but is diagnostic and non-embedded.
-   Both the fit artifacts and all 24 waterfall products must be part of the
-   data release before the DA statement can cover the triptych sequence.
+   Figure 1 data grid and the triptych family read 11 fit-delivery NPZ
+   artifacts plus Chromatica's two local CHIME/DSA `_cntr_bpc.npy` waterfalls.
+   Both rows are `embedded_in_manuscript = yes` while
+   `blocked_external_data`; the compact gallery uses all 24 archival
+   waterfalls but is diagnostic and non-embedded. The fit artifacts and
+   Chromatica products must be part of the data release before the DA statement
+   can cover Figures 1--2 and the morphology-audit appendix.
 
 7. **The manifest does not enumerate every embedded output. (OPEN — this is the
    weakest link in the DA statement.)**
@@ -421,7 +420,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
    `clone_verified` verdict, and this audit did **not** execute it.
 
    The consequence is worse than a gap: because the manifest defines the set it
-   audits, a green sweep over its 27 rows reads as "the manuscript reproduces"
+   audits, a green sweep over its 28 rows reads as "the manuscript reproduces"
    while silently skipping the scintillation figures. Any future coverage check
    must derive the output set from the manuscript's `\includegraphics` and
    `\input` directives, not from the manifest's own row list. Until these rows
@@ -434,9 +433,10 @@ earned their keep once: they are what caught the drift described in hazard 1.
   `dsa_scint_acf/` panels, run their producer from a fresh clone, and record a
   `clone_verified` verdict. Nothing else in this file matters to the DA statement
   as much as this.
-- Deposit the 11 triptych fit artifacts and all 24 CHIME/DSA `_cntr_bpc.npy`
-  products: the triptych sequence is the only embedded row the DA statement
-  cannot cover, and data deposition is the only way to close it.
+- Deposit the 11 fit-delivery artifacts and Chromatica's two CHIME/DSA
+  `_cntr_bpc.npy` products: the Figure 1 grid and triptych family are the two
+  embedded rows the DA statement cannot cover, and data deposition is the only
+  way to close them.
 - Fill the two unresolved producers (author knowledge) and promote their rows
   to `writer_verified = yes`.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,
