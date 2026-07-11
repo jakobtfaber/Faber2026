@@ -1,4 +1,4 @@
-"""Fig. 1 producer: per-burst data | model | residual triptychs.
+"""Opening Fig. 1 sequence producer: per-burst data | model | residual triptychs.
 
 Renders figures/codetection_triptych/{nick}_triptych.{pdf,png,svg} from the
 jointmodel NPZ roster in scripts/jointmodel_triptych_manifest.yaml.
@@ -244,9 +244,11 @@ def render_row(
         figsize=(12.4, 4.9),
         title=title,
     )
+    # Keep the burst name clear of the per-column titles in this manuscript layout.
+    fig.suptitle(title, fontsize=10, y=1.02)
     out_dir.mkdir(parents=True, exist_ok=True)
     stem = out_dir / f"{nick}_triptych"
-    fig.savefig(stem.with_suffix(".png"), dpi=dpi)
+    fig.savefig(stem.with_suffix(".png"), dpi=dpi, bbox_inches="tight")
     fig.savefig(stem.with_suffix(".pdf"), bbox_inches="tight")
     fig.savefig(stem.with_suffix(".svg"), bbox_inches="tight")
     plt.close(fig)
