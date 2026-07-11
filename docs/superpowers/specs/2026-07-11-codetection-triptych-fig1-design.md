@@ -1,24 +1,28 @@
-# Design: opening Fig. 1 sequence (Figs. 1--12) as data | model | residual triptychs
+# Design: Figure 1 data grid, Figure 2 representative fit, appendix audit
 
 **Date:** 2026-07-11  
-**Status:** approved (owner 2026-07-11)  
+**Status:** revised and approved (owner 2026-07-11)
 **Related:** `logs/merge-fig1-triptych-design.md`, prior gallery plan `docs/rse/specs/plan-unified-12burst-figure.md`, jointmodel-pair design `docs/superpowers/specs/2026-07-07-jointmodel-pair-design.md`
 
 ## Goal
 
-Replace the compact 4×3 `fig:codetection-gallery` with the first central manuscript figure that shows, for each co-detection, the **time–frequency data**, the **2-D joint model**, and the **whitened residuals** side by side. No overlays or contours on the data column.
+Make Figure 1 a 3×4 overview of the twelve joint CHIME/DSA observations,
+using the same data grids and crops as the accepted fit products. Use Zach as
+Figure 2 to teach the full **data | model | residual** presentation, and move
+the remaining eleven audits to the terminal appendix.
 
 ## Locked decisions
 
 | Decision | Choice |
 |----------|--------|
-| Layout | Per-burst **data \| model \| resid** triptych |
+| Figure 1 | 3×4 grid of data-only joint CHIME/DSA waterfalls |
+| Figure 2 | Zach **data \| model \| resid** representative example |
 | Overlays on data | **None** (`show_model_on_data=False`) |
-| Pagination | **One burst per full-width `figure*[p]` page** (full structural resolution) |
+| Appendix pagination | **One burst per full-width `figure*[p]` page** |
 | Sample order | MJD-ascending (zach … casey), including chromatica |
 | Chromatica | Data-only page until an accepted joint fit exists |
 | Flagged fits (whitney, hamilton, wilhelm) | **Show triptychs with †** in caption / title note |
-| Residuals elsewhere | Do **not** duplicate full set in appendix; Results Whitney becomes a cross-ref |
+| Remaining audits | Collect the other eleven panels in the terminal appendix |
 | Trust framing | Morphology-audit panels; no quoted τ/α/β from these figures |
 | Off-pulse pad | Each side ≈ total CHIME on-pulse width \(W_C\) beyond the observed union |
 | Display resolution | **Fit-delivery grid from the jointmodel NPZ** (same `f_factor`/`t_factor` used for the fit); data and model share that grid. Chromatica data-only uses the gallery archival display grid. |
@@ -26,7 +30,7 @@ Replace the compact 4×3 `fig:codetection-gallery` with the first central manusc
 ## Non-goals
 
 - Contour or dashed-model overlays on the data waterfall.
-- Cramming all 12×3 panels onto one page.
+- Cramming all 12 triptychs onto one page.
 - Pipeline gitlink / pin bump as a side effect (prefer top-level manuscript script + existing `plot_codetection` import).
 - Re-fitting or clearing Wave-1 trust reset in this lane.
 
@@ -51,9 +55,9 @@ Chromatica page: `columns=("data",)` (or blank model/resid with explicit “no a
 
 ## Manuscript placement
 
-- **Observations / `sec:data`:** twelve separately numbered triptych floats replace `figures/codetection_gallery.pdf` as the opening Fig. 1 sequence (Figs. 1--12).
-- **Appendix `app:jointmodel-pairs`:** remove duplicate `\includegraphics` set (or leave a short pointer).
-- **Results:** `fig:jointmodel-pair-whitney` → cross-ref to the Whitney page of the opening Fig. 1 sequence (Figs. 1--12).
+- **Observations / `sec:data`:** Figure 1 data grid followed by Zach as Figure 2.
+- **Appendix `app:jointmodel-pairs`:** remaining eleven full audit panels, at the end.
+- **Results:** Whitney cross-ref points to its appendix panel.
 - Caption language: morphology audit; † for flagged multiplicity issues; chromatica exception.
 
 ## Artifact / reproducibility
@@ -64,10 +68,10 @@ Chromatica page: `columns=("data",)` (or blank model/resid with explicit “no a
 
 ## Success criteria
 
-- Referee sees every co-detection’s data, model, and residual at readable structural resolution early in the paper.
+- Referee sees the full sample at a glance, one representative fit early, and every remaining audit at readable resolution in the appendix.
 - Off-pulse context ≈ one CHIME burst-width per side; bursts not drowned in empty time.
-- `make` builds; labels resolve; no duplicate full triptych set in appendix.
-- Data-only gallery script may remain as a diagnostic, but is not part of Figs. 1--12.
+- `make` builds; labels resolve; Zach is not duplicated in the appendix.
+- The older archival data-only gallery may remain diagnostic; Figure 1 uses the fit-delivery data grids instead.
 
 ## Spec self-review
 
