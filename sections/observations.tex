@@ -28,13 +28,28 @@ standardized to ascending order and its per-channel bandpass normalized, so the
 fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
 and figures in this paper are produced with a common open-source reduction and
 fitting pipeline, which we reference throughout for reproducibility.
-Figures~\ref{fig:codetection-triptych-zach}--\ref{fig:codetection-triptych-casey}
-present the dedispersed dynamic spectra of all twelve co-detections together
-with the corresponding two-dimensional joint models and whitened residuals
-(FRB~20240203A is shown without a model; no accepted joint fit is available).
-Panels marked~$\dagger$ have a known incompleteness in the adopted component
-multiplicity (Section~\ref{sec:multicomp}). We do not further catalog the
-fine-scale baseband morphology beyond that multiplicity check.
+Figure~\ref{fig:codetection-data-grid} presents the dedispersed CHIME/FRB and
+DSA-110 dynamic spectra for all twelve co-detections. Figure~\ref{fig:codetection-triptych-zach}
+then uses FRB~20220207C as a representative example of the full
+data/model/residual morphology audit. The corresponding panels for the
+remaining eleven bursts appear in Appendix~\ref{app:jointmodel-pairs};
+FRB~20240203A is shown there without a model because no accepted joint fit is
+available. Panels marked~$\dagger$ have a known incompleteness in the adopted
+component multiplicity (Section~\ref{sec:multicomp}).
+
+\begin{figure*}[tp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/codetection_data_grid.pdf}
+    \caption{Joint CHIME/FRB and DSA-110 dynamic spectra for the twelve
+    co-detections, ordered by detection epoch. Each panel combines the two
+    observed bands on a shared frequency axis; hatching marks the unobserved
+    frequency gap. The time window is the observed on-pulse union of both
+    bands padded by approximately the CHIME on-pulse width. For the eleven
+    accepted joint fits, the displayed observations use the same fit-delivery
+    grid as the model audit. FRB~20240203A uses the archival data-only display
+    grid because no accepted joint fit is available.}
+    \label{fig:codetection-data-grid}
+\end{figure*}
 
 \input{sections/codetection_triptychs.tex}
 
