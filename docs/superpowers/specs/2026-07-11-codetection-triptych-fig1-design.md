@@ -1,4 +1,4 @@
-# Design: Fig. 1 as data | model | residual triptychs
+# Design: opening Fig. 1 sequence (Figs. 1--12) as data | model | residual triptychs
 
 **Date:** 2026-07-11  
 **Status:** approved (owner 2026-07-11)  
@@ -51,9 +51,9 @@ Chromatica page: `columns=("data",)` (or blank model/resid with explicit “no a
 
 ## Manuscript placement
 
-- **Observations / `sec:data`:** multi-page triptych sequence replaces `figures/codetection_gallery.pdf`.
+- **Observations / `sec:data`:** twelve separately numbered triptych floats replace `figures/codetection_gallery.pdf` as the opening Fig. 1 sequence (Figs. 1--12).
 - **Appendix `app:jointmodel-pairs`:** remove duplicate `\includegraphics` set (or leave a short pointer).
-- **Results:** `fig:jointmodel-pair-whitney` → cross-ref to the Whitney page of the new Fig. 1 sequence.
+- **Results:** `fig:jointmodel-pair-whitney` → cross-ref to the Whitney page of the opening Fig. 1 sequence (Figs. 1--12).
 - Caption language: morphology audit; † for flagged multiplicity issues; chromatica exception.
 
 ## Artifact / reproducibility
@@ -67,7 +67,7 @@ Chromatica page: `columns=("data",)` (or blank model/resid with explicit “no a
 - Referee sees every co-detection’s data, model, and residual at readable structural resolution early in the paper.
 - Off-pulse context ≈ one CHIME burst-width per side; bursts not drowned in empty time.
 - `make` builds; labels resolve; no duplicate full triptych set in appendix.
-- Data-only gallery script may remain as a diagnostic, but is not Fig. 1.
+- Data-only gallery script may remain as a diagnostic, but is not part of Figs. 1--12.
 
 ## Spec self-review
 
