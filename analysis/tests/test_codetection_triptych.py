@@ -1,4 +1,4 @@
-"""Tests for the opening Fig. 1 data|model|residual triptych sequence."""
+"""Tests for the codetection data|model|residual fit-audit figures."""
 
 from __future__ import annotations
 
