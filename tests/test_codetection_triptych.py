@@ -1,4 +1,4 @@
-"""Tests for Fig. 1 data|model|residual triptych producer."""
+"""Tests for the opening Fig. 1 data|model|residual triptych sequence."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "pipeline"))
 
+import plot_codetection_triptych as triptych  # noqa: E402
 from flits.batch.codetection_plots import BandSpectrum  # noqa: E402
 
 from plot_codetection_triptych import (  # noqa: E402
@@ -131,14 +132,36 @@ def test_crop_spectrum_keeps_alignment():
     assert c.data.shape[1] == c.time_ms.size == c.model.shape[1]
 
 
-def test_plot_kwargs_disable_model_overlay():
-    """Contract: producer source must hard-code show_model_on_data=False."""
-    src = (ROOT / "scripts" / "plot_codetection_triptych.py").read_text()
-    assert "show_model_on_data=False" in src
-    assert "show_model_on_data=True" not in src
+def test_render_disables_model_overlay(monkeypatch, tmp_path):
+    """Contract: the producer call must disable model overlays on data."""
+    calls = []
+
+    class FakeFigure:
+        def suptitle(self, *args, **kwargs):
+            pass
+
+        def savefig(self, *args, **kwargs):
+            pass
+
+    monkeypatch.setattr(triptych, "bands_from_npz", lambda *args: [])
+    monkeypatch.setattr(
+        triptych,
+        "plot_codetection",
+        lambda bands, **kwargs: calls.append(kwargs) or FakeFigure(),
+    )
+    monkeypatch.setattr(triptych.plt, "close", lambda fig: None)
+
+    triptych.render_row(
+        {"nick": "zach", "tns": "FRB 20220207C", "npz": "fit.npz"},
+        root=tmp_path,
+        data_root=tmp_path,
+        out_dir=tmp_path,
+        dpi=72,
+    )
+    assert calls[0]["show_model_on_data"] is False
 
 
 def test_manifest_yaml_parses_flags():
     rows = load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
     flagged = {r["nick"] for r in rows if r.get("flag") and r["nick"] != "chromatica"}
-    assert {"whitney", "wilhelm", "hamilton"} <= flagged
+    assert flagged == {"whitney", "wilhelm", "hamilton"}
