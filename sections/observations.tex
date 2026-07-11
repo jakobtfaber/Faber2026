@@ -28,32 +28,15 @@ standardized to ascending order and its per-channel bandpass normalized, so the
 fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
 and figures in this paper are produced with a common open-source reduction and
 fitting pipeline, which we reference throughout for reproducibility.
-Figure~\ref{fig:codetection-gallery} presents the dedispersed dynamic spectra
-of all twelve co-detections in both bands. We do not further catalog the
-fine-scale baseband morphology of each burst; the analysis
-only depends on whether a burst resolves into more than one temporal component,
-which is treated in the multi-component fit of
-Section~\ref{sec:multicomp}.
+Figures~\ref{fig:codetection-triptych-zach}--\ref{fig:codetection-triptych-casey}
+present the dedispersed dynamic spectra of all twelve co-detections together
+with the corresponding two-dimensional joint models and whitened residuals
+(FRB~20240203A is shown without a model; no accepted joint fit is available).
+Panels marked~$\dagger$ have a known incompleteness in the adopted component
+multiplicity (Section~\ref{sec:multicomp}). We do not further catalog the
+fine-scale baseband morphology beyond that multiplicity check.
 
-\begin{figure*}[t!]
-\centering
-\includegraphics[width=\textwidth]{figures/codetection_gallery.pdf}
-\caption{Dedispersed total-intensity dynamic spectra of the full twelve-burst
-co-detection sample, ordered by detection epoch. In each panel, the DSA-110
-(1.31--1.50\,GHz) and CHIME/FRB (0.40--0.80\,GHz) waterfalls share a frequency
-axis drawn to scale; hatching marks the unobserved 0.80--1.31\,GHz interval.
-The upper strip shows the band-summed profiles (DSA-110 black, CHIME/FRB blue),
-each normalized to its peak, and the right marginal shows the normalized
-on-pulse spectrum in each band. The time window is chosen adaptively from the
-on-pulse spans in both bands. Every spectrum is shown at its
-instrument-optimized dispersion measure as recorded in the archival data
-products (the per-telescope DM values and their agreement accompany the data
-release, Section~\ref{sec:data-availability}); times are relative to each
-band's profile peak. Data are bandpass-corrected and block-averaged for display
-(approximately $33\,\mu$s; 512 channels per band); masked channels are gray.
-No model curves are overlaid.}
-\label{fig:codetection-gallery}
-\end{figure*}
+\input{sections/codetection_triptychs.tex}
 
 \subsection{Scattering fits}
 \label{sec:obs-scatt}

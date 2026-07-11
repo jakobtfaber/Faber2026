@@ -103,7 +103,7 @@ Result: of the manifest's 26 rows, **12 regenerate from a fresh clone** (5 as
 written, 7 only after correcting the command), **4 exit 0 while writing nothing
 at the declared path**, 8 are blocked on data outside both repos, and 2 have no
 command. (The 2026-07-09 execution sweep ran the 25 rows then present; the
-26th, `figures/codetection_gallery.pdf`, was added the same day with its
+As of 2026-07-11 the embedded Fig. 1 sequence is `figures/codetection_triptych/*_triptych.pdf` (`scripts/plot_codetection_triptych.py`); the compact gallery remains a diagnostic-only product. The earlier 26th, `figures/codetection_gallery.pdf`, was added the same day with its
 verdict assigned by inspection rather than execution — its inputs are the 24
 `~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` products, which exist in
 neither repo, so it is `blocked_external_data` without needing a run.)
