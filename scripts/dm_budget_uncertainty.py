@@ -249,7 +249,8 @@ def sample_system_column(dm_point: float, mass_source: str, n: int) -> np.ndarra
         return np.zeros(n)
     if mass_source == "cluster_catalog":
         key = "cluster"
-    elif mass_source == "measured":
+    elif mass_source in ("measured", "glade_catalog"):
+        # GLADE catalog masses are measured-mass priors (σ_ln=0.40), same as SIGHTLINES.
         key = "measured"
     else:
         key = "assumed"
