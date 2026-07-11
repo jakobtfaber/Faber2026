@@ -21,7 +21,7 @@ Replace the compact 4×3 `fig:codetection-gallery` with the first central manusc
 | Residuals elsewhere | Do **not** duplicate full set in appendix; Results Whitney becomes a cross-ref |
 | Trust framing | Morphology-audit panels; no quoted τ/α/β from these figures |
 | Off-pulse pad | Each side ≈ total CHIME on-pulse width \(W_C\) beyond the observed union |
-| Display resolution | DSA native 32.768 µs; CHIME ×13 ≈ 33 µs; 512 ch/band; ~600 dpi waterfall raster |
+| Display resolution | **Fit-delivery grid from the jointmodel NPZ** (same `f_factor`/`t_factor` used for the fit); data and model share that grid. Chromatica data-only uses the gallery archival display grid. |
 
 ## Non-goals
 
