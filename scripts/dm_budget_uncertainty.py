@@ -36,8 +36,14 @@ against an X-ray/SZ-motivated beta-model (Cavaliere & Fusco-Femiano 1976; the
 GNFW pressure calibration of Arnaud et al. 2010 motivates f_gas), propagating
 M500 (richness-mass scatter), f_gas, and the core/slope shape.
 
-Self-contained: numpy + scipy only. Point-estimate component inputs are taken
-from the V5-cleared budget table; the physics of the *scatter* is added here.
+Self-contained: numpy + scipy only (plus a frozen per-system intervening CSV
+for the figure overlays). Point-estimate component inputs are taken from the
+V5-cleared budget table; the physics of the *scatter* is added here.
+
+The figure is a 3x3 of peak-normalized PDFs per redshift-constrained sightline:
+faded MW-disk / MW-halo / IGM / per-system intervening curves under a bold
+P(DM_host). Tabulated host posteriors are unchanged (still use the
+sightline-sum intervening draw).
 
 Regenerate: python scripts/dm_budget_uncertainty.py
 """
@@ -210,12 +216,47 @@ def host_posterior(row):
     host = dm_obs - disk - halo - cosmic - interv
     p16, p50, p84 = np.percentile(host, [16, 50, 84])
     return {
-        "name": name, "z": z,
+        "name": name, "z": z, "mass": mass, "dm_int": dm_int,
         "dm_host_arith": dm_obs - dm_mw - dm_cos_mean - dm_int,  # old mean-subtraction
         "dm_host_p16": p16, "dm_host_p50": p50, "dm_host_p84": p84,
         "p_host_neg": float(np.mean(host < 0)),
         "samples": host,
+        "disk": disk, "halo": halo, "cosmic": cosmic, "interv": interv,
     }
+
+
+def load_intervening_systems():
+    """Per-system census point columns (frozen CSV from foreground_unified)."""
+    path = REPO / "scripts" / "dm_budget_intervening_systems.csv"
+    by_tns: dict[str, list[dict]] = {}
+    if not path.exists():
+        return by_tns
+    with path.open() as f:
+        for row in csv.DictReader(f):
+            tns = row["tns"]
+            by_tns.setdefault(tns, []).append({
+                "kind": row["kind"],
+                "mass_source": row["mass_source"],
+                "dm_point": float(row["dm_point"]),
+                "impact_kpc": float(row["impact_kpc"]),
+            })
+    return by_tns
+
+
+def sample_system_column(dm_point: float, mass_source: str, n: int) -> np.ndarray:
+    """Lognormal smear of a census point column; sigma matches INT_SIGMA_LN family."""
+    if dm_point <= 0:
+        return np.zeros(n)
+    if mass_source == "cluster_catalog":
+        key = "cluster"
+    elif mass_source == "measured":
+        key = "measured"
+    else:
+        key = "assumed"
+    s = INT_SIGMA_LN[key]
+    if s <= 0:
+        return np.full(n, dm_point)
+    return dm_point * RNG.lognormal(-0.5 * s ** 2, s, n)
 
 
 # --- B2: FRB 20230307A intracluster column (mNFW vs beta-model) ----------------
@@ -310,43 +351,187 @@ def main():
         w.writerow(["cluster_95CI_lo_hi", f"{lo:.0f}", f"{hi:.0f}"])
     print(f"\nwrote {OUT_CSV.relative_to(REPO)}")
 
-    _make_figure(results, dm_cl)
+
+    _make_figure(results)
 
 
-def _make_figure(results, dm_cl):
-    import matplotlib
-    matplotlib.use("Agg")
+# Manuscript figure palette — matches sightline_budget.make_budget_figure /
+# galaxies/v2_0/systems_figures.py.
+_MW_COLOR = "#4A90E2"
+_HALO_COLOR = "#7FB3E8"
+_COSMIC_COLOR = "#9B59B6"
+_INTERV_COLOR = "#F5A623"
+_HOST_COLOR = "#D0021B"
+_DARK_BLUE = "#1B365D"
+
+
+def _apply_manuscript_style() -> None:
+    """Same style stack as scripts/plot_codetection_gallery.py / flits.plotting.
+
+    SciencePlots ``["science", "notebook"]`` plus the FLITS Computer-Modern
+    overrides (no TeX binary required). Falls back to ``pipeline/matplotlibrc``
+    if SciencePlots is unavailable.
+    """
     import matplotlib.pyplot as plt
 
-    fig, (ax1, ax2) = plt.subplots(
-        1, 2, figsize=(11, 4.2), gridspec_kw={"width_ratios": [2.4, 1]}
-    )
-    names = [r["name"].replace("FRB ", "") for r in results]
-    y = np.arange(len(results))[::-1]
-    p16 = np.array([r["dm_host_p16"] for r in results])
-    p50 = np.array([r["dm_host_p50"] for r in results])
-    p84 = np.array([r["dm_host_p84"] for r in results])
-    arith = np.array([r["dm_host_arith"] for r in results])
-    ax1.axvline(0, color="0.6", lw=1, ls="--")
-    ax1.errorbar(p50, y, xerr=[p50 - p16, p84 - p50], fmt="o", color="#264653",
-                 capsize=3, label="forward-modeled posterior (p16/p50/p84)")
-    ax1.scatter(arith, y, marker="x", color="#e76f51", zorder=5,
-                label="arithmetic mean-subtraction")
-    ax1.set_yticks(y)
-    ax1.set_yticklabels(names, fontsize=8)
-    ax1.set_ylim(-0.6, len(results) - 0.4)
-    ax1.set_xlabel(r"$\mathrm{DM_{host}}\ (\mathrm{pc\,cm^{-3}})$")
-    ax1.set_title("Host dispersion: posterior vs. mean-subtraction")
-    ax1.legend(fontsize=7, loc="lower right")
+    try:
+        import sys
 
-    ax2.hist(dm_cl, bins=60, color="#2a9d8f", alpha=0.8, density=True)
-    ax2.axvline(160, color="#e76f51", lw=1.5, label="mNFW (pipeline)")
-    ax2.set_xlabel(r"cluster $\mathrm{DM_{int}}\ (\mathrm{pc\,cm^{-3}})$")
-    ax2.set_title("FRB 20230307A cluster\ncolumn (beta-model MC)", fontsize=9)
-    ax2.legend(fontsize=7)
-    fig.tight_layout()
-    fig.savefig(OUT_FIG)
-    fig.savefig(OUT_FIG_PNG, dpi=150)
+        pipe = str(REPO / "pipeline")
+        if pipe not in sys.path:
+            sys.path.insert(0, pipe)
+        from flits.plotting import use_flits_style
+
+        use_flits_style()
+        return
+    except Exception:
+        pass
+    try:
+        import scienceplots  # noqa: F401
+
+        plt.style.use(["science", "notebook"])
+    except Exception:
+        import matplotlib
+
+        rc = REPO / "pipeline" / "matplotlibrc"
+        if rc.exists():
+            matplotlib.rc_file(str(rc))
+    plt.rcParams["text.usetex"] = False
+    plt.rcParams["font.family"] = "serif"
+    plt.rcParams["font.serif"] = ["cmr10"]
+    plt.rcParams["mathtext.fontset"] = "cm"
+    plt.rcParams["axes.formatter.use_mathtext"] = True
+    plt.rcParams["axes.unicode_minus"] = False
+
+
+def _kde_1d(samples: np.ndarray, x: np.ndarray) -> np.ndarray:
+    """Gaussian KDE on a fixed grid; falls back to a histogram if degenerate."""
+    s = np.asarray(samples, dtype=float)
+    s = s[np.isfinite(s)]
+    if s.size < 50:
+        hist, edges = np.histogram(s, bins=40, density=True, range=(x[0], x[-1]))
+        centers = 0.5 * (edges[:-1] + edges[1:])
+        return np.interp(x, centers, hist, left=0.0, right=0.0)
+    std = float(np.std(s))
+    if std <= 0.0:
+        y = np.zeros_like(x)
+        y[np.argmin(np.abs(x - float(np.median(s))))] = 1.0
+        return y
+    bw = max(1.06 * std * s.size ** (-0.2), 2.0)
+    if s.size > 12_000:
+        s = RNG.choice(s, size=12_000, replace=False)
+    z = (x[None, :] - s[:, None]) / bw
+    return np.exp(-0.5 * z * z).mean(axis=0) / (bw * math.sqrt(2.0 * math.pi))
+
+
+def _peak_norm(dens: np.ndarray) -> np.ndarray:
+    m = float(dens.max()) if dens.size else 0.0
+    return dens / m if m > 0 else dens
+
+
+def _make_figure(results):
+    """One panel per sightline: faded component PDFs under bold P(DM_host)."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+
+    _apply_manuscript_style()
+    # Dense 3x3 at true manuscript width: same shrunk-type overrides as
+    # scripts/plot_codetection_gallery.py (render(), rcParams block).
+    plt.rcParams.update({
+        "font.size": 7,
+        "axes.labelsize": 7,
+        "axes.titlesize": 7,
+        "xtick.labelsize": 6,
+        "ytick.labelsize": 6,
+        "legend.fontsize": 6,
+        "axes.linewidth": 0.6,
+        "xtick.direction": "in",
+        "ytick.direction": "in",
+    })
+
+    systems_by_tns = load_intervening_systems()
+
+    n = len(results)
+    ncols, nrows = 3, 3
+    fig, axes = plt.subplots(
+        nrows, ncols, figsize=(7.3, 6.4), layout="constrained",
+    )
+    axes = np.asarray(axes).ravel()
+
+    legend_handles = [
+        Line2D([0], [0], color=_HOST_COLOR, lw=1.5, label=r"$P(\mathrm{DM_{host}})$"),
+        Line2D([0], [0], color=_MW_COLOR, lw=0.8, alpha=0.35, label="MW ISM (disk)"),
+        Line2D([0], [0], color=_HALO_COLOR, lw=0.8, alpha=0.35, label="MW halo"),
+        Line2D([0], [0], color=_COSMIC_COLOR, lw=0.8, alpha=0.35, label="cosmic / IGM"),
+        Line2D([0], [0], color=_INTERV_COLOR, lw=0.7, alpha=0.30,
+               label="intervening system(s)"),
+        Line2D([0], [0], color=_DARK_BLUE, lw=0.8, ls="--", alpha=0.45,
+               label="intervening sightline sum"),
+    ]
+
+    for i, r in enumerate(results):
+        ax = axes[i]
+
+        sys_rows = systems_by_tns.get(r["name"], [])
+        sys_draws = [
+            sample_system_column(s["dm_point"], s["mass_source"], N_DRAW)
+            for s in sys_rows
+        ]
+
+        parts = [r["samples"], r["disk"], r["halo"], r["cosmic"], r["interv"], *sys_draws]
+        pooled = np.concatenate([p[np.isfinite(p)] for p in parts if len(p)])
+        x_lo, x_hi = np.percentile(pooled, [1.0, 99.0])
+        pad = 0.06 * max(x_hi - x_lo, 1.0)
+        x_lo, x_hi = x_lo - pad, x_hi + pad
+        x = np.linspace(x_lo, x_hi, 360)
+
+        def plot_faded(samples, color, lw=0.8, ls="-"):
+            dens = _peak_norm(_kde_1d(samples, x))
+            ax.plot(x, dens, color=color, lw=lw, ls=ls, alpha=0.28, zorder=2)
+            ax.fill_between(x, 0.0, dens, color=color, alpha=0.04, zorder=1)
+
+        plot_faded(r["disk"], _MW_COLOR)
+        plot_faded(r["halo"], _HALO_COLOR)
+        plot_faded(r["cosmic"], _COSMIC_COLOR)
+
+        for j, draws in enumerate(sys_draws):
+            dens = _peak_norm(_kde_1d(draws, x))
+            a = 0.22 + 0.05 * (j % 3)
+            ax.plot(x, dens, color=_INTERV_COLOR, lw=0.7, alpha=a, zorder=2)
+            ax.fill_between(x, 0.0, dens, color=_INTERV_COLOR, alpha=0.03, zorder=1)
+
+        if r["dm_int"] > 0:
+            dens_int = _peak_norm(_kde_1d(r["interv"], x))
+            ax.plot(x, dens_int, color=_DARK_BLUE, lw=0.8, ls="--", alpha=0.40, zorder=3)
+
+        dens_h = _peak_norm(_kde_1d(r["samples"], x))
+        ax.plot(x, dens_h, color=_HOST_COLOR, lw=1.5, zorder=5)
+        ax.fill_between(x, 0.0, dens_h, color=_HOST_COLOR, alpha=0.22, zorder=4)
+        ax.axvline(0.0, color="0.55", lw=0.5, ls=":", zorder=0)
+        ax.axvline(r["dm_host_p50"], color=_HOST_COLOR, lw=0.6, ls="--", alpha=0.7, zorder=4)
+
+        short = r["name"].replace("FRB ", "")
+        ax.set_title(f"{short}  ($z={r['z']:.3f}$)", pad=3)
+        ax.set_xlim(x_lo, x_hi)
+        ax.set_ylim(0.0, 1.18)
+        ax.set_yticks([0.0, 0.5, 1.0])
+        if i >= n - ncols:
+            ax.set_xlabel(r"DM (pc cm$^{-3}$)")
+        if i % ncols == 0:
+            ax.set_ylabel(r"$\hat{p}$")
+
+    for j in range(n, nrows * ncols):
+        axes[j].set_visible(False)
+
+    fig.legend(
+        handles=legend_handles, loc="outside lower center", ncol=3, frameon=False,
+    )
+    fig.savefig(OUT_FIG, bbox_inches="tight")
+    fig.savefig(OUT_FIG_PNG, dpi=300, bbox_inches="tight")
+    plt.close(fig)
     print(f"wrote {OUT_FIG.relative_to(REPO)}")
 
 

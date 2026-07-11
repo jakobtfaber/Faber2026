@@ -143,17 +143,21 @@ FRB 20240229A & $0.287$ & $197^{+60}_{-75}$  & $0.01$ \\
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/dm_host_posteriors.pdf}
-    \caption{\emph{Left:} forward-modeled host-DM posteriors (median and
-    $16$th--$84$th-percentile interval, dark points) for the nine
-    redshift-constrained sightlines, compared with the arithmetic
-    mean-subtracted residual (orange crosses). Sampling the full, skewed
-    $P(\mathrm{DM_{IGM}}\,|\,z)$ shifts the posterior median above the
-    mean-subtracted value and turns the two formerly negative residuals
-    (FRB 20220310F, FRB 20221203A) into posteriors consistent with zero.
-    \emph{Right:} the FRB 20230307A intracluster column from an X-ray-motivated
-    isothermal $\beta$-model Monte Carlo (over $M_{500}$, $f_{\rm gas}$, and
-    profile shape); the vertical line marks the two-phase mNFW value
-    ($\sim\!160\,\mathrm{pc\,cm^{-3}}$) adopted in the budget.}
+    \caption{Forward-modeled dispersion-budget components and host posteriors
+    for the nine redshift-constrained sightlines, arranged in a $3\times3$
+    grid. Each panel overlays $\hat{p}(x)=p(x)/\max p$ for the terms entering
+    $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{disk}}-\mathrm{DM_{halo}}
+    -\mathrm{DM_{IGM}}-\mathrm{DM_{int}}$: MW disk (blue), MW halo (light blue),
+    TNG-calibrated IGM (purple), and intervening census systems (orange; one
+    curve per galaxy or cluster with nonzero column, obtained by applying the
+    appropriate lognormal prior family to its census point estimate). The
+    dashed navy curve is the sightline-sum intervening prior used in the host
+    convolution itself; the
+    bold red curve is the resulting $P(\mathrm{DM_{host}})$, with a dashed
+    vertical mark at the posterior median and a dotted line at zero.
+    Peak-normalization makes shapes (not absolute heights) comparable across
+    terms of very different scale. Sampling details and
+    fiducial priors are given in Appendix~\ref{app:host-forward-model}.}
     \label{fig:dm_host_posteriors}
 \end{figure*}
 
