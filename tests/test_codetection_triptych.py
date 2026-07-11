@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT / "pipeline"))
 from flits.batch.codetection_plots import BandSpectrum  # noqa: E402
 
 from plot_codetection_triptych import (  # noqa: E402
+    BANDS,
     PAD_FLOOR_MS,
     chime_width_display_window,
     crop_spectrum,
@@ -47,6 +48,14 @@ def test_manifest_has_twelve_and_chromatica_null():
     chrom = next(r for r in rows if r["nick"] == "chromatica")
     assert chrom["npz"] is None
     assert sum(1 for r in rows if r["npz"]) == 11
+
+
+def test_chromatica_archival_chime_uses_x13_time_binning():
+    """The sole archival data-only page keeps the documented ~33 us grid."""
+    assert BANDS["chime"]["t_factor"] == 13
+    assert BANDS["chime"]["dt_ms"] * BANDS["chime"]["t_factor"] == pytest.approx(
+        0.03328
+    )
 
 
 def test_chime_width_pad_formula():
