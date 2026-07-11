@@ -1,0 +1,49 @@
+% Fig. 1 sequence: per-burst data | model | residual triptychs.
+% Artifacts: figures/codetection_triptych/*_triptych.pdf
+% Producer: scripts/plot_codetection_triptych.py
+
+\newcommand{\codetectiontriptych}[4]{%
+\begin{figure*}[p]
+    \centering
+    \includegraphics[width=\textwidth]{codetection_triptych/#1_triptych.pdf}
+    \caption{#3}
+    \label{fig:codetection-triptych-#4}
+\end{figure*}
+\clearpage
+}
+
+% Shared caption body (morphology audit; no quoted tau/alpha/beta).
+\newcommand{\codetectiontriptychcaption}[2]{%
+Two-dimensional joint-model morphology audit for #1#2.
+Left to right: observed CHIME/FRB and DSA-110 dynamic spectra, the
+corresponding two-dimensional joint model, and the whitened residual
+dynamic spectra. Hatched regions mark the unobserved frequency gap between
+the two bands. The time window is the observed on-pulse union of both bands,
+padded on each side by approximately the CHIME on-pulse width. These panels
+validate component multiplicity and residual structure; fit-derived turbulence
+and scattering parameters are deferred to
+Section~\ref{sec:results-alpha}.%
+}
+
+\codetectiontriptych{zach}{FRB~20220207C}{\codetectiontriptychcaption{FRB~20220207C}{}}{zach}
+\codetectiontriptych{whitney}{FRB~20220310F}{\codetectiontriptychcaption{FRB~20220310F}{ ($\dagger$: DSA sub-burst incompletely modeled)}}{whitney}
+\codetectiontriptych{oran}{FRB~20220506D}{\codetectiontriptychcaption{FRB~20220506D}{}}{oran}
+\codetectiontriptych{isha}{FRB~20221113A}{\codetectiontriptychcaption{FRB~20221113A}{}}{isha}
+\codetectiontriptych{wilhelm}{FRB~20221203A}{\codetectiontriptychcaption{FRB~20221203A}{ ($\dagger$: leading DSA structure / bright-pulse residual)}}{wilhelm}
+\codetectiontriptych{phineas}{FRB~20230307A}{\codetectiontriptychcaption{FRB~20230307A}{}}{phineas}
+\codetectiontriptych{freya}{FRB~20230325A}{\codetectiontriptychcaption{FRB~20230325A}{}}{freya}
+\codetectiontriptych{johndoeii}{FRB~20230814B}{\codetectiontriptychcaption{FRB~20230814B}{}}{johndoeii}
+\codetectiontriptych{hamilton}{FRB~20230913A}{\codetectiontriptychcaption{FRB~20230913A}{ ($\dagger$: leading CHIME component incompletely modeled)}}{hamilton}
+\codetectiontriptych{mahi}{FRB~20240122A}{\codetectiontriptychcaption{FRB~20240122A}{}}{mahi}
+\begin{figure*}[p]
+    \centering
+    \includegraphics[width=\textwidth]{codetection_triptych/chromatica_triptych.pdf}
+    \caption{Dedispersed CHIME/FRB and DSA-110 dynamic spectra for
+    FRB~20240203A (chromatica). No accepted joint two-band model is available
+    for this sightline, so only the observations are shown. Hatched regions
+    mark the unobserved frequency gap. The time window follows the same
+    CHIME-width padding rule as the joint-model panels.}
+    \label{fig:codetection-triptych-chromatica}
+\end{figure*}
+\clearpage
+\codetectiontriptych{casey}{FRB~20240229A}{\codetectiontriptychcaption{FRB~20240229A}{}}{casey}
