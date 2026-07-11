@@ -47,12 +47,16 @@ so the rest-frame window shifts from burst to burst. These band-restricted
 energies are therefore \emph{not} comparable to literature energies computed
 over a fixed rest-frame band, and cannot be placed on a standard FRB luminosity
 function without a spectral-model extrapolation that we deliberately avoid here;
-we report them as observed-band quantities and, where a comparison is needed,
-provide a fixed rest-frame-band variant alongside. Second, the single $(1+z)$ in
+we report them as observed-band quantities only. Second, the single $(1+z)$ in
 Eq.~\ref{eq:eiso} is the bandwidth (time-dilation) k-correction, which is common
 to both bands; the differing per-band spectral indices $\gamma_C,\gamma_D$ enter
 only the in-band flux integrals $\int F_X(\nu)\,d\nu$, not the k-correction, so
 the two-band sum is internally consistent despite the single $(1+z)$ factor.
+% TODO(energies-fixed-band-variant): Optional under V3 — if luminosity-function
+% comparison is needed, elect a fixed rest-frame-band companion E_iso (define
+% the band, extrapolation across the 0.8--1.3 GHz gap, and table column), then
+% restore a Methods sentence. D5 lock (2026-07-10) dropped the unconditional
+% promise; see docs/rse/specs/decision-d2-d5-scattering-design-locks.md.
 Energy rows are deferred until the spectral
 amplitudes, calibration path, host-redshift provenance, and inclusion rule are
 ready to be described and cited in the manuscript.

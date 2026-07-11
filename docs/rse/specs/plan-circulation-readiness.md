@@ -108,7 +108,7 @@ tab:foreground, fig:budget both panels, the dominant-systems and cluster
 analyses, the host-dominated 10/11 comparison, the τ·Δν_d two-screen test,
 the scintillation excess, the FRB 20230913A attribution (both diagnostics
 revoked), tab:beta, tab:burst-energies, the multiplicity-bias demonstration
-(fig:whitney_mult, the abstract's closing claim, conclusions item 7),
+(the abstract's closing claim, conclusions item 7),
 fig:jointmodel_montage, and fig:scint_screens.
 
 - [ ] V1 **[FLITS]** Author the re-trust validation contract (ADR): a fit is
@@ -129,6 +129,13 @@ fig:jointmodel_montage, and fig:scint_screens.
       selection-rule contradiction (gate-FAIL 20240203A tabulated under a
       "quality-passing" criterion; note-a redshift provenance vs §2's
       placeholder trio).
+      - [ ] **TODO(energies-fixed-band-variant)** *[decision/optional]* — if
+            luminosity-function comparison is needed, elect a fixed
+            rest-frame-band companion \(E_{\rm iso}\) (define band, gap
+            extrapolation, table column; restore Methods sentence). D5 lock
+            (2026-07-10) dropped the unconditional promise; not required for
+            submission. See `methods.tex` / `results.tex` TODOs and
+            `decision-d2-d5-scattering-design-locks.md`.
 - [ ] V4 **[FLITS]** Census re-validation: per-candidate provenance audit
       (coordinate match, objID lookups, redshift class and source, PS1-STRM
       reliability), independent re-derivation of impact parameters and
