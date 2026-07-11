@@ -1,8 +1,8 @@
-# Codetection Fig. 1 Triptych Implementation Plan
+# Codetection opening Fig. 1 sequence (Figs. 1--12) implementation plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the compact 4×3 `fig:codetection-gallery` with a multi-page Fig. 1 of per-burst **data | model | residual** triptychs (no overlays), using CHIME-width off-pulse padding and full structural display resolution.
+**Goal:** Replace the compact 4×3 `fig:codetection-gallery` with twelve separately numbered per-burst **data | model | residual** triptychs (no overlays), forming the opening Fig. 1 sequence (Figs. 1--12), using CHIME-width off-pulse padding and full structural display resolution.
 
 **Architecture:** Add a top-level manuscript producer `scripts/plot_codetection_triptych.py` that loads jointmodel NPZs (via a checked-in manifest), applies a shared CHIME-width crop to data and model, and calls existing `flits.batch.codetection_plots.plot_codetection` with `show_model_on_data=False`. Wire Observations to the new PDF set; retire appendix duplication; retarget the Results Whitney cross-ref. Prefer no `pipeline/` gitlink bump.
 
