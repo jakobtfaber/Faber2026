@@ -53,9 +53,10 @@ core. Second, the forward-modeled host posteriors
 (Section~\ref{sec:dm}, Appendix~\ref{app:host-forward-model}) are broad and
 asymmetric, dominated by the cosmological scatter: their medians span
 $\mathrm{DM_{host}}\approx-10$--$200\,\mathrm{pc\,cm^{-3}}$, the largest on
-FRB~20240229A ($197^{+60}_{-75}\,\mathrm{pc\,cm^{-3}}$), and every sightline is
-consistent with a host contributing a minority of the extragalactic column once
-the width of the cosmological term is folded in. Third, the two
+FRB~20240229A ($197^{+60}_{-75}\,\mathrm{pc\,cm^{-3}}$), and every
+redshift-known sightline is consistent with a host contributing a minority of
+the extragalactic column once the width of the cosmological term is folded in.
+Third, the two
 highest-redshift sightlines (FRB~20220310F, FRB~20221203A), whose
 mean-subtracted point residuals were negative, have host posteriors consistent
 with zero ($P(\mathrm{DM_{host}}<0)\approx0.5$; Table~\ref{tab:budget}); their
@@ -76,6 +77,8 @@ the measured scattering times is deferred to the scattering analysis
 % TODO(results-budget-scattering): Restore the measured-vs-predicted
 % scattering comparison (fig:budget overlay, tau_obs column) only after the
 % V1 fit ladder clears.
+% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W1), gate V1+C+D1.
+% Keep the placeholder out of the compiled manuscript until the gate clears.
 
 \input{budget_table}
 
@@ -156,6 +159,9 @@ arm within the DSA band alone is short, and a physically meaningful measurement
 of the scaling requires the CHIME-band anchor, which is deferred with the rest
 of the two-band analysis.
 
+% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W5), gate
+% B5+V1 scintillation+A1. Keep it out of the compiled manuscript until then.
+
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/dsa_lorentzian_summary.pdf}
@@ -192,7 +198,12 @@ of the two-band analysis.
 %
 % Candidate future artifacts, once trusted:
 % - tab:beta
-% - fig:whitney_mult
+% - fig:subband_tau_validation
+% (fig:whitney_mult dropped 2026-07-10 --- outdated multiplicity demo; use
+%  appendix jointmodel-pair panels / a re-validated demo if needed later)
+%
+% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W4), gate V1.
+% Keep it out of the compiled manuscript until the gate clears.
 
 The component-multiplicity audit provides a validation of the joint-fit
 morphology independent of the turbulence-parameter values themselves.
@@ -220,3 +231,8 @@ quote the fitted scattering or turbulence parameters from them.
 %
 % Candidate future artifact, once trusted:
 % - tab:burst-energies
+%
+% TODO(energies-fixed-band-variant): Optional under V3 (D5 lock 2026-07-10) —
+% elect a fixed rest-frame-band companion E_iso for luminosity-function
+% comparison only if needed; not required for submission. See methods.tex
+% TODO and decision-d2-d5-scattering-design-locks.md.
