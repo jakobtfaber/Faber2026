@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-13
 **Author:** AI Assistant (claude-fable-5), owner direction 2026-07-13
-**Status:** Draft
+**Status:** In Progress (Phases 1-2 complete, 2026-07-13)
 **Related Documents:**
 - [Plan: Circulation readiness — A1 charter](plan-circulation-readiness.md) (A-lane, trigger text revised 2026-07-13)
 - [Plan: Trust-reset revalidation — V1 contract / ADR-0008](plan-trust-reset-revalidation.md)
@@ -235,7 +235,7 @@ calibration entry, and on P4c Phase 6 gates for real-data runs.
 covariance; validated on synthetic ACFs with known truth.
 
 **Tasks:**
-- [ ] **Write the failing test** for single-screen truth preferring M1
+- [x] **Write the failing test** for single-screen truth preferring M1
   - File: `scintillation/scint_analysis/tests/test_acf_evidence.py` (new)
 
   ```python
@@ -269,10 +269,10 @@ covariance; validated on synthetic ACFs with known truth.
       assert g["gamma2"] > 3.0 * g["gamma1"]   # width ordering held
   ```
 
-- [ ] **Run it, watch it fail:**
+- [x] **Run it, watch it fail:**
   `pytest scintillation/scint_analysis/tests/test_acf_evidence.py -v`
   → FAIL (module `acf_evidence` not found)
-- [ ] **Implement the minimal engine**
+- [x] **Implement the minimal engine**
   - File: `scintillation/scint_analysis/acf_evidence.py` (new)
 
   ```python
@@ -342,9 +342,9 @@ covariance; validated on synthetic ACFs with known truth.
               "dlnz_err": float(np.hypot(m1["logz_err"], m2["logz_err"]))}
   ```
 
-- [ ] **Run it, watch it pass:**
+- [x] **Run it, watch it pass:**
   `pytest scintillation/scint_analysis/tests/test_acf_evidence.py -v` → 2 PASS
-- [ ] **Write the failing test** for the rail guard (second component pinned
+- [x] **Write the failing test** for the rail guard (second component pinned
   at prior edge ⇒ flagged)
 
   ```python
@@ -358,7 +358,7 @@ covariance; validated on synthetic ACFs with known truth.
       assert set(res["m2"]["rail_flags"]) <= {"gamma1", "f", "m2_1", "m2_2", "c"}
   ```
 
-- [ ] **Implement** `_edge_mass_flags(samples, weights, bounds, edge_frac=0.05,
+- [x] **Implement** `_edge_mass_flags(samples, weights, bounds, edge_frac=0.05,
   mass_frac=0.30)` in `acf_evidence.py` using the ADR-0008 rail constants
   (EDGE_WIDTH_FRAC=0.05, EDGE_MASS_FRAC=0.30;
   plan-trust-reset-revalidation.md:497-500), attach as
@@ -378,7 +378,7 @@ covariance; validated on synthetic ACFs with known truth.
       return flags
   ```
 
-- [ ] **Run, watch pass; commit:**
+- [x] **Run, watch pass; commit:**
   `git commit -m "feat(scint): dynesty 1-vs-2 component ACF evidence engine with rail flags"`
 
 **Dependencies:** dynesty installed (`pip install -e .[nested]`).
@@ -394,7 +394,7 @@ single-screen null, with shrinkage; replaces the diagonal in the Phase-1
 likelihood.
 
 **Tasks:**
-- [ ] **Write the failing test**
+- [x] **Write the failing test**
   - File: `scintillation/scint_analysis/tests/test_acf_covariance.py` (new)
 
   ```python
@@ -421,8 +421,8 @@ likelihood.
       assert np.median(np.diag(corr, k=k)) > 0.2
   ```
 
-- [ ] **Run, watch fail** (module missing).
-- [ ] **Implement** `mc_acf_covariance`
+- [x] **Run, watch fail** (module missing).
+- [x] **Implement** `mc_acf_covariance`
   - File: `scintillation/scint_analysis/acf_covariance.py` (new)
 
   ```python
@@ -487,8 +487,8 @@ likelihood.
   implementation time — the test pins the behavior either way. If the
   `(X[:,:,None]*X[:,None,:])` Ledoit-Wolf accumulation is too memory-heavy at
   p≈120, n≈500, chunk over rows.)
-- [ ] **Run, watch pass.**
-- [ ] **Wire into Phase 1:** `compare_acf_evidence(..., cov=...)` already
+- [x] **Run, watch pass.**
+- [x] **Wire into Phase 1:** `compare_acf_evidence(..., cov=...)` already
   accepts the matrix; add a convenience
   `evidence_with_mc_covariance(acf_obj, snr, n_real, seed)` in
   `acf_evidence.py` that (a) fits the single-Lorentzian γ̂ via the existing
@@ -509,7 +509,7 @@ likelihood.
       assert res["dlnz"] < 5.0
   ```
 
-- [ ] **Commit:** `git commit -m "feat(scint): MC correlated-lag ACF covariance with shrinkage; wired to evidence engine"`
+- [x] **Commit:** `git commit -m "feat(scint): MC correlated-lag ACF covariance with shrinkage; wired to evidence engine"`
 
 **Dependencies:** Phase 1.
 
@@ -916,3 +916,24 @@ sign-off input, with 1% as the recommended default)*
 
 ### Version 1.0 — 2026-07-13
 - Initial plan created from the two-agent research sweep (FLITS code surface + spec constraints), per the 2026-07-13 owner direction on the revised A1 trigger.
+
+### Version 1.1 — 2026-07-13 (Phases 1–2 implemented)
+- Branch `a1/trigger-calibration` off `origin/pin/faber2026`, worktree
+  `~/Developer/scratch/worktrees/flits-a1-trigger`. Commits `37a98cf`
+  (Phase 1), `9872147` (Phase 2), pushed.
+- Verification: evidence tests 4/4 (28 s), covariance tests 3/3 (9 s under
+  rwalk), scint-suite regression 145 passed / 1 pre-existing skip.
+- **Deviation 1:** `_run_nested` uses `sample="rwalk"` + a `maxcall` cap with
+  a RuntimeError `evidence_failed` path. dynesty's default uniform-ellipsoid
+  proposal stalled (>15 min, reproducible by seed) on the M2 likelihood
+  plateau (large γ₁ × large f ⇒ near-constant model); random walks degrade
+  gracefully there. This implements Edge Case 2 earlier than planned.
+- **Deviation 2:** the planned `test_forced_rail_is_flagged` (truth-γ outside
+  the prior, full nested run) was replaced by a direct deterministic unit test
+  of `_edge_mass_flags` (edge-pile fires, interior stays quiet): the
+  out-of-prior misfit gives a ~10⁵ log-likelihood dynamic range and
+  correspondingly long nested runs — wrong cost for CI; the integration path
+  is still covered by `test_rail_flag_field_present_and_valid`.
+- Phase-2 realization physics: exponential-PBF field synthesis (HWHM =
+  1/(2πτ_s), C₁ = 1) rather than the plan's exponential-filter sketch — the
+  physical single-screen case, same statistical family.
