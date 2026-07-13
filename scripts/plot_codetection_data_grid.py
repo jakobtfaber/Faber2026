@@ -44,6 +44,11 @@ OUT_DEFAULT = ROOT / "figures" / "codetection_data_grid"
 # ~33.3us, matching the DSA time resolution across the gap.
 DISPLAY_FACTORS = {"dsa": (12, 1), "chime": (1, 13)}
 
+# Display padding around the on-pulse union, as a fraction of the CHIME
+# on-pulse width per side (1.5 ms floor). Half a CHIME width keeps the burst
+# filling the panel instead of sitting in off-pulse noise.
+DISPLAY_PAD_SCALE = 0.5
+
 MASKED_GRAY = "0.85"
 CHIME_COLOR = "#4477aa"
 DSA_COLOR = "black"
@@ -58,7 +63,9 @@ def _finite_percentile(values: np.ndarray, percentile: float, default: float) ->
 
 def load_row_bands(row: dict, *, root: Path, data_root: Path):
     """Near-native archival display bands for every burst (fit or no fit)."""
-    return bands_archival(data_root, row["nick"], factors=DISPLAY_FACTORS)
+    return bands_archival(
+        data_root, row["nick"], factors=DISPLAY_FACTORS, pad_scale=DISPLAY_PAD_SCALE
+    )
 
 
 def _band_dt_ms(band) -> float:
