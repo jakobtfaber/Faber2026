@@ -19,6 +19,8 @@ Run: conda run -n flits python scripts/plot_codetection_triptych.py
 from __future__ import annotations
 
 import argparse
+import json
+import re
 import sys
 import warnings
 from pathlib import Path
@@ -87,13 +89,44 @@ def _shift_time(b: BandSpectrum, shift_ms: float) -> BandSpectrum:
     )
 
 
+def _toa_offset(nick: str) -> float | None:
+    """Measured CHIME-DSA offset; the crossmatch JSON is keyed by file nick
+    (e.g. 'johndoeII'), so map manifest nicks through FILE_NICK first."""
+    return toa_offset_ms(FILE_NICK.get(nick, nick))
+
+
 def _align_toa(bands: list[BandSpectrum], nick: str) -> list[BandSpectrum]:
     chime = next(b for b in bands if "CHIME" in b.label)
     dsa = next(b for b in bands if "DSA" in b.label)
-    offset = toa_offset_ms(nick)
+    offset = _toa_offset(nick)
     if offset is None:
         return [chime, dsa]
     return [_shift_time(chime, chime_toa_shift_ms(dsa, chime, offset)), dsa]
+
+
+def fit_json_path(npz_path: Path) -> Path:
+    """joint_fit JSON tracked beside a jointmodel NPZ (same run suffix)."""
+    return Path(str(npz_path).replace("_jointmodel_", "_joint_fit_")).with_suffix(".json")
+
+
+def dominant_t0_ms(
+    percentiles: dict, band_key: str, fit_t: np.ndarray, model_prof: np.ndarray
+) -> float:
+    """Fitted arrival (t0 median, ms) of the dominant model component.
+
+    Dominant = the component whose t0 is nearest the noiseless model-profile
+    peak; anchoring on the earliest component instead lets weak leading
+    components displace the anchor by many ms.
+    """
+    t0s = [
+        float(v["median"])
+        for k, v in percentiles.items()
+        if re.fullmatch(rf"t0_{band_key}\d*", k)
+    ]
+    if not t0s:
+        raise ValueError(f"no t0_{band_key}* in joint fit percentiles")
+    peak = float(np.asarray(fit_t, float)[int(np.nanargmax(model_prof))])
+    return min(t0s, key=lambda v: abs(v - peak))
 
 
 def _dt_ms(b: BandSpectrum) -> float:
@@ -160,9 +193,31 @@ def crop_bands(bands: list[BandSpectrum], xlim: tuple[float, float]) -> list[Ban
 
 
 def bands_from_npz(npz_path: Path, nick: str) -> list[BandSpectrum]:
-    """Data + model on the identical fit-delivery grid from the NPZ."""
+    """Data + model on the identical fit-delivery grid from the NPZ.
+
+    Time axes are anchored on the fitted arrival times: the DSA-110 dominant
+    component's t0 defines t=0 and the CHIME/FRB band is placed with its
+    fitted arrival at the measured inter-instrument offset. Falls back to the
+    profile-peak alignment when the joint_fit JSON or measured offset is
+    missing.
+    """
     z = np.load(npz_path, allow_pickle=True)
-    bands = _align_toa([_band_from_npz(z, "C"), _band_from_npz(z, "D")], nick)
+    chime, dsa = _band_from_npz(z, "C"), _band_from_npz(z, "D")
+    fj = fit_json_path(npz_path)
+    offset = _toa_offset(nick)
+    if fj.exists() and offset is not None:
+        percentiles = json.loads(fj.read_text())["percentiles"]
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            t0_c = dominant_t0_ms(
+                percentiles, "C", z["timeC"], np.nansum(np.asarray(z["modelC"], float), axis=0)
+            )
+            t0_d = dominant_t0_ms(
+                percentiles, "D", z["timeD"], np.nansum(np.asarray(z["modelD"], float), axis=0)
+            )
+        bands = [_shift_time(chime, offset - t0_c), _shift_time(dsa, -t0_d)]
+    else:
+        bands = _align_toa([chime, dsa], nick)
     for b in bands:
         if b.data.shape != b.model.shape:
             raise RuntimeError(f"{nick} {b.label}: data/model shape mismatch {b.data.shape} vs {b.model.shape}")
@@ -229,7 +284,7 @@ def bands_archival(
             )
         )
     fine = _align_toa(out, nick)
-    if toa_offset_ms(nick) is None:
+    if _toa_offset(nick) is None:
         chime, dsa = fine
         fine = [_shift_time(chime, _peak_time(dsa) - _peak_time(chime)), dsa]
     if extra_shift_ms:
