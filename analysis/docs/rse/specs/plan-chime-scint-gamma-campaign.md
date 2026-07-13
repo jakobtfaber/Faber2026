@@ -1,7 +1,11 @@
 # Plan — CHIME scintillation γ + modulation-index campaign (lane B)
 
 **Owner loop:** claude-fable-5 (orchestrator), 2026-07-12 →. Auto-proceeding;
-owner intervention only at one-way doors (PR merges) and science sign-off.
+2026-07-13 owner grant: fully autonomous through manuscript integration —
+PR merges and science sign-offs included, no per-step approval. Figure
+review stays agent-executed (visual vetting is methodology, not approval);
+never force-push/rewrite shared history; pipeline pin bump lands as its own
+focused PR with a merge-base ancestor check.
 **Standing dispatch:** claude-fable-5 xhigh (design/verification), Codex
 gpt-5.6-sol medium (implementation/validation). Heavy compute → h17 (and hpcc
 if needed); keep jakob-mbp CPU load bounded (fit fan-out ≤ ~4 local workers).
@@ -62,7 +66,14 @@ terminate as DOCUMENTED-FAIL (data physically can't support the measurement)
   burst has PASS/MARGINAL/DOCUMENTED-FAIL. This is the loop body; exit only
   on the Goal condition.
 - **P4f deliver:** per-burst results table + manuscript-ready γ and m
-  figures; journal + board update; hand owner the merge decisions.
+  figures; journal + board update; merge PR #162 lane.
+- **P4g manuscript integration (added 2026-07-13):** bump the Faber2026
+  `pipeline` gitlink to the landed branch tip (own PR, ancestor-checked);
+  update the scintillation section: γ + m(t) + m(ν) results table, method
+  paragraph reflecting the recipe provenance (reference_arc lineage), new
+  figures wired into the build; compile clean; agent review pass over the
+  section (prose + numbers vs results JSONs); land via PR. Terminal state:
+  scintillation results in the manuscript, submission-ready.
 
 ## Loop mechanics
 
@@ -75,3 +86,6 @@ worktree; any future session can resume from here.
 ## Status log
 
 - 2026-07-12: P1–P3 rescue complete (PR #162). P4a agents dispatched.
+- 2026-07-13: CAMPAIGN COMPLETE (terminal state reached). P4c six phases + P4d/P4e loop landed via dsa110/dsa110-FLITS#50 (fork PR #168); Faber2026 pin bump PR #21 (ancestor-checked 3435ba0 -> fba48c6); manuscript PR #22 (results §scintillation CHIME paragraph + Table tab:chime_scint_gates + discussion boundary condition), verifier MERGE-CLEAR, merged 23918bd. Science outcome: 0/12 CHIME bursts certify Δν_d — DOCUMENTED-FAIL sample-wide with named physical causes (fail-closed gates: off-pulse null, two-sided low-lag stability, modulation physicality m≤1.5, sub-band support ≥3, provenance incl. instrumental background correction); freya sweep pins 36–45 kHz to the 35 kHz instrumental scale under all 6 preprocessing×lag variants; γ anchor unavailable, attribution rests on DSA band. m(t) direct + m(ν) products retained as gated diagnostics. Follow-ups (not blocking): cosmetic plot bugs (ΔBIC panel empty, johndoeII glyph dropout, two y-tick overprints); rerun campaign if/when validated instrumental-background-corrected products land sample-wide (would clear the uniform provenance failure and could revive casey_hi/whitney-class candidates).
+- 2026-07-13 (post-terminal figure-review note): hamilton and chromatica are the best-morphology CHIME products in the set (resolved cusped ACF peaks, monotonic bw(ν), primary estimators agreeing at α≈5.3–6.6), clean low-lag stability, failing ONLY the off-pulse null and marginally so against the hard cut (off/on width ratio 1.72 and 1.94 vs the 2.0 pass boundary). johndoeII third but weaker (null inconclusive at 2 off fits; fails modulation physicality independently).
+- 2026-07-13 (uncertainty-aware null probe — CORRECTS the note above): the earlier "threshold-sensitive" framing and the suggestion that a spread-aware null boundary could flip these two verdicts were FALSIFIED by direct test. Reran hamilton + chromatica with the off-pulse fit population serialized (`off_dnu_mhz`) and computed a log-space MAD-scaled z of the on-pulse width against the off-pulse population: hamilton on = 51.1 kHz sits inside off fits spanning 0.6–246 kHz (z = 0.41, a third of the off fits are *narrower* than on); chromatica on = 92.6 kHz inside off fits 73–357 kHz (z = 0.90). A spread-aware boundary therefore fails both MORE decisively than the hard 2.0 ratio — the verdicts are robust, not threshold-sensitive. The z-statistic is now recorded (non-gating) in `off_pulse_null_verdict` as `off_log_z`/`off_log_mad_sigma` with a regression test pinned to the hamilton numbers (commit 9237e4c, dsa110/dsa110-FLITS#51). Only remaining revival path for any CHIME burst: the corrected-products sample-wide rerun.
