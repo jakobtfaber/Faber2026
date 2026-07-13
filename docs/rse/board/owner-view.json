@@ -1,0 +1,28 @@
+{
+  "updated": "2026-07-12T22:36-0700",
+  "needs_you": [],
+  "now": [
+    {"h": "Qualify CHIME method", "d": "Freya gate before any 12-burst rollout", "who": "codex"},
+    {"h": "Partition legacy checkout", "d": "all dirty paths classified; extracting coherent lanes", "who": "codex"},
+    {"h": "Build evidence ledger", "d": "start from restored association, census, and DM strands", "who": "codex"}
+  ],
+  "next": [
+    {"h": "Run Freya recovery loop", "d": "bounded hypotheses with a three-iteration stopping rule"},
+    {"h": "Create sightline cards", "d": "twelve schema-validated evidence records"},
+    {"h": "Audit trusted claims", "d": "association, foreground, and DM prose only"}
+  ],
+  "components": [
+    {"name": "Repository control", "lane": "R", "status": "active", "status_class": "now",
+     "next": "extract clean lanes"},
+    {"name": "Trust ladder", "lane": "V", "status": "partly restored", "status_class": "ready",
+     "next": "populate ledger"},
+    {"name": "Scintillation", "lane": "B", "status": "active", "status_class": "now",
+     "next": "pass Freya gate"},
+    {"name": "Methodology", "lane": "A", "status": "gated", "status_class": "blocked",
+     "next": ""},
+    {"name": "Re-fits → synthesis", "lane": "C·D·E", "status": "blocked", "status_class": "blocked",
+     "next": ""},
+    {"name": "Manuscript", "lane": "F", "status": "limited pass", "status_class": "ready",
+     "next": "audit trusted claims"}
+  ]
+}

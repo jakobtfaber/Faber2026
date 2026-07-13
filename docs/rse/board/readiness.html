@@ -81,6 +81,43 @@
   .now-strip .slot b { display:block; font-size:11px; text-transform:uppercase;
     letter-spacing:0.07em; color:var(--now); margin-bottom:3px; }
   .now-strip .slot { font-size:13.5px; }
+  .own { background:var(--card); border:1px solid var(--hair); border-radius:10px;
+    padding:16px 18px 18px; margin-bottom:8px; }
+  .own-head { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+  .own-head b { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; }
+  .own-cols { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px; }
+  .own-col { border-radius:8px; padding:10px 12px; }
+  .own-col h4 { margin:0 0 6px; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.07em; font-weight:700; }
+  .own-col ul { list-style:none; margin:0; padding:0; }
+  .own-col li { font-size:13.5px; line-height:1.35; padding:6px 0 6px 10px;
+    border-left:3px solid transparent; }
+  .own-col li + li { border-top:1px dashed var(--hair); }
+  .own-col li b { font-weight:650; }
+  .own-col li small { display:block; color:var(--muted); font-size:12px; font-weight:400; }
+  .own-col .who { color:var(--muted); font-size:11px; white-space:nowrap;
+    text-transform:uppercase; letter-spacing:0.04em; margin-left:6px; }
+  .oc-now { background:var(--now-bg); } .oc-now h4 { color:var(--now); }
+  .oc-now li { border-left-color:var(--now); }
+  .oc-next { background:var(--ready-bg); } .oc-next h4 { color:var(--ready); }
+  .oc-next li { border-left-color:var(--ready); }
+  .oc-you { background:var(--pend-bg); border:1px solid var(--pend); }
+  .oc-you h4 { color:var(--pend); } .oc-you li { border-left-color:var(--pend); }
+  .own-comps { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+    gap:10px; margin-top:14px; }
+  .comp { border:1px solid var(--hair); border-radius:8px; padding:9px 11px; }
+  .comp .cnm { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; margin-bottom:4px; }
+  .comp .cnm b { font-size:13px; }
+  .comp .cid { color:var(--muted); font-size:11px;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace; }
+  .comp .cnx { color:var(--muted); font-size:12px; line-height:1.4; display:block; }
+  details.fold { margin-top:24px; }
+  details.fold > summary { cursor:pointer; font-size:12px; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--muted); font-weight:600; padding:4px 0; }
+  details.fold > summary:hover { color:var(--ink); }
+  details.fold > summary:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  details.fold[open] > summary { margin-bottom:2px; }
+  details.fold h2:first-of-type { margin-top:10px; }
   .lane { background:var(--card); border:1px solid var(--hair); border-radius:8px;
     padding:12px 14px; margin-bottom:12px; }
   .lane-head { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:2px; }
@@ -121,16 +158,37 @@
   <span class="meta">2026-07-06 &nbsp;·&nbsp; pipeline pin <span class="mono">7e77437</span> &nbsp;·&nbsp; journal cadence: 10 min while active (see panel) &nbsp;·&nbsp; branch state lives in the journal</span>
 </header>
 
-<div class="now-strip">
-  <div class="slot"><b>Just landed</b>
-    Trust reset wave 3: TOA association + DM_obs also revoked — retained set now EMPTY; V6 added ·
-    §V plan (now seven phases) verified &amp; committed · all decisions re-opened as working choices</div>
-  <div class="slot"><b>In flight now</b>
-    A1 design discussion (trigger calibration question open) · journal panel + 10-min cadence just wired in — NOTE: a second unattributed writer committed scaffolding tonight; journal now attributes all work</div>
-  <div class="slot"><b>Next candidates (your pick)</b>
-    V·P0 provenance freeze · A4 ADR amendment · B1–B3 scint prep · F6 co-author draft · F3 consistency audit</div>
-</div>
+<!-- OWNER:BEGIN -->
+<div class="own">
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T22:36-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-cols">
+<div class="own-col oc-you"><h4>Needs you</h4><ul>
 
+</ul></div>
+<div class="own-col oc-now"><h4>In flight</h4><ul>
+<li><b>Qualify CHIME method</b> <span class="who">codex</span><small>Freya gate before any 12-burst rollout</small></li>
+<li><b>Partition legacy checkout</b> <span class="who">codex</span><small>all dirty paths classified; extracting coherent lanes</small></li>
+<li><b>Build evidence ledger</b> <span class="who">codex</span><small>start from restored association, census, and DM strands</small></li>
+</ul></div>
+<div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
+<li><b>Run Freya recovery loop</b><small>bounded hypotheses with a three-iteration stopping rule</small></li>
+<li><b>Create sightline cards</b><small>twelve schema-validated evidence records</small></li>
+<li><b>Audit trusted claims</b><small>association, foreground, and DM prose only</small></li>
+</ul></div>
+</div>
+<div class="own-comps">
+<div class="comp"><span class="cnm"><b>Repository control</b><span class="cid">R</span><span class="chip c-now">active</span></span><span class="cnx">extract clean lanes</span></div>
+<div class="comp"><span class="cnm"><b>Trust ladder</b><span class="cid">V</span><span class="chip c-ready">partly restored</span></span><span class="cnx">populate ledger</span></div>
+<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">active</span></span><span class="cnx">pass Freya gate</span></div>
+<div class="comp"><span class="cnm"><b>Methodology</b><span class="cid">A</span><span class="chip c-blocked">gated</span></span></div>
+<div class="comp"><span class="cnm"><b>Re-fits → synthesis</b><span class="cid">C·D·E</span><span class="chip c-blocked">blocked</span></span></div>
+<div class="comp"><span class="cnm"><b>Manuscript</b><span class="cid">F</span><span class="chip c-ready">limited pass</span></span><span class="cnx">audit trusted claims</span></div>
+</div>
+</div>
+<!-- OWNER:END -->
+
+<details class="fold">
+<summary>Lanes &amp; tasks — agent-facing detail (V·P0 … G3)</summary>
 <h2>Lanes &amp; tasks — what every ID means</h2>
 
 <div class="lane">
@@ -223,35 +281,40 @@
   <span class="chip c-pend">needs owner decision</span>
   <span class="chip c-blocked">blocked upstream</span>
 </div>
+</details>
 
-<h2>Journal — agent activity log (10-min cadence while active · docs/rse/journal.jsonl · newest first)</h2>
-<div class="card">
+<details class="fold">
+<summary>Journal — agent activity log (newest first)</summary>
+<div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
-<li><span class="jts mono">07-10 16:06</span><span class="jagent">claude-fable-5/ms-referee-methods</span><span class="jlane">ms</span><span class="jnote s-good">Methods gaps filled from FLITS provenance: forward-model/noise/smearing paragraphs (sec:jointfit), gain-prior s2 + explicit priors + dynesty config + numeric quality gates (sec:gainmarg), multicomp fixed-s2 cross-ref; abstract V5 DM-budget slot filled; facilities/software added; LorimerKramer2004+software bib entries. latexmk clean, 0 undefined refs, pages 1/12/13 visually vetted. Revoked SLOTs/placeholders untouched. PR next.</span></li>
-<li><span class="jts mono">07-10 16:00</span><span class="jagent">claude-fable-5/ms-referee-methods</span><span class="jlane">ms</span><span class="jnote s-now">Filling referee-level Methods gaps in sec:jointfit/gainmarg from FLITS provenance (noise model, smearing, priors, dynesty config, quality gates) + abstract V5 DM-budget slot + facilities/software; revoked SLOTs stay. Will land accepted D2-D5/wishlist tex drafts as base commit, then PR.</span></li>
-<li><span class="jts mono">07-10 15:57</span><span class="jagent">codex</span><span class="jlane">dm-shared-fit</span><span class="jnote s-now">77 DM and association tests pass; independent GPT-5.5 review is inspecting PASS-only selection and no-average tension semantics before commit</span></li>
-<li><span class="jts mono">07-10 15:51</span><span class="jagent">codex</span><span class="jlane">dm-shared-fit</span><span class="jnote s-now">Correcting adaptive selector to prefer stable PASS-only resolution clusters; rerunning 24-product selection while raw-data absolute-timing regeneration remains required for a direct shared-DM fit</span></li>
-<li><span class="jts mono">07-10 15:40</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-good">Adaptive multiresolution DM campaign published: FLITS 2934f44, parent PR #79 merged at 8d0e4c5. Final result 8 PASS / 15 MARGINAL / 1 weak-only; not adoption-ready; absolute-time metadata blocks direct cross-band lever fit.</span></li>
-<li><span class="jts mono">07-10 15:38</span><span class="jagent">cursor-grok/dm-host-pdfs</span><span class="jlane">F</span><span class="jnote s-good">Redraw fig:dm_host_posteriors as host PDF ridge plot (ms palette); appendix caption updated; scoped plan-dm-foreground-system-pdfs.md + wishlist O6. Numbers unchanged.</span></li>
-<li><span class="jts mono">07-10 15:31</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-now">Second GPT-5.5 review found three remaining blockers: untracked code absent from provenance hash, cluster selector still referenced global median, and figure/memo stars overclaimed marginal fits. Applying targeted fixes before final review.</span></li>
-<li><span class="jts mono">07-10 15:18</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-now">Full 24-product adaptive run complete: 23/24 science-grade bands, isha/DSA weak; event synthesis flags 8 two-band consistent, 3 tension (freya/phineas/zach), 1 CHIME-only. Expanded 66-test DM regression suite passes; preparing independent review and closeout.</span></li>
-<li><span class="jts mono">07-10 15:07</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-now">Implemented test-first adaptive multiresolution arrival-regression core and runner on pipeline/dm-campaign-2026-07; real-data probe recovered six of seven prior failures at science precision, with isha/DSA remaining weak; validating full 24-product run next.</span></li>
-<li><span class="jts mono">07-10 14:56</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">figure1-caption</span><span class="jnote s-good">PR #78 merged to origin/main at d304be2; caption commit 8449bb2 verified on remote. DM audit: manuscript still uses one DSA-catalog DM per burst; arrival-regression battery is validated primary candidate but not adopted.</span></li>
-<li><span class="jts mono">07-10 14:54</span><span class="jagent">codex-gpt-5.6/figure1-caption-review</span><span class="jlane">ms</span><span class="jnote s-pend">PR #78 caption verified accurate against scripts/plot_codetection_gallery.py; GitHub approval rejected because session authenticates as PR author jakobtfaber. Requires distinct write-access reviewer account.</span></li>
-<li><span class="jts mono">07-10 14:53</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">figure1-caption</span><span class="jnote s-now">Caption committed as 8449bb2; PR #78 checks green; awaiting required write-access approval before merge to origin/main; auditing DM measurement contract next.</span></li>
-<li><span class="jts mono">07-10 14:43</span><span class="jagent">cursor-grok/figure-wishlist</span><span class="jlane">F</span><span class="jnote s-good">Dropped fig:whitney_mult (outdated multiplicity demo): removed draft box from results.tex; wishlist W3 -&gt; Dropped; CONTEXT + plan-circulation-readiness refs cleaned</span></li>
-<li><span class="jts mono">07-10 14:41</span><span class="jagent">cursor-grok/figure-wishlist</span><span class="jlane">F</span><span class="jnote s-good">Promoted W1-W5 PLACEHOLDERs to live draft fbox floats (labels fig:budget, jointmodel_montage, whitney_mult, subband_tau_validation, scint_screens); no revoked includegraphics</span></li>
-<li><span class="jts mono">07-10 14:40</span><span class="jagent">cursor-grok/figure-wishlist</span><span class="jlane">F</span><span class="jnote s-good">Added docs/rse/specs/figure-wishlist.md (W1-W6 + optional); commented PLACEHOLDER scaffolds in observations.tex + results.tex; CONTEXT pointer. No live includegraphics of revoked PDFs.</span></li>
-<li><span class="jts mono">07-10 13:57</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D5</span><span class="jnote s-good">Added TODO(energies-fixed-band-variant) under V3: optional fixed rest-frame E_iso companion; tracked in methods.tex, results.tex, plan-circulation-readiness, decision memo</span></li>
-<li><span class="jts mono">07-10 13:53</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D2-D5</span><span class="jnote s-good">Owner accepted D2-D5 (+D1 separate) 2026-07-10; memo ACCEPTED; matrix DONE; budget.tex closure_regime vocab; methods.tex drop fixed-band variant promise; CONTEXT.md lock note</span></li>
-<li><span class="jts mono">07-10 13:46</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D2-D5</span><span class="jnote s-good">Wrote docs/rse/specs/decision-d2-d5-scattering-design-locks.md (proposed locks); status matrix D2-D5 -&gt; PROPOSED/awaiting owner; one soft conflict: Methods interior vocab vs geometry-adjudicated beta</span></li>
-<li><span class="jts mono">07-10 13:45</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D2-D5</span><span class="jnote s-now">Drafting proposed D2-D5 design-lock memo from referee asks + Methods drafts + A1/geometry contracts</span></li>
-<li><span class="jts mono">07-10 13:05</span><span class="jagent">codex</span><span class="jlane">scintillation</span><span class="jnote s-ready">Opening the validated scintillation ACF review deck in Cursor at user request</span></li>
+<li><span class="jts mono">07-12 22:37</span><span class="jagent">Faber2026-codex</span><span class="jlane">R</span><span class="jnote s-now">Established loop-control PR #1, classified every legacy-checkout path, and began transplanting the owner board and merged journal onto a clean main-based lane.</span></li>
+<li><span class="jts mono">07-12 22:33</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">P4b-&gt;P4c: parity-planner agent (fable) writing plan-chime-scint-recipe-parity.md per planning-implementations skill; key reframe: notebooks never fit gamma to real data (hard-coded placeholders) — primary estimator = analysis-Copy1 log-space ODR over subband dnu(nu)</span></li>
+<li><span class="jts mono">07-12 22:33</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Capture-2 landed on PR #162 (c0a9d0a): live-arc Nimmo_scripts (scint_pipe_new_Nimmo2025 + tutorial), scint_toolkit v1/v2, kenzie_funcs/scint_funcs runtime modules (resolves RECIPE ambiguity 5), zach worked example w/ ACF npz fixture; RECIPE.md + GAP_ANALYSIS.md committed</span></li>
+<li><span class="jts mono">07-12 22:26</span><span class="jagent">codex</span><span class="jlane">B</span><span class="jnote s-good">Gap analysis delivered (logs/codex-gap-analysis.md in rescue worktree): lag-2 vs lag-1 ACF fit-start divergence, HWHM/FWHM convention trap, canfar_reference cleaning mode + 8 ranked deltas w/ acceptance sequence; awaiting RECIPE.md from recipe-reconstructor for P4b synthesis</span></li>
+<li><span class="jts mono">07-12 22:16</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">Phase 4 launched: recipe-reconstruction agent (fable xhigh) + codex gap analysis (gpt-5.6-sol medium) running against the rescue worktree; goal = confident CHIME gamma + m(t), m(nu) via loop campaign</span></li>
+<li><span class="jts mono">07-12 22:16</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Rescued Nimmo-lineage CHIME scint recipe from arc/h17 trash tiers: 21 files (scinttools chain, baseband layer, 10 scint notebooks) sha256-verified into pipeline reference_arc/ with ORIGIN.md + DATA_PROVENANCE 7d; PR dsa110-FLITS#162 to pin/faber2026</span></li>
+<li><span class="jts mono">07-12 22:04</span><span class="jagent">codex</span><span class="jlane">skill-budget</span><span class="jnote s-good">Merged my-skillset PR #124; live Codex prompt now 16 skills and within budget</span></li>
+<li><span class="jts mono">07-12 21:57</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-good">Corrected and merged dsa110-FLITS PR #161: h23 T3 false 59T entry replaced by verified seven candidate trees; five 2022 full-candidate locations remain explicitly unverified; Faber2026 submodule pin unchanged.</span></li>
+<li><span class="jts mono">07-12 21:48</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-now">Corrected h23 inventory on focused dsa110-FLITS branch; validated and pushed commit 1280491; opening PR without changing the manuscript submodule pin.</span></li>
+<li><span class="jts mono">07-12 21:38</span><span class="jagent">codex</span><span class="jlane">skill-budget</span><span class="jnote s-now">Implementing and validating Codex skill-budget control-plane fix in my-skillset</span></li>
+<li><span class="jts mono">07-12 21:28</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-now">Reviewing documented non-CANFAR data locations and authority roles for the user.</span></li>
+<li><span class="jts mono">07-12 21:17</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-ready">Freya rank-1 correction reduced but did not whiten the off-pulse kernel; existing CHIME realization supports upper-limit/diagnostic use unless earlier raw-voltage correction passes injection recovery</span></li>
+<li><span class="jts mono">07-12 21:16</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Assessing what the failed Freya correction implies and whether CHIME ACF scintillation remains recoverable</span></li>
+<li><span class="jts mono">07-12 21:00</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">repo</span><span class="jnote s-now">Overleaf relink: project re-linked to fresh repo Faber2026_CHIME_DSA_Codetections; canonical history grafted (merge ea6fe478, tree==origin/main; snapshot had zero content edits), all branches+gh-pages+tags pushed; next: owner sync round-trip test, then rename swap</span></li>
+<li><span class="jts mono">07-12 20:24</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">ms</span><span class="jnote s-good">Overleaf link breakage root-caused: deleting raw overleaf-* sync branches (PRs 91/92 --delete-branch) severed the GitHub integration; both branches restored at exact prior heads from pull/N/head refs; memory rule saved: never delete overleaf-* branches</span></li>
+<li><span class="jts mono">07-12 20:20</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">ms</span><span class="jnote s-good">Overleaf reconciliation: PR 92 (abstract copy edits) approved via review account + squash-merged at 0d7de124; PR 91 closed unmerged (content-free exec-bit strip from Overleaf round-trip, would have broken journal hooks); both branches deleted</span></li>
+<li><span class="jts mono">07-12 20:12</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-pend">Implemented and opened dsa110-FLITS draft PR #160; Freya real-data off-pulse null still fails after correction, so CHIME measurement and 11-target rollout remain scientifically blocked</span></li>
+<li><span class="jts mono">07-12 20:08</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Independent review findings fixed: provenance cannot be promoted, manifests bind target+hash, and product prefixes refuse overwrite; final suite running</span></li>
+<li><span class="jts mono">07-12 20:04</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-good">owner decision: FLITS PR 159 (separate Lorentzian component tracks) squash-merged to FLITS main after clean auto-review (no findings to implement); pipeline pin untouched; CHIME correction + unified figure remain open per handoff</span></li>
+<li><span class="jts mono">07-12 20:01</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Freya correction gate remains red; dispatched independent Codex review while production ACF qualification runs</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
+</details>
 
+<details class="fold">
+<summary>Reference — trust state &amp; decisions ledger</summary>
 <h2>Trust state after the 2026-07-06 trust reset (three waves)</h2>
 <div class="grid2">
   <div class="card">
@@ -284,5 +347,6 @@
   <div class="card"><h3>Trust reset (three waves)</h3>
     <span class="note" style="font-size:12.5px;color:var(--muted)">All fits revoked (w1); census + DM budget revoked (w2); TOA arithmetic + DM_obs revoked (w3) — retained set empty. Re-entry only via the §V ladder (V1–V6).</span></div>
 </div>
+</details>
 
-<footer>Sources: CONTEXT.md (domain contract) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md). Board source now lives in-repo at docs/rse/board/readiness.html — any agent edits it, rebakes the journal panel (scripts/render_journal_panel.py), and redeploys to this URL. This board is the standing "where are we" reference.</footer>
+<footer>Sources: CONTEXT.md (domain contract) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md) · docs/rse/board/owner-view.json (owner view data). Board source lives in-repo at docs/rse/board/readiness.html — any agent edits it, rebakes owner view + journal panel (scripts/render_journal_panel.py), and deploys with scripts/deploy-board.sh to https://jakobtfaber.github.io/Faber2026/board/ (canonical since 2026-07-12; claude.ai artifact retired). This board is the standing "where are we" reference.</footer>
