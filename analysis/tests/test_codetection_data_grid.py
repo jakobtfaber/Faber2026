@@ -250,3 +250,20 @@ def test_draw_joint_waterfall_draws_two_bands_and_hatched_gap():
     assert len(ax.patches) == 1
     assert ax.get_title() == "FRB test"
     plt.close(fig)
+
+
+def test_gap_display_map_compresses_only_the_gap():
+    bands = [_band("CHIME/FRB", 400.0, 800.0), _band("DSA-110", 1310.0, 1500.0)]
+    fmap = grid._gap_display_map(bands)
+    # Bands keep true scale.
+    assert float(fmap(400.0)) == 400.0
+    assert float(fmap(800.0)) == 800.0
+    assert float(fmap(1500.0)) - float(fmap(1310.0)) == 190.0
+    # Gap shrinks to GAP_COMPRESS of its true bandwidth.
+    gap_disp = float(fmap(1310.0)) - float(fmap(800.0))
+    assert gap_disp == grid.GAP_COMPRESS * 510.0
+    fig, ax = plt.subplots()
+    grid.draw_joint_waterfall(ax, bands, title="")
+    y0, y1 = ax.get_ylim()
+    assert (y1 - y0) < 1100.0 - (1.0 - grid.GAP_COMPRESS) * 510.0 + 1.0
+    plt.close(fig)
