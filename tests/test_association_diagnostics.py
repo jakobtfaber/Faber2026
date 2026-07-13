@@ -1,48 +1,52 @@
 import json
-import math
+import os
 from pathlib import Path
 
 import pytest
 
-from scripts.association_diagnostics import (
-    class_aware_chance_probability,
-    position_time_chance_probability,
-)
+from scripts.association_diagnostics import reported_chance_probability
 
 
-INPUTS = {
-    "rate_per_day": 1000.0,
-    "omega_win_deg2": math.pi * 0.5**2,
-    "dt_s": 1.0,
-}
-
-
-def test_position_time_probability_omits_dm_suppression():
-    assert position_time_chance_probability(INPUTS) == pytest.approx(4.407079754e-7)
-
-
-def test_class_aware_probability_uses_report_value_only_when_dm_is_constrained():
+def test_reported_probability_validates_class_aware_provenance():
     constrained = {
         "chance_coincidence_P": 5e-9,
+        "chance_coincidence_f_DM": 0.01,
+        "chance_coincidence_class": "dm_position_time",
         "dm_agreement": {"consistent": True},
     }
     unconstrained = {
-        "chance_coincidence_P": 5e-9,
+        "chance_coincidence_P": 4.407079754e-7,
+        "chance_coincidence_f_DM": 1.0,
+        "chance_coincidence_class": "position_time",
         "dm_agreement": {"consistent": None},
     }
-    assert class_aware_chance_probability(constrained, INPUTS) == 5e-9
-    assert class_aware_chance_probability(unconstrained, INPUTS) == pytest.approx(4.407079754e-7)
+    assert reported_chance_probability(constrained) == 5e-9
+    assert reported_chance_probability(unconstrained) == pytest.approx(4.407079754e-7)
+
+
+def test_reported_probability_rejects_legacy_or_misclassified_rows():
+    with pytest.raises(ValueError, match="lacks class-aware provenance"):
+        reported_chance_probability(
+            {"chance_coincidence_P": 5e-9, "dm_agreement": {"consistent": None}}
+        )
+    with pytest.raises(ValueError, match="must use f_DM=1"):
+        reported_chance_probability(
+            {
+                "chance_coincidence_P": 5e-9,
+                "chance_coincidence_f_DM": 0.01,
+                "chance_coincidence_class": "position_time",
+                "dm_agreement": {"consistent": None},
+            }
+        )
 
 
 def test_committed_report_has_eight_dm_filtered_and_four_position_time_rows():
     root = Path(__file__).resolve().parents[1]
+    pipeline = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", root / "pipeline"))
     report = json.loads(
-        (root / "pipeline/crossmatching/association_report.json").read_text()
+        (pipeline / "crossmatching/association_report.json").read_text()
     )
-    values = [
-        class_aware_chance_probability(row, report["inputs"])
-        for row in report["bursts"]
-    ]
+    values = [reported_chance_probability(row) for row in report["bursts"]]
     unconstrained = [
         value
         for row, value in zip(report["bursts"], values, strict=True)

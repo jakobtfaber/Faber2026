@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -21,12 +22,13 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from association_diagnostics import class_aware_chance_probability
+from association_diagnostics import reported_chance_probability
 
 PIPELINE = ROOT / "pipeline"
-REGISTRY = PIPELINE / "configs" / "bursts.yaml"
-TOA_RESULTS = PIPELINE / "crossmatching" / "toa_crossmatch_results.json"
-ASSOCIATION_REPORT = PIPELINE / "crossmatching" / "association_report.json"
+PIPELINE_SOURCE = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", PIPELINE))
+REGISTRY = PIPELINE_SOURCE / "configs" / "bursts.yaml"
+TOA_RESULTS = PIPELINE_SOURCE / "crossmatching" / "toa_crossmatch_results.json"
+ASSOCIATION_REPORT = PIPELINE_SOURCE / "crossmatching" / "association_report.json"
 OUT = ROOT / "figures" / "association_summary.pdf"
 
 CLOCK_MS = 1.0
@@ -107,7 +109,7 @@ def load_rows() -> list[dict]:
                 "timing_z": residual / sigma,
                 "position_ratio": float(arow["position"]["separation_deg"])
                 / float(arow["position"]["radius_deg"]),
-                "pcc": class_aware_chance_probability(arow, report["inputs"]),
+                "pcc": reported_chance_probability(arow),
                 "dm_constrained": arow["dm_agreement"]["consistent"] is not None,
             }
         )
