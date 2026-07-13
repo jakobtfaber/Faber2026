@@ -42,7 +42,10 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
     monkeypatch.setattr(
         grid,
         "bands_archival",
-        lambda data_root, nick, factors=None: calls.append((data_root, nick, factors)) or [],
+        lambda data_root, nick, factors=None, pad_scale=1.0: calls.append(
+            (data_root, nick, factors, pad_scale)
+        )
+        or [],
     )
 
     grid.load_row_bands(
@@ -51,9 +54,13 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
     grid.load_row_bands({"nick": "chromatica", "npz": None}, root=tmp_path, data_root=tmp_path)
 
     assert calls == [
-        (tmp_path, "zach", grid.DISPLAY_FACTORS),
-        (tmp_path, "chromatica", grid.DISPLAY_FACTORS),
+        (tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE),
+        (tmp_path, "chromatica", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE),
     ]
+
+
+def test_display_pad_scale_tightens_window():
+    assert 0 < grid.DISPLAY_PAD_SCALE < 1.0
 
 
 def test_display_factors_are_near_native():

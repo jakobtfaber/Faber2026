@@ -116,13 +116,16 @@ def band_onpulse_ms(b: BandSpectrum) -> tuple[float, float]:
     return float(t[lo]), float(t[hi])
 
 
-def chime_width_display_window(bands: list[BandSpectrum]) -> tuple[float, float]:
+def chime_width_display_window(
+    bands: list[BandSpectrum], pad_scale: float = 1.0
+) -> tuple[float, float]:
+    """On-pulse union of both bands, padded by pad_scale x the CHIME width."""
     by = {("CHIME" if "CHIME" in b.label else "DSA"): b for b in bands}
     if "CHIME" not in by or "DSA" not in by:
         raise ValueError("need CHIME and DSA bands for windowing")
     c_lo, c_hi = band_onpulse_ms(by["CHIME"])
     d_lo, d_hi = band_onpulse_ms(by["DSA"])
-    p = max(c_hi - c_lo, PAD_FLOOR_MS)
+    p = max(pad_scale * (c_hi - c_lo), PAD_FLOOR_MS)
     return min(c_lo, d_lo) - p, max(c_hi, d_hi) + p
 
 
@@ -177,11 +180,14 @@ def bands_archival(
     data_root: Path,
     nick: str,
     factors: dict[str, tuple[int, int]] | None = None,
+    pad_scale: float = 1.0,
 ) -> list[BandSpectrum]:
     """Archival `_cntr_bpc.npy` products as BandSpectrum pairs (no model).
 
     `factors` overrides the gallery display resolution per telescope as
     (f_factor, t_factor) block-averaging factors of the native grid.
+    `pad_scale` scales the CHIME-width display padding around the on-pulse
+    union.
     """
     file_nick = FILE_NICK.get(nick, nick)
     products = discover_products(data_root, file_nick)
@@ -212,7 +218,7 @@ def bands_archival(
     if toa_offset_ms(nick) is None:
         chime, dsa = fine
         fine = [_shift_time(chime, _peak_time(dsa) - _peak_time(chime)), dsa]
-    return crop_bands(fine, chime_width_display_window(fine))
+    return crop_bands(fine, chime_width_display_window(fine, pad_scale=pad_scale))
 
 
 def bands_data_only(data_root: Path, nick: str) -> list[BandSpectrum]:
