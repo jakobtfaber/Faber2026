@@ -173,13 +173,23 @@ def _sigma_from_offpulse(ds: np.ndarray) -> np.ndarray:
     return np.where(np.isfinite(sig) & (sig > 0), sig, 1.0)
 
 
-def bands_data_only(data_root: Path, nick: str) -> list[BandSpectrum]:
-    """Chromatica: archival products at gallery display resolution (no model)."""
+def bands_archival(
+    data_root: Path,
+    nick: str,
+    factors: dict[str, tuple[int, int]] | None = None,
+) -> list[BandSpectrum]:
+    """Archival `_cntr_bpc.npy` products as BandSpectrum pairs (no model).
+
+    `factors` overrides the gallery display resolution per telescope as
+    (f_factor, t_factor) block-averaging factors of the native grid.
+    """
     file_nick = FILE_NICK.get(nick, nick)
     products = discover_products(data_root, file_nick)
     out: list[BandSpectrum] = []
     for tel in ("chime", "dsa"):
-        band = BANDS[tel]
+        band = dict(BANDS[tel])
+        if factors and tel in factors:
+            band["f_factor"], band["t_factor"] = factors[tel]
         ds, profile = load_band(products[tel].path, band)
         n_f, n_t = ds.shape
         dt = band["dt_ms"] * band["t_factor"]
@@ -203,6 +213,11 @@ def bands_data_only(data_root: Path, nick: str) -> list[BandSpectrum]:
         chime, dsa = fine
         fine = [_shift_time(chime, _peak_time(dsa) - _peak_time(chime)), dsa]
     return crop_bands(fine, chime_width_display_window(fine))
+
+
+def bands_data_only(data_root: Path, nick: str) -> list[BandSpectrum]:
+    """Chromatica: archival products at gallery display resolution (no model)."""
+    return bands_archival(data_root, nick)
 
 
 def panel_title(tns: str, flag: str | None) -> str:

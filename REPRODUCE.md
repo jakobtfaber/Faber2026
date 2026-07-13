@@ -103,12 +103,13 @@ Result: of the manifest's 28 rows, **12 regenerate from a fresh clone** (5 as
 written, 7 only after correcting the command), **4 exit 0 while writing nothing
 at the declared path**, 10 are blocked on data outside both repos, and 2 have
 no command. The 2026-07-09 execution sweep ran the 25 rows then present. The
-compact archival gallery, the Figure 1 fit-grid data overview, and the
+compact archival gallery, the Figure 1 data overview, and the
 main-text-plus-appendix triptych family were added later with verdicts assigned
-by inspection rather than execution. Figure 1 and the triptychs require eleven
-local fit-delivery NPZ artifacts plus Chromatica's two archival waterfall
-products; the compact gallery remains diagnostic only and requires all 24
-archival waterfalls.
+by inspection rather than execution. The Figure 1 data grid draws every panel
+from the archival `_cntr_bpc.npy` waterfalls (all 24 products, near-native
+display grids); the triptychs require the eleven local fit-delivery NPZ
+artifacts plus Chromatica's two archival waterfall products; the compact
+gallery remains diagnostic only and requires all 24 archival waterfalls.
 
 8 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **4 of
 those 8 needed their `run_command` corrected first**, so the pre-audit manifest
@@ -393,13 +394,14 @@ earned their keep once: they are what caught the drift described in hazard 1.
    manuscript must have its inputs published — a committed data file, or a
    deposited archive — before the DA statement can cover it.
 
-   **2026-07-11 update: this class has one embedded member.** The codetection
-   Figure 1 data grid and the triptych family read 11 fit-delivery NPZ
-   artifacts plus Chromatica's two local CHIME/DSA `_cntr_bpc.npy` waterfalls.
-   Both rows are `embedded_in_manuscript = yes` while
-   `blocked_external_data`; the compact gallery uses all 24 archival
-   waterfalls but is diagnostic and non-embedded. The fit artifacts and
-   Chromatica products must be part of the data release before the DA statement
+   **2026-07-11 update (revised 2026-07-13): this class has one embedded
+   member.** The codetection Figure 1 data grid reads all 24 archival CHIME/DSA
+   `_cntr_bpc.npy` waterfalls (near-native display grids); the triptych family
+   reads the 11 fit-delivery NPZ artifacts plus Chromatica's two archival
+   waterfalls. Both rows are `embedded_in_manuscript = yes` while
+   `blocked_external_data`; the compact gallery uses the same 24 archival
+   waterfalls but is diagnostic and non-embedded. The archival waterfalls and
+   fit artifacts must be part of the data release before the DA statement
    can cover Figures 1--2 and the morphology-audit appendix.
 
 7. **The manifest does not enumerate every embedded output. (OPEN — this is the
@@ -433,10 +435,11 @@ earned their keep once: they are what caught the drift described in hazard 1.
   `dsa_scint_acf/` panels, run their producer from a fresh clone, and record a
   `clone_verified` verdict. Nothing else in this file matters to the DA statement
   as much as this.
-- Deposit the 11 fit-delivery artifacts and Chromatica's two CHIME/DSA
-  `_cntr_bpc.npy` products: the Figure 1 grid and triptych family are the two
-  embedded rows the DA statement cannot cover, and data deposition is the only
-  way to close them.
+- Deposit the 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls and the 11
+  fit-delivery artifacts: the Figure 1 grid (archival waterfalls) and triptych
+  family (fit artifacts plus Chromatica's waterfalls) are the two embedded
+  rows the DA statement cannot cover, and data deposition is the only way to
+  close them.
 - Fill the two unresolved producers (author knowledge) and promote their rows
   to `writer_verified = yes`.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,
