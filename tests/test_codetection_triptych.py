@@ -132,6 +132,21 @@ def test_crop_spectrum_keeps_alignment():
     assert c.data.shape[1] == c.time_ms.size == c.model.shape[1]
 
 
+def test_toa_offset_is_rereferenced_to_target_dm():
+    legacy = triptych.toa_offset_ms("oran")
+    target = 397.015535
+    old_dm = 396.882
+    expected_delta = (
+        1e3
+        * triptych.K_DM_S_MHZ2
+        * (target - old_dm)
+        * (400.0**-2 - 1530.0**-2)
+    )
+    got = triptych.toa_offset_at_dm_ms("oran", target)
+    assert got == pytest.approx(legacy - expected_delta)
+    assert abs(got - legacy) > 3.0
+
+
 def test_render_disables_model_overlay(monkeypatch, tmp_path):
     """Contract: the producer call must disable model overlays on data."""
     calls = []

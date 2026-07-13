@@ -108,7 +108,9 @@ main-text-plus-appendix triptych family were added later with verdicts assigned
 by inspection rather than execution. The Figure 1 data grid draws every panel
 from the archival `_cntr_bpc.npy` waterfalls (all 24 products, near-native
 display grids) and anchors the time axes on the fitted arrival times from the
-tracked jointmodel NPZ + joint_fit JSON pairs; the triptychs require the
+tracked jointmodel NPZ + joint_fit JSON pairs. The legacy CHIME-minus-DSA
+400-MHz timing offsets are re-referenced from their recorded DMs to the adopted
+DMs before those anchors are placed; the triptychs require the
 eleven local fit-delivery NPZ artifacts plus Chromatica's two archival
 waterfall products; the compact gallery remains diagnostic only and requires
 all 24 archival waterfalls.

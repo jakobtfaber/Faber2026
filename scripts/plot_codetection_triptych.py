@@ -19,6 +19,7 @@ Run: conda run -n flits python scripts/plot_codetection_triptych.py
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import warnings
 from pathlib import Path
@@ -52,6 +53,9 @@ MANIFEST_DEFAULT = ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"
 OUT_DEFAULT = ROOT / "figures" / "codetection_triptych"
 DATA_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 PAD_FLOOR_MS = 1.5
+TOA_RESULTS = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
+TOA_FIXTURE = ROOT / "pipeline" / "crossmatching" / "notebook_reproduction_fixture.json"
+K_DM_S_MHZ2 = 4.148808e3
 
 
 def load_manifest(path: Path) -> list[dict]:
@@ -87,10 +91,45 @@ def _shift_time(b: BandSpectrum, shift_ms: float) -> BandSpectrum:
     )
 
 
-def _align_toa(bands: list[BandSpectrum], nick: str) -> list[BandSpectrum]:
+def toa_offset_at_dm_ms(
+    nick: str,
+    target_dm: float,
+    *,
+    toa_results: Path = TOA_RESULTS,
+    toa_fixture: Path = TOA_FIXTURE,
+) -> float | None:
+    """Re-reference the legacy CHIME-minus-DSA 400-MHz offset to ``target_dm``.
+
+    The tracked CHIME TOA is already expressed at 400 MHz. The DSA TOA was
+    propagated from the fixture's native frequency to 400 MHz using the
+    legacy row DM, so changing that DM by ``delta_dm`` changes the DSA TOA by
+    ``K_DM * delta_dm * (400^-2 - nu_DSA^-2)``. Because the stored offset is
+    CHIME minus DSA, that correction is subtracted from the legacy offset.
+    """
+    rows = json.loads(toa_results.read_text())
+    row = rows.get(nick) or rows.get(nick.lower())
+    if row is None:
+        return None
+    fixture = json.loads(toa_fixture.read_text())
+    f_ref = float(fixture["reference_frequency_mhz"])
+    f_dsa = float(fixture["dsa_native_frequency_mhz"])
+    delta_dm = float(target_dm) - float(row["dm"])
+    dsa_delta_ms = (
+        1e3 * K_DM_S_MHZ2 * delta_dm * (f_ref**-2 - f_dsa**-2)
+    )
+    return float(row["measured_offset_ms"]) - dsa_delta_ms
+
+
+def _align_toa(
+    bands: list[BandSpectrum], nick: str, *, target_dm: float | None = None
+) -> list[BandSpectrum]:
     chime = next(b for b in bands if "CHIME" in b.label)
     dsa = next(b for b in bands if "DSA" in b.label)
-    offset = toa_offset_ms(nick)
+    offset = (
+        toa_offset_ms(nick)
+        if target_dm is None
+        else toa_offset_at_dm_ms(nick, target_dm)
+    )
     if offset is None:
         return [chime, dsa]
     return [_shift_time(chime, chime_toa_shift_ms(dsa, chime, offset)), dsa]
@@ -237,8 +276,13 @@ def bands_archival(
                 channel_valid=_channel_valid(ds),
             )
         )
-    fine = _align_toa(out, nick)
-    if toa_offset_ms(nick) is None:
+    fine = _align_toa(out, nick, target_dm=target_dm)
+    offset = (
+        toa_offset_ms(nick)
+        if target_dm is None
+        else toa_offset_at_dm_ms(nick, target_dm)
+    )
+    if offset is None:
         chime, dsa = fine
         fine = [_shift_time(chime, _peak_time(dsa) - _peak_time(chime)), dsa]
     if extra_shift_ms:

@@ -45,7 +45,8 @@ jobs:
         working-directory: pipeline
         run: |
           uv run --frozen pytest -q \
-            galaxies/foreground/test_foreground_table_emitter.py
+            galaxies/foreground/test_foreground_table_emitter.py \
+            ../tests/test_verified_dm_manuscript.py
 
       # The submodule's own tests only compare the emitter against
       # `pipeline/exports/`. The artifact the manuscript actually \input's is the
@@ -53,6 +54,7 @@ jobs:
       # anchor. `--check` compares against whatever `--out` names.
       - name: Emitter output matches the manuscript's committed table
         run: |
+          python scripts/render_dm_measurements_table.py --check
           python scripts/render_budget_table.py --check
           cd pipeline
           uv run --frozen python -m galaxies.foreground.foreground_table_emitter \

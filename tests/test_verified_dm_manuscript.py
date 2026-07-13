@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import render_budget_table  # noqa: E402
+import render_dm_measurements_table  # noqa: E402
 
 
 def _catalog() -> list[dict[str, str]]:
@@ -40,6 +41,7 @@ def test_catalog_matches_full_fit_results_and_uniform_adoption():
 
 def test_dm_measurement_table_matches_catalog_rounding():
     tex = (ROOT / "dm_measurements_table.tex").read_text()
+    assert tex == render_dm_measurements_table.render()
     for row in _catalog():
         expected = (
             f'{row["tns"]} & '
