@@ -57,6 +57,12 @@ DISPLAY_FACTORS = {"dsa": (12, 1), "chime": (1, 13)}
 DISPLAY_PAD_SCALE = 0.5
 DISPLAY_PAD_CAP_MS = 3.0
 
+# Display height of the unobserved 0.8-1.31 GHz gap as a fraction of its true
+# bandwidth. At true scale the gap eats ~46% of the frequency axis; compressing
+# it (hatching still marks it, caption states not-to-scale) returns that space
+# to the observed bands.
+GAP_COMPRESS = 0.25
+
 MASKED_GRAY = "0.85"
 # CHIME marginal color: magma(0.55), matching the waterfall colormap family.
 CHIME_COLOR = "#b73779"
@@ -206,9 +212,28 @@ def _is_chime(band) -> bool:
     return "CHIME" in band.label
 
 
-def draw_joint_waterfall(ax, bands, *, title: str) -> None:
-    """Both bands on one to-scale frequency axis; masked channels gray."""
+def _gap_display_map(bands, gap_scale: float = GAP_COMPRESS):
+    """Real MHz -> display MHz, compressing the inter-band gap to gap_scale
+    of its true bandwidth; each observed band keeps its true scale."""
+    ordered = sorted(bands, key=lambda band: band.frange[0])
+    gap_lo = ordered[0].frange[1]
+    gap_hi = ordered[-1].frange[0]
+    if gap_hi <= gap_lo:
+        return lambda f: np.asarray(f, float)
+
+    def fmap(f):
+        f = np.asarray(f, float)
+        inside = np.clip(f, gap_lo, gap_hi) - gap_lo
+        return f - (1.0 - gap_scale) * inside
+
+    return fmap
+
+
+def draw_joint_waterfall(ax, bands, *, title: str, fmap=None) -> None:
+    """Both bands on one frequency axis (gap compressed); masked channels gray."""
     bands = sorted(bands, key=lambda band: band.frange[0])
+    if fmap is None:
+        fmap = _gap_display_map(bands)
     cmap = matplotlib.colormaps["magma"].copy()
     cmap.set_bad(MASKED_GRAY)
     for band in bands:
@@ -225,7 +250,12 @@ def draw_joint_waterfall(ax, bands, *, title: str) -> None:
             cmap=cmap,
             vmin=lo,
             vmax=hi,
-            extent=(band.time_ms[0], band.time_ms[-1], *band.frange),
+            extent=(
+                band.time_ms[0],
+                band.time_ms[-1],
+                float(fmap(band.frange[0])),
+                float(fmap(band.frange[1])),
+            ),
             rasterized=True,
         )
     x0 = min(b.time_ms[0] for b in bands)
@@ -234,9 +264,9 @@ def draw_joint_waterfall(ax, bands, *, title: str) -> None:
         if upper.frange[0] > lower.frange[1]:
             ax.add_patch(
                 Rectangle(
-                    (x0, lower.frange[1]),
+                    (x0, float(fmap(lower.frange[1]))),
                     x1 - x0,
-                    upper.frange[0] - lower.frange[1],
+                    float(fmap(upper.frange[0])) - float(fmap(lower.frange[1])),
                     facecolor="white",
                     edgecolor="0.55",
                     hatch="///",
@@ -245,7 +275,10 @@ def draw_joint_waterfall(ax, bands, *, title: str) -> None:
                 )
             )
     ax.set_xlim(x0, x1)
-    ax.set_ylim(min(b.frange[0] for b in bands), max(b.frange[1] for b in bands))
+    ax.set_ylim(
+        float(fmap(min(b.frange[0] for b in bands))),
+        float(fmap(max(b.frange[1] for b in bands))),
+    )
     ax.set_title(title, fontsize=7, pad=2)
 
 
@@ -269,8 +302,10 @@ def draw_profile_strip(ax, bands, xlim) -> None:
     ax.set_yticks([])
 
 
-def draw_spectrum_marginal(ax, bands, gap) -> None:
+def draw_spectrum_marginal(ax, bands, gap, *, fmap=None) -> None:
     """Unit-peak time-integrated on-pulse spectrum per band, freq vertical."""
+    if fmap is None:
+        fmap = _gap_display_map(bands)
     for band in bands:
         data = np.asarray(band.data, float)
         with warnings.catch_warnings():
@@ -283,13 +318,14 @@ def draw_spectrum_marginal(ax, bands, gap) -> None:
             spec = spec / smax
         ax.plot(
             spec,
-            band.freq_mhz,
+            fmap(band.freq_mhz),
             lw=0.5,
             color=CHIME_COLOR if _is_chime(band) else DSA_COLOR,
         )
     if gap is not None:
         ax.axhspan(
-            gap[0], gap[1], facecolor="white", edgecolor="0.55", hatch="///",
+            float(fmap(gap[0])), float(fmap(gap[1])),
+            facecolor="white", edgecolor="0.55", hatch="///",
             lw=0, zorder=0.5,
         )
     ax.set_xlim(-0.08, 1.15)
@@ -332,9 +368,9 @@ def render_grid(
     )
     # At \textwidth the typeset height plus the combined adopted-DM/fitted-TOA
     # caption must fit on one AASTeX float page.
-    fig = plt.figure(figsize=(7.3, 7.45))
+    fig = plt.figure(figsize=(7.3, 7.3))
     outer = fig.add_gridspec(
-        3, 4, hspace=0.18, wspace=0.16, left=0.065, right=0.995, top=0.97, bottom=0.045
+        4, 3, hspace=0.24, wspace=0.14, left=0.065, right=0.995, top=0.975, bottom=0.045
     )
     for index, row in enumerate(rows):
         bands = load_row_bands(
@@ -343,7 +379,8 @@ def render_grid(
             data_root=data_root,
             target_dm=adopted_dms[row["nick"].lower()],
         )
-        cell = outer[index // 4, index % 4].subgridspec(
+        fmap = _gap_display_map(bands)
+        cell = outer[index // 3, index % 3].subgridspec(
             2, 2, width_ratios=[3.4, 1.0], height_ratios=[1.0, 3.6],
             wspace=0.07, hspace=0.09,
         )
@@ -351,17 +388,19 @@ def render_grid(
         ax_wf = fig.add_subplot(cell[1, 0])
         ax_sp = fig.add_subplot(cell[1, 1], sharey=ax_wf)
 
-        draw_joint_waterfall(ax_wf, bands, title="")
+        draw_joint_waterfall(ax_wf, bands, title="", fmap=fmap)
         ax_prof.set_title(row["tns"], fontsize=7, pad=2)
         draw_profile_strip(ax_prof, bands, ax_wf.get_xlim())
-        draw_spectrum_marginal(ax_sp, bands, _band_gap_mhz(bands))
+        draw_spectrum_marginal(ax_sp, bands, _band_gap_mhz(bands), fmap=fmap)
 
-        ax_wf.set_yticks([600, 1000, 1400])
-        if index % 4 == 0:
+        yticks = [500, 700, 1400]
+        ax_wf.set_yticks([float(fmap(v)) for v in yticks])
+        ax_wf.set_yticklabels([str(v) for v in yticks])
+        if index % 3 == 0:
             ax_wf.set_ylabel("Frequency (MHz)", fontsize=7)
         else:
             ax_wf.tick_params(labelleft=False)
-        if index // 4 == 2:
+        if index // 3 == 3:
             ax_wf.set_xlabel("Time (ms)", fontsize=7)
         if index == 0:
             ax_prof.legend(
