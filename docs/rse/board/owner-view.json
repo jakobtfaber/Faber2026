@@ -6,7 +6,7 @@
   ],
   "now": [
     {"h": "Unified scintillation figure", "d": "PR 159 merged; CHIME instrumental-ACF correction next", "who": "codex"},
-    {"h": "Verified DM integration", "d": "12 CHIME-primary DMs, Figure 1, tables, and methods in final validation", "who": "codex"},
+    {"h": "Review verified DM PR", "d": "PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods", "who": "you"},
     {"h": "A1 design discussion", "who": "you + agents"}
   ],
   "next": [
@@ -16,7 +16,7 @@
   ],
   "components": [
     {"name": "Sample & association", "lane": "V6", "status": "validated", "status_class": "good",
-     "next": "DM integration PR"},
+     "next": "review PR 17"},
     {"name": "Budget & census", "lane": "V4·V5", "status": "validated", "status_class": "good",
      "next": "DM adopted; scattering after D"},
     {"name": "Scattering", "lane": "V1·A·C", "status": "method open", "status_class": "pend",
