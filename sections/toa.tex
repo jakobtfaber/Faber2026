@@ -26,10 +26,12 @@ The geometric light-travel difference between the observatories is
 \label{eq:geodelay}
 \end{equation}
 where $\mathbf{p}_1$ and $\mathbf{p}_2$ are the GCRS position vectors of CHIME
-and DSA-110 and $\hat{\mathbf{s}}$ is the unit vector toward the source. The
-timing residual is the difference between the frequency-corrected inter-site
-offset and the predicted geometric delay; a residual of zero indicates perfect
-agreement.
+and DSA-110, respectively, and $\hat{\mathbf{s}}$ is the unit vector from Earth
+toward the source. With this ordering, $\tau_{\rm geo}$ predicts
+$t_{\rm CHIME}-t_{\rm DSA}$ because the radiation propagates along
+$-\hat{\mathbf{s}}$. The timing residual is the difference between the
+frequency-corrected CHIME-minus-DSA offset and the predicted geometric delay; a
+residual of zero indicates perfect agreement.
 
 \subsubsection{Chance-coincidence probability}
 \label{sec:toa-pcc}
@@ -103,14 +105,16 @@ so those shifts are tracked separately rather than folded into the association
 residual.
 
 We adopt the sign convention $\Delta t = \Delta t_{\rm inter\text{-}site} -
-\tau_{\rm geo}$, where $\Delta t_{\rm inter\text{-}site}$ is the DSA-minus-CHIME
+\tau_{\rm geo}$, where $\Delta t_{\rm inter\text{-}site}$ is the CHIME-minus-DSA
 arrival offset after both are referenced to 400\,MHz (Eq.~\ref{eq:dmdelay}) and
 $\tau_{\rm geo}$ is the predicted geometric delay (Eq.~\ref{eq:geodelay}); a
-positive residual means the DSA arrival is later than the shared-DM geometric
-prediction relative to CHIME, and $\Delta t=0$ is exact agreement. The geometric
+positive residual means the CHIME arrival is later than the shared-DM geometric
+prediction relative to DSA, and $\Delta t=0$ is exact agreement. The geometric
 term is itself bounded: for the $1345\,\mathrm{km}$ CHIME (DRAO)--DSA-110 (OVRO)
 baseline, $|\tau_{\rm geo}| \le |\mathbf{p}_2-\mathbf{p}_1|/c \approx 4.5\,$ms for
-any source direction. The residual is therefore not error-free but carries a
+any source direction. For the twelve source directions here,
+$\tau_{\rm geo}=-2.30$ to $-2.03\,$ms: the wavefront reaches CHIME first and
+DSA-110 $2.03$--$2.30\,$ms later. The residual is therefore not error-free but carries a
 per-burst systematic of order the inter-site clock/timestamp alignment
 ($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight DM-constrained bursts, the
 residual dispersive delay left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
