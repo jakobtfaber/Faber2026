@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import warnings
 from pathlib import Path
 
@@ -113,8 +112,9 @@ def fit_toa_shift_ms(row: dict, *, root: Path, data_root: Path) -> dict[str, flo
     if not npz_rel:
         return {}
     npz_path = root / npz_rel
-    fit_json = Path(str(npz_path).replace("_jointmodel_", "_joint_fit_")).with_suffix(".json")
-    percentiles = json.loads(fit_json.read_text())["percentiles"]
+    from plot_codetection_triptych import dominant_t0_ms, fit_json_path
+
+    percentiles = json.loads(fit_json_path(npz_path).read_text())["percentiles"]
     z = np.load(npz_path, allow_pickle=True)
 
     from plot_codetection_gallery import BANDS, FILE_NICK, discover_products, load_band
@@ -124,21 +124,12 @@ def fit_toa_shift_ms(row: dict, *, root: Path, data_root: Path) -> dict[str, flo
 
     shifts: dict[str, float] = {}
     for band_key, tel, label in (("C", "chime", "CHIME/FRB"), ("D", "dsa", "DSA-110")):
-        t0s = [
-            float(v["median"])
-            for k, v in percentiles.items()
-            if re.fullmatch(rf"t0_{band_key}\d*", k)
-        ]
-        if not t0s:
-            raise ValueError(f"{row['nick']}: no t0_{band_key}* in {fit_json.name}")
         fit_t = np.asarray(z[f"time{band_key}"], float)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=RuntimeWarning)
             fit_prof = np.nansum(np.asarray(z[f"data{band_key}"], float), axis=0)
             model_prof = np.nansum(np.asarray(z[f"model{band_key}"], float), axis=0)
-        # Dominant component: t0 nearest the noiseless model profile peak.
-        model_peak = float(fit_t[int(np.nanargmax(model_prof))])
-        t0 = min(t0s, key=lambda v: abs(v - model_peak))
+        t0 = dominant_t0_ms(percentiles, band_key, fit_t, model_prof)
 
         # Native archival profile for registration, plus the display anchor
         # computed exactly as bands_archival does (same load_band path).
