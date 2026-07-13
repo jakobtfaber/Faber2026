@@ -47,22 +47,32 @@ TNS = {
 
 
 def _apply_style() -> None:
-    try:
-        sys.path.insert(0, str(PIPELINE))
-        from flits.plotting import use_flits_style
-
-        use_flits_style()
-    except (ImportError, ModuleNotFoundError):
-        plt.rcParams.update({"font.family": "serif", "mathtext.fontset": "cm"})
+    """Apply the manuscript's Computer Modern style without optional packages."""
     plt.rcParams.update(
         {
-            "font.size": 8,
-            "axes.labelsize": 8,
-            "xtick.labelsize": 7,
-            "ytick.labelsize": 7,
-            "axes.linewidth": 0.7,
+            "text.usetex": False,
+            "font.family": "serif",
+            "font.serif": ["cmr10", "Computer Modern Roman", "DejaVu Serif"],
+            "mathtext.fontset": "cm",
+            "axes.formatter.use_mathtext": True,
+            "axes.unicode_minus": False,
+            "font.size": 7.5,
+            "axes.labelsize": 8.0,
+            "axes.linewidth": 0.8,
+            "legend.fontsize": 7.0,
+            "pdf.fonttype": 42,
+            "savefig.bbox": "tight",
+            "savefig.pad_inches": 0.04,
             "xtick.direction": "in",
+            "xtick.labelsize": 7.0,
+            "xtick.major.size": 3.5,
+            "xtick.minor.visible": False,
+            "xtick.top": True,
             "ytick.direction": "in",
+            "ytick.labelsize": 7.0,
+            "ytick.major.size": 3.5,
+            "ytick.minor.visible": False,
+            "ytick.right": True,
         }
     )
 
@@ -104,16 +114,16 @@ def render(rows: list[dict], output: Path = OUT) -> None:
     _apply_style()
     x = np.arange(len(rows))
     constrained = np.array([row["dm_constrained"] for row in rows])
-    colors = np.where(constrained, "#2563eb", "#d97706")
+    colors = np.where(constrained, "#0072B2", "#D55E00")
 
     fig, axes = plt.subplots(
         3,
         1,
-        figsize=(7.2, 5.25),
+        figsize=(7.1, 4.8),
         sharex=True,
         gridspec_kw={"height_ratios": [1.0, 1.0, 1.08]},
     )
-    fig.subplots_adjust(left=0.105, right=0.985, top=0.975, bottom=0.19, hspace=0.16)
+    fig.subplots_adjust(left=0.095, right=0.99, top=0.985, bottom=0.20, hspace=0.12)
 
     measured = np.array([row["measured_offset_ms"] for row in rows])
     geometric = np.array([row["geometric_delay_ms"] for row in rows])
@@ -123,7 +133,7 @@ def render(rows: list[dict], output: Path = OUT) -> None:
         x,
         geometric - 3 * timing_sigma,
         geometric + 3 * timing_sigma,
-        color="0.65",
+        color="0.60",
         linewidth=0.8,
         zorder=1,
     )
@@ -131,71 +141,64 @@ def render(rows: list[dict], output: Path = OUT) -> None:
         x,
         geometric - timing_sigma,
         geometric + timing_sigma,
-        color="#93c5fd",
-        linewidth=5.0,
-        alpha=0.75,
+        color="#9ECAE1",
+        linewidth=4.5,
+        alpha=0.80,
         zorder=2,
     )
-    ax.plot(x, geometric, color="0.15", linewidth=0.7, marker="D", markersize=2.8, zorder=3)
+    ax.plot(x, geometric, color="0.15", linewidth=0.75, marker="D", markersize=2.7, zorder=3)
     ax.scatter(x, measured, c=colors, s=30, edgecolor="white", linewidth=0.5, zorder=4)
     ax.axhline(0, color="0.80", lw=0.6, zorder=0)
     ax.set_ylim(-13, 11)
     ax.set_yticks([-10, -5, 0, 5, 10])
-    ax.set_ylabel("CHIME$-$DSA offset at 400 MHz (ms)")
-    ax.text(
-        0.01,
-        0.91,
-        r"(a)  12/12 measured offsets within event-specific $3\sigma$",
-        transform=ax.transAxes,
-    )
+    ax.set_ylabel(r"Arrival-time offset, $\Delta t_{400}$ (ms)")
+    ax.text(0.01, 0.92, r"(a)", transform=ax.transAxes)
     ax.plot([], [], color="0.15", marker="D", markersize=2.8, linewidth=0.7,
-            label="predicted geometry")
-    ax.plot([], [], color="#93c5fd", linewidth=5.0, alpha=0.75, label=r"$\pm1\sigma$")
-    ax.plot([], [], color="0.65", linewidth=0.8, label=r"$\pm3\sigma$")
+            label=r"$\tau_{\rm geo}$")
+    ax.plot([], [], color="#9ECAE1", linewidth=4.5, alpha=0.80, label=r"$1\sigma$")
+    ax.plot([], [], color="0.60", linewidth=0.8, label=r"$3\sigma$")
     ax.legend(loc="lower left", frameon=False, fontsize=6.5, ncol=3,
               handlelength=1.5, columnspacing=0.9)
 
     position = np.array([row["position_ratio"] for row in rows])
     ax = axes[1]
-    ax.axhspan(0, 1, color="#dcfce7", alpha=0.70, zorder=0)
     ax.axhline(1, color="0.35", ls="--", lw=0.8)
     ax.scatter(x, position, c=colors, s=30, edgecolor="white", linewidth=0.5, zorder=3)
     ax.set_ylim(0, 1.08)
-    ax.set_ylabel(r"Separation / match radius")
-    ax.text(0.01, 0.86, "(b)  12/12 positionally consistent", transform=ax.transAxes)
+    ax.set_ylabel(r"$\theta/\theta_{\rm match}$")
+    ax.text(0.01, 0.88, r"(b)", transform=ax.transAxes)
 
     pcc = np.array([row["pcc"] for row in rows])
     ax = axes[2]
     ax.axhline(1e-6, color="0.35", ls="--", lw=0.8)
     for i, row in enumerate(rows):
         if row["dm_constrained"]:
-            ax.scatter(i, row["pcc"], color="#2563eb", s=30, edgecolor="white", linewidth=0.5)
+            ax.scatter(i, row["pcc"], color="#0072B2", s=30, edgecolor="white", linewidth=0.5)
         else:
             ax.scatter(
                 i,
                 row["pcc"],
                 facecolor="white",
-                edgecolor="#d97706",
+                edgecolor="#D55E00",
                 linewidth=1.2,
                 s=30,
             )
     ax.set_yscale("log")
     ax.set_ylim(1e-9, 1.25e-6)
-    ax.set_ylabel(r"Chance probability $P_{\rm cc}$")
-    ax.text(0.01, 0.88, r"(c)  12/12 below $10^{-6}$", transform=ax.transAxes)
-    ax.scatter([], [], color="#2563eb", s=28, label="DM + position + timing (8)")
+    ax.set_ylabel(r"$P_{\rm cc}$")
+    ax.text(0.01, 0.88, r"(c)", transform=ax.transAxes)
+    ax.scatter([], [], color="#0072B2", s=28, label="DM constrained (8)")
     ax.scatter(
-        [], [], facecolor="white", edgecolor="#d97706", linewidth=1.2, s=28,
-        label="position + timing (4)",
+        [], [], facecolor="white", edgecolor="#D55E00", linewidth=1.2, s=28,
+        label="position and timing (4)",
     )
     ax.legend(loc="lower right", frameon=False, fontsize=7, ncol=2, handletextpad=0.4)
 
     axes[-1].set_xticks(x)
     axes[-1].set_xticklabels([row["label"] for row in rows], rotation=38, ha="right")
-    axes[-1].set_xlabel("FRB")
     for ax in axes:
         ax.set_xlim(-0.55, len(rows) - 0.45)
-        ax.grid(axis="x", color="0.90", lw=0.5)
+        ax.grid(axis="x", color="0.92", lw=0.45)
 
     output.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output, bbox_inches="tight")
