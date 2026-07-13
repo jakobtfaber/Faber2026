@@ -108,7 +108,7 @@ tab:foreground, fig:budget both panels, the dominant-systems and cluster
 analyses, the host-dominated 10/11 comparison, the τ·Δν_d two-screen test,
 the scintillation excess, the FRB 20230913A attribution (both diagnostics
 revoked), tab:beta, tab:burst-energies, the multiplicity-bias demonstration
-(the abstract's closing claim, conclusions item 7),
+(fig:whitney_mult, the abstract's closing claim, conclusions item 7),
 fig:jointmodel_montage, and fig:scint_screens.
 
 - [ ] V1 **[FLITS]** Author the re-trust validation contract (ADR): a fit is
@@ -129,27 +129,20 @@ fig:jointmodel_montage, and fig:scint_screens.
       selection-rule contradiction (gate-FAIL 20240203A tabulated under a
       "quality-passing" criterion; note-a redshift provenance vs §2's
       placeholder trio).
-      - [ ] **TODO(energies-fixed-band-variant)** *[decision/optional]* — if
-            luminosity-function comparison is needed, elect a fixed
-            rest-frame-band companion \(E_{\rm iso}\) (define band, gap
-            extrapolation, table column; restore Methods sentence). D5 lock
-            (2026-07-10) dropped the unconditional promise; not required for
-            submission. See `methods.tex` / `results.tex` TODOs and
-            `decision-d2-d5-scattering-design-locks.md`.
-- [ ] V4 **[FLITS]** Census re-validation: per-candidate provenance audit
+- [x] V4 **[FLITS]** *(cleared 2026-07-07 — owner, on the DR9/DESI-DR1/NED/PS1-STRM re-validation; see CONTEXT.md trust-reset status)* Census re-validation: per-candidate provenance audit
       (coordinate match, objID lookups, redshift class and source, PS1-STRM
       reliability), independent re-derivation of impact parameters and
       b/R_vir · b/R_500, re-run of the foreground/background/inconclusive
       verdict logic, halo-mass proxy provenance. Deliverable: a re-verified
       tab:foreground with per-candidate evidence, plus per-sightline audit
       figures.
-- [ ] V5 **[FLITS]** DM-budget re-validation: verify model implementations
+- [x] V5 **[FLITS]** *(cleared 2026-07-07 — owner, with V4; measured-scattering side of fig:budget stays revoked, plan D1)* DM-budget re-validation: verify model implementations
       against references (NE2001/YMW16 per sightline, halo prior, Macquart
       relation with stated f_IGM/χ_e, mNFW/two-phase columns vs published
       profiles), re-derive host residuals and the prior-predictive
       negative-residual analysis on the V4-verified census. Deliverable: a
       re-verified tab:budget + fig:budget left panel.
-- [ ] V6 **[FLITS]** Association + DM_obs re-validation (wave 3): document
+- [x] V6 **[FLITS]** *(cleared 2026-07-07 — report: v6-association-dm-report-2026-07-07.md; quotable under the shared DSA-DM convention)* Association + DM_obs re-validation (wave 3): document
       per-burst, per-telescope DM_obs provenance (instrument pipeline,
       dedispersion method — e.g. structure-maximizing vs S/N-maximizing —
       producing artifact, uncertainty); quantify CHIME-vs-DSA DM agreement
