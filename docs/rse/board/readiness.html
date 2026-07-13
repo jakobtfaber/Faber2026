@@ -81,6 +81,43 @@
   .now-strip .slot b { display:block; font-size:11px; text-transform:uppercase;
     letter-spacing:0.07em; color:var(--now); margin-bottom:3px; }
   .now-strip .slot { font-size:13.5px; }
+  .own { background:var(--card); border:1px solid var(--hair); border-radius:10px;
+    padding:16px 18px 18px; margin-bottom:8px; }
+  .own-head { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+  .own-head b { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; }
+  .own-cols { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px; }
+  .own-col { border-radius:8px; padding:10px 12px; }
+  .own-col h4 { margin:0 0 6px; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.07em; font-weight:700; }
+  .own-col ul { list-style:none; margin:0; padding:0; }
+  .own-col li { font-size:13.5px; line-height:1.35; padding:6px 0 6px 10px;
+    border-left:3px solid transparent; }
+  .own-col li + li { border-top:1px dashed var(--hair); }
+  .own-col li b { font-weight:650; }
+  .own-col li small { display:block; color:var(--muted); font-size:12px; font-weight:400; }
+  .own-col .who { color:var(--muted); font-size:11px; white-space:nowrap;
+    text-transform:uppercase; letter-spacing:0.04em; margin-left:6px; }
+  .oc-now { background:var(--now-bg); } .oc-now h4 { color:var(--now); }
+  .oc-now li { border-left-color:var(--now); }
+  .oc-next { background:var(--ready-bg); } .oc-next h4 { color:var(--ready); }
+  .oc-next li { border-left-color:var(--ready); }
+  .oc-you { background:var(--pend-bg); border:1px solid var(--pend); }
+  .oc-you h4 { color:var(--pend); } .oc-you li { border-left-color:var(--pend); }
+  .own-comps { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr));
+    gap:10px; margin-top:14px; }
+  .comp { border:1px solid var(--hair); border-radius:8px; padding:9px 11px; }
+  .comp .cnm { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; margin-bottom:4px; }
+  .comp .cnm b { font-size:13px; }
+  .comp .cid { color:var(--muted); font-size:11px;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace; }
+  .comp .cnx { color:var(--muted); font-size:12px; line-height:1.4; display:block; }
+  details.fold { margin-top:24px; }
+  details.fold > summary { cursor:pointer; font-size:12px; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--muted); font-weight:600; padding:4px 0; }
+  details.fold > summary:hover { color:var(--ink); }
+  details.fold > summary:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  details.fold[open] > summary { margin-bottom:2px; }
+  details.fold h2:first-of-type { margin-top:10px; }
   .lane { background:var(--card); border:1px solid var(--hair); border-radius:8px;
     padding:12px 14px; margin-bottom:12px; }
   .lane-head { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:2px; }
@@ -121,16 +158,38 @@
   <span class="meta">2026-07-06 &nbsp;·&nbsp; pipeline pin <span class="mono">7e77437</span> &nbsp;·&nbsp; journal cadence: 10 min while active (see panel) &nbsp;·&nbsp; branch state lives in the journal</span>
 </header>
 
-<div class="now-strip">
-  <div class="slot"><b>Just landed</b>
-    Trust reset wave 3: TOA association + DM_obs also revoked — retained set now EMPTY; V6 added ·
-    §V plan (now seven phases) verified &amp; committed · all decisions re-opened as working choices</div>
-  <div class="slot"><b>In flight now</b>
-    A1 design discussion (trigger calibration question open) · journal panel + 10-min cadence just wired in — NOTE: a second unattributed writer committed scaffolding tonight; journal now attributes all work</div>
-  <div class="slot"><b>Next candidates (your pick)</b>
-    V·P0 provenance freeze · A4 ADR amendment · B1–B3 scint prep · F6 co-author draft · F3 consistency audit</div>
+<!-- OWNER:BEGIN -->
+<div class="own">
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T20:10-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-cols">
+<div class="own-col oc-you"><h4>Needs you</h4><ul>
+<li><b>Calibrate the A1 trigger</b><small>two-screen escalation · open since 07-06</small></li>
+<li><b>Pick first trust-ladder rung</b><small>P0 recommended</small></li>
+</ul></div>
+<div class="own-col oc-now"><h4>In flight</h4><ul>
+<li><b>Unified scintillation figure</b> <span class="who">codex</span><small>PR 159 merged; CHIME instrumental-ACF correction next</small></li>
+<li><b>DM-host posterior figure</b> <span class="who">claude</span><small>restyle branch open</small></li>
+<li><b>A1 design discussion</b> <span class="who">you + agents</span></li>
+</ul></div>
+<div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
+<li><b>V·P0 provenance freeze</b><small>unblocks census + budget</small></li>
+<li><b>F3 consistency audit</b><small>manuscript, runnable now</small></li>
+<li><b>B1–B3 scintillation prep</b></li>
+</ul></div>
 </div>
+<div class="own-comps">
+<div class="comp"><span class="cnm"><b>Trust ladder</b><span class="cid">V</span><span class="chip c-ready">waiting</span></span><span class="cnx">pick a rung (P0)</span></div>
+<div class="comp"><span class="cnm"><b>Methodology</b><span class="cid">A</span><span class="chip c-now">discussing</span></span><span class="cnx">A1, then A2 kernel</span></div>
+<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">active</span></span><span class="cnx">unified figure</span></div>
+<div class="comp"><span class="cnm"><b>Re-fits → synthesis</b><span class="cid">C·D·E</span><span class="chip c-blocked">blocked</span></span></div>
+<div class="comp"><span class="cnm"><b>Manuscript</b><span class="cid">F</span><span class="chip c-now">active</span></span><span class="cnx">merge DM-host branch</span></div>
+<div class="comp"><span class="cnm"><b>Release</b><span class="cid">G</span><span class="chip c-blocked">gated</span></span></div>
+</div>
+</div>
+<!-- OWNER:END -->
 
+<details class="fold">
+<summary>Lanes &amp; tasks — agent-facing detail (V·P0 … G3)</summary>
 <h2>Lanes &amp; tasks — what every ID means</h2>
 
 <div class="lane">
@@ -223,35 +282,40 @@
   <span class="chip c-pend">needs owner decision</span>
   <span class="chip c-blocked">blocked upstream</span>
 </div>
+</details>
 
-<h2>Journal — agent activity log (10-min cadence while active · docs/rse/journal.jsonl · newest first)</h2>
-<div class="card">
+<details class="fold">
+<summary>Journal — agent activity log (newest first)</summary>
+<div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
-<li><span class="jts mono">07-09 03:02</span><span class="jagent">claude-opus-4-8</span><span class="jlane">git-hygiene</span><span class="jnote s-good">Dropped superseded 681cfe2 from local main (content landed via #46/#51/#55/#56; safety ref backup/main-pre-rebase-20260708 retained). Deleted backup/local-main-before-origin-reconcile-20260707 (git cherry: 0 unique patches). backup/dirty-state-before-rebase-20260707 PRESERVED: carries unique commit f1030eb &#x27;Reconcile foreground and DM diagnostic state&#x27;. Corrected ~/Data catalog README: the &#x27;64 stable under two methods&#x27; claim was a coincidence, not corroboration.</span></li>
-<li><span class="jts mono">07-09 03:02</span><span class="jagent">claude-opus-4-8</span><span class="jlane">submodule-pin</span><span class="jnote s-good">MISTAKE + remediation: f9e1c24 is NOT an ancestor of dsa110-FLITS main (lives on agent/sightline-halo-grid-figure, 22 commits divergent). Branching the fix off the pin and PRing to FLITS main squashed a 127-file fork delta upstream and reddened FLITS CI. Reverted by FLITS #145 (main green at 8b5c64e); Faber2026 re-pinned to 6c87890 by #53. Lesson: check &#x27;git merge-base --is-ancestor &lt;old&gt; &lt;new&gt;&#x27; before a pin bump.</span></li>
-<li><span class="jts mono">07-09 03:02</span><span class="jagent">claude-opus-4-8</span><span class="jlane">budget-table-parity</span><span class="jnote s-good">Emitter existed all along in the pinned submodule; its budget_table_data.json held PRE-#40 posteriors, so the documented regenerate command would have reverted 8/9 DM_host cells + tablecomments. test_dm_host_matches_forward_model had been RED since #40. Fixed at source (FLITS 6c87890), emitter output now byte-identical to budget_table.tex, 9/9 parity green. PRs #46/#48/#53/#55/#56.</span></li>
-<li><span class="jts mono">07-09 03:02</span><span class="jagent">claude-opus-4-8</span><span class="jlane">b3-provenance</span><span class="jnote s-good">B3 closed. Verified N=64 (MJD window 59611-60370), mu_analytic(500)=5.02e-9, 64mu=3.2e-7, bursts.json holds exactly the 12. Resolved the 10-vs-12 worry: 10 non-empty chime_event_no = 9 real IDs (benjy is a literal &#x27;-&#x27;); 8 are accepted pairs, the 9th (gertrude/FRB20220726A) is a REJECTED no-baseband candidate; 4 accepted pairs carry no ID. Catalog chime column is not the authority. PR #45 fixed toa.tex:68 &#x27;triggers&#x27;-&gt;&#x27;detections&#x27; (the defect #44 left).</span></li>
-<li><span class="jts mono">07-09 03:10</span><span class="jagent">claude-opus-4.8/faber2026-autonomous-closeout</span><span class="jlane">repo</span><span class="jnote s-pend">iTerm Diff-pane fix cannot be applied by an agent: it requires quitting iTerm2 (PID 1368), which kills this session plus coherent-fold, undermind-mcp and two other Faber2026 sessions. Prefs are already written (custom.claudeCodeNoDiff workgroup); toggle at ~/bin/iterm-claude-diff-pane {off|on|status}. Root cause: iTerm2&#x27;s builtin Claude Code workgroup spawns a `git difftool -y -x vimdiff HEAD` Diff pane that parks vimdiff on the first changed file and holds it plus its .swp.</span></li>
-<li><span class="jts mono">07-09 03:05</span><span class="jagent">claude-opus-4.8/faber2026-autonomous-closeout</span><span class="jlane">ms</span><span class="jnote s-ready">Correction to my own earlier claim: the negative DM_host medians for FRB 20220310F (-10) and FRB 20221203A (-2) are INTENTIONAL. Both z~0.5, posteriors consistent with zero, P(DM_host&lt;0)~0.5, already explained in budget_table.tex&#x27;s tablecomments. Not unphysical; do not censor at zero. Issue #49 closed with this correction.</span></li>
-<li><span class="jts mono">07-09 03:00</span><span class="jagent">claude-opus-4.8/faber2026-autonomous-closeout</span><span class="jlane">repo</span><span class="jnote s-good">PR #48 (pin bump to c69d043) had already fixed the drift before PR #46 merged, so #46 landed a hazard warning that was stale on arrival. PR #51 corrects it: STOP block removed, regenerate command uncommented, parity recorded green (9/9 at c69d043, emitter output byte-identical to budget_table.tex). Hazard 1 rewritten as a standing trap about the (super-repo commit, pin) pair.</span></li>
-<li><span class="jts mono">07-09 02:50</span><span class="jagent">claude-opus-4.8/faber2026-autonomous-closeout</span><span class="jlane">ms</span><span class="jnote s-ready">Root cause: the budget parity test lives in the submodule but reads scripts/dm_budget_uncertainty.csv from the SUPER-REPO. PR #40 (TNG IGM re-base) and #42 (low-z spline) rewrote that CSV and budget_table.tex followed; budget_table_data.json in dsa110-FLITS did not, and the pin stayed at f9e1c24. For that window the documented regenerate command would have reverted 35 lines of the DM_host column.</span></li>
-<li><span class="jts mono">07-09 02:40</span><span class="jagent">claude-opus-4.8/faber2026-autonomous-closeout</span><span class="jlane">repo</span><span class="jnote s-ready">Re-verified the emitter parity suite instead of trusting a stale &#x27;9 passed&#x27; recorded at submodule 386e886. At pin f9e1c24: 8 passed, 1 FAILED (test_dm_host_matches_forward_model). Evaluating the assert over every row showed all 9 non-placeholder sightlines mismatched -- pytest names only the first because the assert short-circuits.</span></li>
-<li><span class="jts mono">07-09 02:35</span><span class="jagent">claude-opus-4.8/faber2026-autonomous-closeout</span><span class="jlane">repo</span><span class="jnote s-good">Landed the stranded reproducibility-spine commit: cherry-picked 681cfe2 (rebased successor of 4a00aa0) onto origin/main in an isolated worktree, PR #46 (squash f7fcbb2). Fixed en route: census-registry path was unresolvable from pipeline/; repro_manifest.csv CRLF endings were being normalized by a naive read_text/write_text rewrite.</span></li>
-<li><span class="jts mono">07-09 02:29</span><span class="jagent">ai-assistant/faber2026</span><span class="jlane">ms</span><span class="jnote s-good">PR #43 squash-merged as dbe8f29 (track 07-08 handoffs; /data/ gitignored). Resolved a .gitignore conflict on the remote (66f2133): union keeps the new /data/ block plus main&#x27;s __pycache__/ that PR #42 had added. No open PRs remain; origin/main tip dbe8f29.</span></li>
-<li><span class="jts mono">07-09 02:29</span><span class="jagent">ai-assistant/faber2026</span><span class="jlane">ms</span><span class="jnote s-good">PR #42 squash-merged as 8cef432 (IGM spline low-z guard). Independently revalidated before merge: 10/10 correctness tests pass; regenerated dm_budget_uncertainty.csv is bit-identical to the committed CSV; row-by-row diff vs pre-fix main confirms ONLY the two below-grid sightlines moved (20220207C P(&lt;0) 0.185-&gt;0.125, 20240203A 0.010-&gt;0.007), seven on-grid rows bit-identical; budget_table.tex cells ($51^{+36}_{-43}$, $106^{+30}_{-36}$) match the CSV. Concurrent-writer hazard from prior handoff is resolved: PR #44 already merged the B3 toa.tex edit; local toa.tex mod is redundant with main.</span></li>
-<li><span class="jts mono">07-09 01:57</span><span class="jagent">claude-opus-4-8</span><span class="jlane">ms-appendix-sync</span><span class="jnote s-good">PR #41 squash-merged as bd7ee52; origin/main now internally consistent post-#40. Next: IGM spline low-z guard.</span></li>
-<li><span class="jts mono">07-09 01:43</span><span class="jagent">claude-opus-4.8/faber2026-authordecisions</span><span class="jlane">ms</span><span class="jnote s-good">Wrote handoff-2026-07-09-01-41-pr41-appendix-sync-and-igm-spline-defect.md: PR #41 open+mergeable (Appendix C / budget_table / results / conclusions synced to #40); open defect = TNG IGM spline extrapolates below z=0.1 grid (20220207C ratio 1.22, needs own PR after #41 merges); B3 reframed as a detection count, catalog on disk gives 64 in-window but has a corrupt MJD and 10 vs 12 chime_event_no.</span></li>
-<li><span class="jts mono">07-08 23:13</span><span class="jagent">claude-opus-4.8/faber2026-authordecisions</span><span class="jlane">ms</span><span class="jnote s-good">Synced Appendix C + budget_table + results/conclusions to PR #40 on branch ms/appendix-c-sync-pr40 (latexmk 0, 47pp, 0 undefined). Partition probe: negative medians are NOT a DM_int double-count; f_IGM for host=0 is 0.733/0.742, i.e. 0.24/0.16 sigma below the 0.76 prior -- consistent-with-zero framing survives. NEW DEFECT: _MU_IGM_SPL extrapolates below the TNG grid (starts z=0.1); at z=0.043 the IGM marginal exceeds the Macquart total (ratio 1.22) -- needs its own PR. B3: data/dsa110_frb_catalog.csv gives 64 detections in-window but has a corrupt MJD and only 10 chime_event_no vs the paper&#x27;s 12 pairs; not used.</span></li>
-<li><span class="jts mono">07-08 22:58</span><span class="jagent">claude-opus-4.8/faber2026-authordecisions</span><span class="jlane">ms</span><span class="jnote s-pend">BLOCKER: origin/main internally inconsistent after #40 (64158aa). #40 rebased the cosmic DM term onto the TNG/Connor2024 IGM log-normal (deleted F_LO/F_HI) and regenerated csv+figure, but did NOT touch sections/appendix.tex. Appendix C prose still cites the Macquart P(Delta) F~U[0.25,0.40] prior, and all 9 rows of tab:host-forward-model print pre-#40 numbers. Two sightlines flip sign: 20220310F p50 +12-&gt;-10 (P(&lt;0) 0.45-&gt;0.54), 20221203A +14-&gt;-2 (0.46-&gt;0.51). The 18:35 DM sign-off is VOID -- it applied to the pre-#40 model. Also: lane-liveness &#x27;live&#x27; is a hung &#x27;git difftool -y -x vimdiff HEAD&#x27; (pid 55399, 4h) + MacVim (56031) holding docs/rse/board/.readiness.html.swp, not an agent.</span></li>
-<li><span class="jts mono">07-08 18:35</span><span class="jagent">claude-opus-4.8/faber2026-authordecisions</span><span class="jlane">ms</span><span class="jnote s-good">DM priors signed off as-is by author (no rerun; dm_budget_uncertainty.csv reproduces bit-identically). B3 deferred but reframed: denominator is a DSA-110 detection count, not a trigger-DB query -- mu has no per-burst inputs (inputs.py:22-59), so sum_mu = N x 5e-9. toa.tex:68 says &#x27;triggers&#x27;, :73 says &#x27;detections&#x27;; only the latter is correct.</span></li>
-<li><span class="jts mono">07-08 16:16</span><span class="jagent">codex-gpt-5.5/faber2026-handoff</span><span class="jlane">ms</span><span class="jnote s-good">Wrote temp handoff summarizing which original ApJ-readiness handoff tasks remain necessary versus superseded.</span></li>
-<li><span class="jts mono">07-08 14:31</span><span class="jagent">codex-gpt-5.5/faber2026-handoff</span><span class="jlane">ms</span><span class="jnote s-good">Reversed the provisional morphology-panel diagnostic-only sentence; residual-quality decision remains explicitly owner-pending.</span></li>
-<li><span class="jts mono">07-08 14:26</span><span class="jagent">codex-gpt-5.5/faber2026-handoff</span><span class="jlane">ms</span><span class="jnote s-now">Found handoff may be under ~/handoffs; checking durable handoff and preserving morphology-panel diagnostic boundary.</span></li>
+<li><span class="jts mono">07-12 23:02</span><span class="jagent">claude-code</span><span class="jlane">manuscript</span><span class="jnote s-good">Defined &#x27;characteristic radius&#x27; as R500: formal definition at first use in observations.tex (Wen+Han catalog intro) and explicit R500 naming + Section ref in results.tex dominant-systems paragraph.</span></li>
+<li><span class="jts mono">07-12 22:54</span><span class="jagent">Faber2026-codex</span><span class="jlane">association-summary</span><span class="jnote s-now">Generated and visually validated 12-burst association summary; correcting class-aware Pcc prose and table before manuscript build</span></li>
+<li><span class="jts mono">07-12 22:54</span><span class="jagent">watchdog/launchd</span><span class="jlane">repo</span><span class="jnote s-ready">unattributed activity: 6+ file(s) touched in last 10m (sections/results.tex,sections/conclusions.tex sections/toa.tex) while journal stale 10m - active agent must self-report (docs/rse/journal-protocol.md)</span></li>
+<li><span class="jts mono">07-12 22:44</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">P4c underway: 968-line recipe-parity plan delivered (6 phases, no open questions); Codex implementing Phase 1 (lag contract + HWHM convention) test-first in rescue worktree; sequential phase loop w/ adversarial verify between phases</span></li>
+<li><span class="jts mono">07-12 22:43</span><span class="jagent">Faber2026-codex</span><span class="jlane">toa-sign-fix</span><span class="jnote s-now">Committed and pushed CHIME-DSA timing sign and association-card caption fixes; final dirty-state closeout verification in progress</span></li>
+<li><span class="jts mono">07-12 22:33</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">P4b-&gt;P4c: parity-planner agent (fable) writing plan-chime-scint-recipe-parity.md per planning-implementations skill; key reframe: notebooks never fit gamma to real data (hard-coded placeholders) — primary estimator = analysis-Copy1 log-space ODR over subband dnu(nu)</span></li>
+<li><span class="jts mono">07-12 22:33</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Capture-2 landed on PR #162 (c0a9d0a): live-arc Nimmo_scripts (scint_pipe_new_Nimmo2025 + tutorial), scint_toolkit v1/v2, kenzie_funcs/scint_funcs runtime modules (resolves RECIPE ambiguity 5), zach worked example w/ ACF npz fixture; RECIPE.md + GAP_ANALYSIS.md committed</span></li>
+<li><span class="jts mono">07-12 22:26</span><span class="jagent">codex</span><span class="jlane">B</span><span class="jnote s-good">Gap analysis delivered (logs/codex-gap-analysis.md in rescue worktree): lag-2 vs lag-1 ACF fit-start divergence, HWHM/FWHM convention trap, canfar_reference cleaning mode + 8 ranked deltas w/ acceptance sequence; awaiting RECIPE.md from recipe-reconstructor for P4b synthesis</span></li>
+<li><span class="jts mono">07-12 22:16</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">Phase 4 launched: recipe-reconstruction agent (fable xhigh) + codex gap analysis (gpt-5.6-sol medium) running against the rescue worktree; goal = confident CHIME gamma + m(t), m(nu) via loop campaign</span></li>
+<li><span class="jts mono">07-12 22:16</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Rescued Nimmo-lineage CHIME scint recipe from arc/h17 trash tiers: 21 files (scinttools chain, baseband layer, 10 scint notebooks) sha256-verified into pipeline reference_arc/ with ORIGIN.md + DATA_PROVENANCE 7d; PR dsa110-FLITS#162 to pin/faber2026</span></li>
+<li><span class="jts mono">07-12 22:04</span><span class="jagent">codex</span><span class="jlane">skill-budget</span><span class="jnote s-good">Merged my-skillset PR #124; live Codex prompt now 16 skills and within budget</span></li>
+<li><span class="jts mono">07-12 21:57</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-good">Corrected and merged dsa110-FLITS PR #161: h23 T3 false 59T entry replaced by verified seven candidate trees; five 2022 full-candidate locations remain explicitly unverified; Faber2026 submodule pin unchanged.</span></li>
+<li><span class="jts mono">07-12 21:48</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-now">Corrected h23 inventory on focused dsa110-FLITS branch; validated and pushed commit 1280491; opening PR without changing the manuscript submodule pin.</span></li>
+<li><span class="jts mono">07-12 21:38</span><span class="jagent">codex</span><span class="jlane">skill-budget</span><span class="jnote s-now">Implementing and validating Codex skill-budget control-plane fix in my-skillset</span></li>
+<li><span class="jts mono">07-12 21:28</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-now">Reviewing documented non-CANFAR data locations and authority roles for the user.</span></li>
+<li><span class="jts mono">07-12 21:17</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-ready">Freya rank-1 correction reduced but did not whiten the off-pulse kernel; existing CHIME realization supports upper-limit/diagnostic use unless earlier raw-voltage correction passes injection recovery</span></li>
+<li><span class="jts mono">07-12 21:16</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Assessing what the failed Freya correction implies and whether CHIME ACF scintillation remains recoverable</span></li>
+<li><span class="jts mono">07-12 21:00</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">repo</span><span class="jnote s-now">Overleaf relink: project re-linked to fresh repo Faber2026_CHIME_DSA_Codetections; canonical history grafted (merge ea6fe478, tree==origin/main; snapshot had zero content edits), all branches+gh-pages+tags pushed; next: owner sync round-trip test, then rename swap</span></li>
+<li><span class="jts mono">07-12 20:24</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">ms</span><span class="jnote s-good">Overleaf link breakage root-caused: deleting raw overleaf-* sync branches (PRs 91/92 --delete-branch) severed the GitHub integration; both branches restored at exact prior heads from pull/N/head refs; memory rule saved: never delete overleaf-* branches</span></li>
+<li><span class="jts mono">07-12 20:20</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">ms</span><span class="jnote s-good">Overleaf reconciliation: PR 92 (abstract copy edits) approved via review account + squash-merged at 0d7de124; PR 91 closed unmerged (content-free exec-bit strip from Overleaf round-trip, would have broken journal hooks); both branches deleted</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
+</details>
 
+<details class="fold">
+<summary>Reference — trust state &amp; decisions ledger</summary>
 <h2>Trust state after the 2026-07-06 trust reset (three waves)</h2>
 <div class="grid2">
   <div class="card">
@@ -284,5 +348,6 @@
   <div class="card"><h3>Trust reset (three waves)</h3>
     <span class="note" style="font-size:12.5px;color:var(--muted)">All fits revoked (w1); census + DM budget revoked (w2); TOA arithmetic + DM_obs revoked (w3) — retained set empty. Re-entry only via the §V ladder (V1–V6).</span></div>
 </div>
+</details>
 
-<footer>Sources: CONTEXT.md (domain contract) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md). Board source now lives in-repo at docs/rse/board/readiness.html — any agent edits it, rebakes the journal panel (scripts/render_journal_panel.py), and redeploys to this URL. This board is the standing "where are we" reference.</footer>
+<footer>Sources: CONTEXT.md (domain contract) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md) · docs/rse/board/owner-view.json (owner view data). Board source lives in-repo at docs/rse/board/readiness.html — any agent edits it, rebakes owner view + journal panel (scripts/render_journal_panel.py), and deploys with scripts/deploy-board.sh to https://jakobtfaber.github.io/Faber2026/board/ (canonical since 2026-07-12; claude.ai artifact retired). This board is the standing "where are we" reference.</footer>
