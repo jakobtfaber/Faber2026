@@ -1,0 +1,31 @@
+% Joint two-band morphology-audit panels.
+% Artifacts: figures/jointmodel_pair/*_jointmodel_pair.pdf
+
+\newcommand{\jointmodelpairpanel}[4]{%
+\begin{figure*}[p]
+    \centering
+    \includegraphics[width=\textwidth]{jointmodel_pair/#1_jointmodel_pair.pdf}
+    \caption{Two-dimensional joint-model morphology audit for #2.
+    The three panels show the observed CHIME/FRB and DSA-110
+    dynamic spectra, the corresponding two-dimensional joint model, and the
+    residual dynamic spectra. Hatched regions mark the frequency gap between
+    the two observing bands. These panels are validation figures for component
+    multiplicity and residual structure; fit-derived turbulence and scattering
+    parameters are deferred to the scattering analysis of
+    Section~\ref{sec:results-alpha}.}
+    \label{fig:jointmodel-pair-#4}
+\end{figure*}
+\clearpage
+}
+
+\jointmodelpairpanel{zach}{FRB~20220207C}{zach}{zach}
+\jointmodelpairpanel{whitney}{FRB~20220310F}{whitney}{whitney}
+\jointmodelpairpanel{oran}{FRB~20220506D}{oran}{oran}
+\jointmodelpairpanel{isha}{FRB~20221113A}{isha}{isha}
+\jointmodelpairpanel{wilhelm}{FRB~20221203A}{wilhelm}{wilhelm}
+\jointmodelpairpanel{phineas}{FRB~20230307A}{phineas}{phineas}
+\jointmodelpairpanel{freya}{FRB~20230325A}{freya}{freya}
+\jointmodelpairpanel{johndoeII}{FRB~20230814B}{johndoeii}{johndoeii}
+\jointmodelpairpanel{hamilton}{FRB~20230913A}{hamilton}{hamilton}
+\jointmodelpairpanel{mahi}{FRB~20240122A}{mahi}{mahi}
+\jointmodelpairpanel{casey}{FRB~20240229A}{casey}{casey}

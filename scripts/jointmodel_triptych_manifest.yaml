@@ -1,0 +1,52 @@
+# MJD-ordered roster shared by the Figure 1 data grid and fit-audit figures.
+# Paths are relative to the manuscript repo root unless absolute.
+# chromatica: no accepted joint fit → data-only page.
+bursts:
+  - nick: zach
+    tns: "FRB 20220207C"
+    npz: figures/jointmodel_pair/fit_artifacts/zach_jointmodel_C2D4_cwin_nlive160.npz
+    flag: null
+  - nick: whitney
+    tns: "FRB 20220310F"
+    npz: figures/jointmodel_pair/fit_artifacts/whitney_jointmodel_C2D2_chime2resolved_nlive160.npz
+    flag: "DSA sub-burst incompletely modeled"
+  - nick: oran
+    tns: "FRB 20220506D"
+    npz: figures/jointmodel_pair/fit_artifacts/oran_jointmodel_C2D1.npz
+    flag: null
+  - nick: isha
+    tns: "FRB 20221113A"
+    npz: figures/jointmodel_pair/fit_artifacts/isha_jointmodel_C2D1.npz
+    flag: null
+  - nick: wilhelm
+    tns: "FRB 20221203A"
+    npz: figures/jointmodel_pair/fit_artifacts/wilhelm_jointmodel_sharedzeta.npz
+    flag: "leading DSA structure / bright-pulse residual"
+  - nick: phineas
+    tns: "FRB 20230307A"
+    npz: figures/jointmodel_pair/fit_artifacts/phineas_jointmodel_C3D3.npz
+    flag: null
+  - nick: freya
+    tns: "FRB 20230325A"
+    npz: figures/jointmodel_pair/fit_artifacts/freya_jointmodel_sharedzeta.npz
+    flag: null
+  - nick: johndoeii
+    tns: "FRB 20230814B"
+    npz: figures/jointmodel_pair/fit_artifacts/johndoeII_jointmodel_C2D2_nlive120.npz
+    flag: null
+  - nick: hamilton
+    tns: "FRB 20230913A"
+    npz: figures/jointmodel_pair/fit_artifacts/hamilton_jointmodel_C3D1_cwin.npz
+    flag: "leading CHIME component incompletely modeled"
+  - nick: mahi
+    tns: "FRB 20240122A"
+    npz: figures/jointmodel_pair/fit_artifacts/mahi_jointmodel_C1D1.npz
+    flag: null
+  - nick: chromatica
+    tns: "FRB 20240203A"
+    npz: null
+    flag: "no accepted joint fit"
+  - nick: casey
+    tns: "FRB 20240229A"
+    npz: figures/jointmodel_pair/fit_artifacts/casey_jointmodel_C2D1_cwin.npz
+    flag: null

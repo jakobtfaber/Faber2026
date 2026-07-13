@@ -1,0 +1,345 @@
+% Core methods section. The observed DM decomposes as
+%   DM_obs = DM_MW,ISM + DM_MW,halo + <DM_cosmic>(z) + DM_intervening + DM_host,
+% with DM_MW,ISM from NE2025 (NE2001/YMW16 retained as cross-checks), DM_MW,halo a 40 pc/cm^3 prior
+% (Yamasaki & Totani 2020), <DM_cosmic>(z) the Macquart relation
+% (Macquart et al. 2020; f_IGM=0.84, chi_e=0.875) for the point estimate; the
+% forward-modeled cosmic term is drawn from the TNG-300 IGM log-normal
+% (Walker et al. 2024) via the Connor et al. (2025) reproduction package,
+% and DM_intervening a two-phase
+% (hot mNFW + clumpy cool) CGM column for each intersecting foreground galaxy,
+% reported raw and capped at b = 0.1 R_vir (the galaxy-interior regime).
+%
+% Scattering: measured tau_1GHz from nested-sampling fits (quality-gated on
+% reduced chi^2, with R^2/normality informational only), compared against the
+% predicted intervening tau from a thin-screen two-phase model.
+
+\subsection{Dispersion Measure Decomposition}
+\label{sec:dm}
+
+The observed dispersion measure of each co-detection separates into Galactic,
+cosmological, host, and (where the sightline intersects a foreground galaxy)
+intervening contributions \citep{CordesChatterjee2019},
+\begin{equation}
+\mathrm{DM_{obs}} = \mathrm{DM_{MW}} + \langle\mathrm{DM_{cosmic}}\rangle(z)
++ \mathrm{DM_{int}} + \mathrm{DM_{host}},
+\label{eq:dmbudget}
+\end{equation}
+with the Galactic term $\mathrm{DM_{MW}} = \mathrm{DM_{MW,ISM}} +
+\mathrm{DM_{MW,halo}}$ split between disk and halo. We estimate the disk
+contribution $\mathrm{DM_{MW,ISM}}$ from the NE2025 \citep{Ocker2026}
+electron-density model integrated to $30\,\mathrm{kpc}$ (consistent with the
+Galactic characterization of Section~\ref{sec:obs-fg}), with the older NE2001
+\citep{CordesLazio2002} and YMW16 \citep{YMW2017} models retained as
+cross-checks, and adopt a $\sim$40\,pc\,cm$^{-3}$ Milky-Way halo prior
+\citep{YamasakiTotani2020}. The
+cosmological mean $\langle\mathrm{DM_{cosmic}}\rangle(z)$ follows the Macquart
+relation \citep{Macquart2020}. For the sightlines that cross a foreground
+galaxy we model the intervening circumgalactic column $\mathrm{DM_{int}}$ as a
+two-phase (hot modified-NFW plus clumpy cool) medium, taking the mNFW gas
+profile from \citet{ProchaskaZheng2019}. Such intervening halos can add a
+measurable DM contribution and, where the gas is turbulent, scattering on FRB
+sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
+yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
+
+Rather than attribute the arithmetic residual of the mean-subtracted budget to
+the host, we forward-model $\mathrm{DM_{host}}$ as a posterior. The diffuse
+cosmic term is drawn as the intergalactic column
+$\mathrm{DM_{IGM}}\sim\mathrm{LogNormal}(\mu(z),\sigma(z))$, with $\mu(z)$ and
+$\sigma(z)$ the redshift-dependent parameters of the bivariate (IGM, halo)
+log-normal fit to a mock FRB survey in IllustrisTNG-300 \citep{Walker2024},
+adopted through the \citet{Connor2024} reproduction package and rescaled to the
+IGM baryon fraction $f_{\rm IGM}=0.76^{+0.10}_{-0.11}$ that \citet{Connor2024}
+infer from the DSA-110 sample. We use the IGM marginal rather than the total
+cosmic column $\mathrm{DM_{cos}}=\mathrm{DM_{IGM}}+\mathrm{DM_X}$ because the
+identified intervening halos ($\mathrm{DM_X}$) are already carried by our
+separate $\mathrm{DM_{int}}$ census; adopting the total would double-count them.
+This calibration replaces the earlier fixed-scaling
+$\sigma_{\rm DM}=F\,z^{-1/2}$ form \citep{Macquart2020, McQuinn2014, James2022},
+which \citet{Connor2024} show overstates the diffuse scatter because
+$\sigma_{\rm DM}$ does not follow the $z^{-1/2}$ halo-Poisson scaling. The
+Galactic-disk, Galactic-halo, and intervening columns are drawn from their own
+priors (Appendix~\ref{app:host-forward-model}). We evaluate
+$\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-\mathrm{DM_{cosmic}}-
+\mathrm{DM_{int}}$ per draw. Because $P(\mathrm{DM_{cosmic}})$ is right-skewed,
+subtracting its \emph{mean}---as an arithmetic residual does---biases the
+inferred host low; sampling the full distribution removes that bias and returns
+an asymmetric posterior with a well-defined $P(\mathrm{DM_{host}}<0)$ per
+sightline (Table~\ref{tab:budget}, Appendix~\ref{app:host-forward-model}).
+
+\subsection{Intervening Foreground Galaxies and Clusters}
+\label{sec:foreground}
+
+The intervening term $\mathrm{DM_{int}}$ is sourced only where a sightline
+actually crosses foreground circumgalactic or intracluster gas. We therefore
+build $\mathrm{DM_{int}}$ from the confirmed foreground systems of the census
+(Section~\ref{sec:obs-fg}, Table~\ref{tab:foreground}), and only from those
+whose impact parameter places the sightline inside the gas. For galaxies we
+require the sightline to pierce the virial radius ($b\le R_{\rm vir}$) and
+integrate the column to the halo, capping the reported value at $b = 0.1\,R_{\rm
+vir}$ to exclude the galaxy-interior regime. For clusters we require the
+sightline to pass within $R_{500}$ ($b/R_{500}\le 1$), a conservative aperture
+that across the whole sample selects a single cluster (FRB~20230307A,
+J115120.4$+$714435 at $b/R_{500}=0.83$). Eleven of the fourteen confirmed foreground galaxy halos
+satisfy $b\le R_{\rm vir}$ and contribute; the remaining three---all along the
+FRB~20230307A sightline---graze just outside their virial radii
+($b/R_{\rm vir}\approx1.05$--$1.7$), beyond the $R_{\rm vir}$ truncation of the
+modelled circumgalactic profile, and are excluded. Refuted and inconclusive systems, and confirmed
+systems whose sightline passes outside this aperture, do not contribute.
+
+For each retained system we model the gas as a two-phase medium---a hot
+modified-NFW component \citep{ProchaskaZheng2019} plus a clumpy cool
+component---and integrate the electron column along the impact-parameter chord.
+The cluster contribution uses the $M_{500}$ and $R_{500}$ of the
+\citet{WenHan2024} catalog to fix the halo, computing the intracluster DM from
+the modified-NFW profile at the sightline's impact parameter.
+The $b\le R_{500}$ cut retains just the one cluster that pierces the halo; the
+per-cluster DM columns for all four foreground clusters along the
+FRB~20230307A sightline are shown in Figure~\ref{fig:clusters_icm}
+(Appendix~\ref{app:clusters}).
+
+\subsection{Scattering Attribution}
+\label{sec:scattering}
+
+We measure the pulse-broadening time and its frequency scaling from the
+co-detected dynamic spectra and compare them against the scattering predicted
+by each candidate screen. The candidate screens are the Milky-Way ISM, an
+intervening circumgalactic medium, and a host galaxy, where the host can
+dominate the scattering of a heavily broadened burst \citep{Ocker2022}. The fits are produced with a common
+open-source reduction and fitting pipeline.
+
+\subsubsection{The joint two-band fit}
+\label{sec:jointfit}
+\label{sec:beta-scattering-methods}
+
+A single-band scattering fit cannot separate the scattering timescale from its
+frequency scaling, because the pulse broadening
+$\tau(\nu)=\tau_{1\,\mathrm{GHz}}\,(\nu/1\,\mathrm{GHz})^{-\alpha}$ enters a
+single band only through its value at that band's frequency, so one band fixes
+the product and not the slope. Co-detection breaks this degeneracy---the $\sim$1\,GHz
+lever arm between CHIME/FRB ($\sim$0.4--0.8\,GHz) and DSA-110
+($\sim$1.4\,GHz) measures the frequency scaling directly---but breaking the
+degeneracy is not the same as measuring $\alpha$ in a physically consistent way.
+
+The pulse-broadening function (PBF) shape and the scattering index $\alpha$ are
+not independent observables. Both descend from the same turbulence spectrum. A
+power-law electron-density fluctuation spectrum
+$P_n(q)\propto q^{-\beta}$ produces a phase structure function
+$D_\phi(\rho)\propto\rho^{\beta-2}$, whose Fourier transform determines the
+angular brightness distribution and hence the PBF shape, while the diffractive
+scale and Fresnel arguments give the frequency scaling
+$\tau\propto\nu^{-2\beta/(\beta-2)}$ for a thin screen---i.e.\
+$\alpha=2\beta/(\beta-2)$ \citep{Rickett1990, Cordes2025}. The common
+one-sided exponential PBF,
+$p_E(t,\tau)=\tau^{-1}e^{-t/\tau}\,\Theta(t)$, corresponds to a square-law
+structure function $D_\phi(\rho)\propto\rho^2$ ($\beta=4$), for which
+$\alpha=4$. A Kolmogorov spectrum ($\beta=11/3$) instead yields a
+power-law PBF tail $p_d(t)\propto t^{-\beta/2}$ and $\alpha\approx4.4$
+\citep{Cordes2025}.
+
+Because $\beta$ determines both the PBF shape and $\alpha$, they must be
+co-modeled. Choosing a fixed PBF family and freely varying $\alpha$ inside it
+is physically inconsistent, because the exponential PBF assumes square-law
+statistics, which already imply $\alpha\approx4$. If the true medium is
+Kolmogorov---or anything other than square-law---fitting an exponential PBF
+will absorb the shape mismatch into a biased $\alpha$ \citep{Cordes2025}.
+
+We therefore replace the phenomenological pair $(\tau_{1\,\mathrm{GHz}},\alpha)$
+with the turbulence spectral index $\beta$ as the fundamental parameter. For
+each $\beta$ in the fit, the PBF shape is computed directly from the
+corresponding phase structure function $D_\phi(\rho)\propto\rho^{\beta-2}$, and
+the frequency scaling index follows as $\alpha=2\beta/(\beta-2)$ under the
+thin-screen assumption. The free parameters of the joint fit are
+$(\tau_{1\,\mathrm{GHz}},\beta)$ and the per-telescope pulse parameters
+(arrival time $t_0$, intrinsic width $\zeta$, and a residual DM offset
+$\delta\mathrm{DM}$). The fit operates on the CHIME/FRB and DSA-110 dynamic
+spectra simultaneously, with the PBF shape and $\alpha$ both derived from
+$\beta$ at every likelihood evaluation rather than chosen independently.
+
+Under this model, the Kolmogorov value $\beta=11/3$ ($\alpha\approx4.4$) and the
+square-law limit $\beta=4$ ($\alpha=4$, exponential PBF) are specific points in
+the physically allowed thin-screen inertial-range mapping. Because
+$\alpha=2\beta/(\beta-2)$ decreases as $\beta$ increases in this regime, a
+formally shallow empirical scaling is not interpreted by itself as a turbulence
+spectral index; it instead indicates that the assumed scattering family, burst
+morphology, or inertial-range closure is incomplete.
+
+The square-law endpoint requires a further caution that we build into the
+results rather than append as a caveat. When the diffractive scale drops below
+the turbulence inner scale, the phase structure function is locally quadratic
+and $\alpha\to4$ regardless of the underlying spectral index, so an
+inner-scale-dominated medium and a genuine $\beta=4$ spectrum are observationally
+degenerate \citep{Cordes2016, Cordes2025}. A posterior that concentrates at
+$\beta=4$ is therefore \emph{not} reported as a measurement of square-law
+turbulence. It instead marks the closure regime in which the thin-screen
+inertial-range mapping no longer determines $\beta$. Accordingly, the per-sightline results
+table (Section~\ref{sec:results-alpha}) will carry an explicit closure-regime
+label---\texttt{inertial} (a resolved $\beta$ within the inertial range) versus
+\texttt{endpoint-degenerate} (square-law / inner-scale endpoint)---alongside each
+entry, so that no square-law endpoint is read as an inertial-range spectral
+index. Geometry family (thin vs extended) is recorded separately and is not
+folded into this label.
+
+Concretely, the model dynamic spectrum in each band is built per frequency
+channel as an intrinsic Gaussian profile of width $\zeta$ convolved with the
+$\beta$-derived PBF. In the square-law limit $\beta\to4$ the convolution is
+evaluated with the closed-form Gaussian--exponential expression in a
+numerically stable scaled-complementary-error-function form; below that limit
+it is evaluated with the power-law-tail PBF implied by the phase structure
+function, whose asymptotic decay is $t^{-\beta/2}$. The residual
+dispersion-measure offset $\delta\mathrm{DM}$ shifts the per-channel arrival
+time by the $\nu^{-2}$ cold-plasma delay relative to the band reference
+frequency and contributes intra-channel dispersion smearing: the dispersive
+sweep across one native channel of width $\Delta\nu_{\rm ch}$,
+$\Delta t_{\rm DM} \approx 8.3\,\mu\mathrm{s}\,
+(\mathrm{DM}/\mathrm{pc\,cm^{-3}})\,(\Delta\nu_{\rm ch}/\mathrm{MHz})\,
+(\nu/\mathrm{GHz})^{-3}$ \citep{LorimerKramer2004}, enters the model as a
+boxcar of that duration, represented by its variance-matched Gaussian
+($\sigma_{\rm DM}=\Delta t_{\rm DM}/\sqrt{12}$) added in quadrature to
+$\zeta$. Each spectrum is fit at its instrument-optimized dedispersion DM
+(Section~\ref{sec:data}), so $\delta\mathrm{DM}$ is a small per-band residual
+about that reference rather than a re-measurement of the total DM, and the
+smearing term is evaluated at the offset from each product's de-smeared
+baseline: for coherently dedispersed products only the fitted residual
+$|\delta\mathrm{DM}|$ contributes, while for incoherently dedispersed
+products the full dedispersion DM plus residual sets the smearing at the
+native channel width.
+
+The two bands enter the fit as independent datasets sharing
+$(\tau_{1\,\mathrm{GHz}},\beta)$. Within a band, channels are treated as
+independent Gaussian measurements: the per-channel noise standard deviation
+is estimated from off-pulse samples of the same spectrum with the
+median-absolute-deviation estimator scaled to Gaussian equivalence, which is
+robust to residual burst power and narrowband interference. Channels flagged
+by the upstream masking, dead channels, and channels with vanishing
+off-pulse variance are excluded from the likelihood through a per-channel
+validity mask rather than interpolated.
+
+\subsubsection{Sub-band validation of the frequency scaling}
+\label{sec:subband}
+\label{sec:beta-subband}
+
+The frequency scaling recovered by the joint fit can be validated independently
+of the PBF parametrization by fitting the scattering time directly in frequency
+sub-bands. We split each band into sub-bands (four across CHIME, three across
+DSA-110), collapse each to a one-dimensional profile, and fit a scattered
+pulse---a Gaussian intrinsic shape convolved with a one-sided exponential tail,
+the exponentially-modified Gaussian---to each sub-band independently, leaving the
+scattering time $\tau$ free at every frequency. Because each $\tau_i$ is measured
+per sub-band with no power law imposed, the slope of $\tau_i(\nu_i)$ is an
+estimate of the frequency scaling that shares neither parametrization nor
+likelihood with the joint two-dimensional fit.
+
+This cross-check is a slope diagnostic, not an independent turbulence
+measurement, and we treat it as such for a specific reason. Each sub-band $\tau_i$
+is itself fit with an exponential (EMG) kernel---the $\beta=4$ family the joint
+fit is designed to avoid privileging---so each $\tau_i$ inherits a shape-mismatch
+bias wherever the true PBF is not exponential. The sub-band \emph{slope} is
+informative only insofar as that bias is common to all sub-bands and cancels in
+the ratio; it does not cancel when the mismatch is frequency-dependent, which is
+the generic case (the fraction of the pulse in the power-law tail, and hence the
+bias on a per-band exponential $\tau_i$, itself varies with frequency). We
+therefore report the sub-band slope as a validation diagnostic---a consistency
+check on the joint-fit frequency scaling---and never as a measurement of the
+turbulence spectral index. The sub-band validation figure and event-level
+sub-band comparisons are presented with the scattering analysis
+(Section~\ref{sec:results-alpha}).
+
+% TODO(methods-subband-validation): Restore a sub-band validation artifact only
+% after fit re-validation. The restored figure should state the included bursts,
+% exclusion reasons, fit family, and whether the sub-band slopes are used as a
+% validation diagnostic or as physical turbulence constraints.
+% Figure float lives in Section~\ref{sec:results-alpha} as PLACEHOLDER
+% fig:subband_tau_validation (wishlist W4); D3: diagnostic only.
+
+\subsubsection{Gain-marginalized likelihood}
+\label{sec:gainmarg}
+\label{sec:beta-gainmarg}
+
+The per-channel amplitude of an FRB spectrum is unknown and strongly modulated
+by scintillation; carried as a free spectral envelope it leaves correlated
+structure in the fit residuals and invalidates a $\chi^2$ goodness-of-fit test.
+We therefore marginalize the per-channel gain analytically. With a Gaussian
+prior on the gain the per-channel evidence is available in closed form (a
+matched-filter likelihood), and the recovered gain absorbs both the burst
+spectrum and the scintillation pattern. This removes the spectral and
+scintillation structure from the residual, so that the reduced $\chi^2$ and the
+lag-1 residual autocorrelation become meaningful quality gates, and it lowers
+the sampled dimensionality.
+
+Because the marginalization deliberately absorbs the scintillation pattern into
+the gain, the scattering fit does not measure scintillation. The
+decorrelation-bandwidth products used later
+(Section~\ref{sec:results-scintillation}) come from a separate
+autocorrelation-function analysis path applied to the same dynamic spectra, not
+from this likelihood. The one interaction to guard against is at low
+signal-to-noise, where a fully free per-channel gain can absorb genuine
+scattering-induced spectral smearing into the spectral envelope and thereby bias
+the scattering time low; we therefore keep the gain prior informative (finite
+width) rather than flat, and verify on the final fits that the
+$\tau_{1\,\mathrm{GHz}}$ posterior is stable against the gain-prior width before
+quoting any low-$\tau$ result. The gain prior is a per-channel zero-mean
+Gaussian of variance $s^2$; unless stated otherwise $s^2$ is profiled at its
+maximum-marginal-likelihood value, and it is held fixed whenever Bayesian
+evidences are compared across likelihood variants
+(Section~\ref{sec:multicomp}), so that evidence differences reflect the
+temporal model rather than the gain hyperparameter.
+
+The priors on the sampled parameters are deliberately simple and, except for
+one anchor, independent of the initialization, as evidence-based model
+comparison requires. $\tau_{1\,\mathrm{GHz}}$ and each intrinsic width
+$\zeta$ are log-uniform over $10^{-4}$--$10^{3}$\,ms; $\beta$ is uniform over
+the thin-screen inertial branch, by default $3\le\beta\le4$, the image of
+$4\le\alpha\le6$ under $\alpha=2\beta/(\beta-2)$; each per-band
+$\delta\mathrm{DM}$ is uniform over $\pm50\,\mathrm{pc\,cm^{-3}}$ about the
+dedispersion reference---bounding the residual keeps a broad, heavily
+smeared solution from escaping into an unphysically large
+$|\delta\mathrm{DM}|$ degeneracy; and each arrival time $t_0$ is uniform in
+a window anchored on that band's profile-peak estimate, the only
+data-derived quantity in the prior. We sample the posterior by nested
+sampling \citep{Skilling2004}, as implemented in \texttt{dynesty}
+\citep{Speagle2020}, using random-walk sampling with at least 600 live
+points (at least 800 for the higher-dimensional multi-component variants)
+and terminating when the estimated remaining log-evidence falls below 0.5.
+Parameter summaries are posterior-weighted percentiles, and the $\alpha$
+posterior is derived deterministically from the $\beta$ samples. Each fit is
+quality-gated on the reduced $\chi^2$ of its noise-whitened,
+gain-marginalized residuals---accepted in $0.3\le\chi^2_\mathrm{red}\le1.5$,
+rejected above 10, and flagged for individual inspection between (or
+suspiciously below 0.3)---and on the absence of lag-one residual
+autocorrelation (Durbin--Watson statistic within 1--3), treating $R^2$ and
+residual normality as informational.
+
+\subsubsection{Multiple temporal components}
+\label{sec:multicomp}
+\label{sec:beta-multicomp}
+
+Some bursts comprise more than one temporal sub-component, a common feature of
+the resolved FRB population \citep{Hessels2019, Pleunis2021}. An unmodeled
+second component is partially absorbed by a single scattered pulse---as a steeper
+frequency scaling and a larger scattering time---and so biases the inferred
+$\beta$, distorting both the fitted PBF shape and $\alpha$ simultaneously. We
+extend the likelihood to $N$ temporal components per band, each contributing its
+own $(t_0,\zeta)$ while $(\tau_{1\,\mathrm{GHz}},\beta)$ remain shared across
+both bands and all components, and we select the number of components per band
+by Bayesian evidence subject to a residual check. Because the evidence
+normalization differs between
+likelihood variants, the component counts are compared on a single matched grid
+in which even the one-component model is evaluated through the multi-component
+likelihood, with the gain-prior variance held fixed across counts
+(Section~\ref{sec:gainmarg}), so that evidence differences are meaningful.
+Component arrival times
+within a band are ordered and separated by a data-derived minimum spacing,
+keeping the fit identifiable at every prior sample.
+
+The evidence comparison is not by itself the final acceptance gate. For each
+candidate multiplicity we inspect the two-dimensional data, best-fit model, and
+whitened residual dynamic spectra in both bands. A component choice is rejected
+and re-fit if coherent burst power remains in the residuals, or if the collapsed
+profiles show a resolved sub-component that is absent from the model, even when
+the scalar goodness-of-fit statistics are otherwise acceptable. This visual and
+residual audit is part of the component-selection procedure, in which a fit with
+missed sub-components is treated as diagnostic and re-fit at higher multiplicity
+until it passes the same check. A clean single-component co-detection in our sample,
+for which the joint fit returns a well-constrained $\beta$ with white residuals,
+validates the method; accepted multi-component cases will be presented in
+Section~\ref{sec:results-alpha}.

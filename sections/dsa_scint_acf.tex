@@ -1,0 +1,30 @@
+% Per-burst DSA-110 ACF Lorentzian-fit diagnostics.
+% \dsascintacfpanel{nickname}{FRB name}
+\newcommand{\dsascintacfpanel}[2]{%
+    \begin{figure*}
+        \centering
+        \includegraphics[width=\textwidth]{figures/dsa_scint_acf/#1_dsa_acf_lorentzian_fits.pdf}
+        \caption{DSA-110 scintillation ACF diagnostics for #2. \emph{Left:}
+        clean Lorentzian decorrelation bandwidth $\gamma$ against sub-band
+        center frequency, with the $\gamma\propto\nu^4$ guide where two or more
+        distinct clean frequencies constrain it. \emph{Right:} the stacked
+        equal-signal-to-noise sub-band autocorrelation functions (colored
+        traces) with $1\sigma$ ACF uncertainties (gray) and the fitted total
+        Lorentzian model (black); each panel is annotated with its sub-band
+        center frequency $\nu_c$ and reduced chi-square $\chi_r^2$.}
+        \label{fig:dsa-scint-acf-#1}
+    \end{figure*}%
+}
+
+\dsascintacfpanel{zach}{FRB~20220207C}
+\dsascintacfpanel{whitney}{FRB~20220310F}
+\dsascintacfpanel{oran}{FRB~20220506D}
+\dsascintacfpanel{isha}{FRB~20221113A}
+\dsascintacfpanel{wilhelm}{FRB~20221203A}
+\dsascintacfpanel{phineas}{FRB~20230307A}
+\dsascintacfpanel{freya}{FRB~20230325A}
+\dsascintacfpanel{johndoeII}{FRB~20230814B}
+\dsascintacfpanel{hamilton}{FRB~20230913A}
+\dsascintacfpanel{mahi}{FRB~20240122A}
+\dsascintacfpanel{chromatica}{FRB~20240203A}
+\dsascintacfpanel{casey}{FRB~20240229A}

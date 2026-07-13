@@ -1,0 +1,202 @@
+\section{Association cards}
+\label{app:assoc-cards}
+
+This appendix collects the per-burst association-card figures referenced in the
+main text. Each card is a compact, at-a-glance cross-check that the CHIME/FRB and
+DSA-110 triggers correspond to the same astrophysical burst, and that the
+association used throughout the manuscript is internally consistent.
+
+Across the sample, the cards summarize (i) the timing consistency between the
+two pipelines after accounting for barycentric corrections and dispersive delays, (ii)
+sky-position consistency between the candidate localizations (to the extent
+available for each burst), and (iii) dispersion-measure consistency and
+bookkeeping (e.g., the CHIME/FRB-reported DM compared to any independently
+reconstructed DM used in downstream analysis). Many cards also include catalog
+context (nearby galaxies, foreground structures, or survey footprints) that is
+used as a qualitative sanity check on the association and as a pointer to the
+foreground-census layer described in the main text.
+
+When reading the cards, the most important failure modes they are designed to
+catch are: a mis-identified counterpart between instruments, a bookkeeping
+mismatch (wrong TOA, wrong DM, or wrong metadata version), or an association
+that is only explainable by implausible timing/DM offsets. We treat the cards as
+validation artifacts: they motivate which bursts advance to the joint
+DM/scattering analysis, but we avoid over-interpreting any individual panel
+beyond confirming that the association inputs are coherent.
+
+\clearpage
+\input{sections/association_cards.tex}
+\clearpage
+
+\FloatBarrier
+
+\section{Intracluster dispersion measures for foreground clusters}
+\label{app:clusters}
+
+This appendix collects the per-cluster hot-gas dispersion-measure columns behind the
+$b\le R_{500}$ budget cut described in the main text. Only the single cluster
+that pierces the halo enters $\mathrm{DM_{int}}$; the remaining panels show the
+excluded clusters and the near-miss that motivate the cut being a principled
+impact-parameter threshold rather than a hand-picked selection.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/clusters_icm.pdf}
+    \caption{Predicted intracluster hot-gas dispersion measure for the four foreground
+    clusters along the FRB~20230307A sightline. Each panel plots the
+    modified-NFW hot-baryon dispersion-measure column $\mathrm{DM}(b)$ against projected
+    impact parameter $b$ (blue); the vertical marker is the sightline's measured
+    impact parameter, the dashed line is $R_{500}$, and the shaded region is
+    inside $R_{500}$. Only J115120.4$+$714435 ($b/R_{500}=0.83$) meets the
+    $b\le R_{500}$ budget cut and enters $\mathrm{DM_{int}}$
+    ($\sim$160\,pc\,cm$^{-3}$ from this mNFW profile, factor-of-two uncertain across
+    profile and cluster-parameter systematics,
+    Appendix~\ref{app:host-forward-model}; Table~\ref{tab:foreground}); the
+    others lie beyond
+    $R_{500}$ and are excluded even where the profile remains formally nonzero
+    (J115128.2$+$713637 at $b/R_{500}=1.25$, $\sim$95\,pc\,cm$^{-3}$). Cluster
+    masses ($\log M_{500}$) and radii are from the \citet{WenHan2024} DESI
+    Legacy/WISE catalog.}
+    \label{fig:clusters_icm}
+\end{figure*}
+
+\clearpage
+\FloatBarrier
+
+\section{Forward-modeled host dispersion measure}
+\label{app:host-forward-model}
+
+The host term of Table~\ref{tab:budget} is a forward-modeled posterior rather
+than an arithmetic residual (Section~\ref{sec:dm}). For each redshift-constrained
+sightline we draw $N=2\times10^{5}$ Monte-Carlo samples of
+$\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW,ISM}}-\mathrm{DM_{MW,halo}}
+-\mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$, propagating priors on the non-host
+terms:
+\begin{itemize}
+\item \emph{Cosmological.} The diffuse cosmic term is the intergalactic column
+$\mathrm{DM_{IGM}}\sim\mathrm{LogNormal}(\mu(z),\sigma(z))$, with $\mu(z)$ and
+$\sigma(z)$ the redshift-dependent parameters of the bivariate (IGM, halo)
+log-normal fit to a mock FRB survey in IllustrisTNG-300 \citep{Walker2024},
+adopted through the \citet{Connor2024} reproduction package. We take the IGM
+marginal rather than the total cosmic column
+$\mathrm{DM_{cos}}=\mathrm{DM_{IGM}}+\mathrm{DM_X}$, because the identified
+intervening halos ($\mathrm{DM_X}$) are already carried by the separate
+$\mathrm{DM_{int}}$ census and the total would double-count them
+(Section~\ref{sec:dm}). The calibration is rescaled to the IGM baryon fraction
+$f_{\rm IGM}=0.76^{+0.10}_{-0.11}$ that \citet{Connor2024} infer from the
+DSA-110 and literature FRB sample; we marginalize $f_{\rm IGM}$ over that
+asymmetric-normal prior, which shifts the log-median by
+$\ln(f_{\rm IGM}/f_{\rm IGM,TNG})$ with $f_{\rm IGM,TNG}=0.797$. This supersedes
+the \citet{Macquart2020} $p(\Delta)$ form with $\sigma_{\rm DM}=F\,z^{-1/2}$:
+\citet{Connor2024} show that the diffuse scatter is set by non-Poissonian
+intersection of IGM filaments and sheets rather than by halo Poisson statistics,
+and does not follow the $z^{-1/2}$ scaling \citep{McQuinn2014, James2022}. The
+TNG-300 calibration is tabulated for $z\ge0.1$; for the two sightlines below
+that redshift (FRB~20220207C, FRB~20240203A) we continue $\mu(z)$ along the
+\citet{Macquart2020} redshift dependence,
+$\langle\mathrm{DM_{IGM}}\rangle\propto\int_0^z(1+z')/E(z')\,\mathrm{d}z'$,
+rather than extrapolating the spline, and hold $\sigma$ at its grid-edge value.
+The continuation is exact in the $z\rightarrow0$ limit and reproduces the
+tabulated log-median increments to $1.5\%$ over $0.1<z<0.3$.
+\item \emph{Galactic disk.} The NE2025 disk column with a $30\%$ lognormal
+uncertainty.
+\item \emph{Galactic halo.} $40\,\mathrm{pc\,cm^{-3}}$ median, lognormal with a
+factor-$\sim\!2$ span ($2\sigma$ range $\approx[20,80]\,\mathrm{pc\,cm^{-3}}$;
+\citealt{YamasakiTotani2020, KeatingPen2020, Cook2023}).
+\item \emph{Intervening.} The Table~\ref{tab:foreground} column with a $40\%$
+(measured-mass halo), factor-$2$ (assumed-mass halo), or $30\%$ (cluster)
+lognormal uncertainty.
+\end{itemize}
+The resulting posteriors are asymmetric, dominated at higher redshift by the
+diffuse cosmic scatter (Figure~\ref{fig:dm_host_posteriors},
+Table~\ref{tab:host-forward-model}); their medians exceed the
+mean-subtracted residuals because the log-normal $P(\mathrm{DM_{IGM}})$ is
+right-skewed. Two sightlines, FRB~20220310F and FRB~20221203A, carry median
+posteriors marginally below zero with $P(\mathrm{DM_{host}}<0)\simeq0.5$; both
+are consistent with a vanishing host contribution, and the $f_{\rm IGM}$
+required to place either median exactly at zero ($0.73$ and $0.74$) lies within
+$0.25\sigma$ of the adopted prior median. The prior widths above are fiducial
+and are documented so they can be revised; the analysis and both artifacts are
+reproduced by \texttt{scripts/dm\_budget\_uncertainty.py}.
+
+\begin{deluxetable}{lccc}
+\tabletypesize{\footnotesize}
+\tablecaption{Forward-modeled host-DM posteriors for the nine
+redshift-constrained sightlines: median with $16$th--$84$th-percentile interval,
+and $P(\mathrm{DM_{host}}<0)$. DM in $\mathrm{pc\,cm^{-3}}$.
+\label{tab:host-forward-model}}
+\tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$\mathrm{DM_{host}}$} &
+  \colhead{$P(\mathrm{DM_{host}}<0)$}}
+\startdata
+FRB 20220207C & $0.043$ & $51^{+36}_{-43}$   & $0.13$ \\
+FRB 20220310F & $0.479$ & $-10^{+88}_{-107}$ & $0.54$ \\
+FRB 20220506D & $0.300$ & $48^{+65}_{-80}$   & $0.27$ \\
+FRB 20221113A & $0.251$ & $55^{+61}_{-75}$   & $0.23$ \\
+FRB 20221203A & $0.510$ & $-2^{+106}_{-131}$ & $0.51$ \\
+FRB 20230307A & $0.271$ & $90^{+87}_{-107}$  & $0.20$ \\
+FRB 20230913A & $0.302$ & $136^{+69}_{-88}$  & $0.07$ \\
+FRB 20240203A & $0.074$ & $106^{+30}_{-36}$  & $0.01$ \\
+FRB 20240229A & $0.287$ & $197^{+60}_{-75}$  & $0.01$ \\
+\enddata
+\end{deluxetable}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/dm_host_posteriors.pdf}
+    \caption{Forward-modeled dispersion-budget components and host posteriors
+    for the nine redshift-constrained sightlines, arranged in a $3\times3$
+    grid. Each panel overlays $\hat{p}(x)=p(x)/\max p$ for the terms entering
+    $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{disk}}-\mathrm{DM_{halo}}
+    -\mathrm{DM_{IGM}}-\mathrm{DM_{int}}$: MW disk (blue), MW halo (light blue),
+    TNG-calibrated IGM (purple), and intervening census systems (orange; one
+    curve per galaxy or cluster with nonzero column, obtained by applying the
+    appropriate lognormal prior family to its census point estimate). The
+    dashed navy curve is the sightline-sum intervening prior used in the host
+    convolution itself; the
+    bold red curve is the resulting $P(\mathrm{DM_{host}})$, with a dashed
+    vertical mark at the posterior median and a dotted line at zero.
+    Peak-normalization makes shapes (not absolute heights) comparable across
+    terms of very different scale. Sampling details and
+    fiducial priors are given in Appendix~\ref{app:host-forward-model}.}
+    \label{fig:dm_host_posteriors}
+\end{figure*}
+
+\clearpage
+\FloatBarrier
+
+\section{DSA-110 scintillation ACF diagnostics}
+\label{app:dsa-scint-acf}
+
+This appendix collects the per-burst DSA-110 scintillation diagnostics behind
+the sample summary of Figure~\ref{fig:dsa_scint_gamma}. Each figure pairs the
+clean decorrelation-bandwidth measurements for one burst with the stacked
+equal-signal-to-noise sub-band autocorrelation functions and their fitted total
+Lorentzian models, so the bandwidth points in the main text can be traced back
+to the underlying ACF fits and their reduced chi-square values. Components
+carrying quality flags are excluded from the bandwidth panels but remain in the
+tabulated component list; the sub-band count and per-sub-band component count
+are the internally selected values described in Section~\ref{sec:methods}.
+
+\clearpage
+\input{sections/dsa_scint_acf.tex}
+\clearpage
+
+\FloatBarrier
+
+\input{sections/twoscreen_formalism.tex}
+
+\FloatBarrier
+
+\clearpage
+\section{Joint-model morphology audits}
+\label{app:jointmodel-pairs}
+
+Figure~\ref{fig:codetection-triptych-zach} introduces the representative
+data/model/residual morphology audit in the main text. The remaining eleven
+per-burst panels are collected here so every accepted fit and the data-only
+FRB~20240203A exception can be inspected without interrupting the main-text
+figure sequence.
+
+\input{sections/codetection_triptychs_appendix.tex}
+
+\FloatBarrier

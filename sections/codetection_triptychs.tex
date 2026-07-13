@@ -1,0 +1,31 @@
+% Figure 2 representative data | model | residual triptych.
+% Artifacts: figures/codetection_triptych/*_triptych.pdf
+% Producer: scripts/plot_codetection_triptych.py
+
+\newcommand{\codetectiontriptych}[3]{%
+\begin{figure*}[p]
+    \centering
+    \includegraphics[width=\textwidth]{codetection_triptych/#1_triptych.pdf}
+    \caption{#2}
+    \label{fig:codetection-triptych-#3}
+\end{figure*}
+\clearpage
+}
+
+% Shared caption body (morphology audit; no quoted tau/alpha/beta).
+\newcommand{\codetectiontriptychcaption}[2]{%
+Two-dimensional joint-model morphology audit for #1#2.
+Left to right: observed CHIME/FRB and DSA-110 dynamic spectra, the
+corresponding two-dimensional joint model, and the whitened residual
+dynamic spectra. Hatched regions mark the unobserved frequency gap between
+the two bands. The time window is the observed on-pulse union of both bands,
+padded on each side by approximately the CHIME on-pulse width. These panels
+audit component multiplicity and expose coherent residual structure; fit-derived turbulence
+and scattering parameters are deferred to
+Section~\ref{sec:results-alpha}.%
+}
+
+\codetectiontriptych{zach}{\codetectiontriptychcaption{FRB~20220207C}{. This
+representative panel establishes the visual conventions used for the complete
+appendix audit. The coherent time-localized CHIME residual structure exposes a
+limitation of the adopted morphology}}{zach}

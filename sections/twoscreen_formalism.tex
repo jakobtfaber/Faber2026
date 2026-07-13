@@ -1,0 +1,252 @@
+% =====================================================================
+%  Appendix: two-screen scintillation formalism and screen-distance
+%  constraints. Self-contained theory supporting the deferred
+%  scintillation results (Sec. results-scintillation) and screen
+%  attribution (Sec. disc-screen-attribution). Asserts no per-burst
+%  result; every relation is sourced to the primary literature and,
+%  where geometric, checked against an independent ray-trace.
+%
+%  Notation: this manuscript denotes the fitted diffractive decorrelation
+%  bandwidth (Lorentzian HWHM) by gamma in Sec. results-scintillation and
+%  by Delta_nu_d in the screen-product context. Here gamma == Delta_nu_d
+%  == nu_s are the same quantity; we use nu_s in the two-screen algebra to
+%  avoid collision with the per-band spectral index gamma_X of
+%  Sec. methods-energies, and state the identification once below.
+% =====================================================================
+
+\section{Two-screen scintillation formalism and screen-distance constraints}
+\label{app:twoscreen}
+% AASTeX resets the equation counter in each appendix section, while hyperref's
+% default anchor uses only that counter. Include the section in the anchor so
+% these equations do not reuse destinations from earlier appendix sections.
+\renewcommand{\theHequation}{\thesection.\arabic{equation}}
+
+This appendix collects the diffractive-scintillation estimator and the
+two-screen geometric framework that Section~\ref{sec:results-scintillation}
+and the screen attribution of Section~\ref{sec:disc-screen-attribution} draw
+on. It defines quantities and relations only; the per-sightline application
+is made in the main text once the prerequisite scintillation and scattering
+strands are independently trusted. Throughout, the fitted decorrelation
+bandwidth written $\gamma$ in Section~\ref{sec:results-scintillation} is
+denoted $\nu_{s}$ here ($\gamma\equiv\Delta\nu_{d}\equiv\nu_{s}$, the
+Lorentzian half-width at half-maximum), reserving $\gamma$ for that section's
+usage.
+
+\subsection{ACF-based diffractive-scintillation estimator}
+\label{app:acf}
+
+For each burst the on-pulse spectrum $I(\nu)$ is formed by averaging the
+dynamic spectrum over the on-pulse samples, with the noise level estimated
+from an off-pulse region. The one-dimensional frequency autocorrelation
+function (ACF) of the mean-subtracted spectrum is
+%
+\begin{equation}
+\mathrm{ACF}(\delta\nu)
+  = \frac{\big\langle\, \Delta I(\nu)\,\Delta I(\nu+\delta\nu)\,\big\rangle_\nu}
+         {\big\langle I(\nu)\big\rangle_\nu^2},
+\qquad
+\Delta I(\nu) \equiv I(\nu) - \big\langle I(\nu)\big\rangle_\nu,
+\label{eq:acf}
+\end{equation}
+%
+where $\langle\cdot\rangle_\nu$ averages over frequency channels. This
+normalization is by the squared mean intensity, rather than by the spectral
+variance, so that the noise-corrected zero-lag amplitude is the squared
+modulation index. The
+zero-lag point ($\delta\nu=0$) is excluded from all fits: radiometer noise is
+uncorrelated between channels and contributes a delta-function spike at
+$\delta\nu=0$ that biases the peak upward by the noise variance. The
+scintillation modulation index $m\equiv\sigma_I/\langle I\rangle$ is recovered
+as the noise-corrected zero-lag amplitude, i.e.\ the fitted model extrapolated
+to $\delta\nu\to0$,
+%
+\begin{equation}
+\mathrm{ACF}(0^{+}) = m^{2}.
+\label{eq:m2}
+\end{equation}
+%
+A point source in the strong-scattering regime gives $m=1$; a source whose
+apparent angular size partially resolves the scattering disk gives $m<1$
+(partial quenching), the property exploited in Appendix~\ref{app:distance}.
+Each diffractive component is modeled with the Lorentzian derived by
+\citet{Gwinn1998} for a single thin screen,
+%
+\begin{equation}
+\mathrm{ACF}(\delta\nu)
+  = \frac{m^{2}}{1 + (\delta\nu/\nu_{s})^{2}},
+\label{eq:lorentzian}
+\end{equation}
+%
+with $\nu_{s}$ the decorrelation bandwidth (the $\gamma$ of
+Section~\ref{sec:results-scintillation}). The decorrelation bandwidth and the
+pulse-broadening time $\tau_{s}$ from the same screen are conjugate through
+the Fourier uncertainty relation
+%
+\begin{equation}
+2\pi\,\nu_{s}\,\tau_{s} = C_{1},
+\label{eq:c1}
+\end{equation}
+%
+with $C_{1}$ a geometry- and spectrum-dependent constant of order unity that
+ranges over $0.5$--$2$ across plausible screen-geometry and turbulence-spectrum
+combinations \citep{LambertRickett1999,Pradeep2025}. We adopt $C_{1}=1$ as the
+fiducial thin-screen value and propagate the full $0.5$--$2$ range as a
+systematic on any $\tau_{s}\leftrightarrow\nu_{s}$ conversion.
+
+\paragraph{Finite-sample statistics.}
+Across an observing band $B$ the number of independent scintles is
+$N_{\rm scint}\simeq\eta\,B/\nu_{s}$ with a filling factor $\eta=\mathcal{O}(1)$
+for scintle overlap. The finite scintle count sets an irreducible
+``self-noise'' floor on the estimator, with fractional uncertainties
+%
+\begin{equation}
+\frac{\sigma_{\nu_{s}}}{\nu_{s}} \sim \frac{1}{\sqrt{N_{\rm scint}}},
+\qquad
+\frac{\sigma_{m}}{m} \sim \frac{1}{\sqrt{N_{\rm scint}}},
+\label{eq:selfnoise}
+\end{equation}
+%
+dominant when $\nu_{s}$ is a sizeable fraction of $B$ (few scintles across the
+band); it is added in quadrature with the radiometer-noise contribution when
+quoting uncertainties on $\nu_{s}$ and $m$.
+
+\subsection{Two-screen geometry}
+\label{app:geometry}
+
+Place the observer at $O$ and the source at angular-diameter distance $D$, with
+a near (Milky Way) screen at distance $d_{\rm MW}$ from $O$ and a far
+(host-galaxy) screen at $d_{h}$, $d_{\rm MW}<d_{h}<D$. A thin screen at
+distance $d$ imposes a scattering time
+%
+\begin{equation}
+\tau = \frac{\theta_{\rm scat}^{2}\,d_{\rm eff}}{2c},
+\qquad
+d_{\rm eff} = \frac{d\,(D-d)}{D},
+\label{eq:tau}
+\end{equation}
+%
+so $\theta_{\rm scat}=\sqrt{2c\tau/d_{\rm eff}}$ and the diffractive
+field-coherence scale is $s_{d}=\lambda/(2\pi\theta_{\rm scat})$; cosmological
+$(1+z)$ factors enter the far-screen terms and are carried explicitly in
+Eq.~(\ref{eq:distance}).
+
+\paragraph{Apparent size of the host image.}
+The quantity governing whether one screen resolves the other is the angular
+size of the host scattering disk projected to the near screen. A
+first-principles ray-trace (point source at $D$, thin deflector at $d_{h}$,
+observing plane at $d_{\rm MW}$) gives
+%
+\begin{equation}
+\theta_{\rm img}
+  = \theta_{{\rm scat},h}\,\frac{D-d_{h}}{D-d_{\rm MW}} ,
+\label{eq:thimg}
+\end{equation}
+%
+which in the limit $d_{\rm MW}\to0$ reduces to the observed image size
+$\theta_{h}\simeq\theta_{{\rm scat},h}(D-d_{h})/D=(2c\tau_{h}\,d_{ls,h})^{1/2}/D$,
+with $d_{ls,h}=D-d_{h}$ \citep{Masui2015}. (The lever-arm denominator is
+$D-d_{\rm MW}$, the far-screen-to-near-screen path measured from the source
+side; the screen--screen separation $d_{h}-d_{\rm MW}$ would fail this
+observer limit.)
+
+\paragraph{Resolution power.}
+The near screen acts as an interferometer of effective aperture $L_{\rm MW}$
+and angular resolution $\theta_{\rm res}=\lambda/L_{\rm MW}$.
+\citet{Pradeep2025} parameterise the degree of resolution by the resolution
+power
+%
+\begin{equation}
+\mathrm{RP} \equiv \frac{\Theta_{\rm size}}{\theta_{\rm res}}
+  = \frac{L_{\rm MW}\,L_{\rm host}}{\lambda\,D_{\rm MW,host}},
+\label{eq:rp}
+\end{equation}
+%
+where $L_{\rm MW},L_{\rm host}$ are the transverse scattering-disk sizes and
+$D_{\rm MW,host}$ the angular-diameter distance between the screens.
+$\mathrm{RP}\ll1$: screens do not resolve each other (both scintillation
+scales visible); $\mathrm{RP}\simeq1$: marginal resolution; $\mathrm{RP}\gg1$:
+the near screen resolves the far screen and the associated broad-scale
+scintillation is quenched.
+
+\subsection{Modulation-index parameterization for two screens}
+\label{app:modindex}
+
+With two screens the total spectral ACF is not the sum of the two Lorentzians:
+\citet{Pradeep2025} show it carries an additional product term,
+%
+\begin{equation}
+\mathrm{ACF}_{\rm tot}(\delta\nu)
+  = \underbrace{m_{\rm MW}^{2}\,\rho_{\rm MW}(\delta\nu)
+  + m_{h}^{2}\,\rho_{h}(\delta\nu)}_{\text{sum of screens}}
+  + \underbrace{m_{\rm MW}^{2}\,m_{h}^{2}\,
+      \rho_{\rm MW}(\delta\nu)\,\rho_{h}(\delta\nu)}_{\text{product term}},
+\label{eq:acf2}
+\end{equation}
+%
+with $\rho_{s}(\delta\nu)=[1+(\delta\nu/\nu_{s,s})^{2}]^{-1}$. In the
+unresolved regime with both screens fully modulated
+($m_{\rm MW}=m_{h}=1$), the noise-free zero-lag value is
+$\mathrm{ACF}_{\rm tot}(0^{+})=3$, so the combined modulation index rises to
+%
+\begin{equation}
+m_{\rm tot} = \sqrt{3}\qquad(\text{unresolved, fully modulated}).
+\label{eq:sqrt3}
+\end{equation}
+%
+As the near screen begins to resolve the far screen, the broad-scale component
+is progressively (not abruptly) quenched: $m_{\rm MW}$ declines toward zero
+with increasing RP, the product term collapses, and $m_{\rm tot}$ falls back
+toward the single-screen value. The measured
+$\{m_{\rm MW},m_{h},\nu_{s,\rm MW},\nu_{s,h}\}$ therefore diagnose the
+resolution regime directly.
+
+\subsection{Host-screen distance constraint}
+\label{app:distance}
+
+The physical argument \citep{Masui2015,CordesChatterjee2019} is that the near
+(MW) screen imprints scintillation only if the host image it views is
+unresolved, $\theta_{\rm img}\lesssim\theta_{\rm res,MW}$ (equivalently
+$\mathrm{RP}\lesssim1$). Observing MW scintillation therefore bounds the host
+scattering angle from above and, since $\theta_{{\rm scat},h}$ is fixed by the
+measured host $\tau_{h}$ through Eq.~(\ref{eq:tau}), bounds the product of
+screen distances. In the redshift-consistent form of \citet{Pradeep2025},
+%
+\begin{equation}
+D_{h,\rm FRB}\,D_{\rm MW}
+  \;\lesssim\;
+  \frac{(1+z_{\rm FRB})\,D_{\rm FRB}^{2}}{8\pi\,\nu^{2}}\,
+  \frac{\nu_{s,\rm MW}}{m_{\rm MW}\,\tau_{s,h}},
+\label{eq:distance}
+\end{equation}
+%
+where $D_{h,\rm FRB}$ is the source--host-screen distance, $D_{\rm MW}$ the
+observer--MW-screen distance, $\nu$ the observing frequency, $\nu_{s,\rm MW}$
+the MW decorrelation bandwidth, $m_{\rm MW}$ the MW modulation index, and
+$\tau_{s,h}$ the host scattering time. With $D_{\rm FRB}$ and $z_{\rm FRB}$
+fixed by the host redshift and $D_{\rm MW}$ estimated from a Galactic
+electron-density model \citep{CordesLazio2002}, this is an upper limit on
+$D_{h,\rm FRB}$.
+
+The modulation-index factor corrects the resolution-induced broadening of the
+measured MW scintillation bandwidth, but it does not turn
+Eq.~(\ref{eq:distance}) into an equality. In particular, reduced but detected
+MW modulation ($0<m_{\rm MW}<1$) is evidence for partial resolution, not proof
+that the geometric threshold is exactly saturated. The transition is gradual,
+and stochastic screen realizations produce appreciable scatter at fixed
+resolution power \citep{Pradeep2025}. We therefore retain
+Eq.~(\ref{eq:distance}) as an upper limit for all resolution regimes in which
+the MW component remains measurable. A future calibrated likelihood linking
+$\{m_{\rm MW},\nu_{s,\rm MW}\}$ to RP could support posterior inference on
+$D_{h,\rm FRB}$, but such an inference would be model-dependent and would not
+be a point-distance measurement obtained by saturating this inequality.
+
+\paragraph{Caveats.} Equation~(\ref{eq:distance}) assumes both screens are
+two-dimensional (isotropic) in the plane of the sky; for
+one-dimensional (elongated) screens the relative position angle enters and the
+scalar relation breaks down \citep{Pradeep2025}. Because the broad-scale
+quenching is gradual, ``marginal resolution'' is a regime rather than a
+knife-edge; any later posterior use of the relation must include the calibrated
+RP dependence and realization scatter. Consistency check:
+representative sample values give $L_{x}L_{g}\lesssim\text{few}\
+\mathrm{kpc}^{2}$, in line with the CRAFT two-screen constraints of
+\citet{Sammons2023}.

@@ -1,0 +1,26 @@
+% Association-card appendix.
+% Artifacts: figures/association_cards/association_card_*.pdf
+
+% Keep the cards compact by placing them in a single 6x2 grid that fits on one page.
+% Two columns ensures each card remains legible; we cap height so six rows fit.
+\newcommand{\assoccardpanel}[1]{%
+  \includegraphics[width=0.495\textwidth,height=0.145\textheight,keepaspectratio]{association_cards/association_card_#1.pdf}%
+}
+
+% Tighten spacing between panels.
+\setlength{\tabcolsep}{1pt}
+\renewcommand{\arraystretch}{0.86}
+
+\begin{figure*}[p]
+  \centering
+  \begin{tabular}{@{}c c@{}}
+    \assoccardpanel{casey} & \assoccardpanel{chromatica} \\
+    \assoccardpanel{freya} & \assoccardpanel{hamilton} \\
+    \assoccardpanel{isha} & \assoccardpanel{johndoeii} \\
+    \assoccardpanel{mahi} & \assoccardpanel{oran} \\
+    \assoccardpanel{phineas} & \assoccardpanel{whitney} \\
+    \assoccardpanel{wilhelm} & \assoccardpanel{zach}
+  \end{tabular}
+  \caption{Association cards for the co-detection sample.}
+  \label{fig:assoc-cards-grid}
+\end{figure*}

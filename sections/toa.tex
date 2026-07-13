@@ -1,0 +1,166 @@
+\subsection{Time-of-Arrival Crossmatching}
+\label{sec:toa}
+
+Before attributing the dispersion-measure and scattering budgets we verify that the
+twelve events are genuine co-detections---the same burst seen by both
+facilities, with arrival times consistent under the cold-plasma dispersion law
+and the geometric light-travel delay between the sites. The wide baseline
+between CHIME/FRB (400--800\,MHz) and DSA-110 ($\sim$1.4\,GHz) makes the
+co-detections a test of the $1/\nu^2$ dispersion scaling and of the relative
+timing alignment of the two facilities \citep{Lorimer2007, Thornton2013}.
+
+\subsubsection{Delay model}
+
+We translate the arrival times at the two central frequencies to a common
+reference frequency $\nu_{\mathrm{ref}}=400$\,MHz. The cold-plasma dispersion
+delay is
+\begin{equation}
+\Delta t_p = K_{\mathrm{DM}}\,\mathrm{DM}
+\left(\frac{1}{\nu_{\mathrm{ref}}^2}-\frac{1}{\nu_{\mathrm{obs}}^2}\right),
+\label{eq:dmdelay}
+\end{equation}
+with $K_{\mathrm{DM}} = 4.148808\times10^{3}\,\mathrm{MHz^2\,pc^{-1}\,cm^3\,s}$.
+The geometric light-travel difference between the observatories is
+\begin{equation}
+\tau_{\mathrm{geo}} = \frac{(\mathbf{p}_2-\mathbf{p}_1)\cdot\hat{\mathbf{s}}}{c},
+\label{eq:geodelay}
+\end{equation}
+where $\mathbf{p}_1$ and $\mathbf{p}_2$ are the GCRS position vectors of CHIME
+and DSA-110 and $\hat{\mathbf{s}}$ is the unit vector toward the source. The
+timing residual is the difference between the frequency-corrected inter-site
+offset and the predicted geometric delay; a residual of zero indicates perfect
+agreement.
+
+\subsubsection{Chance-coincidence probability}
+\label{sec:toa-pcc}
+
+A small timing residual shows that a CHIME and a DSA trigger are \emph{consistent}
+with being the same burst; it does not by itself show that they \emph{are}. The
+complementary question is how often an \emph{unrelated} CHIME burst would fall
+close enough to a given DSA burst---in arrival time, sky position, and dispersion
+measure simultaneously---to mimic the association by chance. We quantify this with
+a chance-coincidence (false-alarm) probability $P_{\rm cc}$.
+
+We model unrelated CHIME bursts as a Poisson point process on the sky. For DSA
+burst $i$, the expected number of unrelated CHIME bursts that land inside the joint
+association window is
+\begin{equation}
+\mu_i = R \,\Omega_{\rm win}\, (2\,\Delta t)\, f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM}),
+\label{eq:pcc_mu}
+\end{equation}
+where $R$ is the all-sky CHIME burst rate (per unit solid angle per unit time),
+$\Omega_{\rm win}$ is the sky area of the positional window, $2\,\Delta t$ is the
+full arrival-time window (a $\pm\Delta t$ coincidence gate), and
+$f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM})$ is the fraction of the CHIME DM
+distribution lying within $\pm\Delta\mathrm{DM}$ of the burst's DM---the factor
+that additionally requires a chance interloper to match in DM, not only in
+time and position. For such a rare-event Poisson process the probability that
+\emph{at least one} unrelated burst falls in the window is
+\begin{equation}
+P_{{\rm cc},i} = 1 - e^{-\mu_i} \simeq \mu_i \qquad (\mu_i \ll 1),
+\label{eq:pcc_p}
+\end{equation}
+so $P_{\rm cc}$ is, to excellent approximation, just the expected number of chance
+matches.
+
+Equation~\eqref{eq:pcc_mu} conditions on a single DSA burst, so the sample-level
+false-alarm expectation is the sum $\sum_j \mu_j$ over the \emph{trial set}: the
+complete list of DSA-110 triggers searched for a CHIME/FRB counterpart over the
+2022~February--2024~February overlap, not merely the twelve that matched. The
+look-elsewhere penalty is therefore carried explicitly by that sum. Because each
+per-event expectation is only $\mu_j\sim5\times10^{-9}$ under the
+chance-maximizing windows below, the trial sum stays orders of magnitude below
+unity even when the entire DSA-110 detection list---the 64 FRBs detected across
+the 2022~February--2024~February overlap---is taken as the denominator
+($\sum_j\mu_j\approx3\times10^{-7}$). The value $\sum_i\mu_i$ reported below is
+summed over the twelve reported pairs; extending it to the full 64-burst trial
+set multiplies it by at most the searched-to-matched ratio ($64/12\approx5$) and
+leaves the conclusion unchanged.
+
+We evaluate Eq.~\eqref{eq:pcc_mu} with deliberately conservative,
+chance-\emph{maximizing} inputs, so the reported $P_{\rm cc}$ is an upper bound on
+the true false-alarm rate: an all-sky CHIME rate rounded up to
+$R = 10^{3}\,\mathrm{sky^{-1}\,day^{-1}}$ (above the Catalog~1 value of
+$\simeq525\,\mathrm{sky^{-1}\,day^{-1}}$; \citealt{CHIME2021Catalog}), a
+$0.5^{\circ}$-radius positional disk ($\Omega_{\rm win}=0.785\,\mathrm{deg^2}$),
+$\Delta t = \pm1\,\mathrm{s}$, and $\Delta\mathrm{DM}=\pm5\,\mathrm{pc\,cm^{-3}}$.
+These windows are far wider than the actual per-event tolerances (millisecond
+timing, arcsecond-scale DSA localization, and the measured DM agreement), so using
+each event's true tolerances can only lower $P_{\rm cc}$. As an independent check,
+a direct Monte-Carlo of the background point process reproduces the closed-form
+$P_{\rm cc}$ to $0.3\%$ in a regime where both are measurable, and the result is
+stable across several orders of magnitude of variation in each window and in $R$.
+
+\subsubsection{Residuals and systematics}
+
+Table~\ref{tab:sample} summarizes the association diagnostics. The tabulated
+residuals use the shared DSA-DM convention: the CHIME and DSA arrivals are both
+referenced to 400\,MHz with the DSA catalog DM, so the residual is a
+timing/geometry consistency check rather than an independent per-telescope-DM
+comparison. Re-referencing the CHIME arrivals with their independently measured
+DMs would inject millisecond-scale shifts for the largest CHIME--DSA DM offsets,
+so those shifts are tracked separately rather than folded into the association
+residual.
+
+We adopt the sign convention $\Delta t = \Delta t_{\rm inter\text{-}site} -
+\tau_{\rm geo}$, where $\Delta t_{\rm inter\text{-}site}$ is the DSA-minus-CHIME
+arrival offset after both are referenced to 400\,MHz (Eq.~\ref{eq:dmdelay}) and
+$\tau_{\rm geo}$ is the predicted geometric delay (Eq.~\ref{eq:geodelay}); a
+positive residual means the DSA arrival is later than the shared-DM geometric
+prediction relative to CHIME, and $\Delta t=0$ is exact agreement. The geometric
+term is itself bounded: for the $1345\,\mathrm{km}$ CHIME (DRAO)--DSA-110 (OVRO)
+baseline, $|\tau_{\rm geo}| \le |\mathbf{p}_2-\mathbf{p}_1|/c \approx 4.5\,$ms for
+any source direction. The residual is therefore not error-free but carries a
+per-burst systematic of order the inter-site clock/timestamp alignment
+($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight DM-constrained bursts, the
+residual dispersive delay left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
+CHIME-referenced shift for the largest offset (FRB~20220207C, $\Delta\mathrm{DM}
+=-0.84\,\mathrm{pc\,cm^{-3}}$) were the CHIME arrival re-referenced at its own DM,
+a convention-dependent term reported separately rather than folded in. We
+assign each pair a $1\sigma$ timing budget $\sigma_i$ by combining, in
+quadrature, the shared-DM combined CHIME+DSA arrival error, the intrinsic pulse
+width, and the $\sigma_{\rm clock}\sim1$\,ms term, and accept a pair when its
+residual is consistent with the geometric delay to within $|\Delta t_i| \le
+3\sigma_i$. The budget is dominated by the pulse width for the two broadest
+bursts, so the largest raw residual---$+8.4$\,ms for FRB~20220506D, a $74$\,ms-wide
+burst---is only $0.1\sigma$. All twelve residuals ($-2.7$ to $+8.4$\,ms,
+tabulated with their $\sigma_i$ in Table~\ref{tab:sample}) satisfy the criterion;
+the tightest is FRB~20221203A at $2.6\sigma$. A residual of several tens of ms
+for a narrow, well-localized burst---inconsistent with both its few-ms budget and
+the $\lesssim\!4.5$\,ms geometric delay---would fail. We stress
+that the association verdict does not rest on the timing residual alone: the
+decisive gates are the chance-coincidence probability, positional coincidence,
+and (for the DM-constrained bursts) DM agreement, for which the residual is a
+supporting consistency diagnostic.
+
+Evaluated with the conservative windows above, all twelve bursts have
+per-burst chance-coincidence probabilities of order $10^{-9}$ and thus
+$P_{\rm cc}<10^{-8}$ individually; the expected number of chance associations
+across the full sample is $\sum_i\mu_i \approx 5.5\times10^{-8}$. In other words,
+even under windows chosen to overstate the false-alarm rate, fewer than one in a
+hundred million such pairings would be expected to arise by chance per pair
+(and the sample-summed expectation is about one in twenty million). Because the
+estimate is so far below any plausible threshold, the chance-coincidence test on
+its own establishes the co-detections; the positional-coincidence and
+DM-agreement checks only tighten an already-decisive result. All twelve pass the
+positional-coincidence check. The eight bursts with constrained CHIME-side DMs
+also pass the CHIME--DSA DM-agreement check; the four remaining bursts are marked
+`assoc.~(pos.)' in Table~\ref{tab:sample}: their association rests on
+position and timing alone, because their CHIME sub-band fits did not provide
+a constraining independent DM. For those four we set $f_{\rm DM}=1$ in
+Eq.~\eqref{eq:pcc_mu}---the DM criterion is not imposed, so their
+$P_{\rm cc}$ is a time-and-position bound only, consistent with the
+position-only verdict; the eight DM-constrained bursts carry the full
+$f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM})<1$ factor. The reported
+$P_{\rm cc}$ values are thus computed per association class, and the
+position-only $P_{\rm cc}$ are, if anything, conservative relative to the
+DM-constrained ones.
+
+The per-burst DM provenance (per-telescope DM, method, and CHIME--DSA agreement)
+and the intermediate association diagnostics are provided as a machine-readable
+table in the archival data release (Section~\ref{sec:data-availability});
+Table~\ref{tab:sample} carries the manuscript-facing timing residual, $P_{\rm cc}$,
+and association-verdict columns. We note in passing that the eight
+DM-constrained bursts show CHIME reading systematically low relative to DSA by
+$\approx0.4\,\mathrm{pc\,cm^{-3}}$ on average---a coherent, sub-floor offset that
+does not affect any association verdict.

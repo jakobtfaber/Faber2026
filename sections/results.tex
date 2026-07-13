@@ -1,0 +1,240 @@
+\section{Results}
+\label{sec:results}
+
+The association tests, the foreground census, and the dispersion-measure budget
+decomposition are reported below. The scattering fits for individual sightlines,
+the scintillation products, the turbulence parameters, the burst energies, and
+the measured-versus-predicted scattering comparison are presented in the
+following subsections.
+
+\FloatBarrier
+\subsection{Association of the co-detections}
+\label{sec:results-association}
+
+All twelve candidate pairs pass the association tests of
+Section~\ref{sec:toa}. Under the conservative, chance-maximizing windows of
+Section~\ref{sec:toa-pcc}, every pair has a chance-coincidence probability
+$P_{\rm cc}<10^{-8}$---fewer than one in a hundred million such pairings would be
+expected to arise by chance---and passes the positional-coincidence check; the
+timing residuals, referenced to
+400\,MHz under the shared DSA-DM convention, are consistent with the
+predicted inter-site geometric delay (Table~\ref{tab:sample}). The eight
+bursts with constrained CHIME-side dispersion measures also pass the
+CHIME--DSA DM-agreement check; the remaining four are retained as
+position-and-timing associations, since their CHIME sub-band fits do not
+provide a constraining independent DM. We therefore treat all twelve pairs as
+genuine co-detections in what follows.
+
+\FloatBarrier
+\subsection{Per-sightline dispersion-measure budget}
+\label{sec:results-budget}
+\label{sec:budget}
+
+Table~\ref{tab:budget} reports the decomposition of Eq.~\ref{eq:dmbudget}
+along the twelve sightlines. Three features organize the sample. First, the
+intervening term is strongly concentrated: summed over the confirmed
+foreground systems of Section~\ref{sec:obs-fg}, $\mathrm{DM_{int}}$ exceeds
+$100\,\mathrm{pc\,cm^{-3}}$ on only one sightline (FRB~20230307A,
+$241\,\mathrm{pc\,cm^{-3}}$, dominated by the intracluster column of
+Section~\ref{sec:dominant-systems}), while the remaining sightlines carry
+$\lesssim 85\,\mathrm{pc\,cm^{-3}}$ and four tabulate
+$\mathrm{DM_{int}}=0$---for two distinct reasons. FRB~20220506D and
+FRB~20240122A lie outside the deep-imaging footprints, so their sightlines
+are constrained only by the shallow all-sky layers and their intervening
+terms are unconstrained rather than measured to be zero (note~u). FRB~20240203A
+and FRB~20240229A carry confirmed foreground halos, but those halos lie
+beyond the virial radii implied by their assumed masses, so the modeled
+columns vanish; their zeros are conditional on the mass assumption (note~m),
+and FRB~20240203A is additionally outside the deep footprints. One sightline
+(FRB~20230814B) crosses a foreground halo in the
+galaxy-interior regime ($b \approx 4.6$\,kpc), where the reported column is
+capped at its $b=0.1\,R_{\rm vir}$ value rather than extrapolated through the
+core. Second, the forward-modeled host posteriors
+(Section~\ref{sec:dm}, Appendix~\ref{app:host-forward-model}) are broad and
+asymmetric, dominated by the cosmological scatter: their medians span
+$\mathrm{DM_{host}}\approx-10$--$200\,\mathrm{pc\,cm^{-3}}$, the largest on
+FRB~20240229A ($197^{+60}_{-75}\,\mathrm{pc\,cm^{-3}}$), and every
+redshift-known sightline is consistent with a host contributing a minority of
+the extragalactic column once the width of the cosmological term is folded in.
+Third, the two
+highest-redshift sightlines (FRB~20220310F, FRB~20221203A), whose
+mean-subtracted point residuals were negative, have host posteriors consistent
+with zero ($P(\mathrm{DM_{host}}<0)\approx0.5$; Table~\ref{tab:budget}); their
+marginally negative medians reflect sightline-to-sightline scatter about the
+diffuse cosmic normalization at these redshifts, not an unphysical host, and an
+IGM baryon fraction within $0.25\sigma$ of the adopted prior places either
+median at zero. The three sightlines without
+spectroscopic host redshifts are excluded from all distance-dependent terms
+(Table~\ref{tab:budget}, note p).
+
+The predicted intervening pulse broadening from the thin-screen two-phase
+model is small everywhere: $\tau_{\mathrm{int}} \le 0.024$\,ms at 1\,GHz,
+with the largest values on the sightlines whose confirmed halos are crossed
+at the smallest impact parameters. The comparison of these predictions with
+the measured scattering times is deferred to the scattering analysis
+(Section~\ref{sec:results-alpha}).
+
+% TODO(results-budget-scattering): Restore the measured-vs-predicted
+% scattering comparison (fig:budget overlay, tau_obs column) only after the
+% V1 fit ladder clears.
+% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W1), gate V1+C+D1.
+% Keep the placeholder out of the compiled manuscript until the gate clears.
+
+\input{budget_table}
+
+\subsubsection{Dominant intervening systems}
+\label{sec:dominant-systems}
+
+Of the twelve sightlines, only one crosses a foreground cluster within its
+characteristic radius. The FRB~20230307A sightline passes at $b/R_{500}=0.83$
+from the \citet{WenHan2024} cluster J115120.4$+$714435 ($z=0.200$,
+$\log M_{500}=14.1$), for which the two-phase modified-NFW model predicts an
+intracluster column of order $160\,\mathrm{pc\,cm^{-3}}$
+(Figure~\ref{fig:clusters_icm}). This column is uncertain at the factor-of-two
+level: an X-ray/SZ-motivated isothermal $\beta$-model with the same $M_{500}$
+and a cosmic gas fraction gives a somewhat higher central value
+($\approx250\,\mathrm{pc\,cm^{-3}}$), and propagating the richness-based
+$M_{500}$ ($\sim\!0.2$\,dex scatter), the gas fraction ($f_{\rm gas}=0.10$--$0.16$),
+and the profile shape spans $\approx100$--$560\,\mathrm{pc\,cm^{-3}}$
+(Appendix~\ref{app:host-forward-model}). The mNFW profile is calibrated on
+$\sim\!L_\star$ halos \citep{ProchaskaZheng2019} and is not guaranteed to hold at
+$\log M_{500}=14.1$; its value sits near the low end of the $\beta$-model range
+and should be read as a conservative estimate. This is nonetheless the single
+dominant intervening system in the sample. The other foreground clusters recovered along this and the two
+other cluster-bearing sightlines all lie beyond $R_{500}$, where the modeled
+column drops steeply; they are excluded from the budget even where the profile
+remains formally nonzero, and none approaches the FRB~20230307A cluster in
+predicted contribution.
+
+The confirmed foreground galaxies lie at impact parameters of tens to a few
+hundred kpc, in the outer circumgalactic medium rather than the galaxy interior.
+Each therefore adds only a small dispersion-measure contribution, and no single galaxy halo dominates
+its sightline's intervening column.
+The intervening DM in this sample is thus concentrated almost entirely on
+the one cluster-crossing sightline and is small on the rest; the sightlines
+carrying no confirmed within-aperture system are limited by survey depth
+(Section~\ref{sec:obs-fg}), not shown to be free of foreground gas.
+
+\FloatBarrier
+\subsection{Scintillation and screen attribution}
+\label{sec:results-scintillation}
+
+We report here the DSA-band diffractive-scintillation products that have been
+re-derived under the validation contract; the CHIME-band scintillation
+campaign, the scattering fits that enter any $\tau\,\Delta\nu_d$ screen
+product, and the resulting one- versus two-screen attribution are deferred to
+Section~\ref{sec:disc-screen-attribution} once their prerequisite strands are
+independently trusted. The estimator used for the decorrelation bandwidth and
+modulation index, and the two-screen framework that the attribution will draw
+on---including the $\tau_{s}\leftrightarrow\nu_{s}$ relation, the two-screen
+ACF product term, and the screen-distance constraint---are set out in
+Appendix~\ref{app:twoscreen}.
+
+For each burst we recompute the spectral autocorrelation function (ACF) of the
+DSA-110 dynamic spectrum in equal-signal-to-noise frequency sub-bands and fit
+it with a sum of Lorentzian components, whose half-width at half-maximum defines
+the diffractive decorrelation bandwidth $\gamma$
+\citep{Rickett1990, Cordes2016}. The number of sub-bands and the number of
+Lorentzian components per sub-band are selected internally, from fixed
+model-comparison and viability gates rather than inherited fit choices, as
+described in Section~\ref{sec:methods}; components that fail the bandwidth,
+modulation, or fractional-uncertainty quality flags are retained in the
+component tables but excluded from the summary measurements.
+
+All twelve co-detections yield at least one clean (unflagged) DSA-band
+decorrelation-bandwidth measurement, for a total of 41 clean Lorentzian
+components across the sample. The per-burst clean-component median $\gamma$
+spans roughly $0.24\,$MHz (FRB~20230913A) to $23\,$MHz (FRB~20220310F), with
+individual clean components ranging from $\sim0.13$ to $\sim23\,$MHz across the
+$1.28$--$1.53\,$GHz DSA band---comparable to and in several cases exceeding the
+Galactic diffractive bandwidths predicted by NE2025 along these sightlines
+(Figure~\ref{fig:ne2025_mw}). Figure~\ref{fig:dsa_scint_gamma} summarizes the
+clean measurements as one bandwidth-versus-frequency panel per burst. For the
+nine bursts with clean measurements at two or more distinct sub-band
+frequencies, we overlay a fixed $\gamma\propto\nu^4$ guide anchored to the
+measurements; the three single-frequency bursts (FRB~20230325A, FRB~20221113A,
+and FRB~20220310F) carry no guide, since a single frequency does not constrain
+the scaling. We do not fit a per-burst scaling index here: the frequency lever
+arm within the DSA band alone is short, and a physically meaningful measurement
+of the scaling requires the CHIME-band anchor, which is deferred with the rest
+of the two-band analysis.
+
+% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W5), gate
+% B5+V1 scintillation+A1. Keep it out of the compiled manuscript until then.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/dsa_lorentzian_summary.pdf}
+    \caption{DSA-110 diffractive decorrelation bandwidths for the twelve
+    co-detections. Each panel shows the clean (unflagged) Lorentzian
+    decorrelation bandwidth $\gamma$ against DSA sub-band center frequency for
+    one burst, on a logarithmic bandwidth axis. Filled purple circles are clean
+    selected components with $1\sigma$ fit uncertainties; the dashed gray guide
+    is the fixed $\gamma\propto\nu^4$ scaling anchored to the measurements,
+    shown only for the nine bursts constrained at two or more distinct clean
+    sub-band frequencies. Components carrying quality flags are excluded here but
+    retained in the component tables. The full per-burst ACF diagnostics, showing
+    the stacked sub-band autocorrelation functions with their fitted total
+    Lorentzian models, are provided in
+    Appendix~\ref{app:dsa-scint-acf}.}
+    \label{fig:dsa_scint_gamma}
+\end{figure*}
+
+\FloatBarrier
+\subsection{Turbulence spectrum and burst multiplicity}
+\label{sec:results-alpha}
+
+% TODO(results-turbulence): Insert only after the joint scattering fits pass
+% the fit re-validation ladder and the geometry-selection campaign has decided
+% which model family is citable per sightline. Do not quote rail classes,
+% alpha=4 limits, class fractions, median beta, or campaign-era fit values as
+% sky results.
+%
+% This slot should eventually report:
+% - the validated per-sightline turbulence parameters, if any;
+% - the model family under which each value is citable;
+% - multiplicity decisions that survive re-validation;
+% - any morphology-induced bias demonstration that is re-established.
+%
+% Candidate future artifacts, once trusted:
+% - tab:beta
+% - fig:subband_tau_validation
+% (fig:whitney_mult dropped 2026-07-10 --- outdated multiplicity demo; use
+%  appendix jointmodel-pair panels / a re-validated demo if needed later)
+%
+% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W4), gate V1.
+% Keep it out of the compiled manuscript until the gate clears.
+
+The component-multiplicity audit exposes limitations of the joint-fit
+morphology independent of the turbulence-parameter values themselves.
+Appendix Figure~\ref{fig:codetection-triptych-whitney} shows the FRB~20220310F
+two-dimensional data/model/residual panel after the CHIME
+side is forced to retain its resolved second pulse
+($\dagger$: the DSA sub-burst remains incompletely modeled). Figure~\ref{fig:codetection-triptych-zach}
+provides the representative main-text audit, and the remaining panels are
+collected in Appendix~\ref{app:jointmodel-pairs}.
+We use these figures to check whether the adopted component count leaves
+coherent burst power in the residuals; we do not quote the fitted scattering
+or turbulence parameters from them.
+
+\FloatBarrier
+\subsection{Band-restricted burst energies}
+\label{sec:burst-energies}
+
+% TODO(results-energies): Insert only after the energy re-validation pass.
+% A citable row requires a trusted host redshift, trusted per-band spectral
+% amplitudes, a checked calibration path, and a resolved inclusion rule.
+%
+% Required before filling:
+% - Re-establish c0 and gamma values from trusted fits or an energy-specific
+%   trusted export.
+% - Resolve any prior-rail or selection-rule issues.
+% - State the burst list and exclusion reasons explicitly.
+%
+% Candidate future artifact, once trusted:
+% - tab:burst-energies
+%
+% TODO(energies-fixed-band-variant): Optional under V3 (D5 lock 2026-07-10) —
+% elect a fixed rest-frame-band companion E_iso for luminosity-function
+% comparison only if needed; not required for submission. See methods.tex
+% TODO and decision-d2-d5-scattering-design-locks.md.
