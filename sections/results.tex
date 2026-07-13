@@ -13,19 +13,39 @@ following subsections.
 
 All twelve candidate pairs pass the association tests of
 Section~\ref{sec:toa}. Under the conservative, chance-maximizing windows of
-Section~\ref{sec:toa-pcc}, every pair has a chance-coincidence probability
-$P_{\rm cc}<10^{-8}$---fewer than one in a hundred million such pairings would be
-expected to arise by chance---and passes the positional-coincidence check; the
+Section~\ref{sec:toa-pcc}, every pair has $P_{\rm cc}<10^{-6}$ and passes the
+positional-coincidence check; the
 timing residuals, referenced to
 400\,MHz under the shared DSA-DM convention, are consistent with the
-predicted inter-site geometric delay (Table~\ref{tab:sample}). The eight
+predicted inter-site geometric delay (Table~\ref{tab:sample};
+Figure~\ref{fig:association-summary}). The eight
 bursts with constrained CHIME-side dispersion measures also pass the
 CHIME--DSA DM-agreement check; the remaining four are retained as
 position-and-timing associations, since their CHIME sub-band fits do not
 provide a constraining independent DM. We therefore treat all twelve pairs as
 genuine co-detections in what follows.
 
-\FloatBarrier
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/association_summary.pdf}
+    \caption{Summary of the three association diagnostics for the twelve
+    co-detections, ordered by arrival epoch. (a) The measured 400-MHz
+    CHIME-minus-DSA offset (colored points) compared with the predicted
+    geometric offset ($\tau_{\rm geo}=-2.30$ to $-2.03$\,ms; black diamonds).
+    Thick blue and thin gray segments show the event-specific $1\sigma$ and
+    $3\sigma$ intervals around the geometric prediction, respectively; the two
+    largest intervals extend beyond the displayed range. (b) Angular
+    separation divided by the adopted CHIME localization
+    radius; the dashed line is the positional-consistency boundary. (c)
+    Conservative chance-coincidence probability. Filled blue markers denote the
+    eight bursts with independent CHIME--DSA DM checks; open orange markers are
+    the four position-and-time-only associations, for which $f_{\rm DM}=1$.
+    All twelve pass all applicable criteria. The per-burst timing, DM, and
+    localization views are retained as audit cards in
+    Appendix~\ref{app:assoc-cards}.}
+    \label{fig:association-summary}
+\end{figure*}
+
 \subsection{Per-sightline dispersion-measure budget}
 \label{sec:results-budget}
 \label{sec:budget}
