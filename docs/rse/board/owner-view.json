@@ -1,12 +1,12 @@
 {
-  "updated": "2026-07-12T23:30-0700",
+  "updated": "2026-07-13T03:30-0700",
   "needs_you": [
     {"h": "Calibrate the A1 trigger", "d": "two-screen escalation · open since 07-06"},
     {"h": "Pick first trust-ladder rung", "d": "P0 recommended"}
   ],
   "now": [
     {"h": "Unified scintillation figure", "d": "PR 159 merged; CHIME instrumental-ACF correction next", "who": "codex"},
-    {"h": "DM-host posterior figure", "d": "restyle branch open", "who": "claude"},
+    {"h": "Review verified DM PR", "d": "PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods", "who": "you"},
     {"h": "A1 design discussion", "who": "you + agents"}
   ],
   "next": [
@@ -16,9 +16,9 @@
   ],
   "components": [
     {"name": "Sample & association", "lane": "V6", "status": "validated", "status_class": "good",
-     "next": "figure + P_cc prose landing"},
+     "next": "review PR 17"},
     {"name": "Budget & census", "lane": "V4·V5", "status": "validated", "status_class": "good",
-     "next": "prose rewrite after D"},
+     "next": "DM adopted; scattering after D"},
     {"name": "Scattering", "lane": "V1·A·C", "status": "method open", "status_class": "pend",
      "next": "A1 with you · V1/V2 startable"},
     {"name": "Scintillation", "lane": "B", "status": "active", "status_class": "now",

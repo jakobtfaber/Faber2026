@@ -1,5 +1,10 @@
 # Research: DM measurement methods — provenance of the quoted DMs and the improvement landscape
 
+> **Historical audit, superseded 2026-07-13.** This file describes the state
+> before the controlled phase-coherence campaign. The adopted values and final
+> method are recorded in [verified-dm-adoption-2026-07-13.md](verified-dm-adoption-2026-07-13.md)
+> and `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv`.
+
 **Date:** 2026-07-09
 **Scope:** both — internal (DM provenance, dispersion code inventory, DM treatment in the 2D joint model) and external (DM-estimation package survey with disconfirming checks)
 **Codebase state:** Faber2026 `ms/codetection-gallery` tip (main `29f7a81` + gallery lane), pipeline pin `14e0d1f`

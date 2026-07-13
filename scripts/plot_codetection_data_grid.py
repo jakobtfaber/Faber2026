@@ -11,12 +11,15 @@ CHIME-width display crop never runs off the end of either band.
 Each cell carries the band-summed profile strip on top and the time-integrated
 on-pulse spectrum marginal on the right; RFI-excised (zapped/flat) channels are
 NaN-masked and render in a uniform gray in every panel. No model or residual
-values are drawn.
+values are drawn. Before display averaging, both native-resolution products
+are re-dedispersed from their filename-stem DMs to the adopted CHIME
+phase-coherence DM in ``analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv``.
 """
 
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import warnings
 from pathlib import Path
@@ -38,6 +41,7 @@ from plot_codetection_triptych import (
 )
 
 OUT_DEFAULT = ROOT / "figures" / "codetection_data_grid"
+DM_CATALOG_DEFAULT = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 
 # Block-averaging factors of the native archival grids (f_factor, t_factor):
 # DSA 6144ch/32.768us -> 512ch at native time (1024ch buries the faintest DSA
@@ -64,6 +68,27 @@ def _finite_percentile(values: np.ndarray, percentile: float, default: float) ->
     finite = np.asarray(values, float)
     finite = finite[np.isfinite(finite)]
     return default if finite.size == 0 else float(np.percentile(finite, percentile))
+
+
+def load_adopted_dms(path: Path) -> dict[str, float]:
+    """Read and strictly validate the 12-burst manuscript DM catalog."""
+    with path.open(newline="") as fh:
+        rows = list(csv.DictReader(fh))
+    if len(rows) != 12:
+        raise ValueError(f"DM catalog must contain 12 rows, got {len(rows)}")
+    out: dict[str, float] = {}
+    for row in rows:
+        nick = row["nick"].lower()
+        if nick in out:
+            raise ValueError(f"duplicate DM catalog nick: {nick}")
+        if row.get("adoption") != "chime_primary":
+            raise ValueError(f"{nick}: Figure 1 requires chime_primary adoption")
+        adopted = float(row["adopted_dm"])
+        chime = float(row["chime_dm"])
+        if not np.isclose(adopted, chime, rtol=0.0, atol=5e-7):
+            raise ValueError(f"{nick}: adopted DM does not equal CHIME DM")
+        out[nick] = adopted
+    return out
 
 
 def _block_mean_1d(x: np.ndarray, r: int) -> np.ndarray:
@@ -100,7 +125,9 @@ def _register_fit_grid_ms(
     return lag * r * dt_native_ms
 
 
-def fit_toa_shift_ms(row: dict, *, root: Path, data_root: Path) -> dict[str, float]:
+def fit_toa_shift_ms(
+    row: dict, *, root: Path, data_root: Path, target_dm: float
+) -> dict[str, float]:
     """Per-band shift (band label -> ms) moving the display anchor from the
     data profile peak to the fitted arrival time from the accepted joint fit:
     the t0 (referenced to the top of each band) of the model component nearest
@@ -131,14 +158,22 @@ def fit_toa_shift_ms(row: dict, *, root: Path, data_root: Path) -> dict[str, flo
             model_prof = np.nansum(np.asarray(z[f"model{band_key}"], float), axis=0)
         t0 = dominant_t0_ms(percentiles, band_key, fit_t, model_prof)
 
-        # Native archival profile for registration, plus the display anchor
-        # computed exactly as bands_archival does (same load_band path).
+        # Register against the original archival stream because the fit NPZ
+        # was made at the product's filename-stem DM. Compute the display
+        # anchor separately after applying the same adopted-DM correction as
+        # bands_archival; re-dedispersion changes the band-summed peak.
         f_factor, t_factor_disp = DISPLAY_FACTORS[tel]
         dt_native = BANDS[tel]["dt_ms"]
         band_native = dict(BANDS[tel], f_factor=f_factor, t_factor=1)
         _, native_prof = load_band(products[tel].path, band_native)
         band_disp = dict(BANDS[tel], f_factor=f_factor, t_factor=t_factor_disp)
-        _, disp_prof = load_band(products[tel].path, band_disp)
+        residual_dm = float(target_dm - products[tel].dm)
+        _, disp_prof = load_band(
+            products[tel].path,
+            band_disp,
+            telescope=tel,
+            residual_dm=residual_dm,
+        )
         pk_native_ms = int(np.nanargmax(disp_prof)) * t_factor_disp * dt_native
 
         start_native_ms = _register_fit_grid_ms(fit_t, fit_prof, native_prof, dt_native)
@@ -147,7 +182,7 @@ def fit_toa_shift_ms(row: dict, *, root: Path, data_root: Path) -> dict[str, flo
     return shifts
 
 
-def load_row_bands(row: dict, *, root: Path, data_root: Path):
+def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
     """Near-native archival display bands for every burst (fit or no fit)."""
     return bands_archival(
         data_root,
@@ -155,7 +190,10 @@ def load_row_bands(row: dict, *, root: Path, data_root: Path):
         factors=DISPLAY_FACTORS,
         pad_scale=DISPLAY_PAD_SCALE,
         pad_cap_ms=DISPLAY_PAD_CAP_MS,
-        extra_shift_ms=fit_toa_shift_ms(row, root=root, data_root=data_root),
+        target_dm=target_dm,
+        extra_shift_ms=fit_toa_shift_ms(
+            row, root=root, data_root=data_root, target_dm=target_dm
+        ),
     )
 
 
@@ -267,7 +305,19 @@ def _band_gap_mhz(bands) -> tuple[float, float] | None:
     return None
 
 
-def render_grid(rows: list[dict], *, root: Path, data_root: Path, out: Path, dpi: int) -> None:
+def render_grid(
+    rows: list[dict],
+    *,
+    root: Path,
+    data_root: Path,
+    out: Path,
+    dpi: int,
+    dm_catalog: Path = DM_CATALOG_DEFAULT,
+) -> None:
+    adopted_dms = load_adopted_dms(dm_catalog)
+    roster = {row["nick"].lower() for row in rows}
+    if roster != set(adopted_dms):
+        raise ValueError("manifest and adopted-DM catalog rosters differ")
     _apply_style()
     plt.rcParams.update(
         {
@@ -280,14 +330,19 @@ def render_grid(rows: list[dict], *, root: Path, data_root: Path, out: Path, dpi
             "ytick.direction": "in",
         }
     )
-    # 7.3 x 7.65 in: at \textwidth the typeset height plus the caption must fit
-    # a single AASTeX float page (9.2 in tall overflowed by ~103 pt).
-    fig = plt.figure(figsize=(7.3, 7.65))
+    # At \textwidth the typeset height plus the combined adopted-DM/fitted-TOA
+    # caption must fit on one AASTeX float page.
+    fig = plt.figure(figsize=(7.3, 7.45))
     outer = fig.add_gridspec(
         3, 4, hspace=0.18, wspace=0.16, left=0.065, right=0.995, top=0.97, bottom=0.045
     )
     for index, row in enumerate(rows):
-        bands = load_row_bands(row, root=root, data_root=data_root)
+        bands = load_row_bands(
+            row,
+            root=root,
+            data_root=data_root,
+            target_dm=adopted_dms[row["nick"].lower()],
+        )
         cell = outer[index // 4, index % 4].subgridspec(
             2, 2, width_ratios=[3.4, 1.0], height_ratios=[1.0, 3.6],
             wspace=0.07, hspace=0.09,
@@ -325,10 +380,18 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT)
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT_DEFAULT)
     parser.add_argument("--out", type=Path, default=OUT_DEFAULT)
+    parser.add_argument("--dm-catalog", type=Path, default=DM_CATALOG_DEFAULT)
     parser.add_argument("--dpi", type=int, default=600)
     args = parser.parse_args()
     rows = load_manifest(args.manifest)
-    render_grid(rows, root=ROOT, data_root=args.data_root, out=args.out, dpi=args.dpi)
+    render_grid(
+        rows,
+        root=ROOT,
+        data_root=args.data_root,
+        out=args.out,
+        dpi=args.dpi,
+        dm_catalog=args.dm_catalog,
+    )
     print(f"wrote {args.out.with_suffix('.pdf')}")
     return 0
 

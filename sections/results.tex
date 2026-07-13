@@ -18,12 +18,15 @@ positional-coincidence check; the
 timing residuals, referenced to
 400\,MHz under the shared DSA-DM convention, are consistent with the
 predicted inter-site geometric delay (Table~\ref{tab:sample};
-Figure~\ref{fig:association-summary}). The eight
-bursts with constrained CHIME-side dispersion measures also pass the
-CHIME--DSA DM-agreement check; the remaining four are retained as
-position-and-timing associations, since their CHIME sub-band fits do not
-provide a constraining independent DM. We therefore treat all twelve pairs as
-genuine co-detections in what follows.
+Figure~\ref{fig:association-summary}). The original association calculation
+used a DM-conditioned chance term for eight events and deliberately retained
+$f_{\rm DM}=1$ for the other four. The new phase-coherence analysis now yields
+independent CHIME and DSA measurements for all twelve, with
+$|\mathrm{DM_{CHIME}}-\mathrm{DM_{DSA}}|\leq
+0.117\,\mathrm{pc\,cm^{-3}}$ (Table~\ref{tab:dm-measurements}). We do not use
+this post-selection result to reduce the published chance probabilities for
+the four conservative position-and-time associations. We therefore treat all
+twelve pairs as genuine co-detections in what follows.
 
 \begin{figure*}[t]
     \centering
@@ -41,8 +44,9 @@ genuine co-detections in what follows.
     separation divided by the adopted CHIME localization
     radius; the dashed line is the positional-consistency boundary. (c)
     Conservative chance-coincidence probability. Filled blue markers denote the
-    eight bursts with independent CHIME--DSA DM checks; open orange markers are
-    the four position-and-time-only associations, for which $f_{\rm DM}=1$.
+    eight bursts whose pre-specified association statistic included the
+    CHIME--DSA DM term; open orange markers are the four conservatively retained
+    position-and-time-only association calculations, for which $f_{\rm DM}=1$.
     All twelve pass all applicable criteria. The per-burst timing, DM,
     localization, and chance-probability views are retained as audit cards in
     Appendix~\ref{app:assoc-cards}.}
@@ -76,7 +80,7 @@ core. Second, the forward-modeled host posteriors
 (Section~\ref{sec:dm}, Appendix~\ref{app:host-forward-model}) are broad and
 asymmetric, dominated by the cosmological scatter: their medians span
 $\mathrm{DM_{host}}\approx-10$--$200\,\mathrm{pc\,cm^{-3}}$, the largest on
-FRB~20240229A ($197^{+60}_{-75}\,\mathrm{pc\,cm^{-3}}$), and every
+FRB~20240229A ($198^{+59}_{-76}\,\mathrm{pc\,cm^{-3}}$), and every
 redshift-known sightline is consistent with a host contributing a minority of
 the extragalactic column once the width of the cosmological term is folded in.
 Third, the two

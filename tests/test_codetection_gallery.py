@@ -6,11 +6,12 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from plot_codetection_gallery import (
+from plot_codetection_gallery import (  # noqa: E402
     NICK_TNS,
     block_mean,
     dead_channel_mask,
     discover_products,
+    load_band,
     onpulse_span,
     peak_window,
 )
@@ -92,6 +93,29 @@ def test_discover_products_raises_on_missing(tmp_path):
         assert "chime" in str(e)
     else:
         raise AssertionError("expected FileNotFoundError")
+
+
+def test_load_band_applies_native_residual_dm_before_averaging(monkeypatch, tmp_path):
+    raw = np.arange(8 * 20, dtype=np.float32).reshape(8, 20)
+    path = tmp_path / "band.npy"
+    np.save(path, raw)
+    calls = []
+
+    def fake_shift(arr, freq, dt_s, residual_dm, *, mode):
+        calls.append((arr.shape, freq.shape, dt_s, residual_dm, mode))
+        return arr + 2.0
+
+    import dispersion.dm_power_analysis as dm_power
+
+    monkeypatch.setattr(dm_power, "shift_waterfall_residual_dm", fake_shift)
+    monkeypatch.setattr(dm_power, "_freq_grid_mhz", lambda tel, n: np.arange(n, dtype=float))
+    band = {"f_factor": 2, "t_factor": 2, "dt_ms": 0.01}
+    shifted, _ = load_band(path, band, telescope="chime", residual_dm=0.125)
+    baseline, _ = load_band(path, band)
+    # A constant shift is removed by baseline subtraction, but the call proves
+    # that re-dedispersion occurred on the native 8x20 array before 2x2 binning.
+    assert shifted.shape == baseline.shape == (4, 10)
+    assert calls == [((8, 20), (8,), 1e-5, 0.125, "zero_fill")]
 
 
 def test_nick_tns_matches_pipeline():
