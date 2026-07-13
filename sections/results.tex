@@ -223,7 +223,8 @@ subjected to a set of fail-closed artifact controls: an off-pulse null test
 width), a two-sided low-lag excision test (the fitted width must be stable,
 neither collapsing nor growing by more than a factor of two, when the lowest
 lags are removed), a modulation-index physicality bound ($m\lesssim1$ for
-diffractive scintillation of a point source), a minimum of three valid
+diffractive scintillation of a point source, enforced with a tolerance of
+$m\leq1.5$ for noisy fits), a minimum of three valid
 sub-bands, and a provenance requirement that the input product carry the full
 instrumental mitigation stack. A verdict that cannot be evaluated is treated
 as a failure, never as a pass.
@@ -232,8 +233,8 @@ No CHIME-band decorrelation bandwidth survives these controls: all twelve
 bursts are demoted to diagnostic status, each with a named physical cause
 (Table~\ref{tab:chime_scint_gates}). For FRB~20230325A we additionally ran a
 factor-isolation sweep over the preprocessing mode and the first fitted lag
-(six variants); the fitted widths remain pinned at $36$--$45\,$kHz, bracketing
-the previously documented $35\,$kHz instrumental scale, under every
+(six variants); the fitted widths remain pinned at $36$--$45\,$kHz, clustered just
+above the previously documented $35\,$kHz instrumental scale, under every
 combination---the signature of an instrumental artifact, not sky
 scintillation. The sample-wide provenance failure is also uniform: no
 co-detection currently has an up-channelized product with a validated
@@ -251,7 +252,10 @@ fitted amplitudes are physical.
     diagnostic only; no CHIME-band decorrelation bandwidth is certified. All
     twelve additionally share the sample-wide provenance failure (no
     validated instrumental background correction exists yet for the
-    up-channelized products). ``Inconclusive'' verdicts count as failures.}
+    up-channelized products). ``Inconclusive'' verdicts count as failures;
+    only the decisive controls are listed per burst, and the bursts whose
+    best-fit ACF model carries no modulation amplitude also hold an
+    inconclusive modulation verdict.}
     \label{tab:chime_scint_gates}
     \begin{tabular}{ll}
     \hline
