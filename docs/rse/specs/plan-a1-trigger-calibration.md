@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-13
 **Author:** AI Assistant (claude-fable-5), owner direction 2026-07-13
-**Status:** In Progress (Phases 1-2 complete, 2026-07-13)
+**Status:** In Progress (Phases 1-4 code complete; h17 campaign running, 2026-07-13)
 **Related Documents:**
 - [Plan: Circulation readiness — A1 charter](plan-circulation-readiness.md) (A-lane, trigger text revised 2026-07-13)
 - [Plan: Trust-reset revalidation — V1 contract / ADR-0008](plan-trust-reset-revalidation.md)
@@ -524,7 +524,7 @@ per-subband ACFs via `calculate_acfs_for_subbands` (sim_gate pattern), in the
 production HWHM convention and the P4c channelization contract.
 
 **Tasks:**
-- [ ] **Write the failing test**
+- [x] **Write the failing test**
   - File: `simulation/tests/test_trigger_injections.py` (new)
 
   ```python
@@ -549,8 +549,8 @@ production HWHM convention and the P4c channelization contract.
       assert out["truth"]["f"] == 10.0
   ```
 
-- [ ] **Run, watch fail.**
-- [ ] **Implement** `simulation/trigger_calibration.py`:
+- [x] **Run, watch fail.**
+- [x] **Implement** `simulation/trigger_calibration.py`:
   `inject_single_screen` composes the Phase-2 `_one_realization` spectrum
   generator (fast path) with `calculate_acfs_for_subbands`
   (`analysis.py:509`) using a minimal config dict mirroring
@@ -563,7 +563,7 @@ production HWHM convention and the P4c channelization contract.
   engine (`simulation/engine.py:84` `FRBScintillator`, single screen) and its
   ACF compared to the fast path (KS distance on ACF values < 0.15); marked
   `@pytest.mark.slow`.
-- [ ] **Run, watch pass; commit:**
+- [x] **Run, watch pass; commit:**
   `git commit -m "feat(sim): truth-known single/two-screen ACF injections through production path"`
 
 **Dependencies:** Phase 2 (shares the spectrum generator); P4c Phase-1
@@ -581,7 +581,7 @@ exercised in tests.
 `reports/a1_trigger_calibration.json` + figures.
 
 **Tasks:**
-- [ ] **Write the failing test** (campaign kernel, small-n smoke)
+- [x] **Write the failing test** (campaign kernel, small-n smoke)
   - File: `simulation/tests/test_trigger_calibration_campaign.py` (new)
 
   ```python
@@ -600,11 +600,11 @@ exercised in tests.
       assert t[0.005] >= t[0.01] >= t[0.05]
   ```
 
-- [ ] **Run, watch fail; implement** `null_dlnz_cell` (n_real injections →
+- [x] **Run, watch fail; implement** `null_dlnz_cell` (n_real injections →
   per-burst summed ΔlnZ over subbands, each with its matched MC covariance)
   and `threshold_table` (envelope: max over cells of the (1−rate) quantile).
-- [ ] **Run, watch pass; commit.**
-- [ ] **Campaign driver** `simulation/scripts/run_a1_trigger_calibration.py`:
+- [x] **Run, watch pass; commit.**
+- [x] **Campaign driver** `simulation/scripts/run_a1_trigger_calibration.py`:
   grid Δν_d/Δchan ∈ {2, 5, 10, 30, 100} × S/N ∈ {10, 25, 50, 100} ×
   num_subbands ∈ {1, 4, 8}, n_real=200 per null cell (≈ 2.4×10⁴ nested runs;
   h17, joblib over cells, seeds = `seed0 + cell_index*1000 + real_index`);
@@ -916,6 +916,28 @@ sign-off input, with 1% as the recommended default)*
 
 ### Version 1.0 — 2026-07-13
 - Initial plan created from the two-agent research sweep (FLITS code surface + spec constraints), per the 2026-07-13 owner direction on the revised A1 trigger.
+
+### Version 1.2 — 2026-07-13 (Phases 3–4 implemented; campaign launched)
+- Commits `4854569` (injections + campaign kernel/driver), `e077611` (grid
+  fix). Tests: injections 2/2, campaign kernel 3/3 (incl. slow smoke);
+  driver `--smoke` end-to-end locally and on h17; parallel == sequential by
+  seed.
+- **Deviation 3:** tests live in root `tests/` (repo convention;
+  `simulation/tests/` does not exist).
+- **Deviation 4:** calibration band scales with subband count
+  (`num_subbands × 120` channels) — the plan's fixed 6 MHz band starved the
+  8-subband arm below `calculate_acf`'s 20-channel minimum; first h17 launch
+  failed that whole arm instantly (200/200 `evidence_failed`, caught by the
+  failure accounting) and was killed, fixed, relaunched at `e077611`.
+- Full grid (60 null + 8 power cells, n=200/100) running on h17
+  (`~/a1-trigger-calibration`, conda env `flits-a1-312`, 36 workers, nohup;
+  log `/tmp/a1_campaign.log`; per-cell checkpoints under
+  `reports/a1_trigger_calibration.cells/`).
+- Watch item for the analysis: one smoke null realization hit ΔlnZ ≈ +24 —
+  if the full null tail is that heavy, the suspect is covariance
+  conditioning (MC covariance synthesizes plain 1-D spectra; injections go
+  through the full dynamic-spectrum render with time-integrated noise).
+  The n=200 null distributions decide.
 
 ### Version 1.1 — 2026-07-13 (Phases 1–2 implemented)
 - Branch `a1/trigger-calibration` off `origin/pin/faber2026`, worktree
