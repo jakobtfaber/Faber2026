@@ -160,15 +160,14 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T14:40-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T20:10-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
 <li><b>Calibrate the A1 trigger</b><small>two-screen escalation · open since 07-06</small></li>
-<li><b>PR 159: confirm redesign</b><small>unified scint figure, held unmerged</small></li>
 <li><b>Pick first trust-ladder rung</b><small>P0 recommended</small></li>
 </ul></div>
 <div class="own-col oc-now"><h4>In flight</h4><ul>
-<li><b>Unified scintillation figure</b> <span class="who">codex</span><small>Freya CHIME ACF = instrumental ripple; fix in prep</small></li>
+<li><b>Unified scintillation figure</b> <span class="who">codex</span><small>PR 159 merged; CHIME instrumental-ACF correction next</small></li>
 <li><b>DM-host posterior figure</b> <span class="who">claude</span><small>restyle branch open</small></li>
 <li><b>A1 design discussion</b> <span class="who">you + agents</span></li>
 </ul></div>
@@ -290,6 +289,8 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
+<li><span class="jts mono">07-12 20:04</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-good">owner decision: FLITS PR 159 (separate Lorentzian component tracks) squash-merged to FLITS main after clean auto-review (no findings to implement); pipeline pin untouched; CHIME correction + unified figure remain open per handoff</span></li>
+<li><span class="jts mono">07-12 20:01</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Freya correction gate remains red; dispatched independent Codex review while production ACF qualification runs</span></li>
 <li><span class="jts mono">07-12 19:57</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">board</span><span class="jnote s-good">board moved off claude.ai: canonical URL now https://jakobtfaber.github.io/Faber2026/board/ via scripts/deploy-board.sh (gh-pages, board/ subdir; scattering deck at root preserved); protocol + footer + memory updated</span></li>
 <li><span class="jts mono">07-12 19:54</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Core FLITS correction and fail-closed gates implemented; starting real Freya paired-product qualification</span></li>
 <li><span class="jts mono">07-12 19:46</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">board</span><span class="jnote s-good">owner view de-densified per owner: headline/detail split (h/d fields), component cards chip+name only, journal folded; redeployed</span></li>
@@ -308,8 +309,6 @@
 <li><span class="jts mono">07-11 15:35</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-now">rerendering Freya prototype with diagnostic two-band gamma_1 power-law as solid curve plus log-space 1-sigma covariance band</span></li>
 <li><span class="jts mono">07-11 15:25</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-ready">opened Freya CHIME+DSA scintillation prototype in the editor for owner review</span></li>
 <li><span class="jts mono">07-11 15:15</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-ready">rendered Freya single-event CHIME+DSA gamma/ACF prototype for owner review; CHIME is diagnostic_only and two-band scaling fit is withheld; PR 159 remains unmerged</span></li>
-<li><span class="jts mono">07-11 15:11</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-now">rendering single-event Freya prototype combining CHIME+DSA gamma tracks and representative ACFs; CHIME diagnostic-only status shown explicitly</span></li>
-<li><span class="jts mono">07-11 14:57</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-now">user clarified target: replace manuscript Figures 19-30 with one cohesive all-event CHIME+DSA gamma and ACF figure; holding PR 159 unmerged and redesigning</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
