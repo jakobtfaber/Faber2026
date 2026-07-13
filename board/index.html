@@ -109,7 +109,47 @@
     font-family:ui-monospace,"SF Mono",Menlo,monospace; }
   .comp .cnx { color:var(--muted); font-size:11.5px; line-height:1.35; display:block; margin-top:2px; }
 
-  /* ── pipeline map ────────────────────────────────────────────────── */
+  /* ── strand swimlanes (main view) ────────────────────────────────── */
+  .strands { display:flex; flex-direction:column; gap:10px; }
+  .strand { background:var(--card); border:1px solid var(--hair); border-radius:10px;
+    padding:12px 16px; display:grid; grid-template-columns:230px 1fr; gap:6px 22px;
+    align-items:center; }
+  @media (max-width:860px){ .strand { grid-template-columns:1fr; } }
+  .strand.s-live { border-left:4px solid var(--now); }
+  .strand.s-attn { border-left:4px solid var(--pend); }
+  .s-head b { font-size:14px; }
+  .s-head .sref { display:block; color:var(--muted); font-size:11.5px; }
+  .s-head .sids { display:block; color:var(--muted); font-size:10.5px; margin-top:3px;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace; }
+  .s-stages { display:flex; }
+  .stage { flex:1; position:relative; text-align:center; min-width:72px; padding:0 4px; }
+  .stage::before { content:""; position:absolute; top:8px; left:-50%; width:100%;
+    height:2px; background:var(--hair); }
+  .stage:first-child::before { display:none; }
+  .stage i { display:block; width:17px; height:17px; border-radius:50%; margin:0 auto 4px;
+    background:var(--card); border:2px solid var(--hair); position:relative; z-index:1; }
+  .stage b { font-size:10px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--muted); font-weight:700; display:block; }
+  .stage small { display:block; font-size:10.5px; color:var(--muted); line-height:1.25; margin-top:1px; }
+  .st-done i { background:var(--good); border-color:var(--good); }
+  .st-half i { background:linear-gradient(90deg,var(--good) 50%,var(--card) 50%); border-color:var(--good); }
+  .st-now i  { background:var(--now); border-color:var(--now); box-shadow:0 0 0 4px var(--now-bg); }
+  .st-you i  { background:var(--pend-bg); border-color:var(--pend); box-shadow:0 0 0 4px var(--pend-bg); }
+  .st-ready i { border-color:var(--ready); }
+  .st-block i { opacity:0.55; }
+  .st-done b { color:var(--good); } .st-half b { color:var(--good); }
+  .st-now b { color:var(--now); } .st-you b { color:var(--pend); }
+  .st-ready b { color:var(--ready); }
+  .feed { display:inline-block; font-size:10.5px; color:var(--now); background:var(--now-bg);
+    border-radius:8px; padding:0 7px; font-weight:600; margin-top:2px; }
+  .mech { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .strandlegend { display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;
+    font-size:12px; color:var(--muted); align-items:center; }
+  .strandlegend .stage { flex:none; min-width:0; display:inline-flex; align-items:center; gap:5px; }
+  .strandlegend .stage::before { display:none; }
+  .strandlegend .stage i { width:13px; height:13px; margin:0; display:inline-block; }
+
+  /* ── pipeline map (agent-facing, in fold) ────────────────────────── */
   .mapwrap { background:var(--card); border:1px solid var(--hair); border-radius:10px;
     padding:14px 16px 8px; overflow-x:auto; }
   .mapwrap svg { display:block; width:100%; min-width:880px; height:auto; }
@@ -118,7 +158,6 @@
   .mapwrap .nnm { font-size:12.5px; font-weight:650; }
   .mapwrap .nst { font-size:11px; fill:var(--muted); }
   .mapwrap .edge { stroke:var(--blocked); stroke-width:1.6; fill:none; opacity:0.75; }
-  .mapwrap .edge.live { stroke:var(--now); opacity:1; }
   .mapwrap .node-good  { fill:var(--good-bg);    stroke:var(--good); }
   .mapwrap .node-now   { fill:var(--now-bg);     stroke:var(--now); }
   .mapwrap .node-ready { fill:var(--ready-bg);   stroke:var(--ready); }
@@ -133,7 +172,7 @@
   .maplegend { display:flex; flex-wrap:wrap; gap:12px; padding:8px 4px 4px;
     font-size:12px; color:var(--muted); }
 
-  /* ── trust ladder stepper ────────────────────────────────────────── */
+  /* ── trust ladder stepper (agent-facing, in fold) ────────────────── */
   .ladder { display:grid; grid-template-columns:repeat(7,1fr); gap:0;
     background:var(--card); border:1px solid var(--hair); border-radius:10px;
     padding:16px 12px 12px; overflow-x:auto; }
@@ -228,7 +267,7 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T20:10-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T23:30-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
 <li><b>Calibrate the A1 trigger</b><small>two-screen escalation · open since 07-06</small></li>
@@ -240,27 +279,143 @@
 <li><b>A1 design discussion</b> <span class="who">you + agents</span></li>
 </ul></div>
 <div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
-<li><b>V·P0 provenance freeze</b><small>unblocks census + budget</small></li>
+<li><b>V·P0 provenance freeze</b><small>pins every data input; opens the fit ladder</small></li>
 <li><b>F3 consistency audit</b><small>manuscript, runnable now</small></li>
 <li><b>B1–B3 scintillation prep</b></li>
 </ul></div>
 </div>
 <div class="own-comps">
-<div class="comp"><span class="cnm"><b>Trust ladder</b><span class="cid">V</span><span class="chip c-ready">waiting</span></span><span class="cnx">pick a rung (P0)</span></div>
-<div class="comp"><span class="cnm"><b>Methodology</b><span class="cid">A</span><span class="chip c-now">discussing</span></span><span class="cnx">A1, then A2 kernel</span></div>
-<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">active</span></span><span class="cnx">unified figure</span></div>
-<div class="comp"><span class="cnm"><b>Re-fits → synthesis</b><span class="cid">C·D·E</span><span class="chip c-blocked">blocked</span></span></div>
-<div class="comp"><span class="cnm"><b>Manuscript</b><span class="cid">F</span><span class="chip c-now">active</span></span><span class="cnx">merge DM-host branch</span></div>
-<div class="comp"><span class="cnm"><b>Release</b><span class="cid">G</span><span class="chip c-blocked">gated</span></span></div>
+<div class="comp"><span class="cnm"><b>Sample &amp; association</b><span class="cid">V6</span><span class="chip c-good">validated</span></span><span class="cnx">figure + P_cc prose landing</span></div>
+<div class="comp"><span class="cnm"><b>Budget &amp; census</b><span class="cid">V4·V5</span><span class="chip c-good">validated</span></span><span class="cnx">prose rewrite after D</span></div>
+<div class="comp"><span class="cnm"><b>Scattering</b><span class="cid">V1·A·C</span><span class="chip c-pend">method open</span></span><span class="cnx">A1 with you · V1/V2 startable</span></div>
+<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">active</span></span><span class="cnx">recipe parity → CHIME Δν_d</span></div>
+<div class="comp"><span class="cnm"><b>Energies</b><span class="cid">V3</span><span class="chip c-blocked">waiting</span></span><span class="cnx">after P0 + V1</span></div>
+<div class="comp"><span class="cnm"><b>Synthesis</b><span class="cid">D·E·F1</span><span class="chip c-blocked">blocked</span></span></div>
+<div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-ready">startable</span></span><span class="cnx">P0 · F3 audit · F6 authors</span></div>
 </div>
 </div>
 <!-- OWNER:END -->
 
-<h2>The spine — how work flows to circulation</h2>
-<!-- Static map: any agent editing lane status updates BOTH this SVG's node
-     classes/progress segments AND the lane detail fold below, then rebakes
-     + redeploys (scripts/deploy-board.sh). Node classes: node-good/now/
-     ready/pend/blocked; progress segments seg-good/ready/pend + track. -->
+<h2>The paper, strand by strand — inputs → method → measured → validated → written</h2>
+<!-- Strand swimlanes: the owner-facing structure. Task IDs (P0, A1, B4, …)
+     remain the canonical keys from plan-circulation-readiness.md; strands
+     only regroup them by science claim. Agents changing lane state update
+     the stage classes here (st-done/half/now/you/ready/block), the recovery
+     map + ladder in the fold below, and owner-view.json — then rebake +
+     scripts/deploy-board.sh. -->
+<div class="strands">
+
+  <div class="strand">
+    <div class="s-head"><b>Sample &amp; association</b>
+      <span class="sref">§2 observations · toa — which 12 bursts, and why we believe the pairings</span>
+      <span class="sids">V6 ✓</span></div>
+    <div class="s-stages">
+      <div class="stage st-done"><i></i><b>inputs</b><small>DM/TOA provenance per telescope</small></div>
+      <div class="stage st-done"><i></i><b>method</b><small>shared DSA-DM convention</small></div>
+      <div class="stage st-done"><i></i><b>measured</b><small>residuals · P_cc</small></div>
+      <div class="stage st-done"><i></i><b>validated</b><small>V6 cleared 07-07</small></div>
+      <div class="stage st-half"><i></i><b>written</b><small>summary figure + P_cc prose landing now</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>DM budget &amp; foreground census</b>
+      <span class="sref">§3 budget — where the dispersion comes from</span>
+      <span class="sids">V4 ✓ · V5 ✓ · D2</span></div>
+    <div class="s-stages">
+      <div class="stage st-done"><i></i><b>inputs</b><small>DR9/DESI/NED/PS1 re-audit</small></div>
+      <div class="stage st-done"><i></i><b>method</b><small>models verified vs refs</small></div>
+      <div class="stage st-half"><i></i><b>measured</b><small>35 systems ✓ · D2 comparison <span class="feed">← scattering</span></small></div>
+      <div class="stage st-done"><i></i><b>validated</b><small>V4+V5 cleared 07-07</small></div>
+      <div class="stage st-ready"><i></i><b>written</b><small>predicted side restored; prose rewrite after D</small></div>
+    </div>
+  </div>
+
+  <div class="strand s-attn">
+    <div class="s-head"><b>Scattering</b>
+      <span class="sref">co-model methods · results · tab:beta — τ, β, geometry per sightline</span>
+      <span class="sids">V1 · V2 · A1–A4 · C1–C3 · F2</span></div>
+    <div class="s-stages">
+      <div class="stage st-ready"><i></i><b>inputs</b><small>V2 cube forensics startable</small></div>
+      <div class="stage st-you"><i></i><b>method</b><small>A1 with you · V1 contract <span class="feed">← scint prior odds</span></small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>C1 re-fit ×12</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small>under V1 contract</small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>tab:beta rework F2</small></div>
+    </div>
+  </div>
+
+  <div class="strand s-live">
+    <div class="s-head"><b>Scintillation</b>
+      <span class="sref">two-screen appendix — Δν_d both bands; sets scattering geometry · hard circulation gate</span>
+      <span class="sids">B1–B6</span></div>
+    <div class="s-stages">
+      <div class="stage st-now"><i></i><b>inputs</b><small>CHIME regen startable; freya ACF correction stuck → upper-limit fallback</small></div>
+      <div class="stage st-now"><i></i><b>method</b><small>recipe-parity Phase 1 landed</small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>both bands, under V1</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small>B5 two-screen rebuild</small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>fig:scint_screens re-made</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>Energies &amp; intrinsic</b>
+      <span class="sref">tab:burst-energies — what the bursts themselves are</span>
+      <span class="sids">V3 · E2</span></div>
+    <div class="s-stages">
+      <div class="stage st-half"><i></i><b>inputs</b><small>rides scattering inputs</small></div>
+      <div class="stage st-ready"><i></i><b>method</b><small>γ_D pile-up + selection rule to resolve</small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>c₀,γ re-export</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small>after P0 + V1 rails</small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>table re-admitted then</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>Synthesis &amp; interpretation</b>
+      <span class="sref">discussion · conclusions — propagation vs intrinsic, per sightline</span>
+      <span class="sids">D1 · E1 · F1</span></div>
+    <div class="s-stages">
+      <div class="stage st-block"><i></i><b>inputs</b><small><span class="feed">← scattering + budget</span></small></div>
+      <div class="stage st-block"><i></i><b>method</b><small>adjudicated geometries</small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>D1 measured-vs-predicted</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small></small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>F1 the big rewrite</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>Paper mechanics</b>
+      <span class="sref">cross-cutting — foundations, audits, authorship, release</span>
+      <span class="sids">P0 · F3–F7 · G1–G3</span></div>
+    <div class="mech">
+      <span class="chip c-pend">P0 provenance freeze — recommended next</span>
+      <span class="chip c-ready">F3 consistency audit — runnable now</span>
+      <span class="chip c-ready">F6 co-author draft — runnable now</span>
+      <span class="chip c-now">F4 referee pass — partial now</span>
+      <span class="chip c-blocked">F5 line polish — after F3/F4</span>
+      <span class="chip c-blocked">G1–G3 release — gated, last</span>
+    </div>
+  </div>
+
+</div>
+<div class="strandlegend">
+  <span class="stage st-done"><i></i>done</span>
+  <span class="stage st-half"><i></i>partial</span>
+  <span class="stage st-now"><i></i>active now</span>
+  <span class="stage st-you"><i></i>needs you</span>
+  <span class="stage st-ready"><i></i>startable</span>
+  <span class="stage st-block"><i></i>waiting upstream</span>
+  <span>· <span class="feed">← feed</span> = cross-strand dependency</span>
+</div>
+
+<details class="fold">
+<summary>Agent detail — recovery map, trust ladder, lanes &amp; tasks (V·P0 … G3)</summary>
+
+<h2>Recovery pipeline — the dependency graph agents schedule against</h2>
+<!-- Static map: any agent editing lane status updates the strand swimlanes
+     above, this SVG's node classes/progress segments, AND the lane detail
+     below, then rebakes + redeploys (scripts/deploy-board.sh). Node classes:
+     node-good/now/ready/pend/blocked; segments seg-good/ready/pend + track. -->
 <div class="mapwrap">
 <svg viewBox="0 0 1150 268" role="img" aria-label="Dependency map: lanes V, A, B feed C, then D, E, F, G">
   <defs>
@@ -269,7 +424,6 @@
     </marker>
   </defs>
 
-  <!-- edges -->
   <path class="edge" d="M178,47  C215,47 215,120 244,120" marker-end="url(#arr)"/>
   <path class="edge" d="M178,134 L244,134" marker-end="url(#arr)"/>
   <path class="edge" d="M178,221 C215,221 215,148 244,148" marker-end="url(#arr)"/>
@@ -278,7 +432,6 @@
   <path class="edge" d="M816,134 L866,134" marker-end="url(#arr)"/>
   <path class="edge" d="M1006,134 L1040,134" marker-end="url(#arr)"/>
 
-  <!-- V -->
   <g><title>V — trust ladder: 3 of 7 rungs cleared (V4 census, V5 budget, V6 association); P0/P1/P2 startable</title>
   <rect x="8" y="10" width="170" height="74" rx="9" class="node-ready" stroke-width="1.5"/>
   <text x="22" y="36" class="nid t-ready">V</text>
@@ -289,7 +442,6 @@
   <rect x="83" y="60" width="59" height="6" rx="3" class="seg-ready"/>
   </g>
 
-  <!-- A -->
   <g><title>A — methodology reset: A1 two-screen design open with the owner; A2–A4 startable</title>
   <rect x="8" y="97" width="170" height="74" rx="9" class="node-pend" stroke-width="1.5"/>
   <text x="22" y="123" class="nid t-pend">A</text>
@@ -300,7 +452,6 @@
   <rect x="58" y="147" width="106" height="6" rx="3" class="seg-ready"/>
   </g>
 
-  <!-- B -->
   <g><title>B — scintillation campaign, both bands: active; CHIME recipe parity in flight; B4/B5 blocked on prep + V1</title>
   <rect x="8" y="184" width="170" height="74" rx="9" class="node-now" stroke-width="1.5"/>
   <text x="22" y="210" class="nid t-now">B</text>
@@ -310,7 +461,6 @@
   <rect x="22" y="234" width="93" height="6" rx="3" class="seg-ready"/>
   </g>
 
-  <!-- C -->
   <g><title>C — scattering re-fit from scratch, all 12: blocked until V1 + A + B5</title>
   <rect x="252" y="97" width="150" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
   <text x="266" y="123" class="nid t-blocked">C</text>
@@ -319,7 +469,6 @@
   <rect x="266" y="147" width="122" height="6" rx="3" class="track"/>
   </g>
 
-  <!-- D -->
   <g><title>D — sightline and foreground comparison: blocked on C (V4/V5 already cleared)</title>
   <rect x="476" y="97" width="142" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
   <text x="490" y="123" class="nid t-blocked">D</text>
@@ -328,7 +477,6 @@
   <rect x="490" y="147" width="114" height="6" rx="3" class="track"/>
   </g>
 
-  <!-- E -->
   <g><title>E — synthesis: blocked on D</title>
   <rect x="676" y="97" width="140" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
   <text x="690" y="123" class="nid t-blocked">E</text>
@@ -337,7 +485,6 @@
   <rect x="690" y="147" width="112" height="6" rx="3" class="track"/>
   </g>
 
-  <!-- F -->
   <g><title>F — manuscript: active now on runnable parts (F3/F4/F6); the big rewrite F1 waits on D/E</title>
   <rect x="866" y="97" width="140" height="74" rx="9" class="node-now" stroke-width="1.5"/>
   <text x="880" y="123" class="nid t-now">F</text>
@@ -348,7 +495,6 @@
   <rect x="896" y="147" width="46" height="6" rx="3" class="seg-ready"/>
   </g>
 
-  <!-- G -->
   <g><title>G — release mechanics: gated, last</title>
   <rect x="1040" y="97" width="102" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
   <text x="1054" y="123" class="nid t-blocked">G</text>
@@ -384,8 +530,6 @@
     <span class="rnm">Association + DM_obs</span><span class="rst">cleared 07-07</span></div>
 </div>
 
-<details class="fold">
-<summary>Lanes &amp; tasks — agent-facing detail (V·P0 … G3)</summary>
 <h2>Lanes &amp; tasks — what every ID means</h2>
 
 <div class="lane">
@@ -484,6 +628,10 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
+<li><span class="jts mono">07-12 23:36</span><span class="jagent">claude-fable-5</span><span class="jlane">board</span><span class="jnote s-good">board IA restructured: owner view now science-strand swimlanes (association / budget+census / scattering / scintillation / energies / synthesis / mechanics) each on inputs-&gt;method-&gt;measured-&gt;validated-&gt;written lifecycle with cross-strand feed chips; trust = per-strand validated stage, not a separate lane; recovery map + ladder + lane detail moved to agent fold; owner-view.json components re-keyed to strands (canonical task IDs unchanged); stale &#x27;P0 unblocks census+budget&#x27; hint corrected</span></li>
+<li><span class="jts mono">07-12 23:31</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Phase 1 committed (9de9aa8) after refute-&gt;fix-&gt;CONFIRMED-FIXED cycle; 150 tests pass; Phase-4 amendment recorded in plan (log-space c guard for ODR overflow); dispatching Phase 2 canfar_reference cleaning mode</span></li>
+<li><span class="jts mono">07-12 23:27</span><span class="jagent">codex</span><span class="jlane">dm-phase-suite</span><span class="jnote s-now">Isolated FLITS worktree created; implementing and testing boundary-safe controlled DM_phase kernel and 24-input preflight</span></li>
+<li><span class="jts mono">07-12 23:17</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">Phase 1 REFUTED by adversarial verify: centerless ACF broke noise-template path (len mismatch crash analysis.py:462/740 + center-index normalization anchor :653) — invisible to suite (tests pass noise_template=None); codex fix round dispatched w/ template-enabled regression test both lag contracts</span></li>
 <li><span class="jts mono">07-12 23:15</span><span class="jagent">claude-fable-5</span><span class="jlane">board</span><span class="jnote s-good">board redesign: dependency-spine SVG map with per-lane progress bars replaces the text spine; trust-ladder stepper (P0-P6, V4/V5/V6 shown cleared per CONTEXT.md - fixes stale board state); needs-you promoted to full-width banner; journal restyled as dot timeline; status palette CVD-validated (dataviz six-checks); baker contract (OWNER/JOURNAL markers) unchanged</span></li>
 <li><span class="jts mono">07-12 23:14</span><span class="jagent">watchdog/launchd</span><span class="jlane">repo</span><span class="jnote s-ready">unattributed activity: 6+ file(s) touched in last 10m (sections/results.tex,main.bbl main.pdf) while journal stale 10m - active agent must self-report (docs/rse/journal-protocol.md)</span></li>
 <li><span class="jts mono">07-12 23:04</span><span class="jagent">codex</span><span class="jlane">B</span><span class="jnote s-good">P4c Phase 1 implemented: first_fit_lag contract (CHIME lag-2, DSA lag-1), centerless two-sided ACF, 2D fitter zero-lag exclusion, HWHM/FWHM explicit fields; 19 files +111/-18; suite 148 passed/1 skip; fable verifier dispatched before commit</span></li>
@@ -500,10 +648,6 @@
 <li><span class="jts mono">07-12 22:04</span><span class="jagent">codex</span><span class="jlane">skill-budget</span><span class="jnote s-good">Merged my-skillset PR #124; live Codex prompt now 16 skills and within budget</span></li>
 <li><span class="jts mono">07-12 21:57</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-good">Corrected and merged dsa110-FLITS PR #161: h23 T3 false 59T entry replaced by verified seven candidate trees; five 2022 full-candidate locations remain explicitly unverified; Faber2026 submodule pin unchanged.</span></li>
 <li><span class="jts mono">07-12 21:48</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-now">Corrected h23 inventory on focused dsa110-FLITS branch; validated and pushed commit 1280491; opening PR without changing the manuscript submodule pin.</span></li>
-<li><span class="jts mono">07-12 21:38</span><span class="jagent">codex</span><span class="jlane">skill-budget</span><span class="jnote s-now">Implementing and validating Codex skill-budget control-plane fix in my-skillset</span></li>
-<li><span class="jts mono">07-12 21:28</span><span class="jagent">codex-gpt-5.6</span><span class="jlane">data-inventory</span><span class="jnote s-now">Reviewing documented non-CANFAR data locations and authority roles for the user.</span></li>
-<li><span class="jts mono">07-12 21:17</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-ready">Freya rank-1 correction reduced but did not whiten the off-pulse kernel; existing CHIME realization supports upper-limit/diagnostic use unless earlier raw-voltage correction passes injection recovery</span></li>
-<li><span class="jts mono">07-12 21:16</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Assessing what the failed Freya correction implies and whether CHIME ACF scintillation remains recoverable</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
@@ -544,4 +688,4 @@
 </div>
 </details>
 
-<footer>Sources: CONTEXT.md (domain contract; trust-state statuses) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md) · docs/rse/board/owner-view.json (owner view data). Board source lives in-repo at docs/rse/board/readiness.html — any agent edits it (keep the map + ladder in sync with lane state), rebakes owner view + journal panel (scripts/render_journal_panel.py), and deploys with scripts/deploy-board.sh to https://jakobtfaber.github.io/Faber2026/board/ (canonical since 2026-07-12). This board is the standing "where are we" reference.</footer>
+<footer>Sources: CONTEXT.md (domain contract; trust-state statuses) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md) · docs/rse/board/owner-view.json (owner view data). Structure: the owner-facing view groups work by <b>science strand</b> (association · budget/census · scattering · scintillation · energies · synthesis · mechanics), each on an inputs→method→measured→validated→written lifecycle; the canonical task IDs (P0, A1, B4, …) from the plans are unchanged and the agent-facing recovery map/lanes live in the fold. Board source: docs/rse/board/readiness.html — any agent edits it (keep strands, map, ladder, and lane detail in sync), rebakes (scripts/render_journal_panel.py), deploys (scripts/deploy-board.sh) to https://jakobtfaber.github.io/Faber2026/board/. This board is the standing "where are we" reference.</footer>
