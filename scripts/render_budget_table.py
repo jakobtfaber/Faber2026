@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -21,8 +22,25 @@ HOST_CSV = ROOT / "scripts" / "dm_budget_uncertainty.csv"
 BASE_DATA = PIPELINE / "galaxies" / "foreground" / "budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 
-sys.path.insert(0, str(PIPELINE))
-from galaxies.foreground import budget_table_emitter as base  # noqa: E402
+EMITTER = PIPELINE / "galaxies" / "foreground" / "budget_table_emitter.py"
+
+
+def _load_base_emitter():
+    """Load the stdlib-only emitter without executing the package ``__init__``.
+
+    Importing ``galaxies.foreground`` eagerly imports Astropy, which is
+    irrelevant to table rendering and unavailable in the workflow's initial
+    plain-Python parity step.
+    """
+    spec = importlib.util.spec_from_file_location("_budget_table_emitter", EMITTER)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"cannot load budget table emitter: {EMITTER}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+base = _load_base_emitter()
 
 
 def _csv_by(path: Path, key: str) -> dict[str, dict[str, str]]:
