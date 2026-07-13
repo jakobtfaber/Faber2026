@@ -37,16 +37,34 @@ def test_manifest_defines_twelve_grid_panels_in_epoch_order():
     assert rows[-1]["nick"] == "casey"
 
 
-def test_load_row_bands_uses_fit_delivery_data_when_npz_exists(monkeypatch, tmp_path):
+def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_path):
     calls = []
-    monkeypatch.setattr(grid, "bands_from_npz", lambda path, nick: calls.append((path, nick)) or [])
-    monkeypatch.setattr(grid, "bands_data_only", lambda *args: (_ for _ in ()).throw(AssertionError))
+    monkeypatch.setattr(
+        grid,
+        "bands_archival",
+        lambda data_root, nick, factors=None: calls.append((data_root, nick, factors)) or [],
+    )
 
     grid.load_row_bands(
         {"nick": "zach", "npz": "fits/zach.npz"}, root=tmp_path, data_root=tmp_path
     )
+    grid.load_row_bands({"nick": "chromatica", "npz": None}, root=tmp_path, data_root=tmp_path)
 
-    assert calls == [(tmp_path / "fits/zach.npz", "zach")]
+    assert calls == [
+        (tmp_path, "zach", grid.DISPLAY_FACTORS),
+        (tmp_path, "chromatica", grid.DISPLAY_FACTORS),
+    ]
+
+
+def test_display_factors_are_near_native():
+    from plot_codetection_gallery import BANDS
+
+    for tel, (f_factor, t_factor) in grid.DISPLAY_FACTORS.items():
+        n_native = {"dsa": 6144, "chime": 1024}[tel]
+        n_display = {"dsa": 512, "chime": 1024}[tel]
+        assert n_native // f_factor == n_display
+        dt = BANDS[tel]["dt_ms"] * t_factor
+        assert abs(dt - 32.768e-3) / 32.768e-3 < 0.05
 
 
 def test_draw_joint_waterfall_draws_two_bands_and_hatched_gap():

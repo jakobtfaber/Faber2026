@@ -1,14 +1,23 @@
 """Render Figure 1: a 12-panel grid of the joint CHIME/DSA observations.
 
-For the eleven accepted joint fits, each panel uses the exact fit-delivery data
-grid and CHIME-width crop stored beside the model in the jointmodel NPZ. The
-Chromatica panel uses the same archival data-only exception as the triptych
-producer. No model or residual values are drawn.
+Every panel is drawn from the archival `_cntr_bpc.npy` products at near-native
+display resolution (1024 channels per band; DSA-110 native 32.768 us time
+sampling, CHIME/FRB block-averaged to ~33.3 us to match), NOT from the coarse
+fit-delivery grids stored in the jointmodel NPZs — those are for the model
+audit (triptychs), where data and model must share one grid. Both archival
+products span the full ~82 ms burst-centered window, so the shared
+CHIME-width display crop never runs off the end of either band.
+
+Each cell carries the band-summed profile strip on top and the time-integrated
+on-pulse spectrum marginal on the right; RFI-excised (zapped/flat) channels are
+NaN-masked and render in a uniform gray in every panel. No model or residual
+values are drawn.
 """
 
 from __future__ import annotations
 
 import argparse
+import warnings
 from pathlib import Path
 
 import matplotlib
@@ -18,17 +27,27 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Rectangle
 
+from plot_codetection_gallery import _apply_style, onpulse_span
 from plot_codetection_triptych import (
     DATA_ROOT_DEFAULT,
     MANIFEST_DEFAULT,
     ROOT,
-    bands_data_only,
-    bands_from_npz,
+    bands_archival,
     load_manifest,
 )
 
 OUT_DEFAULT = ROOT / "figures" / "codetection_data_grid"
-GAP_FILL = "0.93"
+
+# Block-averaging factors of the native archival grids (f_factor, t_factor):
+# DSA 6144ch/32.768us -> 512ch at native time (1024ch buries the faintest DSA
+# detections below per-pixel noise); CHIME 1024ch/2.56us -> native channels at
+# ~33.3us, matching the DSA time resolution across the gap.
+DISPLAY_FACTORS = {"dsa": (12, 1), "chime": (1, 13)}
+
+MASKED_GRAY = "0.85"
+CHIME_COLOR = "#4477aa"
+DSA_COLOR = "black"
+CLIP_LO, CLIP_HI = 1.0, 99.5
 
 
 def _finite_percentile(values: np.ndarray, percentile: float, default: float) -> float:
@@ -38,24 +57,32 @@ def _finite_percentile(values: np.ndarray, percentile: float, default: float) ->
 
 
 def load_row_bands(row: dict, *, root: Path, data_root: Path):
-    """Load the same observed arrays and crop used by the triptych left column."""
-    if row.get("npz"):
-        return bands_from_npz(root / row["npz"], row["nick"])
-    return bands_data_only(data_root, row["nick"])
+    """Near-native archival display bands for every burst (fit or no fit)."""
+    return bands_archival(data_root, row["nick"], factors=DISPLAY_FACTORS)
+
+
+def _band_dt_ms(band) -> float:
+    t = np.asarray(band.time_ms, float)
+    return float(np.median(np.diff(t))) if t.size > 1 else 0.033
+
+
+def _is_chime(band) -> bool:
+    return "CHIME" in band.label
 
 
 def draw_joint_waterfall(ax, bands, *, title: str) -> None:
+    """Both bands on one to-scale frequency axis; masked channels gray."""
     bands = sorted(bands, key=lambda band: band.frange[0])
     cmap = matplotlib.colormaps["magma"].copy()
-    cmap.set_bad("white")
+    cmap.set_bad(MASKED_GRAY)
     for band in bands:
         data = np.asarray(band.data, float)
-        lo = _finite_percentile(data, 1.0, -1.0)
-        hi = _finite_percentile(data, 99.5, 1.0)
+        lo = _finite_percentile(data, CLIP_LO, -1.0)
+        hi = _finite_percentile(data, CLIP_HI, 1.0)
         if hi <= lo:
             hi = lo + 1.0
         ax.imshow(
-            data,
+            np.ma.masked_invalid(data),
             origin="lower",
             aspect="auto",
             interpolation="nearest",
@@ -65,39 +92,133 @@ def draw_joint_waterfall(ax, bands, *, title: str) -> None:
             extent=(band.time_ms[0], band.time_ms[-1], *band.frange),
             rasterized=True,
         )
+    x0 = min(b.time_ms[0] for b in bands)
+    x1 = max(b.time_ms[-1] for b in bands)
     for lower, upper in zip(bands[:-1], bands[1:], strict=False):
         if upper.frange[0] > lower.frange[1]:
             ax.add_patch(
                 Rectangle(
-                    (min(b.time_ms[0] for b in bands), lower.frange[1]),
-                    max(b.time_ms[-1] for b in bands) - min(b.time_ms[0] for b in bands),
+                    (x0, lower.frange[1]),
+                    x1 - x0,
                     upper.frange[0] - lower.frange[1],
                     facecolor="white",
                     edgecolor="0.55",
-                    hatch="////",
+                    hatch="///",
                     linewidth=0,
                     zorder=0.5,
                 )
             )
-    ax.set_xlim(min(b.time_ms[0] for b in bands), max(b.time_ms[-1] for b in bands))
+    ax.set_xlim(x0, x1)
     ax.set_ylim(min(b.frange[0] for b in bands), max(b.frange[1] for b in bands))
-    ax.set_title(title, fontsize=9, pad=3)
-    ax.tick_params(labelsize=7, direction="in", top=True, right=True)
+    ax.set_title(title, fontsize=7, pad=2)
+
+
+def draw_profile_strip(ax, bands, xlim) -> None:
+    """Unit-peak band-summed profiles (DSA black, CHIME blue)."""
+    for band in bands:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            prof = np.nansum(np.asarray(band.data, float), axis=0)
+        pmax = np.nanmax(prof)
+        ax.plot(
+            band.time_ms,
+            prof / (pmax if pmax > 0 else 1.0),
+            lw=0.7,
+            color=CHIME_COLOR if _is_chime(band) else DSA_COLOR,
+            label=band.label,
+        )
+    ax.set_xlim(*xlim)
+    ax.set_ylim(-0.15, 1.1)
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+
+def draw_spectrum_marginal(ax, bands, gap) -> None:
+    """Unit-peak time-integrated on-pulse spectrum per band, freq vertical."""
+    for band in bands:
+        data = np.asarray(band.data, float)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            prof = np.nansum(data, axis=0)
+            lo, hi, _ = onpulse_span(np.nan_to_num(prof), _band_dt_ms(band))
+            spec = np.nanmean(data[:, lo : hi + 1], axis=1)
+        smax = np.nanmax(spec)
+        if np.isfinite(smax) and smax > 0:
+            spec = spec / smax
+        ax.plot(
+            spec,
+            band.freq_mhz,
+            lw=0.5,
+            color=CHIME_COLOR if _is_chime(band) else DSA_COLOR,
+        )
+    if gap is not None:
+        ax.axhspan(
+            gap[0], gap[1], facecolor="white", edgecolor="0.55", hatch="///",
+            lw=0, zorder=0.5,
+        )
+    ax.set_xlim(-0.08, 1.15)
+    ax.set_xticks([])
+    ax.tick_params(labelleft=False)
+
+
+def _band_gap_mhz(bands) -> tuple[float, float] | None:
+    ordered = sorted(bands, key=lambda band: band.frange[0])
+    for lower, upper in zip(ordered[:-1], ordered[1:], strict=False):
+        if upper.frange[0] > lower.frange[1]:
+            return lower.frange[1], upper.frange[0]
+    return None
 
 
 def render_grid(rows: list[dict], *, root: Path, data_root: Path, out: Path, dpi: int) -> None:
-    fig, axes = plt.subplots(3, 4, figsize=(13.2, 9.2), constrained_layout=True)
-    for index, (ax, row) in enumerate(zip(axes.flat, rows, strict=True)):
+    _apply_style()
+    plt.rcParams.update(
+        {
+            "font.size": 7,
+            "axes.labelsize": 7,
+            "xtick.labelsize": 6,
+            "ytick.labelsize": 6,
+            "axes.linewidth": 0.6,
+            "xtick.direction": "in",
+            "ytick.direction": "in",
+        }
+    )
+    # 7.3 x 7.8 in: at \textwidth the typeset height plus the caption must fit
+    # a single AASTeX float page (9.2 in tall overflowed by ~103 pt).
+    fig = plt.figure(figsize=(7.3, 7.8))
+    outer = fig.add_gridspec(
+        3, 4, hspace=0.26, wspace=0.30, left=0.07, right=0.99, top=0.965, bottom=0.05
+    )
+    for index, row in enumerate(rows):
         bands = load_row_bands(row, root=root, data_root=data_root)
-        draw_joint_waterfall(ax, bands, title=row["tns"])
-        if index // 4 == 2:
-            ax.set_xlabel("Time (ms)", fontsize=8)
+        cell = outer[index // 4, index % 4].subgridspec(
+            2, 2, width_ratios=[3.4, 1.0], height_ratios=[1.0, 3.6],
+            wspace=0.07, hspace=0.09,
+        )
+        ax_prof = fig.add_subplot(cell[0, 0])
+        ax_wf = fig.add_subplot(cell[1, 0])
+        ax_sp = fig.add_subplot(cell[1, 1], sharey=ax_wf)
+
+        draw_joint_waterfall(ax_wf, bands, title="")
+        ax_prof.set_title(row["tns"], fontsize=7, pad=2)
+        draw_profile_strip(ax_prof, bands, ax_wf.get_xlim())
+        draw_spectrum_marginal(ax_sp, bands, _band_gap_mhz(bands))
+
+        ax_wf.set_yticks([600, 1000, 1400])
         if index % 4 == 0:
-            ax.set_ylabel("Frequency (MHz)", fontsize=8)
+            ax_wf.set_ylabel("Frequency (MHz)", fontsize=7)
+        else:
+            ax_wf.tick_params(labelleft=False)
+        if index // 4 == 2:
+            ax_wf.set_xlabel("Time (ms)", fontsize=7)
+        if index == 0:
+            ax_prof.legend(
+                fontsize=5, frameon=False, loc="upper right", handlelength=1.0,
+                borderaxespad=0.1, labelspacing=0.2,
+            )
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out.with_suffix(".png"), dpi=dpi)
-    fig.savefig(out.with_suffix(".pdf"))
-    fig.savefig(out.with_suffix(".svg"))
+    fig.savefig(out.with_suffix(".pdf"), dpi=dpi)
+    fig.savefig(out.with_suffix(".svg"), dpi=dpi)
     plt.close(fig)
 
 
@@ -106,7 +227,7 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT)
     parser.add_argument("--data-root", type=Path, default=DATA_ROOT_DEFAULT)
     parser.add_argument("--out", type=Path, default=OUT_DEFAULT)
-    parser.add_argument("--dpi", type=int, default=300)
+    parser.add_argument("--dpi", type=int, default=600)
     args = parser.parse_args()
     rows = load_manifest(args.manifest)
     render_grid(rows, root=ROOT, data_root=args.data_root, out=args.out, dpi=args.dpi)
