@@ -267,10 +267,10 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T23:30-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-13T00:15-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
-<li><b>Calibrate the A1 trigger</b><small>two-screen escalation · open since 07-06</small></li>
+<li><b>Sign off revised A1 trigger</b><small>now evidence-based (stacked-Lorentzian ΔlnZ, injection-calibrated) per your 07-13 direction · final sign-off once calibration reports its operating point</small></li>
 <li><b>Pick first trust-ladder rung</b><small>P0 recommended</small></li>
 </ul></div>
 <div class="own-col oc-now"><h4>In flight</h4><ul>
@@ -548,7 +548,7 @@
 <div class="lane">
   <div class="lane-head"><span class="id">A</span><span class="nm">Methodology reset — geometry selection replaces the rail taxonomy</span><span class="dep">A1 draft → A2/A3 → C</span></div>
   <ul class="tasks">
-    <li><span class="dot d-now"></span><span class="tid">A1</span><span class="desc">Two-screen treatment — working draft, design open <small>draft (2026-07-06): scint products enter as a modular constraint layer (frozen posteriors/limits, never point estimates); τ·Δν_d counts screens probabilistically; no fitted 2nd broadening component unless the escalation trigger fires (Pr(τ_near/τ_dom&gt;0.1)&gt;0.1, median&gt;0.03, same-screen ambiguity, or PPC residual at the predicted scale); scint sets prior odds on the kernel family, evidence decides. All elements revisable — discussion live</small></span><span class="st s-now">open — discussing</span></li>
+    <li><span class="dot d-now"></span><span class="tid">A1</span><span class="desc">Two-screen treatment — working draft, design open <small>draft (2026-07-06, trigger revised 2026-07-13): scint products enter as a modular constraint layer (frozen posteriors/limits, never point estimates); τ·Δν_d counts screens probabilistically; no fitted 2nd broadening component unless the escalation trigger fires — now evidence-based: nested-sampling ΔlnZ prefers a stacked-Lorentzian ACF over a single Lorentzian (floor + zero-lag spike modeled, finite-scintle covariance, threshold injection-calibrated on single-screen sims), or PPC residual at the predicted 2nd-screen timescale; old τ_near/τ_dom thresholds demoted to prior-odds inputs; ACF non-detection ≠ single screen (censoring). Scint sets prior odds on the kernel family, evidence decides. All elements revisable — discussion live</small></span><span class="st s-now">open — discussing</span></li>
     <li><span class="dot d-ready"></span><span class="tid">A2</span><span class="desc">Extended-medium PBF kernel <small>code the Williamson uniform-LOS pulse-broadening function in FLITS as the alternative to thin-screen, β-coupled per ADR-0007 — needed because 10/12 posteriors railed at β=4 (thin-screen closure rejected)</small></span><span class="st s-ready">design open</span></li>
     <li><span class="dot d-ready"></span><span class="tid">A3</span><span class="desc">Per-sightline geometry selection <small>thin screen vs extended medium chosen per burst by evidence/model comparison, with A1's scint prior odds; interior rows (freya, phineas) re-adjudicated under the same machinery</small></span><span class="st s-ready">design open</span></li>
     <li><span class="dot d-ready"></span><span class="tid">A4</span><span class="desc">ADR amendment <small>write the FLITS ADR recording: rail classes are campaign QA only, α=4-limit quoting retired, A1 decision text</small></span><span class="st s-ready">startable</span></li>
@@ -628,6 +628,8 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
+<li><span class="jts mono">07-13 01:42</span><span class="jagent">claude-code</span><span class="jlane">A</span><span class="jnote s-good">A1 trigger revised per owner direction (07-13): escalation now evidence-based — nested-sampling ΔlnZ for stacked-Lorentzian vs single-Lorentzian ACF (floor + zero-lag spike modeled, finite-scintle covariance, injection-calibrated threshold) OR predicted-scale PPC residual; old tau_near/tau_dom thresholds demoted to prior-odds inputs. Plan doc + board updated; owner sign-off pending calibration operating point.</span></li>
+<li><span class="jts mono">07-13 01:37</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Phase 5 CONFIRMED-GOOD committed 0db3362 (definition separation pinned, intra-pulse bug real-and-fixed, fail-loud chunk validation); Phase 6 dispatched (wire CHIME gates + manifest merge fix M1) — final phase before campaign run</span></li>
 <li><span class="jts mono">07-13 01:36</span><span class="jagent">codex-gpt-5.5/dm-phase</span><span class="jlane">repo</span><span class="jnote s-now">PR 48 was already merged; opened focused draft revert PR 49 and marked all v1 measurements and null classifications retracted pending reference-parity rewrite.</span></li>
 <li><span class="jts mono">07-13 01:30</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-ready">Campaign preflight: 12/12 CHIME _chime_hi.npz verified readable under ~/Data/Faber2026/dsa110/scintillation/data (15-71MB each); P4d has no data blocker; awaiting Phase 5 verdict then Phase 6</span></li>
 <li><span class="jts mono">07-13 01:30</span><span class="jagent">codex-gpt-5.5/dm-phase</span><span class="jlane">repo</span><span class="jnote s-pend">Retracted DM-phase campaign v1: a nonstandard coherence-significance gate systematically rejects visible stable DSA fits; reference-parity rewrite and full rerun required.</span></li>
@@ -646,8 +648,6 @@
 <li><span class="jts mono">07-13 00:32</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Phase 3 REFUTED-&gt;fixed-&gt;committed (4e7f3e0): xfail relabeled instrument-dominated (35.19 kHz = artifact value per chime_artifact_guards), provenance corrected; factor-isolation sweep added to campaign plan; dispatching Phase 4 (gamma ODR estimator w/ log-space guard)</span></li>
 <li><span class="jts mono">07-13 00:24</span><span class="jagent">codex</span><span class="jlane">B</span><span class="jnote s-good">Phase 3 implemented: zach fixture (hash-pinned, executed-notebook provenance per value), gamma recompute baseline [alpha=3.66], plan misattribution corrected (freya cell13 = 3836 kHz not 35.19), freya legacy cross-check strict-xfail &#x27;scallop not ported&#x27; (58.98 vs 35.19 kHz); 156 pass/1 xfail; verifier probing whether xfail attribution hides a real defect</span></li>
 <li><span class="jts mono">07-13 00:22</span><span class="jagent">codex</span><span class="jlane">worktree-convergence</span><span class="jnote s-now">Retired obsolete manuscript worktrees; merged deploy-board salvage via PR 4; rebuilt CHIME recovery as focused fail-closed PR dsa110-FLITS#46 after closing contaminated #45; CI pending. Reference-arc and DM-phase classification remain.</span></li>
-<li><span class="jts mono">07-13 00:15</span><span class="jagent">claude-fable-5</span><span class="jlane">board</span><span class="jnote s-good">journal-protocol: strand-structure paragraph added (strand-keyed owner-view components; lane-state changes must update the matching swimlane stage; journal lanes stay canonical IDs)</span></li>
-<li><span class="jts mono">07-13 00:06</span><span class="jagent">codex</span><span class="jlane">dm-phase-suite</span><span class="jnote s-now">Full injection gate passed; visual bootstrap regression repaired; all-24 native-first DM measurement run launched at FLITS commit 6b49bab</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
