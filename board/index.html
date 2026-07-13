@@ -290,6 +290,7 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
+<li><span class="jts mono">07-12 19:57</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">board</span><span class="jnote s-good">board moved off claude.ai: canonical URL now https://jakobtfaber.github.io/Faber2026/board/ via scripts/deploy-board.sh (gh-pages, board/ subdir; scattering deck at root preserved); protocol + footer + memory updated</span></li>
 <li><span class="jts mono">07-12 19:54</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Core FLITS correction and fail-closed gates implemented; starting real Freya paired-product qualification</span></li>
 <li><span class="jts mono">07-12 19:46</span><span class="jagent">claude-fable-5/owner-view-board</span><span class="jlane">board</span><span class="jnote s-good">owner view de-densified per owner: headline/detail split (h/d fields), component cards chip+name only, journal folded; redeployed</span></li>
 <li><span class="jts mono">07-12 19:42</span><span class="jagent">Faber2026-codex</span><span class="jlane">scintillation</span><span class="jnote s-now">Implementing CHIME pre-alignment common-mode correction and Freya qualification in clean dsa110-FLITS worktree</span></li>
@@ -309,7 +310,6 @@
 <li><span class="jts mono">07-11 15:15</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-ready">rendered Freya single-event CHIME+DSA gamma/ACF prototype for owner review; CHIME is diagnostic_only and two-band scaling fit is withheld; PR 159 remains unmerged</span></li>
 <li><span class="jts mono">07-11 15:11</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-now">rendering single-event Freya prototype combining CHIME+DSA gamma tracks and representative ACFs; CHIME diagnostic-only status shown explicitly</span></li>
 <li><span class="jts mono">07-11 14:57</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-now">user clarified target: replace manuscript Figures 19-30 with one cohesive all-event CHIME+DSA gamma and ACF figure; holding PR 159 unmerged and redesigning</span></li>
-<li><span class="jts mono">07-11 14:39</span><span class="jagent">codex</span><span class="jlane">dsa-scintillation-figures</span><span class="jnote s-now">separating gamma_1 from broader Lorentzian tracks; full pipeline regeneration 6/12 complete</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
@@ -351,4 +351,4 @@
 </div>
 </details>
 
-<footer>Sources: CONTEXT.md (domain contract) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md) · docs/rse/board/owner-view.json (owner view data). Board source now lives in-repo at docs/rse/board/readiness.html — any agent edits it, rebakes owner view + journal panel (scripts/render_journal_panel.py), and redeploys to this URL. This board is the standing "where are we" reference.</footer>
+<footer>Sources: CONTEXT.md (domain contract) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md) · docs/rse/board/owner-view.json (owner view data). Board source lives in-repo at docs/rse/board/readiness.html — any agent edits it, rebakes owner view + journal panel (scripts/render_journal_panel.py), and deploys with scripts/deploy-board.sh to https://jakobtfaber.github.io/Faber2026/board/ (canonical since 2026-07-12; claude.ai artifact retired). This board is the standing "where are we" reference.</footer>
