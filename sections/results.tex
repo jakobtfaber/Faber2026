@@ -149,11 +149,11 @@ carrying no confirmed within-aperture system are limited by survey depth
 \label{sec:results-scintillation}
 
 We report here the DSA-band diffractive-scintillation products that have been
-re-derived under the validation contract; the CHIME-band scintillation
-campaign, the scattering fits that enter any $\tau\,\Delta\nu_d$ screen
-product, and the resulting one- versus two-screen attribution are deferred to
-Section~\ref{sec:disc-screen-attribution} once their prerequisite strands are
-independently trusted. The estimator used for the decorrelation bandwidth and
+re-derived under the validation contract, together with the outcome of the
+CHIME-band scintillation campaign; the scattering fits that enter any
+$\tau\,\Delta\nu_d$ screen product and the resulting one- versus two-screen
+attribution are deferred to Section~\ref{sec:disc-screen-attribution} once
+their prerequisite strands are independently trusted. The estimator used for the decorrelation bandwidth and
 modulation index, and the two-screen framework that the attribution will draw
 on---including the $\tau_{s}\leftrightarrow\nu_{s}$ relation, the two-screen
 ACF product term, and the screen-distance constraint---are set out in
@@ -183,10 +183,10 @@ nine bursts with clean measurements at two or more distinct sub-band
 frequencies, we overlay a fixed $\gamma\propto\nu^4$ guide anchored to the
 measurements; the three single-frequency bursts (FRB~20230325A, FRB~20221113A,
 and FRB~20220310F) carry no guide, since a single frequency does not constrain
-the scaling. We do not fit a per-burst scaling index here: the frequency lever
-arm within the DSA band alone is short, and a physically meaningful measurement
-of the scaling requires the CHIME-band anchor, which is deferred with the rest
-of the two-band analysis.
+the scaling. We do not fit a per-burst scaling index: the frequency lever
+arm within the DSA band alone is short, and the CHIME-band anchor that a
+physically meaningful two-band measurement requires does not survive the
+artifact controls described below.
 
 % Draft figure metadata: docs/rse/specs/figure-wishlist.md (W5), gate
 % B5+V1 scintillation+A1. Keep it out of the compiled manuscript until then.
@@ -208,6 +208,74 @@ of the two-band analysis.
     Appendix~\ref{app:dsa-scint-acf}.}
     \label{fig:dsa_scint_gamma}
 \end{figure*}
+
+\paragraph{CHIME-band campaign.} We attempted the same decorrelation-bandwidth
+measurement on the up-channelized CHIME/FRB baseband products of all twelve
+co-detections, using the estimator lineage recovered from the original
+collaboration analysis (frequency-ACF Lorentzian fits in
+equal-signal-to-noise sub-bands, half-width-at-half-maximum convention, with
+the zero-lag and first-lag bins excluded from the fit). Because the CHIME
+up-channelization imprints frequency structure that can mimic narrow
+scintillation---a coarse-channel harmonic comb, bandpass scalloping, and
+low-lag correlations documented previously for FRB~20230325A---every fit was
+subjected to a set of fail-closed artifact controls: an off-pulse null test
+(the same fit applied to off-burst spectra must not reproduce the on-burst
+width), a two-sided low-lag excision test (the fitted width must be stable,
+neither collapsing nor growing by more than a factor of two, when the lowest
+lags are removed), a modulation-index physicality bound ($m\lesssim1$ for
+diffractive scintillation of a point source, enforced with a tolerance of
+$m\leq1.5$ for noisy fits), a minimum of three valid
+sub-bands, and a provenance requirement that the input product carry the full
+instrumental mitigation stack. A verdict that cannot be evaluated is treated
+as a failure, never as a pass.
+
+No CHIME-band decorrelation bandwidth survives these controls: all twelve
+bursts are demoted to diagnostic status, each with a named physical cause
+(Table~\ref{tab:chime_scint_gates}). For FRB~20230325A we additionally ran a
+factor-isolation sweep over the preprocessing mode and the first fitted lag
+(six variants); the fitted widths remain pinned at $36$--$45\,$kHz, clustered just
+above the previously documented $35\,$kHz instrumental scale, under every
+combination---the signature of an instrumental artifact, not sky
+scintillation. The sample-wide provenance failure is also uniform: no
+co-detection currently has an up-channelized product with a validated
+instrumental background correction, so even a burst that passed every
+physical null would presently be reported as diagnostic only. The CHIME-band
+data therefore contribute no certified $\Delta\nu_d$ and no scaling-index
+anchor to the screen analysis; time-resolved modulation indices from the
+sliding-chunk (std/mean) estimator remain available as diagnostics where the
+fitted amplitudes are physical.
+
+\begin{table}
+    \centering
+    \caption{CHIME-band scintillation campaign gate outcomes. Every burst
+    fails at least one fail-closed artifact control and is reported as
+    diagnostic only; no CHIME-band decorrelation bandwidth is certified. All
+    twelve additionally share the sample-wide provenance failure (no
+    validated instrumental background correction exists yet for the
+    up-channelized products). ``Inconclusive'' verdicts count as failures;
+    only the decisive controls are listed per burst, and the bursts whose
+    best-fit ACF model carries no modulation amplitude also hold an
+    inconclusive modulation verdict.}
+    \label{tab:chime_scint_gates}
+    \begin{tabular}{ll}
+    \hline
+    FRB & Failed physical controls \\
+    \hline
+    20220207C & off-pulse null \\
+    20220310F & modulation physicality \\
+    20220506D & low-lag stability; off-pulse null inconclusive \\
+    20221113A & modulation physicality; off-pulse null inconclusive \\
+    20221203A & low-lag stability; modulation physicality \\
+    20230307A & low-lag stability; modulation physicality \\
+    20230325A & off-pulse null (instrumental; see text) \\
+    20230814B & modulation physicality; off-pulse null inconclusive \\
+    20230913A & off-pulse null \\
+    20240122A & flat-field provenance; modulation physicality \\
+    20240203A & off-pulse null \\
+    20240229A & low-lag stability \\
+    \hline
+    \end{tabular}
+\end{table}
 
 \FloatBarrier
 \subsection{Turbulence spectrum and burst multiplicity}
