@@ -1,34 +1,32 @@
-"""Shared manuscript-facing association diagnostic calculations.
+"""Validate manuscript-facing association diagnostics from the pipeline report.
 
-The pipeline association report applies the DM-window factor to every row.  For
-bursts without an independently constrained CHIME DM, the manuscript instead
-defines a position-and-time-only chance probability (``f_DM = 1``).  Keep that
-class-aware correction in one place for the sample table and summary figure.
+The pipeline owns the chance-coincidence calculation.  Manuscript generators
+must consume its class-aware values directly rather than silently correcting a
+stale report downstream.
 """
 
 from __future__ import annotations
 
-import math
+def reported_chance_probability(burst: dict) -> float:
+    """Return source Pcc after checking its class and applied DM factor."""
+    required = {
+        "chance_coincidence_P",
+        "chance_coincidence_f_DM",
+        "chance_coincidence_class",
+    }
+    missing = sorted(required - burst.keys())
+    if missing:
+        raise ValueError(
+            "association report lacks class-aware provenance fields: " + ", ".join(missing)
+        )
 
-FULL_SKY_SR = 4.0 * math.pi
-SECONDS_PER_DAY = 86400.0
-DEG2_PER_SR = (180.0 / math.pi) ** 2
-
-
-def position_time_chance_probability(inputs: dict) -> float:
-    """Poisson probability for the report's sky/time window with no DM cut."""
-    mu = (
-        float(inputs["rate_per_day"])
-        / FULL_SKY_SR
-        / SECONDS_PER_DAY
-        * (float(inputs["omega_win_deg2"]) / DEG2_PER_SR)
-        * (2.0 * float(inputs["dt_s"]))
-    )
-    return -math.expm1(-mu)
-
-
-def class_aware_chance_probability(burst: dict, inputs: dict) -> float:
-    """Return DM-filtered Pcc when DM is constrained, otherwise position+time Pcc."""
-    if burst["dm_agreement"]["consistent"] is None:
-        return position_time_chance_probability(inputs)
+    dm_constrained = burst["dm_agreement"]["consistent"] is not None
+    expected_class = "dm_position_time" if dm_constrained else "position_time"
+    if burst["chance_coincidence_class"] != expected_class:
+        raise ValueError(
+            f"association class mismatch: expected {expected_class}, "
+            f"got {burst['chance_coincidence_class']}"
+        )
+    if not dm_constrained and float(burst["chance_coincidence_f_DM"]) != 1.0:
+        raise ValueError("position-and-time-only association must use f_DM=1")
     return float(burst["chance_coincidence_P"])

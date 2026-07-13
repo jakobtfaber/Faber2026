@@ -25,7 +25,7 @@ from pathlib import Path
 
 import yaml
 
-from association_diagnostics import class_aware_chance_probability
+from association_diagnostics import reported_chance_probability
 
 REPO = Path(__file__).resolve().parent.parent
 PIPELINE = REPO / "pipeline"
@@ -107,9 +107,7 @@ def _load_association_diagnostics() -> dict[str, dict[str, str]]:
         diagnostics[nick] = {
             "toa_residual_ms": f"${residual_ms:+.2f} \\pm {sigma_ms:.2f}$",
             "toa_nsigma": n_sigma,
-            "pcc": _tex_scientific(
-                class_aware_chance_probability(assoc_row, report["inputs"])
-            ),
+            "pcc": _tex_scientific(reported_chance_probability(assoc_row)),
             "verdict": _association_verdict(assoc_row),
         }
     return diagnostics
