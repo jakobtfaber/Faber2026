@@ -176,6 +176,56 @@ def test_render_disables_model_overlay(monkeypatch, tmp_path):
     assert calls[0]["show_model_on_data"] is False
 
 
+def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
+    """DSA dominant-component t0 -> t=0; CHIME fitted arrival -> measured offset."""
+    import json as _json
+
+    n_t = 400
+    dt = 0.065536
+    t = np.arange(n_t) * dt
+    burst_idx = 200
+
+    def _cube():
+        data = np.zeros((6, n_t))
+        data[:, burst_idx : burst_idx + 8] = 20.0
+        model = np.zeros_like(data)
+        model[:, burst_idx] = 1.0
+        return data, model
+
+    dataC, modelC = _cube()
+    dataD, modelD = _cube()
+    npz = tmp_path / "syn_jointmodel_X.npz"
+    np.savez(
+        npz,
+        timeC=t, dataC=dataC, modelC=modelC, noiseC=np.ones(6), validC=np.ones(6, bool),
+        freqC=np.linspace(0.4, 0.8, 6),
+        timeD=t, dataD=dataD, modelD=modelD, noiseD=np.ones(6), validD=np.ones(6, bool),
+        freqD=np.linspace(1.31, 1.5, 6),
+    )
+    t_burst = float(t[burst_idx])
+    (tmp_path / "syn_joint_fit_X.json").write_text(_json.dumps({
+        "percentiles": {
+            "t0_C1": {"median": t_burst - 0.3},
+            "t0_C2": {"median": t_burst - 6.0},  # weak early component: ignored
+            "t0_D1": {"median": t_burst - 0.1},
+        }
+    }))
+    offset = 2.0
+    monkeypatch.setattr(triptych, "toa_offset_ms", lambda nick, toa_json=None: offset)
+
+    bands = triptych.bands_from_npz(npz, "syn")
+    chime = next(b for b in bands if "CHIME" in b.label)
+    dsa = next(b for b in bands if "DSA" in b.label)
+    # Fitted arrivals: DSA at 0, CHIME at offset -> burst peaks land at
+    # +0.1 (DSA) and offset + 0.3 (CHIME).
+    prof_d = np.nansum(dsa.data, axis=0)
+    prof_c = np.nansum(chime.data, axis=0)
+    peak_d = float(dsa.time_ms[int(np.argmax(prof_d))])
+    peak_c = float(chime.time_ms[int(np.argmax(prof_c))])
+    assert peak_d == pytest.approx(0.1, abs=dt)
+    assert peak_c == pytest.approx(offset + 0.3, abs=dt)
+
+
 def test_manifest_yaml_parses_flags():
     rows = load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
     flagged = {r["nick"] for r in rows if r.get("flag") and r["nick"] != "chromatica"}
