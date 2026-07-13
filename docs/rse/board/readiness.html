@@ -1,61 +1,64 @@
 <title>Faber2026 — Circulation Readiness</title>
 <style>
+  /* ── tokens ──────────────────────────────────────────────────────────
+     Status palette validated with the dataviz six-checks script
+     (CVD separation + contrast pass both modes; status colors always
+     ship with a text label, never color alone). */
   :root {
-    --ground:#FAFBFC; --card:#FFFFFF; --ink:#1A2330; --muted:#5A6B7E;
-    --hair:#E2E8EE; --accent:#2E7D8F;
-    --good:#2E7D46; --good-bg:#E8F3EC;
-    --revoked:#B3372E; --revoked-bg:#F9ECEA;
-    --ready:#2563A8; --ready-bg:#EAF1F9;
-    --pend:#96690F; --pend-bg:#F8F1E0;
-    --blocked:#6B7684; --blocked-bg:#EEF1F4;
-    --unsup:#8A4A9E; --unsup-bg:#F4ECF8;
-    --now:#2E7D8F; --now-bg:#E6F2F5;
+    --ground:#F7F9FB; --card:#FFFFFF; --ink:#18212E; --muted:#5A6B7E;
+    --hair:#E2E8EE; --accent:#0F7E99;
+    --good:#2E7D46;   --good-bg:#E8F3EC;
+    --revoked:#B3372E;--revoked-bg:#F9ECEA;
+    --ready:#2563A8;  --ready-bg:#EAF1F9;
+    --pend:#96690F;   --pend-bg:#FBF3DD;
+    --blocked:#6B7684;--blocked-bg:#EEF1F4;
+    --unsup:#8A4A9E;  --unsup-bg:#F4ECF8;
+    --now:#0F7E99;    --now-bg:#E4F2F5;
+    --track:#E7ECF1;
   }
   @media (prefers-color-scheme: dark) { :root {
-    --ground:#10151B; --card:#171E26; --ink:#E6ECF2; --muted:#93A1B0;
-    --hair:#263140; --accent:#5FB3C4;
-    --good:#6CC08B; --good-bg:#1B2E22;
-    --revoked:#E08076; --revoked-bg:#33201D;
-    --ready:#7FB1E0; --ready-bg:#1B2838;
-    --pend:#D9B25F; --pend-bg:#322A18;
-    --blocked:#9AA5B1; --blocked-bg:#222A33;
-    --unsup:#C89ADB; --unsup-bg:#2C2135;
-    --now:#5FB3C4; --now-bg:#16282E;
+    --ground:#0E1319; --card:#161D26; --ink:#E6ECF2; --muted:#93A1B0;
+    --hair:#263140; --accent:#45C4D8;
+    --good:#6CC08B;   --good-bg:#1B2E22;
+    --revoked:#E08076;--revoked-bg:#33201D;
+    --ready:#8FA6EE;  --ready-bg:#1E2536;
+    --pend:#D9B25F;   --pend-bg:#322A18;
+    --blocked:#9AA5B1;--blocked-bg:#222A33;
+    --unsup:#C89ADB;  --unsup-bg:#2C2135;
+    --now:#45C4D8;    --now-bg:#122B31;
+    --track:#212B36;
   }}
   :root[data-theme="light"] {
-    --ground:#FAFBFC; --card:#FFFFFF; --ink:#1A2330; --muted:#5A6B7E;
-    --hair:#E2E8EE; --accent:#2E7D8F;
-    --good:#2E7D46; --good-bg:#E8F3EC;
-    --revoked:#B3372E; --revoked-bg:#F9ECEA;
-    --ready:#2563A8; --ready-bg:#EAF1F9;
-    --pend:#96690F; --pend-bg:#F8F1E0;
-    --blocked:#6B7684; --blocked-bg:#EEF1F4;
-    --unsup:#8A4A9E; --unsup-bg:#F4ECF8;
-    --now:#2E7D8F; --now-bg:#E6F2F5;
+    --ground:#F7F9FB; --card:#FFFFFF; --ink:#18212E; --muted:#5A6B7E;
+    --hair:#E2E8EE; --accent:#0F7E99;
+    --good:#2E7D46; --good-bg:#E8F3EC; --revoked:#B3372E; --revoked-bg:#F9ECEA;
+    --ready:#2563A8; --ready-bg:#EAF1F9; --pend:#96690F; --pend-bg:#FBF3DD;
+    --blocked:#6B7684; --blocked-bg:#EEF1F4; --unsup:#8A4A9E; --unsup-bg:#F4ECF8;
+    --now:#0F7E99; --now-bg:#E4F2F5; --track:#E7ECF1;
   }
   :root[data-theme="dark"] {
-    --ground:#10151B; --card:#171E26; --ink:#E6ECF2; --muted:#93A1B0;
-    --hair:#263140; --accent:#5FB3C4;
-    --good:#6CC08B; --good-bg:#1B2E22;
-    --revoked:#E08076; --revoked-bg:#33201D;
-    --ready:#7FB1E0; --ready-bg:#1B2838;
-    --pend:#D9B25F; --pend-bg:#322A18;
-    --blocked:#9AA5B1; --blocked-bg:#222A33;
-    --unsup:#C89ADB; --unsup-bg:#2C2135;
-    --now:#5FB3C4; --now-bg:#16282E;
+    --ground:#0E1319; --card:#161D26; --ink:#E6ECF2; --muted:#93A1B0;
+    --hair:#263140; --accent:#45C4D8;
+    --good:#6CC08B; --good-bg:#1B2E22; --revoked:#E08076; --revoked-bg:#33201D;
+    --ready:#8FA6EE; --ready-bg:#1E2536; --pend:#D9B25F; --pend-bg:#322A18;
+    --blocked:#9AA5B1; --blocked-bg:#222A33; --unsup:#C89ADB; --unsup-bg:#2C2135;
+    --now:#45C4D8; --now-bg:#122B31; --track:#212B36;
   }
   * { box-sizing:border-box; }
   body { background:var(--ground); color:var(--ink);
     font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;
-    margin:0; padding:28px clamp(16px,4vw,48px) 64px; }
+    margin:0; padding:26px clamp(16px,4vw,52px) 64px; }
   .mono { font-family:ui-monospace,"SF Mono",Menlo,monospace; font-variant-numeric:tabular-nums; }
-  header { display:flex; flex-wrap:wrap; align-items:baseline; gap:12px 20px;
-    border-bottom:2px solid var(--hair); padding-bottom:14px; margin-bottom:20px; }
-  h1 { font-size:21px; margin:0; letter-spacing:-0.01em; }
-  h1 small { color:var(--muted); font-weight:400; }
+
+  header { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 20px;
+    padding-bottom:14px; margin-bottom:18px; border-bottom:2px solid var(--hair); }
+  h1 { font-size:22px; margin:0; letter-spacing:-0.01em; }
+  h1 small { color:var(--muted); font-weight:400; font-size:15px; }
   .meta { color:var(--muted); font-size:13px; }
+
   h2 { font-size:12px; text-transform:uppercase; letter-spacing:0.08em;
-    color:var(--muted); margin:28px 0 10px; font-weight:600; }
+    color:var(--muted); margin:30px 0 10px; font-weight:600; }
+
   .chip { display:inline-flex; align-items:center; gap:5px; font-size:11.5px;
     font-weight:600; padding:1px 8px; border-radius:9px; white-space:nowrap; }
   .chip::before { content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
@@ -66,6 +69,136 @@
   .c-blocked{color:var(--blocked);background:var(--blocked-bg);}
   .c-unsup{color:var(--unsup);background:var(--unsup-bg);}
   .c-now{color:var(--now);background:var(--now-bg);}
+
+  /* ── owner view (baked by scripts/render_journal_panel.py — class
+        contract fixed: .own .own-head .own-cols .own-col oc-* .own-comps
+        .comp .cnm .cid .cnx .who) ──────────────────────────────────── */
+  .own { margin-bottom:8px; }
+  .own-head { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+  .own-head b { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); }
+  .own-cols { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:720px){ .own-cols { grid-template-columns:1fr; } }
+  .own-col { border-radius:10px; padding:12px 16px; }
+  .own-col h4 { margin:0 0 8px; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.07em; font-weight:700; }
+  .own-col ul { list-style:none; margin:0; padding:0; }
+  .own-col li { font-size:13.5px; line-height:1.35; }
+  .own-col li b { font-weight:650; }
+  .own-col li small { display:block; color:var(--muted); font-size:12px; font-weight:400; }
+  .own-col .who { color:var(--muted); font-size:11px; white-space:nowrap;
+    text-transform:uppercase; letter-spacing:0.04em; margin-left:6px; }
+  /* needs-you = full-width banner, the loudest element on the page */
+  .oc-you { grid-column:1 / -1; background:var(--pend-bg);
+    border:1px solid var(--pend); border-left:6px solid var(--pend); }
+  .oc-you h4 { color:var(--pend); font-size:12px; }
+  .oc-you ul { display:flex; flex-wrap:wrap; gap:8px 28px; }
+  .oc-you li { padding:2px 0; }
+  .oc-you li b { font-size:15px; }
+  .oc-now { background:var(--now-bg); } .oc-now h4 { color:var(--now); }
+  .oc-now li { padding:5px 0 5px 10px; border-left:3px solid var(--now); }
+  .oc-now li + li { border-top:1px dashed var(--hair); }
+  .oc-next { background:var(--ready-bg); } .oc-next h4 { color:var(--ready); }
+  .oc-next li { padding:5px 0 5px 10px; border-left:3px solid var(--ready); }
+  .oc-next li + li { border-top:1px dashed var(--hair); }
+  .own-comps { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .comp { border:1px solid var(--hair); background:var(--card); border-radius:8px;
+    padding:7px 11px; flex:1 1 150px; min-width:150px; }
+  .comp .cnm { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
+  .comp .cnm b { font-size:12.5px; }
+  .comp .cid { color:var(--muted); font-size:11px;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace; }
+  .comp .cnx { color:var(--muted); font-size:11.5px; line-height:1.35; display:block; margin-top:2px; }
+
+  /* ── strand swimlanes (main view) ────────────────────────────────── */
+  .strands { display:flex; flex-direction:column; gap:10px; }
+  .strand { background:var(--card); border:1px solid var(--hair); border-radius:10px;
+    padding:12px 16px; display:grid; grid-template-columns:230px 1fr; gap:6px 22px;
+    align-items:center; }
+  @media (max-width:860px){ .strand { grid-template-columns:1fr; } }
+  .strand.s-live { border-left:4px solid var(--now); }
+  .strand.s-attn { border-left:4px solid var(--pend); }
+  .s-head b { font-size:14px; }
+  .s-head .sref { display:block; color:var(--muted); font-size:11.5px; }
+  .s-head .sids { display:block; color:var(--muted); font-size:10.5px; margin-top:3px;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace; }
+  .s-stages { display:flex; }
+  .stage { flex:1; position:relative; text-align:center; min-width:72px; padding:0 4px; }
+  .stage::before { content:""; position:absolute; top:8px; left:-50%; width:100%;
+    height:2px; background:var(--hair); }
+  .stage:first-child::before { display:none; }
+  .stage i { display:block; width:17px; height:17px; border-radius:50%; margin:0 auto 4px;
+    background:var(--card); border:2px solid var(--hair); position:relative; z-index:1; }
+  .stage b { font-size:10px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--muted); font-weight:700; display:block; }
+  .stage small { display:block; font-size:10.5px; color:var(--muted); line-height:1.25; margin-top:1px; }
+  .st-done i { background:var(--good); border-color:var(--good); }
+  .st-half i { background:linear-gradient(90deg,var(--good) 50%,var(--card) 50%); border-color:var(--good); }
+  .st-now i  { background:var(--now); border-color:var(--now); box-shadow:0 0 0 4px var(--now-bg); }
+  .st-you i  { background:var(--pend-bg); border-color:var(--pend); box-shadow:0 0 0 4px var(--pend-bg); }
+  .st-ready i { border-color:var(--ready); }
+  .st-block i { opacity:0.55; }
+  .st-done b { color:var(--good); } .st-half b { color:var(--good); }
+  .st-now b { color:var(--now); } .st-you b { color:var(--pend); }
+  .st-ready b { color:var(--ready); }
+  .feed { display:inline-block; font-size:10.5px; color:var(--now); background:var(--now-bg);
+    border-radius:8px; padding:0 7px; font-weight:600; margin-top:2px; }
+  .mech { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .strandlegend { display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;
+    font-size:12px; color:var(--muted); align-items:center; }
+  .strandlegend .stage { flex:none; min-width:0; display:inline-flex; align-items:center; gap:5px; }
+  .strandlegend .stage::before { display:none; }
+  .strandlegend .stage i { width:13px; height:13px; margin:0; display:inline-block; }
+
+  /* ── pipeline map (agent-facing, in fold) ────────────────────────── */
+  .mapwrap { background:var(--card); border:1px solid var(--hair); border-radius:10px;
+    padding:14px 16px 8px; overflow-x:auto; }
+  .mapwrap svg { display:block; width:100%; min-width:880px; height:auto; }
+  .mapwrap text { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; fill:var(--ink); }
+  .mapwrap .nid { font-size:19px; font-weight:800; }
+  .mapwrap .nnm { font-size:12.5px; font-weight:650; }
+  .mapwrap .nst { font-size:11px; fill:var(--muted); }
+  .mapwrap .edge { stroke:var(--blocked); stroke-width:1.6; fill:none; opacity:0.75; }
+  .mapwrap .node-good  { fill:var(--good-bg);    stroke:var(--good); }
+  .mapwrap .node-now   { fill:var(--now-bg);     stroke:var(--now); }
+  .mapwrap .node-ready { fill:var(--ready-bg);   stroke:var(--ready); }
+  .mapwrap .node-pend  { fill:var(--pend-bg);    stroke:var(--pend); }
+  .mapwrap .node-blocked { fill:var(--blocked-bg); stroke:var(--hair); }
+  .mapwrap .t-good{fill:var(--good);} .mapwrap .t-now{fill:var(--now);}
+  .mapwrap .t-ready{fill:var(--ready);} .mapwrap .t-pend{fill:var(--pend);}
+  .mapwrap .t-blocked{fill:var(--blocked);}
+  .mapwrap .track { fill:var(--track); }
+  .mapwrap .seg-good{fill:var(--good);} .mapwrap .seg-ready{fill:var(--ready);}
+  .mapwrap .seg-pend{fill:var(--pend);} .mapwrap .seg-now{fill:var(--now);}
+  .maplegend { display:flex; flex-wrap:wrap; gap:12px; padding:8px 4px 4px;
+    font-size:12px; color:var(--muted); }
+
+  /* ── trust ladder stepper (agent-facing, in fold) ────────────────── */
+  .ladder { display:grid; grid-template-columns:repeat(7,1fr); gap:0;
+    background:var(--card); border:1px solid var(--hair); border-radius:10px;
+    padding:16px 12px 12px; overflow-x:auto; }
+  @media (max-width:820px){ .ladder { grid-template-columns:repeat(4,1fr); row-gap:16px; } }
+  .rung { position:relative; text-align:center; padding:0 6px; min-width:96px; }
+  .rung::before { content:""; position:absolute; top:13px; left:-50%; width:100%;
+    height:2px; background:var(--hair); z-index:0; }
+  .rung:first-child::before { display:none; }
+  @media (max-width:820px){ .rung:nth-child(5)::before { display:none; } }
+  .rung .pt { position:relative; z-index:1; width:26px; height:26px; margin:0 auto 6px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:13px; font-weight:800; background:var(--card); border:2px solid var(--hair);
+    color:var(--muted); }
+  .rung.r-done .pt { background:var(--good); border-color:var(--good); color:var(--card); }
+  .rung.r-ready .pt { border-color:var(--ready); color:var(--ready); }
+  .rung.r-next .pt { border-color:var(--pend); color:var(--pend);
+    box-shadow:0 0 0 4px var(--pend-bg); }
+  .rung .rid { font-size:11.5px; font-weight:700;
+    font-family:ui-monospace,"SF Mono",Menlo,monospace; }
+  .rung .rnm { font-size:11.5px; color:var(--muted); line-height:1.3; display:block; }
+  .rung .rst { font-size:10.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.05em; display:block; margin-top:2px; }
+  .rung.r-done .rst { color:var(--good); } .rung.r-ready .rst { color:var(--ready); }
+  .rung.r-next .rst { color:var(--pend); } .rung.r-blocked .rst { color:var(--blocked); }
+
+  /* ── cards, tables, lanes (detail fold) ──────────────────────────── */
   .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px; }
   .grid3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
   .card { background:var(--card); border:1px solid var(--hair); border-radius:8px; padding:14px 16px; }
@@ -75,12 +208,14 @@
   tr:first-child td { border-top:none; }
   td.what { width:52%; }
   td .note { color:var(--muted); font-size:12.5px; display:block; }
-  .now-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px;
-    background:var(--now-bg); border:1px solid var(--now); border-radius:10px;
-    padding:12px 16px; margin-bottom:4px; }
-  .now-strip .slot b { display:block; font-size:11px; text-transform:uppercase;
-    letter-spacing:0.07em; color:var(--now); margin-bottom:3px; }
-  .now-strip .slot { font-size:13.5px; }
+
+  details.fold { margin-top:26px; }
+  details.fold > summary { cursor:pointer; font-size:12px; text-transform:uppercase;
+    letter-spacing:0.08em; color:var(--muted); font-weight:600; padding:6px 0; }
+  details.fold > summary:hover { color:var(--ink); }
+  details.fold > summary:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  details.fold h2:first-of-type { margin-top:10px; }
+
   .lane { background:var(--card); border:1px solid var(--hair); border-radius:8px;
     padding:12px 14px; margin-bottom:12px; }
   .lane-head { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:2px; }
@@ -101,34 +236,298 @@
   .s-good{color:var(--good);} .s-ready{color:var(--ready);}
   .s-pend{color:var(--pend);} .s-blocked{color:var(--blocked);} .s-now{color:var(--now);}
   .legend { display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; font-size:12px; color:var(--muted); }
-  .spine { font-size:12.5px; color:var(--muted); background:var(--card);
-    border:1px solid var(--hair); border-radius:8px; padding:10px 14px; overflow-x:auto; white-space:nowrap; }
-  ul.journal { list-style:none; margin:8px 0 0; padding:0; font-size:12.5px; }
-  ul.journal li { display:grid; grid-template-columns:88px 168px 64px 1fr;
-    gap:10px; padding:4px 0; border-top:1px dashed var(--hair); align-items:baseline; }
-  ul.journal li:first-child { border-top:none; }
+
+  /* ── journal timeline ────────────────────────────────────────────── */
+  ul.journal { list-style:none; margin:8px 0 0; padding:0 0 0 6px; font-size:12.5px; }
+  ul.journal li { display:grid; grid-template-columns:86px 150px 90px 1fr;
+    gap:10px; padding:6px 0 6px 16px; align-items:baseline; position:relative;
+    border-left:2px solid var(--hair); }
+  ul.journal li::before { content:""; position:absolute; left:-6px; top:11px;
+    width:10px; height:10px; border-radius:50%; background:currentColor;
+    border:2px solid var(--card); }
+  ul.journal li:has(.s-good)::before { color:var(--good); }
+  ul.journal li:has(.s-now)::before { color:var(--now); }
+  ul.journal li:has(.s-pend)::before { color:var(--pend); }
+  ul.journal li:has(.s-ready)::before { color:var(--blocked); }
+  ul.journal .jnote { color:var(--ink); }
   .jts { color:var(--muted); font-size:11.5px; }
   .jagent { color:var(--accent); font-weight:600; font-size:11.5px; overflow-wrap:anywhere; }
   .jlane { font-weight:700; font-size:11.5px; font-family:ui-monospace,"SF Mono",Menlo,monospace; }
   .jnote { overflow-wrap:anywhere; }
-  @media (max-width:640px) { ul.journal li { grid-template-columns:88px 1fr; }
+  @media (max-width:640px) { ul.journal li { grid-template-columns:86px 1fr; }
     .jagent { grid-column:2; } .jlane { grid-column:1; } .jnote { grid-column:1 / -1; } }
+
   footer { margin-top:30px; color:var(--muted); font-size:12px; border-top:1px solid var(--hair); padding-top:10px; }
 </style>
 
 <header>
-  <h1>Faber2026 <small>— circulation readiness board</small></h1>
-  <span class="meta">2026-07-06 &nbsp;·&nbsp; pipeline pin <span class="mono">7e77437</span> &nbsp;·&nbsp; journal cadence: 10 min while active (see panel) &nbsp;·&nbsp; branch state lives in the journal</span>
+  <h1>Faber2026 <small>— circulation readiness</small></h1>
+  <span class="meta">CHIME/FRB × DSA-110 co-detection paper · 12 bursts · trust reset 07-06, climbing back via the §V ladder · branch state lives in the journal</span>
 </header>
 
-<div class="now-strip">
-  <div class="slot"><b>Just landed</b>
-    Trust reset wave 3: TOA association + DM_obs also revoked — retained set now EMPTY; V6 added ·
-    §V plan (now seven phases) verified &amp; committed · all decisions re-opened as working choices</div>
-  <div class="slot"><b>In flight now</b>
-    A1 design discussion (trigger calibration question open) · journal panel + 10-min cadence just wired in — NOTE: a second unattributed writer committed scaffolding tonight; journal now attributes all work</div>
-  <div class="slot"><b>Next candidates (your pick)</b>
-    V·P0 provenance freeze · A4 ADR amendment · B1–B3 scint prep · F6 co-author draft · F3 consistency audit</div>
+<!-- OWNER:BEGIN -->
+<div class="own">
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-12T23:30-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-cols">
+<div class="own-col oc-you"><h4>Needs you</h4><ul>
+<li><b>Calibrate the A1 trigger</b><small>two-screen escalation · open since 07-06</small></li>
+<li><b>Pick first trust-ladder rung</b><small>P0 recommended</small></li>
+</ul></div>
+<div class="own-col oc-now"><h4>In flight</h4><ul>
+<li><b>Unified scintillation figure</b> <span class="who">codex</span><small>PR 159 merged; CHIME instrumental-ACF correction next</small></li>
+<li><b>DM-host posterior figure</b> <span class="who">claude</span><small>restyle branch open</small></li>
+<li><b>A1 design discussion</b> <span class="who">you + agents</span></li>
+</ul></div>
+<div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
+<li><b>V·P0 provenance freeze</b><small>pins every data input; opens the fit ladder</small></li>
+<li><b>F3 consistency audit</b><small>manuscript, runnable now</small></li>
+<li><b>B1–B3 scintillation prep</b></li>
+</ul></div>
+</div>
+<div class="own-comps">
+<div class="comp"><span class="cnm"><b>Sample &amp; association</b><span class="cid">V6</span><span class="chip c-good">validated</span></span><span class="cnx">figure + P_cc prose landing</span></div>
+<div class="comp"><span class="cnm"><b>Budget &amp; census</b><span class="cid">V4·V5</span><span class="chip c-good">validated</span></span><span class="cnx">prose rewrite after D</span></div>
+<div class="comp"><span class="cnm"><b>Scattering</b><span class="cid">V1·A·C</span><span class="chip c-pend">method open</span></span><span class="cnx">A1 with you · V1/V2 startable</span></div>
+<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">active</span></span><span class="cnx">recipe parity → CHIME Δν_d</span></div>
+<div class="comp"><span class="cnm"><b>Energies</b><span class="cid">V3</span><span class="chip c-blocked">waiting</span></span><span class="cnx">after P0 + V1</span></div>
+<div class="comp"><span class="cnm"><b>Synthesis</b><span class="cid">D·E·F1</span><span class="chip c-blocked">blocked</span></span></div>
+<div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-ready">startable</span></span><span class="cnx">P0 · F3 audit · F6 authors</span></div>
+</div>
+</div>
+<!-- OWNER:END -->
+
+<h2>The paper, strand by strand — inputs → method → measured → validated → written</h2>
+<!-- Strand swimlanes: the owner-facing structure. Task IDs (P0, A1, B4, …)
+     remain the canonical keys from plan-circulation-readiness.md; strands
+     only regroup them by science claim. Agents changing lane state update
+     the stage classes here (st-done/half/now/you/ready/block), the recovery
+     map + ladder in the fold below, and owner-view.json — then rebake +
+     scripts/deploy-board.sh. -->
+<div class="strands">
+
+  <div class="strand">
+    <div class="s-head"><b>Sample &amp; association</b>
+      <span class="sref">§2 observations · toa — which 12 bursts, and why we believe the pairings</span>
+      <span class="sids">V6 ✓</span></div>
+    <div class="s-stages">
+      <div class="stage st-done"><i></i><b>inputs</b><small>DM/TOA provenance per telescope</small></div>
+      <div class="stage st-done"><i></i><b>method</b><small>shared DSA-DM convention</small></div>
+      <div class="stage st-done"><i></i><b>measured</b><small>residuals · P_cc</small></div>
+      <div class="stage st-done"><i></i><b>validated</b><small>V6 cleared 07-07</small></div>
+      <div class="stage st-half"><i></i><b>written</b><small>summary figure + P_cc prose landing now</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>DM budget &amp; foreground census</b>
+      <span class="sref">§3 budget — where the dispersion comes from</span>
+      <span class="sids">V4 ✓ · V5 ✓ · D2</span></div>
+    <div class="s-stages">
+      <div class="stage st-done"><i></i><b>inputs</b><small>DR9/DESI/NED/PS1 re-audit</small></div>
+      <div class="stage st-done"><i></i><b>method</b><small>models verified vs refs</small></div>
+      <div class="stage st-half"><i></i><b>measured</b><small>35 systems ✓ · D2 comparison <span class="feed">← scattering</span></small></div>
+      <div class="stage st-done"><i></i><b>validated</b><small>V4+V5 cleared 07-07</small></div>
+      <div class="stage st-ready"><i></i><b>written</b><small>predicted side restored; prose rewrite after D</small></div>
+    </div>
+  </div>
+
+  <div class="strand s-attn">
+    <div class="s-head"><b>Scattering</b>
+      <span class="sref">co-model methods · results · tab:beta — τ, β, geometry per sightline</span>
+      <span class="sids">V1 · V2 · A1–A4 · C1–C3 · F2</span></div>
+    <div class="s-stages">
+      <div class="stage st-ready"><i></i><b>inputs</b><small>V2 cube forensics startable</small></div>
+      <div class="stage st-you"><i></i><b>method</b><small>A1 with you · V1 contract <span class="feed">← scint prior odds</span></small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>C1 re-fit ×12</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small>under V1 contract</small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>tab:beta rework F2</small></div>
+    </div>
+  </div>
+
+  <div class="strand s-live">
+    <div class="s-head"><b>Scintillation</b>
+      <span class="sref">two-screen appendix — Δν_d both bands; sets scattering geometry · hard circulation gate</span>
+      <span class="sids">B1–B6</span></div>
+    <div class="s-stages">
+      <div class="stage st-now"><i></i><b>inputs</b><small>CHIME regen startable; freya ACF correction stuck → upper-limit fallback</small></div>
+      <div class="stage st-now"><i></i><b>method</b><small>recipe-parity Phase 1 landed</small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>both bands, under V1</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small>B5 two-screen rebuild</small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>fig:scint_screens re-made</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>Energies &amp; intrinsic</b>
+      <span class="sref">tab:burst-energies — what the bursts themselves are</span>
+      <span class="sids">V3 · E2</span></div>
+    <div class="s-stages">
+      <div class="stage st-half"><i></i><b>inputs</b><small>rides scattering inputs</small></div>
+      <div class="stage st-ready"><i></i><b>method</b><small>γ_D pile-up + selection rule to resolve</small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>c₀,γ re-export</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small>after P0 + V1 rails</small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>table re-admitted then</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>Synthesis &amp; interpretation</b>
+      <span class="sref">discussion · conclusions — propagation vs intrinsic, per sightline</span>
+      <span class="sids">D1 · E1 · F1</span></div>
+    <div class="s-stages">
+      <div class="stage st-block"><i></i><b>inputs</b><small><span class="feed">← scattering + budget</span></small></div>
+      <div class="stage st-block"><i></i><b>method</b><small>adjudicated geometries</small></div>
+      <div class="stage st-block"><i></i><b>measured</b><small>D1 measured-vs-predicted</small></div>
+      <div class="stage st-block"><i></i><b>validated</b><small></small></div>
+      <div class="stage st-block"><i></i><b>written</b><small>F1 the big rewrite</small></div>
+    </div>
+  </div>
+
+  <div class="strand">
+    <div class="s-head"><b>Paper mechanics</b>
+      <span class="sref">cross-cutting — foundations, audits, authorship, release</span>
+      <span class="sids">P0 · F3–F7 · G1–G3</span></div>
+    <div class="mech">
+      <span class="chip c-pend">P0 provenance freeze — recommended next</span>
+      <span class="chip c-ready">F3 consistency audit — runnable now</span>
+      <span class="chip c-ready">F6 co-author draft — runnable now</span>
+      <span class="chip c-now">F4 referee pass — partial now</span>
+      <span class="chip c-blocked">F5 line polish — after F3/F4</span>
+      <span class="chip c-blocked">G1–G3 release — gated, last</span>
+    </div>
+  </div>
+
+</div>
+<div class="strandlegend">
+  <span class="stage st-done"><i></i>done</span>
+  <span class="stage st-half"><i></i>partial</span>
+  <span class="stage st-now"><i></i>active now</span>
+  <span class="stage st-you"><i></i>needs you</span>
+  <span class="stage st-ready"><i></i>startable</span>
+  <span class="stage st-block"><i></i>waiting upstream</span>
+  <span>· <span class="feed">← feed</span> = cross-strand dependency</span>
+</div>
+
+<details class="fold">
+<summary>Agent detail — recovery map, trust ladder, lanes &amp; tasks (V·P0 … G3)</summary>
+
+<h2>Recovery pipeline — the dependency graph agents schedule against</h2>
+<!-- Static map: any agent editing lane status updates the strand swimlanes
+     above, this SVG's node classes/progress segments, AND the lane detail
+     below, then rebakes + redeploys (scripts/deploy-board.sh). Node classes:
+     node-good/now/ready/pend/blocked; segments seg-good/ready/pend + track. -->
+<div class="mapwrap">
+<svg viewBox="0 0 1150 268" role="img" aria-label="Dependency map: lanes V, A, B feed C, then D, E, F, G">
+  <defs>
+    <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="var(--blocked)"/>
+    </marker>
+  </defs>
+
+  <path class="edge" d="M178,47  C215,47 215,120 244,120" marker-end="url(#arr)"/>
+  <path class="edge" d="M178,134 L244,134" marker-end="url(#arr)"/>
+  <path class="edge" d="M178,221 C215,221 215,148 244,148" marker-end="url(#arr)"/>
+  <path class="edge" d="M402,134 L468,134" marker-end="url(#arr)"/>
+  <path class="edge" d="M618,134 L676,134" marker-end="url(#arr)"/>
+  <path class="edge" d="M816,134 L866,134" marker-end="url(#arr)"/>
+  <path class="edge" d="M1006,134 L1040,134" marker-end="url(#arr)"/>
+
+  <g><title>V — trust ladder: 3 of 7 rungs cleared (V4 census, V5 budget, V6 association); P0/P1/P2 startable</title>
+  <rect x="8" y="10" width="170" height="74" rx="9" class="node-ready" stroke-width="1.5"/>
+  <text x="22" y="36" class="nid t-ready">V</text>
+  <text x="44" y="34" class="nnm">Trust ladder</text>
+  <text x="22" y="52" class="nst">3/7 cleared · pick next rung</text>
+  <rect x="22" y="60" width="142" height="6" rx="3" class="track"/>
+  <rect x="22" y="60" width="59" height="6" rx="3" class="seg-good"/>
+  <rect x="83" y="60" width="59" height="6" rx="3" class="seg-ready"/>
+  </g>
+
+  <g><title>A — methodology reset: A1 two-screen design open with the owner; A2–A4 startable</title>
+  <rect x="8" y="97" width="170" height="74" rx="9" class="node-pend" stroke-width="1.5"/>
+  <text x="22" y="123" class="nid t-pend">A</text>
+  <text x="44" y="121" class="nnm">Methodology</text>
+  <text x="22" y="139" class="nst">A1 design — with you</text>
+  <rect x="22" y="147" width="142" height="6" rx="3" class="track"/>
+  <rect x="22" y="147" width="34" height="6" rx="3" class="seg-pend"/>
+  <rect x="58" y="147" width="106" height="6" rx="3" class="seg-ready"/>
+  </g>
+
+  <g><title>B — scintillation campaign, both bands: active; CHIME recipe parity in flight; B4/B5 blocked on prep + V1</title>
+  <rect x="8" y="184" width="170" height="74" rx="9" class="node-now" stroke-width="1.5"/>
+  <text x="22" y="210" class="nid t-now">B</text>
+  <text x="44" y="208" class="nnm">Scintillation</text>
+  <text x="22" y="226" class="nst">active · CHIME recipe parity</text>
+  <rect x="22" y="234" width="142" height="6" rx="3" class="track"/>
+  <rect x="22" y="234" width="93" height="6" rx="3" class="seg-ready"/>
+  </g>
+
+  <g><title>C — scattering re-fit from scratch, all 12: blocked until V1 + A + B5</title>
+  <rect x="252" y="97" width="150" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
+  <text x="266" y="123" class="nid t-blocked">C</text>
+  <text x="288" y="121" class="nnm">Re-fit ×12</text>
+  <text x="266" y="139" class="nst">needs V1 + A + B5</text>
+  <rect x="266" y="147" width="122" height="6" rx="3" class="track"/>
+  </g>
+
+  <g><title>D — sightline and foreground comparison: blocked on C (V4/V5 already cleared)</title>
+  <rect x="476" y="97" width="142" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
+  <text x="490" y="123" class="nid t-blocked">D</text>
+  <text x="512" y="121" class="nnm">Sightlines</text>
+  <text x="490" y="139" class="nst">needs C · V4/V5 ✓</text>
+  <rect x="490" y="147" width="114" height="6" rx="3" class="track"/>
+  </g>
+
+  <g><title>E — synthesis: blocked on D</title>
+  <rect x="676" y="97" width="140" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
+  <text x="690" y="123" class="nid t-blocked">E</text>
+  <text x="712" y="121" class="nnm">Synthesis</text>
+  <text x="690" y="139" class="nst">needs D</text>
+  <rect x="690" y="147" width="112" height="6" rx="3" class="track"/>
+  </g>
+
+  <g><title>F — manuscript: active now on runnable parts (F3/F4/F6); the big rewrite F1 waits on D/E</title>
+  <rect x="866" y="97" width="140" height="74" rx="9" class="node-now" stroke-width="1.5"/>
+  <text x="880" y="123" class="nid t-now">F</text>
+  <text x="902" y="121" class="nnm">Manuscript</text>
+  <text x="880" y="139" class="nst">partial now · F1 after E</text>
+  <rect x="880" y="147" width="112" height="6" rx="3" class="track"/>
+  <rect x="880" y="147" width="14" height="6" rx="3" class="seg-good"/>
+  <rect x="896" y="147" width="46" height="6" rx="3" class="seg-ready"/>
+  </g>
+
+  <g><title>G — release mechanics: gated, last</title>
+  <rect x="1040" y="97" width="102" height="74" rx="9" class="node-blocked" stroke-width="1.5"/>
+  <text x="1054" y="123" class="nid t-blocked">G</text>
+  <text x="1076" y="121" class="nnm">Release</text>
+  <text x="1054" y="139" class="nst">gated · last</text>
+  <rect x="1054" y="147" width="74" height="6" rx="3" class="track"/>
+  </g>
+</svg>
+<div class="maplegend">
+  <span class="chip c-now">active now</span>
+  <span class="chip c-pend">needs your decision</span>
+  <span class="chip c-ready">startable</span>
+  <span class="chip c-blocked">blocked upstream</span>
+  <span>bar = lane progress: <span class="s-good">done</span> · <span class="s-ready">startable</span> · rest blocked</span>
+</div>
+</div>
+
+<h2>Trust ladder — earning back the revoked products (§V)</h2>
+<div class="ladder">
+  <div class="rung r-next"><div class="pt">P0</div><span class="rid">P0</span>
+    <span class="rnm">Provenance freeze</span><span class="rst">recommended next</span></div>
+  <div class="rung r-ready"><div class="pt">P1</div><span class="rid">P1 · V1</span>
+    <span class="rnm">Fit re-trust contract</span><span class="rst">startable</span></div>
+  <div class="rung r-ready"><div class="pt">P2</div><span class="rid">P2 · V2</span>
+    <span class="rnm">Input forensics</span><span class="rst">startable</span></div>
+  <div class="rung r-done"><div class="pt">✓</div><span class="rid">P3 · V4</span>
+    <span class="rnm">Census</span><span class="rst">cleared 07-07</span></div>
+  <div class="rung r-done"><div class="pt">✓</div><span class="rid">P4 · V5</span>
+    <span class="rnm">DM budget</span><span class="rst">cleared 07-07</span></div>
+  <div class="rung r-blocked"><div class="pt">P5</div><span class="rid">P5 · V3</span>
+    <span class="rnm">Energies</span><span class="rst">after P0 + P1</span></div>
+  <div class="rung r-done"><div class="pt">✓</div><span class="rid">P6 · V6</span>
+    <span class="rnm">Association + DM_obs</span><span class="rst">cleared 07-07</span></div>
 </div>
 
 <h2>Lanes &amp; tasks — what every ID means</h2>
@@ -139,10 +538,10 @@
     <li><span class="dot d-ready"></span><span class="tid">P0</span><span class="desc">Provenance freeze <small>pin SHA-256 of every data input; restore the removed census scripts + frozen CSVs into the tracked tree; label the two fit generations; make budget/foreground tables emitter-generated instead of hand-typed</small></span><span class="st s-ready">startable</span></li>
     <li><span class="dot d-ready"></span><span class="tid">P1·V1</span><span class="desc">The re-trust contract <small>ADR-0008: 5 rungs a fit must pass to be citable. Builds: one shared rail detector (today there are 3 conflicting ones), absolute injection-recovery requirement (current: only linear, ~2.5× off), a real posterior-predictive check (current "PPC" is just a χ² stat), fixed verification coverage</small></span><span class="st s-ready">startable</span></li>
     <li><span class="dot d-ready"></span><span class="tid">P2·V2</span><span class="desc">Scattering-input forensics <small>find the off-repo cube builder on h17, checksum all 24 CHIME cubes, test each for the gen-1 de-chirp/wrap defect, close the open DATA_SOURCES reconciliation mystery</small></span><span class="st s-ready">startable</span></li>
-    <li><span class="dot d-blocked"></span><span class="tid">P3·V4</span><span class="desc">Census re-validation <small>Tier 1: byte-exact replay of the 49-candidate census from frozen inputs. Tier 2: re-query live catalogs for every verdict that could flip (photo-z straddlers, unsure PS1-STRM). Independent re-derivation of impact parameters</small></span><span class="st s-blocked">after P0</span></li>
-    <li><span class="dot d-blocked"></span><span class="tid">P4·V5</span><span class="desc">DM-budget re-validation <small>oracle tests: Macquart relation vs analytic, mNFW vs published curve, NE2001/YMW16 pass-through; audit the hand-set priors (40 pc cm⁻³ halo, caps); regenerate the budget table from the verified census</small></span><span class="st s-blocked">after P0/P3</span></li>
+    <li><span class="dot d-good"></span><span class="tid">P3·V4</span><span class="desc">Census re-validation <small>owner-cleared 2026-07-07 on the DR9/DESI-DR1/NED/PS1-STRM re-validation (incl. the phineas DESI-STAR contaminant fix; all census clusters traced to Wen &amp; Han 2024). tab:foreground, verdicts, impact parameters, two-phase mNFW DM_int, fig:clusters_icm restored (CONTEXT.md status)</small></span><span class="st s-good">cleared 07-07</span></li>
+    <li><span class="dot d-good"></span><span class="tid">P4·V5</span><span class="desc">DM-budget re-validation <small>owner-cleared 2026-07-07 with V4 — census now presents 35 systems; budget table + fig:budget left panel restored. Measured-scattering side of fig:budget stays revoked (wave-1 τ fits, plan D1)</small></span><span class="st s-good">cleared 07-07</span></li>
     <li><span class="dot d-blocked"></span><span class="tid">P5·V3</span><span class="desc">Energies audit <small>explain the γ_D ≈ −5 pile-up (prior rail study at floor −10), make the table's selection rule explicit + enforced, resolve chromatica's contradictory gate verdicts</small></span><span class="st s-blocked">after P0+P1 rails</span></li>
-    <li><span class="dot d-ready"></span><span class="tid">P6·V6</span><span class="desc">Association + DM_obs re-validation (wave 3) <small>document per-burst, per-telescope DM_obs (CHIME vs DSA values already exist in chime_side_inputs.json — producers undocumented); quantify their agreement (ΔDM figure); re-derive TOA residuals + chance-association arithmetic from raw inputs — re-certifies the twelve-burst sample itself</small></span><span class="st s-ready">startable</span></li>
+    <li><span class="dot d-good"></span><span class="tid">P6·V6</span><span class="desc">Association + DM_obs re-validation (wave 3) <small>complete 2026-07-07 — per-burst per-telescope DM_obs provenance + CHIME–DSA agreement documented; association residuals, P_cc, verdicts quotable from the pinned V6 artifacts under the shared DSA-DM convention (report: v6-association-dm-report-2026-07-07.md)</small></span><span class="st s-good">cleared 07-07</span></li>
   </ul>
 </div>
 
@@ -157,12 +556,12 @@
 </div>
 
 <div class="lane">
-  <div class="lane-head"><span class="id">B</span><span class="nm">Scintillation campaign, both bands — hard circulation gate</span><span class="dep">B1–B4 → B5 → C</span></div>
+  <div class="lane-head"><span class="id">B</span><span class="nm">Scintillation campaign, both bands — hard circulation gate · <b class="s-now">active</b>: CHIME recipe-parity loop in flight (journal lane B); CHIME instrumental-ACF correction blocked at freya off-pulse null (FLITS PR #160)</span><span class="dep">B1–B4 → B5 → C</span></div>
   <ul class="tasks">
     <li><span class="dot d-ready"></span><span class="tid">B1</span><span class="desc">Burst configs for whitney / phineas / mahi / isha <small>casey pattern; burst bins ~1020 / ~1079 / ~29 / ~55; first run doubles as loader test</small></span><span class="st s-ready">startable</span></li>
     <li><span class="dot d-ready"></span><span class="tid">B2</span><span class="desc">U sizing + CHIME regeneration, six never-generated co-detections <small>zach, oran, wilhelm, johndoeii, hamilton, chromatica (NE2025 MW-floor rule)</small></span><span class="st s-ready">startable</span></li>
     <li><span class="dot d-ready"></span><span class="tid">B3</span><span class="desc">mahi 700–725 MHz RFI inspection <small>before any measurement uses that sub-band</small></span><span class="st s-ready">startable</span></li>
-    <li><span class="dot d-blocked"></span><span class="tid">B4</span><span class="desc">CHIME-band ACF / Δν_d measurements across the sample <small>run under the V1 contract</small></span><span class="st s-blocked">after B1/B2 + V1</span></li>
+    <li><span class="dot d-blocked"></span><span class="tid">B4</span><span class="desc">CHIME-band ACF / Δν_d measurements across the sample <small>run under the V1 contract; recipe-parity plan (plan-chime-scint-recipe-parity.md) is the active prep</small></span><span class="st s-blocked">after B1/B2 + V1</span></li>
     <li><span class="dot d-blocked"></span><span class="tid">B5</span><span class="desc">Two-screen analysis rebuilt on joint CHIME+DSA scint <small>includes re-running the revoked DSA-band ACF fits under the contract</small></span><span class="st s-blocked">after B1–B4</span></li>
     <li><span class="dot d-ready"></span><span class="tid">B6</span><span class="desc">Provenance housekeeping <small>refresh DATA_PROVENANCE (gen-2 md5s), commit the h17-side tooling into FLITS</small></span><span class="st s-ready">startable</span></li>
   </ul>
@@ -178,7 +577,7 @@
 </div>
 
 <div class="lane">
-  <div class="lane-head"><span class="id">D</span><span class="nm">Sightline analysis &amp; foreground comparison</span><span class="dep">needs C + V4/V5</span></div>
+  <div class="lane-head"><span class="id">D</span><span class="nm">Sightline analysis &amp; foreground comparison</span><span class="dep">needs C (V4/V5 cleared)</span></div>
   <ul class="tasks">
     <li><span class="dot d-blocked"></span><span class="tid">D1</span><span class="desc">Measured-vs-predicted foreground scattering per sightline <small>under the adjudicated geometries (old version was thin-screen-conditioned)</small></span><span class="st s-blocked">blocked</span></li>
     <li><span class="dot d-blocked"></span><span class="tid">D2</span><span class="desc">Galaxy / galaxy-cluster foreground comparison as first-class results <small>per-sightline attribution verdicts</small></span><span class="st s-blocked">blocked</span></li>
@@ -202,7 +601,7 @@
     <li><span class="dot d-ready"></span><span class="tid">F4</span><span class="desc">Referee-mode full read-through <small>structural pass on intro/observations/toa/budget can run now; full pass after F1</small></span><span class="st s-ready">partial now</span></li>
     <li><span class="dot d-blocked"></span><span class="tid">F5</span><span class="desc">Line-level prose polish <small>after F3/F4 triage</small></span><span class="st s-blocked">after F3/F4</span></li>
     <li><span class="dot d-ready"></span><span class="tid">F6</span><span class="desc">Co-author list draft <small>from Law2024 (DSA-110) + CHIME/FRB 2018 author overlap, for your pruning; then typeset auth.tex</small></span><span class="st s-ready">startable</span></li>
-    <li><span class="dot d-ready"></span><span class="tid">F7</span><span class="desc">codetections_polarization/ <small>working choice: companion-paper materials, intentionally parked, no action — revisable</small></span><span class="st s-ready">working choice</span></li>
+    <li><span class="dot d-good"></span><span class="tid">F7</span><span class="desc">codetections_polarization/ <small>working choice: companion-paper materials, intentionally parked, no action — revisable</small></span><span class="st s-good">working choice</span></li>
   </ul>
 </div>
 
@@ -215,62 +614,65 @@
   </ul>
 </div>
 
-<div class="spine"><b>Dependency spine:</b>&nbsp; V1/V2 → all re-fits &nbsp;·&nbsp; V1/V3 → energies &nbsp;·&nbsp; V4 → census claims + V5 residuals &nbsp;·&nbsp; A1 ✓ → A2/A3 &nbsp;·&nbsp; B1–B4 → B5 &nbsp;·&nbsp; (V, A, B5) → C1/C2 → C3 → F2 &nbsp;·&nbsp; C3 + V4/V5 → D → E → F1 → F4/F5 → G</div>
-
 <div class="legend">
-  <span class="chip c-good">done / locked</span>
+  <span class="chip c-good">done / cleared</span>
+  <span class="chip c-now">active now</span>
   <span class="chip c-ready">startable now</span>
   <span class="chip c-pend">needs owner decision</span>
   <span class="chip c-blocked">blocked upstream</span>
 </div>
+</details>
 
-<h2>Journal — agent activity log (10-min cadence while active · docs/rse/journal.jsonl · newest first)</h2>
-<div class="card">
+<details class="fold">
+<summary>Journal — agent activity log (newest first)</summary>
+<div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
-<li><span class="jts mono">07-10 16:06</span><span class="jagent">claude-fable-5/ms-referee-methods</span><span class="jlane">ms</span><span class="jnote s-good">Methods gaps filled from FLITS provenance: forward-model/noise/smearing paragraphs (sec:jointfit), gain-prior s2 + explicit priors + dynesty config + numeric quality gates (sec:gainmarg), multicomp fixed-s2 cross-ref; abstract V5 DM-budget slot filled; facilities/software added; LorimerKramer2004+software bib entries. latexmk clean, 0 undefined refs, pages 1/12/13 visually vetted. Revoked SLOTs/placeholders untouched. PR next.</span></li>
-<li><span class="jts mono">07-10 16:00</span><span class="jagent">claude-fable-5/ms-referee-methods</span><span class="jlane">ms</span><span class="jnote s-now">Filling referee-level Methods gaps in sec:jointfit/gainmarg from FLITS provenance (noise model, smearing, priors, dynesty config, quality gates) + abstract V5 DM-budget slot + facilities/software; revoked SLOTs stay. Will land accepted D2-D5/wishlist tex drafts as base commit, then PR.</span></li>
-<li><span class="jts mono">07-10 15:57</span><span class="jagent">codex</span><span class="jlane">dm-shared-fit</span><span class="jnote s-now">77 DM and association tests pass; independent GPT-5.5 review is inspecting PASS-only selection and no-average tension semantics before commit</span></li>
-<li><span class="jts mono">07-10 15:51</span><span class="jagent">codex</span><span class="jlane">dm-shared-fit</span><span class="jnote s-now">Correcting adaptive selector to prefer stable PASS-only resolution clusters; rerunning 24-product selection while raw-data absolute-timing regeneration remains required for a direct shared-DM fit</span></li>
-<li><span class="jts mono">07-10 15:40</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-good">Adaptive multiresolution DM campaign published: FLITS 2934f44, parent PR #79 merged at 8d0e4c5. Final result 8 PASS / 15 MARGINAL / 1 weak-only; not adoption-ready; absolute-time metadata blocks direct cross-band lever fit.</span></li>
-<li><span class="jts mono">07-10 15:38</span><span class="jagent">cursor-grok/dm-host-pdfs</span><span class="jlane">F</span><span class="jnote s-good">Redraw fig:dm_host_posteriors as host PDF ridge plot (ms palette); appendix caption updated; scoped plan-dm-foreground-system-pdfs.md + wishlist O6. Numbers unchanged.</span></li>
-<li><span class="jts mono">07-10 15:31</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-now">Second GPT-5.5 review found three remaining blockers: untracked code absent from provenance hash, cluster selector still referenced global median, and figure/memo stars overclaimed marginal fits. Applying targeted fixes before final review.</span></li>
-<li><span class="jts mono">07-10 15:18</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-now">Full 24-product adaptive run complete: 23/24 science-grade bands, isha/DSA weak; event synthesis flags 8 two-band consistent, 3 tension (freya/phineas/zach), 1 CHIME-only. Expanded 66-test DM regression suite passes; preparing independent review and closeout.</span></li>
-<li><span class="jts mono">07-10 15:07</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">dm-adaptive-arrival</span><span class="jnote s-now">Implemented test-first adaptive multiresolution arrival-regression core and runner on pipeline/dm-campaign-2026-07; real-data probe recovered six of seven prior failures at science precision, with isha/DSA remaining weak; validating full 24-product run next.</span></li>
-<li><span class="jts mono">07-10 14:56</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">figure1-caption</span><span class="jnote s-good">PR #78 merged to origin/main at d304be2; caption commit 8449bb2 verified on remote. DM audit: manuscript still uses one DSA-catalog DM per burst; arrival-regression battery is validated primary candidate but not adopted.</span></li>
-<li><span class="jts mono">07-10 14:54</span><span class="jagent">codex-gpt-5.6/figure1-caption-review</span><span class="jlane">ms</span><span class="jnote s-pend">PR #78 caption verified accurate against scripts/plot_codetection_gallery.py; GitHub approval rejected because session authenticates as PR author jakobtfaber. Requires distinct write-access reviewer account.</span></li>
-<li><span class="jts mono">07-10 14:53</span><span class="jagent">Faber2026-2-codex</span><span class="jlane">figure1-caption</span><span class="jnote s-now">Caption committed as 8449bb2; PR #78 checks green; awaiting required write-access approval before merge to origin/main; auditing DM measurement contract next.</span></li>
-<li><span class="jts mono">07-10 14:43</span><span class="jagent">cursor-grok/figure-wishlist</span><span class="jlane">F</span><span class="jnote s-good">Dropped fig:whitney_mult (outdated multiplicity demo): removed draft box from results.tex; wishlist W3 -&gt; Dropped; CONTEXT + plan-circulation-readiness refs cleaned</span></li>
-<li><span class="jts mono">07-10 14:41</span><span class="jagent">cursor-grok/figure-wishlist</span><span class="jlane">F</span><span class="jnote s-good">Promoted W1-W5 PLACEHOLDERs to live draft fbox floats (labels fig:budget, jointmodel_montage, whitney_mult, subband_tau_validation, scint_screens); no revoked includegraphics</span></li>
-<li><span class="jts mono">07-10 14:40</span><span class="jagent">cursor-grok/figure-wishlist</span><span class="jlane">F</span><span class="jnote s-good">Added docs/rse/specs/figure-wishlist.md (W1-W6 + optional); commented PLACEHOLDER scaffolds in observations.tex + results.tex; CONTEXT pointer. No live includegraphics of revoked PDFs.</span></li>
-<li><span class="jts mono">07-10 13:57</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D5</span><span class="jnote s-good">Added TODO(energies-fixed-band-variant) under V3: optional fixed rest-frame E_iso companion; tracked in methods.tex, results.tex, plan-circulation-readiness, decision memo</span></li>
-<li><span class="jts mono">07-10 13:53</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D2-D5</span><span class="jnote s-good">Owner accepted D2-D5 (+D1 separate) 2026-07-10; memo ACCEPTED; matrix DONE; budget.tex closure_regime vocab; methods.tex drop fixed-band variant promise; CONTEXT.md lock note</span></li>
-<li><span class="jts mono">07-10 13:46</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D2-D5</span><span class="jnote s-good">Wrote docs/rse/specs/decision-d2-d5-scattering-design-locks.md (proposed locks); status matrix D2-D5 -&gt; PROPOSED/awaiting owner; one soft conflict: Methods interior vocab vs geometry-adjudicated beta</span></li>
-<li><span class="jts mono">07-10 13:45</span><span class="jagent">cursor-grok/d2-d5-design-locks</span><span class="jlane">D2-D5</span><span class="jnote s-now">Drafting proposed D2-D5 design-lock memo from referee asks + Methods drafts + A1/geometry contracts</span></li>
-<li><span class="jts mono">07-10 13:05</span><span class="jagent">codex</span><span class="jlane">scintillation</span><span class="jnote s-ready">Opening the validated scintillation ACF review deck in Cursor at user request</span></li>
+<li><span class="jts mono">07-12 23:49</span><span class="jagent">codex</span><span class="jlane">B</span><span class="jnote s-good">Phase 2 implemented: canfar_reference cleaning mode (LTE mask, off-pulse channel rejection, S/N norm, npz intermediates) 219+/30-; 154 tests pass, ruff clean on touched; verifier re-dispatched</span></li>
+<li><span class="jts mono">07-12 23:49</span><span class="jagent">claude-fable-5</span><span class="jlane">board</span><span class="jnote s-ready">handoff written: docs/rse/specs/handoff-2026-07-12-23-47-board-strand-redesign.md (board strand redesign; closeout items: commit board source to main, sync journal-protocol strand vocab)</span></li>
+<li><span class="jts mono">07-12 23:47</span><span class="jagent">codex</span><span class="jlane">dm-phase-suite</span><span class="jnote s-now">Full held-out injection calibration v3 running; pilot measurement and 12-panel diagnostic renderer implemented but gated on injection pass</span></li>
+<li><span class="jts mono">07-12 23:46</span><span class="jagent">codex</span><span class="jlane">association-provenance</span><span class="jnote s-now">Source class-aware Pcc fix committed in FLITS; regenerated report/cards/table/summary validated; preparing scoped parent gitlink and product commit.</span></li>
+<li><span class="jts mono">07-12 23:36</span><span class="jagent">claude-fable-5</span><span class="jlane">board</span><span class="jnote s-good">board IA restructured: owner view now science-strand swimlanes (association / budget+census / scattering / scintillation / energies / synthesis / mechanics) each on inputs-&gt;method-&gt;measured-&gt;validated-&gt;written lifecycle with cross-strand feed chips; trust = per-strand validated stage, not a separate lane; recovery map + ladder + lane detail moved to agent fold; owner-view.json components re-keyed to strands (canonical task IDs unchanged); stale &#x27;P0 unblocks census+budget&#x27; hint corrected</span></li>
+<li><span class="jts mono">07-12 23:31</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Phase 1 committed (9de9aa8) after refute-&gt;fix-&gt;CONFIRMED-FIXED cycle; 150 tests pass; Phase-4 amendment recorded in plan (log-space c guard for ODR overflow); dispatching Phase 2 canfar_reference cleaning mode</span></li>
+<li><span class="jts mono">07-12 23:27</span><span class="jagent">codex</span><span class="jlane">dm-phase-suite</span><span class="jnote s-now">Isolated FLITS worktree created; implementing and testing boundary-safe controlled DM_phase kernel and 24-input preflight</span></li>
+<li><span class="jts mono">07-12 23:17</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">Phase 1 REFUTED by adversarial verify: centerless ACF broke noise-template path (len mismatch crash analysis.py:462/740 + center-index normalization anchor :653) — invisible to suite (tests pass noise_template=None); codex fix round dispatched w/ template-enabled regression test both lag contracts</span></li>
+<li><span class="jts mono">07-12 23:15</span><span class="jagent">claude-fable-5</span><span class="jlane">board</span><span class="jnote s-good">board redesign: dependency-spine SVG map with per-lane progress bars replaces the text spine; trust-ladder stepper (P0-P6, V4/V5/V6 shown cleared per CONTEXT.md - fixes stale board state); needs-you promoted to full-width banner; journal restyled as dot timeline; status palette CVD-validated (dataviz six-checks); baker contract (OWNER/JOURNAL markers) unchanged</span></li>
+<li><span class="jts mono">07-12 23:14</span><span class="jagent">watchdog/launchd</span><span class="jlane">repo</span><span class="jnote s-ready">unattributed activity: 6+ file(s) touched in last 10m (sections/results.tex,main.bbl main.pdf) while journal stale 10m - active agent must self-report (docs/rse/journal-protocol.md)</span></li>
+<li><span class="jts mono">07-12 23:04</span><span class="jagent">codex</span><span class="jlane">B</span><span class="jnote s-good">P4c Phase 1 implemented: first_fit_lag contract (CHIME lag-2, DSA lag-1), centerless two-sided ACF, 2D fitter zero-lag exclusion, HWHM/FWHM explicit fields; 19 files +111/-18; suite 148 passed/1 skip; fable verifier dispatched before commit</span></li>
+<li><span class="jts mono">07-12 23:02</span><span class="jagent">claude-code</span><span class="jlane">manuscript</span><span class="jnote s-good">Defined &#x27;characteristic radius&#x27; as R500: formal definition at first use in observations.tex (Wen+Han catalog intro) and explicit R500 naming + Section ref in results.tex dominant-systems paragraph.</span></li>
+<li><span class="jts mono">07-12 22:54</span><span class="jagent">Faber2026-codex</span><span class="jlane">association-summary</span><span class="jnote s-now">Generated and visually validated 12-burst association summary; correcting class-aware Pcc prose and table before manuscript build</span></li>
+<li><span class="jts mono">07-12 22:54</span><span class="jagent">watchdog/launchd</span><span class="jlane">repo</span><span class="jnote s-ready">unattributed activity: 6+ file(s) touched in last 10m (sections/results.tex,sections/conclusions.tex sections/toa.tex) while journal stale 10m - active agent must self-report (docs/rse/journal-protocol.md)</span></li>
+<li><span class="jts mono">07-12 22:44</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">P4c underway: 968-line recipe-parity plan delivered (6 phases, no open questions); Codex implementing Phase 1 (lag contract + HWHM convention) test-first in rescue worktree; sequential phase loop w/ adversarial verify between phases</span></li>
+<li><span class="jts mono">07-12 22:43</span><span class="jagent">Faber2026-codex</span><span class="jlane">toa-sign-fix</span><span class="jnote s-now">Committed and pushed CHIME-DSA timing sign and association-card caption fixes; final dirty-state closeout verification in progress</span></li>
+<li><span class="jts mono">07-12 22:33</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">P4b-&gt;P4c: parity-planner agent (fable) writing plan-chime-scint-recipe-parity.md per planning-implementations skill; key reframe: notebooks never fit gamma to real data (hard-coded placeholders) — primary estimator = analysis-Copy1 log-space ODR over subband dnu(nu)</span></li>
+<li><span class="jts mono">07-12 22:33</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-good">Capture-2 landed on PR #162 (c0a9d0a): live-arc Nimmo_scripts (scint_pipe_new_Nimmo2025 + tutorial), scint_toolkit v1/v2, kenzie_funcs/scint_funcs runtime modules (resolves RECIPE ambiguity 5), zach worked example w/ ACF npz fixture; RECIPE.md + GAP_ANALYSIS.md committed</span></li>
+<li><span class="jts mono">07-12 22:26</span><span class="jagent">codex</span><span class="jlane">B</span><span class="jnote s-good">Gap analysis delivered (logs/codex-gap-analysis.md in rescue worktree): lag-2 vs lag-1 ACF fit-start divergence, HWHM/FWHM convention trap, canfar_reference cleaning mode + 8 ranked deltas w/ acceptance sequence; awaiting RECIPE.md from recipe-reconstructor for P4b synthesis</span></li>
+<li><span class="jts mono">07-12 22:16</span><span class="jagent">claude</span><span class="jlane">B</span><span class="jnote s-now">Phase 4 launched: recipe-reconstruction agent (fable xhigh) + codex gap analysis (gpt-5.6-sol medium) running against the rescue worktree; goal = confident CHIME gamma + m(t), m(nu) via loop campaign</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
+</details>
 
-<h2>Trust state after the 2026-07-06 trust reset (three waves)</h2>
+<details class="fold">
+<summary>Reference — trust state &amp; decisions ledger</summary>
+<h2>Trust state after the 2026-07-06 reset — where it stands now</h2>
 <div class="grid2">
   <div class="card">
-    <h3>Retains trust</h3>
+    <h3>Restored via the §V ladder</h3>
     <table>
-      <tr><td class="what"><b>Nothing</b> — no analysis product retains trust <span class="note">wave 3 took the last two (TOA arithmetic, DM_obs)</span></td><td><span class="chip c-revoked">empty set</span></td></tr>
-      <tr><td class="what" colspan="2"><span class="note">Raw observational inputs (positions, nicknames, published host spec-z) remain inputs, not revoked products; the V ladders audit their provenance where consumed. The twelve-burst set stays the working roster; its citable association evidence awaits V6.</span></td></tr>
+      <tr><td class="what">TOA association + DM<sub>obs</sub> <span class="note">V6 cleared 07-07 — residuals, P_cc, verdicts quotable from the pinned V6 artifacts under the shared DSA-DM convention; per-burst DM provenance + CHIME–DSA agreement documented</span></td><td><span class="chip c-good">restored</span></td></tr>
+      <tr><td class="what">Foreground census <span class="note">V4 cleared 07-07 — 35 systems (Wen &amp; Han 2024 provenance), verdicts, impact parameters, fig:clusters_icm, tab:foreground</span></td><td><span class="chip c-good">restored</span></td></tr>
+      <tr><td class="what">DM budget decomposition <span class="note">V5 cleared 07-07 — tab:budget, fig:budget left (predicted) panel, two-phase mNFW DM_int, host residuals</span></td><td><span class="chip c-good">restored</span></td></tr>
+      <tr><td class="what" colspan="2"><span class="note">Raw observational inputs (positions, nicknames, published host spec-z) were never revoked products; the V ladders audit their provenance where consumed.</span></td></tr>
     </table>
   </div>
   <div class="card">
-    <h3>Revoked / unsupported</h3>
+    <h3>Still revoked / unsupported</h3>
     <table>
-      <tr><td class="what">Joint scattering fits <span class="note">wave 1 — every β, τ₁GHz, multiplicity, PPC; interior rows included</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
-      <tr><td class="what">Sub-band EMG fits · scint ACF fits (Δν_d) <span class="note">wave 1 — gen-1 data-defect lineage unresolved</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
-      <tr><td class="what">c₀, γ amplitudes → all energies <span class="note">wave 1 — γ_D ≈ −5 pile-up unexplained</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
-      <tr><td class="what">Foreground census <span class="note">wave 2 — cross-matches, verdicts, impact params, mass proxies</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
-      <tr><td class="what">DM budget decomposition <span class="note">wave 2 — MW terms, Macquart mean, mNFW columns, host residuals</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
-      <tr><td class="what">TOA association arithmetic · DM<sub>obs</sub> <span class="note">wave 3 — per-telescope values, agreement, and acquisition method undocumented; sample membership evidence awaits V6</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
-      <tr><td class="what">All downstream claims <span class="note">host-dominated 10/11 · τ·Δν_d two-screen · scint excess · 20230913A attribution · negative-residual bound · multiplicity demo · every quoted TOA residual, P_cc, DM_obs · tab:budget/foreground/beta/energies · fig:budget both panels</span></td><td><span class="chip c-unsup">unsupported</span></td></tr>
+      <tr><td class="what">Joint scattering fits <span class="note">wave 1 — every β, τ₁GHz, multiplicity, PPC; interior rows (freya, phineas) included · awaits V1 + C</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
+      <tr><td class="what">Sub-band EMG fits · scint ACF fits (Δν_d) <span class="note">wave 1 — gen-1 data-defect lineage unresolved; CHIME-band campaign re-establishes both bands</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
+      <tr><td class="what">c₀, γ amplitudes → all energies <span class="note">wave 1 — γ_D ≈ −5 pile-up unexplained · awaits V3</span></td><td><span class="chip c-revoked">revoked</span></td></tr>
+      <tr><td class="what">Downstream claims still unsupported <span class="note">measured side of fig:budget + measured-vs-predicted overlay · τ·Δν_d two-screen test · scint excess · 20230913A attribution · multiplicity demo (fig:whitney_mult, abstract close, conclusions 7) · tab:beta · tab:burst-energies · fig:jointmodel_montage · fig:scint_screens</span></td><td><span class="chip c-unsup">unsupported</span></td></tr>
     </table>
   </div>
 </div>
@@ -282,7 +684,8 @@
   <div class="card"><h3>Rail tallies · F7 · F6 <span class="chip c-ready">working choices</span></h3>
     <span class="note" style="font-size:12.5px;color:var(--muted)">Tallies dropped from manuscript · polarization dir = companion paper, keep as-is · co-authors drafted from Law2024 + CHIME/FRB 2018 overlap. All revisable on your word.</span></div>
   <div class="card"><h3>Trust reset (three waves)</h3>
-    <span class="note" style="font-size:12.5px;color:var(--muted)">All fits revoked (w1); census + DM budget revoked (w2); TOA arithmetic + DM_obs revoked (w3) — retained set empty. Re-entry only via the §V ladder (V1–V6).</span></div>
+    <span class="note" style="font-size:12.5px;color:var(--muted)">All fits revoked (w1); census + DM budget revoked (w2); TOA arithmetic + DM_obs revoked (w3). V4/V5/V6 since cleared (07-07); wave-1 fits + energies remain out pending V1/V3 + C. Re-entry only via the §V ladder.</span></div>
 </div>
+</details>
 
-<footer>Sources: CONTEXT.md (domain contract) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md). Board source now lives in-repo at docs/rse/board/readiness.html — any agent edits it, rebakes the journal panel (scripts/render_journal_panel.py), and redeploys to this URL. This board is the standing "where are we" reference.</footer>
+<footer>Sources: CONTEXT.md (domain contract; trust-state statuses) · docs/rse/specs/plan-circulation-readiness.md · docs/rse/specs/plan-trust-reset-revalidation.md (§V expansion) · docs/rse/journal.jsonl (protocol: docs/rse/journal-protocol.md) · docs/rse/board/owner-view.json (owner view data). Structure: the owner-facing view groups work by <b>science strand</b> (association · budget/census · scattering · scintillation · energies · synthesis · mechanics), each on an inputs→method→measured→validated→written lifecycle; the canonical task IDs (P0, A1, B4, …) from the plans are unchanged and the agent-facing recovery map/lanes live in the fold. Board source: docs/rse/board/readiness.html — any agent edits it (keep strands, map, ladder, and lane detail in sync), rebakes (scripts/render_journal_panel.py), deploys (scripts/deploy-board.sh) to https://jakobtfaber.github.io/Faber2026/board/. This board is the standing "where are we" reference.</footer>
