@@ -30,6 +30,10 @@ ASSOCIATION_REPORT = PIPELINE / "crossmatching" / "association_report.json"
 OUT = ROOT / "figures" / "association_summary.pdf"
 
 CLOCK_MS = 1.0
+DM_COLOR = "#0072B2"  # Okabe--Ito blue
+POSITION_TIME_COLOR = "#D55E00"  # Okabe--Ito vermillion
+ONE_SIGMA_COLOR = "0.78"
+THREE_SIGMA_COLOR = "0.58"
 TNS = {
     "zach": "20220207C",
     "whitney": "20220310F",
@@ -114,7 +118,27 @@ def render(rows: list[dict], output: Path = OUT) -> None:
     _apply_style()
     x = np.arange(len(rows))
     constrained = np.array([row["dm_constrained"] for row in rows])
-    colors = np.where(constrained, "#0072B2", "#D55E00")
+
+    def plot_measured(ax: plt.Axes, values: np.ndarray) -> None:
+        """Use one class encoding consistently in every diagnostic panel."""
+        ax.scatter(
+            x[constrained],
+            values[constrained],
+            color=DM_COLOR,
+            s=30,
+            edgecolor="white",
+            linewidth=0.5,
+            zorder=4,
+        )
+        ax.scatter(
+            x[~constrained],
+            values[~constrained],
+            facecolor="white",
+            edgecolor=POSITION_TIME_COLOR,
+            s=30,
+            linewidth=1.2,
+            zorder=4,
+        )
 
     fig, axes = plt.subplots(
         3,
@@ -129,11 +153,18 @@ def render(rows: list[dict], output: Path = OUT) -> None:
     geometric = np.array([row["geometric_delay_ms"] for row in rows])
     timing_sigma = np.array([row["timing_sigma_ms"] for row in rows])
     ax = axes[0]
+    timing_ylim = (-14.0, 10.0)
+    lower_3sigma = geometric - 3 * timing_sigma
+    upper_3sigma = geometric + 3 * timing_sigma
+
+    # These are event-specific acceptance intervals about the geometric null,
+    # not errors on tau_geo.  Neutral grays avoid conflating uncertainty with
+    # the blue/orange association classes.
     ax.vlines(
         x,
-        geometric - 3 * timing_sigma,
-        geometric + 3 * timing_sigma,
-        color="0.60",
+        lower_3sigma,
+        upper_3sigma,
+        color=THREE_SIGMA_COLOR,
         linewidth=0.8,
         zorder=1,
     )
@@ -141,29 +172,54 @@ def render(rows: list[dict], output: Path = OUT) -> None:
         x,
         geometric - timing_sigma,
         geometric + timing_sigma,
-        color="#9ECAE1",
+        color=ONE_SIGMA_COLOR,
         linewidth=4.5,
-        alpha=0.80,
         zorder=2,
     )
-    ax.plot(x, geometric, color="0.15", linewidth=0.75, marker="D", markersize=2.7, zorder=3)
-    ax.scatter(x, measured, c=colors, s=30, edgecolor="white", linewidth=0.5, zorder=4)
+
+    # Each diamond is an independent sky-position prediction.  Connecting
+    # them would imply a temporal trend or meaningful interpolation.
+    ax.scatter(x, geometric, color="0.12", marker="D", s=18, zorder=3)
+    plot_measured(ax, measured)
+
+    # The two broadest timing budgets exceed the useful display range.  Mark
+    # truncation explicitly instead of allowing clipped lines to look finite.
+    below = lower_3sigma < timing_ylim[0]
+    above = upper_3sigma > timing_ylim[1]
+    ax.scatter(
+        x[below],
+        np.full(np.count_nonzero(below), timing_ylim[0] + 0.35),
+        marker="v",
+        color=THREE_SIGMA_COLOR,
+        s=14,
+        linewidth=0,
+        zorder=3,
+    )
+    ax.scatter(
+        x[above],
+        np.full(np.count_nonzero(above), timing_ylim[1] - 0.35),
+        marker="^",
+        color=THREE_SIGMA_COLOR,
+        s=14,
+        linewidth=0,
+        zorder=3,
+    )
     ax.axhline(0, color="0.80", lw=0.6, zorder=0)
-    ax.set_ylim(-13, 11)
+    ax.set_ylim(*timing_ylim)
     ax.set_yticks([-10, -5, 0, 5, 10])
     ax.set_ylabel(r"Arrival-time offset, $\Delta t_{400}$ (ms)")
     ax.text(0.01, 0.92, r"(a)", transform=ax.transAxes)
-    ax.plot([], [], color="0.15", marker="D", markersize=2.8, linewidth=0.7,
-            label=r"$\tau_{\rm geo}$")
-    ax.plot([], [], color="#9ECAE1", linewidth=4.5, alpha=0.80, label=r"$1\sigma$")
-    ax.plot([], [], color="0.60", linewidth=0.8, label=r"$3\sigma$")
+    ax.scatter([], [], color="0.12", marker="D", s=18,
+               label=r"$\tau_{\rm geo}$ prediction")
+    ax.plot([], [], color=ONE_SIGMA_COLOR, linewidth=4.5, label=r"$1\sigma$ interval")
+    ax.plot([], [], color=THREE_SIGMA_COLOR, linewidth=0.8, label=r"$3\sigma$ interval")
     ax.legend(loc="lower left", frameon=False, fontsize=6.5, ncol=3,
               handlelength=1.5, columnspacing=0.9)
 
     position = np.array([row["position_ratio"] for row in rows])
     ax = axes[1]
     ax.axhline(1, color="0.35", ls="--", lw=0.8)
-    ax.scatter(x, position, c=colors, s=30, edgecolor="white", linewidth=0.5, zorder=3)
+    plot_measured(ax, position)
     ax.set_ylim(0, 1.08)
     ax.set_ylabel(r"$\theta/\theta_{\rm match}$")
     ax.text(0.01, 0.88, r"(b)", transform=ax.transAxes)
@@ -171,26 +227,16 @@ def render(rows: list[dict], output: Path = OUT) -> None:
     pcc = np.array([row["pcc"] for row in rows])
     ax = axes[2]
     ax.axhline(1e-6, color="0.35", ls="--", lw=0.8)
-    for i, row in enumerate(rows):
-        if row["dm_constrained"]:
-            ax.scatter(i, row["pcc"], color="#0072B2", s=30, edgecolor="white", linewidth=0.5)
-        else:
-            ax.scatter(
-                i,
-                row["pcc"],
-                facecolor="white",
-                edgecolor="#D55E00",
-                linewidth=1.2,
-                s=30,
-            )
+    plot_measured(ax, pcc)
     ax.set_yscale("log")
     ax.set_ylim(1e-9, 1.25e-6)
     ax.set_ylabel(r"$P_{\rm cc}$")
     ax.text(0.01, 0.88, r"(c)", transform=ax.transAxes)
-    ax.scatter([], [], color="#0072B2", s=28, label="DM constrained (8)")
+    ax.scatter([], [], color=DM_COLOR, edgecolor="white", linewidth=0.5,
+               s=28, label="DM constrained (8)")
     ax.scatter(
-        [], [], facecolor="white", edgecolor="#D55E00", linewidth=1.2, s=28,
-        label="position and timing (4)",
+        [], [], facecolor="white", edgecolor=POSITION_TIME_COLOR,
+        linewidth=1.2, s=28, label="position and timing only (4)",
     )
     ax.legend(loc="lower right", frameon=False, fontsize=7, ncol=2, handletextpad=0.4)
 
