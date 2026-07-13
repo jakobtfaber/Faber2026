@@ -26,10 +26,12 @@ The geometric light-travel difference between the observatories is
 \label{eq:geodelay}
 \end{equation}
 where $\mathbf{p}_1$ and $\mathbf{p}_2$ are the GCRS position vectors of CHIME
-and DSA-110 and $\hat{\mathbf{s}}$ is the unit vector toward the source. The
-timing residual is the difference between the frequency-corrected inter-site
-offset and the predicted geometric delay; a residual of zero indicates perfect
-agreement.
+and DSA-110, respectively, and $\hat{\mathbf{s}}$ is the unit vector from Earth
+toward the source. With this ordering, $\tau_{\rm geo}$ predicts
+$t_{\rm CHIME}-t_{\rm DSA}$ because the radiation propagates along
+$-\hat{\mathbf{s}}$. The timing residual is the difference between the
+frequency-corrected CHIME-minus-DSA offset and the predicted geometric delay; a
+residual of zero indicates perfect agreement.
 
 \subsubsection{Chance-coincidence probability}
 \label{sec:toa-pcc}
@@ -67,15 +69,13 @@ Equation~\eqref{eq:pcc_mu} conditions on a single DSA burst, so the sample-level
 false-alarm expectation is the sum $\sum_j \mu_j$ over the \emph{trial set}: the
 complete list of DSA-110 triggers searched for a CHIME/FRB counterpart over the
 2022~February--2024~February overlap, not merely the twelve that matched. The
-look-elsewhere penalty is therefore carried explicitly by that sum. Because each
-per-event expectation is only $\mu_j\sim5\times10^{-9}$ under the
-chance-maximizing windows below, the trial sum stays orders of magnitude below
-unity even when the entire DSA-110 detection list---the 64 FRBs detected across
-the 2022~February--2024~February overlap---is taken as the denominator
-($\sum_j\mu_j\approx3\times10^{-7}$). The value $\sum_i\mu_i$ reported below is
-summed over the twelve reported pairs; extending it to the full 64-burst trial
-set multiplies it by at most the searched-to-matched ratio ($64/12\approx5$) and
-leaves the conclusion unchanged.
+look-elsewhere penalty is therefore carried explicitly by that sum. Under the
+chance-maximizing windows below, the eight DM-constrained pairs have
+$\mu_j\sim2$--$6\times10^{-9}$, while the four position-and-time-only pairs use
+$f_{\rm DM}=1$ and have $\mu_j=4.4\times10^{-7}$. The twelve reported pairs sum
+to $\sum_i\mu_i\approx1.8\times10^{-6}$. Even the conservative extension to the
+entire 64-burst DSA-110 trial set, obtained by scaling by the searched-to-matched
+ratio $64/12$, remains below $10^{-5}$ and leaves the conclusion unchanged.
 
 We evaluate Eq.~\eqref{eq:pcc_mu} with deliberately conservative,
 chance-\emph{maximizing} inputs, so the reported $P_{\rm cc}$ is an upper bound on
@@ -103,14 +103,16 @@ so those shifts are tracked separately rather than folded into the association
 residual.
 
 We adopt the sign convention $\Delta t = \Delta t_{\rm inter\text{-}site} -
-\tau_{\rm geo}$, where $\Delta t_{\rm inter\text{-}site}$ is the DSA-minus-CHIME
+\tau_{\rm geo}$, where $\Delta t_{\rm inter\text{-}site}$ is the CHIME-minus-DSA
 arrival offset after both are referenced to 400\,MHz (Eq.~\ref{eq:dmdelay}) and
 $\tau_{\rm geo}$ is the predicted geometric delay (Eq.~\ref{eq:geodelay}); a
-positive residual means the DSA arrival is later than the shared-DM geometric
-prediction relative to CHIME, and $\Delta t=0$ is exact agreement. The geometric
+positive residual means the CHIME arrival is later than the shared-DM geometric
+prediction relative to DSA, and $\Delta t=0$ is exact agreement. The geometric
 term is itself bounded: for the $1345\,\mathrm{km}$ CHIME (DRAO)--DSA-110 (OVRO)
 baseline, $|\tau_{\rm geo}| \le |\mathbf{p}_2-\mathbf{p}_1|/c \approx 4.5\,$ms for
-any source direction. The residual is therefore not error-free but carries a
+any source direction. For the twelve source directions here,
+$\tau_{\rm geo}=-2.30$ to $-2.03\,$ms: the wavefront reaches CHIME first and
+DSA-110 $2.03$--$2.30\,$ms later. The residual is therefore not error-free but carries a
 per-burst systematic of order the inter-site clock/timestamp alignment
 ($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight DM-constrained bursts, the
 residual dispersive delay left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
@@ -133,17 +135,15 @@ decisive gates are the chance-coincidence probability, positional coincidence,
 and (for the DM-constrained bursts) DM agreement, for which the residual is a
 supporting consistency diagnostic.
 
-Evaluated with the conservative windows above, all twelve bursts have
-per-burst chance-coincidence probabilities of order $10^{-9}$ and thus
-$P_{\rm cc}<10^{-8}$ individually; the expected number of chance associations
-across the full sample is $\sum_i\mu_i \approx 5.5\times10^{-8}$. In other words,
-even under windows chosen to overstate the false-alarm rate, fewer than one in a
-hundred million such pairings would be expected to arise by chance per pair
-(and the sample-summed expectation is about one in twenty million). Because the
-estimate is so far below any plausible threshold, the chance-coincidence test on
-its own establishes the co-detections; the positional-coincidence and
-DM-agreement checks only tighten an already-decisive result. All twelve pass the
-positional-coincidence check. The eight bursts with constrained CHIME-side DMs
+Evaluated with the conservative windows above, the eight DM-constrained bursts
+have $P_{\rm cc}<10^{-8}$ individually, while each of the four pairs without a
+constraining CHIME DM has the deliberately less selective position-and-time-only
+value $P_{\rm cc}=4.4\times10^{-7}$. Thus all twelve have $P_{\rm cc}<10^{-6}$,
+and their sample-summed expectation is $\sum_i\mu_i\approx1.8\times10^{-6}$.
+Because these class-aware estimates remain far below unity, the
+chance-coincidence test establishes the co-detections; positional coincidence
+and, where available, DM agreement provide independent checks. All twelve pass
+the positional-coincidence check. The eight bursts with constrained CHIME-side DMs
 also pass the CHIME--DSA DM-agreement check; the four remaining bursts are marked
 `assoc.~(pos.)' in Table~\ref{tab:sample}: their association rests on
 position and timing alone, because their CHIME sub-band fits did not provide

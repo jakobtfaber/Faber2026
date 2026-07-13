@@ -25,6 +25,8 @@ from pathlib import Path
 
 import yaml
 
+from association_diagnostics import reported_chance_probability
+
 REPO = Path(__file__).resolve().parent.parent
 PIPELINE = REPO / "pipeline"
 PIPELINE_SOURCE = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", PIPELINE))
@@ -45,6 +47,11 @@ N_SIGMA_ACCEPT = 3.0
 
 def _source_commit() -> str:
     try:
+        if PIPELINE_SOURCE.resolve() == PIPELINE.resolve():
+            return subprocess.check_output(
+                ["git", "-C", str(REPO), "rev-parse", "--short", "HEAD:pipeline"],
+                text=True,
+            ).strip()
         return subprocess.check_output(
             ["git", "-C", str(PIPELINE_SOURCE), "rev-parse", "--short", "HEAD"],
             text=True,
@@ -79,9 +86,10 @@ def _association_verdict(row: dict) -> str:
 
 def _load_association_diagnostics() -> dict[str, dict[str, str]]:
     toa = {k.lower(): v for k, v in json.loads(TOA_RESULTS.read_text()).items()}
+    report = json.loads(ASSOCIATION_REPORT.read_text())
     assoc = {
         row["name"].lower(): row
-        for row in json.loads(ASSOCIATION_REPORT.read_text())["bursts"]
+        for row in report["bursts"]
     }
     diagnostics = {}
     for nick, assoc_row in assoc.items():
@@ -99,7 +107,7 @@ def _load_association_diagnostics() -> dict[str, dict[str, str]]:
         diagnostics[nick] = {
             "toa_residual_ms": f"${residual_ms:+.2f} \\pm {sigma_ms:.2f}$",
             "toa_nsigma": n_sigma,
-            "pcc": _tex_scientific(assoc_row["chance_coincidence_P"]),
+            "pcc": _tex_scientific(reported_chance_probability(assoc_row)),
             "verdict": _association_verdict(assoc_row),
         }
     return diagnostics
