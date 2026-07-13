@@ -368,9 +368,9 @@ def render_grid(
     )
     # At \textwidth the typeset height plus the combined adopted-DM/fitted-TOA
     # caption must fit on one AASTeX float page.
-    fig = plt.figure(figsize=(7.3, 7.3))
+    fig = plt.figure(figsize=(7.3, 7.62))
     outer = fig.add_gridspec(
-        4, 3, hspace=0.24, wspace=0.14, left=0.065, right=0.995, top=0.975, bottom=0.045
+        4, 3, hspace=0.2, wspace=0.14, left=0.065, right=0.995, top=0.978, bottom=0.042
     )
     for index, row in enumerate(rows):
         bands = load_row_bands(
@@ -381,7 +381,7 @@ def render_grid(
         )
         fmap = _gap_display_map(bands)
         cell = outer[index // 3, index % 3].subgridspec(
-            2, 2, width_ratios=[3.4, 1.0], height_ratios=[1.0, 3.6],
+            2, 2, width_ratios=[3.4, 1.0], height_ratios=[1.0, 4.1],
             wspace=0.07, hspace=0.09,
         )
         ax_prof = fig.add_subplot(cell[0, 0])
