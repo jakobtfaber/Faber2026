@@ -5,6 +5,17 @@ DM-phase campaign. It contains the complete code snapshot, tests, numerical
 results, provenance, held-out injection validation, and visual diagnostics for
 all 12 CHIME+DSA events.
 
+## Manuscript adoption policy
+
+The manuscript adopts the CHIME/FRB fit for every event and uses DSA-110 as an
+independent cross-check. The previously generated inverse-variance and
+random-effects joint values remain useful sensitivity tests, but are not the
+primary DMs because the CHIME curves are consistently narrower and the
+400--800 MHz band has about 34 times the cold-plasma DM leverage of the
+1311--1499 MHz DSA band. The authoritative adopted-value surface is
+[`manuscript_dm_catalog.csv`](manuscript_dm_catalog.csv); the full reasoning is
+recorded in `docs/rse/specs/verified-dm-adoption-2026-07-13.md`.
+
 Do not use the earlier adaptive-arrival or DM-phase v1 `UNCONSTRAINED` statuses
 as measurement-quality evidence. Those statuses came from an incorrect
 application-level gate, not from invisible bursts. This v2 package fits every
@@ -14,6 +25,7 @@ band independently and then produces one joint DM per event.
 
 - [`results/diagnostics/all_events_contact_sheet.jpg`](results/diagnostics/all_events_contact_sheet.jpg): all-event visual audit.
 - [`results/diagnostics/summary.md`](results/diagnostics/summary.md): manuscript-facing DM table.
+- [`manuscript_dm_catalog.csv`](manuscript_dm_catalog.csv): adopted CHIME-primary DMs and both band measurements.
 - [`results/diagnostics/`](results/diagnostics/): one full diagnostic figure per event.
 - [`results/validation/injection_recovery.png`](results/validation/injection_recovery.png): held-out recovery matrix.
 - [`results/fits.json`](results/fits.json): complete curves, jackknifes, cutoff studies, resolution studies, and joint fits.

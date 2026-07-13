@@ -45,7 +45,6 @@ jobs:
         working-directory: pipeline
         run: |
           uv run --frozen pytest -q \
-            galaxies/foreground/test_budget_table_emitter.py \
             galaxies/foreground/test_foreground_table_emitter.py
 
       # The submodule's own tests only compare the emitter against
@@ -53,9 +52,8 @@ jobs:
       # root `<table>.tex`, so point `--check` at that instead of its default
       # anchor. `--check` compares against whatever `--out` names.
       - name: Emitter output matches the manuscript's committed table
-        working-directory: pipeline
         run: |
-          uv run --frozen python -m galaxies.foreground.budget_table_emitter \
-            --check --out ../budget_table.tex
+          python scripts/render_budget_table.py --check
+          cd pipeline
           uv run --frozen python -m galaxies.foreground.foreground_table_emitter \
             --check --out ../foreground_table.tex

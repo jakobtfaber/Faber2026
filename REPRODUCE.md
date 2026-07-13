@@ -146,7 +146,7 @@ regeneration section below.)
 
 ## Status: what's embedded now vs. staged
 
-The manuscript is mid-draft. Of 28 tracked outputs (24 figures + 4 tables),
+The manuscript is mid-draft. Of 29 tracked outputs (24 figures + 5 tables),
 ten are currently `\input`/`\includegraphics`'d (the
 `embedded_in_manuscript = yes` rows, most recently the Figure 1 data grid and
 the redistributed triptych family); the other 18 (seventeen figures + the
@@ -160,9 +160,15 @@ lost when a SLOT is filled.
 
 ## Regenerating the tables
 
-Three of the four tables are generated from a data file + an emitter; edit the
-**data file**, never the `.tex`. Each root `.tex` also carries a
-`% !! GENERATED FILE` banner with its own regenerate line.
+All five manuscript tables have an explicit provenance path. For the verified
+DM table, the reviewed source is
+`analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` and parity is enforced by
+`tests/test_verified_dm_manuscript.py`. For the DM budget,
+the foreground/cosmological columns remain sourced from the pinned pipeline
+JSON, while `DM_obs` is overlaid from
+`analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` and `DM_host` from
+`scripts/dm_budget_uncertainty.csv`. Run the root renderer after regenerating
+the host posterior; do not edit `budget_table.tex` directly.
 
 Both are safe to regenerate at the currently pinned submodule (`14e0d1f`);
 regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
@@ -182,18 +188,19 @@ is hand-maintained, is not `\input` by the manuscript, and is deliberately left
 untouched: `tab:beta` is deferred. Do not treat that file as regenerable-and-current.
 
 ```bash
+conda run -n flits python scripts/dm_budget_uncertainty.py
+conda run -n flits python scripts/render_budget_table.py
+conda run -n flits python scripts/render_budget_table.py --check
+
 cd pipeline
-# budget table: values in galaxies/foreground/budget_table_data.json
-uv run python -m galaxies.foreground.budget_table_emitter     --out ../budget_table.tex
 # foreground census: values in galaxies/foreground/foreground_table_data.json
 uv run python -m galaxies.foreground.foreground_table_emitter --out ../foreground_table.tex
 # verify (byte-exact vs exports/ + value cross-checks against upstream products)
-uv run pytest galaxies/foreground/test_budget_table_emitter.py \
-              galaxies/foreground/test_foreground_table_emitter.py
+uv run pytest galaxies/foreground/test_foreground_table_emitter.py
 # ^ green at pipeline pin 6c87890 (verified 2026-07-09).
 ```
 
-Each emitter also writes a canonical copy to `pipeline/exports/<table>.tex` (the
+The pipeline emitters also write canonical copies to `pipeline/exports/<table>.tex` (the
 byte-exact regression anchor) and supports `--check` (non-zero exit on drift).
 **`--check` is not a sufficient CI gate on its own** — it compares the emitter's
 output to `exports/<table>.tex`, and both are derived from the *same*
@@ -203,7 +210,9 @@ hazard 1. Measured at pin `f9e1c24`: both emitters' `--check` exited 0 while
 `assert`, so one run reports only the first mismatching sightline —
 FRB 20220207C; replaying the comparison without short-circuiting shows all nine
 differed.) CI must run the **parity tests**, not just `--check`.
-The `\input{budget_table}` /
+The root budget renderer is now the authoritative cross-repository parity gate;
+the pipeline-local budget test predates the adopted phase-DM catalog and is not
+run against the manuscript table. The `\input{budget_table}` /
 `\input{foreground_table}` paths
 in `sections/` are unchanged: the emitters overwrite the manuscript's root
 `.tex` files in place, so the Overleaf lane (which has no `pipeline/` submodule)

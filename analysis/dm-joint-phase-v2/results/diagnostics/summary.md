@@ -1,4 +1,9 @@
-# Joint CHIME/DSA DM-phase results
+# Joint CHIME/DSA DM-phase diagnostic results
+
+These combinations are retained as sensitivity tests. The manuscript-adopted
+DMs are the CHIME/FRB measurements in
+`../../manuscript_dm_catalog.csv`; see
+`docs/rse/specs/verified-dm-adoption-2026-07-13.md` for the decision record.
 
 Each band was fitted independently at the finest native or near-native resolution that was stable across the resolution grid. The quoted band uncertainty is the maximum of the channel-block jackknife, resolution dependence, fluctuation-frequency-cutoff dependence, and a 0.005 pc cm^-3 numerical floor. The joint estimate is inverse-variance weighted when the bands are consistent and uses a fitted random-effects term when their difference exceeds the stated band errors.
 

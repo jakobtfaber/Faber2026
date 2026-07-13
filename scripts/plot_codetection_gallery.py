@@ -15,9 +15,10 @@ Data contract (docs/rse/specs/research-unified-12burst-figure.md):
   ~81.9 ms burst-centered windows, stored frequency-DESCENDING
   (pipeline/scattering/configs/telescopes.yaml) and flipped to ascending here.
 
-DM convention: each panel is displayed at the instrument-optimized DM baked
-into the product (encoded in the filename stem); no re-dedispersion is applied.
-The caption states this. Times are relative to each band's profile peak (the
+DM convention: by default each panel is displayed at the instrument-optimized
+DM baked into the product (encoded in the filename stem).  Callers may pass a
+residual DM to ``load_band``; the native waterfall is then zero-fill shifted
+before display averaging. Times are relative to each band's profile peak (the
 products carry no shared absolute time zero).
 
 No fit/model products are read or drawn (CONTEXT.md trust reset: raw
@@ -207,12 +208,34 @@ def _apply_style() -> None:
     plt.rcParams["axes.unicode_minus"] = False
 
 
-def load_band(path: Path, band: dict) -> tuple[np.ndarray, np.ndarray]:
+def load_band(
+    path: Path,
+    band: dict,
+    *,
+    telescope: str | None = None,
+    residual_dm: float = 0.0,
+) -> tuple[np.ndarray, np.ndarray]:
     """Load one product -> (windowless waterfall [ascending freq, display res],
     band profile). Baseline: per-channel median over the outer quartiles."""
     raw = np.load(path, mmap_mode="r")
     arr = np.flipud(np.array(raw, dtype=np.float32, copy=True))  # ascending freq
     dead = dead_channel_mask(arr)
+    if residual_dm:
+        if telescope is None:
+            raise ValueError("telescope is required when residual_dm is non-zero")
+        from dispersion.dm_power_analysis import (
+            _freq_grid_mhz,
+            shift_waterfall_residual_dm,
+        )
+
+        freq_mhz = _freq_grid_mhz(telescope, arr.shape[0])
+        arr = shift_waterfall_residual_dm(
+            arr,
+            freq_mhz,
+            band["dt_ms"] * 1e-3,
+            float(residual_dm),
+            mode="zero_fill",
+        )
     arr[dead] = np.nan
     ds = block_mean(arr, band["f_factor"], band["t_factor"])
     nt = ds.shape[1]

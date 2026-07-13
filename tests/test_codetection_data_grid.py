@@ -42,27 +42,56 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
     monkeypatch.setattr(
         grid,
         "bands_archival",
-        lambda data_root, nick, factors=None, pad_scale=1.0, pad_cap_ms=None: calls.append(
-            (data_root, nick, factors, pad_scale, pad_cap_ms)
+        lambda data_root, nick, factors=None, pad_scale=1.0, pad_cap_ms=None,
+        target_dm=None: calls.append(
+            (data_root, nick, factors, pad_scale, pad_cap_ms, target_dm)
         )
         or [],
     )
 
     grid.load_row_bands(
-        {"nick": "zach", "npz": "fits/zach.npz"}, root=tmp_path, data_root=tmp_path
+        {"nick": "zach", "npz": "fits/zach.npz"}, root=tmp_path,
+        data_root=tmp_path, target_dm=262.361665,
     )
-    grid.load_row_bands({"nick": "chromatica", "npz": None}, root=tmp_path, data_root=tmp_path)
+    grid.load_row_bands(
+        {"nick": "chromatica", "npz": None}, root=tmp_path,
+        data_root=tmp_path, target_dm=272.638699,
+    )
 
     assert calls == [
-        (tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE, grid.DISPLAY_PAD_CAP_MS),
+        (
+            tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS, 262.361665,
+        ),
         (
             tmp_path,
             "chromatica",
             grid.DISPLAY_FACTORS,
             grid.DISPLAY_PAD_SCALE,
             grid.DISPLAY_PAD_CAP_MS,
+            272.638699,
         ),
     ]
+
+
+def test_adopted_dm_catalog_is_complete_and_chime_primary():
+    rows = grid.load_manifest(grid.MANIFEST_DEFAULT)
+    adopted = grid.load_adopted_dms(grid.DM_CATALOG_DEFAULT)
+    assert set(adopted) == {row["nick"].lower() for row in rows}
+    assert adopted["zach"] == 262.361665
+    assert adopted["johndoeii"] == 696.518001
+
+
+def test_adopted_dm_catalog_rejects_non_chime_adoption(tmp_path):
+    source = grid.DM_CATALOG_DEFAULT.read_text()
+    bad = tmp_path / "dm.csv"
+    bad.write_text(source.replace("chime_primary", "random_effects", 1))
+    try:
+        grid.load_adopted_dms(bad)
+    except ValueError as exc:
+        assert "chime_primary" in str(exc)
+    else:
+        raise AssertionError("expected invalid adoption to be rejected")
 
 
 def test_display_pad_scale_tightens_window():

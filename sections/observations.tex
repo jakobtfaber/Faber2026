@@ -10,9 +10,9 @@ separate scattering time from frequency scaling more strongly than a single-band
 fit. The twelve bursts, their TNS designations, sky positions,
 detection epochs, and association diagnostics are listed in
 Table~\ref{tab:sample}. The timing residuals in that table use the shared
-DSA-DM reference convention; the per-telescope DM values and their CHIME--DSA
-agreement are provided as a machine-readable provenance table in the archival
-data release (Section~\ref{sec:data-availability}).
+DSA-DM reference convention retained by the association analysis. The new
+per-telescope phase-coherence DMs, their CHIME--DSA differences, and the adopted
+values are given in Table~\ref{tab:dm-measurements}.
 
 \input{sample_table.tex}
 
@@ -52,13 +52,68 @@ component multiplicity (Section~\ref{sec:multicomp}).
     arrival-time offset. All twelve panels are drawn from the archival
     bandpass-corrected data products at near-native display resolution
     ($32.8$ and $33.3\,\mu$s time bins with 512 and 1024 channels in the
-    DSA-110 and CHIME/FRB bands, respectively), each at its
-    instrument-optimized dispersion measure; channels excised as RFI or
+    DSA-110 and CHIME/FRB bands, respectively). Before display averaging, both
+    products for each event are re-dedispersed from the exact DM encoded in
+    their filenames to the adopted CHIME/FRB value in
+    Table~\ref{tab:dm-measurements}; channels excised as RFI or
     otherwise flagged are gray in every panel. No model curves are overlaid.}
     \label{fig:codetection-data-grid}
 \end{figure*}
 
 \input{sections/codetection_triptychs.tex}
+
+\subsection{Dispersion-measure measurements}
+\label{sec:dm-measurement}
+
+We measure a structure-optimizing dispersion measure independently in each
+band with a controlled implementation of the phase-coherence statistic used by
+\texttt{DM\_phase} \citep{Michilli2021}. The archival waterfalls are already
+dedispersed, so every trial coordinate is a physical residual about the exact
+DM encoded in that product's filename, not about the rounded catalog value.
+After robust per-channel normalization and masking, we Fourier transform each
+channel along time, divide by its Fourier amplitude to retain unit phasors,
+apply the cold-plasma phase rotation for each trial residual DM, coherently sum
+the phasors over frequency channels, square the modulus, and integrate the
+coherent power with fluctuation-frequency-squared weighting.
+
+For each band we first search $\pm1\,\mathrm{pc\,cm^{-3}}$ at
+$0.01\,\mathrm{pc\,cm^{-3}}$ spacing, then search at
+$0.002\,\mathrm{pc\,cm^{-3}}$ around the selected maximum. A maximum within
+three samples of a fine-grid boundary automatically recenters and expands the
+grid. We repeat the fit on the native waterfall and after factors of two in
+frequency, time, and both dimensions; the finest member of the stable
+resolution cluster is retained. We also repeat the phase-power integral with
+maximum fluctuation frequencies of 500, 1000, 1500, 2500, and 5000\,Hz and
+perform twelve leave-one-channel-block-out jackknifes. The reported band
+uncertainty is the maximum of the jackknife variation, resolution variation,
+cutoff variation, and a $0.005\,\mathrm{pc\,cm^{-3}}$ numerical floor. All 24
+band fits select native time and frequency resolution and have interior
+fine-grid maxima.
+
+The CHIME/FRB fits are adopted as the total DMs (Table~\ref{tab:dm-measurements}).
+This is a uniform instrument-level choice, not an event-by-event selection:
+the cold-plasma delay per unit DM across 400--800\,MHz is approximately
+19.4\,ms, compared with 0.57\,ms across 1311--1499\,MHz, giving CHIME about 34
+times greater DM leverage. Correspondingly, its measured coherence curves are
+generally narrower and less cutoff-sensitive. The DSA fits remain independent
+cross-checks; all twelve differ from CHIME by less than
+$0.12\,\mathrm{pc\,cm^{-3}}$.
+
+For completeness, we also formed inverse-variance CHIME+DSA means with
+$w_i=\sigma_i^{-2}$. When the band scatter exceeded the stated errors, we
+introduced a non-negative between-band term $\tau$ and used
+$w_i=(\sigma_i^2+\tau^2)^{-1}$. That random-effects calculation identifies
+frequency-dependent morphology in FRBs~20220207C, 20221113A, 20230307A, and
+20230325A, but with only two bands it also partly equalizes a sharp CHIME
+maximum and a broader DSA maximum. We therefore retain those joint values as a
+sensitivity analysis rather than as the adopted DMs. Held-out single- and
+double-component injections give a joint recovery RMS of
+$0.0028\,\mathrm{pc\,cm^{-3}}$ and a maximum absolute error of
+$0.0062\,\mathrm{pc\,cm^{-3}}$. Full curves, resolution and cutoff studies,
+diagnostic figures, code, tests, and SHA-256 fingerprints of all 24 input
+products accompany the manuscript.
+
+\input{dm_measurements_table.tex}
 
 \subsection{Scattering fits}
 \label{sec:obs-scatt}

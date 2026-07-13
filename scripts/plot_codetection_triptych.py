@@ -191,6 +191,7 @@ def bands_archival(
     factors: dict[str, tuple[int, int]] | None = None,
     pad_scale: float = 1.0,
     pad_cap_ms: float | None = None,
+    target_dm: float | None = None,
 ) -> list[BandSpectrum]:
     """Archival `_cntr_bpc.npy` products as BandSpectrum pairs (no model).
 
@@ -198,6 +199,8 @@ def bands_archival(
     (f_factor, t_factor) block-averaging factors of the native grid.
     `pad_scale` scales and `pad_cap_ms` bounds the CHIME-width display
     padding around the on-pulse union.
+    When ``target_dm`` is supplied, each native waterfall is shifted from its
+    filename-stem DM to that common value before any display averaging.
     """
     file_nick = FILE_NICK.get(nick, nick)
     products = discover_products(data_root, file_nick)
@@ -206,7 +209,13 @@ def bands_archival(
         band = dict(BANDS[tel])
         if factors and tel in factors:
             band["f_factor"], band["t_factor"] = factors[tel]
-        ds, profile = load_band(products[tel].path, band)
+        residual_dm = 0.0 if target_dm is None else float(target_dm - products[tel].dm)
+        ds, profile = load_band(
+            products[tel].path,
+            band,
+            telescope=tel,
+            residual_dm=residual_dm,
+        )
         n_f, n_t = ds.shape
         dt = band["dt_ms"] * band["t_factor"]
         pk = int(np.nanargmax(profile))
