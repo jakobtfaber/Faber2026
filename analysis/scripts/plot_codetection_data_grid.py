@@ -46,8 +46,11 @@ DISPLAY_FACTORS = {"dsa": (12, 1), "chime": (1, 13)}
 
 # Display padding around the on-pulse union, as a fraction of the CHIME
 # on-pulse width per side (1.5 ms floor). Half a CHIME width keeps the burst
-# filling the panel instead of sitting in off-pulse noise.
+# filling the panel instead of sitting in off-pulse noise; the absolute cap
+# stops heavily scattered bursts (CHIME width tens of ms) from inflating the
+# off-pulse margins.
 DISPLAY_PAD_SCALE = 0.5
+DISPLAY_PAD_CAP_MS = 3.0
 
 MASKED_GRAY = "0.85"
 CHIME_COLOR = "#4477aa"
@@ -64,7 +67,11 @@ def _finite_percentile(values: np.ndarray, percentile: float, default: float) ->
 def load_row_bands(row: dict, *, root: Path, data_root: Path):
     """Near-native archival display bands for every burst (fit or no fit)."""
     return bands_archival(
-        data_root, row["nick"], factors=DISPLAY_FACTORS, pad_scale=DISPLAY_PAD_SCALE
+        data_root,
+        row["nick"],
+        factors=DISPLAY_FACTORS,
+        pad_scale=DISPLAY_PAD_SCALE,
+        pad_cap_ms=DISPLAY_PAD_CAP_MS,
     )
 
 
@@ -193,7 +200,7 @@ def render_grid(rows: list[dict], *, root: Path, data_root: Path, out: Path, dpi
     # a single AASTeX float page (9.2 in tall overflowed by ~103 pt).
     fig = plt.figure(figsize=(7.3, 7.8))
     outer = fig.add_gridspec(
-        3, 4, hspace=0.26, wspace=0.30, left=0.07, right=0.99, top=0.965, bottom=0.05
+        3, 4, hspace=0.18, wspace=0.16, left=0.065, right=0.995, top=0.97, bottom=0.045
     )
     for index, row in enumerate(rows):
         bands = load_row_bands(row, root=root, data_root=data_root)
