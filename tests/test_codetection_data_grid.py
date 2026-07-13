@@ -42,8 +42,8 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
     monkeypatch.setattr(
         grid,
         "bands_archival",
-        lambda data_root, nick, factors=None, pad_scale=1.0: calls.append(
-            (data_root, nick, factors, pad_scale)
+        lambda data_root, nick, factors=None, pad_scale=1.0, pad_cap_ms=None: calls.append(
+            (data_root, nick, factors, pad_scale, pad_cap_ms)
         )
         or [],
     )
@@ -54,13 +54,50 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
     grid.load_row_bands({"nick": "chromatica", "npz": None}, root=tmp_path, data_root=tmp_path)
 
     assert calls == [
-        (tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE),
-        (tmp_path, "chromatica", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE),
+        (tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE, grid.DISPLAY_PAD_CAP_MS),
+        (
+            tmp_path,
+            "chromatica",
+            grid.DISPLAY_FACTORS,
+            grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS,
+        ),
     ]
 
 
 def test_display_pad_scale_tightens_window():
     assert 0 < grid.DISPLAY_PAD_SCALE < 1.0
+    from plot_codetection_triptych import PAD_FLOOR_MS
+
+    assert PAD_FLOOR_MS <= grid.DISPLAY_PAD_CAP_MS <= 5.0
+
+
+def test_pad_cap_bounds_window_for_scattered_bursts():
+    from plot_codetection_triptych import chime_width_display_window
+
+    def _wide_band(label, width):
+        time = np.linspace(-40.0, 40.0, 801)  # 0.1 ms bins
+        data = np.zeros((8, time.size))
+        on = (time >= 0.0) & (time <= width)
+        data[:, on] = 100.0
+        from flits.batch.codetection_plots import BandSpectrum
+
+        return BandSpectrum(
+            freq_mhz=np.linspace(400.0, 800.0, 8) if "CHIME" in label else np.linspace(1310.0, 1500.0, 8),
+            time_ms=time,
+            data=data,
+            model=np.zeros_like(data),
+            sigma=np.ones(8),
+            label=label,
+            channel_valid=np.ones(8, dtype=bool),
+        )
+
+    bands = [_wide_band("CHIME/FRB", 20.0), _wide_band("DSA-110", 1.0)]
+    t0, t1 = chime_width_display_window(bands, pad_scale=0.5, pad_cap_ms=3.0)
+    assert t0 >= -3.5 and t1 <= 23.5  # pad capped at 3 ms (+ span resolution)
+    assert t0 < 0.0 < 20.0 < t1  # on-pulse union never cropped
+    uncapped_t0, uncapped_t1 = chime_width_display_window(bands, pad_scale=0.5)
+    assert uncapped_t1 - uncapped_t0 > t1 - t0
 
 
 def test_display_factors_are_near_native():
