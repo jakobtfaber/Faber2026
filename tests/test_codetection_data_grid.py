@@ -43,10 +43,19 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
         grid,
         "bands_archival",
         lambda data_root, nick, factors=None, pad_scale=1.0, pad_cap_ms=None,
-        target_dm=None: calls.append(
-            (data_root, nick, factors, pad_scale, pad_cap_ms, target_dm)
+        target_dm=None, extra_shift_ms=None: calls.append(
+            (
+                data_root, nick, factors, pad_scale, pad_cap_ms,
+                target_dm, extra_shift_ms,
+            )
         )
         or [],
+    )
+    fake_shift = {"CHIME/FRB": 0.1, "DSA-110": -0.05}
+    monkeypatch.setattr(
+        grid,
+        "fit_toa_shift_ms",
+        lambda row, root, data_root, target_dm: fake_shift if row.get("npz") else {},
     )
 
     grid.load_row_bands(
@@ -61,7 +70,7 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
     assert calls == [
         (
             tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
-            grid.DISPLAY_PAD_CAP_MS, 262.361665,
+            grid.DISPLAY_PAD_CAP_MS, 262.361665, fake_shift,
         ),
         (
             tmp_path,
@@ -70,6 +79,7 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
             grid.DISPLAY_PAD_SCALE,
             grid.DISPLAY_PAD_CAP_MS,
             272.638699,
+            {},
         ),
     ]
 
@@ -92,6 +102,95 @@ def test_adopted_dm_catalog_rejects_non_chime_adoption(tmp_path):
         assert "chime_primary" in str(exc)
     else:
         raise AssertionError("expected invalid adoption to be rejected")
+
+
+def test_register_fit_grid_recovers_crop_offset():
+    rng = np.random.default_rng(7)
+    dt = 0.032768
+    native = rng.normal(size=4000)
+    native[1200:1230] += 30.0  # burst
+    start, r = 900, 2
+    fit_prof = native[start : start + 1200].reshape(-1, r).mean(axis=1)
+    fit_t = np.arange(fit_prof.size) * (r * dt)
+    got = grid._register_fit_grid_ms(fit_t, fit_prof, native, dt)
+    assert abs(got - start * dt) < r * dt + 1e-9
+
+
+def test_fit_toa_shift_uses_dominant_component(monkeypatch, tmp_path):
+    # Synthetic NPZ + JSON: two components, model peak on the later/brighter
+    # one; the anchor must pick t0 nearest the model peak, not the earliest.
+    dt_native = 0.032768
+    r_fit = 2
+    n_native = 4000
+    burst_native = 2000
+    native = np.zeros(n_native)
+    native[burst_native : burst_native + 20] = 50.0
+
+    start = 1500
+    n_fit = 900
+    fit_data = native[start : start + n_fit * r_fit].reshape(1, n_fit, r_fit).mean(axis=2)
+    fit_t = np.arange(n_fit) * (r_fit * dt_native)
+    model = np.zeros_like(fit_data)
+    peak_fit_idx = (burst_native - start) // r_fit
+    model[0, peak_fit_idx] = 1.0
+
+    npz = tmp_path / "syn_jointmodel_X.npz"
+    np.savez(
+        npz,
+        timeC=fit_t, dataC=fit_data, modelC=model,
+        timeD=fit_t, dataD=fit_data, modelD=model,
+    )
+    t_peak_fit = float(fit_t[peak_fit_idx])
+    fit_json = tmp_path / "syn_joint_fit_X.json"
+    import json as _json
+
+    fit_json.write_text(_json.dumps({
+        "percentiles": {
+            "t0_C1": {"median": t_peak_fit - 5.0},   # early spurious component
+            "t0_C2": {"median": t_peak_fit - 0.2},   # dominant (near model peak)
+            "t0_D1": {"median": t_peak_fit - 0.2},
+        }
+    }))
+
+    class _Prod:
+        path = "unused"
+        dm = 100.0
+
+    monkeypatch.setattr(grid, "DISPLAY_FACTORS", {"dsa": (1, 2), "chime": (1, 2)})
+    import plot_codetection_gallery as gal
+
+    monkeypatch.setattr(gal, "discover_products", lambda root, nick: {"chime": _Prod, "dsa": _Prod})
+
+    load_calls = []
+
+    def _fake_load(path, band, telescope=None, residual_dm=0.0):
+        load_calls.append((telescope, residual_dm, band["t_factor"]))
+        r = band["t_factor"]
+        prof = native[: (native.size // r) * r].reshape(-1, r).mean(axis=1)
+        return prof[None, :], prof
+
+    monkeypatch.setattr(gal, "load_band", _fake_load)
+    monkeypatch.setattr(gal, "BANDS", {
+        "dsa": dict(dt_ms=dt_native, f_factor=1, t_factor=2),
+        "chime": dict(dt_ms=dt_native, f_factor=1, t_factor=2),
+    })
+
+    shifts = grid.fit_toa_shift_ms(
+        {"nick": "syn", "npz": npz.name},
+        root=tmp_path,
+        data_root=tmp_path,
+        target_dm=100.25,
+    )
+    # Anchor = dominant component 0.2 ms before the peak -> shift +0.2 (within
+    # one display bin of registration tolerance); the -5 ms component ignored.
+    for label in ("CHIME/FRB", "DSA-110"):
+        assert abs(shifts[label] - 0.2) < 2 * r_fit * dt_native
+    # Each band is loaded once at the original DM for fit-grid registration,
+    # then once at the adopted DM for the actual display-peak anchor.
+    assert load_calls == [
+        (None, 0.0, 1), ("chime", 0.25, 2),
+        (None, 0.0, 1), ("dsa", 0.25, 2),
+    ]
 
 
 def test_display_pad_scale_tightens_window():

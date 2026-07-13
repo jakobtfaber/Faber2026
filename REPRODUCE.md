@@ -107,9 +107,11 @@ compact archival gallery, the Figure 1 data overview, and the
 main-text-plus-appendix triptych family were added later with verdicts assigned
 by inspection rather than execution. The Figure 1 data grid draws every panel
 from the archival `_cntr_bpc.npy` waterfalls (all 24 products, near-native
-display grids); the triptychs require the eleven local fit-delivery NPZ
-artifacts plus Chromatica's two archival waterfall products; the compact
-gallery remains diagnostic only and requires all 24 archival waterfalls.
+display grids) and anchors the time axes on the fitted arrival times from the
+tracked jointmodel NPZ + joint_fit JSON pairs; the triptychs require the
+eleven local fit-delivery NPZ artifacts plus Chromatica's two archival
+waterfall products; the compact gallery remains diagnostic only and requires
+all 24 archival waterfalls.
 
 8 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **4 of
 those 8 needed their `run_command` corrected first**, so the pre-audit manifest

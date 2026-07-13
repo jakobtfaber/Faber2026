@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
+import re
 import warnings
 from pathlib import Path
 
@@ -90,6 +92,105 @@ def load_adopted_dms(path: Path) -> dict[str, float]:
     return out
 
 
+def _block_mean_1d(x: np.ndarray, r: int) -> np.ndarray:
+    n = (x.size // r) * r
+    return np.nanmean(x[:n].reshape(-1, r), axis=1)
+
+
+def _standardize(x: np.ndarray) -> np.ndarray:
+    x = np.nan_to_num(np.asarray(x, float))
+    x = x - x.mean()
+    s = x.std()
+    return x / s if s > 0 else x
+
+
+def _register_fit_grid_ms(
+    fit_t: np.ndarray, fit_prof: np.ndarray, native_prof: np.ndarray, dt_native_ms: float
+) -> float:
+    """Native-frame time (ms) of the fit grid's first sample.
+
+    The fit-delivery grid is a crop+downsample of the same archival stream, so
+    cross-correlating its band profile against the native archival profile
+    (downsampled to the fit dt) registers the two frames exactly, using the
+    whole profile rather than a single noisy peak sample.
+    """
+    dt_fit = float(np.median(np.diff(fit_t)))
+    r = int(round(dt_fit / dt_native_ms))
+    if r < 1 or abs(dt_fit - r * dt_native_ms) > 0.02 * dt_fit:
+        raise ValueError(f"fit dt {dt_fit} is not a multiple of native dt {dt_native_ms}")
+    arch = _standardize(_block_mean_1d(native_prof, r))
+    fit = _standardize(fit_prof)
+    if fit.size > arch.size:
+        raise ValueError("fit grid longer than archival window")
+    lag = int(np.argmax(np.correlate(arch, fit, mode="valid")))
+    return lag * r * dt_native_ms
+
+
+def fit_toa_shift_ms(
+    row: dict, *, root: Path, data_root: Path, target_dm: float
+) -> dict[str, float]:
+    """Per-band shift (band label -> ms) moving the display anchor from the
+    data profile peak to the fitted arrival time from the accepted joint fit:
+    the t0 (referenced to the top of each band) of the model component nearest
+    the model profile peak, i.e. the dominant component.
+
+    Empty for rows without an accepted joint fit (peak anchor kept).
+    """
+    npz_rel = row.get("npz")
+    if not npz_rel:
+        return {}
+    npz_path = root / npz_rel
+    fit_json = Path(str(npz_path).replace("_jointmodel_", "_joint_fit_")).with_suffix(".json")
+    percentiles = json.loads(fit_json.read_text())["percentiles"]
+    z = np.load(npz_path, allow_pickle=True)
+
+    from plot_codetection_gallery import BANDS, FILE_NICK, discover_products, load_band
+
+    file_nick = FILE_NICK.get(row["nick"], row["nick"])
+    products = discover_products(data_root, file_nick)
+
+    shifts: dict[str, float] = {}
+    for band_key, tel, label in (("C", "chime", "CHIME/FRB"), ("D", "dsa", "DSA-110")):
+        t0s = [
+            float(v["median"])
+            for k, v in percentiles.items()
+            if re.fullmatch(rf"t0_{band_key}\d*", k)
+        ]
+        if not t0s:
+            raise ValueError(f"{row['nick']}: no t0_{band_key}* in {fit_json.name}")
+        fit_t = np.asarray(z[f"time{band_key}"], float)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=RuntimeWarning)
+            fit_prof = np.nansum(np.asarray(z[f"data{band_key}"], float), axis=0)
+            model_prof = np.nansum(np.asarray(z[f"model{band_key}"], float), axis=0)
+        # Dominant component: t0 nearest the noiseless model profile peak.
+        model_peak = float(fit_t[int(np.nanargmax(model_prof))])
+        t0 = min(t0s, key=lambda v: abs(v - model_peak))
+
+        # Register against the original archival stream because the fit NPZ
+        # was made at the product's filename-stem DM. Compute the display
+        # anchor separately after applying the same adopted-DM correction as
+        # bands_archival; re-dedispersion changes the band-summed peak.
+        f_factor, t_factor_disp = DISPLAY_FACTORS[tel]
+        dt_native = BANDS[tel]["dt_ms"]
+        band_native = dict(BANDS[tel], f_factor=f_factor, t_factor=1)
+        _, native_prof = load_band(products[tel].path, band_native)
+        band_disp = dict(BANDS[tel], f_factor=f_factor, t_factor=t_factor_disp)
+        residual_dm = float(target_dm - products[tel].dm)
+        _, disp_prof = load_band(
+            products[tel].path,
+            band_disp,
+            telescope=tel,
+            residual_dm=residual_dm,
+        )
+        pk_native_ms = int(np.nanargmax(disp_prof)) * t_factor_disp * dt_native
+
+        start_native_ms = _register_fit_grid_ms(fit_t, fit_prof, native_prof, dt_native)
+        toa_display_ms = start_native_ms + (t0 - float(fit_t[0])) - pk_native_ms
+        shifts[label] = -toa_display_ms
+    return shifts
+
+
 def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
     """Near-native archival display bands for every burst (fit or no fit)."""
     return bands_archival(
@@ -99,6 +200,9 @@ def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
         pad_scale=DISPLAY_PAD_SCALE,
         pad_cap_ms=DISPLAY_PAD_CAP_MS,
         target_dm=target_dm,
+        extra_shift_ms=fit_toa_shift_ms(
+            row, root=root, data_root=data_root, target_dm=target_dm
+        ),
     )
 
 
@@ -235,9 +339,9 @@ def render_grid(
             "ytick.direction": "in",
         }
     )
-    # 7.3 x 7.55 in: at \textwidth the typeset height plus the expanded
-    # adopted-DM caption fits a single AASTeX float page.
-    fig = plt.figure(figsize=(7.3, 7.55))
+    # At \textwidth the typeset height plus the combined adopted-DM/fitted-TOA
+    # caption must fit on one AASTeX float page.
+    fig = plt.figure(figsize=(7.3, 7.45))
     outer = fig.add_gridspec(
         3, 4, hspace=0.18, wspace=0.16, left=0.065, right=0.995, top=0.97, bottom=0.045
     )

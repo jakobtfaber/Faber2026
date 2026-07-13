@@ -192,6 +192,7 @@ def bands_archival(
     pad_scale: float = 1.0,
     pad_cap_ms: float | None = None,
     target_dm: float | None = None,
+    extra_shift_ms: dict[str, float] | None = None,
 ) -> list[BandSpectrum]:
     """Archival `_cntr_bpc.npy` products as BandSpectrum pairs (no model).
 
@@ -201,6 +202,9 @@ def bands_archival(
     padding around the on-pulse union.
     When ``target_dm`` is supplied, each native waterfall is shifted from its
     filename-stem DM to that common value before any display averaging.
+    `extra_shift_ms` (band label -> ms) is applied after the TOA alignment
+    and before windowing, e.g. to move the per-band anchor from the data
+    profile peak to a fitted arrival time.
     """
     file_nick = FILE_NICK.get(nick, nick)
     products = discover_products(data_root, file_nick)
@@ -237,6 +241,8 @@ def bands_archival(
     if toa_offset_ms(nick) is None:
         chime, dsa = fine
         fine = [_shift_time(chime, _peak_time(dsa) - _peak_time(chime)), dsa]
+    if extra_shift_ms:
+        fine = [_shift_time(b, extra_shift_ms.get(b.label, 0.0)) for b in fine]
     return crop_bands(
         fine,
         chime_width_display_window(fine, pad_scale=pad_scale, pad_cap_ms=pad_cap_ms),
