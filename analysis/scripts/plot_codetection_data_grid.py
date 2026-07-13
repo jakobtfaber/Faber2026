@@ -53,7 +53,8 @@ DISPLAY_PAD_SCALE = 0.5
 DISPLAY_PAD_CAP_MS = 3.0
 
 MASKED_GRAY = "0.85"
-CHIME_COLOR = "#4477aa"
+# CHIME marginal color: magma(0.55), matching the waterfall colormap family.
+CHIME_COLOR = "#b73779"
 DSA_COLOR = "black"
 CLIP_LO, CLIP_HI = 1.0, 99.5
 
