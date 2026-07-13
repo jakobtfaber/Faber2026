@@ -37,17 +37,33 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 
 - [ ] A1 **[decision]** Two-screen treatment — **working draft, open**
       (adopted 2026-07-06 after adversarial iteration — Codex GPT-5.5
-      review, amended text below — then re-opened the same night: owner
-      keeps all design decisions unlocked; every element revisable):
+      review — then re-opened the same night: owner keeps all design
+      decisions unlocked; every element revisable. **Trigger revised
+      2026-07-13, owner direction:** escalation is now evidence-based
+      model comparison, not hand-set ratio thresholds — amended text
+      below):
       > Adopt A1 as a modular scintillation-to-scattering constraint layer,
       > not a hard two-screen fit by default. Scintillation products enter
       > as frozen posterior/limit products with quality flags, not point
       > estimates. The τΔν statistic is used probabilistically to count
       > screens and derive τ_near/τ_dom, marginalized over geometry
       > constants and censoring. A second broadening component is not
-      > fitted unless the re-validated posterior makes it temporally
-      > resolvable: Pr(τ_near/τ_dom > 0.1) > 0.1, median ratio > 0.03,
-      > same-screen ambiguity, or predicted-scale PPC residuals. For
+      > fitted unless the **escalation trigger** fires, defined as either:
+      > (i) nested-sampling model comparison on the frequency ACF prefers a
+      > two-component (stacked-Lorentzian) model over a single Lorentzian —
+      > with the noise floor and zero-lag self-noise spike included in both
+      > models, and a finite-scintle (correlated-lag) covariance or an
+      > equivalent dynamic-spectrum-domain likelihood, so the extra
+      > component cannot feed on ACF sample variance — at a ΔlnZ threshold
+      > set by an injection-calibrated false-escalation rate on
+      > single-screen simulated dynamic spectra (V1 injection-recovery
+      > machinery); or (ii) posterior-predictive residuals in the burst
+      > profile at the predicted second-screen timescale. A two-component
+      > ACF detection escalates; a non-detection does not establish a
+      > single screen (a host-side screen with Δν_d below channel
+      > resolution is censored, not absent). The former τ_near/τ_dom
+      > thresholds (Pr > 0.1 at ratio 0.1, median > 0.03) are retired as
+      > triggers and demoted to prior-odds inputs. For
       > extended host media, quenching constrains an effective
       > source-proximate scattering-depth distribution, not a point screen
       > distance. Scintillation geometry informs prior odds for thin vs
@@ -56,7 +72,8 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       > is deferred unless modular products conflict on a high-S/N
       > sightline.
       A2/A3 design work may proceed against the draft, tracking its
-      revisions.
+      revisions. Remaining owner call: sign off the revised trigger once
+      the injection calibration reports its ΔlnZ operating point.
 - [ ] A2 **[FLITS]** Extended-medium (Williamson uniform-LOS) PBF kernel,
       β-coupled, per band (ADR-0007 un-deferred by the rail evidence: 10/12
       posteriors hit its re-open trigger — the nine tabled railed rows plus
@@ -129,20 +146,20 @@ fig:jointmodel_montage, and fig:scint_screens.
       selection-rule contradiction (gate-FAIL 20240203A tabulated under a
       "quality-passing" criterion; note-a redshift provenance vs §2's
       placeholder trio).
-- [ ] V4 **[FLITS]** Census re-validation: per-candidate provenance audit
+- [x] V4 **[FLITS]** *(cleared 2026-07-07 — owner, on the DR9/DESI-DR1/NED/PS1-STRM re-validation; see CONTEXT.md trust-reset status)* Census re-validation: per-candidate provenance audit
       (coordinate match, objID lookups, redshift class and source, PS1-STRM
       reliability), independent re-derivation of impact parameters and
       b/R_vir · b/R_500, re-run of the foreground/background/inconclusive
       verdict logic, halo-mass proxy provenance. Deliverable: a re-verified
       tab:foreground with per-candidate evidence, plus per-sightline audit
       figures.
-- [ ] V5 **[FLITS]** DM-budget re-validation: verify model implementations
+- [x] V5 **[FLITS]** *(cleared 2026-07-07 — owner, with V4; measured-scattering side of fig:budget stays revoked, plan D1)* DM-budget re-validation: verify model implementations
       against references (NE2001/YMW16 per sightline, halo prior, Macquart
       relation with stated f_IGM/χ_e, mNFW/two-phase columns vs published
       profiles), re-derive host residuals and the prior-predictive
       negative-residual analysis on the V4-verified census. Deliverable: a
       re-verified tab:budget + fig:budget left panel.
-- [ ] V6 **[FLITS]** Association + DM_obs re-validation (wave 3): document
+- [x] V6 **[FLITS]** *(cleared 2026-07-07 — report: v6-association-dm-report-2026-07-07.md; quotable under the shared DSA-DM convention)* Association + DM_obs re-validation (wave 3): document
       per-burst, per-telescope DM_obs provenance (instrument pipeline,
       dedispersion method — e.g. structure-maximizing vs S/N-maximizing —
       producing artifact, uncertainty); quantify CHIME-vs-DSA DM agreement
