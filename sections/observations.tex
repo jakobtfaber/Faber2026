@@ -28,39 +28,21 @@ standardized to ascending order and its per-channel bandpass normalized, so the
 fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
 and figures in this paper are produced with a common open-source reduction and
 fitting pipeline, which we reference throughout for reproducibility.
-Figure~\ref{fig:codetection-data-grid} presents the dedispersed CHIME/FRB and
-DSA-110 dynamic spectra for all twelve co-detections. Figure~\ref{fig:codetection-triptych-zach}
-then uses FRB~20220207C as a representative example of the full
-data/model/residual morphology audit. The corresponding panels for the
-remaining ten modeled bursts are collected in
-Appendix~\ref{app:jointmodel-pairs}; FRB~20240203A is shown data-only because
-none of its attempted joint morphologies passes the residual gate. Every model
-panel was regenerated with the adopted CHIME-primary DM fixed in both bands.
-The audit deliberately retains visibly failed or morphology-only cases so that
-the residual-based exclusions are inspectable rather than hidden
-(Section~\ref{sec:multicomp}).
+The dedispersed twelve-burst gallery and the joint data/model/residual panels
+are withheld from this draft while they pass the author figure-review gate.
+Candidate packets must expose the adopted and input-product DMs, exact fit
+artifacts, residual diagnostics, and intended layout before any figure is
+promoted into the manuscript (Section~\ref{sec:multicomp}).
 
 \begin{figure*}[tp]
     \centering
-    \includegraphics[width=\textwidth]{figures/codetection_data_grid.pdf}
-    \caption{Joint CHIME/FRB and DSA-110 dynamic spectra for the twelve
-    co-detections, ordered by detection epoch. Both observed bands share one
-    frequency axis and are drawn to scale; the hatched unobserved
-    0.80--1.31\,GHz gap is compressed to a quarter of its true bandwidth.
-    Top strips show the peak-normalized band-summed profiles (DSA-110 black,
-    CHIME/FRB magenta); right marginals the normalized time-integrated
-    on-pulse spectra. The window is the on-pulse union of both bands padded
-    by half the CHIME on-pulse width (at most 3\,ms), with times relative to
-    the audited DSA-110 arrival where a joint artifact exists (the dominant
-    component's $t_0$,
-    Section~\ref{sec:jointfit}) and the CHIME/FRB band placed at the
-    adopted-DM-referenced inter-instrument offset (FRB~20240203A, with no
-    retained fit artifact, is anchored on profile peaks). Panels are drawn from the
-    archival bandpass-corrected products at near-native resolution ($32.8$
-    and $33.3\,\mu$s bins with 512 and 1024 channels for DSA-110 and
-    CHIME/FRB), re-dedispersed from the exact DMs encoded in their filenames
-    to the adopted CHIME/FRB values in Table~\ref{tab:dm-measurements};
-    RFI-excised channels are gray. No model curves are overlaid.}
+    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
+    \textbf{[AUTHOR REVIEW PENDING --- FIGURE 1]}\\[0.6em]
+    Twelve-burst CHIME/FRB and DSA-110 gallery. Candidate must be approved by
+    exact SHA-256 through the figure-review packet before promotion.\\
+    \vspace{1.6cm}}}
+    \caption{Reserved Figure~1 slot. \emph{Draft placeholder---the current
+    gallery candidates are not author-approved and are not compiled here.}}
     \label{fig:codetection-data-grid}
 \end{figure*}
 
