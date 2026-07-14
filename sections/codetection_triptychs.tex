@@ -1,34 +1,13 @@
-% Figure 2 representative data | model | residual triptych.
-% Artifacts: figures/codetection_triptych/*_triptych.pdf
-% Producer: scripts/plot_codetection_triptych.py
-
-\newcommand{\codetectiontriptych}[3]{%
+% Joint-model panels are intentionally withheld until manuscript-owner review.
 \begin{figure*}[p]
     \centering
-    \includegraphics[width=\textwidth]{codetection_triptych/#1_triptych.pdf}
-    \caption{#2}
-    \label{fig:codetection-triptych-#3}
+    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
+    \textbf{[AUTHOR REVIEW PENDING --- JOINT-FIT MORPHOLOGY]}\\[0.6em]
+    Representative data/model/residual slot. The complete candidate family is
+    reviewed per burst with adopted DM, fit artifact, and residual diagnostics.\\
+    \vspace{1.6cm}}}
+    \caption{Reserved joint-model morphology slot. \emph{Draft
+    placeholder---no joint-fit panel is author-approved for compilation.}}
+    \label{fig:codetection-triptych-zach}
 \end{figure*}
 \clearpage
-}
-
-% Shared caption body (morphology audit; no quoted tau/alpha/beta).
-\newcommand{\codetectiontriptychcaption}[2]{%
-Two-dimensional joint-model morphology audit for #1#2.
-Left to right: observed CHIME/FRB and DSA-110 dynamic spectra, the
-corresponding two-dimensional joint model, and the whitened residual
-dynamic spectra. Hatched regions mark the unobserved frequency gap between
-the two bands. The time window is the observed on-pulse union of both bands,
-padded on each side by approximately the CHIME on-pulse width. Times are
-relative to the fitted DSA-110 arrival (the dominant model component's
-$t_0$), with the CHIME/FRB band placed at the measured inter-instrument
-arrival-time offset, as in Figure~\ref{fig:codetection-data-grid}. These panels
-audit component multiplicity and expose coherent residual structure; fit-derived turbulence
-and scattering parameters are deferred to
-Section~\ref{sec:results-alpha}.%
-}
-
-\codetectiontriptych{zach}{\codetectiontriptychcaption{FRB~20220207C}{. This
-representative panel establishes the visual conventions used for the complete
-appendix audit. The coherent frequency--time structure in the DSA-110 residual
-excludes this fit from the physical scattering roster}}{zach}
