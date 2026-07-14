@@ -9,7 +9,7 @@ mkdir -p "$TMP/scripts" "$TMP/docs/rse"
 cp "$ROOT/scripts/journal-append.sh" "$TMP/scripts/journal-append.sh"
 : > "$TMP/docs/rse/journal.jsonl"
 
-if "$TMP/scripts/journal-append.sh" "test-agent" "repo" "finish" "bad state" >/tmp/journal-invalid.out 2>/tmp/journal-invalid.err; then
+if bash "$TMP/scripts/journal-append.sh" "test-agent" "repo" "finish" "bad state" >/tmp/journal-invalid.out 2>/tmp/journal-invalid.err; then
   echo "expected invalid state to fail" >&2
   exit 1
 fi
@@ -19,7 +19,7 @@ if [[ -s "$TMP/docs/rse/journal.jsonl" ]]; then
   exit 1
 fi
 
-"$TMP/scripts/journal-append.sh" "test-agent" "repo" "done" "valid state" >/tmp/journal-valid.out
+bash "$TMP/scripts/journal-append.sh" "test-agent" "repo" "done" "valid state" >/tmp/journal-valid.out
 
 python3 - "$TMP/docs/rse/journal.jsonl" <<'PY'
 import json
