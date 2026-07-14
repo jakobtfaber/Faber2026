@@ -44,9 +44,35 @@ the readiness board renders it.
 
    ```bash
    python3 scripts/render_journal_panel.py
-   # then redeploy docs/rse/board/readiness.html to the existing artifact
-   # URL (Claude: Artifact tool with url=https://claude.ai/code/artifact/fdc8d749-f3a6-4296-bbd2-9f1052fe57f6)
+   scripts/deploy-board.sh   # pushes to gh-pages; board/ subdir only
    ```
+
+   Canonical board URL (owner directive 2026-07-12, replaces the claude.ai
+   artifact): **<https://jakobtfaber.github.io/Faber2026/board/>**. The
+   gh-pages ROOT hosts the CHIME scattering deck — a separate lane; the
+   deploy script never touches it. Do not redeploy the board as a
+   claude.ai artifact anymore.
+
+   **Owner view (added 2026-07-12).** The board's top panel is baked from
+   `docs/rse/board/owner-view.json` — the owner-facing summary (Needs you /
+   In flight / Up next, ≤3 items each, plus 7 component cards). If your
+   turn changed what is in flight, opened or resolved an owner decision,
+   or moved a component's status, update that JSON in the same pass, then
+   rebake (same command bakes both panels).
+
+   **Strand structure (added 2026-07-13).** The owner-facing board groups
+   work by science strand (association · budget/census · scattering ·
+   scintillation · energies · synthesis · mechanics), each on an
+   inputs→method→measured→validated→written lifecycle; owner-view.json
+   components are strand-keyed, and a lane-state change must also update
+   the matching strand swimlane stage in `readiness.html` (the V…G
+   recovery map and lane detail live in its agent fold). Journal `lane`
+   values stay the canonical task IDs — strands are presentation only. Plain English only — no lane
+   IDs without a gloss. Items are `{"h": headline, "d": detail}`: `h`
+   ≤6 words (this is all the owner reads); anything longer goes in `d`
+   or gets cut. Component `next` ≤5 words, empty when blocked. A stale
+   owner view is worse than none: the `updated` field is displayed, so
+   bump it every edit.
 
 3. **Commit policy:** the journal rides along with any doc/code commit
    (pathspec-include `docs/rse/journal.jsonl`); it is never the sole

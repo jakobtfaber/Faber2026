@@ -128,15 +128,15 @@ and $P(\mathrm{DM_{host}}<0)$. DM in $\mathrm{pc\,cm^{-3}}$.
 \tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$\mathrm{DM_{host}}$} &
   \colhead{$P(\mathrm{DM_{host}}<0)$}}
 \startdata
-FRB 20220207C & $0.043$ & $51^{+36}_{-43}$   & $0.13$ \\
-FRB 20220310F & $0.479$ & $-10^{+88}_{-107}$ & $0.54$ \\
+FRB 20220207C & $0.043$ & $52^{+35}_{-44}$   & $0.12$ \\
+FRB 20220310F & $0.479$ & $-9^{+87}_{-107}$ & $0.54$ \\
 FRB 20220506D & $0.300$ & $48^{+65}_{-80}$   & $0.27$ \\
-FRB 20221113A & $0.251$ & $55^{+61}_{-75}$   & $0.23$ \\
-FRB 20221203A & $0.510$ & $-2^{+106}_{-131}$ & $0.51$ \\
-FRB 20230307A & $0.271$ & $90^{+87}_{-107}$  & $0.20$ \\
-FRB 20230913A & $0.302$ & $136^{+69}_{-88}$  & $0.07$ \\
-FRB 20240203A & $0.074$ & $106^{+30}_{-36}$  & $0.01$ \\
-FRB 20240229A & $0.287$ & $197^{+60}_{-75}$  & $0.01$ \\
+FRB 20221113A & $0.251$ & $55^{+62}_{-75}$   & $0.23$ \\
+FRB 20221203A & $0.510$ & $-2^{+106}_{-130}$ & $0.51$ \\
+FRB 20230307A & $0.271$ & $90^{+88}_{-107}$  & $0.20$ \\
+FRB 20230913A & $0.302$ & $137^{+69}_{-88}$  & $0.07$ \\
+FRB 20240203A & $0.074$ & $107^{+29}_{-37}$  & $0.01$ \\
+FRB 20240229A & $0.287$ & $198^{+59}_{-76}$  & $0.01$ \\
 \enddata
 \end{deluxetable}
 
@@ -164,22 +164,6 @@ FRB 20240229A & $0.287$ & $197^{+60}_{-75}$  & $0.01$ \\
 \clearpage
 \FloatBarrier
 
-\section{Joint-model morphology audits}
-\label{app:jointmodel-pairs}
-
-This appendix collects the per-burst two-dimensional data/model/residual panels
-for the joint-model morphology audit. The panels are included to make
-the component-multiplicity and residual checks visible in the manuscript, while
-leaving the fit-derived turbulence and scattering parameters deferred to the
-completed scattering analysis.
-
-\clearpage
-\input{sections/jointmodel_pairs.tex}
-\clearpage
-
-\FloatBarrier
-
-
 \section{DSA-110 scintillation ACF diagnostics}
 \label{app:dsa-scint-acf}
 
@@ -200,5 +184,19 @@ are the internally selected values described in Section~\ref{sec:methods}.
 \FloatBarrier
 
 \input{sections/twoscreen_formalism.tex}
+
+\FloatBarrier
+
+\clearpage
+\section{Joint-model morphology audits}
+\label{app:jointmodel-pairs}
+
+Figure~\ref{fig:codetection-triptych-zach} introduces the representative
+data/model/residual morphology audit in the main text. The remaining eleven
+per-burst panels are collected here so every accepted fit and the data-only
+FRB~20240203A exception can be inspected without interrupting the main-text
+figure sequence.
+
+\input{sections/codetection_triptychs_appendix.tex}
 
 \FloatBarrier

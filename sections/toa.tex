@@ -70,7 +70,8 @@ false-alarm expectation is the sum $\sum_j \mu_j$ over the \emph{trial set}: the
 complete list of DSA-110 triggers searched for a CHIME/FRB counterpart over the
 2022~February--2024~February overlap, not merely the twelve that matched. The
 look-elsewhere penalty is therefore carried explicitly by that sum. Under the
-chance-maximizing windows below, the eight DM-constrained pairs have
+chance-maximizing windows below, the eight pairs whose pre-specified
+association statistic included a DM constraint have
 $\mu_j\sim2$--$6\times10^{-9}$, while the four position-and-time-only pairs use
 $f_{\rm DM}=1$ and have $\mu_j=4.4\times10^{-7}$. The twelve reported pairs sum
 to $\sum_i\mu_i\approx1.8\times10^{-6}$. Even the conservative extension to the
@@ -114,10 +115,11 @@ any source direction. For the twelve source directions here,
 $\tau_{\rm geo}=-2.30$ to $-2.03\,$ms: the wavefront reaches CHIME first and
 DSA-110 $2.03$--$2.30\,$ms later. The residual is therefore not error-free but carries a
 per-burst systematic of order the inter-site clock/timestamp alignment
-($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight DM-constrained bursts, the
-residual dispersive delay left by the CHIME--DSA DM offset---up to $\sim\!12$\,ms of
-CHIME-referenced shift for the largest offset (FRB~20220207C, $\Delta\mathrm{DM}
-=-0.84\,\mathrm{pc\,cm^{-3}}$) were the CHIME arrival re-referenced at its own DM,
+($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight originally DM-conditioned
+pairs, the residual dispersive delay left by the CHIME--DSA DM offset. With the
+new phase-coherence measurements, the largest band offset is
+$0.117\,\mathrm{pc\,cm^{-3}}$ (FRB~20221113A), corresponding to approximately
+$2.8$\,ms when re-referenced between 1.5\,GHz and 400\,MHz,
 a convention-dependent term reported separately rather than folded in. We
 assign each pair a $1\sigma$ timing budget $\sigma_i$ by combining, in
 quadrature, the shared-DM combined CHIME+DSA arrival error, the intrinsic pulse
@@ -132,35 +134,40 @@ for a narrow, well-localized burst---inconsistent with both its few-ms budget an
 the $\lesssim\!4.5$\,ms geometric delay---would fail. We stress
 that the association verdict does not rest on the timing residual alone: the
 decisive gates are the chance-coincidence probability, positional coincidence,
-and (for the DM-constrained bursts) DM agreement, for which the residual is a
+and (for the eight bursts with a pre-specified DM-conditioned association
+term) DM agreement, for which the residual is a
 supporting consistency diagnostic.
 
-Evaluated with the conservative windows above, the eight DM-constrained bursts
-have $P_{\rm cc}<10^{-8}$ individually, while each of the four pairs without a
-constraining CHIME DM has the deliberately less selective position-and-time-only
+Evaluated with the conservative windows above, the eight originally
+DM-conditioned bursts
+have $P_{\rm cc}<10^{-8}$ individually, while each of the four conservatively
+classified pairs has the deliberately less selective position-and-time-only
 value $P_{\rm cc}=4.4\times10^{-7}$. Thus all twelve have $P_{\rm cc}<10^{-6}$,
 and their sample-summed expectation is $\sum_i\mu_i\approx1.8\times10^{-6}$.
 Because these class-aware estimates remain far below unity, the
 chance-coincidence test establishes the co-detections; positional coincidence
-and, where available, DM agreement provide independent checks. All twelve pass
-the positional-coincidence check. The eight bursts with constrained CHIME-side DMs
-also pass the CHIME--DSA DM-agreement check; the four remaining bursts are marked
-`assoc.~(pos.)' in Table~\ref{tab:sample}: their association rests on
-position and timing alone, because their CHIME sub-band fits did not provide
-a constraining independent DM. For those four we set $f_{\rm DM}=1$ in
+and the independently measured phase-coherence DMs provide additional checks.
+All twelve pass the positional-coincidence check and now have constrained
+CHIME and DSA phase-coherence measurements (Table~\ref{tab:dm-measurements}).
+The four pairs marked `assoc.~(pos.)' in Table~\ref{tab:sample} retain that
+label because their pre-specified association calculation used position and
+timing alone; we do not apply a post-selection DM factor. For those four we set
+$f_{\rm DM}=1$ in
 Eq.~\eqref{eq:pcc_mu}---the DM criterion is not imposed, so their
 $P_{\rm cc}$ is a time-and-position bound only, consistent with the
-position-only verdict; the eight DM-constrained bursts carry the full
+position-only verdict; the eight originally DM-conditioned bursts carry the full
 $f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM})<1$ factor. The reported
 $P_{\rm cc}$ values are thus computed per association class, and the
 position-only $P_{\rm cc}$ are, if anything, conservative relative to the
-DM-constrained ones.
+originally DM-conditioned ones.
 
 The per-burst DM provenance (per-telescope DM, method, and CHIME--DSA agreement)
-and the intermediate association diagnostics are provided as a machine-readable
-table in the archival data release (Section~\ref{sec:data-availability});
+is given in Table~\ref{tab:dm-measurements} and in the accompanying
+machine-readable catalog; the intermediate association diagnostics are
+provided in the archival data release (Section~\ref{sec:data-availability});
 Table~\ref{tab:sample} carries the manuscript-facing timing residual, $P_{\rm cc}$,
-and association-verdict columns. We note in passing that the eight
-DM-constrained bursts show CHIME reading systematically low relative to DSA by
-$\approx0.4\,\mathrm{pc\,cm^{-3}}$ on average---a coherent, sub-floor offset that
-does not affect any association verdict.
+and association-verdict columns. Across the twelve phase-coherence fits,
+$\mathrm{DM_{CHIME}}-\mathrm{DM_{DSA}}$ has mean
+$+0.013\,\mathrm{pc\,cm^{-3}}$ and maximum absolute value
+$0.117\,\mathrm{pc\,cm^{-3}}$; no coherent $\sim0.4\,\mathrm{pc\,cm^{-3}}$
+instrument offset remains.

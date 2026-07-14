@@ -64,21 +64,21 @@ OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png"
 RNG = np.random.default_rng(20260707)
 N_DRAW = 200_000
 
-# --- Per-sightline point-estimate budget (V5-cleared budget_table.tex) ---------
+# --- Per-sightline point-estimate budget ---------------------------------------
 # DM in pc cm^-3. DM_MW is disk(NE2025)+40 halo; we split the 40 back out below.
 # Placeholder-z sightlines (freya/mahi/johndoeii) are excluded: no cosmic/host term.
 DM_MW_HALO = 40.0
 SIGHTLINES = [
     # name, z, DM_obs, DM_MW(disk+halo), DM_cosmic_mean, DM_int, mass
-    ("FRB 20220207C", 0.043, 262, 111, 36, 70, "measured"),
-    ("FRB 20220310F", 0.479, 462, 81, 427, 11, "assumed"),
-    ("FRB 20220506D", 0.300, 397, 118, 262, 0, "none"),
-    ("FRB 20221113A", 0.251, 411, 123, 217, 41, "measured"),
-    ("FRB 20221203A", 0.510, 602, 117, 456, 84, "assumed"),
-    ("FRB 20230307A", 0.271, 610, 74, 235, 241, "cluster"),
-    ("FRB 20230913A", 0.302, 518, 110, 264, 41, "assumed"),
-    ("FRB 20240203A", 0.074, 272, 111, 62, 0, "none"),
-    ("FRB 20240229A", 0.287, 491, 74, 250, 0, "none"),
+    ("FRB 20220207C", 0.043, 262.361665, 111, 36, 70, "measured"),
+    ("FRB 20220310F", 0.479, 462.188773, 81, 427, 11, "assumed"),
+    ("FRB 20220506D", 0.300, 397.015535, 118, 262, 0, "none"),
+    ("FRB 20221113A", 0.251, 411.435717, 123, 217, 41, "measured"),
+    ("FRB 20221203A", 0.510, 602.377821, 117, 456, 84, "assumed"),
+    ("FRB 20230307A", 0.271, 610.289070, 74, 235, 241, "cluster"),
+    ("FRB 20230913A", 0.302, 518.796993, 110, 264, 41, "assumed"),
+    ("FRB 20240203A", 0.074, 272.638699, 111, 62, 0, "none"),
+    ("FRB 20240229A", 0.287, 491.207826, 74, 250, 0, "none"),
 ]
 
 # --- Nuisance priors -----------------------------------------------------------
@@ -340,7 +340,7 @@ def main():
           f"~{span_lo:.0f}-{span_hi:.0f} pc cm^-3")
 
     with OUT_CSV.open("w", newline="") as f:
-        w = csv.writer(f)
+        w = csv.writer(f, lineterminator="\n")
         w.writerow(["burst", "z", "dm_host_arith", "dm_host_p16", "dm_host_p50",
                     "dm_host_p84", "p_host_negative"])
         for r in results:

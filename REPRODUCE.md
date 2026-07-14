@@ -99,21 +99,28 @@ both a `savefig` read and a return code.
   fresh machine.
 - **no_command** — nothing runnable is recorded.
 
-Result: of the manifest's 26 rows, **12 regenerate from a fresh clone** (5 as
+Result: of the manifest's 28 rows, **12 regenerate from a fresh clone** (5 as
 written, 7 only after correcting the command), **4 exit 0 while writing nothing
-at the declared path**, 8 are blocked on data outside both repos, and 2 have no
-command. (The 2026-07-09 execution sweep ran the 25 rows then present; the
-26th, `figures/codetection_gallery.pdf`, was added the same day with its
-verdict assigned by inspection rather than execution — its inputs are the 24
-`~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` products, which exist in
-neither repo, so it is `blocked_external_data` without needing a run.)
+at the declared path**, 10 are blocked on data outside both repos, and 2 have
+no command. The 2026-07-09 execution sweep ran the 25 rows then present. The
+compact archival gallery, the Figure 1 data overview, and the
+main-text-plus-appendix triptych family were added later with verdicts assigned
+by inspection rather than execution. The Figure 1 data grid draws every panel
+from the archival `_cntr_bpc.npy` waterfalls (all 24 products, near-native
+display grids) and anchors the time axes on the fitted arrival times from the
+tracked jointmodel NPZ + joint_fit JSON pairs. The legacy CHIME-minus-DSA
+400-MHz timing offsets are re-referenced from their recorded DMs to the adopted
+DMs before those anchors are placed; the triptychs require the
+eleven local fit-delivery NPZ artifacts plus Chromatica's two archival
+waterfall products; the compact gallery remains diagnostic only and requires
+all 24 archival waterfalls.
 
-9 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **5 of
-those 9 needed their `run_command` corrected first**, so the pre-audit manifest
-could not have rebuilt the manuscript. The tenth, `codetection_gallery.pdf`,
-is the first row that is *both* embedded and blocked: the committed manuscript
-now includes one figure that cannot be rebuilt from a fresh clone until the
-burst waterfall products are deposited (see hazard 6). Every other blocked or
+8 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **4 of
+those 8 needed their `run_command` corrected first**, so the pre-audit manifest
+could not have rebuilt the manuscript. The two blocked embedded rows are the
+codetection data grid and triptych family; neither can be rebuilt from a fresh
+clone until the fit artifacts and Chromatica waterfall products are deposited
+(see hazard 6). Every other blocked or
 command-less row is a *staged* output waiting on a result SLOT; those cannot
 be promoted into the manuscript until their inputs are published alongside the
 code.
@@ -143,11 +150,10 @@ regeneration section below.)
 
 ## Status: what's embedded now vs. staged
 
-The manuscript is mid-draft. Of 26 tracked outputs (22 figures + 4 tables),
+The manuscript is mid-draft. Of 29 tracked outputs (24 figures + 5 tables),
 ten are currently `\input`/`\includegraphics`'d (the
-`embedded_in_manuscript = yes` rows — most recently
-`figures/codetection_gallery.pdf`, the unified 12-burst dynamic-spectra
-gallery added 2026-07-09); the other 16 (fifteen figures + the
+`embedded_in_manuscript = yes` rows, most recently the Figure 1 data grid and
+the redistributed triptych family); the other 18 (seventeen figures + the
 staged `beta_table.tex`) are produced and sit in the repo but are not yet
 placed — they are waiting on the abstract's bracketed result SLOTs (joint
 two-band scattering, scintillation attribution, band-restricted energies). One
@@ -158,9 +164,15 @@ lost when a SLOT is filled.
 
 ## Regenerating the tables
 
-Three of the four tables are generated from a data file + an emitter; edit the
-**data file**, never the `.tex`. Each root `.tex` also carries a
-`% !! GENERATED FILE` banner with its own regenerate line.
+All five manuscript tables have an explicit provenance path. For the verified
+DM table, the reviewed source is
+`analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` and parity is enforced by
+`tests/test_verified_dm_manuscript.py`. For the DM budget,
+the foreground/cosmological columns remain sourced from the pinned pipeline
+JSON, while `DM_obs` is overlaid from
+`analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` and `DM_host` from
+`scripts/dm_budget_uncertainty.csv`. Run the root renderer after regenerating
+the host posterior; do not edit `budget_table.tex` directly.
 
 Both are safe to regenerate at the currently pinned submodule (`14e0d1f`);
 regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
@@ -180,18 +192,19 @@ is hand-maintained, is not `\input` by the manuscript, and is deliberately left
 untouched: `tab:beta` is deferred. Do not treat that file as regenerable-and-current.
 
 ```bash
+conda run -n flits python scripts/dm_budget_uncertainty.py
+conda run -n flits python scripts/render_budget_table.py
+conda run -n flits python scripts/render_budget_table.py --check
+
 cd pipeline
-# budget table: values in galaxies/foreground/budget_table_data.json
-uv run python -m galaxies.foreground.budget_table_emitter     --out ../budget_table.tex
 # foreground census: values in galaxies/foreground/foreground_table_data.json
 uv run python -m galaxies.foreground.foreground_table_emitter --out ../foreground_table.tex
 # verify (byte-exact vs exports/ + value cross-checks against upstream products)
-uv run pytest galaxies/foreground/test_budget_table_emitter.py \
-              galaxies/foreground/test_foreground_table_emitter.py
+uv run pytest galaxies/foreground/test_foreground_table_emitter.py
 # ^ green at pipeline pin 6c87890 (verified 2026-07-09).
 ```
 
-Each emitter also writes a canonical copy to `pipeline/exports/<table>.tex` (the
+The pipeline emitters also write canonical copies to `pipeline/exports/<table>.tex` (the
 byte-exact regression anchor) and supports `--check` (non-zero exit on drift).
 **`--check` is not a sufficient CI gate on its own** — it compares the emitter's
 output to `exports/<table>.tex`, and both are derived from the *same*
@@ -201,7 +214,9 @@ hazard 1. Measured at pin `f9e1c24`: both emitters' `--check` exited 0 while
 `assert`, so one run reports only the first mismatching sightline —
 FRB 20220207C; replaying the comparison without short-circuiting shows all nine
 differed.) CI must run the **parity tests**, not just `--check`.
-The `\input{budget_table}` /
+The root budget renderer is now the authoritative cross-repository parity gate;
+the pipeline-local budget test predates the adopted phase-DM catalog and is not
+run against the manuscript table. The `\input{budget_table}` /
 `\input{foreground_table}` paths
 in `sections/` are unchanged: the emitters overwrite the manuscript's root
 `.tex` files in place, so the Overleaf lane (which has no `pipeline/` submodule)
@@ -392,13 +407,15 @@ earned their keep once: they are what caught the drift described in hazard 1.
    manuscript must have its inputs published — a committed data file, or a
    deposited archive — before the DA statement can cover it.
 
-   **2026-07-09 update: this class now has its first embedded member.**
-   `figures/codetection_gallery.pdf` (fig:codetection-gallery, row 26) reads
-   the 24 `~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` waterfall
-   products and is `embedded_in_manuscript = yes` while `blocked_external_data`
-   — the deposition requirement above is no longer hypothetical. The burst
-   waterfall products (or a subset sufficient to re-render the gallery) must be
-   part of the data release before the DA statement can cover this figure.
+   **2026-07-11 update (revised 2026-07-13): this class has one embedded
+   member.** The codetection Figure 1 data grid reads all 24 archival CHIME/DSA
+   `_cntr_bpc.npy` waterfalls (near-native display grids); the triptych family
+   reads the 11 fit-delivery NPZ artifacts plus Chromatica's two archival
+   waterfalls. Both rows are `embedded_in_manuscript = yes` while
+   `blocked_external_data`; the compact gallery uses the same 24 archival
+   waterfalls but is diagnostic and non-embedded. The archival waterfalls and
+   fit artifacts must be part of the data release before the DA statement
+   can cover Figures 1--2 and the morphology-audit appendix.
 
 7. **The manifest does not enumerate every embedded output. (OPEN — this is the
    weakest link in the DA statement.)**
@@ -418,7 +435,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
    `clone_verified` verdict, and this audit did **not** execute it.
 
    The consequence is worse than a gap: because the manifest defines the set it
-   audits, a green sweep over its 26 rows reads as "the manuscript reproduces"
+   audits, a green sweep over its 28 rows reads as "the manuscript reproduces"
    while silently skipping the scintillation figures. Any future coverage check
    must derive the output set from the manuscript's `\includegraphics` and
    `\input` directives, not from the manifest's own row list. Until these rows
@@ -431,9 +448,11 @@ earned their keep once: they are what caught the drift described in hazard 1.
   `dsa_scint_acf/` panels, run their producer from a fresh clone, and record a
   `clone_verified` verdict. Nothing else in this file matters to the DA statement
   as much as this.
-- Deposit the `DSA_bursts` `_cntr_bpc.npy` products (or a gallery-sufficient
-  subset): `figures/codetection_gallery.pdf` is now the only embedded row the
-  DA statement cannot cover, and data deposition is the only way to close it.
+- Deposit the 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls and the 11
+  fit-delivery artifacts: the Figure 1 grid (archival waterfalls) and triptych
+  family (fit artifacts plus Chromatica's waterfalls) are the two embedded
+  rows the DA statement cannot cover, and data deposition is the only way to
+  close them.
 - Fill the two unresolved producers (author knowledge) and promote their rows
   to `writer_verified = yes`.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,

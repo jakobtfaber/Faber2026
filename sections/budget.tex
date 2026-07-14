@@ -1,6 +1,6 @@
 % Core methods section. The observed DM decomposes as
 %   DM_obs = DM_MW,ISM + DM_MW,halo + <DM_cosmic>(z) + DM_intervening + DM_host,
-% with DM_MW,ISM from NE2001/YMW16 (pygedm), DM_MW,halo a 40 pc/cm^3 prior
+% with DM_MW,ISM from NE2025 (NE2001/YMW16 retained as cross-checks), DM_MW,halo a 40 pc/cm^3 prior
 % (Yamasaki & Totani 2020), <DM_cosmic>(z) the Macquart relation
 % (Macquart et al. 2020; f_IGM=0.84, chi_e=0.875) for the point estimate; the
 % forward-modeled cosmic term is drawn from the TNG-300 IGM log-normal
@@ -24,7 +24,10 @@ intervening contributions \citep{CordesChatterjee2019},
 + \mathrm{DM_{int}} + \mathrm{DM_{host}},
 \label{eq:dmbudget}
 \end{equation}
-with the Galactic term $\mathrm{DM_{MW}} = \mathrm{DM_{MW,ISM}} +
+Here $\mathrm{DM_{obs}}$ is the adopted CHIME phase-coherence measurement in
+Table~\ref{tab:dm-measurements}, rather than the rounded discovery-catalog
+value. This convention is used consistently in Table~\ref{tab:budget} and the
+forward host-DM calculation. The Galactic term $\mathrm{DM_{MW}} = \mathrm{DM_{MW,ISM}} +
 \mathrm{DM_{MW,halo}}$ split between disk and halo. We estimate the disk
 contribution $\mathrm{DM_{MW,ISM}}$ from the NE2025 \citep{Ocker2026}
 electron-density model integrated to $30\,\mathrm{kpc}$ (consistent with the
@@ -173,9 +176,46 @@ $\beta=4$ is therefore \emph{not} reported as a measurement of square-law
 turbulence. It instead marks the closure regime in which the thin-screen
 inertial-range mapping no longer determines $\beta$. Accordingly, the per-sightline results
 table (Section~\ref{sec:results-alpha}) will carry an explicit closure-regime
-label---interior (a resolved $\beta$ within the inertial range) versus
-square-law/inner-scale limited---alongside each entry, so that no square-law
-endpoint is read as an inertial-range spectral index.
+label---\texttt{inertial} (a resolved $\beta$ within the inertial range) versus
+\texttt{endpoint-degenerate} (square-law / inner-scale endpoint)---alongside each
+entry, so that no square-law endpoint is read as an inertial-range spectral
+index. Geometry family (thin vs extended) is recorded separately and is not
+folded into this label.
+
+Concretely, the model dynamic spectrum in each band is built per frequency
+channel as an intrinsic Gaussian profile of width $\zeta$ convolved with the
+$\beta$-derived PBF. In the square-law limit $\beta\to4$ the convolution is
+evaluated with the closed-form Gaussian--exponential expression in a
+numerically stable scaled-complementary-error-function form; below that limit
+it is evaluated with the power-law-tail PBF implied by the phase structure
+function, whose asymptotic decay is $t^{-\beta/2}$. The residual
+dispersion-measure offset $\delta\mathrm{DM}$ shifts the per-channel arrival
+time by the $\nu^{-2}$ cold-plasma delay relative to the band reference
+frequency and contributes intra-channel dispersion smearing: the dispersive
+sweep across one native channel of width $\Delta\nu_{\rm ch}$,
+$\Delta t_{\rm DM} \approx 8.3\,\mu\mathrm{s}\,
+(\mathrm{DM}/\mathrm{pc\,cm^{-3}})\,(\Delta\nu_{\rm ch}/\mathrm{MHz})\,
+(\nu/\mathrm{GHz})^{-3}$ \citep{LorimerKramer2004}, enters the model as a
+boxcar of that duration, represented by its variance-matched Gaussian
+($\sigma_{\rm DM}=\Delta t_{\rm DM}/\sqrt{12}$) added in quadrature to
+$\zeta$. Each spectrum is fit at its instrument-optimized dedispersion DM
+(Section~\ref{sec:data}), so $\delta\mathrm{DM}$ is a small per-band residual
+about that reference rather than a re-measurement of the total DM, and the
+smearing term is evaluated at the offset from each product's de-smeared
+baseline: for coherently dedispersed products only the fitted residual
+$|\delta\mathrm{DM}|$ contributes, while for incoherently dedispersed
+products the full dedispersion DM plus residual sets the smearing at the
+native channel width.
+
+The two bands enter the fit as independent datasets sharing
+$(\tau_{1\,\mathrm{GHz}},\beta)$. Within a band, channels are treated as
+independent Gaussian measurements: the per-channel noise standard deviation
+is estimated from off-pulse samples of the same spectrum with the
+median-absolute-deviation estimator scaled to Gaussian equivalence, which is
+robust to residual burst power and narrowband interference. Channels flagged
+by the upstream masking, dead channels, and channels with vanishing
+off-pulse variance are excluded from the likelihood through a per-channel
+validity mask rather than interpolated.
 
 \subsubsection{Sub-band validation of the frequency scaling}
 \label{sec:subband}
@@ -211,6 +251,8 @@ sub-band comparisons are presented with the scattering analysis
 % after fit re-validation. The restored figure should state the included bursts,
 % exclusion reasons, fit family, and whether the sub-band slopes are used as a
 % validation diagnostic or as physical turbulence constraints.
+% Figure float lives in Section~\ref{sec:results-alpha} as PLACEHOLDER
+% fig:subband_tau_validation (wishlist W4); D3: diagnostic only.
 
 \subsubsection{Gain-marginalized likelihood}
 \label{sec:gainmarg}
@@ -238,11 +280,37 @@ scattering-induced spectral smearing into the spectral envelope and thereby bias
 the scattering time low; we therefore keep the gain prior informative (finite
 width) rather than flat, and verify on the final fits that the
 $\tau_{1\,\mathrm{GHz}}$ posterior is stable against the gain-prior width before
-quoting any low-$\tau$ result. We
-sample the posterior by nested sampling \citep{Skilling2004}, as implemented in
-\texttt{dynesty} \citep{Speagle2020}, and quality-gate each fit on its reduced
-$\chi^2$ and residual whiteness, treating $R^2$ and residual normality as
-informational.
+quoting any low-$\tau$ result. The gain prior is a per-channel zero-mean
+Gaussian of variance $s^2$; unless stated otherwise $s^2$ is profiled at its
+maximum-marginal-likelihood value, and it is held fixed whenever Bayesian
+evidences are compared across likelihood variants
+(Section~\ref{sec:multicomp}), so that evidence differences reflect the
+temporal model rather than the gain hyperparameter.
+
+The priors on the sampled parameters are deliberately simple and, except for
+one anchor, independent of the initialization, as evidence-based model
+comparison requires. $\tau_{1\,\mathrm{GHz}}$ and each intrinsic width
+$\zeta$ are log-uniform over $10^{-4}$--$10^{3}$\,ms; $\beta$ is uniform over
+the thin-screen inertial branch, by default $3\le\beta\le4$, the image of
+$4\le\alpha\le6$ under $\alpha=2\beta/(\beta-2)$; each per-band
+$\delta\mathrm{DM}$ is uniform over $\pm50\,\mathrm{pc\,cm^{-3}}$ about the
+dedispersion reference---bounding the residual keeps a broad, heavily
+smeared solution from escaping into an unphysically large
+$|\delta\mathrm{DM}|$ degeneracy; and each arrival time $t_0$ is uniform in
+a window anchored on that band's profile-peak estimate, the only
+data-derived quantity in the prior. We sample the posterior by nested
+sampling \citep{Skilling2004}, as implemented in \texttt{dynesty}
+\citep{Speagle2020}, using random-walk sampling with at least 600 live
+points (at least 800 for the higher-dimensional multi-component variants)
+and terminating when the estimated remaining log-evidence falls below 0.5.
+Parameter summaries are posterior-weighted percentiles, and the $\alpha$
+posterior is derived deterministically from the $\beta$ samples. Each fit is
+quality-gated on the reduced $\chi^2$ of its noise-whitened,
+gain-marginalized residuals---accepted in $0.3\le\chi^2_\mathrm{red}\le1.5$,
+rejected above 10, and flagged for individual inspection between (or
+suspiciously below 0.3)---and on the absence of lag-one residual
+autocorrelation (Durbin--Watson statistic within 1--3), treating $R^2$ and
+residual normality as informational.
 
 \subsubsection{Multiple temporal components}
 \label{sec:multicomp}
@@ -260,7 +328,9 @@ by Bayesian evidence subject to a residual check. Because the evidence
 normalization differs between
 likelihood variants, the component counts are compared on a single matched grid
 in which even the one-component model is evaluated through the multi-component
-likelihood, so that evidence differences are meaningful. Component arrival times
+likelihood, with the gain-prior variance held fixed across counts
+(Section~\ref{sec:gainmarg}), so that evidence differences are meaningful.
+Component arrival times
 within a band are ordered and separated by a data-derived minimum spacing,
 keeping the fit identifiable at every prior sample.
 

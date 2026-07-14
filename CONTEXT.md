@@ -75,6 +75,14 @@ single undifferentiated DM_obs as if CHIME and DSA agree.
 
 **Geometry-adjudicated β** (supersedes "rail-aware citable", owner decision
 2026-07-06; quoting provisions suspended by the fit-trust reset above):
+**D2–D5 design locks** (owner accepted 2026-07-10; memo
+`docs/rse/specs/decision-d2-d5-scattering-design-locks.md`): `tab:beta` carries
+`closure_regime ∈ {inertial, endpoint-degenerate}` (no β/α turbulence quote on
+endpoint rows; geometry is a separate A3 field); sub-band EMG slopes are
+diagnostic only; scintillation products come from a separate ACF path (A1);
+energies are band-restricted with a non-comparability disclaimer (no fixed
+rest-frame variant unless elected under V3). Locks are presentation contracts —
+they do not restore fit citability.
 Rail classes from the β-coherent thin-screen campaign (interior / railed-hi /
 railed-lo / unconstrained / gate-FAIL) are fit-campaign QA vocabulary and do
 NOT appear in manuscript prose or tables. A posterior railing at β=4 is
@@ -191,7 +199,7 @@ reconciled to this contract** — wave 1: abstract, observations (§2), the
 co-model methods (sec:jointfit / sec:beta-scattering-methods), results,
 discussion, conclusions, and `tab:beta` still carry rail-class language
 and/or α = 4 limits, and the multiplicity-bias demonstration
-(fig:whitney_mult, the abstract's closing claim, conclusions item 7) plus
+(the abstract's closing claim, conclusions item 7) plus
 fig:jointmodel_montage and fig:scint_screens are built on revoked fits;
 wave 2: the budget section (§3 — census verdicts, dominant-systems and
 cluster analyses, scint excess, τ·Δν_d test), results §4.1, and conclusions
@@ -218,6 +226,11 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 
 ## Relationships
 
+- **Figure wishlist** (`docs/rse/specs/figure-wishlist.md`) lists intended
+  figures not yet (re)inserted; live draft `\fbox` floats with `\label{fig:…}`
+  sit in `sections/observations.tex` and `sections/results.tex`. Do not
+  `\includegraphics` revoked campaign PDFs until the listed gate clears; strip
+  draft boxes before circulation (referee M9).
 - **Geometry-adjudicated β** governs what `tab:beta` (**unified β roster**) may
   quote, while **explicit pending** governs population prose;
   **scint→scattering coupling** sequences the re-fit that will repopulate it.

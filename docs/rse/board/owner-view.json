@@ -1,0 +1,33 @@
+{
+  "updated": "2026-07-13T03:30-0700",
+  "needs_you": [
+    {"h": "Calibrate the A1 trigger", "d": "two-screen escalation · open since 07-06"},
+    {"h": "Pick first trust-ladder rung", "d": "P0 recommended"}
+  ],
+  "now": [
+    {"h": "Unified scintillation figure", "d": "PR 159 merged; CHIME instrumental-ACF correction next", "who": "codex"},
+    {"h": "Review verified DM PR", "d": "PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods", "who": "you"},
+    {"h": "A1 design discussion", "who": "you + agents"}
+  ],
+  "next": [
+    {"h": "V·P0 provenance freeze", "d": "pins every data input; opens the fit ladder"},
+    {"h": "F3 consistency audit", "d": "manuscript, runnable now"},
+    {"h": "B1–B3 scintillation prep"}
+  ],
+  "components": [
+    {"name": "Sample & association", "lane": "V6", "status": "validated", "status_class": "good",
+     "next": "review PR 17"},
+    {"name": "Budget & census", "lane": "V4·V5", "status": "validated", "status_class": "good",
+     "next": "DM adopted; scattering after D"},
+    {"name": "Scattering", "lane": "V1·A·C", "status": "method open", "status_class": "pend",
+     "next": "A1 with you · V1/V2 startable"},
+    {"name": "Scintillation", "lane": "B", "status": "active", "status_class": "now",
+     "next": "recipe parity → CHIME Δν_d"},
+    {"name": "Energies", "lane": "V3", "status": "waiting", "status_class": "blocked",
+     "next": "after P0 + V1"},
+    {"name": "Synthesis", "lane": "D·E·F1", "status": "blocked", "status_class": "blocked",
+     "next": ""},
+    {"name": "Mechanics", "lane": "P0·F·G", "status": "startable", "status_class": "ready",
+     "next": "P0 · F3 audit · F6 authors"}
+  ]
+}

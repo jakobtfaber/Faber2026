@@ -35,11 +35,14 @@ We present twelve fast radio bursts co-detected by CHIME/FRB
 ($0.4$--$0.8$\,GHz) and DSA-110 ($\sim$1.4\,GHz) between February 2022 and
 February 2024. All twelve pass timing and positional association tests, with
 chance-coincidence probabilities $P_{\rm cc}<10^{-6}$; the eight bursts with
-independently constrained CHIME-side dispersion measures also pass the
-CHIME--DSA dispersion-measure agreement test. The
+pre-specified DM-conditioned association tests pass those tests, while new
+phase-coherence measurements constrain both CHIME/FRB and DSA-110 DMs for all
+twelve events. The two bands agree to within
+$0.12\,\mathrm{pc\,cm^{-3}}$; we adopt the sharper CHIME/FRB measurement for
+each burst and retain DSA-110 as an independent cross-check. The
 $\sim$1\,GHz frequency baseline between the two facilities breaks the
 degeneracy between scattering time and its frequency scaling, which limits any
-single-band measurement. Because the pulse-broadening function shape and the
+single-band measurement. Because the pulse-broadening function shape and
 scaling index $\alpha$ both descend from the same turbulence spectrum, we
 co-model them through the spectral index $\beta$ of the electron-density
 fluctuation spectrum, rather than fitting a fixed pulse-broadening shape with
@@ -56,7 +59,17 @@ $\approx100$--$560\,\mathrm{pc\,cm^{-3}}$ across the profile choice and
 cluster-parameter systematics); the confirmed foreground galaxies on the
 remaining sightlines sit in the outer circumgalactic medium and contribute
 individually small columns.
-% [SLOT: dispersion-measure budget decomposition and host residuals.]
+A per-sightline dispersion-measure budget over that census finds the
+intervening column concentrated on the single cluster-crossing sightline,
+with the remaining confirmed systems contributing
+$\lesssim85\,\mathrm{pc\,cm^{-3}}$ each; the forward-modeled host
+contributions are broad and asymmetric (posterior medians spanning
+$\approx-10$ to $200\,\mathrm{pc\,cm^{-3}}$), every redshift-known sightline
+is consistent with the host supplying a minority of the extragalactic column,
+and the
+negative mean-subtracted residuals of the two highest-redshift sightlines
+are consistent with sightline-to-sightline scatter about the Macquart
+relation rather than an unphysical host term.
 % [SLOT: scintillation constraints and screen attribution.]
 % [SLOT: band-restricted burst energies.]
 % [SLOT: one-sentence physical conclusion tying scattering attribution to the
@@ -92,13 +105,18 @@ The dynamic spectra, fit products, and foreground-census tables supporting
 this work will be made available upon publication. The reduction and fitting
 pipeline is publicly available at
 \url{https://github.com/jakobtfaber/dsa110-FLITS}; the accepted version of
-this manuscript corresponds to a tagged release of that repository.
+this manuscript corresponds to a tagged release of that repository. The
+manuscript source repository includes the adopted per-burst DM catalog, the
+full CHIME/FRB and DSA-110 fit results, per-event diagnostic figures, injection
+tests, input hashes, and an implementation snapshot under
+\texttt{analysis/dm-joint-phase-v2/}.
 
 \facilities{CHIME, OVRO:DSA-110}
 
 \software{\texttt{astropy} \citep{astropy2013, astropy2018, astropy2022},
-\texttt{dynesty} \citep{Speagle2020}, \texttt{numpy}, \texttt{scipy},
-\texttt{matplotlib}, \texttt{pygedm} \citep{Price2021} (NE2001/YMW16),
+\texttt{dynesty} \citep{Speagle2020}, \texttt{numpy} \citep{Harris2020numpy},
+\texttt{scipy} \citep{Virtanen2020scipy},
+\texttt{matplotlib} \citep{Hunter2007}, \texttt{pygedm} \citep{Price2021} (NE2001/YMW16),
 \texttt{mwprop} \citep{Ocker2026} (NE2025), and the open-source co-detection
 reduction and fitting pipeline
 (\url{https://github.com/jakobtfaber/dsa110-FLITS}).
