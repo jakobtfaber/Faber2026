@@ -167,10 +167,19 @@ FRB 20240229A & $0.287$ & $198^{+59}_{-76}$  & $0.01$ \\
 \section{DSA-110 scintillation ACF diagnostics}
 \label{app:dsa-scint-acf}
 
-The sample-wide diagnostics generated before the current calibration and
-fit-validation gates remain withheld. Figure~\ref{fig:oran-dsa-scint-qualified}
-shows the one DSA-110 sub-band measurement that has cleared the frozen
+This appendix collects the per-burst DSA-110 scintillation diagnostics behind
+Figure~\ref{fig:dsa_scint_gamma}. The upper-left panel fits only the narrow
+$\gamma_1$ component track and overlays the prediction derived from the
+accepted DM-locked pulse-broadening fit; broader selected components are
+separated below and excluded from the scaling fit. The right-hand panels show
+the symmetric-lag sub-band ACF data with their uncertainties and fitted total
+Lorentzian models. These sample-wide panels are fit diagnostics; only the Oran
+low-frequency sub-band has additionally cleared the frozen injection-calibrated
 qualification battery.
+
+\clearpage
+\input{sections/dsa_scint_acf.tex}
+\clearpage
 
 \begin{figure*}
     \centering
@@ -198,10 +207,14 @@ qualification battery.
 \label{app:jointmodel-pairs}
 
 Figure~\ref{fig:codetection-triptych-zach} introduces the representative
-data/model/residual morphology audit in the main text. The remaining eleven
-per-burst panels were generated from fits that precede the current validation
-gates and are withheld from this version of the manuscript. They will be
-restored here only after the joint-fit campaign has been revalidated and the
-panels have been regenerated from the accepted artifacts.
+data/model/residual morphology audit in the main text. The following eleven
+panels provide the complete retained DM-locked joint-model roster, repeating
+the representative event for a self-contained audit sequence. Their captions
+state whether the fit is physically accepted or retained only to expose
+residual structure. FRB~20240203A is omitted here because all attempted models
+fail the CHIME residual gate; its correctly dedispersed observations remain in
+Figure~\ref{fig:codetection-data-grid}.
+
+\input{sections/jointmodel_pairs.tex}
 
 \FloatBarrier

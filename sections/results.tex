@@ -31,7 +31,7 @@ twelve pairs as genuine co-detections in what follows.
 \begin{figure*}[t]
     \centering
     \includegraphics[width=\textwidth]{figures/association_summary.pdf}
-    \caption{Summary of the three association diagnostics for the twelve
+    \caption{Summary of the four association diagnostics for the twelve
     co-detections, ordered by arrival epoch. (a) The measured offset
     $\Delta t_{400}\equiv t_{\rm CHIME}-t_{\rm DSA}$ at a common 400-MHz
     reference (circles), compared with the predicted geometric offset
@@ -42,8 +42,14 @@ twelve pairs as genuine co-detections in what follows.
     range. The horizontal zero line separates negative (CHIME-first) from
     positive (DSA-first) measured offsets. (b) Angular
     separation divided by the adopted CHIME localization
-    radius; the dashed line is the positional-consistency boundary. (c)
-    Conservative chance-coincidence probability. Filled blue markers denote the
+    radius; the dashed line is the positional-consistency boundary. (c) The
+    independently fitted CHIME-minus-DSA phase-coherence DM difference. Error
+    bars combine the two band uncertainties and, where required by the
+    validated random-effects comparison, the measured between-band scatter;
+    the dashed line denotes exact agreement. (d) Conservative
+    chance-coincidence probability, recomputed at the adopted CHIME-primary DM
+    for the eight events whose original statistic included a DM term. Filled
+    blue markers denote the
     eight bursts whose pre-specified association statistic included the
     CHIME--DSA DM term; open orange markers are the four conservatively retained
     position-and-time-only association calculations, for which $f_{\rm DM}=1$.
@@ -148,8 +154,8 @@ carrying no confirmed within-aperture system are limited by survey depth
 \subsection{Scintillation and screen attribution}
 \label{sec:results-scintillation}
 
-We report here the validation status of the DSA-band
-diffractive-scintillation products together with the outcome of the CHIME-band
+We report here the revalidated DSA-band diffractive-scintillation products
+together with the outcome of the CHIME-band
 scintillation campaign; the scattering fits that enter any
 $\tau\,\Delta\nu_d$ screen product and the resulting one- versus two-screen
 attribution are deferred to Section~\ref{sec:disc-screen-attribution} once
@@ -170,11 +176,27 @@ described in Section~\ref{sec:methods}; components that fail the bandwidth,
 modulation, or fractional-uncertainty quality flags are retained in the
 component tables but excluded from the summary measurements.
 
-The previous sample-wide DSA-band component catalog was produced before the
-current calibration and fit-validation gates were established and remains
-withheld. A targeted frozen qualification of the strongest candidate does,
-however, clear those gates. For the low-frequency DSA-110 sub-band of
-FRB~20220506D, centered at $1328.24\,$MHz, we measure
+Across the twelve co-detections, the regenerated fit diagnostics contain at
+least one unflagged DSA-band decorrelation-bandwidth measurement per burst, for
+a total of 41 clean Lorentzian
+components across the sample. Individual clean components span
+$0.129$--$23.4$\,MHz across the $1.28$--$1.53$\,GHz DSA band. The upper-left
+panel of each per-burst diagnostic (Appendix~\ref{app:dsa-scint-acf}) fits a
+power law only to the narrow $\gamma_1$ component track; broader selected
+components are shown separately below and excluded from that scaling fit. For
+the nine bursts with at least two narrow-component frequencies, the fitted
+within-band slope is retained as a descriptive interpolation, not a physical
+turbulence-index measurement: the DSA-only frequency lever arm is too short,
+and no CHIME-band decorrelation-bandwidth anchor survives the artifact controls
+below. Each diagnostic also shows the bandwidth predicted from the accepted
+DM-locked pulse-broadening fit through
+$\Delta\nu_d=C_1/(2\pi\tau)$ with $C_1=1.16$; the comparison is used only after
+the pulse-broadening fit clears its independent residual gates.
+
+The clean-component label is a fit-quality classification, not by itself a
+certified astrophysical measurement. A targeted frozen qualification of the
+strongest candidate clears the full calibration battery. For the low-frequency
+DSA-110 sub-band of FRB~20220506D, centered at $1328.24\,$MHz, we measure
 \begin{equation}
     \gamma = 0.446\ \mathrm{MHz}, \qquad
     68\%\ \mathrm{CI} = [0.196,\,0.685]\ \mathrm{MHz}.
@@ -187,8 +209,22 @@ monotonic response calibration, and a resolved-interval requirement. It is the
 only presently certified DSA-band scintillation measurement in the sample and,
 as a single sub-band point, does not determine a frequency-scaling index.
 
-% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W5), gate
-% B5+V1 scintillation+A1. Keep it out of the compiled manuscript until then.
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/dsa_lorentzian_summary.pdf}
+    \caption{Revalidated DSA-110 diffractive decorrelation bandwidths for the
+    twelve co-detections. Each panel shows the clean selected Lorentzian
+    components against DSA sub-band center frequency on a logarithmic
+    bandwidth axis; error bars are the $1\sigma$ fit uncertainties. Components
+    carrying quality flags are omitted from this summary but retained in the
+    machine-readable component catalog. The dashed gray line is a
+    $\gamma\propto\nu^4$ visual guide anchored independently in each panel and
+    is not a fitted sample-wide law. The publication-format per-burst
+    diagnostics in Appendix~\ref{app:dsa-scint-acf} separate the narrow
+    $\gamma_1$ scaling track from broader components and show the underlying
+    symmetric-lag ACF data, errors, and fitted model.}
+    \label{fig:dsa_scint_gamma}
+\end{figure*}
 
 \paragraph{CHIME-band campaign.} We attempted the same decorrelation-bandwidth
 measurement on the up-channelized CHIME/FRB baseband products of all twelve
@@ -289,11 +325,13 @@ no certified $\Delta\nu_d$ and no scaling-index anchor to the screen analysis.
 The component-multiplicity audit exposes limitations of the joint-fit
 morphology independent of the turbulence-parameter values themselves.
 Figure~\ref{fig:codetection-triptych-zach} provides the representative
-main-text audit. The remaining per-burst panels were generated from fits that
-precede the current validation gates and are therefore withheld from this
-version of the manuscript. We use the retained representative figure only to
-illustrate the residual-morphology check; we do not quote fitted scattering or
-turbulence parameters from it.
+main-text audit, and Appendix~\ref{app:jointmodel-pairs} shows the ten other
+DM-locked model audits. Seven fits pass both the posterior-predictive and visual
+residual checks. Four displayed models---FRBs~20220207C, 20221203A, 20230913A,
+and 20240229A---remain morphology-only or rejected because coherent residual
+structure survives the best tested component count; FRB~20240203A has no
+retained joint-model panel. We therefore show all usable audit products but
+promote scattering predictions only from the seven visually accepted fits.
 
 \FloatBarrier
 \subsection{Band-restricted burst energies}
