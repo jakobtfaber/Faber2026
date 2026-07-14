@@ -21,4 +21,5 @@ clean:
 test-science:
 	$(UV) run --project pipeline --frozen python -m pytest -q -ra \
 		--strict-config --strict-markers tests
+	python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh
