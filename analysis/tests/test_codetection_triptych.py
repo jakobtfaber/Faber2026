@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import csv
+import json
 import sys
 from pathlib import Path
 
@@ -229,4 +231,37 @@ def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
 def test_manifest_yaml_parses_flags():
     rows = load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
     flagged = {r["nick"] for r in rows if r.get("flag") and r["nick"] != "chromatica"}
-    assert flagged == {"whitney", "wilhelm", "hamilton"}
+    assert flagged == {"zach", "wilhelm", "hamilton", "casey"}
+
+
+def test_manifest_fit_artifacts_use_the_adopted_dm_in_both_bands():
+    with (ROOT / "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv").open(
+        newline=""
+    ) as handle:
+        catalog = {row["nick"].lower(): float(row["adopted_dm"]) for row in csv.DictReader(handle)}
+    with (
+        ROOT
+        / "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv"
+    ).open(newline="") as handle:
+        campaign = {row["burst"].lower(): row for row in csv.DictReader(handle)}
+
+    for row in load_manifest(ROOT / "scripts/jointmodel_triptych_manifest.yaml"):
+        if not row["npz"]:
+            continue
+        fit = json.loads(triptych.fit_json_path(ROOT / row["npz"]).read_text())
+        adopted = catalog[row["nick"].lower()]
+        campaign_row = campaign[row["nick"].lower()]
+        assert float(campaign_row["adopted_dm"]) == pytest.approx(adopted, abs=5e-7)
+        fixed = fit["fixed_parameters"]
+        assert fixed["delta_dm_C"] == pytest.approx(
+            adopted - float(campaign_row["product_dm_C"]), abs=5e-7
+        )
+        assert fixed["delta_dm_D"] == pytest.approx(
+            adopted - float(campaign_row["product_dm_D"]), abs=5e-7
+        )
+        assert fixed["delta_dm_C"] == pytest.approx(
+            fit["percentiles"]["delta_dm_C"]["median"], abs=5e-7
+        )
+        assert fixed["delta_dm_D"] == pytest.approx(
+            fit["percentiles"]["delta_dm_D"]["median"], abs=5e-7
+        )

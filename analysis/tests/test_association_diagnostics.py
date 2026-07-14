@@ -4,7 +4,11 @@ from pathlib import Path
 
 import pytest
 
-from scripts.association_diagnostics import reported_chance_probability
+from scripts.association_diagnostics import (
+    class_aware_chance_probability,
+    reported_chance_probability,
+)
+from scripts.plot_association_summary import load_rows
 
 
 def test_reported_probability_validates_class_aware_provenance():
@@ -29,6 +33,34 @@ def test_reported_probability_rejects_legacy_or_misclassified_rows():
         reported_chance_probability(
             {"chance_coincidence_P": 5e-9, "dm_agreement": {"consistent": None}}
         )
+
+
+def test_recomputed_probability_preserves_pre_specified_association_class():
+    inputs = {
+        "rate_per_day": 1000.0,
+        "omega_win_deg2": 0.7853981633974483,
+        "dt_s": 1.0,
+        "ddm": 5.0,
+    }
+    constrained = {"dm_agreement": {"consistent": True}}
+    position_time = {"dm_agreement": {"consistent": None}}
+    assert class_aware_chance_probability(
+        constrained, dm=411.435717, inputs=inputs
+    ) < 1e-8
+    assert class_aware_chance_probability(
+        position_time, dm=411.435717, inputs=inputs
+    ) == pytest.approx(4.407079754e-7)
+
+
+def test_figure_five_uses_verified_dms_without_reclassifying_associations():
+    rows = load_rows()
+    assert len(rows) == 12
+    assert sum(row["dm_constrained"] for row in rows) == 8
+    assert max(abs(row["timing_z"]) for row in rows) < 3.0
+    assert max(row["pcc"] for row in rows) == pytest.approx(4.407079754e-7)
+    isha = next(row for row in rows if row["name"] == "isha")
+    assert isha["dm_difference"] == pytest.approx(-0.116990)
+    assert isha["dm_difference_sigma"] == pytest.approx(0.09734831)
     with pytest.raises(ValueError, match="must use f_DM=1"):
         reported_chance_probability(
             {
