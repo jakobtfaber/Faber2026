@@ -1,17 +1,18 @@
 {
-  "updated": "2026-07-13T21:55-0700",
+  "updated": "2026-07-14T00:15-0700",
   "needs_you": [
-    {"h": "Re-land dropped pipeline lane?", "d": "fork rewrite: pin 0e0f58b drops scint_analysis + DM-campaign trees (~221 files) the old pin carried · cherry-pick onto rewritten main or accept · tables unaffected"},
-    {"h": "Calibrate the A1 trigger", "d": "two-screen escalation · open since 07-06"},
-    {"h": "Pick first trust-ladder rung", "d": "P0 recommended"}
+    {"h": "Re-land dropped pipeline lane?", "d": "agent assessment 07-14: NOT deprecated — A1 + B-lane depend on scint_analysis; drop was collateral of the fork rewrite · recommend cherry-pick onto rewritten main · confirm to execute"},
+    {"h": "Review P0 provenance PR", "d": "FLITS PR 170: frozen census + adjudication package + fit-generation inventory + budget parity · suite 187 green"},
+    {"h": "Sign off A1 ΔlnZ operating point", "d": "campaign 36/68 cells on h17; verdict wiring + tests done · one-figure-one-table packet lands when campaign finishes"}
   ],
   "now": [
+    {"h": "V·P0 provenance freeze", "d": "P0.2–P0.4 implemented; PR 170 awaiting review", "who": "claude"},
+    {"h": "A1 calibration campaign", "d": "h17, 36/68 cells (second joblib wave)", "who": "h17"},
     {"h": "Unified scintillation figure", "d": "PR 159 merged; CHIME instrumental-ACF correction next", "who": "codex"},
-    {"h": "Review verified DM PR", "d": "PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods", "who": "you"},
-    {"h": "A1 design discussion", "who": "you + agents"}
+    {"h": "Review verified DM PR", "d": "PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods", "who": "you"}
   ],
   "next": [
-    {"h": "V·P0 provenance freeze", "d": "pins every data input; opens the fit ladder"},
+    {"h": "A1 sign-off packet", "d": "harvest campaign → report-a1-trigger-calibration.md"},
     {"h": "F3 consistency audit", "d": "manuscript, runnable now"},
     {"h": "B1–B3 scintillation prep"}
   ],
@@ -28,7 +29,7 @@
      "next": "after P0 + V1"},
     {"name": "Synthesis", "lane": "D·E·F1", "status": "blocked", "status_class": "blocked",
      "next": ""},
-    {"name": "Mechanics", "lane": "P0·F·G", "status": "startable", "status_class": "ready",
-     "next": "P0 · F3 audit · F6 authors"}
+    {"name": "Mechanics", "lane": "P0·F·G", "status": "active", "status_class": "now",
+     "next": "P0 PR 170 in review · F3 audit · F6 authors"}
   ]
 }
