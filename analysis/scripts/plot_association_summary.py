@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 """Generate the manuscript association-summary figure.
 
-The three panels aggregate the same diagnostics shown burst-by-burst in the
-appendix cards: timing consistency, positional consistency, and conservative
-chance-coincidence probability.  Run from the repository root with
+The four panels aggregate timing consistency, positional consistency, the new
+phase-coherence DM comparison, and conservative chance-coincidence probability.
+Run from the repository root with
 ``python scripts/plot_association_summary.py``.
 """
 
 from __future__ import annotations
 
+import csv
 import json
 import math
 import os
@@ -22,7 +23,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from association_diagnostics import reported_chance_probability
+from association_diagnostics import class_aware_chance_probability  # noqa: E402
 
 PIPELINE = ROOT / "pipeline"
 PIPELINE_SOURCE = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", PIPELINE))
@@ -30,6 +31,7 @@ REGISTRY = PIPELINE_SOURCE / "configs" / "bursts.yaml"
 TOA_RESULTS = PIPELINE_SOURCE / "crossmatching" / "toa_crossmatch_results.json"
 ASSOCIATION_REPORT = PIPELINE_SOURCE / "crossmatching" / "association_report.json"
 OUT = ROOT / "figures" / "association_summary.pdf"
+DM_CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 
 CLOCK_MS = 1.0
 DM_COLOR = "#0072B2"  # Okabe--Ito blue
@@ -88,15 +90,26 @@ def load_rows() -> list[dict]:
     toa = {name.lower(): row for name, row in json.loads(TOA_RESULTS.read_text()).items()}
     report = json.loads(ASSOCIATION_REPORT.read_text())
     assoc = {row["name"].lower(): row for row in report["bursts"]}
+    with DM_CATALOG.open(newline="") as fh:
+        dm_rows = {row["nick"].lower(): row for row in csv.DictReader(fh)}
+    if set(dm_rows) != set(registry):
+        raise ValueError("burst registry and verified-DM catalog rosters differ")
+
     rows = []
     for name, rec in registry.items():
         key = name.lower()
         trow, arow = toa[key], assoc[key]
+        dm_row = dm_rows[key]
         residual = float(trow["measured_offset_ms"] - trow["geometric_delay_ms"])
         sigma = math.sqrt(
             float(trow.get("combined_dm_uncertainty_ms") or 0.0) ** 2
             + float(trow.get("fwhm_ms") or 0.0) ** 2
             + CLOCK_MS**2
+        )
+        dm_sigma = math.sqrt(
+            float(dm_row["chime_sigma"]) ** 2
+            + float(dm_row["dsa_sigma"]) ** 2
+            + float(dm_row["between_band_sigma"]) ** 2
         )
         rows.append(
             {
@@ -109,8 +122,14 @@ def load_rows() -> list[dict]:
                 "timing_z": residual / sigma,
                 "position_ratio": float(arow["position"]["separation_deg"])
                 / float(arow["position"]["radius_deg"]),
-                "pcc": reported_chance_probability(arow),
+                "pcc": class_aware_chance_probability(
+                    arow,
+                    dm=float(dm_row["adopted_dm"]),
+                    inputs=report["inputs"],
+                ),
                 "dm_constrained": arow["dm_agreement"]["consistent"] is not None,
+                "dm_difference": float(dm_row["chime_minus_dsa"]),
+                "dm_difference_sigma": dm_sigma,
             }
         )
     return sorted(rows, key=lambda row: row["mjd"])
@@ -143,13 +162,13 @@ def render(rows: list[dict], output: Path = OUT) -> None:
         )
 
     fig, axes = plt.subplots(
-        3,
+        4,
         1,
-        figsize=(7.1, 4.8),
+        figsize=(7.1, 6.1),
         sharex=True,
-        gridspec_kw={"height_ratios": [1.0, 1.0, 1.08]},
+        gridspec_kw={"height_ratios": [1.0, 0.9, 0.9, 1.0]},
     )
-    fig.subplots_adjust(left=0.095, right=0.99, top=0.985, bottom=0.20, hspace=0.12)
+    fig.subplots_adjust(left=0.095, right=0.99, top=0.99, bottom=0.16, hspace=0.13)
 
     measured = np.array([row["measured_offset_ms"] for row in rows])
     geometric = np.array([row["geometric_delay_ms"] for row in rows])
@@ -226,16 +245,35 @@ def render(rows: list[dict], output: Path = OUT) -> None:
     ax.set_ylabel(r"$\theta/\theta_{\rm match}$")
     ax.text(0.01, 0.88, r"(b)", transform=ax.transAxes)
 
-    pcc = np.array([row["pcc"] for row in rows])
+    dm_difference = np.array([row["dm_difference"] for row in rows])
+    dm_difference_sigma = np.array([row["dm_difference_sigma"] for row in rows])
     ax = axes[2]
+    ax.axhline(0, color="0.35", ls="--", lw=0.8)
+    ax.errorbar(
+        x,
+        dm_difference,
+        yerr=dm_difference_sigma,
+        fmt="none",
+        ecolor="0.55",
+        elinewidth=0.8,
+        capsize=1.8,
+        zorder=2,
+    )
+    plot_measured(ax, dm_difference)
+    ax.set_ylim(-0.16, 0.12)
+    ax.set_ylabel(r"$\mathrm{DM}_{\rm C}-\mathrm{DM}_{\rm D}$" + "\n" + r"($\mathrm{pc\,cm^{-3}}$)")
+    ax.text(0.01, 0.86, r"(c)", transform=ax.transAxes)
+
+    pcc = np.array([row["pcc"] for row in rows])
+    ax = axes[3]
     ax.axhline(1e-6, color="0.35", ls="--", lw=0.8)
     plot_measured(ax, pcc)
     ax.set_yscale("log")
     ax.set_ylim(1e-9, 1.25e-6)
     ax.set_ylabel(r"$P_{\rm cc}$")
-    ax.text(0.01, 0.88, r"(c)", transform=ax.transAxes)
+    ax.text(0.01, 0.88, r"(d)", transform=ax.transAxes)
     ax.scatter([], [], color=DM_COLOR, edgecolor="white", linewidth=0.5,
-               s=28, label="DM constrained (8)")
+               s=28, label="pre-specified DM term (8)")
     ax.scatter(
         [], [], facecolor="white", edgecolor=POSITION_TIME_COLOR,
         linewidth=1.2, s=28, label="position and timing only (4)",
