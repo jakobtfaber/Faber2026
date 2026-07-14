@@ -7,14 +7,14 @@ Do not add narrative history here.
 | Lane | Canonical repository/branch | Status | Next gate | Evidence | Worktree |
 |---|---|---|---|---|---|
 | Figure revalidation & replacement | `jakobtfaber/Faber2026` — new batch branches off `main` only | decision pending | Owner picks the Figure 1 product (`fig1-gallery` vs triptych design) by stable candidate ID | Merged PR #35 (gate); open draft PR #36 (rejected packet, never merge); open PR #37 (review handoff) | `Faber2026-figure-candidates` (clean, review-only) |
-| P0 provenance freeze | `jakobtfaber/dsa110-FLITS` `reval/p0-provenance` | active — writer/CI in progress | Existing writer finishes CI and explicitly releases the lane; then independent validation and merge adjudication | FLITS PR #170 at `3673457` (2026-07-14 14:27 PDT); checks in progress at last inspection | `flits-p0-provenance-repair` (clean at pushed head; do not touch until released) |
-| A1 trigger calibration | `jakobtfaber/dsa110-FLITS` `a1/trigger-calibration` | active (parked) | Confirm ancestry against current FLITS `main`; resume after P0 closure; merge only at scientific completion gate | Consolidation handoff Phase 4 | none expected |
-| Branch/worktree consolidation | `jakobtfaber/Faber2026` `docs/consolidation-active-lanes-20260714` | active | Land focused docs PR; then prune only lanes with recorded equivalence proof | `docs/rse/specs/handoff-2026-07-14-branch-consolidation-and-next-actions.md` | `Faber2026-consolidation-docs-codex` |
+| A1 trigger calibration | `jakobtfaber/dsa110-FLITS` `a1/trigger-calibration` | active | Complete the injection campaign, diagnostic controls, calibration report, and owner operating-point sign-off; merge only at that scientific gate | Branch `1e58c96`, based on post-P0 `main`; 20 focused + 235 full tests pass | `flits-a1-trigger-calibration` |
+| Branch/worktree consolidation | `jakobtfaber/Faber2026` root checkout | blocked | Live Claude process releases the root; then verify the published overlay, switch to current `main`, and retire `ms/validated-fit-figure-refresh-20260714` | Merged PR #39; integrated-lane range-diff proof in the Phase 1 closure handoff | root checkout (live; do not switch or clean) |
 
 ## Archive
 
 | Lane | Closure evidence |
 |---|---|
+| P0 provenance freeze | FLITS PR #170 merged (`82fc7ec`); tree-identical to independently validated post-`788b819` integration; 11 focused, 230 FLITS, and 54 parent tests passed |
 | FLITS figure-branch integration (pin chain) | FLITS PR #173 merged (`788b819`); Faber2026 pin-only PR #38 merged (`251d634`); pin verified reachable from FLITS `main` |
 | Figure approval gate implementation | Merged PR #35 (`af06269`, v4 lane); v1–v3 worktrees are preserved dirty experiments, not authoritative |
 | July replacement figure refresh | Merged PR #34; figures subsequently rejected by owner and withheld by PR #35 |
