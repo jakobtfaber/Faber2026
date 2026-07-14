@@ -37,17 +37,33 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 
 - [ ] A1 **[decision]** Two-screen treatment — **working draft, open**
       (adopted 2026-07-06 after adversarial iteration — Codex GPT-5.5
-      review, amended text below — then re-opened the same night: owner
-      keeps all design decisions unlocked; every element revisable):
+      review — then re-opened the same night: owner keeps all design
+      decisions unlocked; every element revisable. **Trigger revised
+      2026-07-13, owner direction:** escalation is now evidence-based
+      model comparison, not hand-set ratio thresholds — amended text
+      below):
       > Adopt A1 as a modular scintillation-to-scattering constraint layer,
       > not a hard two-screen fit by default. Scintillation products enter
       > as frozen posterior/limit products with quality flags, not point
       > estimates. The τΔν statistic is used probabilistically to count
       > screens and derive τ_near/τ_dom, marginalized over geometry
       > constants and censoring. A second broadening component is not
-      > fitted unless the re-validated posterior makes it temporally
-      > resolvable: Pr(τ_near/τ_dom > 0.1) > 0.1, median ratio > 0.03,
-      > same-screen ambiguity, or predicted-scale PPC residuals. For
+      > fitted unless the **escalation trigger** fires, defined as either:
+      > (i) nested-sampling model comparison on the frequency ACF prefers a
+      > two-component (stacked-Lorentzian) model over a single Lorentzian —
+      > with the noise floor and zero-lag self-noise spike included in both
+      > models, and a finite-scintle (correlated-lag) covariance or an
+      > equivalent dynamic-spectrum-domain likelihood, so the extra
+      > component cannot feed on ACF sample variance — at a ΔlnZ threshold
+      > set by an injection-calibrated false-escalation rate on
+      > single-screen simulated dynamic spectra (V1 injection-recovery
+      > machinery); or (ii) posterior-predictive residuals in the burst
+      > profile at the predicted second-screen timescale. A two-component
+      > ACF detection escalates; a non-detection does not establish a
+      > single screen (a host-side screen with Δν_d below channel
+      > resolution is censored, not absent). The former τ_near/τ_dom
+      > thresholds (Pr > 0.1 at ratio 0.1, median > 0.03) are retired as
+      > triggers and demoted to prior-odds inputs. For
       > extended host media, quenching constrains an effective
       > source-proximate scattering-depth distribution, not a point screen
       > distance. Scintillation geometry informs prior odds for thin vs
@@ -56,7 +72,8 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       > is deferred unless modular products conflict on a high-S/N
       > sightline.
       A2/A3 design work may proceed against the draft, tracking its
-      revisions.
+      revisions. Remaining owner call: sign off the revised trigger once
+      the injection calibration reports its ΔlnZ operating point.
 - [ ] A2 **[FLITS]** Extended-medium (Williamson uniform-LOS) PBF kernel,
       β-coupled, per band (ADR-0007 un-deferred by the rail evidence: 10/12
       posteriors hit its re-open trigger — the nine tabled railed rows plus
