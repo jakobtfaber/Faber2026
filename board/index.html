@@ -267,15 +267,15 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-13T00:15-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-13T03:30-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
-<li><b>Sign off revised A1 trigger</b><small>now evidence-based (stacked-Lorentzian ΔlnZ, injection-calibrated) per your 07-13 direction · final sign-off once calibration reports its operating point</small></li>
+<li><b>Calibrate the A1 trigger</b><small>two-screen escalation · open since 07-06</small></li>
 <li><b>Pick first trust-ladder rung</b><small>P0 recommended</small></li>
 </ul></div>
 <div class="own-col oc-now"><h4>In flight</h4><ul>
 <li><b>Unified scintillation figure</b> <span class="who">codex</span><small>PR 159 merged; CHIME instrumental-ACF correction next</small></li>
-<li><b>DM-host posterior figure</b> <span class="who">claude</span><small>restyle branch open</small></li>
+<li><b>Review verified DM PR</b> <span class="who">you</span><small>PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods</small></li>
 <li><b>A1 design discussion</b> <span class="who">you + agents</span></li>
 </ul></div>
 <div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
@@ -285,8 +285,8 @@
 </ul></div>
 </div>
 <div class="own-comps">
-<div class="comp"><span class="cnm"><b>Sample &amp; association</b><span class="cid">V6</span><span class="chip c-good">validated</span></span><span class="cnx">figure + P_cc prose landing</span></div>
-<div class="comp"><span class="cnm"><b>Budget &amp; census</b><span class="cid">V4·V5</span><span class="chip c-good">validated</span></span><span class="cnx">prose rewrite after D</span></div>
+<div class="comp"><span class="cnm"><b>Sample &amp; association</b><span class="cid">V6</span><span class="chip c-good">validated</span></span><span class="cnx">review PR 17</span></div>
+<div class="comp"><span class="cnm"><b>Budget &amp; census</b><span class="cid">V4·V5</span><span class="chip c-good">validated</span></span><span class="cnx">DM adopted; scattering after D</span></div>
 <div class="comp"><span class="cnm"><b>Scattering</b><span class="cid">V1·A·C</span><span class="chip c-pend">method open</span></span><span class="cnx">A1 with you · V1/V2 startable</span></div>
 <div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">active</span></span><span class="cnx">recipe parity → CHIME Δν_d</span></div>
 <div class="comp"><span class="cnm"><b>Energies</b><span class="cid">V3</span><span class="chip c-blocked">waiting</span></span><span class="cnx">after P0 + V1</span></div>
@@ -314,7 +314,7 @@
       <div class="stage st-done"><i></i><b>method</b><small>shared DSA-DM convention</small></div>
       <div class="stage st-done"><i></i><b>measured</b><small>residuals · P_cc</small></div>
       <div class="stage st-done"><i></i><b>validated</b><small>V6 cleared 07-07</small></div>
-      <div class="stage st-half"><i></i><b>written</b><small>summary figure + P_cc prose landing now</small></div>
+      <div class="stage st-now"><i></i><b>written</b><small>verified DM table + methods + Figure 1 in final validation</small></div>
     </div>
   </div>
 
@@ -327,7 +327,7 @@
       <div class="stage st-done"><i></i><b>method</b><small>models verified vs refs</small></div>
       <div class="stage st-half"><i></i><b>measured</b><small>35 systems ✓ · D2 comparison <span class="feed">← scattering</span></small></div>
       <div class="stage st-done"><i></i><b>validated</b><small>V4+V5 cleared 07-07</small></div>
-      <div class="stage st-ready"><i></i><b>written</b><small>predicted side restored; prose rewrite after D</small></div>
+      <div class="stage st-half"><i></i><b>written</b><small>adopted DM propagated; scattering comparison after D</small></div>
     </div>
   </div>
 
@@ -548,7 +548,7 @@
 <div class="lane">
   <div class="lane-head"><span class="id">A</span><span class="nm">Methodology reset — geometry selection replaces the rail taxonomy</span><span class="dep">A1 draft → A2/A3 → C</span></div>
   <ul class="tasks">
-    <li><span class="dot d-now"></span><span class="tid">A1</span><span class="desc">Two-screen treatment — working draft, design open <small>draft (2026-07-06, trigger revised 2026-07-13): scint products enter as a modular constraint layer (frozen posteriors/limits, never point estimates); τ·Δν_d counts screens probabilistically; no fitted 2nd broadening component unless the escalation trigger fires — now evidence-based: nested-sampling ΔlnZ prefers a stacked-Lorentzian ACF over a single Lorentzian (floor + zero-lag spike modeled, finite-scintle covariance, threshold injection-calibrated on single-screen sims), or PPC residual at the predicted 2nd-screen timescale; old τ_near/τ_dom thresholds demoted to prior-odds inputs; ACF non-detection ≠ single screen (censoring). Scint sets prior odds on the kernel family, evidence decides. All elements revisable — discussion live. Calibration plan: docs/rse/specs/plan-a1-trigger-calibration.md (6 phases, FLITS lane)</small></span><span class="st s-now">open — discussing</span></li>
+    <li><span class="dot d-now"></span><span class="tid">A1</span><span class="desc">Two-screen treatment — working draft, design open <small>draft (2026-07-06): scint products enter as a modular constraint layer (frozen posteriors/limits, never point estimates); τ·Δν_d counts screens probabilistically; no fitted 2nd broadening component unless the escalation trigger fires (Pr(τ_near/τ_dom&gt;0.1)&gt;0.1, median&gt;0.03, same-screen ambiguity, or PPC residual at the predicted scale); scint sets prior odds on the kernel family, evidence decides. All elements revisable — discussion live</small></span><span class="st s-now">open — discussing</span></li>
     <li><span class="dot d-ready"></span><span class="tid">A2</span><span class="desc">Extended-medium PBF kernel <small>code the Williamson uniform-LOS pulse-broadening function in FLITS as the alternative to thin-screen, β-coupled per ADR-0007 — needed because 10/12 posteriors railed at β=4 (thin-screen closure rejected)</small></span><span class="st s-ready">design open</span></li>
     <li><span class="dot d-ready"></span><span class="tid">A3</span><span class="desc">Per-sightline geometry selection <small>thin screen vs extended medium chosen per burst by evidence/model comparison, with A1's scint prior odds; interior rows (freya, phineas) re-adjudicated under the same machinery</small></span><span class="st s-ready">design open</span></li>
     <li><span class="dot d-ready"></span><span class="tid">A4</span><span class="desc">ADR amendment <small>write the FLITS ADR recording: rail classes are campaign QA only, α=4-limit quoting retired, A1 decision text</small></span><span class="st s-ready">startable</span></li>
@@ -628,8 +628,8 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
-<li><span class="jts mono">07-13 17:08</span><span class="jagent">codex-gpt-5.5/chime-scallop-calibration</span><span class="jlane">B</span><span class="jnote s-good">Live reverified dsa110-FLITS PR #167 merged into pin/faber2026 at 5b4bf65; remote target branch points exactly to merge commit.</span></li>
-<li><span class="jts mono">07-13 17:07</span><span class="jagent">watchdog/launchd</span><span class="jlane">repo</span><span class="jnote s-ready">unattributed activity: 2+ file(s) touched in last 10m (.entire/tmp/pre-prompt-019f59e2-c9f8-7fd0-b954-ff58850b028d.json,.entire/metadata/019f59e2-c9f8-7fd0-b954-ff58850b028d/prompt.txt) while journal stale 349m - active agent must self-report (docs/rse/journal-protocol.md)</span></li>
+<li><span class="jts mono">07-13 21:13</span><span class="jagent">claude-fable-5</span><span class="jlane">fork-rewrite-sync</span><span class="jnote s-pend">DECISION PENDING: pin bump fba48c6 -&gt; 0e0f58b drops ~221 files the canonical pin/faber2026 lane carried (scintillation/scint_analysis 57 files, dispersion/dm_phase_suite + DM-campaign results ~110, chime recovery/baseband analyses ~32; off_log_z/model-aware bandwidth fields absent at 0e0f58b). Tables unaffected. Re-land via cherry-picks onto rewritten main (merge would re-expose bot authors), or accept if h17/dm-campaign relocation supersedes. Old SHAs resolve only via org upstream. Local flits-* scratch worktrees sit on pre-rewrite branches.</span></li>
+<li><span class="jts mono">07-13 21:13</span><span class="jagent">claude-fable-5</span><span class="jlane">fork-rewrite-sync</span><span class="jnote s-good">mbp synced to rewritten FLITS fork: Faber2026 main ff to c5e83d2, submodule URL synced + checked out 0e0f58b, standalone clone reset --hard to 0e0f58b. Verified: table-parity CI green, DEFAULT_OUT_DIR fix present, hazard-5 fallback-import still open (galaxies/foreground/sightline_budget.py:65). REPRODUCE.md pin narrative updated across the rewrite boundary; memory updated (pin-off-main superseded).</span></li>
 <li><span class="jts mono">07-13 11:18</span><span class="jagent">claude-fable-5</span><span class="jlane">scint-campaign</span><span class="jnote s-ready">Uncertainty-aware off-pulse null probe on hamilton+chromatica: FALSIFIES threshold-sensitivity — on-pulse widths sit inside the off-pulse fit population (log-MAD z 0.41 / 0.90), so a spread-aware boundary rejects them MORE decisively. off_dnu_mhz + off_log_z now recorded (non-gating) in the null verdict; dsa110-FLITS#51 merged to pin/faber2026 (dff9c42); spec note corrected. Faber2026 pipeline pin (fba48c6) deliberately NOT bumped — diagnostic-only change, bump when next needed.</span></li>
 <li><span class="jts mono">07-13 11:17</span><span class="jagent">claude-fable</span><span class="jlane">fig1-data-grid</span><span class="jnote s-good">PR #23 merged: Fig.1 panels taller — figure 7.62in, waterfall cell share 3.6-&gt;4.1, hspace 0.20; caption tightened ~4 lines (no content dropped) to keep the float on one page.</span></li>
 <li><span class="jts mono">07-13 09:59</span><span class="jagent">claude-fable-5</span><span class="jlane">scint-campaign</span><span class="jnote s-ready">Figure review detail: 0 accept / 3 suspect / 17 reject. hamilton (ratio 1.72) + chromatica (1.94) fail only the off-pulse null and marginally vs the 2.0 boundary, with the best scintle morphology and agreeing estimators - logged as priority re-analysis candidates in the spec. Rejects visually corroborate every gate verdict incl. both former false positives.</span></li>
