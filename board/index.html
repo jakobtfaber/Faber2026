@@ -267,20 +267,20 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-13T21:55-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-14T00:15-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
-<li><b>Re-land dropped pipeline lane?</b><small>fork rewrite: pin 0e0f58b drops scint_analysis + DM-campaign trees (~221 files) the old pin carried · cherry-pick onto rewritten main or accept · tables unaffected</small></li>
-<li><b>Calibrate the A1 trigger</b><small>two-screen escalation · open since 07-06</small></li>
-<li><b>Pick first trust-ladder rung</b><small>P0 recommended</small></li>
+<li><b>Re-land dropped pipeline lane?</b><small>agent assessment 07-14: NOT deprecated — A1 + B-lane depend on scint_analysis; drop was collateral of the fork rewrite · recommend cherry-pick onto rewritten main · confirm to execute</small></li>
+<li><b>Review P0 provenance PR</b><small>FLITS PR 170: frozen census + adjudication package + fit-generation inventory + budget parity · suite 187 green</small></li>
+<li><b>Sign off A1 ΔlnZ operating point</b><small>campaign 36/68 cells on h17; verdict wiring + tests done · one-figure-one-table packet lands when campaign finishes</small></li>
 </ul></div>
 <div class="own-col oc-now"><h4>In flight</h4><ul>
+<li><b>V·P0 provenance freeze</b> <span class="who">claude</span><small>P0.2–P0.4 implemented; PR 170 awaiting review</small></li>
+<li><b>A1 calibration campaign</b> <span class="who">h17</span><small>h17, 36/68 cells (second joblib wave)</small></li>
 <li><b>Unified scintillation figure</b> <span class="who">codex</span><small>PR 159 merged; CHIME instrumental-ACF correction next</small></li>
-<li><b>Review verified DM PR</b> <span class="who">you</span><small>PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods</small></li>
-<li><b>A1 design discussion</b> <span class="who">you + agents</span></li>
 </ul></div>
 <div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
-<li><b>V·P0 provenance freeze</b><small>pins every data input; opens the fit ladder</small></li>
+<li><b>A1 sign-off packet</b><small>harvest campaign → report-a1-trigger-calibration.md</small></li>
 <li><b>F3 consistency audit</b><small>manuscript, runnable now</small></li>
 <li><b>B1–B3 scintillation prep</b></li>
 </ul></div>
@@ -292,7 +292,7 @@
 <div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">active</span></span><span class="cnx">recipe parity → CHIME Δν_d</span></div>
 <div class="comp"><span class="cnm"><b>Energies</b><span class="cid">V3</span><span class="chip c-blocked">waiting</span></span><span class="cnx">after P0 + V1</span></div>
 <div class="comp"><span class="cnm"><b>Synthesis</b><span class="cid">D·E·F1</span><span class="chip c-blocked">blocked</span></span></div>
-<div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-ready">startable</span></span><span class="cnx">P0 · F3 audit · F6 authors</span></div>
+<div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-now">active</span></span><span class="cnx">P0 PR 170 in review · F3 audit · F6 authors</span></div>
 </div>
 </div>
 <!-- OWNER:END -->
@@ -629,6 +629,10 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
+<li><span class="jts mono">07-14 00:07</span><span class="jagent">claude-fable-5/session-239df2fa</span><span class="jlane">repo</span><span class="jnote s-ready">Re-land assessment: dropped scint/DM lane (~221 files) is NOT deprecated — A1 chain and B-lane depend on scint_analysis; drop was collateral of the fork history rewrite. Recommendation to owner: re-land via cherry-picks onto rewritten main.</span></li>
+<li><span class="jts mono">07-14 00:07</span><span class="jagent">claude-fable-5/session-239df2fa</span><span class="jlane">A1</span><span class="jnote s-now">Calibration campaign on h17 at 36/68 cells (20h elapsed; second joblib wave running). Phase 5 verdict wiring + report figures already on a1/trigger-calibration (e7088906, b1bbcfef); 8/8 trigger tests pass. Sign-off packet blocked on campaign completion.</span></li>
+<li><span class="jts mono">07-14 00:07</span><span class="jagent">claude-fable-5/session-239df2fa</span><span class="jlane">V·P0</span><span class="jnote s-good">P0.2-P0.4 executed on FLITS branch reval/p0-provenance: frozen census byte-verified vs pinned sha256s, adjudication package restored (sha-pinned, import-safe tests), fit_generations.yaml inventory, budget-table parity test. Full suite 187 passed. PR #170 open.</span></li>
+<li><span class="jts mono">07-14 00:03</span><span class="jagent">claude-code</span><span class="jlane">fork-upstream-reconcile</span><span class="jnote s-ready">Verified jakobtfaber/dsa110-FLITS 629-ahead/280-behind banner is SHA-only: fork DAG contains a scrubbed copy of all 280 upstream commits, tree-identical to upstream HEAD c97177c (tree 683d0e7), reconciled via documented -s ours merge 4269124. No content missing; banner can never converge post-rewrite. Options: detach fork via GitHub Support, or document as expected.</span></li>
 <li><span class="jts mono">07-13 23:42</span><span class="jagent">claude-fable-5</span><span class="jlane">iacobus-drain</span><span class="jnote s-good">ACL grant confirmed live: mbp netmap now carries 1 inbound filter rule; from h17: nc 100.121.73.103:22 succeeded, ssh jakob-mbp -&gt; MBP_OK, ssh iacobus (ProxyJump) -&gt; IACOBUS_OK. Handoff fully closed.</span></li>
 <li><span class="jts mono">07-13 23:40</span><span class="jagent">claude-fable-5</span><span class="jlane">iacobus-drain</span><span class="jnote s-good">Drain complete + verified: rclone check --size-only 0 differences, 5437 files matching; remote 244.815 GiB / 5438 objects; 4 old ERROR lines in archive log are June temp-file races (retry succeeded 07-02), none today. Source tree quarantined move-only to ~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713 with PROVENANCE.md. Morphologies untouched. Remaining external: tailnet ACL grant (tag:hpc -&gt; tag:work-laptop tcp:22) in admin console, then h17 ssh jakob-mbp / ssh iacobus confirmation.</span></li>
 <li><span class="jts mono">07-13 23:29</span><span class="jagent">claude-fable-5</span><span class="jlane">iacobus-drain</span><span class="jnote s-now">Handoff executed: mbp sshd/ALF verified fine; root cause of h17-&gt;mbp timeout is the tailnet ACL (empty inbound PacketFilter on jakob-mbp; disco ping passes, all data-plane dropped; ShieldsUp off) - needs admin-console ACL edit, no local fix. Drain proceeding mbp-orchestrated: iacobus rclone gdrive-jakob live (4.49TiB free), metadata sentinel PASS, parallel jobs launched; burst_pickles+burst_npys already 100% from a 2026-06-26 run (ignore-existing skip), archive+rest in flight; watcher armed.</span></li>
@@ -645,10 +649,6 @@
 <li><span class="jts mono">07-13 05:36</span><span class="jagent">claude-fable-5</span><span class="jlane">scint-campaign</span><span class="jnote s-good">TERMINAL STATE: CHIME scint campaign complete and in the manuscript. dsa110-FLITS#50 merged (rescue+parity+gated campaign, reconciled with DM lane), Faber2026 pin bump #21 merged, manuscript PR #22 merged (Table 5 gate outcomes + discussion boundary condition; verifier MERGE-CLEAR after row-by-row prose-vs-JSON check). 0/12 CHIME Dnu_d certified - documented instrumental/data-quality causes; gamma anchor unavailable; DSA band carries screen attribution.</span></li>
 <li><span class="jts mono">07-13 05:29</span><span class="jagent">claude-fable-5</span><span class="jlane">scint-campaign</span><span class="jnote s-now">P4g underway: manuscript PR #22 open (results scintillation subsection + gate-outcome Table 5 + discussion boundary condition; compiles clean, table visually vetted p.22). Verifier prose-vs-data review dispatched; merge on MERGE-CLEAR. Pin bump PR #21 already merged (ce8002d).</span></li>
 <li><span class="jts mono">07-13 05:28</span><span class="jagent">codex-gpt-5.5/chime-scallop-calibration</span><span class="jlane">B</span><span class="jnote s-now">PR #167 review fixes pushed as 70f530b: PNG committed, hash-bound manual review, missing-fit failure path, pytest registration. Local bare suite 634 passed/8 skipped; updated security checks green, Python CI and Claude review pending.</span></li>
-<li><span class="jts mono">07-13 05:24</span><span class="jagent">claude-fable-5</span><span class="jlane">scint-campaign</span><span class="jnote s-now">Two-repo pin unification done: fork PR #168 merged, canonical dsa110/dsa110-FLITS#50 merged (fba48c6, reconciles scint lane with DM lane + model-aware bandwidth fields), Faber2026 pin bump PR #21 opened+merged (ancestor-checked 3435ba0 -&gt; fba48c6). Next: P4g manuscript integration - scintillation section update with campaign table + methods provenance.</span></li>
-<li><span class="jts mono">07-13 05:07</span><span class="jagent">claude-fable-5</span><span class="jlane">scint-campaign</span><span class="jnote s-now">Separate-lane reconciliation: pin/faber2026 had advanced 10 commits (concurrent CHIME recovery/calibration lane: instrumental background correction now a 4th required mitigation; freya voltage-injection validation). Merged into rescue branch (8e0943e), tests 46 pass. Corrected products exist only for freya -&gt; campaign stays honestly uncorrected, provenance gate documents it. PR #168 opened to pin/faber2026 (old #162 died in repo relink). Campaign rerunning on merged tip; verifier clearance pending; then merge + pin bump + manuscript.</span></li>
-<li><span class="jts mono">07-13 05:06</span><span class="jagent">codex-gpt-5.5/chime-scallop-calibration</span><span class="jlane">B</span><span class="jnote s-now">B2 experiment and manual figure review pass; commit a34b95d pushed and PR #167 open against pin/faber2026. Security checks green; Python CI and Claude review still pending, no comments yet.</span></li>
-<li><span class="jts mono">07-13 04:56</span><span class="jagent">claude-fable-5</span><span class="jlane">scint-campaign</span><span class="jnote s-now">Gate blind spots closed (e3803ea): whitney -&gt; modulation_index fail (m=3.53), casey_hi -&gt; subband_support fail (2 subbands). Rerun: 0/12 CHIME bursts certify a Dnu_d measurement; all diagnostic_only with named physical causes. This is the campaign science result: CHIME-side scintillation is instrument/noise-dominated for these products. Verifier confirmation pass dispatched; on OK -&gt; merge PR #162, pin bump, manuscript integration (CHIME as documented non-detections + m where physical, gamma from DSA).</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
