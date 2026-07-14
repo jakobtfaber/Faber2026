@@ -7,6 +7,33 @@ stale report downstream.
 
 from __future__ import annotations
 
+import math
+
+
+def class_aware_chance_probability(
+    burst: dict,
+    *,
+    dm: float,
+    inputs: dict,
+) -> float:
+    """Recompute Pcc at the new DM without changing the pre-specified class."""
+    mu = (
+        float(inputs["rate_per_day"])
+        / (4.0 * math.pi)
+        / 86400.0
+        * (float(inputs["omega_win_deg2"]) / (180.0 / math.pi) ** 2)
+        * (2.0 * float(inputs["dt_s"]))
+    )
+    if burst["dm_agreement"]["consistent"] is not None:
+        dm_median, dm_sigma_ln = 500.0, 0.7
+        z = (math.log(dm) - math.log(dm_median)) / dm_sigma_ln
+        density = math.exp(-0.5 * z * z) / (
+            dm * dm_sigma_ln * math.sqrt(2.0 * math.pi)
+        )
+        mu *= min(1.0, density * 2.0 * float(inputs["ddm"]))
+    return -math.expm1(-mu)
+
+
 def reported_chance_probability(burst: dict) -> float:
     """Return source Pcc after checking its class and applied DM factor."""
     required = {
