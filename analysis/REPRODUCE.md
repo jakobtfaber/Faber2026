@@ -174,17 +174,33 @@ JSON, while `DM_obs` is overlaid from
 `scripts/dm_budget_uncertainty.csv`. Run the root renderer after regenerating
 the host posterior; do not edit `budget_table.tex` directly.
 
-Both are safe to regenerate at the currently pinned submodule (`14e0d1f`);
+Both are safe to regenerate at the currently pinned submodule (`0e0f58b`);
 regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
 untrue — see hazard 1 for what went wrong and why the pin matters. (The pin
 reached `14e0d1f` in three steps: `6c87890 → 334cc74` as Faber2026 #68, then
 `334cc74 → 79eaf7e` as Faber2026 #71, a single commit promoting the `zach`
 C2D4 beta fit, then `79eaf7e → 14e0d1f` as the guards pin-bump PR, a single
 commit promoting the CHIME artifact-control guards (FLITS #156; scintillation
-lane only). Across the whole `6c87890 → 14e0d1f` range no `*_table_data.json`
-and neither table emitter is touched, so the byte-exact regeneration of
-`budget_table.tex` and `foreground_table.tex` is unchanged from the earlier
-verification. `beta_table.tex` is a separate matter — see the note below.)
+lane only). It then advanced to `fba48c6` — `3435ba0 → fba48c6`, Faber2026
+#21 of the relinked repo, 2026-07-13, reconciling the scintillation and DM
+lanes. On 2026-07-13 the submodule was retargeted from the org upstream to
+the personal fork `jakobtfaber/dsa110-FLITS` (`f08c973`) and pinned to the
+fork's rewritten `main` at `0e0f58b` (`c5e83d2`). **`0e0f58b` is NOT a
+descendant of `fba48c6`** — the fork history was rewritten (author scrub +
+force-push), so the `merge-base --is-ancestor` bump check does not apply
+across that boundary, and every pre-rewrite SHA in this document resolves
+only via the org upstream `dsa110/dsa110-FLITS`, not via the fork. A content
+diff `fba48c6 → 0e0f58b` (2026-07-13) touches no `*_table_data.json` and
+neither table emitter, so the byte-exact regeneration of `budget_table.tex`
+and `foreground_table.tex` is unchanged from the earlier verification, and
+the `table-parity` CI job is green at `c5e83d2`. The same diff, however,
+**drops ~221 files** that `fba48c6` carried — `scintillation/scint_analysis`,
+the `dispersion/dm_phase_suite` + DM-campaign results trees, and the
+2026-07-12/13 CHIME recovery/baseband-calibration analyses — content from the
+canonical `pin/faber2026` lane that never reached the rewritten fork `main`.
+Whether to re-land that lane (cherry-picks onto the rewritten history) is an
+open decision; tables are unaffected. `beta_table.tex` is a separate matter —
+see the note below.)
 
 `#71` did change the submodule's `analysis/beta_campaign/beta_table_rows.tex`
 (the `zach` row moved from `_C1D1` to `_C2D4_cwin`). The root `beta_table.tex`
@@ -275,8 +291,10 @@ earned their keep once: they are what caught the drift described in hazard 1.
    regenerated `budget_table_data.json`. Verified at pin `6c87890`: the parity
    test is 9/9 green, `--check` exits 0, and the emitter's output is
    byte-identical to the committed `budget_table.tex`. This still holds at the
-   current pin `79eaf7e` (Faber2026 #68 then #71): the `6c87890 → 79eaf7e` range
-   does not touch `budget_table_data.json` or either table emitter, so the 9/9
+   current pin `0e0f58b` (verified 2026-07-13, by content diff across the
+   fork-history rewrite — see the pin narrative above): no
+   `budget_table_data.json` or table-emitter changes anywhere in
+   `6c87890 → fba48c6 → 0e0f58b`, so the 9/9
    parity result carries over unchanged. The `parity` CI job re-ran the emitters
    against the super-repo at each pin bump and was green on both.
 
@@ -362,8 +380,9 @@ earned their keep once: they are what caught the drift described in hazard 1.
    Overleaf path — and one of them was not saved by its `run_command`. FIXED at
    the current pin. (Code fix landed as FLITS #148, first reaching this repo at
    pin `334cc74` via the `6c87890 → 334cc74` bump, Faber2026 #68. The current
-   pin `79eaf7e` — Faber2026 #71 — is a descendant of `334cc74` and carries the
-   fix unchanged.)**
+   pin `0e0f58b` carries the fix unchanged (re-verified directly at `0e0f58b`,
+   since descendant-of-`334cc74` reasoning does not survive the 2026-07-13
+   fork-history rewrite).)**
 
    Hazard 3 fixed `plot_association_cards.py`. It did not fix its neighbours:
 
@@ -381,7 +400,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
    (restored). **FLITS PR #148** replaced both defaults with
    `os.path.join(os.path.dirname(_REPO), "figures")` — the same `_REPO`-derived
    form hazard 3 used — and that fix is now in the pinned submodule (present
-   since `334cc74`, verified again at the current pin `79eaf7e`:
+   since `334cc74`, verified again at the current pin `0e0f58b`:
    `DEFAULT_OUT_DIR` is repo-derived at
    `sightline_halo_grid.py:63` and `systems_figures.py:80`). A bare run therefore
    lands `clusters_icm.*` / `galaxies_cgm.*` inside the repository. The manifest's
@@ -461,10 +480,11 @@ earned their keep once: they are what caught the drift described in hazard 1.
 - **Hazard (5) is partly closed; (6) is open.** (5)'s `DEFAULT_OUT_DIR` half is
   **done** — FLITS #148 made it repo-relative in the two `galaxies/v2_0/` modules,
   in the pinned submodule since `334cc74` (Faber2026 #68) and still present at the
-  current pin `79eaf7e` (Faber2026 #71). Still open in (5): add
+  current pin `0e0f58b` (verified 2026-07-13). Still open in (5): add
   the missing `build_unified_records` to `sightline_budget.py`'s fallback import
-  (confirmed still absent at `79eaf7e` — neither #148 nor #71 touches
-  `sightline_budget.py`). (6) is a data-deposition decision,
+  (the module now lives at `galaxies/foreground/sightline_budget.py` after the
+  `v2_0 → foreground` rename; confirmed still absent at `0e0f58b` — the
+  `except ImportError` branch at line 65 imports only `MASS_PRIORITY`). (6) is a data-deposition decision,
   not a code fix.
 - Once producers are confirmed, this manifest can back a top-level `Makefile`
   target (`make figures`) that regenerates the embedded set end-to-end. The
