@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>July 14 replacement figures — owner review packet</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1500px;margin:auto;padding:2rem;background:#f5f6f8;color:#17202a}
+.summary,.card{background:white;border:1px solid #ccd2d8;border-radius:10px;padding:1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:1rem}
+.card{margin:0;border-left:8px solid #c17d00} .status-approved{border-left-color:#16803c} .status-needs_revision{border-left-color:#b42318}
+img{width:100%;max-height:680px;object-fit:contain;background:white} code{word-break:break-all} dt{font-weight:700;margin-top:.5rem}
+</style></head><body>
+<h1>July 14 replacement figures — owner review packet</h1>
+<section class="summary"><p><strong>Batch:</strong> <code>2026-07-14-replacement-review</code><br>
+<strong>Source revision:</strong> <code>fcc67fba6ce28830ab65677b6ccba91c77c0426a</code><br>
+<strong>Pipeline revision:</strong> <code>67bdd01418f5c4181902b499992746b965c83367</code><br>
+<strong>DM catalog:</strong> <code>86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8</code></p>
+<p>Approval is per candidate. Reply with the stable candidate ID and either <em>approve</em> or <em>needs revision</em>, plus notes. Promotion is impossible unless the approved candidate bytes still match this packet.</p>
+<p><a href="contact-sheet.png">Open the full contact sheet</a> before reviewing individual evidence cards.</p>
+<h3>Packet validation</h3><ul><li>None</li></ul></section>
+<main class="grid">
+<article id="fig1-gallery" class="card status-needs_revision">
+  <h2>fig1-gallery: Figure 1: twelve-burst CHIME/FRB and DSA-110 gallery</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p></p>
+  <a href="candidates/fig1-gallery.pdf"><img src="previews/fig1-gallery.png" alt="Figure 1: twelve-burst CHIME/FRB and DSA-110 gallery"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_data_grid.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>c3b4109f7b9ddaa63ff27bc2c93b23c89f186ebd3dad94db2bc082626a88b2f5</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_data_grid.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and uncertainty for every burst; input waterfall path and SHA-256 for both telescopes; input-product DM and applied re-dedispersion offset; time/frequency resolution and mask summary</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a></dd>
+    <dt>DM record</dt><dd><pre>[
+  {
+    &quot;adopted_dm&quot;: &quot;262.361665&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.010372&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.023274&quot;,
+    &quot;chime_dm&quot;: &quot;262.361665&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.045268&quot;,
+    &quot;chime_sigma&quot;: &quot;0.010372&quot;,
+    &quot;dsa_dm&quot;: &quot;262.316397&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.029297&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;262.347322&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.021060&quot;,
+    &quot;nick&quot;: &quot;zach&quot;,
+    &quot;tns&quot;: &quot;FRB 20220207C&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;462.188773&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;462.188773&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.004032&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;462.192806&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.029313&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;462.188887&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004929&quot;,
+    &quot;nick&quot;: &quot;whitney&quot;,
+    &quot;tns&quot;: &quot;FRB 20220310F&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;397.015535&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;397.015535&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.074489&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;396.941046&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.082506&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;397.015263&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004991&quot;,
+    &quot;nick&quot;: &quot;oran&quot;,
+    &quot;tns&quot;: &quot;FRB 20220506D&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;411.435717&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.064884&quot;,
+    &quot;chime_dm&quot;: &quot;411.435717&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.116990&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;411.552707&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.072400&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;411.471916&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.054079&quot;,
+    &quot;nick&quot;: &quot;isha&quot;,
+    &quot;tns&quot;: &quot;FRB 20221113A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;602.377821&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.006047&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;602.377821&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.001370&quot;,
+    &quot;chime_sigma&quot;: &quot;0.006047&quot;,
+    &quot;dsa_dm&quot;: &quot;602.379192&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.012800&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;602.378071&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.005467&quot;,
+    &quot;nick&quot;: &quot;wilhelm&quot;,
+    &quot;tns&quot;: &quot;FRB 20221203A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;610.289070&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.039496&quot;,
+    &quot;chime_dm&quot;: &quot;610.289070&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.056527&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;610.232543&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.007096&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;610.261030&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.028262&quot;,
+    &quot;nick&quot;: &quot;phineas&quot;,
+    &quot;tns&quot;: &quot;FRB 20230307A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;912.407552&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.015668&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.055841&quot;,
+    &quot;chime_dm&quot;: &quot;912.407552&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.083539&quot;,
+    &quot;chime_sigma&quot;: &quot;0.015668&quot;,
+    &quot;dsa_dm&quot;: &quot;912.491091&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.022292&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;912.447817&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.041742&quot;,
+    &quot;nick&quot;: &quot;freya&quot;,
+    &quot;tns&quot;: &quot;FRB 20230325A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;696.518001&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;696.518001&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.052497&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;696.465504&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.068454&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;696.517722&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+    &quot;nick&quot;: &quot;johndoeII&quot;,
+    &quot;tns&quot;: &quot;FRB 20230814B&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;518.796993&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;518.796993&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.000663&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;518.797655&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.063024&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;518.796997&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004984&quot;,
+    &quot;nick&quot;: &quot;hamilton&quot;,
+    &quot;tns&quot;: &quot;FRB 20230913A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;960.131611&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;960.131611&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.045776&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;960.085835&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.069745&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;960.131377&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+    &quot;nick&quot;: &quot;mahi&quot;,
+    &quot;tns&quot;: &quot;FRB 20240122A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;272.638699&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.011918&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;272.638699&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.077283&quot;,
+    &quot;chime_sigma&quot;: &quot;0.011918&quot;,
+    &quot;dsa_dm&quot;: &quot;272.561416&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.086174&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;272.637248&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.011806&quot;,
+    &quot;nick&quot;: &quot;chromatica&quot;,
+    &quot;tns&quot;: &quot;FRB 20240203A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;491.207826&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005165&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;491.207826&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.010334&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005165&quot;,
+    &quot;dsa_dm&quot;: &quot;491.197492&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.039550&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;491.207653&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.005122&quot;,
+    &quot;nick&quot;: &quot;casey&quot;,
+    &quot;tns&quot;: &quot;FRB 20240229A&quot;
+  }
+]</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="fig5-association" class="card status-needs_revision">
+  <h2>fig5-association: Figure 5: association diagnostics</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p></p>
+  <a href="candidates/fig5-association.pdf"><img src="previews/fig5-association.png" alt="Figure 5: association diagnostics"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/association_summary.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>f76864431c788f8e21b3336d7d2ce95ff6032a2953afb6d35b1f5d2af13880f7</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_association_summary.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM catalog SHA-256; timing-table source and convention; association class and probability inputs; CHIME-minus-DSA DM values and uncertainties</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>[
+  {
+    &quot;adopted_dm&quot;: &quot;262.361665&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.010372&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.023274&quot;,
+    &quot;chime_dm&quot;: &quot;262.361665&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.045268&quot;,
+    &quot;chime_sigma&quot;: &quot;0.010372&quot;,
+    &quot;dsa_dm&quot;: &quot;262.316397&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.029297&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;262.347322&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.021060&quot;,
+    &quot;nick&quot;: &quot;zach&quot;,
+    &quot;tns&quot;: &quot;FRB 20220207C&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;462.188773&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;462.188773&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.004032&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;462.192806&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.029313&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;462.188887&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004929&quot;,
+    &quot;nick&quot;: &quot;whitney&quot;,
+    &quot;tns&quot;: &quot;FRB 20220310F&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;397.015535&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;397.015535&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.074489&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;396.941046&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.082506&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;397.015263&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004991&quot;,
+    &quot;nick&quot;: &quot;oran&quot;,
+    &quot;tns&quot;: &quot;FRB 20220506D&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;411.435717&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.064884&quot;,
+    &quot;chime_dm&quot;: &quot;411.435717&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.116990&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;411.552707&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.072400&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;411.471916&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.054079&quot;,
+    &quot;nick&quot;: &quot;isha&quot;,
+    &quot;tns&quot;: &quot;FRB 20221113A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;602.377821&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.006047&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;602.377821&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.001370&quot;,
+    &quot;chime_sigma&quot;: &quot;0.006047&quot;,
+    &quot;dsa_dm&quot;: &quot;602.379192&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.012800&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;602.378071&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.005467&quot;,
+    &quot;nick&quot;: &quot;wilhelm&quot;,
+    &quot;tns&quot;: &quot;FRB 20221203A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;610.289070&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.039496&quot;,
+    &quot;chime_dm&quot;: &quot;610.289070&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.056527&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;610.232543&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.007096&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;610.261030&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.028262&quot;,
+    &quot;nick&quot;: &quot;phineas&quot;,
+    &quot;tns&quot;: &quot;FRB 20230307A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;912.407552&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.015668&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.055841&quot;,
+    &quot;chime_dm&quot;: &quot;912.407552&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.083539&quot;,
+    &quot;chime_sigma&quot;: &quot;0.015668&quot;,
+    &quot;dsa_dm&quot;: &quot;912.491091&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.022292&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;912.447817&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.041742&quot;,
+    &quot;nick&quot;: &quot;freya&quot;,
+    &quot;tns&quot;: &quot;FRB 20230325A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;696.518001&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;696.518001&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.052497&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;696.465504&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.068454&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;696.517722&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+    &quot;nick&quot;: &quot;johndoeII&quot;,
+    &quot;tns&quot;: &quot;FRB 20230814B&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;518.796993&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;518.796993&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.000663&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;518.797655&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.063024&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;518.796997&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004984&quot;,
+    &quot;nick&quot;: &quot;hamilton&quot;,
+    &quot;tns&quot;: &quot;FRB 20230913A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;960.131611&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;960.131611&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.045776&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;960.085835&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.069745&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;960.131377&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+    &quot;nick&quot;: &quot;mahi&quot;,
+    &quot;tns&quot;: &quot;FRB 20240122A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;272.638699&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.011918&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;272.638699&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.077283&quot;,
+    &quot;chime_sigma&quot;: &quot;0.011918&quot;,
+    &quot;dsa_dm&quot;: &quot;272.561416&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.086174&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;272.637248&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.011806&quot;,
+    &quot;nick&quot;: &quot;chromatica&quot;,
+    &quot;tns&quot;: &quot;FRB 20240203A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;491.207826&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005165&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;491.207826&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.010334&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005165&quot;,
+    &quot;dsa_dm&quot;: &quot;491.197492&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.039550&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;491.207653&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.005122&quot;,
+    &quot;nick&quot;: &quot;casey&quot;,
+    &quot;tns&quot;: &quot;FRB 20240229A&quot;
+  }
+]</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="fig6-scint-summary" class="card status-needs_revision">
+  <h2>fig6-scint-summary: Figure 6: DSA-110 scintillation summary</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p></p>
+  <a href="candidates/fig6-scint-summary.pdf"><img src="previews/fig6-scint-summary.png" alt="Figure 6: DSA-110 scintillation summary"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_lorentzian_summary.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>e7f5f902d53720f7c0beea7be3f6c3b2ab6ff5ca5abaa762cb953b89a2574dd9</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>component catalog SHA-256; quality flags and exclusion reasons; fit convention and lag mask; qualification status distinct from diagnostic status</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd>None</dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-zach" class="card status-needs_revision">
+  <h2>dsa-acf-zach: DSA-110 scintillation ACF: FRB 20220207C</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>zach &middot; FRB 20220207C</p>
+  <a href="candidates/dsa-acf-zach.pdf"><img src="previews/dsa-acf-zach.png" alt="DSA-110 scintillation ACF: FRB 20220207C"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/zach_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>820b4b2a8bac2c78414773abeb8dca6eceee13ce55036e8207d27742b3a20647</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;262.361665&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.010372&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.023274&quot;,
+  &quot;chime_dm&quot;: &quot;262.361665&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.045268&quot;,
+  &quot;chime_sigma&quot;: &quot;0.010372&quot;,
+  &quot;dsa_dm&quot;: &quot;262.316397&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.029297&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;262.347322&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.021060&quot;,
+  &quot;nick&quot;: &quot;zach&quot;,
+  &quot;tns&quot;: &quot;FRB 20220207C&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-whitney" class="card status-needs_revision">
+  <h2>dsa-acf-whitney: DSA-110 scintillation ACF: FRB 20220310F</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>whitney &middot; FRB 20220310F</p>
+  <a href="candidates/dsa-acf-whitney.pdf"><img src="previews/dsa-acf-whitney.png" alt="DSA-110 scintillation ACF: FRB 20220310F"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/whitney_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>7e34ed0e4d0e1a2a68122ac662bc8955852c76b8218c3ce6d9401ad1dd22f176</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;462.188773&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;462.188773&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.004032&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;462.192806&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.029313&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;462.188887&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004929&quot;,
+  &quot;nick&quot;: &quot;whitney&quot;,
+  &quot;tns&quot;: &quot;FRB 20220310F&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-oran" class="card status-needs_revision">
+  <h2>dsa-acf-oran: DSA-110 scintillation ACF: FRB 20220506D</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>oran &middot; FRB 20220506D</p>
+  <a href="candidates/dsa-acf-oran.pdf"><img src="previews/dsa-acf-oran.png" alt="DSA-110 scintillation ACF: FRB 20220506D"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/oran_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>1c232f01e433b4354df17fdbc365fd06ef03c843a49dd5de2768f8197e584871</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;397.015535&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;397.015535&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.074489&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;396.941046&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.082506&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;397.015263&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004991&quot;,
+  &quot;nick&quot;: &quot;oran&quot;,
+  &quot;tns&quot;: &quot;FRB 20220506D&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-isha" class="card status-needs_revision">
+  <h2>dsa-acf-isha: DSA-110 scintillation ACF: FRB 20221113A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>isha &middot; FRB 20221113A</p>
+  <a href="candidates/dsa-acf-isha.pdf"><img src="previews/dsa-acf-isha.png" alt="DSA-110 scintillation ACF: FRB 20221113A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/isha_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>d0671e6a7dd5e6e56c78969d0101e9bb4e11e4799b98a32d0b2461287d0aa7cf</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;411.435717&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.064884&quot;,
+  &quot;chime_dm&quot;: &quot;411.435717&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.116990&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;411.552707&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.072400&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;411.471916&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.054079&quot;,
+  &quot;nick&quot;: &quot;isha&quot;,
+  &quot;tns&quot;: &quot;FRB 20221113A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-wilhelm" class="card status-needs_revision">
+  <h2>dsa-acf-wilhelm: DSA-110 scintillation ACF: FRB 20221203A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>wilhelm &middot; FRB 20221203A</p>
+  <a href="candidates/dsa-acf-wilhelm.pdf"><img src="previews/dsa-acf-wilhelm.png" alt="DSA-110 scintillation ACF: FRB 20221203A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/wilhelm_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>4337a0a33ff571fa45b0bf3e4732cbcb595fff6bf50d06d53238916b8f63939a</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;602.377821&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.006047&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;602.377821&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.001370&quot;,
+  &quot;chime_sigma&quot;: &quot;0.006047&quot;,
+  &quot;dsa_dm&quot;: &quot;602.379192&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.012800&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;602.378071&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.005467&quot;,
+  &quot;nick&quot;: &quot;wilhelm&quot;,
+  &quot;tns&quot;: &quot;FRB 20221203A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-phineas" class="card status-needs_revision">
+  <h2>dsa-acf-phineas: DSA-110 scintillation ACF: FRB 20230307A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>phineas &middot; FRB 20230307A</p>
+  <a href="candidates/dsa-acf-phineas.pdf"><img src="previews/dsa-acf-phineas.png" alt="DSA-110 scintillation ACF: FRB 20230307A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/phineas_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>0d85d3c2ea0d56be28832a118284528eea98876114325930bbb29ed2981c7b19</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;610.289070&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.039496&quot;,
+  &quot;chime_dm&quot;: &quot;610.289070&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.056527&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;610.232543&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.007096&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;610.261030&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.028262&quot;,
+  &quot;nick&quot;: &quot;phineas&quot;,
+  &quot;tns&quot;: &quot;FRB 20230307A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-freya" class="card status-needs_revision">
+  <h2>dsa-acf-freya: DSA-110 scintillation ACF: FRB 20230325A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>freya &middot; FRB 20230325A</p>
+  <a href="candidates/dsa-acf-freya.pdf"><img src="previews/dsa-acf-freya.png" alt="DSA-110 scintillation ACF: FRB 20230325A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/freya_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>a22e49d1be54e5f4f93f8b7e8735f1f87f0ae33485f204d4d3c3b19382a1e287</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;912.407552&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.015668&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.055841&quot;,
+  &quot;chime_dm&quot;: &quot;912.407552&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.083539&quot;,
+  &quot;chime_sigma&quot;: &quot;0.015668&quot;,
+  &quot;dsa_dm&quot;: &quot;912.491091&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.022292&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;912.447817&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.041742&quot;,
+  &quot;nick&quot;: &quot;freya&quot;,
+  &quot;tns&quot;: &quot;FRB 20230325A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-johndoeII" class="card status-needs_revision">
+  <h2>dsa-acf-johndoeII: DSA-110 scintillation ACF: FRB 20230814B</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>johndoeII &middot; FRB 20230814B</p>
+  <a href="candidates/dsa-acf-johndoeII.pdf"><img src="previews/dsa-acf-johndoeII.png" alt="DSA-110 scintillation ACF: FRB 20230814B"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/johndoeII_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>57ffe1a6b84cfd7b56b5a25b48f2666b93465b92087088312895124e828ed787</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;696.518001&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;696.518001&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.052497&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;696.465504&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.068454&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;696.517722&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+  &quot;nick&quot;: &quot;johndoeII&quot;,
+  &quot;tns&quot;: &quot;FRB 20230814B&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-hamilton" class="card status-needs_revision">
+  <h2>dsa-acf-hamilton: DSA-110 scintillation ACF: FRB 20230913A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>hamilton &middot; FRB 20230913A</p>
+  <a href="candidates/dsa-acf-hamilton.pdf"><img src="previews/dsa-acf-hamilton.png" alt="DSA-110 scintillation ACF: FRB 20230913A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/hamilton_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>563dfd09c18cdeca4f4c8d35ed4a1dbff71c6ef59459b4ffeffe52b91e4e0261</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;518.796993&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;518.796993&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.000663&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;518.797655&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.063024&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;518.796997&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004984&quot;,
+  &quot;nick&quot;: &quot;hamilton&quot;,
+  &quot;tns&quot;: &quot;FRB 20230913A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-mahi" class="card status-needs_revision">
+  <h2>dsa-acf-mahi: DSA-110 scintillation ACF: FRB 20240122A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>mahi &middot; FRB 20240122A</p>
+  <a href="candidates/dsa-acf-mahi.pdf"><img src="previews/dsa-acf-mahi.png" alt="DSA-110 scintillation ACF: FRB 20240122A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/mahi_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>6b97d4342dc1e147d8596d66a4767968bdc869d1ded83b52bf55f34917541339</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;960.131611&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;960.131611&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.045776&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;960.085835&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.069745&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;960.131377&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+  &quot;nick&quot;: &quot;mahi&quot;,
+  &quot;tns&quot;: &quot;FRB 20240122A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-chromatica" class="card status-needs_revision">
+  <h2>dsa-acf-chromatica: DSA-110 scintillation ACF: FRB 20240203A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>chromatica &middot; FRB 20240203A</p>
+  <a href="candidates/dsa-acf-chromatica.pdf"><img src="previews/dsa-acf-chromatica.png" alt="DSA-110 scintillation ACF: FRB 20240203A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/chromatica_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>fe9996be40a278c301d8f859e81931c8a14b623c252ca9c2a671c571f0171c88</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;272.638699&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.011918&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;272.638699&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.077283&quot;,
+  &quot;chime_sigma&quot;: &quot;0.011918&quot;,
+  &quot;dsa_dm&quot;: &quot;272.561416&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.086174&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;272.637248&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.011806&quot;,
+  &quot;nick&quot;: &quot;chromatica&quot;,
+  &quot;tns&quot;: &quot;FRB 20240203A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="dsa-acf-casey" class="card status-needs_revision">
+  <h2>dsa-acf-casey: DSA-110 scintillation ACF: FRB 20240229A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>casey &middot; FRB 20240229A</p>
+  <a href="candidates/dsa-acf-casey.pdf"><img src="previews/dsa-acf-casey.png" alt="DSA-110 scintillation ACF: FRB 20240229A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/dsa_scint_acf/casey_dsa_acf_lorentzian_fits.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>48289ef565f5f8baeeb67bc3a3d1f7ad4f8e04db78658cd03e190e4ed673860d</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07</code></dd>
+    <dt>Required provenance</dt><dd>sub-band edges and center frequencies; symmetric-lag ACF samples, errors, and lag exclusions; all fitted components with flags; narrow-track membership and fit diagnostics; PBF overlay source or explicit absence</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/scint-component-catalog.csv">scint-component-catalog</a>, <a href="provenance/scint-fit-catalog.json">scint-fit-catalog</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;491.207826&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005165&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;491.207826&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.010334&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005165&quot;,
+  &quot;dsa_dm&quot;: &quot;491.197492&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.039550&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;491.207653&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.005122&quot;,
+  &quot;nick&quot;: &quot;casey&quot;,
+  &quot;tns&quot;: &quot;FRB 20240229A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-zach" class="card status-needs_revision">
+  <h2>joint-zach: DM-locked joint-model audit: FRB 20220207C</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>zach &middot; FRB 20220207C</p>
+  <a href="candidates/joint-zach.pdf"><img src="previews/joint-zach.png" alt="DM-locked joint-model audit: FRB 20220207C"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/zach_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>d98782ceb51d20a8384293296efc9c6f951a647b883d1eb5eaf10337f9176c9d</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;262.361665&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.010372&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.023274&quot;,
+  &quot;chime_dm&quot;: &quot;262.361665&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.045268&quot;,
+  &quot;chime_sigma&quot;: &quot;0.010372&quot;,
+  &quot;dsa_dm&quot;: &quot;262.316397&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.029297&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;262.347322&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.021060&quot;,
+  &quot;nick&quot;: &quot;zach&quot;,
+  &quot;tns&quot;: &quot;FRB 20220207C&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-whitney" class="card status-needs_revision">
+  <h2>joint-whitney: DM-locked joint-model audit: FRB 20220310F</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>whitney &middot; FRB 20220310F</p>
+  <a href="candidates/joint-whitney.pdf"><img src="previews/joint-whitney.png" alt="DM-locked joint-model audit: FRB 20220310F"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/whitney_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>36468228a351b66bb9acfd7532266601ad278a6011d0fe9646e85d529d227f40</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;462.188773&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;462.188773&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.004032&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;462.192806&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.029313&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;462.188887&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004929&quot;,
+  &quot;nick&quot;: &quot;whitney&quot;,
+  &quot;tns&quot;: &quot;FRB 20220310F&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-oran" class="card status-needs_revision">
+  <h2>joint-oran: DM-locked joint-model audit: FRB 20220506D</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>oran &middot; FRB 20220506D</p>
+  <a href="candidates/joint-oran.pdf"><img src="previews/joint-oran.png" alt="DM-locked joint-model audit: FRB 20220506D"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/oran_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>3b85d0cdca1f453f1422305cb8c0538ca2842a48a6b20a10d336642429307faa</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;397.015535&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;397.015535&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.074489&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;396.941046&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.082506&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;397.015263&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004991&quot;,
+  &quot;nick&quot;: &quot;oran&quot;,
+  &quot;tns&quot;: &quot;FRB 20220506D&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-isha" class="card status-needs_revision">
+  <h2>joint-isha: DM-locked joint-model audit: FRB 20221113A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>isha &middot; FRB 20221113A</p>
+  <a href="candidates/joint-isha.pdf"><img src="previews/joint-isha.png" alt="DM-locked joint-model audit: FRB 20221113A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/isha_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>9a19244d1afd7dc8529cb25c1ba57da903c62b5ff2462d7c7d658209c73be66c</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;411.435717&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.064884&quot;,
+  &quot;chime_dm&quot;: &quot;411.435717&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.116990&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;411.552707&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.072400&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;411.471916&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.054079&quot;,
+  &quot;nick&quot;: &quot;isha&quot;,
+  &quot;tns&quot;: &quot;FRB 20221113A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-wilhelm" class="card status-needs_revision">
+  <h2>joint-wilhelm: DM-locked joint-model audit: FRB 20221203A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>wilhelm &middot; FRB 20221203A</p>
+  <a href="candidates/joint-wilhelm.pdf"><img src="previews/joint-wilhelm.png" alt="DM-locked joint-model audit: FRB 20221203A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/wilhelm_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>b06742a6b76248b19a24d3d0c99450825407792ced0e94246c07138e955b998f</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;602.377821&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.006047&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;602.377821&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.001370&quot;,
+  &quot;chime_sigma&quot;: &quot;0.006047&quot;,
+  &quot;dsa_dm&quot;: &quot;602.379192&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.012800&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;602.378071&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.005467&quot;,
+  &quot;nick&quot;: &quot;wilhelm&quot;,
+  &quot;tns&quot;: &quot;FRB 20221203A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-phineas" class="card status-needs_revision">
+  <h2>joint-phineas: DM-locked joint-model audit: FRB 20230307A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>phineas &middot; FRB 20230307A</p>
+  <a href="candidates/joint-phineas.pdf"><img src="previews/joint-phineas.png" alt="DM-locked joint-model audit: FRB 20230307A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/phineas_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>112824efb8a133238ee965d586d6549c2b2b85bb55591453a584a44bbf0b7d46</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;610.289070&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.039496&quot;,
+  &quot;chime_dm&quot;: &quot;610.289070&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.056527&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;610.232543&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.007096&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;610.261030&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.028262&quot;,
+  &quot;nick&quot;: &quot;phineas&quot;,
+  &quot;tns&quot;: &quot;FRB 20230307A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-freya" class="card status-needs_revision">
+  <h2>joint-freya: DM-locked joint-model audit: FRB 20230325A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>freya &middot; FRB 20230325A</p>
+  <a href="candidates/joint-freya.pdf"><img src="previews/joint-freya.png" alt="DM-locked joint-model audit: FRB 20230325A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/freya_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>c3a9eb1560169ebdeb62f25bfc34449d4e9bae009ff262928605f5edda1cb986</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;912.407552&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.015668&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.055841&quot;,
+  &quot;chime_dm&quot;: &quot;912.407552&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.083539&quot;,
+  &quot;chime_sigma&quot;: &quot;0.015668&quot;,
+  &quot;dsa_dm&quot;: &quot;912.491091&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.022292&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;912.447817&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.041742&quot;,
+  &quot;nick&quot;: &quot;freya&quot;,
+  &quot;tns&quot;: &quot;FRB 20230325A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-johndoeII" class="card status-needs_revision">
+  <h2>joint-johndoeII: DM-locked joint-model audit: FRB 20230814B</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>johndoeII &middot; FRB 20230814B</p>
+  <a href="candidates/joint-johndoeII.pdf"><img src="previews/joint-johndoeII.png" alt="DM-locked joint-model audit: FRB 20230814B"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/johndoeII_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>14377d25fb301b7daf18d3a800c349c060193d813194fa953293f96704cd2b7e</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;696.518001&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;696.518001&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.052497&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;696.465504&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.068454&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;696.517722&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+  &quot;nick&quot;: &quot;johndoeII&quot;,
+  &quot;tns&quot;: &quot;FRB 20230814B&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-hamilton" class="card status-needs_revision">
+  <h2>joint-hamilton: DM-locked joint-model audit: FRB 20230913A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>hamilton &middot; FRB 20230913A</p>
+  <a href="candidates/joint-hamilton.pdf"><img src="previews/joint-hamilton.png" alt="DM-locked joint-model audit: FRB 20230913A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/hamilton_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>5db2abbb1b3d4624130149c6bef1eee13806720b790db3d314d2fdcf8ccb7221</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;518.796993&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;518.796993&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.000663&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;518.797655&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.063024&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;518.796997&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004984&quot;,
+  &quot;nick&quot;: &quot;hamilton&quot;,
+  &quot;tns&quot;: &quot;FRB 20230913A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-mahi" class="card status-needs_revision">
+  <h2>joint-mahi: DM-locked joint-model audit: FRB 20240122A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>mahi &middot; FRB 20240122A</p>
+  <a href="candidates/joint-mahi.pdf"><img src="previews/joint-mahi.png" alt="DM-locked joint-model audit: FRB 20240122A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/mahi_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>29ee428fa85b91b28be7c6f4fbbbb3ab6c5dfedb40319bbb4705b76d4ddb9272</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;960.131611&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;960.131611&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.045776&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;960.085835&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.069745&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;960.131377&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+  &quot;nick&quot;: &quot;mahi&quot;,
+  &quot;tns&quot;: &quot;FRB 20240122A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="joint-casey" class="card status-needs_revision">
+  <h2>joint-casey: DM-locked joint-model audit: FRB 20240229A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>casey &middot; FRB 20240229A</p>
+  <a href="candidates/joint-casey.pdf"><img src="previews/joint-casey.png" alt="DM-locked joint-model audit: FRB 20240229A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/jointmodel_pair/casey_jointmodel_pair.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>82e004a3fe9e974da4ce477b1b307da4bca1f74b3643d8d3c5cc11c96b3ece83</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scattering-dm-locked-2026-07-14</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact fit artifact and configuration SHA-256; component counts and priors; per-band residual diagnostics; physical, morphology-only, or rejected adjudication with notes</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;491.207826&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005165&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;491.207826&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.010334&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005165&quot;,
+  &quot;dsa_dm&quot;: &quot;491.197492&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.039550&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;491.207653&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.005122&quot;,
+  &quot;nick&quot;: &quot;casey&quot;,
+  &quot;tns&quot;: &quot;FRB 20240229A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-zach" class="card status-needs_revision">
+  <h2>triptych-zach: Data/model/residual triptych: FRB 20220207C</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>zach &middot; FRB 20220207C</p>
+  <a href="candidates/triptych-zach.pdf"><img src="previews/triptych-zach.png" alt="Data/model/residual triptych: FRB 20220207C"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/zach_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>25e3169c6840b91f5ddf94f6d21dfaace5fefd177983e0da9a4435f098c61abe</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;262.361665&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.010372&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.023274&quot;,
+  &quot;chime_dm&quot;: &quot;262.361665&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.045268&quot;,
+  &quot;chime_sigma&quot;: &quot;0.010372&quot;,
+  &quot;dsa_dm&quot;: &quot;262.316397&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.029297&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;262.347322&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.021060&quot;,
+  &quot;nick&quot;: &quot;zach&quot;,
+  &quot;tns&quot;: &quot;FRB 20220207C&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-whitney" class="card status-needs_revision">
+  <h2>triptych-whitney: Data/model/residual triptych: FRB 20220310F</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>whitney &middot; FRB 20220310F</p>
+  <a href="candidates/triptych-whitney.pdf"><img src="previews/triptych-whitney.png" alt="Data/model/residual triptych: FRB 20220310F"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/whitney_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>d6e51e80682efc7d86c364d85af2f74c24d0970b9c3c6bc594b5678696453c95</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;462.188773&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;462.188773&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.004032&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;462.192806&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.029313&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;462.188887&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004929&quot;,
+  &quot;nick&quot;: &quot;whitney&quot;,
+  &quot;tns&quot;: &quot;FRB 20220310F&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-oran" class="card status-needs_revision">
+  <h2>triptych-oran: Data/model/residual triptych: FRB 20220506D</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>oran &middot; FRB 20220506D</p>
+  <a href="candidates/triptych-oran.pdf"><img src="previews/triptych-oran.png" alt="Data/model/residual triptych: FRB 20220506D"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/oran_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>654cec3d03a05b5f4e53932962e7b39ceee49fdee539dfc604416f8451a7ff9c</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;397.015535&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;397.015535&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.074489&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;396.941046&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.082506&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;397.015263&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004991&quot;,
+  &quot;nick&quot;: &quot;oran&quot;,
+  &quot;tns&quot;: &quot;FRB 20220506D&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-isha" class="card status-needs_revision">
+  <h2>triptych-isha: Data/model/residual triptych: FRB 20221113A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>isha &middot; FRB 20221113A</p>
+  <a href="candidates/triptych-isha.pdf"><img src="previews/triptych-isha.png" alt="Data/model/residual triptych: FRB 20221113A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/isha_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>c54d0d0ceb03959f9be9f70ff9b13f21d3e3c6e439a676c12a631f7cfef7d1fc</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;411.435717&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.064884&quot;,
+  &quot;chime_dm&quot;: &quot;411.435717&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.116990&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;411.552707&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.072400&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;411.471916&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.054079&quot;,
+  &quot;nick&quot;: &quot;isha&quot;,
+  &quot;tns&quot;: &quot;FRB 20221113A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-wilhelm" class="card status-needs_revision">
+  <h2>triptych-wilhelm: Data/model/residual triptych: FRB 20221203A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>wilhelm &middot; FRB 20221203A</p>
+  <a href="candidates/triptych-wilhelm.pdf"><img src="previews/triptych-wilhelm.png" alt="Data/model/residual triptych: FRB 20221203A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/wilhelm_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>702c266d7225da99832ed5a2bfa02b7b8514b6eb4eca31f509e8a2f7cd3770b1</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;602.377821&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.006047&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;602.377821&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.001370&quot;,
+  &quot;chime_sigma&quot;: &quot;0.006047&quot;,
+  &quot;dsa_dm&quot;: &quot;602.379192&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.012800&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;602.378071&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.005467&quot;,
+  &quot;nick&quot;: &quot;wilhelm&quot;,
+  &quot;tns&quot;: &quot;FRB 20221203A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-phineas" class="card status-needs_revision">
+  <h2>triptych-phineas: Data/model/residual triptych: FRB 20230307A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>phineas &middot; FRB 20230307A</p>
+  <a href="candidates/triptych-phineas.pdf"><img src="previews/triptych-phineas.png" alt="Data/model/residual triptych: FRB 20230307A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/phineas_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>9ab8121c8f6cfa0df9d382ef6df1ccb2009ab5cf60ab8af2af62e1c4466a8c76</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;610.289070&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.039496&quot;,
+  &quot;chime_dm&quot;: &quot;610.289070&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.056527&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;610.232543&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.007096&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;610.261030&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.028262&quot;,
+  &quot;nick&quot;: &quot;phineas&quot;,
+  &quot;tns&quot;: &quot;FRB 20230307A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-freya" class="card status-needs_revision">
+  <h2>triptych-freya: Data/model/residual triptych: FRB 20230325A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>freya &middot; FRB 20230325A</p>
+  <a href="candidates/triptych-freya.pdf"><img src="previews/triptych-freya.png" alt="Data/model/residual triptych: FRB 20230325A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/freya_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>3d987fd24e25c6de3d2a59d385b9d57720d5763284491d8331472bb52ab2dd5b</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;912.407552&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.015668&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.055841&quot;,
+  &quot;chime_dm&quot;: &quot;912.407552&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.083539&quot;,
+  &quot;chime_sigma&quot;: &quot;0.015668&quot;,
+  &quot;dsa_dm&quot;: &quot;912.491091&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.022292&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;912.447817&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.041742&quot;,
+  &quot;nick&quot;: &quot;freya&quot;,
+  &quot;tns&quot;: &quot;FRB 20230325A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-johndoeii" class="card status-needs_revision">
+  <h2>triptych-johndoeii: Data/model/residual triptych: FRB 20230814B</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>johndoeii &middot; FRB 20230814B</p>
+  <a href="candidates/triptych-johndoeii.pdf"><img src="previews/triptych-johndoeii.png" alt="Data/model/residual triptych: FRB 20230814B"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/johndoeii_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>a0645afedb183b835b38b629d6aab36c4e3b9df56fa97f47d212339ec4f7f3ad</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;696.518001&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;696.518001&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.052497&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;696.465504&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.068454&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;696.517722&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+  &quot;nick&quot;: &quot;johndoeII&quot;,
+  &quot;tns&quot;: &quot;FRB 20230814B&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-hamilton" class="card status-needs_revision">
+  <h2>triptych-hamilton: Data/model/residual triptych: FRB 20230913A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>hamilton &middot; FRB 20230913A</p>
+  <a href="candidates/triptych-hamilton.pdf"><img src="previews/triptych-hamilton.png" alt="Data/model/residual triptych: FRB 20230913A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/hamilton_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>c9423b20186fb8e7cf4ad008e981fee38e4ceee3d8b09d74164ca27c9637290b</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;518.796993&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;518.796993&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;-0.000663&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;518.797655&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.063024&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;518.796997&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004984&quot;,
+  &quot;nick&quot;: &quot;hamilton&quot;,
+  &quot;tns&quot;: &quot;FRB 20230913A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-mahi" class="card status-needs_revision">
+  <h2>triptych-mahi: Data/model/residual triptych: FRB 20240122A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>mahi &middot; FRB 20240122A</p>
+  <a href="candidates/triptych-mahi.pdf"><img src="previews/triptych-mahi.png" alt="Data/model/residual triptych: FRB 20240122A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/mahi_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>fbc20e0c7132a968f7b85433eaad9864cd9436a784e797df4f0a6a61634f76e3</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;960.131611&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;960.131611&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.045776&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;960.085835&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.069745&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;960.131377&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+  &quot;nick&quot;: &quot;mahi&quot;,
+  &quot;tns&quot;: &quot;FRB 20240122A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-chromatica" class="card status-needs_revision">
+  <h2>triptych-chromatica: Data/model/residual triptych: FRB 20240203A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>chromatica &middot; FRB 20240203A</p>
+  <a href="candidates/triptych-chromatica.pdf"><img src="previews/triptych-chromatica.png" alt="Data/model/residual triptych: FRB 20240203A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/chromatica_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>f82fc3b2db2a24f8107e0d307ad0b8f0879d39195135a52f8e998c741d68aa75</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;272.638699&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.011918&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;272.638699&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.077283&quot;,
+  &quot;chime_sigma&quot;: &quot;0.011918&quot;,
+  &quot;dsa_dm&quot;: &quot;272.561416&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.086174&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;272.637248&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.011806&quot;,
+  &quot;nick&quot;: &quot;chromatica&quot;,
+  &quot;tns&quot;: &quot;FRB 20240203A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="triptych-casey" class="card status-needs_revision">
+  <h2>triptych-casey: Data/model/residual triptych: FRB 20240229A</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p>casey &middot; FRB 20240229A</p>
+  <a href="candidates/triptych-casey.pdf"><img src="previews/triptych-casey.png" alt="Data/model/residual triptych: FRB 20240229A"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/casey_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>3848dba211f84294f3442a453cadf8ed440cdbe746ce1dbe56d2a9b1c08cd7b8</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; display window, resolution, and masks; residual normalization and color scale; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;491.207826&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005165&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;491.207826&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.010334&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005165&quot;,
+  &quot;dsa_dm&quot;: &quot;491.197492&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.039550&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;491.207653&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.005122&quot;,
+  &quot;nick&quot;: &quot;casey&quot;,
+  &quot;tns&quot;: &quot;FRB 20240229A&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article>
+<article id="oran-qualified-scintillation" class="card status-needs_revision">
+  <h2>oran-qualified-scintillation: Qualified Oran DSA-110 scintillation calibration</h2>
+  <p><strong>Status:</strong> needs_revision</p>
+  <p></p>
+  <a href="candidates/oran-qualified-scintillation.png"><img src="previews/oran-qualified-scintillation.png" alt="Qualified Oran DSA-110 scintillation calibration"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>efaae17332939497198b83b07674aaa766d0619d2936c4436a42c693fd83fdd6</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/run_oran_dsa_measurement.py</code></dd>
+    <dt>Required provenance</dt><dd>frozen real-background injection configuration; injection recovery and off-pulse null results; fit-window and low-lag stability; reported interval convention and center frequency</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/oran-qualification.json">oran-qualification</a></dd>
+    <dt>DM record</dt><dd>None</dd>
+    <dt>Reviewer notes</dt><dd>Replacement batch rejected as not correct; retain for comparison only and do not promote.</dd>
+  </dl>
+</article></main></body></html>
