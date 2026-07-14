@@ -32,9 +32,12 @@ Figure~\ref{fig:codetection-data-grid} presents the dedispersed CHIME/FRB and
 DSA-110 dynamic spectra for all twelve co-detections. Figure~\ref{fig:codetection-triptych-zach}
 then uses FRB~20220207C as a representative example of the full
 data/model/residual morphology audit. The corresponding panels for the
-remaining eleven bursts were produced from pre-validation fits and are withheld
-from this version of the manuscript pending regeneration. The representative
-panel is retained only as an illustration of the morphology-audit method
+remaining ten modeled bursts are collected in
+Appendix~\ref{app:jointmodel-pairs}; FRB~20240203A is shown data-only because
+none of its attempted joint morphologies passes the residual gate. Every model
+panel was regenerated with the adopted CHIME-primary DM fixed in both bands.
+The audit deliberately retains visibly failed or morphology-only cases so that
+the residual-based exclusions are inspectable rather than hidden
 (Section~\ref{sec:multicomp}).
 
 \begin{figure*}[tp]
@@ -48,10 +51,11 @@ panel is retained only as an illustration of the morphology-audit method
     CHIME/FRB magenta); right marginals the normalized time-integrated
     on-pulse spectra. The window is the on-pulse union of both bands padded
     by half the CHIME on-pulse width (at most 3\,ms), with times relative to
-    the fitted DSA-110 arrival (the dominant component's $t_0$,
+    the audited DSA-110 arrival where a joint artifact exists (the dominant
+    component's $t_0$,
     Section~\ref{sec:jointfit}) and the CHIME/FRB band placed at the
     adopted-DM-referenced inter-instrument offset (FRB~20240203A, with no
-    accepted fit, is anchored on profile peaks). Panels are drawn from the
+    retained fit artifact, is anchored on profile peaks). Panels are drawn from the
     archival bandpass-corrected products at near-native resolution ($32.8$
     and $33.3\,\mu$s bins with 512 and 1024 channels for DSA-110 and
     CHIME/FRB), re-dedispersed from the exact DMs encoded in their filenames
@@ -124,10 +128,11 @@ used to decide which per-sightline quantities are reported
 (Sections~\ref{sec:jointfit} and~\ref{sec:multicomp}). Scattering-fit results
 are presented in Section~\ref{sec:results-alpha}.
 
-% TODO(obs-scattering): Reinsert any joint-fit montage only after the fit
-% products shown in the figure have passed the re-validation contract.
-% Draft figure metadata: docs/rse/specs/figure-wishlist.md (W2), gate V1+C.
-% Do not compile the revoked campaign-era jointmodel_montage.pdf.
+The joint-model appendix is a morphology audit, not a blanket promotion of
+fit-derived scattering parameters. Only the seven panels that pass both the
+numerical and visual residual gates contribute pulse-broadening predictions to
+the scintillation diagnostics; the other retained panels document why those
+parameters are excluded.
 
 \subsection{Milky Way foreground contributions}
 \label{sec:obs-mw}
