@@ -167,11 +167,25 @@ FRB 20240229A & $0.287$ & $198^{+59}_{-76}$  & $0.01$ \\
 \section{DSA-110 scintillation ACF diagnostics}
 \label{app:dsa-scint-acf}
 
-This appendix reserves the location for the per-burst DSA-110 scintillation
-diagnostics behind the DSA-band measurements. The previous diagnostics were generated before the
-current calibration and fit-validation gates were established and are withheld
-from this version of the manuscript. Regenerated per-burst ACF diagnostics will
-be restored here after the revalidated campaign clears those gates.
+The sample-wide diagnostics generated before the current calibration and
+fit-validation gates remain withheld. Figure~\ref{fig:oran-dsa-scint-qualified}
+shows the one DSA-110 sub-band measurement that has cleared the frozen
+qualification battery.
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png}
+    \caption{Qualified DSA-110 scintillation bandwidth for FRB~20220506D.
+    \emph{Left:} deterministic real-background injection response, with
+    empirical 68\% intervals, the identity relation, the observed direct fit,
+    and the inverted calibrated interval. Wide injected signals visibly reach
+    the estimator's $2\,$MHz upper bound and are not cropped from the
+    diagnostic. \emph{Right:} stability of the direct Lorentzian-HWHM fit over
+    four maximum-lag windows. The reported result is
+    $\gamma=0.446\,$MHz with a simulation-calibrated 68\% interval
+    $[0.196,0.685]\,$MHz at $1328.24\,$MHz.}
+    \label{fig:oran-dsa-scint-qualified}
+\end{figure*}
 
 \FloatBarrier
 
