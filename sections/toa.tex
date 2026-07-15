@@ -33,6 +33,26 @@ $-\hat{\mathbf{s}}$. The timing residual is the difference between the
 frequency-corrected CHIME-minus-DSA offset and the predicted geometric delay; a
 residual of zero indicates perfect agreement.
 
+Because the few-ms residuals are comparable to plausible convention
+differences, we state the arrival-time conventions explicitly. Both TOAs are
+\emph{topocentric} and carried on the UTC scale; no barycentric correction is
+applied, since barycentering is common to the two sites at the
+sub-millisecond level and the inter-site geometric term is instead computed
+directly through Eq.~\eqref{eq:geodelay}. The CHIME TOA estimator is the peak
+sample of the incoherently dedispersed, frequency-collapsed Stokes-I profile
+after Savitzky--Golay smoothing, with the timestamp reconstructed from the
+baseband frame time; the DSA-110 TOA is the catalog arrival time (MJD, UTC)
+at the native band reference. Each is translated to the common
+$\nu_{\rm ref}=400$\,MHz through Eq.~\eqref{eq:dmdelay} with the shared
+DSA-DM convention of Section~\ref{sec:toa}. The geometric delay is evaluated
+with \texttt{astropy}: observatory \texttt{EarthLocation}s (DRAO and OVRO)
+transformed to GCRS at the CHIME arrival time---which carries the IERS Earth
+orientation data---projected onto the ICRS source direction.
+Peak-sample TOAs on asymmetric (scattered) profiles are
+morphology-dependent; this bias is common-mode only in part, which is one
+reason the residual is a supporting diagnostic and the per-burst timing
+budget is dominated by the pulse width for broad bursts.
+
 \subsubsection{Chance-coincidence probability}
 \label{sec:toa-pcc}
 
@@ -102,6 +122,27 @@ a direct Monte-Carlo of the background point process reproduces the closed-form
 $P_{\rm cc}$ to $0.3\%$ in a regime where both are measurable, and the result is
 stable across several orders of magnitude of variation in each window and in $R$.
 
+Two idealizations of the Poisson background deserve explicit sensitivity
+statements. First, the model takes $R$ as an isotropic all-sky rate, whereas
+the sample sits in a narrow high-declination band ($+70^{\circ}$ to
+$+74^{\circ}$) where CHIME's per-solid-angle exposure---and hence its detected
+burst surface density---exceeds the all-sky mean: the transit dwell time
+scales as $1/\cos\delta\simeq3.2$ at $\delta=72^{\circ}$, and these
+declinations also receive lower-transit coverage. The adopted
+$R=10^{3}\,\mathrm{sky^{-1}\,day^{-1}}$ already doubles the Catalog~1 rate;
+even inflating the \emph{local} rate density by a further factor of ten
+raises the sample-summed expectation only to
+$\sum_i\mu_i\approx1.8\times10^{-5}$ (and the conservative 64-trigger
+extension to $\lesssim10^{-4}$), leaving the association verdict unchanged.
+Second, the model assumes non-repeating background sources, while repeaters
+make close-time coincidences more likely than Poisson within the $\pm1$\,s
+gate. The DSA-110 detection list over the overlap window includes two bursts
+of the known repeater FRB~20220912A, and none of the twelve co-detected
+counterparts has a repeat detection in either dataset; because repetition
+enters Eq.~\eqref{eq:pcc_mu} only through the effective CHIME rate inside the
+$\pm1$\,s gate, even a repeater-driven rate enhancement of $10^{3}$ leaves
+$\sum_i\mu_i\lesssim10^{-2}$.
+
 \subsubsection{Residuals and systematics}
 
 Table~\ref{tab:sample} summarizes the association diagnostics. The tabulated
@@ -141,7 +182,18 @@ burst---is only $0.1\sigma$. All twelve residuals ($-2.7$ to $+8.4$\,ms,
 tabulated with their $\sigma_i$ in Table~\ref{tab:sample}) satisfy the criterion;
 the tightest is FRB~20221203A at $2.6\sigma$. A residual of several tens of ms
 for a narrow, well-localized burst---inconsistent with both its few-ms budget and
-the $\lesssim\!4.5$\,ms geometric delay---would fail. We stress
+the $\lesssim\!4.5$\,ms geometric delay---would fail.
+Because nine of the twelve residuals are positive, we also test for a
+constant inter-site timing offset: the inverse-variance-weighted mean
+residual is $+2.1\pm0.9$\,ms ($2.4\sigma$ from zero), a network-level shift
+comparable to the $\sigma_{\rm clock}\sim1$\,ms per-site timestamp systematic
+already carried in the budget, and a constant-offset model is only mildly
+preferred over zero offset ($\chi^{2}=8.9/11$ versus $14.7/12$). Subtracting
+the fitted offset leaves every pair within $1.8\sigma$ of the geometric
+prediction (maximum $2.6\sigma$ without subtraction), so the acceptance
+verdicts are unchanged in either convention; we retain the unsubtracted
+residuals in Table~\ref{tab:sample} and flag the weighted mean as a candidate
+inter-site calibration term for the archival release. We stress
 that the association verdict does not rest on the timing residual alone: the
 decisive gates are the chance-coincidence probability, positional coincidence,
 and (for the eight bursts with a pre-specified DM-conditioned association

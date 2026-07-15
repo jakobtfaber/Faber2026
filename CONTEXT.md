@@ -53,8 +53,11 @@ per-candidate masses (`data/census_masses/halo_rvir_ADJUDICATED.csv`) with
 whitney-1473's WISE-blend mass overridden to its optical g−z estimate
 (logM*=9.605; `mass_overrides.csv`); halo impact parameters are uniformly
 recomputed from burst position + coordinates + adopted z (the cluster keeps
-its analysis-provenance b=603.6, b/R500=0.83 — a 2.6% recompute offset is
-flagged, unresolved). Budget outcome: DM_int nonzero on four sightlines
+its analysis-provenance b=603.6, b/R500=0.83 — the 2.6% recompute offset
+[619 kpc, 0.85] was investigated 2026-07-15: no committed input reproduces
+603.6 [needs a 4.6 arcsec different position or H0≈70]; RESOLVED by carrying
+it as a documented ±3% geometry systematic in Appendix B, negligible against
+the factor-of-two column systematics). Budget outcome: DM_int nonzero on four sightlines
 (phineas 243, casey 117, chromatica 26, whitney 6); footnote m retired;
 7 of 9 physical confirmed halos pierce R_vir (b/R_vir 0.46–0.96). `tab:foreground`, the census verdicts/impact
 parameters, the two-phase mNFW `DM_int` columns, and `fig:clusters_icm` are
