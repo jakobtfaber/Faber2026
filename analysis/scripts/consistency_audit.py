@@ -237,7 +237,10 @@ def normalize_figure_path(raw: str) -> str:
     path = raw.replace("#1", "*")
     if not Path(path).suffix:
         path += ".pdf"
-    if not path.startswith("figures/"):
+    # Most manuscript graphics live under figures/, but a small number of
+    # pinned-submodule qualification artifacts are intentionally compiled from
+    # pipeline/. Preserve either explicit repository-relative root.
+    if not path.startswith(("figures/", "pipeline/")):
         path = "figures/" + path
     return path
 
