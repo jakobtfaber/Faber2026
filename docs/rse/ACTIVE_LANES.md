@@ -6,7 +6,8 @@ Do not add narrative history here.
 
 | Lane | Canonical repository/branch | Status | Next gate | Evidence | Worktree |
 |---|---|---|---|---|---|
-| Figure revalidation & replacement | `jakobtfaber/Faber2026` — new batch branches off `main` only | decision pending | Owner picks the Figure 1 product (`fig1-gallery` vs triptych design) by stable candidate ID | Merged PR #35 (gate); rejected packet archived at `archive/rejected-figure-candidates-20260714`; [durable review contract](specs/handoff-2026-07-14-figure-review-and-replacement.md) | None; create a fresh isolated worktree for each new batch |
+| Figure revalidation & replacement | `jakobtfaber/Faber2026` — new batch branches off `main` only | product selected; science and exact-byte approval pending | Freeze and revalidate the adopted-DM catalog, then render a new isolated `fig1-gallery` candidate under the locked data-only 4-by-3 contract | [Figure 1 and C1 decision](specs/decision-2026-07-14-figure1-and-chime-c1.md); merged PR #35 (gate); rejected packet archived at `archive/rejected-figure-candidates-20260714` | None; create a fresh isolated worktree for each new batch |
+| CHIME C1 qualification | `jakobtfaber/dsa110-FLITS` — new experiment branch from `91a5120` or later verified `main` | design selected; implementation pending | Implement blinded `c1-allpairs-crossgp`; pass held-out nulls and every required `m=0.15` and `m=0.17` real-background recovery cell before unblinding | [Figure 1 and C1 decision](specs/decision-2026-07-14-figure1-and-chime-c1.md); [CHIME closeout handoff](specs/handoff-2026-07-14-chime-repair-and-figure-review-closeout.md) | None; create a clean isolated FLITS worktree |
 
 ## Archive
 
