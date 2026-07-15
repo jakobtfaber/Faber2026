@@ -64,15 +64,15 @@ needs_owner = false
 id = "f3-consistency-audit"
 title = "F3 manuscript consistency audit"
 strand = "synthesis"
-status = "proposed"
-owner = ""
+status = "in_progress"
+owner = "devin"
 issue = 57                        # GitHub issue (0 = not yet filed)
-branch = ""
-worktree = ""
+branch = "ms/f3-consistency-audit"
+worktree = "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-f3-consistency-audit"
 pr = 0
 gates = ["audit trusted association/census/budget claims vs ledger"]
-next_action = "runnable now; consumes the claims-audit view"
-needs_owner = false
+next_action = "PR audit script + provenance fixes; defer budget.tex alpha=4 wording to owner/scattering gate"
+needs_owner = true
 
 [[lane]]
 id = "fig1-gallery"
@@ -97,24 +97,25 @@ needs_owner = false
 # ---------------------------------------------------------------------------
 
 [owner_view]
-updated = "2026-07-15T02:55-0700"
+updated = "2026-07-15T03:30-0700"
 
 [[owner_view.needs_you]]
-h = "Nothing pending"
-d = "All four calls answered in-session 2026-07-15: amendments ratified; Gate 0 sanctioned (verdict GO, window dnu_d >= 77-127 kHz); Route B in build; CHIME calibrator-data ask declined (in-house only)."
+h = "F3: budget.tex alpha=4 wording"
+d = "Mechanical audit is clean except for two retired-language findings in sections/budget.tex (lines 138, 162) where scattering methodology quotes alpha=4. Decide whether to rephrase now or defer to the scattering gate."
 
 [[owner_view.now]]
 h = "Route B: voltage-domain separation"
 d = "Gate 0 GO — detection admissible for dnu_d >= 77-127 kHz only; predeclared experiment record next, then estimator on h17 freya baseband"
 who = "claude"
 
+[[owner_view.now]]
+h = "F3 consistency audit"
+d = "script + provenance fixes ready for PR; two alpha=4-limit findings deferred pending owner/scattering gate"
+who = "devin"
+
 [[owner_view.next]]
 h = "A5: N-component profile-fit statistic"
 d = "calibrated N-vs-1 profile model comparison (owner charter at A1 closure); design after control system lands"
-
-[[owner_view.next]]
-h = "F3 consistency audit"
-d = "manuscript audit of trusted association/census/budget claims — runnable now"
 
 [[owner_view.next]]
 h = "Figure 1 data-only gallery"
