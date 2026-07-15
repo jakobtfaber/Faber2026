@@ -267,13 +267,13 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-15T05:10-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-15T05:40-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
-<li><b>P3: stop, or amend and build?</b><small>Gate 0b did its job: as frozen it FAILS (1.2 sigma at 213 kHz vs floor 3) and the culprit is the inherited 64-channel block demeaning, which erases scintles wider than one coarse block. A diagnostic without demeaning (safe now: the ratio already cancels the common mode) restores 3.0-4.5 sigma across 127-352 kHz, confirmed by end-to-end injections (3.2 sigma at 213 kHz). Honest ceiling stays below the 5-sigma G3 detection bar, so P3&#x27; would deliver a calibrated upper limit, not a likely detection. Say &#x27;stop&#x27; (paper takes P2&#x27;s exclusion) or &#x27;amend P3&#x27; (build the estimator without demeaning, k&gt;=11 envelope cut, ~day of work). Figure: gate0b_owner_decision.png on the FLITS branch.</small></li>
+
 </ul></div>
 <div class="own-col oc-now"><h4>In flight</h4><ul>
-<li><b>P3 paused at Gate 0b fork</b> <span class="who">claude</span><small>frozen-spec forecast FAILED (terminal without amendment); no-demean amendment forecast passes; awaiting owner A/B; no burst-data computation until then</small></li>
+<li><b>P3&#x27; build in progress</b> <span class="who">claude</span><small>owner sanctioned the amendment (no demeaning, k&gt;=11 envelope cut, null-mean-subtracted z); floor re-check 3.8/3.2 sigma at 213 kHz; implementing optimal_dnu.py then blinded G1&#x27;&#x27;/G2&#x27;&#x27;; expected product = calibrated upper limit on 127-352 kHz</small></li>
 </ul></div>
 <div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
 <li><b>A5: N-component profile-fit statistic</b><small>calibrated N-vs-1 profile model comparison (owner charter at A1 closure); design after control system lands</small></li>
@@ -284,7 +284,7 @@
 <div class="comp"><span class="cnm"><b>Sample &amp; association</b><span class="cid">V6</span><span class="chip c-good">validated</span></span><span class="cnx">PR 17 merged — done</span></div>
 <div class="comp"><span class="cnm"><b>Budget &amp; census</b><span class="cid">V4·V5</span><span class="chip c-good">validated</span></span><span class="cnx">DM adopted; scattering after D</span></div>
 <div class="comp"><span class="cnm"><b>Scattering</b><span class="cid">V1·A·C</span><span class="chip c-pend">A1 trigger closed (no operating point)</span></span><span class="cnx">A5 chartered · V1/V2 startable</span></div>
-<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-pend">CHIME campaign OPEN; P3 Gate 0b: frozen spec FAILS, amended spec viable</span></span><span class="cnx">owner picks stop vs amended P3&#x27; (no demeaning; calibrated upper-limit product)</span></div>
+<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">CHIME campaign OPEN; P3&#x27; sanctioned and IN BUILD (amendment 2026-07-15)</span></span><span class="cnx">optimal_dnu.py + tests, then blinded G1&#x27;&#x27;/G2&#x27;&#x27;; unblinding gate after</span></div>
 <div class="comp"><span class="cnm"><b>Energies</b><span class="cid">V3</span><span class="chip c-blocked">waiting</span></span><span class="cnx">after V1</span></div>
 <div class="comp"><span class="cnm"><b>Synthesis</b><span class="cid">D·E·F1</span><span class="chip c-blocked">blocked</span></span><span class="cnx">frozen until CHIME route resolves or owner closes campaign</span></div>
 <div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-now">active</span></span><span class="cnx">pin 1085de0 current · control system LANDED (PR 59) · views generated</span></div>
