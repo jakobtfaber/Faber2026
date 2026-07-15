@@ -122,29 +122,44 @@ bright-pulse profile residual within that preferred exponential-tail model, not
 a rejected EMG/PBF family.
 
 **Scint→scattering coupling** (owner decision 2026-07-06; A1 mechanism
-below adopted as a **working draft** 2026-07-06 late evening and re-opened
-the same night — owner keeps all design decisions unlocked; treat every
-element as revisable until the design discussion closes):
+adopted as a working draft 2026-07-06, trigger revised 2026-07-13, trigger
+closed 2026-07-15):
 Scintillation is not a parallel product. The two-screen analysis (τ·Δν_d,
 screen placement) built on the CHIME+DSA scintillation campaign — once it is
 complete on both bands — feeds the per-sightline scattering geometry choice;
 scattering re-fits and any restructured β presentation are sequenced behind
-that completion. Mechanism (A1, working draft): a modular constraint layer — scint
+that completion. Mechanism (A1): a modular constraint layer — scint
 products enter as frozen posterior/limit products with quality flags (never
 point estimates); τ·Δν_d is used probabilistically to count screens and
-derive τ_near/τ_dom; no second broadening component is fitted unless the
-re-validated posterior makes it temporally resolvable (escalation trigger:
-Pr(τ_near/τ_dom > 0.1) > 0.1, median ratio > 0.03, same-screen ambiguity,
-or predicted-scale PPC residuals); for extended host media, quenching
-constrains an effective source-proximate scattering-depth distribution, not
-a point screen distance; scint geometry sets **prior odds** on the PBF
-kernel family (thin vs extended) with final selection by
+derive τ_near/τ_dom, marginalized over geometry constants and censoring; a
+second broadening component is not fitted unless the **escalation trigger**
+fires. As revised 2026-07-13, the trigger is evidence-based model
+comparison, not hand-set ratio thresholds: (i) nested-sampling model
+comparison preferring a two-component (stacked-Lorentzian) ACF model over a
+single Lorentzian at an injection-calibrated ΔlnZ threshold, or (ii)
+posterior-predictive residuals in the burst profile at the predicted
+second-screen timescale. **Closed 2026-07-15:** the injection calibration
+found no usable ΔlnZ operating point (1% false-escalation envelope at
+ΔlnZ ≈ 5.97×10⁴, zero escalation probability across all eight power cells —
+`plan-a1-trigger-calibration.md` final outcome); clause (i) is retired and
+clause (ii) is the sole surviving escalation limb. The former τ_near/τ_dom
+ratio thresholds (Pr(τ_near/τ_dom > 0.1) > 0.1, median ratio > 0.03) are
+retired as triggers, demoted to prior-odds inputs only. Successor statistic
+chartered as **A5** (N-component profile-fit justification statistic, owner
+direction at A1-trigger closure) — a calibrated model-comparison criterion
+for burst-profile component count, distinct from A1's screen count; design
+pending, not a circulation blocker unless promoted. For extended host
+media, quenching constrains an effective source-proximate scattering-depth
+distribution, not a point screen distance; scint geometry sets **prior
+odds** on the PBF kernel family (thin vs extended) with final selection by
 evidence/model-comparison; a joint burst-shape+ACF likelihood is deferred
 unless modular products conflict on a high-S/N sightline. Full decision
-text: plan-circulation-readiness A1.
+text: plan-circulation-readiness A1/A5.
 _Avoid_: presenting scintillation and scattering as independent result
 silos; treating a scint verdict as a hard geometry cut rather than prior
-odds; fitting a second broadening component without the escalation trigger.
+odds; quoting the retired τ_near/τ_dom thresholds as the current escalation
+trigger; conflating A5 (profile-component count) with A1/A2/A3
+(scattering-screen geometry).
 
 **Unified β roster** (suspended by the fit-trust reset — the row facts below
 are history of the revoked campaign, not citable trust states):
@@ -182,11 +197,32 @@ inputs share the gen-1 de-chirp defect lineage found in the scintillation
 products. (1) Geometry-selection campaign (extended-medium kernel + per-sightline model
 selection, scint-informed) — supersedes the narrower "ADR-0007 re-analysis of
 the nine railed rows"; blocks any α quoting for the nine ex-railed rows and
-the restructured abstract/co-model-methods/results language. (2) CHIME-band scintillation
-campaign: burst configs + first measurements for whitney/phineas/mahi/isha;
-U sizing + regeneration for the six never-generated co-detections; ACF/Δν_d
-across the sample (the existing DSA-band Δν_d fits and two-screen table are
-themselves revoked pending §V; the campaign re-establishes both bands).
+the restructured abstract/co-model-methods/results language. (2) CHIME-band scintillation campaign — status 2026-07-15: three
+freya-qualification routes closed `DOCUMENTED-FAIL` in sequence — C1
+(cross-fitted all-pairs estimator: 0/8 required low-modulation calibration
+cells passed, nulls failed the family-wise gate, FLITS #176); P1 (windowed
+fine-channelization regeneration from the coherently dedispersed baseband:
+none of five predeclared window variants passed the frozen 10x common-mode
+suppression screen, and windowing left the common-mode amplitude unchanged,
+0.586 → 0.62–0.68, placing the structure upstream in the baseband within
+each 390.625 kHz coarse channel — FLITS #179, pin #50); P2/Route B (ratio
+statistic: G2 common-mode cancellation PASS, ~100x, but G1 sensitivity fail
+— FLITS PR #180, pin #65). The owner declined to ratify narrowing the paper
+to DSA-only scintillation (`decision-2026-07-15-p1-scope-fork.md`, owner
+amendment): the campaign stays OPEN. Sanctioned successor routes: P3
+(delay-domain optimal quadratic estimator,
+`handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md`, Gate 0b forecast
+first) awaiting owner sanction; external instrumental characterization
+(steady calibrator through the identical baseband + upchannelization path);
+voltage-domain cross-statistics (separating the multiplicative common
+bandpass from source-flux modulation before detection) — each requires its
+own predeclared experiment record with frozen gates before burst data is
+inspected. Full-sample campaign work (burst configs for
+whitney/phineas/mahi/isha; U sizing + regeneration for the six
+never-generated co-detections; ACF/Δν_d across the sample) remains blocked
+behind a qualifying route on freya (the existing DSA-band Δν_d fits and
+two-screen table are themselves revoked pending §V; the campaign
+re-establishes both bands).
 (3) Per-band systematics pass on the sightlines the fresh campaign flags
 with elevated per-band χ² (the revoked campaign's trio — wilhelm, hamilton,
 zach — is the starting hypothesis, re-derived by plan C1). (4) Two-screen
@@ -226,11 +262,26 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 
 ## Relationships
 
-- **Figure wishlist** (`docs/rse/specs/figure-wishlist.md`) lists intended
-  figures not yet (re)inserted; live draft `\fbox` floats with `\label{fig:…}`
-  sit in `sections/observations.tex` and `sections/results.tex`. Do not
-  `\includegraphics` revoked campaign PDFs until the listed gate clears; strip
-  draft boxes before circulation (referee M9).
+- **Figure 1** is locked (owner decision 2026-07-14,
+  `decision-2026-07-14-figure1-and-chime-c1.md`) as `fig1-gallery`: a
+  data-only 4-by-3 MJD-ordered twelve-burst gallery (CHIME/FRB + DSA-110
+  dynamic spectra with time/frequency marginals, no fitted model or
+  scintillation annotation). This chooses the product, not the bytes — a
+  fresh isolated batch and hash-bound owner approval of the exact candidate
+  are still required; the earlier rejected-candidate `fig1-gallery` stays
+  `needs_revision` and must not be promoted.
+- **Figure wishlist** (`docs/rse/specs/figure-wishlist.md`) lists other
+  intended figures not yet (re)inserted; live draft `\fbox` floats with
+  `\label{fig:…}` sit in `sections/observations.tex` and
+  `sections/results.tex`. Do not `\includegraphics` revoked campaign PDFs
+  until the listed gate clears; strip draft boxes before circulation
+  (referee M9).
+- **Operational state** is generated, not hand-maintained: canonical source
+  is `docs/rse/program-state.toml` (its `[owner_view]` block is the board
+  summary), evidence tracked in `docs/rse/evidence-ledger.toml`;
+  `scripts/sync_state.py` regenerates `docs/rse/ACTIVE_LANES.md` and the
+  `owner-view.json` the readiness board renders. Design:
+  `docs/rse/specs/plan-hybrid-control-system.md` (landed PR #59).
 - **Geometry-adjudicated β** governs what `tab:beta` (**unified β roster**) may
   quote, while **explicit pending** governs population prose;
   **scint→scattering coupling** sequences the re-fit that will repopulate it.
