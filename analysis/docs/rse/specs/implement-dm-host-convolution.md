@@ -62,6 +62,7 @@ Python 3.13/SciPy 1.16 check and the canonical clean Conda run:
 |---|---|
 | `scripts/dm_budget_uncertainty.csv` | `5cee3a81ad94b02b5f22bd2e3ffaff277a403d798f7a50aaf983bee07b8e29ff` |
 | `budget_table.tex` | `e4b3d43e6ec58666809903f6bbbef4b89e5f08c04e35386e1cdc8fccafdc2b86` |
+| `figures/dm_host_posteriors.png` | `89fb8d49144ede86b53ea850ec088b13be935ffed5636742e01da64c266f991d` |
 
 The raster figure is environment-renderer dependent and is therefore validated
 visually and through numerical PDF tests rather than promised byte-identical
