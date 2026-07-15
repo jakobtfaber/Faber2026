@@ -1,7 +1,7 @@
 # Validation: F3 manuscript consistency audit
 
 > Validated the F3 subsection of `plan-circulation-readiness.md` and the PR #64
-> review-fix implementation at commit `088b8a6` on 2026-07-15. This is a scoped
+> review-fix implementation through commit `fa225ca` on 2026-07-15. This is a scoped
 > F3 verdict, not a validation of the full circulation-readiness plan.
 
 ## Overall status: decision pending
@@ -18,13 +18,15 @@ owner-gated `alpha=4` passages in `sections/budget.tex`.
 
 - Per-section sample counts: implemented against the canonical twelve-row
   `sample_table.tex` roster, with roster parity checks for the DM and budget
-  tables and explicit full-sample assertions in the abstract, observations,
+  tables and explicit full-sample assertions for every current complete-sample
+  claim in the abstract, observations,
   results, TOA, and conclusions sections.
 - Retired-language sweep: implemented; the two known `sections/budget.tex`
   findings remain visible rather than being suppressed.
 - Table and figure provenance: implemented for generated `\input{}` targets
-  and every reachable `\includegraphics{}` target, including wildcard figure
-  families and the pinned `pipeline/` gitlink.
+  and every reachable `\includegraphics{}` target. Generated tables require
+  embedded manifest rows; wildcard figure families require all twelve roster
+  assets; pipeline-produced outputs require the pinned `pipeline/` gitlink.
 - Cross-references: implemented for duplicate labels and undefined references.
 - Portable control state: the machine-local worktree path was removed.
 - Static owner board: regenerated after the owner-view change.
@@ -35,8 +37,8 @@ owner-gated `alpha=4` passages in `sections/budget.tex`.
 
 All scoped automated checks passed:
 
-- `python3 -m pytest -q tests/test_consistency_audit.py` — 6 passed.
-- `make test-science` — 74 passed, 1 documented xfail; state drift gate,
+- `python3 -m pytest -q tests/test_consistency_audit.py` — 8 passed.
+- `make test-science` — 76 passed, 1 documented xfail; state drift gate,
   figure approval gate, and journal append test passed.
 - `python3 scripts/sync_state.py --check --offline` — 3/3 views match;
   lane and ledger rules pass.
@@ -59,7 +61,8 @@ The audit command itself exits 1 by design and reports exactly two findings:
 The implementation now covers every mechanical check named by F3: sample
 counts, retired language, table/figure provenance against the pinned pipeline,
 and cross-references. Regression tests exercise both the passing repository
-state and failures for a changed full-sample count and an unmanifested figure.
+state and failures for changed full-sample counts, an incomplete wildcard
+figure family, an unmanifested figure, and an unmanifested generated table.
 
 ### Deviations
 
