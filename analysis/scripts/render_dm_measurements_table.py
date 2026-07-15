@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 OUT = ROOT / "dm_measurements_table.tex"
 
-HEAD = r"""% Adopted values: analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
+HEAD = r"""% Generated from analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
 % Do not hand-edit without updating the catalog and the DM decision record.
 \begin{deluxetable*}{lrrrr}
 \tabletypesize{\scriptsize}
