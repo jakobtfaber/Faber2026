@@ -24,11 +24,12 @@ DSA-110 \citep{Law2024} and CHIME/FRB \citep{CHIMEFRB2018,Michilli2021} flux
 scales, and integrated over each instrument's observing band---CHIME over
 $0.400$--$0.800\,\mathrm{GHz}$ and DSA over $1.311$--$1.499\,\mathrm{GHz}$,
 \begin{equation}
-E_{\mathrm{iso}} = \frac{4\pi D_L^2(z)}{1+z}\left[
-  I_C + I_D
-\right],\qquad
-I_X = \int_{\nu_1^{X}}^{\nu_2^{X}} \sigma_{S,X}(\nu)\,\Delta t
-  \sum_{t\,\in\,\mathrm{on\mbox{-}pulse}} \frac{d_X(\nu,t)}{\sigma_{N,X}(\nu)}\,d\nu,
+\begin{aligned}
+E_{\mathrm{iso}} &= \frac{4\pi D_L^2(z)}{1+z}\left(I_C + I_D\right),\\
+I_X &= \int_{\nu_1^{X}}^{\nu_2^{X}} \sigma_{S,X}(\nu)\,\Delta t
+  \sum_{t\,\in\,\mathrm{on\mbox{-}pulse}}
+  \frac{d_X(\nu,t)}{\sigma_{N,X}(\nu)}\,d\nu,
+\end{aligned}
 \label{eq:eiso}
 \end{equation}
 with $D_L(z)$ from the fiducial \textit{Planck}\,2018 cosmology
