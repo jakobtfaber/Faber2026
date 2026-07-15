@@ -58,6 +58,17 @@ def test_all_compiled_figures_exist_and_are_manifested():
     assert findings == []
 
 
+def test_pipeline_figure_paths_remain_repo_relative():
+    assert audit.normalize_figure_path("pipeline/results/diagnostic.png") == \
+        "pipeline/results/diagnostic.png"
+
+
+def test_compiled_generated_tables_have_provenance():
+    findings = []
+    audit.check_inputs_and_provenance(audit.tex_files(), findings)
+    assert findings == []
+
+
 def test_unmanifested_compiled_figure_is_reported(monkeypatch):
     monkeypatch.setattr(audit, "manifest_entries", lambda kind=None: [])
     findings = []

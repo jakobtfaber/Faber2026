@@ -1,0 +1,22 @@
+{
+  "batch_id": "2026-07-15-provisional-propagation-approved",
+  "candidate_id": "dsa-acf-johndoeII",
+  "candidate_sha256": "57ffe1a6b84cfd7b56b5a25b48f2666b93465b92087088312895124e828ed787",
+  "decision": {
+    "notes": "Approved in chat after review of the exact rebuilt manuscript pages on 2026-07-15.",
+    "reviewed_at": "2026-07-15T19:51:54+00:00",
+    "reviewer": "Jakob Faber",
+    "reviewer_role": "manuscript_owner",
+    "status": "approved"
+  },
+  "dm_catalog": {
+    "path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8"
+  },
+  "pipeline_revision": "a70b9c54817a94d2739eaa95860333e6e3f03c0a",
+  "promoted_at": "2026-07-15T19:52:06+00:00",
+  "promoted_sha256": "57ffe1a6b84cfd7b56b5a25b48f2666b93465b92087088312895124e828ed787",
+  "promoted_target": "figures/dsa_scint_acf/johndoeII_dsa_acf_lorentzian_fits.pdf",
+  "schema_version": 1,
+  "source_revision": "e90d4aa27a83ce4adfaa61e162d52e0ab7e9b294"
+}
