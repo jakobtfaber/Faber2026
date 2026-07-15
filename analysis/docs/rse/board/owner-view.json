@@ -1,11 +1,6 @@
 {
   "updated": "2026-07-15T04:30-0700",
-  "needs_you": [
-    {
-      "h": "F1/scattering: budget.tex alpha=4 wording",
-      "d": "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
-    }
-  ],
+  "needs_you": [],
   "now": [
     {
       "h": "P3 build sanctioned; Gate 0b first",
