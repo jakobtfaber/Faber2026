@@ -166,3 +166,61 @@ V3 is **not** yet clearable: blocked on the CHIME-side data-driven run (§6)
 plus the wilhelm-z E1 flag. Everything else — math, rail disposition, selection
 rule, error model, manuscript text — is ready, so the CHIME run is the only
 compute left between here and an owner sign-off.
+
+## 8. Publication validation
+
+Validated against the V3 implementation at commit `2cb2323` on 2026-07-15.
+
+### Implementation status
+
+- The estimator definition, validation contract, legacy arithmetic audit,
+  explicit selection rule, and owner-view state are implemented.
+- The Results table and its interpretation prose remain source-gated and do
+  not compile before V3 clearance.
+- V3 itself remains blocked on the two items stated above; landing this
+  contract does not mark the science lane complete.
+
+### Automated verification results
+
+- **PASS:** `analysis/v3_energetics/recompute_energies.py` — all legacy-table
+  arithmetic and robustness checks passed; the script rejects non-legacy
+  provenance rather than masquerading as the future data-driven verifier.
+- **PASS:** `make` — manuscript compiled with no undefined references and no
+  overflow from the energy-estimator equation.
+- **PASS:** `make test-science` — 76 passed, 1 expected xfail; figure-approval
+  and journal tests passed.
+- **PASS:** `python3 scripts/sync_state.py --check` — all three generated views
+  matched their canonical sources; lane/ledger rules passed.
+- **PASS:** `git diff --check`.
+
+### Code review findings
+
+- Codex GPT-5.5/medium identified premature compiled-result claims, ambiguity
+  between the legacy audit and future data-driven verifier, and a stale Casey
+  exclusion reason. All were corrected.
+- Antigravity identified an orphaned compiled Discussion lead-in and internal
+  gate/future-tense leakage. The Results and Discussion drafts are now gated
+  together in source comments; Methods uses publication-ready present tense.
+- Claude Opus 4.8/xhigh could not run because the local Claude CLI session was
+  not authenticated. No Claude review is claimed.
+
+### Manual testing required
+
+No manual test remains for landing this contract. The CHIME-side computation,
+FRB~20221203A redshift provenance pin, regenerated artifact review, and owner
+sign-off are follow-up science gates, not completed work in this change.
+
+### Recommendations
+
+- **Critical for this contract:** none.
+- **Follow-up:** complete §6, implement the data-driven verifier, pin the
+  FRB~20221203A redshift source, review the regenerated table, then uncomment
+  and fill the gated Results and Discussion prose only after owner V3 clearance.
+
+## References
+
+- [D2--D5 scattering design locks](decision-d2-d5-scattering-design-locks.md)
+- [Legacy arithmetic audit](../../../analysis/v3_energetics/recompute_energies.py)
+- [Energy estimator](../../../sections/methods.tex)
+- [Gated energy results draft](../../../sections/results.tex)
+- [Gated energy interpretation draft](../../../sections/discussion.tex)
