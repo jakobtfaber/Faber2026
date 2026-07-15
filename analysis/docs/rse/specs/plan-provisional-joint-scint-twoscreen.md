@@ -135,9 +135,12 @@ sample-wide correlation claims mitigate both.
 
 ## Reproducibility
 
-- Code basis: parent `e90d4aa27a83ce4adfaa61e162d52e0ab7e9b294`, pipeline
-  `a70b9c54817a94d2739eaa95860333e6e3f03c0a`; the working branch contains the
+- Delivery basis: parent `4eea03b1`, pipeline
+  `93157723fed19dc66cc54c8eb804c3c498ac10c9`; the working branch contains the
   generator, foreground alignment, and manuscript integration described here.
+  The exact-byte figure receipts retain their original pipeline provenance at
+  `a70b9c54817a94d2739eaa95860333e6e3f03c0a`. The intervening pin update touches
+  none of the joint-fit, DSA-scintillation, or foreground inputs used here.
 - Environment: macOS, Python 3.13; generator is standard-library-only. Tests
   use pytest. Input CSV/JSON SHA-256 values are written to
   `analysis/provisional_propagation/results.json`.
