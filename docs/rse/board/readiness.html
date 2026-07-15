@@ -267,31 +267,31 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-15T00:35-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-15T01:10-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
-<li><b>Ratify P1 scope-fork rule</b><small>decision-2026-07-15-p1-scope-fork.md: P1 is the final CHIME recovery attempt for this paper — pass → 12-burst campaign + synthesis; fail → paper narrows to DSA scintillation + CHIME limits. Agent-recorded under your autonomy grant; ratify or amend.</small></li>
-<li><b>Sign off A1 ΔlnZ operating point</b><small>campaign 36/68 cells on h17 (state as of 07-14, unverified since) · verdict wiring + tests done · one-figure-one-table packet lands when campaign finishes</small></li>
+<li><b>Ratify scope fork — P1 failed</b><small>P1 closed DOCUMENTED-FAIL (PR 47: 0/5 window variants passed the frozen 10× common-mode screen; no on-pulse fitting). Under decision-2026-07-15-p1-scope-fork.md the paper narrows to DSA scintillation + CHIME limits/diagnostics. Ratify the rule to execute the narrowing — this sets the paper&#x27;s final scope.</small></li>
+<li><b>Pick control-system implementer</b><small>plan-hybrid-control-system.md merged (PR 48): TOML state layers + generated views + CI drift gate, 1-day timebox. Choose one implementer/worktree: Antigravity (holds two duplicate worktrees — one must go), Devin, or Claude.</small></li>
+<li><b>Sign off A1 ΔlnZ operating point</b><small>campaign 36/68 cells on h17 (state as of 07-14, unverified since) · verdict wiring + tests done · packet lands when campaign finishes</small></li>
 </ul></div>
 <div class="own-col oc-now"><h4>In flight</h4><ul>
-<li><b>P1 window-upchan redesign</b> <span class="who">codex</span><small>revival plan v1.2 revision in flight: direct common-mode measurement on freya (rho_lag1 0.587, Lorentzian 35.4 kHz) → off-pulse mechanism test precedes any blinded campaign</small></li>
 <li><b>A1 calibration campaign</b> <span class="who">h17</span><small>h17, 36/68 cells (second joblib wave; as of 07-14)</small></li>
-<li><b>Hybrid control-system plan</b> <span class="who">claude</span><small>state-drift fix: canonical state files + generated board views + CI check; plan spec in review</small></li>
+<li><b>Scope-fork execution staged</b> <span class="who">claude</span><small>on ratification: revise dependency spine, unfreeze Discussion/synthesis on the narrowed basis, CHIME limits/diagnostics section</small></li>
 </ul></div>
 <div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
-<li><b>F3 consistency audit</b><small>manuscript audit of trusted association/census/budget claims — runnable now, independent of CHIME fork</small></li>
-<li><b>Figure 1 data-only gallery</b><small>per the 2026-07-14 decision route; independent of CHIME fork</small></li>
-<li><b>Evidence ledger bootstrap</b><small>12 sightlines × 8 strands; part of the control-system plan</small></li>
+<li><b>F3 consistency audit</b><small>manuscript audit of trusted association/census/budget claims — runnable now</small></li>
+<li><b>Figure 1 data-only gallery</b><small>per the 2026-07-14 decision route; independent of the fork</small></li>
+<li><b>Control-system flag-day PR</b><small>after implementer choice; evidence ledger bootstraps with the P1 outcome already recorded</small></li>
 </ul></div>
 </div>
 <div class="own-comps">
 <div class="comp"><span class="cnm"><b>Sample &amp; association</b><span class="cid">V6</span><span class="chip c-good">validated</span></span><span class="cnx">PR 17 merged — done</span></div>
 <div class="comp"><span class="cnm"><b>Budget &amp; census</b><span class="cid">V4·V5</span><span class="chip c-good">validated</span></span><span class="cnx">DM adopted; scattering after D</span></div>
 <div class="comp"><span class="cnm"><b>Scattering</b><span class="cid">V1·A·C</span><span class="chip c-pend">method open</span></span><span class="cnx">A1 with you · V1/V2 startable</span></div>
-<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-pend">C1 failed — P1 successor</span></span><span class="cnx">P1 off-pulse mechanism test</span></div>
+<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-pend">CHIME closed: C1+P1 failed</span></span><span class="cnx">DSA-only + CHIME limits (on ratification)</span></div>
 <div class="comp"><span class="cnm"><b>Energies</b><span class="cid">V3</span><span class="chip c-blocked">waiting</span></span><span class="cnx">after V1</span></div>
-<div class="comp"><span class="cnm"><b>Synthesis</b><span class="cid">D·E·F1</span><span class="chip c-blocked">blocked</span></span><span class="cnx">resolves at P1 scope fork</span></div>
-<div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-now">active</span></span><span class="cnx">pin 80094de landed · control-system plan · F6 authors</span></div>
+<div class="comp"><span class="cnm"><b>Synthesis</b><span class="cid">D·E·F1</span><span class="chip c-blocked">blocked</span></span><span class="cnx">unblocks on scope ratification</span></div>
+<div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-now">active</span></span><span class="cnx">pin 80094de current · control system speced · F6 authors</span></div>
 </div>
 </div>
 <!-- OWNER:END -->
@@ -628,6 +628,8 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
+<li><span class="jts mono">07-15 00:26</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">chime-c1</span><span class="jnote s-ready">P1 closed DOCUMENTED-FAIL via PR #47 (0/5 window variants passed frozen 10x common-mode screen; no on-pulse fit; no Phase-4 route authorized) — landed 9 min after the scope-fork rule merged. Outcome addendum appended to decision-2026-07-15-p1-scope-fork.md: fail branch applies, paper narrows to DSA scint + CHIME limits/diagnostics, EXECUTION AWAITS OWNER RATIFICATION. Board updated: ratification is the top Needs-you item; scint component &#x27;CHIME closed: C1+P1 failed&#x27;. P1 worktree lane landed (plan file byte-identical on main) but lane-liveness=uncertain -&gt; preserved, prune decision pending.</span></li>
+<li><span class="jts mono">07-15 00:21</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">ms</span><span class="jnote s-now">hybrid control-system plan spec written (plan-hybrid-control-system.md): TOML state layers read via stdlib tomllib, fetched-vs-stored split (live gh queries at render time), claims-audit consumer for the evidence ledger, --check CI drift gate wired into test-science, flag-day migration, 1-day timebox. PR next; implementer choice = owner open question (Antigravity worktrees vs Devin vs Claude).</span></li>
 <li><span class="jts mono">07-15 00:16</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">chime-c1</span><span class="jnote s-good">pin PR #45 MERGED (main pins FLITS 80094de). Scope-fork predeclaration recorded: decision-2026-07-15-p1-scope-fork.md — P1 is the FINAL CHIME recovery attempt this paper; pass -&gt; 12-burst campaign, fail -&gt; narrow to DSA scint + CHIME limits. Owner ratification requested via board. owner-view.json refreshed (PR 170/171/17 verified merged, C1 verdict + P1 v1.2 lane reflected).</span></li>
 <li><span class="jts mono">07-15 00:13</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">repo</span><span class="jnote s-now">pin-bump lane: PR #45 (pipeline gitlink 91a5120-&gt;80094de, FLITS #176 C1 DOCUMENTED-FAIL + #177 caveat hygiene) opened; CI 4/4 green; merging</span></li>
 <li><span class="jts mono">07-14 23:38</span><span class="jagent">claude-code</span><span class="jlane">chime-c1</span><span class="jnote s-good">Auto-review fixes landed on both FLITS PRs: #176 hardening (hash-bound checkpoints/nulls/aggregate; fail-closed detection on invalid m_err; unblind gated on figures.review.json; reviewed figures force-added past *.png ignore) — nulls+aggregate rerun, verdict unchanged NO-GO, 1 fail-closed detection now recorded; #177 caveat-bypass closure (shipped hamilton/johndoeII configs carry single_block; results table renders PASS [single_block], never clean PASS). Deferred to p1-window-upchan: scramble within-pol pairs + raw split-ordering check. Resolution comments posted; PR #44 doc updated.</span></li>
@@ -646,8 +648,6 @@
 <li><span class="jts mono">07-13 23:40</span><span class="jagent">claude-fable-5</span><span class="jlane">iacobus-drain</span><span class="jnote s-good">Drain complete + verified: rclone check --size-only 0 differences, 5437 files matching; remote 244.815 GiB / 5438 objects; 4 old ERROR lines in archive log are June temp-file races (retry succeeded 07-02), none today. Source tree quarantined move-only to ~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713 with PROVENANCE.md. Morphologies untouched. Remaining external: tailnet ACL grant (tag:hpc -&gt; tag:work-laptop tcp:22) in admin console, then h17 ssh jakob-mbp / ssh iacobus confirmation.</span></li>
 <li><span class="jts mono">07-13 23:29</span><span class="jagent">claude-fable-5</span><span class="jlane">iacobus-drain</span><span class="jnote s-now">Handoff executed: mbp sshd/ALF verified fine; root cause of h17-&gt;mbp timeout is the tailnet ACL (empty inbound PacketFilter on jakob-mbp; disco ping passes, all data-plane dropped; ShieldsUp off) - needs admin-console ACL edit, no local fix. Drain proceeding mbp-orchestrated: iacobus rclone gdrive-jakob live (4.49TiB free), metadata sentinel PASS, parallel jobs launched; burst_pickles+burst_npys already 100% from a 2026-06-26 run (ignore-existing skip), archive+rest in flight; watcher armed.</span></li>
 <li><span class="jts mono">07-13 21:58</span><span class="jagent">claude-fable-5</span><span class="jlane">fork-rewrite-sync</span><span class="jnote s-now">Implemented PR #26 auto-review P2s: owner-view.json now surfaces the re-land decision in Needs-you (rebaked+redeployed); repro_manifest.csv rows 6/9/10/14 gained UPDATE 2026-07-13 clauses (pin 0e0f58b, rewrite boundary, content-diff verification, drop caveat).</span></li>
-<li><span class="jts mono">07-13 21:13</span><span class="jagent">claude-fable-5</span><span class="jlane">fork-rewrite-sync</span><span class="jnote s-pend">DECISION PENDING: pin bump fba48c6 -&gt; 0e0f58b drops ~221 files the canonical pin/faber2026 lane carried (scintillation/scint_analysis 57 files, dispersion/dm_phase_suite + DM-campaign results ~110, chime recovery/baseband analyses ~32; off_log_z/model-aware bandwidth fields absent at 0e0f58b). Tables unaffected. Re-land via cherry-picks onto rewritten main (merge would re-expose bot authors), or accept if h17/dm-campaign relocation supersedes. Old SHAs resolve only via org upstream. Local flits-* scratch worktrees sit on pre-rewrite branches.</span></li>
-<li><span class="jts mono">07-13 21:13</span><span class="jagent">claude-fable-5</span><span class="jlane">fork-rewrite-sync</span><span class="jnote s-good">mbp synced to rewritten FLITS fork: Faber2026 main ff to c5e83d2, submodule URL synced + checked out 0e0f58b, standalone clone reset --hard to 0e0f58b. Verified: table-parity CI green, DEFAULT_OUT_DIR fix present, hazard-5 fallback-import still open (galaxies/foreground/sightline_budget.py:65). REPRODUCE.md pin narrative updated across the rewrite boundary; memory updated (pin-off-main superseded).</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>
