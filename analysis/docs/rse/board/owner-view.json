@@ -1,10 +1,15 @@
 {
-  "updated": "2026-07-15T05:40-0700",
-  "needs_you": [],
+  "updated": "2026-07-15T06:30-0700",
+  "needs_you": [
+    {
+      "h": "Ratify CHIME scintillation closure wording",
+      "d": "P3' passed both blinded gates (first of the campaign), you authorized the single permitted on-pulse computation, and it found 40-sigma broad spectral structure that is NOT scintillation: amplitude 11x the calibrated ceiling (implied m~0.6), width running off the 400 kHz scan edge, matching the burst's intrinsic spectral envelope. Recorded fail-closed as 'no admissible measurement; scintillation constraint is envelope-confusion-limited'. Ratify that as the manuscript statement, or sanction a P4 envelope-modeling experiment (exploratory-only: the burst spectrum has been seen). Figures: unblind_onpulse_scan.png on FLITS main."
+    }
+  ],
   "now": [
     {
-      "h": "P3' build in progress",
-      "d": "owner sanctioned the amendment (no demeaning, k>=11 envelope cut, null-mean-subtracted z); floor re-check 3.8/3.2 sigma at 213 kHz; implementing optimal_dnu.py then blinded G1''/G2''; expected product = calibrated upper limit on 127-352 kHz",
+      "h": "P3' complete; closure wording pending",
+      "d": "FLITS #181 merged (563645c) + pin bumped this PR; estimator calibrated (G1''/G2'' PASS), unblinded once with owner authorization; verdict: intrinsic-envelope foreground, no admissible Delta-nu_d",
       "who": "claude"
     }
   ],
@@ -43,9 +48,9 @@
     {
       "name": "Scintillation",
       "lane": "B",
-      "status": "CHIME campaign OPEN; P3' sanctioned and IN BUILD (amendment 2026-07-15)",
-      "status_class": "now",
-      "next": "optimal_dnu.py + tests, then blinded G1''/G2''; unblinding gate after"
+      "status": "P3' done: calibrated estimator, unblinded once; intrinsic envelope dominates, no Delta-nu_d",
+      "status_class": "pend",
+      "next": "owner ratifies envelope-confusion-limited closure or sanctions P4 (exploratory)"
     },
     {
       "name": "Energies",
@@ -66,7 +71,7 @@
       "lane": "P0·F·G",
       "status": "active",
       "status_class": "now",
-      "next": "pin 1085de0 current · control system LANDED (PR 59) · views generated"
+      "next": "pin 563645c current (P3' landed) · control system LANDED (PR 59) · views generated"
     }
   ]
 }
