@@ -220,3 +220,39 @@ new experiment requiring fresh owner sanction):**
 
 **Status: awaiting owner choice between A and B. No further computation on
 burst data until then.**
+
+## P3′ amendment (2026-07-15, same day — owner-sanctioned Option B in-session)
+
+The owner sanctions the amended experiment. Three spec changes relative to the
+frozen estimator above; everything else (G1″/G2″ grids, seeds, G3, the
+unblinding rule, the test battery) is unchanged:
+
+1. **No block demeaning.** Global mean removal only, full-band FFT over the
+   23 064 fine channels. Safe now because the ratio statistic already cancels
+   the common mode algebraically (P2 G2); the demeaning it replaced was
+   protection the ratio has made redundant. This resolves T5 by amendment
+   (full-band is frozen; the per-block variant is retired).
+2. **Delay-bin exclusion `k < 11` (frozen).** Spectral structure smoother than
+   ~12.8 MHz is excised from the matched sum — the envelope control replacing
+   demeaning: an intrinsic burst spectral envelope (common to pols and time
+   halves, invisible to the null campaign) lives at these lowest delay bins.
+   Cost measured at ~7 % of SNR.
+3. **Null-mean-subtracted z-scores with a calibration/evaluation null split.**
+   Per-Δν_d detection score `z = (â − ⟨â⟩_null)/σ_null`; nulls seeds
+   `900000 + i` with `i = 0–99` the calibration half (mean, σ per grid point)
+   and `i = 100–199` the evaluation half (trials-corrected max-z
+   distribution). Scan-template Monte-Carlo seeds `750000 + 1000·grid_index +
+   j` (disjoint from all prior seed spaces). G2″ PASS interpretation, frozen
+   before any burst data: the two independent null halves must give a
+   consistent trials-corrected 95th-percentile max-z (within 15 %), and the
+   T3 σ-calibration must hold on the evaluation half.
+
+Scan-estimator semantics for G1″ certification (frozen): recovered `Δν_d` =
+argmax of `z` over the 25-point log grid; amplitude pull evaluated at the grid
+point nearest the injected width; "converged" = finite `â` and `σ_â`.
+
+**Re-checked Gate 0b floor under this amendment: PASSES** — 3.8σ (formula) /
+3.2σ (end-to-end injections) at m = 0.17, Δν_d = 213 kHz, k ≥ 11
+(§Gate 0b result diagnostics). The G3 bar stays at 5σ; the owner sanctions
+the build understanding the realistic product is a calibrated upper limit on
+`Δν_d ∈ [127, 352] kHz`.
