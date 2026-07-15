@@ -254,24 +254,21 @@ census is incomplete and $\mathrm{DM_{int}}$ is a floor, so the tabulated host D
 \section{DSA-110 scintillation ACF diagnostics}
 \label{app:dsa-scint-acf}
 
-The per-burst DSA-110 diagnostics are withheld until the manuscript owner has
-reviewed each burst's component assignment, exclusions, ACF data, model, and
-overlay provenance. Numerical qualification and author approval are separate
-gates.
+The per-burst DSA-110 diagnostics below expose the complete best-so-far fit
+family. They are provisional: numerical fit quality and visual inspection are
+not substitutes for injection and null-test qualification.
 
 \clearpage
 \input{sections/dsa_scint_acf.tex}
 \clearpage
 
-\begin{figure*}
+\begin{figure*}[p]
     \centering
-    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
-    \textbf{[AUTHOR REVIEW PENDING --- ORAN CALIBRATION]}\\[0.6em]
-    Qualification evidence and rendered presentation must both be reviewed
-    before this candidate is promoted.\\
-    \vspace{1.6cm}}}
-    \caption{Reserved Oran scintillation-calibration slot. \emph{Draft
-    placeholder---the visualization is not yet author-approved.}}
+    \includegraphics[width=0.9\textwidth]{pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png}
+    \caption{Frozen injection-response calibration for the certified
+    FRB~20220506D DSA-110 component at 1328.24 MHz. Unlike the broader
+    best-so-far catalog, this component passed the real-background injection,
+    off-pulse null, fit-window, low-lag, and resolved-interval gates.}
     \label{fig:oran-dsa-scint-qualified}
 \end{figure*}
 
@@ -285,9 +282,10 @@ gates.
 \section{Joint-model morphology audits}
 \label{app:jointmodel-pairs}
 
-The joint-model audit candidates are withheld pending per-burst owner review of
-the adopted DM, fit configuration, component count, and residual structure.
-No numerical or agent visual gate substitutes for that approval.
+The panels below show every retained best-so-far DM-locked joint model. They
+are morphology audits, not robust scattering measurements; the residual
+adjudication and the still-pending V1 re-trust certification are reported in
+Table~\ref{tab:joint-fit-provisional}.
 
 \input{sections/jointmodel_pairs.tex}
 

@@ -158,12 +158,14 @@ carrying no confirmed within-aperture system are limited by survey depth
 \subsection{Scintillation and screen attribution}
 \label{sec:results-scintillation}
 
-We report here the revalidated DSA-band diffractive-scintillation products
-together with the outcome of the CHIME-band
-scintillation campaign; the scattering fits that enter any
-$\tau\,\Delta\nu_d$ screen product and the resulting one- versus two-screen
-attribution are deferred to Section~\ref{sec:disc-screen-attribution} once
-their prerequisite strands are independently trusted. The estimator used for the decorrelation bandwidth and
+We report the certified Oran DSA-band measurement and, separately, the
+best-so-far DSA-band fit catalog together with the outcome of the CHIME-band
+scintillation campaign. The provisional scattering fits that enter the
+$\tau\,\Delta\nu_d$ screen products are listed in
+Table~\ref{tab:joint-fit-provisional}, and their bounded interpretation is made
+in Section~\ref{sec:disc-screen-attribution}. None of those scattering values,
+nor any DSA bandwidth except the qualified Oran point below, is yet a robustly
+verified measurement. The estimator used for the decorrelation bandwidth and
 modulation index, and the two-screen framework that the attribution will draw
 on---including the $\tau_{s}\leftrightarrow\nu_{s}$ relation, the two-screen
 ACF product term, and the screen-distance constraint---are set out in
@@ -213,15 +215,22 @@ monotonic response calibration, and a resolved-interval requirement. It is the
 only presently certified DSA-band scintillation measurement in the sample and,
 as a single sub-band point, does not determine a frequency-scaling index.
 
+Table~\ref{tab:dsa-scint-provisional} summarizes the narrow-component
+best-fit catalog for completeness. Its medians and ranges describe clean
+component fits and are not substitutes for Oran-style injection calibration;
+the individual sub-band values are shown in
+Appendix~\ref{app:dsa-scint-acf}.
+
+\input{dsa_scint_provisional_table}
+
 \begin{figure*}
     \centering
-    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
-    \textbf{[AUTHOR REVIEW PENDING --- SCINTILLATION SUMMARY]}\\[0.6em]
-    Candidate component assignments, exclusions, fit convention, and
-    qualification status must be approved before promotion.\\
-    \vspace{1.6cm}}}
-    \caption{Reserved DSA-110 scintillation-summary slot. \emph{Draft
-    placeholder---the current replacement is not author-approved.}}
+    \includegraphics[width=\textwidth]{figures/dsa_lorentzian_summary.pdf}
+    \caption{Best-so-far DSA-110 Lorentzian decorrelation-bandwidth fits. Clean
+    narrow components are summarized by burst; broader components are shown
+    separately. This is a provisional fit diagnostic: only the FRB~20220506D
+    component at 1328.24 MHz has passed the full injection, off-pulse, and
+    stability qualification described in the text.}
     \label{fig:dsa_scint_gamma}
 \end{figure*}
 
@@ -334,14 +343,20 @@ no certified $\Delta\nu_d$ and no scaling-index anchor to the screen analysis.
 
 The component-multiplicity audit exposes limitations of the joint-fit
 morphology independent of the turbulence-parameter values themselves.
-Figure~\ref{fig:codetection-triptych-zach} provides the representative
+Figure~\ref{fig:codetection-triptych-whitney} provides the representative
 main-text audit, and Appendix~\ref{app:jointmodel-pairs} shows the ten other
-DM-locked model audits. Seven fits pass both the posterior-predictive and visual
-residual checks. Four displayed models---FRBs~20220207C, 20221203A, 20230913A,
-and 20240229A---remain morphology-only or rejected because coherent residual
+retained DM-locked model audits. Table~\ref{tab:joint-fit-provisional} records
+their best-so-far marginal values. Seven fits pass the July reduced-$\chi^2$
+and visual-residual adjudication. Three displayed models---FRBs~20220207C,
+20230913A, and 20240229A---remain morphology-only, while FRB~20221203A is
+rejected because coherent residual
 structure survives the best tested component count; FRB~20240203A has no
 retained joint-model panel. We therefore show all usable audit products but
-promote scattering predictions only from the seven visually accepted fits.
+use scattering predictions only from the seven visually accepted fits. This
+adjudication predates full V1 re-trust certification, so every numerical fit
+value remains provisional.
+
+\input{joint_fit_provisional_table}
 
 \FloatBarrier
 \subsection{Band-restricted burst energies}
