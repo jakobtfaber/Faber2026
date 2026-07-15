@@ -222,6 +222,9 @@ def main():
         interpretation = classify_foreground_alignment(
             adjudication, eligible_count, coverage_limited, tau_ratio)
         propagation_status = screen_by_tns.get(tns, {}).get("verdict", "fit unusable")
+        propagation_tex = ("pending fixed-index refit"
+                           if propagation_status == "pending fixed-index consistency refit"
+                           else tex_escape(propagation_status))
         foreground_json.append({
             "tns": tns,
             "adjudication": adjudication,
@@ -238,7 +241,7 @@ def main():
         ratio_tex = f"{tau_ratio:.3g}" if tau_ratio is not None else r"\nodata"
         nearest_tex = f"{nearest_inconclusive:.0f}" if nearest_inconclusive is not None else r"\nodata"
         foreground_rows.append(
-            f"{tns.replace('FRB ', '')} & {tex_escape(propagation_status)} & "
+            f"{tns.replace('FRB ', '')} & {propagation_tex} & "
             f"{'limited' if coverage_limited else 'covered'} & {eligible_count} & "
             f"{nearest_tex} & {tau_int:.3g} & {tau_fit_tex} & {ratio_tex} & "
             f"{tex_escape(interpretation)} \\\\"
