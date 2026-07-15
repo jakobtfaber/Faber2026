@@ -54,4 +54,3 @@ propagation must be labeled approximate and covariance-free.
 - `pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv`
 - `pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv`
 - `pipeline/flits/batch/analysis_logic.py`
-

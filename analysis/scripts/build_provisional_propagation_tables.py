@@ -135,9 +135,9 @@ def main():
                 sorted(values)[len(values)//2 - 1] + sorted(values)[len(values)//2]) / 2
             span = f"{min(values):.3g}--{max(values):.3g}" if len(values) > 1 else f"{values[0]:.3g}"
             cert = "Oran 1328-MHz component only" if nick == "oran" else "provisional"
-            dsa_rows.append(f"{tns.replace('FRB ', '')} & {len(values)} & {med:.3g} & {span} & {cert} \\\\ ")
+            dsa_rows.append(f"{tns.replace('FRB ', '')} & {len(values)} & {med:.3g} & {span} & {cert} \\\\")
         else:
-            dsa_rows.append(f"{tns.replace('FRB ', '')} & 0 & \\nodata & \\nodata & no clean narrow component \\\\ ")
+            dsa_rows.append(f"{tns.replace('FRB ', '')} & 0 & \\nodata & \\nodata & no clean narrow component \\\\")
 
         if row["adjudication"] != "accepted_physical" or fit is None:
             continue
@@ -158,7 +158,7 @@ def main():
         screen_rows.append(
             f"{tns.replace('FRB ', '')} & {len(vals)} & {median:.2g} & "
             f"{min(vals):.2g}--{max(vals):.2g} & "
-            f"{min(v - e for v, e in pairs):.2g} & {verdict} \\\\ "
+            f"{min(v - e for v, e in pairs):.2g} & {verdict} \\\\"
         )
         screen_json.append({"burst": nick, "tns": tns, "products": [
             {"value": v, "sigma_approx": e} for v, e in pairs], "verdict": verdict})
@@ -207,7 +207,7 @@ def main():
             f"{tns.replace('FRB ', '')} & {tex_escape(propagation_status)} & "
             f"{'limited' if coverage_limited else 'covered'} & {eligible_count} & "
             f"{nearest_tex} & {tau_int:.3g} & {tau_fit_tex} & {ratio_tex} & "
-            f"{tex_escape(interpretation)} \\\\ "
+            f"{tex_escape(interpretation)} \\\\"
         )
 
     def table(path, label, caption, columns, header, rows, comments=None):

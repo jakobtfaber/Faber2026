@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-15
 **Author:** AI Assistant
-**Status:** In Progress
+**Status:** Validated; pending PR merge
 **Related Documents:**
 - [Research](research-provisional-joint-scint-twoscreen.md)
 - [Foreground alignment research](research-foreground-propagation-alignment.md)
