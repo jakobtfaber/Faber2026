@@ -39,9 +39,9 @@ strand = "scintillation"
 status = "needs_owner"
 owner = "claude"
 issue = 55                        # GitHub issue (0 = not yet filed)
-branch = "docs/chime-successor-routes"
+branch = ""
 worktree = ""
-pr = 53
+pr = 0                            # assessment landed via merged PR #53 (see next_action); no active PR
 gates = ["predeclared gates frozen before burst data inspected", "owner sanction of route"]
 next_action = "owner: sanction Gate 0 + route order (research-chime-scint-successor-routes.md, PR #53 merged)"
 needs_owner = true
