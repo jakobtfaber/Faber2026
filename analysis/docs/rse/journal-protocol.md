@@ -53,12 +53,24 @@ the readiness board renders it.
    deploy script never touches it. Do not redeploy the board as a
    claude.ai artifact anymore.
 
-   **Owner view (added 2026-07-12).** The board's top panel is baked from
-   `docs/rse/board/owner-view.json` — the owner-facing summary (Needs you /
-   In flight / Up next, ≤3 items each, plus 7 component cards). If your
-   turn changed what is in flight, opened or resolved an owner decision,
-   or moved a component's status, update that JSON in the same pass, then
-   rebake (same command bakes both panels).
+   **Owner view (added 2026-07-12; generated since 2026-07-15).** The board's
+   top panel is baked from `docs/rse/board/owner-view.json` — the owner-facing
+   summary (Needs you / In flight / Up next, ≤3 items each, plus 7 component
+   cards). **That JSON is now GENERATED, not hand-edited.** Its canonical
+   source is the `[owner_view]` block of `docs/rse/program-state.toml` (the
+   hybrid control system, `docs/rse/specs/plan-hybrid-control-system.md`). If
+   your turn changed what is in flight, opened or resolved an owner decision,
+   or moved a component's status, edit `program-state.toml` and regenerate:
+
+   ```bash
+   python3 scripts/sync_state.py           # rewrites owner-view.json + ACTIVE_LANES.md + claims-audit.md
+   python3 scripts/render_journal_panel.py # then bakes both board panels
+   ```
+
+   Hand-editing `owner-view.json` (or `ACTIVE_LANES.md` / `claims-audit.md`)
+   now fails `make check-state` (`scripts/sync_state.py --check --offline`),
+   which `make test-science` and `scripts/deploy-board.sh` both enforce. Bump
+   `[owner_view].updated` in `program-state.toml` on every owner-view edit.
 
    **Strand structure (added 2026-07-13).** The owner-facing board groups
    work by science strand (association · budget/census · scattering ·

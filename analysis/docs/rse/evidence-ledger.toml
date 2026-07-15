@@ -1,0 +1,931 @@
+# GENERATED-INPUT — canonical scientific evidence ledger (hand-editable).
+# Read with stdlib tomllib (Python >= 3.11). Consumed by scripts/sync_state.py,
+# which regenerates docs/rse/board/claims-audit.md.
+# Edit THIS file, then run: python3 scripts/sync_state.py
+#
+# Twelve co-detection sightlines x eight evidence strands. Bootstrapped from
+# CONTEXT.md trust boundaries (2026-07-15 state), the 2026-07-14/15 decision
+# records, and the C1/P1 DOCUMENTED-FAIL records indexed in the pipeline
+# INVENTORY at pin 2242124 — NOT from the stale boards.
+#
+# evidence.status vocabulary:
+#   trusted        — re-validated for manuscript use (passed its §V ladder)
+#   diagnostic     — informative but not citable as a result
+#   upper_limit    — a bound, citable as a limit
+#   unavailable    — no product exists
+#   blocked        — a product exists but trust is revoked pending a gate
+#   documented_fail— a recorded, publishable negative result
+# A manuscript label (consumers) may consume only trusted / upper_limit /
+# documented_fail evidence; consuming anything else is a claims-audit error.
+
+[[sightline]]
+burst = "zach"
+tns = "FRB 20220207C"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; re-admitted railed-hi Tier-B (PPC-verified C1D1 joint fit) but suspended pending §V (V1) and geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "whitney"
+tns = "FRB 20220310F"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; Pass-2 re-admitted via mixed-legacy c0,gamma but uncitable pending §V (V3); do NOT FAIL-gate (energy is beta-independent)"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "oran"
+tns = "FRB 20220506D"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "trusted"
+artifact = "pipeline:scintillation (Oran DSA qualified measurement)"
+commit = "2242124"
+scope = "qualified DSA-band scintillation measurement (Faber2026 PR #32; Oran)"
+claims = ["Oran has a qualified DSA-band scintillation-bandwidth measurement"]
+consumers = ["sec:results-scintillation", "fig:oran-dsa-scint-qualified"]
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; Pass-2 re-admitted via mixed-legacy c0,gamma but uncitable pending §V (V3); do NOT FAIL-gate (energy is beta-independent)"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "isha"
+tns = "FRB 20221113A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "wilhelm"
+tns = "FRB 20221203A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; EMG guardrail: a coherent bright-pulse residual within the preferred exponential-tail model, not a rejected EMG/PBF family; suspended pending §V (V1)"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "phineas"
+tns = "FRB 20230307A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; interior beta=3.23 under the retired thin-screen campaign, suspended pending §V (V1) and geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "freya"
+tns = "FRB 20230325A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "documented_fail"
+artifact = "pipeline:scintillation/experiments (C1 + P1 records; INVENTORY at pin 2242124)"
+commit = "2242124"
+scope = "C1 all-pairs cross-GP DOCUMENTED-FAIL (0/8 gated low-modulation cells, FLITS #176); P1 windowed re-upchannelization mechanism-level DOCUMENTED-FAIL (0/5 window variants, FLITS #179); P1 refuted the FFT-leakage origin, placing the common mode in the baseband within each 390.625 kHz coarse channel"
+claims = ["the retained CHIME product is information-limited for Delta-nu_d at the observed modulation depth (C1 and P1 both DOCUMENTED-FAIL)"]
+consumers = ["sec:results-scintillation", "tab:chime_scint_gates"]
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; interior beta=3.72 under the retired thin-screen campaign, suspended pending §V (V1) and geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "johndoeII"
+tns = "FRB 20230814B"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "diagnostic"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared the census verdict, but johndoeII's interior z=0.77 dominant-halo attribution is provisional until a spectroscopic host redshift exists"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "hamilton"
+tns = "FRB 20230913A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "mahi"
+tns = "FRB 20240122A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "chromatica"
+tns = "FRB 20240203A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "documented_fail"
+artifact = "pipeline:analysis/beta_campaign/CAMPAIGN_REPORT.md"
+commit = "2242124"
+scope = "joint-fit quality gate FAIL (chi2_r ~ 11.6/9.3); excluded from the beta roster (tab:beta)"
+claims = ["chromatica's scattering joint fit fails the quality gate and is excluded from the beta roster"]
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []
+
+[[sightline]]
+burst = "casey"
+tns = "FRB 20240229A"
+
+[[sightline.evidence]]
+strand = "association"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6 revalidated 2026-07-07; residuals, P_cc, and verdicts quotable under the shared-DSA-DM reference convention"
+claims = ["co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention"]
+consumers = ["sec:results-association", "sec:toa", "sec:toa-pcc", "fig:association-summary"]
+
+[[sightline.evidence]]
+strand = "dm_obs"
+status = "trusted"
+artifact = "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+commit = "2242124"
+scope = "V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py"
+claims = ["adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement"]
+consumers = ["sec:dm-measurement", "sec:dm"]
+
+[[sightline.evidence]]
+strand = "dm_budget"
+status = "trusted"
+artifact = "scripts/dm_budget_uncertainty.py"
+commit = "2242124"
+scope = "V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored"
+claims = ["DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5"]
+consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
+
+[[sightline.evidence]]
+strand = "foreground_census"
+status = "trusted"
+artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+commit = "2242124"
+scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
+claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
+consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:sightline_halo_grid"]
+
+[[sightline.evidence]]
+strand = "scintillation_dsa"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scintillation_chime"
+status = "unavailable"
+artifact = ""
+commit = ""
+scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "scattering"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection"
+claims = []
+consumers = []
+
+[[sightline.evidence]]
+strand = "energies"
+status = "blocked"
+artifact = ""
+commit = ""
+scope = "fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass"
+claims = []
+consumers = []

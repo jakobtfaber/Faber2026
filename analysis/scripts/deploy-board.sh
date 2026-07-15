@@ -16,6 +16,13 @@ trap cleanup EXIT
 
 [[ -f "$BOARD" ]] || { echo "missing $BOARD" >&2; exit 1; }
 
+# Refuse to publish a board built from a drifted/contradicted control state.
+# --offline keeps deploy usable without a gh token; drop it for live checks.
+if ! python3 "$ROOT/scripts/sync_state.py" --check --offline; then
+  echo "deploy-board: sync_state --check failed; regenerate views before deploying" >&2
+  exit 1
+fi
+
 git -C "$ROOT" fetch "$REMOTE" "$BRANCH"
 git -C "$ROOT" worktree add --detach "$TMP" "$REMOTE/$BRANCH"
 
