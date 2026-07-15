@@ -36,6 +36,7 @@ graphify-out/
 # to GitHub or mirror them into Overleaf.
 /.agents/
 /.claude/
+/.claude-science/
 /.codex/
 /.cursor/
 /.entire/
