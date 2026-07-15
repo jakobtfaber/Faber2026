@@ -1,5 +1,10 @@
 #!/usr/bin/env python
-"""V3 independent recomputation + robustness audit of the burst-energies table.
+"""Legacy-table arithmetic recomputation + robustness audit for V3 energies.
+
+This script deliberately audits the current mixed-legacy table only. It is
+not the verifier for the adopted CHIME+DSA data-driven estimator: that verifier
+must use the regenerated artifact's data-fluence statistical uncertainties and
+must not read joint-fit c0/gamma posterior widths.
 
 Independent of pipeline code (only reads its pinned artifacts):
   1. Re-derive E_iso for all 8 rows from the stored calibrated band integrals
@@ -32,6 +37,7 @@ HERE = Path(__file__).resolve().parent
 PIPE = HERE.parents[1] / "pipeline"
 BE = PIPE / "analysis" / "burst_energies"
 JOINT = PIPE / "analysis" / "scattering-refit-2026-06" / "joint_json"
+PROVENANCE = BE / "burst_energies.provenance.json"
 
 JY_MS_HZ_TO_ERG_CM2 = 1e-29 * 1e7  # 1 Jy*ms*Hz = 1e-29 J/m^2 ; J->erg
 BAND_SYS_DEX = {"C": 0.25, "D": 0.20}
@@ -50,7 +56,17 @@ def check(name, ok, detail=""):
 
 
 def main():
+    provenance = json.loads(PROVENANCE.read_text())
+    lineages = set(provenance.get("c0gamma_pbf", {}).values())
+    if lineages != {"mixed-legacy"}:
+        print(
+            "[FAIL] this audit accepts only the mixed-legacy artifact; "
+            "use the data-driven verifier required by the V3 runbook"
+        )
+        raise SystemExit(1)
+
     rows = json.loads((BE / "burst_energies.json").read_text())
+    print(f"mode: legacy arithmetic audit ({provenance['git_sha']})")
     print(f"loaded {len(rows)} rows from burst_energies.json\n")
 
     # ---- 1+2: E_iso and error re-derivation ------------------------------
@@ -156,7 +172,9 @@ def main():
             near = "  <-- at -5 prior bound" if gd < -4.5 else ""
             print(f"  {p.stem.replace('_joint_fit',''):12s} gamma_C {gc:+.2f}  gamma_D {gd:+.2f}{near}")
 
-    print(f"\n{'ALL CHECKS PASSED' if not FAILURES else 'FAILURES: ' + ', '.join(FAILURES)}")
+    print(
+        f"\n{'ALL LEGACY-AUDIT CHECKS PASSED' if not FAILURES else 'FAILURES: ' + ', '.join(FAILURES)}"
+    )
     if FAILURES:
         raise SystemExit(1)
 

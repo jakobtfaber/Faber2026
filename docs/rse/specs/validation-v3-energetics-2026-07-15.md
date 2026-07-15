@@ -62,9 +62,9 @@ this is stated in the table systematics, not hidden.
 (clean tree), 22 input JSONs sha256-stamped. These are wave-1-revoked
 products; under E2 they are demoted to cross-check inputs only.
 
-## 3. Independent recomputation (all PASS, 2026-07-15)
+## 3. Independent legacy-table recomputation (all PASS, 2026-07-15)
 
-Re-derived from stored calibrated band integrals with independent code
+Re-derived from the legacy table's stored calibrated band integrals with independent code
 (astropy Planck18): D_L (8/8), E_iso per band and total (8/8, <1e-9
 relative), k-correction identity (8/8), error propagation from joint-JSON c0
 posterior widths + BAND_SYS_DEX quadrature (8/8), closed-form band integral
@@ -104,8 +104,7 @@ shared-α scattering verdict — the caption was wrong. **The explicit rule:**
 > validated absolute flux calibration at the burst position. Scattering-fit
 > quality verdicts do not enter: on the data-driven route the energy consumes
 > no fit product. Excluded: freya, mahi, johndoeii (no host redshift);
-> casey (no CHIME-side calibrated fluence product yet — re-check at the
-> CHIME run, since the data-driven route no longer requires a joint fit).
+> casey (photometric redshift only).
 
 Note the casey point: the old 8-row set was defined by "has a joint c0/γ
 fit". Under the data-driven estimator that criterion vanishes, and casey
@@ -144,8 +143,13 @@ CHIME side (compute host, data staged):
 4. Regenerate `burst_energies.json` with both bands data-driven; re-stamp
    provenance (new gate_policy text = §5 rule); keep model-based values as
    cross-check columns; regenerate `burst_energies.tex`.
-5. Re-run `analysis/v3_energetics/recompute_energies.py` (manuscript repo)
-   — must remain ALL PASS with the new artifact.
+5. Add a data-driven verifier (or extend
+   `analysis/v3_energetics/recompute_energies.py` with a schema-selected
+   data-driven mode) that independently recomputes the table from the
+   regenerated fluence and statistical-error fields, checks its provenance,
+   and fails if any adopted value or uncertainty depends on joint-fit
+   `c0`/`gamma`. The current script intentionally accepts only the
+   mixed-legacy artifact and is retained as the E4 arithmetic cross-check.
 6. casey adjudication per §5 flag; wilhelm z provenance pin per §2 flag.
 
 ## 7. V3 status after this session

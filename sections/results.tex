@@ -328,20 +328,25 @@ promote scattering predictions only from the seven visually accepted fits.
 % completes on the compute host and the owner clears V3. Do not quote the
 % legacy (mixed-legacy c0/gamma) energies in prose.
 
-Energies are reported for the sightlines that satisfy both conditions of the
+The energy table will report sightlines that satisfy both conditions of the
 inclusion rule stated in Section~\ref{sec:methods-energies}: a spectroscopic
 host redshift, and a validated absolute flux calibration in both bands at the
-burst position. Eight of the twelve co-detections qualify: FRBs~20220207C,
+burst position. Applying that rule to the current metadata gives a provisional
+eight-row roster: FRBs~20220207C,
 20220310F, 20220506D, 20221113A, 20221203A, 20230307A, 20230913A, and
-20240203A. Six of the eight host redshifts are published spectroscopic
-values; FRBs~20230913A and 20240203A carry as-yet-unpublished spectroscopic
-redshifts and their rows are flagged provisional. The four exclusions are
+20240203A. Five have published spectroscopic host redshifts;
+FRBs~20230913A and 20240203A carry as-yet-unpublished spectroscopic
+redshifts and are flagged provisional, while the source of the adopted
+$z=0.5100$ for FRB~20221203A must be pinned before its row is citable. The
+four exclusions are
 FRBs~20230325A, 20240122A, and 20230814B, which lack a host redshift, and
 FRB~20240229A, whose available redshift is photometric rather than
 spectroscopic \citep{Connor2024}. Because the energy estimator uses no
 fitted parameters (Eq.~\ref{eq:eiso}), scattering-model fit quality does not
 enter the selection: an energy row neither requires nor inherits a joint-fit
-quality verdict.
+quality verdict. No row or numerical summary will be compiled until the
+CHIME-side data-driven fluences are regenerated, the FRB~20221203A redshift
+provenance is pinned, and V3 is cleared.
 
 % TODO(fill-at-V3-clear): uncomment and fill from the regenerated table —
 % the legacy artifact indicates ~three decades, E_iso ~ 1e38--1e41 erg
@@ -351,7 +356,7 @@ quality verdict.
 %$E_{\mathrm{iso}}\sim10^{38}$--$10^{41}\,$erg, with the uncertainty budget
 %dominated by the absolute-scale systematic rather than by measurement noise
 %(Section~\ref{sec:methods-energies}).
-We re-emphasize that these are observed-band quantities: each row samples a
+These will be observed-band quantities: each row samples a
 different pair of rest-frame intervals, so the rows are not mutually
 comparable at the few-tens-of-percent level, and none is comparable to a
 fixed-rest-band literature energy without a spectral extrapolation we do not
