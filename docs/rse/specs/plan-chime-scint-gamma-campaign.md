@@ -13,8 +13,10 @@ if needed); keep jakob-mbp CPU load bounded (fit fan-out ≤ ~4 local workers).
 ## Goal (loop termination condition)
 
 For every CHIME co-detection with a viable up-channelized product (12 npz, per
-`pipeline/scintillation/DATA_PROVENANCE.md`; isha/hamilton/johndoeII carry
-lower-confidence upper-bound status and must not be silently promoted):
+`pipeline/scintillation/DATA_PROVENANCE.md`; eligibility per the registry —
+isha and johndoeII are `upper_limit_only`, hamilton is `candidate` with a
+`single_block` provenance caveat (owner decision 2026-07-14) — and none may be
+silently promoted):
 
 1. **γ** — scintillation-bandwidth frequency-scaling index from sub-band
    Δν_d(ν) power-law fit, with uncertainty and a PASS/MARGINAL/FAIL verdict
