@@ -157,3 +157,54 @@ FLITS branch `scint/p4-envelope-model` (off `563645c`):
 (`freeze → e0 → e2 → e3 → verdict`); frozen config (hashed); E0/E2/E3 JSONs;
 figures for visual vetting at every stage; RESULT.md; INVENTORY.yaml entry;
 then Faber2026 pin bump. Journal every ≤ 10 min of active work.
+
+---
+
+## Outcome (2026-07-15, same day; FLITS PR #182)
+
+**Verdict (frozen taxonomy, option 3): `DOCUMENTED-FAIL (envelope not
+separable)` — the predeclared E2 fail branch. The real on-pulse residual was
+never scanned (0 of the 3 permitted looks were spent).**
+
+Execution facts, in gate order:
+
+- **Freeze:** config sha `e8e5e01d…`; reference envelope = delay low-pass
+  `k < 11` of the on-pulse mean ratio spectrum (the scan's own envelope
+  definition — no new free scale); injection weight `(E−1)/E` so synthetic
+  scintles ride the burst component only; per-channel half-field noise
+  σ ≈ 0.13; template normalization keeps â in P3′ units (a = (f_b·m)²).
+- **E0 (descriptive):** envelope contrast 0.054 (matches the frozen
+  f_b = 0.05); the intrinsic structure is a delay-power bump at k ≈ 20–40
+  (~3.5–7 MHz scales), inside the k ≥ 11 scan window — confirming what P3′
+  detected at 40σ. Profile: a **single** qualifying component (smoothed
+  S/N 11) → **E3b unavailable** under the frozen component rule.
+- **E2 (14 operating points):** the surrogate model-mismatch control fails
+  at 13 of 14 — cross-family surrogate envelopes produce spurious max-z of
+  **5.4–71.9** against noise-arm p95 ≈ 2 (bound 1.5×). The single
+  control-clean point (M2 GP, ℓ = 0.5 MHz; surrogate p95 = 1.17) absorbs
+  the injected scintles: recovered-width bias −0.45…−0.93, zero certified
+  cells. The only certifying cells anywhere are Δν_d = 77 kHz — below the
+  admissible window — at control-failing scales (M1 Λ=0.5, M2 ℓ=1.0). Drop
+  rules: M1/M3 no control-clean scale; M2 zero certified cells at
+  ≥ 127 kHz on its clean scale. All three families dropped.
+- **Evaluation-time discriminant availability:** E3b unavailable (single
+  component); **E3c unavailable** — freya has no *trusted* DSA-band Δν_d
+  (the DSA fits are revoked pending the trust reset; the sample's only
+  certified DSA measurement is FRB 20220506D, γ = 0.446 MHz). Even a
+  passing E2 could not have promoted a candidate.
+
+**Interpretation (exploratory class):** freya's intrinsic spectral envelope
+carries structure at every scale down to at least ~0.5–1 MHz. Any model
+stiff enough to preserve a 77–352 kHz scintle leaves un-attributable
+model-mismatch structure far above noise; the one model flexible enough to
+pass the mismatch control eats the signal. The envelope/scintle scale
+separation that subtraction requires does not exist in this data. The CHIME
+constraint therefore remains **envelope-confusion-limited**, now with the
+stronger closure that the foreground is not removable in-house: no
+admissible Δν_d measurement AND no quantifiable post-subtraction upper
+limit.
+
+**Successor:** none sanctioned. The E2 tables (`e2_calibration.json`,
+`figures/e2_control.png`) are the quantitative closure artifact. Owner
+review of the manuscript closure wording — deferred since P3′ — can now
+proceed with P3′ and P4 in hand.
