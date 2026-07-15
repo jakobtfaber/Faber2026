@@ -70,13 +70,20 @@ N_DRAW = 200_000
 DM_MW_HALO = 40.0
 SIGHTLINES = [
     # name, z, DM_obs, DM_MW(disk+halo), DM_cosmic_mean, DM_int, mass
-    ("FRB 20220207C", 0.043, 262.361665, 111, 36, 70, "measured"),
+    # DM_int is sourced ONLY from the V4-verified census registry
+    # (pipeline/galaxies/foreground/data/intervening_census_registry.csv):
+    # budget-eligible confirmed systems. The pre-2026-07-15 values for
+    # 20220207C (70), 20221113A (41), 20221203A (84), and 20230913A (41) came
+    # from the revoked legacy results/{name}_galaxies.csv lists through the
+    # registry-empty fallback bug in sightline_budget.foreground_unified;
+    # those sightlines have zero budget-eligible systems in the registry.
+    ("FRB 20220207C", 0.043, 262.361665, 111, 36, 0, "none"),
     ("FRB 20220310F", 0.479, 462.188773, 81, 427, 11, "assumed"),
     ("FRB 20220506D", 0.300, 397.015535, 118, 262, 0, "none"),
-    ("FRB 20221113A", 0.251, 411.435717, 123, 217, 41, "measured"),
-    ("FRB 20221203A", 0.510, 602.377821, 117, 456, 84, "assumed"),
+    ("FRB 20221113A", 0.251, 411.435717, 123, 217, 0, "none"),
+    ("FRB 20221203A", 0.510, 602.377821, 117, 456, 0, "none"),
     ("FRB 20230307A", 0.271, 610.289070, 74, 235, 241, "cluster"),
-    ("FRB 20230913A", 0.302, 518.796993, 110, 264, 41, "assumed"),
+    ("FRB 20230913A", 0.302, 518.796993, 110, 264, 0, "none"),
     ("FRB 20240203A", 0.074, 272.638699, 111, 62, 0, "none"),
     ("FRB 20240229A", 0.287, 491.207826, 74, 250, 0, "none"),
 ]

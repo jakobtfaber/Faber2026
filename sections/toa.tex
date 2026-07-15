@@ -47,12 +47,16 @@ We model unrelated CHIME bursts as a Poisson point process on the sky. For DSA
 burst $i$, the expected number of unrelated CHIME bursts that land inside the joint
 association window is
 \begin{equation}
-\mu_i = R \,\Omega_{\rm win}\, (2\,\Delta t)\, f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM}),
+\mu_i = R \,\frac{\Omega_{\rm win}}{\Omega_{\rm sky}}\, (2\,\Delta t)\, f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM}),
 \label{eq:pcc_mu}
 \end{equation}
-where $R$ is the all-sky CHIME burst rate (per unit solid angle per unit time),
-$\Omega_{\rm win}$ is the sky area of the positional window, $2\,\Delta t$ is the
-full arrival-time window (a $\pm\Delta t$ coincidence gate), and
+where $R$ is the all-sky CHIME burst rate (in
+$\mathrm{bursts\;sky^{-1}\,day^{-1}}$),
+$\Omega_{\rm win}$ is the sky area of the positional window and
+$\Omega_{\rm sky} = 4\pi\,\mathrm{sr} \simeq 41{,}253\,\mathrm{deg^2}$ the full
+sky---so $\Omega_{\rm win}/\Omega_{\rm sky}$ is the fraction of the sky covered
+by the positional gate---$2\,\Delta t$ is the
+full arrival-time window (a $\pm\Delta t$ coincidence gate, expressed in days), and
 $f_{\rm DM}(\mathrm{DM}_i,\Delta\mathrm{DM})$ is the fraction of the CHIME DM
 distribution lying within $\pm\Delta\mathrm{DM}$ of the burst's DM---the factor
 that additionally requires a chance interloper to match in DM, not only in
@@ -83,8 +87,14 @@ chance-\emph{maximizing} inputs, so the reported $P_{\rm cc}$ is an upper bound 
 the true false-alarm rate: an all-sky CHIME rate rounded up to
 $R = 10^{3}\,\mathrm{sky^{-1}\,day^{-1}}$ (above the Catalog~1 value of
 $\simeq525\,\mathrm{sky^{-1}\,day^{-1}}$; \citealt{CHIME2021Catalog}), a
-$0.5^{\circ}$-radius positional disk ($\Omega_{\rm win}=0.785\,\mathrm{deg^2}$),
-$\Delta t = \pm1\,\mathrm{s}$, and $\Delta\mathrm{DM}=\pm5\,\mathrm{pc\,cm^{-3}}$.
+$0.5^{\circ}$-radius positional disk ($\Omega_{\rm win}=0.785\,\mathrm{deg^2}$,
+i.e.\ $\Omega_{\rm win}/\Omega_{\rm sky}=1.90\times10^{-5}$),
+$\Delta t = \pm1\,\mathrm{s}$ ($2\,\Delta t = 2.31\times10^{-5}$\,day), and
+$\Delta\mathrm{DM}=\pm5\,\mathrm{pc\,cm^{-3}}$. With these inputs and
+$f_{\rm DM}=1$, Eq.~\eqref{eq:pcc_mu} evaluates directly to
+$\mu = 10^{3}\times1.90\times10^{-5}\times2.31\times10^{-5}
+= 4.4\times10^{-7}$, the position-and-time-only value quoted below and in
+Table~\ref{tab:sample}.
 These windows are far wider than the actual per-event tolerances (millisecond
 timing, arcsecond-scale DSA localization, and the measured DM agreement), so using
 each event's true tolerances can only lower $P_{\rm cc}$. As an independent check,

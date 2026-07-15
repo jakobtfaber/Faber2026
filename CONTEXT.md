@@ -309,7 +309,9 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
   where they survive (the sub-band validation figure) they are labeled as
   exponential-parametrization cross-checks, not turbulence indices; under the
   fit-trust reset the sub-band fits themselves are also uncitable pending §V.
-- **johndoeII's interior crossing** — its z=0.77 dominant halo is foreground
-  only against a placeholder host redshift; the galaxy-interior attribution is
-  provisional until a spectroscopic host z exists — and now doubly suspended:
-  the census verdict itself is Wave-2 revoked pending V4.
+- **johndoeII's interior crossing** — RESOLVED 2026-07-15: the V4-verified
+  census registry carries no johndoeII candidates at all; the interior-crossing
+  attribution (and its DM_int=70 column) came from the Wave-2-revoked legacy
+  candidate list through the registry-empty fallback bug fixed in FLITS
+  PR #183. The budget now tabulates DM_int=0 (note u, host z unknown); the
+  galaxy-interior narrative is removed from Results and the budget table.
