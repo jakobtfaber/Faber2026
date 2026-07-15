@@ -74,6 +74,15 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
       A2/A3 design work may proceed against the draft, tracking its
       revisions. Remaining owner call: sign off the revised trigger once
       the injection calibration reports its ΔlnZ operating point.
+      **2026-07-15 closure of the trigger sub-input:** the injection
+      calibration completed with no usable operating point (1 %
+      false-escalation envelope at ΔlnZ ≈ 5.97×10⁴, zero escalation
+      probability in all eight power cells —
+      [plan-a1-trigger-calibration.md](plan-a1-trigger-calibration.md)
+      Final outcome). Clause (i) is retired; clause (ii)
+      (posterior-predictive residuals) remains the only escalation limb.
+      There is no ΔlnZ operating point to sign off. Successor statistic
+      chartered as A5 per owner direction.
 - [ ] A2 **[FLITS]** Extended-medium (Williamson uniform-LOS) PBF kernel,
       β-coupled, per band (ADR-0007 un-deferred by the rail evidence: 10/12
       posteriors hit its re-open trigger — the nine tabled railed rows plus
@@ -84,6 +93,16 @@ then a pin bump here) · **[data]** h17 + `~/Data` campaign work ·
 - [ ] A4 **[FLITS]** ADR amendment recording the owner decision: rail classes
       are campaign QA only; α=4-limit quoting retired; ADR-0007 sequencing
       superseded. (CONTEXT.md here already updated 2026-07-06.)
+- [ ] A5 **[FLITS]** N-component profile-fit justification statistic
+      (chartered 2026-07-15, owner direction at A1-trigger closure): a
+      calibrated model-comparison criterion that says a burst is better
+      characterized by N profile components than by 1 — burst-morphology
+      component count, distinct from scattering-screen count. Replaces
+      visual-only morphology vetting as the justification for per-burst
+      component choices; injection-calibrated like A1's campaign, reusing
+      the dynesty evidence engine (`acf_evidence.py`) in the profile
+      domain. Design pending; not a circulation blocker unless the owner
+      promotes it.
 
 ## B. Scintillation campaign completion (both bands) — hard circulation gate
 

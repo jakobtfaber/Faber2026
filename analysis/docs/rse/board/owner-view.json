@@ -1,43 +1,39 @@
 {
-  "updated": "2026-07-15T01:10-0700",
+  "updated": "2026-07-15T01:32-0700",
   "needs_you": [
     {
-      "h": "Ratify scope fork — P1 failed",
-      "d": "P1 closed DOCUMENTED-FAIL (PR 47: 0/5 window variants passed the frozen 10× common-mode screen; no on-pulse fitting). Under decision-2026-07-15-p1-scope-fork.md the paper narrows to DSA scintillation + CHIME limits/diagnostics. Ratify the rule to execute the narrowing — this sets the paper's final scope."
+      "h": "Review the two recorded amendments",
+      "d": "Your in-session directions are now written into the records: (1) scope-fork amendment — CHIME scint measurement stays an active goal, 'P1 is final' revoked, narrowing not executed (decision-2026-07-15-p1-scope-fork.md §Owner amendment); (2) A1 trigger closed with no operating point, successor A5 chartered (N-component profile-fit justification statistic). Confirm the wording binds, or edit."
     },
     {
-      "h": "Pick control-system implementer",
-      "d": "plan-hybrid-control-system.md merged (PR 48): TOML state layers + generated views + CI drift gate, 1-day timebox. Choose one implementer/worktree: Antigravity (holds two duplicate worktrees — one must go), Devin, or Claude."
-    },
-    {
-      "h": "Sign off A1 ΔlnZ operating point",
-      "d": "campaign 36/68 cells on h17 (state as of 07-14, unverified since) · verdict wiring + tests done · packet lands when campaign finishes"
+      "h": "Sanction the next CHIME scint route (when assessment lands)",
+      "d": "P1 refuted the window mechanism — the common mode lives in the baseband within each coarse channel. Remaining product-changing routes: external-calibrator characterization vs voltage-domain cross-statistics. Claude drafts a predeclared assessment (incl. the 0.75% signal vs 59% common-mode S/N caveat); you pick which, if either, to run."
     }
   ],
   "now": [
     {
-      "h": "A1 calibration campaign",
-      "d": "h17, 36/68 cells (second joblib wave; as of 07-14)",
-      "who": "h17"
+      "h": "Hybrid control system implementation",
+      "d": "implementer = Claude (your pick); fresh worktree, 1-day timebox; both duplicate Antigravity worktrees deleted",
+      "who": "claude"
     },
     {
-      "h": "Scope-fork execution staged",
-      "d": "on ratification: revise dependency spine, unfreeze Discussion/synthesis on the narrowed basis, CHIME limits/diagnostics section",
+      "h": "CHIME scint successor-route assessment",
+      "d": "predeclared comparison of external-calibrator vs voltage-domain routes; gates frozen before burst data inspected",
       "who": "claude"
     }
   ],
   "next": [
+    {
+      "h": "A5: N-component profile-fit statistic",
+      "d": "calibrated N-vs-1 profile model comparison (owner charter at A1 closure); design after control system lands"
+    },
     {
       "h": "F3 consistency audit",
       "d": "manuscript audit of trusted association/census/budget claims — runnable now"
     },
     {
       "h": "Figure 1 data-only gallery",
-      "d": "per the 2026-07-14 decision route; independent of the fork"
-    },
-    {
-      "h": "Control-system flag-day PR",
-      "d": "after implementer choice; evidence ledger bootstraps with the P1 outcome already recorded"
+      "d": "per the 2026-07-14 decision route; independent of the CHIME question"
     }
   ],
   "components": [
@@ -58,16 +54,16 @@
     {
       "name": "Scattering",
       "lane": "V1·A·C",
-      "status": "method open",
+      "status": "A1 trigger closed (no operating point)",
       "status_class": "pend",
-      "next": "A1 with you · V1/V2 startable"
+      "next": "A5 chartered · V1/V2 startable"
     },
     {
       "name": "Scintillation",
       "lane": "B",
-      "status": "CHIME closed: C1+P1 failed",
+      "status": "CHIME campaign OPEN per owner amendment; C1+P1 documented-fail",
       "status_class": "pend",
-      "next": "DSA-only + CHIME limits (on ratification)"
+      "next": "successor-route assessment (calibrator vs voltage-domain)"
     },
     {
       "name": "Energies",
@@ -81,14 +77,14 @@
       "lane": "D·E·F1",
       "status": "blocked",
       "status_class": "blocked",
-      "next": "unblocks on scope ratification"
+      "next": "frozen until CHIME route resolves or owner closes campaign"
     },
     {
       "name": "Mechanics",
       "lane": "P0·F·G",
       "status": "active",
       "status_class": "now",
-      "next": "pin 80094de current · control system speced · F6 authors"
+      "next": "pin 2242124 current · control system: Claude implementing"
     }
   ]
 }
