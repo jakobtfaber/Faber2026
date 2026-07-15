@@ -46,7 +46,7 @@ yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
 
 Rather than attribute the arithmetic residual of the mean-subtracted budget to
 the host, we forward-model $\mathrm{DM_{host}}$ as a posterior. The diffuse
-cosmic term is drawn as the intergalactic column
+cosmic term is represented by the intergalactic-column distribution
 $\mathrm{DM_{IGM}}\sim\mathrm{LogNormal}(\mu(z),\sigma(z))$, with $\mu(z)$ and
 $\sigma(z)$ the redshift-dependent parameters of the bivariate (IGM, halo)
 log-normal fit to a mock FRB survey in IllustrisTNG-300 \citep{Walker2024},
@@ -60,11 +60,13 @@ This calibration replaces the earlier fixed-scaling
 $\sigma_{\rm DM}=F\,z^{-1/2}$ form \citep{Macquart2020, McQuinn2014, James2022},
 which \citet{Connor2024} show overstates the diffuse scatter because
 $\sigma_{\rm DM}$ does not follow the $z^{-1/2}$ halo-Poisson scaling. The
-Galactic-disk, Galactic-halo, and intervening columns are drawn from their own
-priors (Appendix~\ref{app:host-forward-model}). We evaluate the observer-frame
+Galactic-disk, Galactic-halo, and individual intervening-system PDFs are
+evaluated from their own priors and convolved deterministically
+(Appendix~\ref{app:host-forward-model}). We evaluate the observer-frame
 host column $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-
-\mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$ per draw; the rest-frame host contribution
-is $(1+z)\,\mathrm{DM_{host}}$. Sampling the full $P(\mathrm{DM_{cosmic}}\,|\,z)$
+\mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$ by reflecting the convolved foreground
+PDF about the exact observed DM; the rest-frame host contribution is
+$(1+z)\,\mathrm{DM_{host}}$. Propagating the full $P(\mathrm{DM_{cosmic}}\,|\,z)$
 rather than subtracting a single number returns an asymmetric posterior with a
 well-defined $P(\mathrm{DM_{host}}<0)$ per sightline; that interval, not a shift
 in the central value, is what the forward model buys. The host medians do sit

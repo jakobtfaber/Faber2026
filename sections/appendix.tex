@@ -93,10 +93,11 @@ catalog entries represent distinct gas halos.
 
 The host term of Table~\ref{tab:budget} is a forward-modeled posterior rather
 than an arithmetic residual (Section~\ref{sec:dm}). For each redshift-constrained
-sightline we draw $N=2\times10^{5}$ Monte-Carlo samples of
+sightline we evaluate the foreground probability densities on a uniform
+$0.1\,\mathrm{pc\,cm^{-3}}$ grid and compute
 $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW,ISM}}-\mathrm{DM_{MW,halo}}
--\mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$, propagating priors on the non-host
-terms:
+-\mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$ by deterministic convolution,
+propagating priors on the non-host terms:
 \begin{itemize}
 \item \emph{Cosmological.} The diffuse cosmic term is the intergalactic column
 $\mathrm{DM_{IGM}}\sim\mathrm{LogNormal}(\mu(z),\sigma(z))$, with $\mu(z)$ and
@@ -122,32 +123,27 @@ that redshift (FRB~20220207C, FRB~20240203A) we continue $\mu(z)$ along the
 $\langle\mathrm{DM_{IGM}}\rangle\propto\int_0^z(1+z')/E(z')\,\mathrm{d}z'$,
 rather than extrapolating the spline, and hold $\sigma$ at its grid-edge value.
 The continuation is exact in the $z\rightarrow0$ limit and reproduces the
-tabulated log-median increments to $1.5\%$ over $0.1<z<0.3$. Holding $\sigma$
-fixed below the grid, if anything, \emph{under}-represents the diffuse scatter at
-$z<0.1$, where cosmic variance grows; this narrows $P(\mathrm{DM_{host}})$ only
-slightly there, because the low-$z$ IGM column it multiplies is small
+tabulated log-median increments to $1.5\%$ over $0.1<z<0.3$.
+Holding $\sigma$ fixed below the grid, if anything, \emph{under}-represents the
+diffuse scatter at $z<0.1$, where cosmic variance grows; this narrows
+$P(\mathrm{DM_{host}})$ only slightly because the low-$z$ IGM column is small
 ($\lesssim35\,\mathrm{pc\,cm^{-3}}$).
-\item \emph{Galactic disk.} The NE2025 disk column times a unit-mean lognormal of
-fractional width $\sigma_{\ln}=0.30$.
-\item \emph{Galactic halo.} A unit-mean lognormal multiplier on
-$40\,\mathrm{pc\,cm^{-3}}$ ($\sigma_{\ln}=0.35$; mean $40$, median
-$\simeq38\,\mathrm{pc\,cm^{-3}}$, $2\sigma$ span
-$\approx[19,76]\,\mathrm{pc\,cm^{-3}}$;
+The $f_{\rm IGM}$ mixture is evaluated by 64-node Gauss--Legendre quadrature
+on each smooth side of the asymmetric prior, including analytically the
+probability clipped onto the physical endpoints.
+\item \emph{Galactic disk.} The NE2025 disk column as the median of a
+lognormal prior with $30\%$ logarithmic scatter.
+\item \emph{Galactic halo.} $40\,\mathrm{pc\,cm^{-3}}$ median, lognormal with a
+factor-$\sim\!2$ span ($2\sigma$ range $\approx[20,80]\,\mathrm{pc\,cm^{-3}}$;
 \citealt{YamasakiTotani2020, KeatingPen2020, Cook2023}).
-\item \emph{Intervening.} The Table~\ref{tab:budget} $\mathrm{DM_{int}}$
-column with a $40\%$
-(measured-mass halo), factor-$2$ (assumed-mass halo), or $30\%$ (cluster)
-lognormal uncertainty; after the census remediation every contributing halo
+\item \emph{Intervening.} Each contributing census system's point column
+as the median of a $40\%$ (measured-mass halo), factor-$2$ (assumed-mass halo),
+or $30\%$ (cluster) lognormal prior; the individual PDFs are convolved to form
+the Table~\ref{tab:budget} $\mathrm{DM_{int}}$ term. After the census remediation every contributing halo
 carries a vetted empirical mass, so the galaxy columns use the $40\%$ family
 and the assumed-mass factor-$2$ family is currently unexercised. The tabulated
-host posterior draws the \emph{sightline-summed} $\mathrm{DM_{int}}$ through a
-single lognormal of the dominant system's family (the cluster family where a
-cluster dominates the column), rather than convolving each system's prior
-independently. This is deliberately conservative: a single lognormal on the sum
-is wider than the sum of independent per-system lognormals, so it broadens
-$P(\mathrm{DM_{host}})$ rather than narrowing it. The per-system curves in
-Figure~\ref{fig:dm_host_posteriors} are shown for context and are not the object
-convolved into the tabulated posterior.
+host posterior uses that convolution directly rather than applying one
+lognormal smear to the sightline-summed point estimate.
 \end{itemize}
 The resulting posteriors are asymmetric, dominated at higher redshift by the
 diffuse cosmic scatter (Figure~\ref{fig:dm_host_posteriors},
@@ -165,6 +161,11 @@ asymmetric interval and the $P(\mathrm{DM_{host}}<0)$ diagnostic, not the change
 in central value. Because $f_{\rm IGM}$ was itself inferred partly from DSA-110
 sightlines, these host DMs are correspondingly sensitive to that normalization.
 
+The component PDFs are convolved with FFTs, normalized after each operation,
+and the foreground-sum PDF is reflected about the exact adopted
+$\mathrm{DM_{obs}}$; no Monte-Carlo sampling or kernel-density estimate enters
+the reported posteriors.
+
 For the six sightlines flagged \tablenotemark{u} in Table~\ref{tab:budget} the
 line of sight lies outside the deep-imaging footprints, so the intervening census
 is incomplete and their $\mathrm{DM_{int}}$ is a floor. The cosmic term used here
@@ -172,8 +173,8 @@ is the IGM marginal, which by construction excludes virialized halos; any
 undetected foreground halo on those sightlines is then subtracted by neither the
 cosmic nor the intervening term and is absorbed into the host residual. Their
 tabulated $\mathrm{DM_{host}}$---including the two largest, FRB~20230913A
-($177\,\mathrm{pc\,cm^{-3}}$) and FRB~20220207C
-($120\,\mathrm{pc\,cm^{-3}}$)---are therefore \emph{upper limits} on the true host
+($171\,\mathrm{pc\,cm^{-3}}$) and FRB~20220207C
+($115\,\mathrm{pc\,cm^{-3}}$)---are therefore \emph{upper limits} on the true host
 contribution, and are marked as such in Table~\ref{tab:host-forward-model} and
 Figure~\ref{fig:dm_host_posteriors}. The three sightlines with deep imaging
 (FRB~20220310F, FRB~20230307A, FRB~20240229A) carry a census complete enough that
@@ -181,13 +182,13 @@ the IGM-marginal cosmic term and $\mathrm{DM_{int}}$ are mutually consistent, an
 their host posteriors are two-sided.
 
 One sightline, FRB~20220310F, carries a median
-posterior marginally below zero with $P(\mathrm{DM_{host}}<0)\simeq0.5$; it
-is consistent with a vanishing host contribution, and the $f_{\rm IGM}$
-required to place its median exactly at zero lies within
-$0.2\sigma$ of the adopted prior median. The highest-redshift sightline,
+posterior marginally below zero with $P(\mathrm{DM_{host}}<0)\simeq0.54$; it
+is consistent with a vanishing host contribution, and a small downward shift
+of $f_{\rm IGM}$ within its quoted uncertainty places the median at zero. The
+highest-redshift sightline,
 FRB~20221203A, using the provisional internal value $z=0.510$, is likewise
 consistent with zero
-($P(\mathrm{DM_{host}}<0)=0.24$). The prior widths above are fiducial
+($P(\mathrm{DM_{host}}<0)=0.25$). The prior widths above are fiducial
 and are documented so they can be revised; the analysis and both artifacts are
 reproduced by \texttt{scripts/dm\_budget\_uncertainty.py}.
 
@@ -206,15 +207,15 @@ $\mathrm{pc\,cm^{-3}}$.
   \colhead{$\mathrm{DM_{host}}$ (rest)} &
   \colhead{$P(\mathrm{DM_{host}}<0)$}}
 \startdata
-FRB 20220207C\tablenotemark{u} & $0.043$ & $120^{+26}_{-31}$  & $125^{+27}_{-32}$  & $0.00$ \\
-FRB 20220310F & $0.479$ & $-5^{+87}_{-106}$ & $-7^{+128}_{-157}$ & $0.52$ \\
-FRB 20220506D\tablenotemark{u} & $0.300$ & $48^{+65}_{-80}$   & $63^{+84}_{-105}$  & $0.27$ \\
-FRB 20221113A\tablenotemark{u} & $0.251$ & $97^{+58}_{-74}$   & $121^{+73}_{-92}$  & $0.10$ \\
-FRB 20221203A\tablenotemark{u} & $0.510$\tablenotemark{r} & $79^{+93}_{-112}$ & $120^{+140}_{-170}$ & $0.24$ \\
-FRB 20230307A & $0.271$ & $88^{+88}_{-108}$  & $111^{+112}_{-137}$ & $0.21$ \\
-FRB 20230913A\tablenotemark{u} & $0.302$\tablenotemark{r} & $177^{+64}_{-80}$  & $231^{+83}_{-105}$  & $0.03$ \\
-FRB 20240203A\tablenotemark{u} & $0.074$\tablenotemark{r} & $80^{+32}_{-38}$  & $86^{+34}_{-41}$   & $0.03$ \\
-FRB 20240229A & $0.287$ & $81^{+74}_{-92}$  & $104^{+96}_{-118}$ & $0.19$ \\
+FRB 20220207C\tablenotemark{u} & $0.043$ & $115^{+26}_{-32}$ & $120^{+27}_{-34}$ & $0.00$ \\
+FRB 20220310F & $0.479$ & $-10^{+87}_{-106}$ & $-14^{+129}_{-158}$ & $0.54$ \\
+FRB 20220506D\tablenotemark{u} & $0.300$ & $42^{+66}_{-81}$ & $55^{+85}_{-106}$ & $0.29$ \\
+FRB 20221113A\tablenotemark{u} & $0.251$ & $90^{+59}_{-74}$ & $113^{+74}_{-93}$ & $0.12$ \\
+FRB 20221203A\tablenotemark{u} & $0.510$\tablenotemark{r} & $73^{+93}_{-113}$ & $110^{+141}_{-171}$ & $0.25$ \\
+FRB 20230307A & $0.271$ & $69^{+81}_{-98}$ & $87^{+104}_{-124}$ & $0.24$ \\
+FRB 20230913A\tablenotemark{u} & $0.302$\tablenotemark{r} & $171^{+65}_{-81}$ & $223^{+84}_{-106}$ & $0.03$ \\
+FRB 20240203A\tablenotemark{u} & $0.074$\tablenotemark{r} & $72^{+33}_{-39}$ & $78^{+35}_{-43}$ & $0.04$ \\
+FRB 20240229A & $0.287$ & $66^{+70}_{-86}$ & $85^{+91}_{-111}$ & $0.22$ \\
 \enddata
 \tablenotetext{r}{Provisional internal host redshift; no citable published
 provenance is currently available.}
@@ -234,16 +235,16 @@ census is incomplete and $\mathrm{DM_{int}}$ is a floor, so the tabulated host D
     TNG-calibrated IGM (purple), and intervening census systems (orange; one
     curve per galaxy or cluster with nonzero column, obtained by applying the
     appropriate lognormal prior family to its census point estimate). The
-    dashed navy curve is the sightline-sum intervening prior used in the host
-    convolution itself; the
-    bold red curve is the resulting $P(\mathrm{DM_{host}})$ (observer frame; the
-    host-frame column is $(1+z)$ times larger), with a dashed
+    dashed navy curve is the convolution of those individual intervening PDFs
+    used in the host calculation; the
+    bold red curve is the resulting $P(\mathrm{DM_{host}})$ (observer frame;
+    the host-frame column is $(1+z)$ times larger), with a dashed
     vertical mark at the posterior median and a dotted line at zero.
     Peak-normalization makes shapes (not absolute heights) comparable across
     terms of very different scale. Panel titles carry a dagger ($\dagger$) for
     the six sightlines outside the deep-imaging footprints, whose incomplete
     intervening census makes $P(\mathrm{DM_{host}})$ an upper limit rather than a
-    two-sided posterior (Table~\ref{tab:host-forward-model}). Sampling details and
+    two-sided posterior (Table~\ref{tab:host-forward-model}). Numerical details and
     fiducial priors are given in Appendix~\ref{app:host-forward-model}.}
     \label{fig:dm_host_posteriors}
 \end{figure*}

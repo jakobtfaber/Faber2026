@@ -2,7 +2,7 @@
 
 The foreground/cosmological columns remain owned by the pinned FLITS table
 data.  This super-repository layer replaces only ``DM_obs`` from the adopted
-phase-coherence catalog and ``DM_host`` from the forward Monte Carlo, keeping
+phase-coherence catalog and ``DM_host`` from deterministic convolution, keeping
 the manuscript table reproducible without changing the pipeline submodule pin.
 """
 
@@ -64,10 +64,12 @@ def render() -> str:
         raise ValueError("budget and adopted-DM rosters differ")
     for row in rows:
         burst = row["burst"]
-        row["dm_obs"] = f'{float(dm[burst]["adopted_dm"]):.4f}'
+        row["dm_obs"] = f"{float(dm[burst]['adopted_dm']):.4f}"
         if row["z"] is not None:
             h = host[burst]
-            p16, p50, p84 = (int(h[k]) for k in ("dm_host_p16", "dm_host_p50", "dm_host_p84"))
+            p16, p50, p84 = (
+                int(h[k]) for k in ("dm_host_p16", "dm_host_p50", "dm_host_p84")
+            )
             row["dm_host"] = [p50, p84 - p50, p50 - p16]
 
     head = base._HEAD.replace(  # noqa: SLF001 - pinned internal formatting contract
@@ -90,41 +92,35 @@ def render() -> str:
             cells[1] += r"\tablenotemark{r}"
         rendered_rows.append(" & ".join(cells) + r" \\")
     body = "\n".join(rendered_rows)
-    # Super-repo overlay on the emitter footnotes/comments: (i) the f_IGM
-    # sensitivity statement tracks the manuscript forward model (median -5
-    # after the 2026-07-15 census remediation -> 0.2 sigma, conservative);
-    # (ii) note u needs the lower-bound clause for the one sightline with
-    # both a shallow-layer confirmed system and no deep coverage.
-    tail = base._TAIL.replace(  # noqa: SLF001
-        "within $0.3\\sigma$",
-        "within $0.2\\sigma$",
-    ).replace(
-        # (iii) The upward move of the host medians relative to the old
-        # mean-subtracted residuals is driven mainly by the f_IGM 0.84 -> 0.76
-        # recalibration (~26 of a ~30 pc/cm^3 shift at z~0.3), not by the
-        # log-normal skew; attribute it correctly.
-        "\\tablecomments{Because the diffuse cosmic term is drawn from a skewed log-normal,\n"
-        "the host posteriors are asymmetric and their medians exceed the naive\n"
-        "mean-subtracted residuals. One high-redshift sightline",
+    # Super-repo overlays add provisional-redshift and incomplete-coverage
+    # qualifications, and attribute the central-value offset correctly.
+    tail = (
+        base._TAIL.replace(  # noqa: SLF001
+            "\\tablecomments{Because the diffuse cosmic term follows a skewed log-normal,\n"
+            "the host posteriors are asymmetric and their medians exceed the naive\n"
+            "mean-subtracted residuals. One high-redshift sightline",
         "\\tablecomments{The host posteriors are asymmetric because the diffuse cosmic\n"
-        "term is drawn from a skewed log-normal. Their medians sit above the naive\n"
-        "mean-subtracted residuals, but that offset is driven mainly by the lower IGM\n"
-        "normalization adopted here ($f_{\\rm IGM}=0.76$ versus $0.84$), not by the\n"
-        "skew; the forward model's value is the asymmetric interval and the\n"
-        "per-sightline $P(\\mathrm{DM_{host}}<0)$, not the shift in central value.\n"
-        "One high-redshift sightline",
-    ).replace(
-        "not\nexcluded---absence of coverage is not absence of foreground\n"
-        "(Section~\\ref{sec:obs-fg}).}",
-        "not\nexcluded---absence of coverage is not absence of foreground\n"
-        "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
-        "shallow-layer confirmed system (FRB~20240203A), the tabulated column\n"
-        "is a lower bound rather than a complete census.}",
-    ).replace(
-        "\\tablenotetext{u}{Position lies outside",
-        "\\tablenotetext{r}{Provisional internal host redshift; no citable "
-        "published provenance is currently available.}\n"
-        "\\tablenotetext{u}{Position lies outside",
+        "term follows a skewed log-normal. Their medians sit above the naive\n"
+            "mean-subtracted residuals, but that offset is driven mainly by the lower IGM\n"
+            "normalization adopted here ($f_{\\rm IGM}=0.76$ versus $0.84$), not by the\n"
+            "skew; the forward model's value is the asymmetric interval and the\n"
+            "per-sightline $P(\\mathrm{DM_{host}}<0)$, not the shift in central value.\n"
+            "One high-redshift sightline",
+        )
+        .replace(
+            "not\nexcluded---absence of coverage is not absence of foreground\n"
+            "(Section~\\ref{sec:obs-fg}).}",
+            "not\nexcluded---absence of coverage is not absence of foreground\n"
+            "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
+            "shallow-layer confirmed system (FRB~20240203A), the tabulated column\n"
+            "is a lower bound rather than a complete census.}",
+        )
+        .replace(
+            "\\tablenotetext{u}{Position lies outside",
+            "\\tablenotetext{r}{Provisional internal host redshift; no citable "
+            "published provenance is currently available.}\n"
+            "\\tablenotetext{u}{Position lies outside",
+        )
     )
     return head + body + "\n" + tail
 
