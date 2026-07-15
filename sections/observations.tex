@@ -295,14 +295,33 @@ $1\sigma$ of the host, when the host redshift is a placeholder, or when no
 trustworthy redshift or galaxy classification exists (including the
 PS1-STRM ``unsure'' class).
 
-The census evaluated 35 catalog candidates along the twelve sightlines,
-which the cross-listing deduplication above reduces to 28 physical systems.
-Table~\ref{tab:foreground} lists the 23 that remain relevant to the budget:
-10 confirmed foreground (9 galaxy halos and the single cluster whose
-sightline passes within $R_{500}$) and 13 inconclusive---candidates the
+An audit of the discovery-to-validation handoff recovered three catalogued
+systems that the frozen 49-row validation sheet never evaluated. Two are
+galaxy candidates in the shallow all-sky layer: WISEA
+J044538.83$+$701843.3 at $b\simeq16$\,kpc toward FRB~20221113A and WISEA
+J211150.32$+$724807.8 at $b\simeq208$\,kpc toward FRB~20220506D. Their
+discovery redshifts fail the hierarchy above---the former is a
+distance-flagged GLADE+ value with no NED redshift, and the latter is a
+low-quality WISExSCOS-grade photometric value---so both remain
+\emph{inconclusive} and contribute zero to the reported budget. The third is
+the WHL12 cluster WHL J115048.0$+$714428 at $z=0.1893$ and
+$b\simeq614$\,kpc toward FRB~20230307A. It is catalog-confirmed foreground but
+absent from the adopted \citet{WenHan2024} source, so it lacks the $M_{500}$
+and $R_{500}$ inputs required by our cluster-column model and is likewise
+budget-ineligible (Appendix~\ref{app:clusters}). These rows carry the explicit
+provenance tag \texttt{v4-extension-2026-07-15}; the frozen inputs remain
+unchanged.
+
+The extended census evaluates 38 catalog rows along the twelve sightlines,
+which the cross-listing deduplication above reduces to 31 physical systems.
+Table~\ref{tab:foreground} lists the 26 retained for census interpretation:
+11 confirmed foreground (9 galaxy halos and 2 catalogued clusters) and
+15 inconclusive---candidates the
 available redshifts could not place on either side of the host, which
 therefore bound the systematic uncertainty on each sightline's intervening
-column. The remaining 5 physical candidates were refuted as background by the
+column. Only 10 of the 11 confirmed systems have the adopted mass/radius inputs
+needed for the reported budget; the WHL12 extension is the exception. The
+remaining 5 physical candidates were refuted as background by the
 validation stage and are omitted from the table, as are candidates rejected
 outright as stars. A further 14 spectroscopically confirmed
 foreground clusters lie along these sightlines at impact parameters beyond
@@ -313,9 +332,8 @@ only wide-field catalogs reach this declination, a sightline with no confirmed
 system is unconstrained by survey depth rather than demonstrably foreground-free;
 the budget of Section~\ref{sec:foreground} treats such sightlines accordingly.
 
-Of the 10 physical confirmed foreground systems, six carry a DESI or NED
-spectroscopic
-(or the single cluster's DESI-member) redshift; the remaining four rest on a
+Of the 11 physical confirmed foreground systems, seven carry a DESI, NED, or
+cluster-catalog redshift; the remaining four rest on a
 DESI Legacy DR9 photometric redshift alone. Our confirmation criterion
 ($z_{\rm phot}+1\sigma < z_{\rm host}$) admits, per object, the $\sim16\%$
 Gaussian probability that the true redshift exceeds $z_{\rm phot}+1\sigma$, plus
