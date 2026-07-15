@@ -5,13 +5,13 @@
 
 Operational control surface for Faber2026, generated from `docs/rse/program-state.toml`. One row per lane. Live PR/issue/branch state is verified by `scripts/sync_state.py --check` (advisory), not baked into this table.
 
-**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 1/3
+**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 0/3
 
 | Lane | Title | Strand | Status | Owner | Issue | Branch | PR | Needs owner | Next action |
 |---|---|---|---|---|---|---|---|---|---|
 | `hybrid-control-system` | Hybrid control system: canonical state, generated views, CI drift gate | mechanics | done | claude | [#54](https://github.com/jakobtfaber/Faber2026/issues/54) | `feat/hybrid-control-system` | [#59](https://github.com/jakobtfaber/Faber2026/pull/59) | no | none — flag day landed (PR #59); views are generated from this file |
 | `chime-route-b-voltage` | P2 Route B: ratio statistics (G2 common-mode cancellation PASS; G1 sensitivity fail) | scintillation | documented_fail | claude | [#55](https://github.com/jakobtfaber/Faber2026/issues/55) | `scint/p2-routeb-voltage` | [#180](https://github.com/jakobtfaber/Faber2026/pull/180) | no | terminal; successor P3 (optimal quadratic estimator) planned in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md, awaiting owner sanction |
-| `chime-p3-optimal-estimator` | P3 delay-domain optimal quadratic estimator (owner-sanctioned successor to P2) | scintillation | in_progress | claude | [#68](https://github.com/jakobtfaber/Faber2026/issues/68) | `scint/p3-optimal-estimator` | — | no | P3' amendment sanctioned (no demeaning, k>=11 cut, null-mean-subtracted z); implement optimal_dnu.py + tests, then blinded G1''/G2'' |
+| `chime-p3-optimal-estimator` | P3 delay-domain optimal quadratic estimator (owner-sanctioned successor to P2) | scintillation | needs_owner | claude | [#68](https://github.com/jakobtfaber/Faber2026/issues/68) | `scint/p3-optimal-estimator` | [#181](https://github.com/jakobtfaber/Faber2026/pull/181) | yes | gates passed, owner-authorized unblinding done: z_max 40.4 at scan edge, amplitude 11x scint ceiling -> intrinsic envelope, declined as measurement; owner ratifies closure wording (envelope-confusion-limited exclusion) or sanctions P4 envelope modeling (exploratory-only) |
 | `a5-profile-fit-statistic` | A5 N-component profile-fit justification statistic | scattering | proposed | — | [#56](https://github.com/jakobtfaber/Faber2026/issues/56) | — | — | no | design after the control system lands |
 | `f3-consistency-audit` | F3 manuscript consistency audit | synthesis | done | devin | [#57](https://github.com/jakobtfaber/Faber2026/issues/57) | `ms/f3-consistency-audit` | [#64](https://github.com/jakobtfaber/Faber2026/pull/64) | no | none — mechanical audit landed in PR #64; owner-approved endpoint wording resolved under F1 |
 | `fig1-gallery` | Figure 1 data-only twelve-burst gallery | association | proposed | — | [#58](https://github.com/jakobtfaber/Faber2026/issues/58) | — | — | no | fresh isolated batch under the locked 4-by-3 data-only contract |
