@@ -1,52 +1,44 @@
 {
-  "updated": "2026-07-14T01:25-0700",
+  "updated": "2026-07-15T00:35-0700",
   "needs_you": [
     {
-      "h": "Review re-land PR",
-      "d": "FLITS PR 171: lane content merged onto rewritten main, suite 704 green · review focus: 7 scint_analysis files where lane superseded #156-159 · pin bump follows merge"
-    },
-    {
-      "h": "Review P0 provenance PR",
-      "d": "FLITS PR 170: frozen census + adjudication package + fit-generation inventory + budget parity · suite 187 green"
+      "h": "Ratify P1 scope-fork rule",
+      "d": "decision-2026-07-15-p1-scope-fork.md: P1 is the final CHIME recovery attempt for this paper — pass → 12-burst campaign + synthesis; fail → paper narrows to DSA scintillation + CHIME limits. Agent-recorded under your autonomy grant; ratify or amend."
     },
     {
       "h": "Sign off A1 ΔlnZ operating point",
-      "d": "campaign 36/68 cells on h17; verdict wiring + tests done · one-figure-one-table packet lands when campaign finishes"
+      "d": "campaign 36/68 cells on h17 (state as of 07-14, unverified since) · verdict wiring + tests done · one-figure-one-table packet lands when campaign finishes"
     }
   ],
   "now": [
     {
-      "h": "V·P0 provenance freeze",
-      "d": "P0.2–P0.4 implemented; PR 170 awaiting review",
-      "who": "claude"
-    },
-    {
-      "h": "A1 calibration campaign",
-      "d": "h17, 36/68 cells (second joblib wave)",
-      "who": "h17"
-    },
-    {
-      "h": "Unified scintillation figure",
-      "d": "PR 159 merged; CHIME instrumental-ACF correction next",
+      "h": "P1 window-upchan redesign",
+      "d": "revival plan v1.2 revision in flight: direct common-mode measurement on freya (rho_lag1 0.587, Lorentzian 35.4 kHz) → off-pulse mechanism test precedes any blinded campaign",
       "who": "codex"
     },
     {
-      "h": "Review verified DM PR",
-      "d": "PR 17 is mergeable and green: 12 CHIME-primary DMs, Figure 1, tables, and methods",
-      "who": "you"
+      "h": "A1 calibration campaign",
+      "d": "h17, 36/68 cells (second joblib wave; as of 07-14)",
+      "who": "h17"
+    },
+    {
+      "h": "Hybrid control-system plan",
+      "d": "state-drift fix: canonical state files + generated board views + CI check; plan spec in review",
+      "who": "claude"
     }
   ],
   "next": [
     {
-      "h": "A1 sign-off packet",
-      "d": "harvest campaign → report-a1-trigger-calibration.md"
-    },
-    {
       "h": "F3 consistency audit",
-      "d": "manuscript, runnable now"
+      "d": "manuscript audit of trusted association/census/budget claims — runnable now, independent of CHIME fork"
     },
     {
-      "h": "B1–B3 scintillation prep"
+      "h": "Figure 1 data-only gallery",
+      "d": "per the 2026-07-14 decision route; independent of CHIME fork"
+    },
+    {
+      "h": "Evidence ledger bootstrap",
+      "d": "12 sightlines × 8 strands; part of the control-system plan"
     }
   ],
   "components": [
@@ -55,7 +47,7 @@
       "lane": "V6",
       "status": "validated",
       "status_class": "good",
-      "next": "review PR 17"
+      "next": "PR 17 merged — done"
     },
     {
       "name": "Budget & census",
@@ -74,30 +66,30 @@
     {
       "name": "Scintillation",
       "lane": "B",
-      "status": "active",
-      "status_class": "now",
-      "next": "recipe parity → CHIME Δν_d"
+      "status": "C1 failed — P1 successor",
+      "status_class": "pend",
+      "next": "P1 off-pulse mechanism test"
     },
     {
       "name": "Energies",
       "lane": "V3",
       "status": "waiting",
       "status_class": "blocked",
-      "next": "after P0 + V1"
+      "next": "after V1"
     },
     {
       "name": "Synthesis",
       "lane": "D·E·F1",
       "status": "blocked",
       "status_class": "blocked",
-      "next": ""
+      "next": "resolves at P1 scope fork"
     },
     {
       "name": "Mechanics",
       "lane": "P0·F·G",
       "status": "active",
       "status_class": "now",
-      "next": "P0 PR 170 in review · F3 audit · F6 authors"
+      "next": "pin 80094de landed · control-system plan · F6 authors"
     }
   ]
 }
