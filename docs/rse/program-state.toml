@@ -50,15 +50,15 @@ needs_owner = false
 id = "chime-p3-optimal-estimator"
 title = "P3 delay-domain optimal quadratic estimator (owner-sanctioned successor to P2)"
 strand = "scintillation"
-status = "in_progress"
+status = "needs_owner"
 owner = "claude"
 issue = 68
 branch = "scint/p3-optimal-estimator"
 worktree = "~/Developer/scratch/worktrees/flits-p3-optimal-estimator"
 pr = 0
 gates = ["Gate 0b measured-noise forecast >= 3 sigma at 213 kHz before any implementation", "G1''/G2'' frozen in experiment-chime-scint-p3-optimal-estimator.md before burst data", "unblinding one-shot, orchestrator-only, after both gates pass"]
-next_action = "run Gate 0b forecast from P2 null machinery; if >= 3 sigma, implement optimal_dnu.py + T1-T6 then G1''/G2''"
-needs_owner = false
+next_action = "Gate 0b FAILED as frozen (1.24 sigma; block demeaning kills wide scintles); no-demean diagnostic restores 3.0-4.5 sigma window; owner picks: A stop (predeclared fail branch) or B sanction amended P3' (calibrated upper-limit product)"
+needs_owner = true
 
 [[lane]]
 id = "a5-profile-fit-statistic"
@@ -111,11 +111,15 @@ needs_owner = false
 # ---------------------------------------------------------------------------
 
 [owner_view]
-updated = "2026-07-15T04:30-0700"
+updated = "2026-07-15T05:10-0700"
+
+[[owner_view.needs_you]]
+h = "P3: stop, or amend and build?"
+d = "Gate 0b did its job: as frozen it FAILS (1.2 sigma at 213 kHz vs floor 3) and the culprit is the inherited 64-channel block demeaning, which erases scintles wider than one coarse block. A diagnostic without demeaning (safe now: the ratio already cancels the common mode) restores 3.0-4.5 sigma across 127-352 kHz, confirmed by end-to-end injections (3.2 sigma at 213 kHz). Honest ceiling stays below the 5-sigma G3 detection bar, so P3' would deliver a calibrated upper limit, not a likely detection. Say 'stop' (paper takes P2's exclusion) or 'amend P3' (build the estimator without demeaning, k>=11 envelope cut, ~day of work). Figure: gate0b_owner_decision.png on the FLITS branch."
 
 [[owner_view.now]]
-h = "P3 build sanctioned; Gate 0b first"
-d = "owner said 'build P3' 2026-07-15; predeclaration frozen (experiment-chime-scint-p3-optimal-estimator.md); Gate 0b measured-noise forecast can still stop the build at < 3 sigma"
+h = "P3 paused at Gate 0b fork"
+d = "frozen-spec forecast FAILED (terminal without amendment); no-demean amendment forecast passes; awaiting owner A/B; no burst-data computation until then"
 who = "claude"
 
 [[owner_view.next]]
@@ -150,9 +154,9 @@ next = "A5 chartered · V1/V2 startable"
 [[owner_view.component]]
 name = "Scintillation"
 lane = "B"
-status = "CHIME campaign OPEN; P3 optimal estimator IN BUILD (sanctioned 2026-07-15)"
-status_class = "now"
-next = "Gate 0b forecast, then T1-T6 + blinded G1''/G2'' on scint/p3-optimal-estimator"
+status = "CHIME campaign OPEN; P3 Gate 0b: frozen spec FAILS, amended spec viable"
+status_class = "pend"
+next = "owner picks stop vs amended P3' (no demeaning; calibrated upper-limit product)"
 
 [[owner_view.component]]
 name = "Energies"
