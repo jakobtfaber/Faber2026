@@ -57,3 +57,19 @@ be taken — the same fail-closed posture as the C1 calibration itself. Without
 it, each documented failure sanctions the next recovery attempt and the paper
 has no finish line; with it, P1's outcome — either outcome — resolves the
 paper's scope.
+
+## Outcome (same day, 2026-07-15)
+
+P1 closed as a mechanism-level `DOCUMENTED-FAIL` nine minutes after this
+record merged: none of the five predeclared window variants passed the frozen
+10× common-mode suppression screen, so P1 ended without on-pulse fitting or a
+C1-style calibration (PR #47; revival plan Phase 3 closure; no Phase-4 route
+authorized). Timing note for the record: this rule was written and merged
+without access to the P1 verdict, but the h17 variant runs were already in
+flight — the rule's authority rests on owner ratification, not on the
+minutes between the two merges.
+
+Under §Decision item 3, the fail branch applies: the paper narrows to DSA
+scintillation plus CHIME upper limits and diagnostics, and any future passing
+route (the plan's conditional Phase 4 included) is a future-paper lane.
+**Execution of the narrowing awaits owner ratification of this record.**

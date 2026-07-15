@@ -1,44 +1,43 @@
 {
-  "updated": "2026-07-15T00:35-0700",
+  "updated": "2026-07-15T01:10-0700",
   "needs_you": [
     {
-      "h": "Ratify P1 scope-fork rule",
-      "d": "decision-2026-07-15-p1-scope-fork.md: P1 is the final CHIME recovery attempt for this paper — pass → 12-burst campaign + synthesis; fail → paper narrows to DSA scintillation + CHIME limits. Agent-recorded under your autonomy grant; ratify or amend."
+      "h": "Ratify scope fork — P1 failed",
+      "d": "P1 closed DOCUMENTED-FAIL (PR 47: 0/5 window variants passed the frozen 10× common-mode screen; no on-pulse fitting). Under decision-2026-07-15-p1-scope-fork.md the paper narrows to DSA scintillation + CHIME limits/diagnostics. Ratify the rule to execute the narrowing — this sets the paper's final scope."
+    },
+    {
+      "h": "Pick control-system implementer",
+      "d": "plan-hybrid-control-system.md merged (PR 48): TOML state layers + generated views + CI drift gate, 1-day timebox. Choose one implementer/worktree: Antigravity (holds two duplicate worktrees — one must go), Devin, or Claude."
     },
     {
       "h": "Sign off A1 ΔlnZ operating point",
-      "d": "campaign 36/68 cells on h17 (state as of 07-14, unverified since) · verdict wiring + tests done · one-figure-one-table packet lands when campaign finishes"
+      "d": "campaign 36/68 cells on h17 (state as of 07-14, unverified since) · verdict wiring + tests done · packet lands when campaign finishes"
     }
   ],
   "now": [
-    {
-      "h": "P1 window-upchan redesign",
-      "d": "revival plan v1.2 revision in flight: direct common-mode measurement on freya (rho_lag1 0.587, Lorentzian 35.4 kHz) → off-pulse mechanism test precedes any blinded campaign",
-      "who": "codex"
-    },
     {
       "h": "A1 calibration campaign",
       "d": "h17, 36/68 cells (second joblib wave; as of 07-14)",
       "who": "h17"
     },
     {
-      "h": "Hybrid control-system plan",
-      "d": "state-drift fix: canonical state files + generated board views + CI check; plan spec in review",
+      "h": "Scope-fork execution staged",
+      "d": "on ratification: revise dependency spine, unfreeze Discussion/synthesis on the narrowed basis, CHIME limits/diagnostics section",
       "who": "claude"
     }
   ],
   "next": [
     {
       "h": "F3 consistency audit",
-      "d": "manuscript audit of trusted association/census/budget claims — runnable now, independent of CHIME fork"
+      "d": "manuscript audit of trusted association/census/budget claims — runnable now"
     },
     {
       "h": "Figure 1 data-only gallery",
-      "d": "per the 2026-07-14 decision route; independent of CHIME fork"
+      "d": "per the 2026-07-14 decision route; independent of the fork"
     },
     {
-      "h": "Evidence ledger bootstrap",
-      "d": "12 sightlines × 8 strands; part of the control-system plan"
+      "h": "Control-system flag-day PR",
+      "d": "after implementer choice; evidence ledger bootstraps with the P1 outcome already recorded"
     }
   ],
   "components": [
@@ -66,9 +65,9 @@
     {
       "name": "Scintillation",
       "lane": "B",
-      "status": "C1 failed — P1 successor",
+      "status": "CHIME closed: C1+P1 failed",
       "status_class": "pend",
-      "next": "P1 off-pulse mechanism test"
+      "next": "DSA-only + CHIME limits (on ratification)"
     },
     {
       "name": "Energies",
@@ -82,14 +81,14 @@
       "lane": "D·E·F1",
       "status": "blocked",
       "status_class": "blocked",
-      "next": "resolves at P1 scope fork"
+      "next": "unblocks on scope ratification"
     },
     {
       "name": "Mechanics",
       "lane": "P0·F·G",
       "status": "active",
       "status_class": "now",
-      "next": "pin 80094de landed · control-system plan · F6 authors"
+      "next": "pin 80094de current · control system speced · F6 authors"
     }
   ]
 }
