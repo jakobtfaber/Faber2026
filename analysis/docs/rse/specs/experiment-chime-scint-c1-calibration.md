@@ -59,7 +59,9 @@ Ratios are observed/limit (>1 = violated, **bold**). G = qualification-gated.
 | 1.00 | 16 | 0.47 | 0.24 | 0.66 | PASS |
 
 **Nulls: FAIL** — max |z| = 4.810 > 4.408 (4 of 24 realizations exceed, both
-null kinds); zero fit-level detections.
+null kinds); one fail-closed fit-level detection (bound-clear control fit
+with an invalid uncertainty estimate counts as a detection under the
+hardened post-review rule).
 
 ## Interpretation
 
