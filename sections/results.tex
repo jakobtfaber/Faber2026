@@ -124,6 +124,22 @@ column drops steeply; they are excluded from the budget even where the profile
 remains formally nonzero, and none approaches the FRB~20230307A cluster in
 predicted contribution.
 
+Because the $b\le R_{500}$ aperture is a fiducial analysis choice rather
+than a physical edge, we state its sensitivity explicitly. Relaxing the
+aperture to $1.5\,R_{500}$ admits exactly one additional system in the
+entire sample---the FRB~20230307A near-miss J115128.2$+$713637 at
+$b/R_{500}=1.25$, whose modeled column is $\approx90\,\mathrm{pc\,cm^{-3}}$
+(Figure~\ref{fig:clusters_icm})---raising that sightline's intervening term
+from $243$ to $\approx330\,\mathrm{pc\,cm^{-3}}$ and moving its host
+posterior from $88^{+88}_{-108}$ to consistency with zero; no further
+cluster enters out to $2\,R_{500}$ (the next crossing is at
+$b/R_{500}=3.0$). The budget's qualitative structure---intervening DM
+dominated by the FRB~20230307A cluster field---is therefore insensitive to
+the aperture, while the host attribution on that single sightline weakens
+under the wider aperture; we retain $R_{500}$ as the fiducial cut and carry
+the near-miss as a one-sided systematic on that sightline's
+$\mathrm{DM_{int}}$.
+
 The contributing confirmed foreground galaxies lie at impact parameters of
 $\sim$100--270\,kpc, in the outer circumgalactic medium rather than the galaxy
 interior, with individual two-phase columns of
@@ -221,11 +237,22 @@ subjected to a set of fail-closed artifact controls: an off-pulse null test
 (the same fit applied to off-burst spectra must not reproduce the on-burst
 width), a two-sided low-lag excision test (the fitted width must be stable,
 neither collapsing nor growing by more than a factor of two, when the lowest
-lags are removed), a modulation-index physicality bound ($m\lesssim1$ for
-diffractive scintillation of a point source, enforced with a tolerance of
-$m\leq1.5$ for noisy fits), a minimum of three valid
+lags are removed), a modulation-index consistency bound, a minimum of three
+valid
 sub-bands, and a provenance requirement that the input product carry the full
-instrumental mitigation stack. A verdict that cannot be evaluated is treated
+instrumental mitigation stack. The modulation bound is framed against the
+propagation models of Appendix~\ref{app:twoscreen}: single-screen
+point-source diffractive scintillation gives $m\lesssim1$, while an
+unresolved pair of fully modulated screens can physically reach
+$m=\sqrt{3}\approx1.73$ (Eq.~\ref{eq:sqrt3}); the enforced tolerance
+$m\leq1.5$ is therefore a single-screen bound with noise headroom, not a
+ceiling on all plausible propagation. Accordingly, a rejection resting
+\emph{solely} on $1.5<m\leq\sqrt{3}$ would be re-examined under the
+two-screen ACF model before being attributed to instrumental origin; no
+verdict in the present campaign rests on that interval alone, because every
+burst that fails the modulation bound also lacks the validated
+instrumental-background product that the provenance control requires
+(Table~\ref{tab:chime_scint_gates}). A verdict that cannot be evaluated is treated
 as a failure, never as a pass.
 
 No CHIME-band decorrelation bandwidth survives these controls: all twelve
@@ -319,20 +346,67 @@ promote scattering predictions only from the seven visually accepted fits.
 \subsection{Band-restricted burst energies}
 \label{sec:burst-energies}
 
-% TODO(results-energies): Insert only after the energy re-validation pass.
-% A citable row requires a trusted host redshift, trusted per-band spectral
-% amplitudes, a checked calibration path, and a resolved inclusion rule.
-%
-% Required before filling:
-% - Re-establish c0 and gamma values from trusted fits or an energy-specific
-%   trusted export.
-% - Resolve any prior-rail or selection-rule issues.
-% - State the burst list and exclusion reasons explicitly.
-%
-% Candidate future artifact, once trusted:
-% - tab:burst-energies
-%
-% TODO(energies-fixed-band-variant): Optional under V3 (D5 lock 2026-07-10) —
-% elect a fixed rest-frame-band companion E_iso for luminosity-function
-% comparison only if needed; not required for submission. See methods.tex
-% TODO and decision-d2-d5-scattering-design-locks.md.
+% V3 status (2026-07-15, validation-v3-energetics-2026-07-15.md): estimator
+% re-based on the data-driven per-channel fluence integral (no fitted spectral
+% parameters; prior-rail issue thereby moot for energies); inclusion rule made
+% explicit below; math/error propagation independently re-verified (ALL PASS).
+% NUMBERS REMAIN GATED: the table body fills from the regenerated
+% burst_energies.json only after the CHIME-side data-driven fluence run
+% completes on the compute host and the owner clears V3. Do not quote the
+% legacy (mixed-legacy c0/gamma) energies in prose.
+
+Energies are reported for the sightlines that satisfy both conditions of the
+inclusion rule stated in Section~\ref{sec:methods-energies}: a spectroscopic
+host redshift, and a validated absolute flux calibration in both bands at the
+burst position. Eight of the twelve co-detections qualify: FRBs~20220207C,
+20220310F, 20220506D, 20221113A, 20221203A, 20230307A, 20230913A, and
+20240203A. Six of the eight host redshifts are published spectroscopic
+values; FRBs~20230913A and 20240203A carry as-yet-unpublished spectroscopic
+redshifts and their rows are flagged provisional. The four exclusions are
+FRBs~20230325A, 20240122A, and 20230814B, which lack a host redshift, and
+FRB~20240229A, whose available redshift is photometric rather than
+spectroscopic \citep{Connor2024}. Because the energy estimator uses no
+fitted parameters (Eq.~\ref{eq:eiso}), scattering-model fit quality does not
+enter the selection: an energy row neither requires nor inherits a joint-fit
+quality verdict.
+
+% TODO(fill-at-V3-clear): uncomment and fill from the regenerated table —
+% the legacy artifact indicates ~three decades, E_iso ~ 1e38--1e41 erg
+% (zach lowest, wilhelm highest), but that range is a revoked-fit product
+% until the data-driven regeneration lands; do not compile it before then.
+%The resulting band-restricted energies span roughly three decades,
+%$E_{\mathrm{iso}}\sim10^{38}$--$10^{41}\,$erg, with the uncertainty budget
+%dominated by the absolute-scale systematic rather than by measurement noise
+%(Section~\ref{sec:methods-energies}).
+We re-emphasize that these are observed-band quantities: each row samples a
+different pair of rest-frame intervals, so the rows are not mutually
+comparable at the few-tens-of-percent level, and none is comparable to a
+fixed-rest-band literature energy without a spectral extrapolation we do not
+perform.
+
+% Table skeleton — fill from the regenerated burst_energies.tex after the
+% CHIME data-driven run + owner V3 clearance. Columns deliberately EXCLUDE
+% gamma_C/gamma_D (revoked fit products; indices await the C1 campaign).
+%\begin{deluxetable*}{lccccc}
+%\tablecaption{Band-restricted isotropic-equivalent energies of the
+%co-detected FRBs, from the per-channel calibrated fluence integrals over the
+%CHIME (0.400--0.800 GHz) and DSA (1.311--1.499 GHz) bands
+%(Eq.~\ref{eq:eiso}). Inclusion rule: spectroscopic host redshift and
+%validated two-band flux calibration; scattering-fit verdicts do not enter.
+%Excluded: FRB 20230325A, FRB 20240122A, FRB 20230814B (no host redshift);
+%FRB 20240229A (photometric redshift only). $1\sigma$ uncertainties combine
+%per-band statistical fluence errors with the absolute-scale systematics
+%($\sim$0.25 dex CHIME, $\sim$0.20 dex DSA) in quadrature.
+%\label{tab:burst-energies}}
+%\tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$D_L$ [Mpc]} &
+%\colhead{$E_{\rm CHIME}$ [erg]} & \colhead{$E_{\rm DSA}$ [erg]} &
+%\colhead{$E_{\rm iso}$ [erg]}}
+%\startdata
+%...rows from regenerated burst_energies.tex...
+%\enddata
+%\tablenotetext{a}{Host redshift not yet published; value provisional
+%(FRBs 20230913A, 20240203A).}
+%\tablenotetext{b}{DSA absolute scale catalog-anchored only for
+%FRBs 20220207C, 20220310F, 20220506D \citep{Law2024}; model-trusted
+%otherwise.}
+%\end{deluxetable*}

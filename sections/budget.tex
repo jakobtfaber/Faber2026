@@ -117,6 +117,33 @@ intervening circumgalactic medium, and a host galaxy, where the host can
 dominate the scattering of a heavily broadened burst \citep{Ocker2022}. The fits are produced with a common
 open-source reduction and fitting pipeline.
 
+The predicted intervening broadening $\tau_{\rm int}$ of
+Table~\ref{tab:budget} is an \emph{order-of-magnitude prior}, not a
+model-independent quantity, and its microphysical assumptions are as
+follows. For a thin screen the broadening scales with the scattering measure
+as $\tau \propto \mathrm{SM}\,\nu^{-4}$ with
+$\mathrm{SM}\sim\tilde{F}\,\mathrm{DM}^2$
+\citep{CordesLazio2002, Cordes2016, Ocker2021}; we evaluate
+$\tau = A\,\tilde{F}\,G\,\mathrm{DM}^{2}\,\nu^{-4}\,(1+z_{\ell})^{-3}$, where
+$A = 10^{-6}\,\mathrm{ms}$ deliberately lumps the NE2001 SM-to-$\tau$
+conversion and screen constants at order-of-magnitude fidelity, $\tilde{F}$
+is the turbulent fluctuation parameter drawn from a star-formation- and
+metallicity-conditioned prior, $G$ is the thin-screen geometric leverage,
+and the $(1+z_{\ell})^{-3}$ factor follows the intervening-screen convention
+of \citet{MacquartKoay2013}. The two-phase medium adds the scattering
+measures of the smooth hot halo and the clumpy cool phase, with the cool
+phase's electron column set to $\mathrm{DM_{cool}} = k\,f_c\,\mathrm{DM_{hot}}$
+($k=0.3$, boosted by a bounded MgII-equivalent-width term where measured;
+\citealt{Werk2014, LanMo2018}) and its fluctuation parameter boosted by a
+factor of $10$ (bracket $3$--$30$) relative to the hot phase, reflecting
+$\sim$pc-scale cloudlet shattering \citep{McCourt2018, VedanthamPhinney2019,
+Ocker2021}. Because $\tau$ predictions of this kind are extremely sensitive
+to the turbulence normalization, outer/inner scales, and phase weighting,
+$\tau_{\rm int}$ should be read as a plausibility scale for the intervening
+contribution, to be compared with the measured broadening once the scattering
+fits clear their re-validation gates (Section~\ref{sec:results-alpha}), and
+not as a per-system measurement.
+
 \subsubsection{The joint two-band fit}
 \label{sec:jointfit}
 \label{sec:beta-scattering-methods}
