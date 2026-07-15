@@ -76,7 +76,23 @@ def render() -> str:
         "adopted CHIME phase-coherence measurement from Table~\\ref{tab:dm-measurements}.",
     )
     body = "\n".join(base.render_row(row) for row in rows)
-    return head + body + "\n" + base._TAIL  # noqa: SLF001
+    # Super-repo overlay on the emitter footnotes/comments: (i) the f_IGM
+    # sensitivity statement tracks the manuscript forward model (median -5
+    # after the 2026-07-15 census remediation -> 0.2 sigma, conservative);
+    # (ii) note u needs the lower-bound clause for the one sightline with
+    # both a shallow-layer confirmed system and no deep coverage.
+    tail = base._TAIL.replace(  # noqa: SLF001
+        "within $0.3\\sigma$",
+        "within $0.2\\sigma$",
+    ).replace(
+        "not\nexcluded---absence of coverage is not absence of foreground\n"
+        "(Section~\\ref{sec:obs-fg}).}",
+        "not\nexcluded---absence of coverage is not absence of foreground\n"
+        "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
+        "shallow-layer confirmed system (FRB~20240203A), the tabulated column\n"
+        "is a lower bound rather than a complete census.}",
+    )
+    return head + body + "\n" + tail
 
 
 def main() -> int:
