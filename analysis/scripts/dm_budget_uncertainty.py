@@ -242,10 +242,16 @@ def host_posterior(row):
         interv = np.full(N_DRAW, float(dm_int))
     host = dm_obs - disk - halo - cosmic - interv
     p16, p50, p84 = np.percentile(host, [16, 50, 84])
+    # Rest-frame host column: DM_host,rest = (1+z) DM_host,obs. (1+z) > 0 is a
+    # monotone rescaling, so the rest-frame percentiles are the observer-frame
+    # percentiles times (1+z) -- computed from the raw samples (not the rounded
+    # integers) so the tabulated rest values are reproducible from this run.
+    r16, r50, r84 = (1.0 + z) * np.percentile(host, [16, 50, 84])
     return {
         "name": name, "z": z, "mass": mass, "dm_int": dm_int,
         "dm_host_arith": dm_obs - dm_mw - dm_cos_mean - dm_int,  # old mean-subtraction
         "dm_host_p16": p16, "dm_host_p50": p50, "dm_host_p84": p84,
+        "dm_host_rest_p16": r16, "dm_host_rest_p50": r50, "dm_host_rest_p84": r84,
         "p_host_neg": float(np.mean(host < 0)),
         "samples": host,
         "disk": disk, "halo": halo, "cosmic": cosmic, "interv": interv,
@@ -372,15 +378,31 @@ def main():
     with OUT_CSV.open("w", newline="") as f:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(["burst", "z", "dm_host_arith", "dm_host_p16", "dm_host_p50",
-                    "dm_host_p84", "p_host_negative"])
+                    "dm_host_p84", "p_host_negative",
+                    "dm_host_rest_p16", "dm_host_rest_p50", "dm_host_rest_p84"])
         for r in results:
             w.writerow([r["name"], r["z"], f"{r['dm_host_arith']:.0f}",
                         f"{r['dm_host_p16']:.0f}", f"{r['dm_host_p50']:.0f}",
-                        f"{r['dm_host_p84']:.0f}", f"{r['p_host_neg']:.3f}"])
+                        f"{r['dm_host_p84']:.0f}", f"{r['p_host_neg']:.3f}",
+                        f"{r['dm_host_rest_p16']:.0f}", f"{r['dm_host_rest_p50']:.0f}",
+                        f"{r['dm_host_rest_p84']:.0f}"])
         w.writerow([])
         w.writerow(["cluster_beta_model_p16_p50_p84", f"{p16:.0f}", f"{p50:.0f}", f"{p84:.0f}"])
         w.writerow(["cluster_95CI_lo_hi", f"{lo:.0f}", f"{hi:.0f}"])
     print(f"\nwrote {OUT_CSV.relative_to(REPO)}")
+
+    # LaTeX-ready rows for tab:host-forward-model (observer & rest frame), so the
+    # appendix table is transcribed from this run rather than hand-computed. Each
+    # frame's interval is the difference of its own rounded percentiles, so
+    # median + upper = the tabulated rounded p84 by construction.
+    print("\n=== tab:host-forward-model rows (obs | rest) ===")
+    for r in results:
+        o50, o16, o84 = round(r["dm_host_p50"]), round(r["dm_host_p16"]), round(r["dm_host_p84"])
+        s50, s16, s84 = (round(r["dm_host_rest_p50"]), round(r["dm_host_rest_p16"]),
+                         round(r["dm_host_rest_p84"]))
+        print(f"{r['name']} & ${r['z']:.3f}$ & "
+              f"${o50}^{{+{o84 - o50}}}_{{-{o50 - o16}}}$ & "
+              f"${s50}^{{+{s84 - s50}}}_{{-{s50 - s16}}}$ & ${r['p_host_neg']:.2f}$ \\\\")
 
 
     _make_figure(results)
