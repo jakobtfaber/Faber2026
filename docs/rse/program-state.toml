@@ -71,8 +71,8 @@ branch = "ms/f3-consistency-audit"
 worktree = ""
 pr = 64
 gates = ["audit trusted association/census/budget claims vs ledger"]
-next_action = "PR #64 open; defer budget.tex alpha=4 wording to owner/scattering gate"
-needs_owner = true
+next_action = "none — mechanical audit landed in PR #64; alpha=4 wording deferred to F1/scattering gate"
+needs_owner = false
 
 [[lane]]
 id = "fig1-gallery"
@@ -97,15 +97,15 @@ needs_owner = false
 # ---------------------------------------------------------------------------
 
 [owner_view]
-updated = "2026-07-15T03:30-0700"
+updated = "2026-07-15T03:59-0700"
 
 [[owner_view.needs_you]]
 h = "Build P3 or stop"
 d = "P2 closed DOCUMENTED-FAIL but split the problem: the ratio statistic cancels the 35 kHz common mode (~100x, G2 clean) and the blocker is now pure radiometer sensitivity. P3 = delay-domain optimal quadratic estimator, full plan in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md (Gate 0b forecast first, ~free). Say 'build P3' or 'stop here' (paper takes P2's censored exclusion)."
 
 [[owner_view.needs_you]]
-h = "F3: budget.tex alpha=4 wording"
-d = "Mechanical audit is clean except for two retired-language findings in sections/budget.tex (lines 138, 162) where scattering methodology quotes alpha=4. Decide whether to rephrase now or defer to the scattering gate."
+h = "F1/scattering: budget.tex alpha=4 wording"
+d = "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
 
 [[owner_view.now]]
 h = "Awaiting owner: P3 sanction"
