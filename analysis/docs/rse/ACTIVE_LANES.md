@@ -5,14 +5,14 @@
 
 Operational control surface for Faber2026, generated from `docs/rse/program-state.toml`. One row per lane. Live PR/issue/branch state is verified by `scripts/sync_state.py --check` (advisory), not baked into this table.
 
-**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 1/3
+**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 2/3
 
 | Lane | Title | Strand | Status | Owner | Issue | Branch | PR | Needs owner | Next action |
 |---|---|---|---|---|---|---|---|---|---|
 | `hybrid-control-system` | Hybrid control system: canonical state, generated views, CI drift gate | mechanics | done | claude | [#54](https://github.com/jakobtfaber/Faber2026/issues/54) | `feat/hybrid-control-system` | [#59](https://github.com/jakobtfaber/Faber2026/pull/59) | no | none — flag day landed (PR #59); views are generated from this file |
 | `chime-route-b-voltage` | Route B: voltage-domain common-mode separation (Gate 0 GO; calibrator data ask declined) | scintillation | in_progress | claude | [#55](https://github.com/jakobtfaber/Faber2026/issues/55) | — | — | no | P2 record predeclared (experiment-chime-scint-routeb-voltage.md); implement S1-S3 statistics + G1/G2 blinded harness in FLITS, run on h17 |
 | `a5-profile-fit-statistic` | A5 N-component profile-fit justification statistic | scattering | proposed | — | [#56](https://github.com/jakobtfaber/Faber2026/issues/56) | — | — | no | design after the control system lands |
-| `f3-consistency-audit` | F3 manuscript consistency audit | synthesis | proposed | — | [#57](https://github.com/jakobtfaber/Faber2026/issues/57) | — | — | no | runnable now; consumes the claims-audit view |
+| `f3-consistency-audit` | F3 manuscript consistency audit | synthesis | in_progress | devin | [#57](https://github.com/jakobtfaber/Faber2026/issues/57) | `ms/f3-consistency-audit` | — | yes | PR audit script + provenance fixes; defer budget.tex alpha=4 wording to owner/scattering gate |
 | `fig1-gallery` | Figure 1 data-only twelve-burst gallery | association | proposed | — | [#58](https://github.com/jakobtfaber/Faber2026/issues/58) | — | — | no | fresh isolated batch under the locked 4-by-3 data-only contract |
 
 ## Gates per lane
