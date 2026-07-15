@@ -13,8 +13,9 @@ and figure were inspected directly.
 
 ## Numerical evidence
 
-- 25 focused parent tests passed under the clean `flits` environment; the full
-  parent suite passed with 88 tests and one expected failure (`xfail`).
+- 42 focused host/provenance/integration tests passed under the clean `flits`
+  environment; after merging current `main`, the full parent suite passed with
+  97 tests and one expected failure (`xfail`).
 - 14 focused FLITS attribution/budget tests passed.
 - All evaluated PDFs normalize to one and reject material negative density.
 - Analytic Normal+Normal convolution recovers mean 7 and variance 13.
@@ -58,20 +59,18 @@ is less accurate than Monte Carlo.
 - `scripts/dm_budget_uncertainty.py --check-inputs`: nine sightlines validated.
 - Host CSV parity test: exact integer summaries and probabilities within the
   three-decimal serialization tolerance.
+- Rest-frame p16/p50/p84 parity: exact `(1+z)` scaling from the unrounded
+  observer-frame quantiles for all nine sightlines.
+- Upper-limit roster parity: all and only the six modeled note-u sightlines are
+  flagged in the figure and appendix interpretation.
 - `scripts/render_budget_table.py --check`: byte-exact pass.
 - `latexmk -pdf -g -interaction=nonstopmode -halt-on-error main.tex`: pass,
-  producing a 37-page PDF.
-- Rendered page 30: updated nine-row host table is legible and numerically
+  producing a 54-page PDF after integration with current `main`.
+- Rendered page 33: updated observer/rest-frame host table is legible and numerically
   consistent with the CSV.
-- Rendered page 31: all nine direct host/component PDFs are legible; the
-  individual and convolved intervening curves appear only where expected.
-- A fresh detached worktree at parent commit
-  `6e5049fb859be2c10d8aae18d30fa1deb06cca3b`, initialized at pinned FLITS
-  `af78543d4747d339b9f13283b4b8528c91a71cb3`, reproduced the CSV and root
-  budget table at the exact SHA-256 hashes recorded in the implementation
-  record. Only the PDF figure became dirty after regeneration, consistent with
-  timestamp/metadata variability; its numerical source and PNG pixels remained
-  unchanged.
+- Rendered page 34: all nine direct host/component PDFs are legible; the
+  individual and convolved intervening curves and six upper-limit daggers appear
+  only where expected.
 
 Existing manuscript-wide float/box warnings remain outside this scoped change;
 there is no new LaTeX error from the rebuilt host section.

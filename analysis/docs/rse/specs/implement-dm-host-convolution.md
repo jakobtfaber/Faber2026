@@ -20,6 +20,11 @@
 - The published summaries and figure use direct PDFs. Monte Carlo is retained
   only as an independent validation oracle; the cluster beta-model calculation
   remains the separately seeded Monte Carlo used before this change.
+- Convolution is performed in observer-frame DM. The reported rest-frame
+  p16/p50/p84 values are the exact monotone `(1+z)` rescaling of those
+  observer-frame quantiles.
+- Six modeled rows outside the deep-imaging footprints retain the manuscript's
+  upper-limit designation because their intervening census is incomplete.
 
 ## Authoritative inputs
 
@@ -55,8 +60,8 @@ Python 3.13/SciPy 1.16 check and the canonical clean Conda run:
 
 | Output | SHA-256 |
 |---|---|
-| `scripts/dm_budget_uncertainty.csv` | `a47fa743e94ff9f7622376c41f25b995b38a53fdd25350b9d71b2c0f3077c1a8` |
-| `budget_table.tex` | `73d1629d9f016290a613395c7283c806c88a86acba841b5af20e126f4fde07c3` |
+| `scripts/dm_budget_uncertainty.csv` | `5cee3a81ad94b02b5f22bd2e3ffaff277a403d798f7a50aaf983bee07b8e29ff` |
+| `budget_table.tex` | `e4b3d43e6ec58666809903f6bbbef4b89e5f08c04e35386e1cdc8fccafdc2b86` |
 
 The raster figure is environment-renderer dependent and is therefore validated
 visually and through numerical PDF tests rather than promised byte-identical

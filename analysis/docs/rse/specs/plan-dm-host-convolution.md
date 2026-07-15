@@ -21,7 +21,9 @@ numerical cross-check.
 were completed. FLITS landed in PR #188. The only intentionally open manual
 criterion is collaborator/owner aesthetic review of the direct-PDF figure; it
 does not block the numerical validation recorded in
-`validation-dm-host-convolution.md`.
+`validation-dm-host-convolution.md`. Integration with the subsequently advanced
+parent `main` preserves its observer/rest-frame distinction, provisional
+redshift notes, and six incomplete-census upper-limit flags.
 
 **Goal:** deterministic, normalized, converged host-DM PDFs whose source inputs
 and manuscript artifacts are mechanically tied to the current census.
