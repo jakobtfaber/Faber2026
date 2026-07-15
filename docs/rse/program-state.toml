@@ -22,28 +22,28 @@ wip_limit = 3                     # max concurrent in_progress lanes ( --check e
 id = "hybrid-control-system"
 title = "Hybrid control system: canonical state, generated views, CI drift gate"
 strand = "mechanics"
-status = "in_progress"
+status = "done"
 owner = "claude"
 issue = 54                        # GitHub issue (0 = not yet filed)
 branch = "feat/hybrid-control-system"
 worktree = ""
-pr = 0
+pr = 59
 gates = ["--check green on clean tree", "golden-file tests pass", "make test-science green"]
-next_action = "land the flag-day PR"
+next_action = "none — flag day landed (PR #59); views are generated from this file"
 needs_owner = false
 
 [[lane]]
 id = "chime-successor-route"
 title = "CHIME scint successor-route assessment (external-calibrator vs voltage-domain)"
 strand = "scintillation"
-status = "in_progress"
+status = "needs_owner"
 owner = "claude"
 issue = 55                        # GitHub issue (0 = not yet filed)
-branch = ""
+branch = "docs/chime-successor-routes"
 worktree = ""
-pr = 0
+pr = 53
 gates = ["predeclared gates frozen before burst data inspected", "owner sanction of route"]
-next_action = "draft predeclared external-calibrator vs voltage-domain assessment"
+next_action = "owner: sanction Gate 0 + route order (research-chime-scint-successor-routes.md, PR #53 merged)"
 needs_owner = true
 
 [[lane]]
@@ -104,17 +104,12 @@ h = "Review the two recorded amendments"
 d = "Your in-session directions are now written into the records: (1) scope-fork amendment — CHIME scint measurement stays an active goal, 'P1 is final' revoked, narrowing not executed (decision-2026-07-15-p1-scope-fork.md §Owner amendment); (2) A1 trigger closed with no operating point, successor A5 chartered (N-component profile-fit justification statistic). Confirm the wording binds, or edit."
 
 [[owner_view.needs_you]]
-h = "Sanction the next CHIME scint route (when assessment lands)"
-d = "P1 refuted the window mechanism — the common mode lives in the baseband within each coarse channel. Remaining product-changing routes: external-calibrator characterization vs voltage-domain cross-statistics. Claude drafts a predeclared assessment (incl. the 0.75% signal vs 59% common-mode S/N caveat); you pick which, if either, to run."
+h = "Sanction the next CHIME scint route — assessment is on main"
+d = "research-chime-scint-successor-routes.md (PR #53): Gate 0 burst-blind detectability calc first, then Route A (external calibrator; stationarity crux + CHIME data ask) vs Route B (voltage-domain cross-statistics; h17 assets in hand). Recommendation: sanction Gate 0 now, route order B-then-A conditional on it."
 
 [[owner_view.now]]
-h = "Hybrid control system implementation"
-d = "implementer = Claude (your pick); fresh worktree, 1-day timebox; both duplicate Antigravity worktrees deleted"
-who = "claude"
-
-[[owner_view.now]]
-h = "CHIME scint successor-route assessment"
-d = "predeclared comparison of external-calibrator vs voltage-domain routes; gates frozen before burst data inspected"
+h = "Awaiting owner: Gate 0 sanction"
+d = "control system LANDED (PR #59, issues #54-58 track lanes); next active work starts on your route sanction"
 who = "claude"
 
 [[owner_view.next]]
@@ -176,4 +171,4 @@ name = "Mechanics"
 lane = "P0·F·G"
 status = "active"
 status_class = "now"
-next = "pin 2242124 current · control system: Claude implementing"
+next = "pin 2242124 current · control system LANDED (PR 59) · views generated"
