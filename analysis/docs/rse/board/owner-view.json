@@ -1,9 +1,9 @@
 {
-  "updated": "2026-07-15T03:30-0700",
+  "updated": "2026-07-15T03:59-0700",
   "needs_you": [
     {
-      "h": "F3: budget.tex alpha=4 wording",
-      "d": "Mechanical audit is clean except for two retired-language findings in sections/budget.tex (lines 138, 162) where scattering methodology quotes alpha=4. Decide whether to rephrase now or defer to the scattering gate."
+      "h": "F1/scattering: budget.tex alpha=4 wording",
+      "d": "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
     }
   ],
   "now": [
@@ -11,11 +11,6 @@
       "h": "Route B: voltage-domain separation",
       "d": "Gate 0 GO — detection admissible for dnu_d >= 77-127 kHz only; predeclared experiment record next, then estimator on h17 freya baseband",
       "who": "claude"
-    },
-    {
-      "h": "F3 consistency audit",
-      "d": "script + provenance fixes ready for PR; two alpha=4-limit findings deferred pending owner/scattering gate",
-      "who": "devin"
     }
   ],
   "next": [
