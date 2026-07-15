@@ -2,20 +2,19 @@
   "updated": "2026-07-15T03:30-0700",
   "needs_you": [
     {
+      "h": "Build P3 or stop",
+      "d": "P2 closed DOCUMENTED-FAIL but split the problem: the ratio statistic cancels the 35 kHz common mode (~100x, G2 clean) and the blocker is now pure radiometer sensitivity. P3 = delay-domain optimal quadratic estimator, full plan in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md (Gate 0b forecast first, ~free). Say 'build P3' or 'stop here' (paper takes P2's censored exclusion)."
+    },
+    {
       "h": "F3: budget.tex alpha=4 wording",
       "d": "Mechanical audit is clean except for two retired-language findings in sections/budget.tex (lines 138, 162) where scattering methodology quotes alpha=4. Decide whether to rephrase now or defer to the scattering gate."
     }
   ],
   "now": [
     {
-      "h": "Route B: voltage-domain separation",
-      "d": "Gate 0 GO — detection admissible for dnu_d >= 77-127 kHz only; predeclared experiment record next, then estimator on h17 freya baseband",
+      "h": "Awaiting owner: P3 sanction",
+      "d": "P2 terminal (FLITS #180, pin #65); P3 plan handed off; Gate 0b forecast runs on sanction",
       "who": "claude"
-    },
-    {
-      "h": "F3 consistency audit",
-      "d": "script + provenance fixes ready for PR; two alpha=4-limit findings deferred pending owner/scattering gate",
-      "who": "devin"
     }
   ],
   "next": [
@@ -53,9 +52,9 @@
     {
       "name": "Scintillation",
       "lane": "B",
-      "status": "CHIME campaign OPEN; Gate 0 GO (window dnu_d >= 77-127 kHz)",
+      "status": "CHIME campaign OPEN; P2 documented-fail (common mode beaten, sensitivity short)",
       "status_class": "pend",
-      "next": "Route B build (voltage-domain); calibrator ask declined by owner"
+      "next": "P3 optimal estimator awaiting owner sanction; plan in handoff"
     },
     {
       "name": "Energies",
@@ -76,7 +75,7 @@
       "lane": "P0·F·G",
       "status": "active",
       "status_class": "now",
-      "next": "pin 2242124 current · control system LANDED (PR 59) · views generated"
+      "next": "pin 1085de0 current · control system LANDED (PR 59) · views generated"
     }
   ]
 }
