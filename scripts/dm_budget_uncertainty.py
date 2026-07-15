@@ -39,6 +39,13 @@ M500 (richness-mass scatter), f_gas, and the core/slope shape.
 Self-contained: numpy + scipy only. Point-estimate component inputs are joined
 from the current budget SSOT, exact adopted-DM catalog, and per-system census.
 
+DM_host here is the OBSERVER-FRAME residual (no 1+z factor); the rest-frame host
+column is (1+z) larger and is tabulated alongside it in the manuscript. For the
+six sightlines outside the deep-imaging footprints (UPPER_LIMIT below) the
+foreground census is incomplete and DM_int is a floor; with the IGM-marginal
+cosmic term (halos excluded), an undetected halo lands in the host residual, so
+those DM_host are upper limits (dagger on the figure panel titles).
+
 The figure is a 3x3 of peak-normalized PDFs per redshift-constrained sightline:
 faded MW-disk / MW-halo / IGM / per-system intervening curves under a bold
 P(DM_host). All plotted curves are direct numerical PDFs; neither sampling nor
@@ -129,6 +136,20 @@ class DiscretePDF:
     def x(self) -> np.ndarray:
         return self.x0 + self.dx * np.arange(self.density.size)
 
+
+# Sightlines outside the deep-imaging footprints (budget_table.tex note u): the
+# intervening census is incomplete, so DM_int is a floor. With the IGM-marginal
+# cosmic term (which excludes virialized halos), any undetected foreground halo
+# is absorbed into the host residual -> DM_host is an UPPER LIMIT, flagged with a
+# dagger on the figure panel titles.
+UPPER_LIMIT = {
+    "FRB 20220207C",
+    "FRB 20220506D",
+    "FRB 20221113A",
+    "FRB 20221203A",
+    "FRB 20230913A",
+    "FRB 20240203A",
+}
 
 # --- Nuisance priors -----------------------------------------------------------
 # Diffuse cosmic (IGM) column: Connor et al. (2025) fit the IGM baryon fraction
@@ -469,6 +490,7 @@ def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
     p16, p50, p84 = (
         pdf_quantile(host, probability) for probability in (0.16, 0.5, 0.84)
     )
+    r16, r50, r84 = ((1.0 + row.z) * value for value in (p16, p50, p84))
     return {
         "name": row.name,
         "z": row.z,
@@ -477,6 +499,9 @@ def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
         "dm_host_p16": p16,
         "dm_host_p50": p50,
         "dm_host_p84": p84,
+        "dm_host_rest_p16": r16,
+        "dm_host_rest_p50": r50,
+        "dm_host_rest_p84": r84,
         "p_host_neg": pdf_cdf_at(host, 0.0),
         "host_pdf": host,
         "disk_pdf": disk,
@@ -618,9 +643,10 @@ def main(argv: list[str] | None = None) -> int:
         f"beta-model column: p50={p50:.0f}, [p16,p84]=[{p16:.0f},{p84:.0f}], "
         f"95% CI=[{lo:.0f},{hi:.0f}] pc cm^-3"
     )
-    print("mNFW central (pipeline, V5): ~160 pc cm^-3")
-    span_lo = min(lo, 160)
-    span_hi = max(hi, 160)
+    mnfw_central = 184.0
+    print(f"mNFW central (budget census point): ~{mnfw_central:.0f} pc cm^-3")
+    span_lo = min(lo, mnfw_central)
+    span_hi = max(hi, mnfw_central)
     print(
         f"combined plausible range (mNFW + beta-model systematic): "
         f"~{span_lo:.0f}-{span_hi:.0f} pc cm^-3"
@@ -637,6 +663,9 @@ def main(argv: list[str] | None = None) -> int:
                 "dm_host_p50",
                 "dm_host_p84",
                 "p_host_negative",
+                "dm_host_rest_p16",
+                "dm_host_rest_p50",
+                "dm_host_rest_p84",
             ]
         )
         for r in results:
@@ -649,6 +678,9 @@ def main(argv: list[str] | None = None) -> int:
                     f"{r['dm_host_p50']:.0f}",
                     f"{r['dm_host_p84']:.0f}",
                     f"{r['p_host_neg']:.3f}",
+                    f"{r['dm_host_rest_p16']:.0f}",
+                    f"{r['dm_host_rest_p50']:.0f}",
+                    f"{r['dm_host_rest_p84']:.0f}",
                 ]
             )
         w.writerow([])
@@ -657,6 +689,28 @@ def main(argv: list[str] | None = None) -> int:
         )
         w.writerow(["cluster_95CI_lo_hi", f"{lo:.0f}", f"{hi:.0f}"])
     print(f"\nwrote {OUT_CSV.relative_to(REPO)}")
+
+    # LaTeX-ready rows for tab:host-forward-model (observer & rest frame), so the
+    # appendix table is transcribed from this run rather than hand-computed. Each
+    # frame's interval is the difference of its own rounded percentiles, so
+    # median + upper = the tabulated rounded p84 by construction.
+    print("\n=== tab:host-forward-model rows (obs | rest) ===")
+    for r in results:
+        o50, o16, o84 = (
+            round(r["dm_host_p50"]),
+            round(r["dm_host_p16"]),
+            round(r["dm_host_p84"]),
+        )
+        s50, s16, s84 = (
+            round(r["dm_host_rest_p50"]),
+            round(r["dm_host_rest_p16"]),
+            round(r["dm_host_rest_p84"]),
+        )
+        print(
+            f"{r['name']} & ${r['z']:.3f}$ & "
+            f"${o50}^{{+{o84 - o50}}}_{{-{o50 - o16}}}$ & "
+            f"${s50}^{{+{s84 - s50}}}_{{-{s50 - s16}}}$ & ${r['p_host_neg']:.2f}$ \\\\"
+        )
 
     _make_figure(results)
     return 0
@@ -825,7 +879,8 @@ def _make_figure(results):
         )
 
         short = r["name"].replace("FRB ", "")
-        ax.set_title(f"{short}  ($z={r['z']:.3f}$)", pad=3)
+        dagger = r"$\dagger$" if r["name"] in UPPER_LIMIT else ""
+        ax.set_title(f"{short}{dagger}  ($z={r['z']:.3f}$)", pad=3)
         ax.set_xlim(x_lo, x_hi)
         ax.set_ylim(0.0, 1.18)
         ax.set_yticks([0.0, 0.5, 1.0])

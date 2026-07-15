@@ -41,18 +41,19 @@ FRB 20220207C\tablenotemark{u} & $0.043$ & 262.3617 & 111 & 36 & 0 & none & \nod
 FRB 20220310F & $0.479$ & 462.1888 & 81 & 427 & 6 & CGM & measured & $-10^{+87}_{-106}$ & $0.00036$ \\
 FRB 20220506D\tablenotemark{u} & $0.300$ & 397.0155 & 118 & 262 & 0 & none & \nodata & $42^{+66}_{-81}$ & $0$ \\
 FRB 20221113A\tablenotemark{u} & $0.251$ & 411.4357 & 123 & 217 & 0 & none & \nodata & $90^{+59}_{-74}$ & $0$ \\
-FRB 20221203A\tablenotemark{u} & $0.510$ & 602.3778 & 117 & 456 & 0 & none & \nodata & $73^{+93}_{-113}$ & $0$ \\
+FRB 20221203A\tablenotemark{u} & $0.510$\tablenotemark{r} & 602.3778 & 117 & 456 & 0 & none & \nodata & $73^{+93}_{-113}$ & $0$ \\
 FRB 20230307A & $0.271$ & 610.2891 & 74 & 235 & 243 & CGM & measured & $69^{+81}_{-98}$ & $0.015$ \\
 FRB 20230325A\tablenotemark{u} & \nodata\tablenotemark{p} & 912.4076 & 100 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
 FRB 20230814B\tablenotemark{u} & \nodata\tablenotemark{p} & 696.5180 & 137 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
-FRB 20230913A\tablenotemark{u} & $0.302$ & 518.7970 & 110 & 264 & 0 & none & \nodata & $171^{+65}_{-81}$ & $0$ \\
+FRB 20230913A\tablenotemark{u} & $0.302$\tablenotemark{r} & 518.7970 & 110 & 264 & 0 & none & \nodata & $171^{+65}_{-81}$ & $0$ \\
 FRB 20240122A\tablenotemark{u} & \nodata\tablenotemark{p} & 960.1316 & 133 & \nodata & 0 & none & \nodata & \nodata & $0$ \\
-FRB 20240203A\tablenotemark{u} & $0.074$ & 272.6387 & 111 & 62 & 26 & CGM & measured & $72^{+33}_{-39}$ & $0.0034$ \\
+FRB 20240203A\tablenotemark{u} & $0.074$\tablenotemark{r} & 272.6387 & 111 & 62 & 26 & CGM & measured & $72^{+33}_{-39}$ & $0.0034$ \\
 FRB 20240229A & $0.287$ & 491.2078 & 74 & 250 & 117 & CGM & measured & $66^{+70}_{-86}$ & $0.073$ \\
 \enddata
 \tablenotetext{p}{Host redshift unknown (placeholder); the cosmological and host
 terms cannot be computed, so this sightline is excluded from any distance-dependent
 quantity.}
+\tablenotetext{r}{Provisional internal host redshift; no citable published provenance is currently available.}
 \tablenotetext{u}{Position lies outside the deep-imaging survey footprints
 (DESI Legacy DR8-North; SDSS DR12 returns no redshifts here), so only the
 shallow all-sky catalogs (NED, GLADE+) constrain the sightline: the
@@ -61,9 +62,13 @@ excluded---absence of coverage is not absence of foreground
 (Section~\ref{sec:obs-fg}). On the one such sightline with a
 shallow-layer confirmed system (FRB~20240203A), the tabulated column
 is a lower bound rather than a complete census.}
-\tablecomments{Because the diffuse cosmic term follows a skewed log-normal,
-the host posteriors are asymmetric and their medians exceed the naive
-mean-subtracted residuals. One high-redshift sightline
+\tablecomments{The host posteriors are asymmetric because the diffuse cosmic
+term follows a skewed log-normal. Their medians sit above the naive
+mean-subtracted residuals, but that offset is driven mainly by the lower IGM
+normalization adopted here ($f_{\rm IGM}=0.76$ versus $0.84$), not by the
+skew; the forward model's value is the asymmetric interval and the
+per-sightline $P(\mathrm{DM_{host}}<0)$, not the shift in central value.
+One high-redshift sightline
 (FRB 20220310F; $z=0.48$), where the diffuse cosmic term
 dominates the budget, has a host posterior consistent with zero
 ($P(\mathrm{DM_{host}}<0)\approx0.5$): its marginally negative median reflects

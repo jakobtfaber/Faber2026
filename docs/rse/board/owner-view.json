@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-15T11:56-0700",
+  "updated": "2026-07-15T12:35-0700",
   "needs_you": [],
   "now": [
     {
@@ -52,7 +52,7 @@
       "lane": "V3",
       "status": "contract authored; rail + selection-rule resolved; estimator re-based data-driven (owner 2026-07-15)",
       "status_class": "pend",
-      "next": "CHIME-side data-driven fluence run (runbook: validation-v3-energetics-2026-07-15.md §6) + wilhelm z provenance pin, then owner V3 sign-off"
+      "next": "CHIME-side data-driven fluence run + independent verifier + regenerated-table review (runbook: validation-v3-energetics-2026-07-15.md §6), then owner V3 sign-off"
     },
     {
       "name": "Synthesis",

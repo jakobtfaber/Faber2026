@@ -22,6 +22,14 @@ HOST_CSV = ROOT / "scripts" / "dm_budget_uncertainty.csv"
 BASE_DATA = PIPELINE / "galaxies" / "foreground" / "budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 
+# These are usable project redshifts but do not yet have a citable published
+# provenance. Keep that distinction visible in distance-dependent results.
+PROVISIONAL_REDSHIFTS = {
+    "FRB 20221203A",
+    "FRB 20230913A",
+    "FRB 20240203A",
+}
+
 EMITTER = PIPELINE / "galaxies" / "foreground" / "budget_table_emitter.py"
 
 
@@ -77,17 +85,42 @@ def render() -> str:
         "convention of Section~\\ref{sec:toa}.",
         "adopted CHIME phase-coherence measurement from Table~\\ref{tab:dm-measurements}.",
     )
-    body = "\n".join(base.render_row(row) for row in rows)
-    # Super-repo overlay on the emitter footnotes/comments: note u needs the
-    # lower-bound clause for the one sightline with
-    # both a shallow-layer confirmed system and no deep coverage.
-    tail = base._TAIL.replace(  # noqa: SLF001
-        "not\nexcluded---absence of coverage is not absence of foreground\n"
-        "(Section~\\ref{sec:obs-fg}).}",
-        "not\nexcluded---absence of coverage is not absence of foreground\n"
-        "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
-        "shallow-layer confirmed system (FRB~20240203A), the tabulated column\n"
-        "is a lower bound rather than a complete census.}",
+    rendered_rows = []
+    for row in rows:
+        cells = base.render_cells(row)
+        if row["burst"] in PROVISIONAL_REDSHIFTS:
+            cells[1] += r"\tablenotemark{r}"
+        rendered_rows.append(" & ".join(cells) + r" \\")
+    body = "\n".join(rendered_rows)
+    # Super-repo overlays add provisional-redshift and incomplete-coverage
+    # qualifications, and attribute the central-value offset correctly.
+    tail = (
+        base._TAIL.replace(  # noqa: SLF001
+            "\\tablecomments{Because the diffuse cosmic term follows a skewed log-normal,\n"
+            "the host posteriors are asymmetric and their medians exceed the naive\n"
+            "mean-subtracted residuals. One high-redshift sightline",
+        "\\tablecomments{The host posteriors are asymmetric because the diffuse cosmic\n"
+        "term follows a skewed log-normal. Their medians sit above the naive\n"
+            "mean-subtracted residuals, but that offset is driven mainly by the lower IGM\n"
+            "normalization adopted here ($f_{\\rm IGM}=0.76$ versus $0.84$), not by the\n"
+            "skew; the forward model's value is the asymmetric interval and the\n"
+            "per-sightline $P(\\mathrm{DM_{host}}<0)$, not the shift in central value.\n"
+            "One high-redshift sightline",
+        )
+        .replace(
+            "not\nexcluded---absence of coverage is not absence of foreground\n"
+            "(Section~\\ref{sec:obs-fg}).}",
+            "not\nexcluded---absence of coverage is not absence of foreground\n"
+            "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
+            "shallow-layer confirmed system (FRB~20240203A), the tabulated column\n"
+            "is a lower bound rather than a complete census.}",
+        )
+        .replace(
+            "\\tablenotetext{u}{Position lies outside",
+            "\\tablenotetext{r}{Provisional internal host redshift; no citable "
+            "published provenance is currently available.}\n"
+            "\\tablenotetext{u}{Position lies outside",
+        )
     )
     return head + body + "\n" + tail
 

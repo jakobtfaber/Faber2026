@@ -247,6 +247,28 @@ def test_host_summaries_converge_on_half_size_grid():
         )
 
 
+def test_rest_frame_quantiles_are_monotone_redshift_rescaling():
+    """Frame criterion: DM_host,rest = (1+z) DM_host,observer."""
+    for row in dbu.load_sightlines():
+        result = dbu.host_distribution(row)
+        for suffix in ("p16", "p50", "p84"):
+            assert result[f"dm_host_rest_{suffix}"] == pytest.approx(
+                (1.0 + row.z) * result[f"dm_host_{suffix}"], rel=1e-14
+            )
+
+
+def test_incomplete_census_upper_limit_roster_is_explicit():
+    """Interpretation criterion: all and only note-u modeled rows are upper limits."""
+    assert dbu.UPPER_LIMIT == {
+        "FRB 20220207C",
+        "FRB 20220506D",
+        "FRB 20221113A",
+        "FRB 20221203A",
+        "FRB 20230913A",
+        "FRB 20240203A",
+    }
+
+
 def test_convolution_matches_independent_monte_carlo_oracle():
     """Cross-method criterion: 500k median-centered draws match all nine PDFs."""
     n = 500_000
@@ -286,6 +308,12 @@ def test_committed_host_csv_matches_deterministic_summaries():
         actual = committed[row.name]
         assert int(actual["dm_host_arith"]) == round(expected["dm_host_arith"])
         for key in ("dm_host_p16", "dm_host_p50", "dm_host_p84"):
+            assert int(actual[key]) == round(expected[key])
+        for key in (
+            "dm_host_rest_p16",
+            "dm_host_rest_p50",
+            "dm_host_rest_p84",
+        ):
             assert int(actual[key]) == round(expected[key])
         assert float(actual["p_host_negative"]) == pytest.approx(
             expected["p_host_neg"], abs=5e-4

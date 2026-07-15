@@ -73,7 +73,8 @@ catalog entries represent distinct gas halos.
     impact parameter, the dashed line is $R_{500}$, and the shaded region is
     inside $R_{500}$. Only J115120.4$+$714435 ($b/R_{500}=0.83$) meets the
     $b\le R_{500}$ budget cut and enters $\mathrm{DM_{int}}$
-    ($\sim$160\,pc\,cm$^{-3}$ from this mNFW profile, factor-of-two uncertain across
+    ($\sim$184\,pc\,cm$^{-3}$ from this mNFW profile, the value carried in the
+    Table~\ref{tab:budget} $\mathrm{DM_{int}}$ sum, factor-of-two uncertain across
     profile and cluster-parameter systematics,
     Appendix~\ref{app:host-forward-model}; Table~\ref{tab:foreground}); the
     others lie beyond
@@ -123,6 +124,10 @@ $\langle\mathrm{DM_{IGM}}\rangle\propto\int_0^z(1+z')/E(z')\,\mathrm{d}z'$,
 rather than extrapolating the spline, and hold $\sigma$ at its grid-edge value.
 The continuation is exact in the $z\rightarrow0$ limit and reproduces the
 tabulated log-median increments to $1.5\%$ over $0.1<z<0.3$.
+Holding $\sigma$ fixed below the grid, if anything, \emph{under}-represents the
+diffuse scatter at $z<0.1$, where cosmic variance grows; this narrows
+$P(\mathrm{DM_{host}})$ only slightly because the low-$z$ IGM column is small
+($\lesssim35\,\mathrm{pc\,cm^{-3}}$).
 The $f_{\rm IGM}$ mixture is evaluated by 64-node Gauss--Legendre quadrature
 on each smooth side of the asymmetric prior, including analytically the
 probability clipped onto the physical endpoints.
@@ -136,43 +141,87 @@ as the median of a $40\%$ (measured-mass halo), factor-$2$ (assumed-mass halo),
 or $30\%$ (cluster) lognormal prior; the individual PDFs are convolved to form
 the Table~\ref{tab:budget} $\mathrm{DM_{int}}$ term. After the census remediation every contributing halo
 carries a vetted empirical mass, so the galaxy columns use the $40\%$ family
-and the assumed-mass factor-$2$ family is currently unexercised.
+and the assumed-mass factor-$2$ family is currently unexercised. The tabulated
+host posterior uses that convolution directly rather than applying one
+lognormal smear to the sightline-summed point estimate.
 \end{itemize}
 The resulting posteriors are asymmetric, dominated at higher redshift by the
 diffuse cosmic scatter (Figure~\ref{fig:dm_host_posteriors},
-Table~\ref{tab:host-forward-model}); their medians exceed the
-mean-subtracted residuals because the log-normal $P(\mathrm{DM_{IGM}})$ is
-right-skewed. The component PDFs are convolved with FFTs, normalized after
-each operation, and the foreground-sum PDF is reflected about the exact
-adopted $\mathrm{DM_{obs}}$; no Monte-Carlo sampling or kernel-density estimate
-enters the reported posteriors. One sightline, FRB~20220310F, carries a median
+Table~\ref{tab:host-forward-model}). The tabulated $\mathrm{DM_{host}}$ is the
+\emph{observer-frame} residual; the host-frame column is $(1+z)$ times larger and
+is listed alongside it in Table~\ref{tab:host-forward-model}. The medians do sit
+above the naive mean-subtracted residuals, but---contrary to a purely
+shape-driven reading---the dominant cause is the lower IGM normalization adopted
+here ($f_{\rm IGM}=0.76$ versus the $f_{\rm IGM}=0.84$ of the earlier Macquart
+point estimate, which lowers the subtracted cosmic column by $\sim\!10\%$), not
+the log-normal skew: at $z\simeq0.3$ the recalibration accounts for $\approx26$
+of a $\approx30\,\mathrm{pc\,cm^{-3}}$ upward shift and the distribution shape for
+only a few. What the forward model adds over the old residual is therefore the
+asymmetric interval and the $P(\mathrm{DM_{host}}<0)$ diagnostic, not the change
+in central value. Because $f_{\rm IGM}$ was itself inferred partly from DSA-110
+sightlines, these host DMs are correspondingly sensitive to that normalization.
+
+The component PDFs are convolved with FFTs, normalized after each operation,
+and the foreground-sum PDF is reflected about the exact adopted
+$\mathrm{DM_{obs}}$; no Monte-Carlo sampling or kernel-density estimate enters
+the reported posteriors.
+
+For the six sightlines flagged \tablenotemark{u} in Table~\ref{tab:budget} the
+line of sight lies outside the deep-imaging footprints, so the intervening census
+is incomplete and their $\mathrm{DM_{int}}$ is a floor. The cosmic term used here
+is the IGM marginal, which by construction excludes virialized halos; any
+undetected foreground halo on those sightlines is then subtracted by neither the
+cosmic nor the intervening term and is absorbed into the host residual. Their
+tabulated $\mathrm{DM_{host}}$---including the two largest, FRB~20230913A
+($171\,\mathrm{pc\,cm^{-3}}$) and FRB~20220207C
+($115\,\mathrm{pc\,cm^{-3}}$)---are therefore \emph{upper limits} on the true host
+contribution, and are marked as such in Table~\ref{tab:host-forward-model} and
+Figure~\ref{fig:dm_host_posteriors}. The three sightlines with deep imaging
+(FRB~20220310F, FRB~20230307A, FRB~20240229A) carry a census complete enough that
+the IGM-marginal cosmic term and $\mathrm{DM_{int}}$ are mutually consistent, and
+their host posteriors are two-sided.
+
+One sightline, FRB~20220310F, carries a median
 posterior marginally below zero with $P(\mathrm{DM_{host}}<0)\simeq0.54$; it
 is consistent with a vanishing host contribution, and a small downward shift
-of $f_{\rm IGM}$ within its quoted uncertainty places the median at zero. The highest-redshift sightline,
-FRB~20221203A, is likewise consistent with zero
+of $f_{\rm IGM}$ within its quoted uncertainty places the median at zero. The
+highest-redshift sightline,
+FRB~20221203A, using the provisional internal value $z=0.510$, is likewise
+consistent with zero
 ($P(\mathrm{DM_{host}}<0)=0.25$). The prior widths above are fiducial
 and are documented so they can be revised; the analysis and both artifacts are
 reproduced by \texttt{scripts/dm\_budget\_uncertainty.py}.
 
-\begin{deluxetable}{lccc}
+\begin{deluxetable}{lcccc}
 \tabletypesize{\footnotesize}
 \tablecaption{Forward-modeled host-DM posteriors for the nine
-redshift-constrained sightlines: median with $16$th--$84$th-percentile interval,
-and $P(\mathrm{DM_{host}}<0)$. DM in $\mathrm{pc\,cm^{-3}}$.
+redshift-constrained sightlines: observer-frame and rest-frame
+[$(1+z)\,\mathrm{DM_{host}}$] median with $16$th--$84$th-percentile interval, and
+$P(\mathrm{DM_{host}}<0)$. Sightlines marked \tablenotemark{u} lie outside the
+deep-imaging footprints (Table~\ref{tab:budget}); their intervening census is
+incomplete, so the listed host DM is an \emph{upper limit}. DM in
+$\mathrm{pc\,cm^{-3}}$.
 \label{tab:host-forward-model}}
-\tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$\mathrm{DM_{host}}$} &
+\tablehead{\colhead{Burst} & \colhead{$z$} &
+  \colhead{$\mathrm{DM_{host}}$ (obs.)} &
+  \colhead{$\mathrm{DM_{host}}$ (rest)} &
   \colhead{$P(\mathrm{DM_{host}}<0)$}}
 \startdata
-FRB 20220207C & $0.043$ & $115^{+26}_{-32}$  & $0.00$ \\
-FRB 20220310F & $0.479$ & $-10^{+87}_{-106}$ & $0.54$ \\
-FRB 20220506D & $0.300$ & $42^{+66}_{-81}$   & $0.29$ \\
-FRB 20221113A & $0.251$ & $90^{+59}_{-74}$   & $0.12$ \\
-FRB 20221203A & $0.510$ & $73^{+93}_{-113}$ & $0.25$ \\
-FRB 20230307A & $0.271$ & $69^{+81}_{-98}$  & $0.24$ \\
-FRB 20230913A & $0.302$ & $171^{+65}_{-81}$  & $0.03$ \\
-FRB 20240203A & $0.074$ & $72^{+33}_{-39}$  & $0.04$ \\
-FRB 20240229A & $0.287$ & $66^{+70}_{-86}$  & $0.22$ \\
+FRB 20220207C\tablenotemark{u} & $0.043$ & $115^{+26}_{-32}$ & $120^{+27}_{-34}$ & $0.00$ \\
+FRB 20220310F & $0.479$ & $-10^{+87}_{-106}$ & $-14^{+129}_{-158}$ & $0.54$ \\
+FRB 20220506D\tablenotemark{u} & $0.300$ & $42^{+66}_{-81}$ & $55^{+85}_{-106}$ & $0.29$ \\
+FRB 20221113A\tablenotemark{u} & $0.251$ & $90^{+59}_{-74}$ & $113^{+74}_{-93}$ & $0.12$ \\
+FRB 20221203A\tablenotemark{u} & $0.510$\tablenotemark{r} & $73^{+93}_{-113}$ & $110^{+141}_{-171}$ & $0.25$ \\
+FRB 20230307A & $0.271$ & $69^{+81}_{-98}$ & $87^{+104}_{-124}$ & $0.24$ \\
+FRB 20230913A\tablenotemark{u} & $0.302$\tablenotemark{r} & $171^{+65}_{-81}$ & $223^{+84}_{-106}$ & $0.03$ \\
+FRB 20240203A\tablenotemark{u} & $0.074$\tablenotemark{r} & $72^{+33}_{-39}$ & $78^{+35}_{-43}$ & $0.04$ \\
+FRB 20240229A & $0.287$ & $66^{+70}_{-86}$ & $85^{+91}_{-111}$ & $0.22$ \\
 \enddata
+\tablenotetext{r}{Provisional internal host redshift; no citable published
+provenance is currently available.}
+\tablenotetext{u}{Sightline outside the deep-imaging footprints; the intervening
+census is incomplete and $\mathrm{DM_{int}}$ is a floor, so the tabulated host DM
+(both frames) is an upper limit on the true host contribution.}
 \end{deluxetable}
 
 \begin{figure*}
@@ -188,10 +237,14 @@ FRB 20240229A & $0.287$ & $66^{+70}_{-86}$  & $0.22$ \\
     appropriate lognormal prior family to its census point estimate). The
     dashed navy curve is the convolution of those individual intervening PDFs
     used in the host calculation; the
-    bold red curve is the resulting $P(\mathrm{DM_{host}})$, with a dashed
+    bold red curve is the resulting $P(\mathrm{DM_{host}})$ (observer frame;
+    the host-frame column is $(1+z)$ times larger), with a dashed
     vertical mark at the posterior median and a dotted line at zero.
     Peak-normalization makes shapes (not absolute heights) comparable across
-    terms of very different scale. Numerical details and
+    terms of very different scale. Panel titles carry a dagger ($\dagger$) for
+    the six sightlines outside the deep-imaging footprints, whose incomplete
+    intervening census makes $P(\mathrm{DM_{host}})$ an upper limit rather than a
+    two-sided posterior (Table~\ref{tab:host-forward-model}). Numerical details and
     fiducial priors are given in Appendix~\ref{app:host-forward-model}.}
     \label{fig:dm_host_posteriors}
 \end{figure*}
@@ -202,24 +255,21 @@ FRB 20240229A & $0.287$ & $66^{+70}_{-86}$  & $0.22$ \\
 \section{DSA-110 scintillation ACF diagnostics}
 \label{app:dsa-scint-acf}
 
-The per-burst DSA-110 diagnostics are withheld until the manuscript owner has
-reviewed each burst's component assignment, exclusions, ACF data, model, and
-overlay provenance. Numerical qualification and author approval are separate
-gates.
+The per-burst DSA-110 diagnostics below expose the complete best-so-far fit
+family. They are provisional: numerical fit quality and visual inspection are
+not substitutes for injection and null-test qualification.
 
 \clearpage
 \input{sections/dsa_scint_acf.tex}
 \clearpage
 
-\begin{figure*}
+\begin{figure*}[p]
     \centering
-    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
-    \textbf{[AUTHOR REVIEW PENDING --- ORAN CALIBRATION]}\\[0.6em]
-    Qualification evidence and rendered presentation must both be reviewed
-    before this candidate is promoted.\\
-    \vspace{1.6cm}}}
-    \caption{Reserved Oran scintillation-calibration slot. \emph{Draft
-    placeholder---the visualization is not yet author-approved.}}
+    \includegraphics[width=0.9\textwidth]{pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png}
+    \caption{Frozen injection-response calibration for the certified
+    FRB~20220506D DSA-110 component at 1328.24 MHz. Unlike the broader
+    best-so-far catalog, this component passed the real-background injection,
+    off-pulse null, fit-window, low-lag, and resolved-interval gates.}
     \label{fig:oran-dsa-scint-qualified}
 \end{figure*}
 
@@ -233,9 +283,10 @@ gates.
 \section{Joint-model morphology audits}
 \label{app:jointmodel-pairs}
 
-The joint-model audit candidates are withheld pending per-burst owner review of
-the adopted DM, fit configuration, component count, and residual structure.
-No numerical or agent visual gate substitutes for that approval.
+The panels below show every retained best-so-far DM-locked joint model. They
+are morphology audits, not robust scattering measurements; the residual
+adjudication and the still-pending V1 re-trust certification are reported in
+Table~\ref{tab:joint-fit-provisional}.
 
 \input{sections/jointmodel_pairs.tex}
 
