@@ -34,16 +34,16 @@ needs_owner = false
 
 [[lane]]
 id = "chime-route-b-voltage"
-title = "Route B: voltage-domain common-mode separation (Gate 0 GO; calibrator data ask declined)"
+title = "P2 Route B: ratio statistics (G2 common-mode cancellation PASS; G1 sensitivity fail)"
 strand = "scintillation"
-status = "in_progress"
+status = "documented_fail"
 owner = "claude"
 issue = 55                        # GitHub issue (0 = not yet filed)
-branch = ""
+branch = "scint/p2-routeb-voltage"
 worktree = ""
-pr = 0
+pr = 180                          # FLITS PR (merged); pin bump Faber2026 #65
 gates = ["predeclared experiment record with frozen thresholds before burst data", "detection admissible only inside the Gate-0 window (dnu_d >= 77-127 kHz)"]
-next_action = "P2 record predeclared (experiment-chime-scint-routeb-voltage.md); implement S1-S3 statistics + G1/G2 blinded harness in FLITS, run on h17"
+next_action = "terminal; successor P3 (optimal quadratic estimator) planned in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md, awaiting owner sanction"
 needs_owner = false
 
 [[lane]]
@@ -100,12 +100,16 @@ needs_owner = false
 updated = "2026-07-15T03:59-0700"
 
 [[owner_view.needs_you]]
+h = "Build P3 or stop"
+d = "P2 closed DOCUMENTED-FAIL but split the problem: the ratio statistic cancels the 35 kHz common mode (~100x, G2 clean) and the blocker is now pure radiometer sensitivity. P3 = delay-domain optimal quadratic estimator, full plan in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md (Gate 0b forecast first, ~free). Say 'build P3' or 'stop here' (paper takes P2's censored exclusion)."
+
+[[owner_view.needs_you]]
 h = "F1/scattering: budget.tex alpha=4 wording"
 d = "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
 
 [[owner_view.now]]
-h = "Route B: voltage-domain separation"
-d = "Gate 0 GO — detection admissible for dnu_d >= 77-127 kHz only; predeclared experiment record next, then estimator on h17 freya baseband"
+h = "Awaiting owner: P3 sanction"
+d = "P2 terminal (FLITS #180, pin #65); P3 plan handed off; Gate 0b forecast runs on sanction"
 who = "claude"
 
 [[owner_view.next]]
@@ -140,9 +144,9 @@ next = "A5 chartered · V1/V2 startable"
 [[owner_view.component]]
 name = "Scintillation"
 lane = "B"
-status = "CHIME campaign OPEN; Gate 0 GO (window dnu_d >= 77-127 kHz)"
+status = "CHIME campaign OPEN; P2 documented-fail (common mode beaten, sensitivity short)"
 status_class = "pend"
-next = "Route B build (voltage-domain); calibrator ask declined by owner"
+next = "P3 optimal estimator awaiting owner sanction; plan in handoff"
 
 [[owner_view.component]]
 name = "Energies"
@@ -163,4 +167,4 @@ name = "Mechanics"
 lane = "P0·F·G"
 status = "active"
 status_class = "now"
-next = "pin 2242124 current · control system LANDED (PR 59) · views generated"
+next = "pin 1085de0 current · control system LANDED (PR 59) · views generated"
