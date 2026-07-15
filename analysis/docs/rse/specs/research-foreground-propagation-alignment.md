@@ -17,8 +17,8 @@ relationship along any of the twelve co-detection sightlines?
   individually and prevents a count of cross-listed candidates from being
   mistaken for a count of physical structures.
 - `analysis/provisional_propagation/results.json` contains the frozen joint-fit
-  and component-level two-screen calculation. Those propagation values remain
-  explicitly unverified.
+  values and records that the component-level two-screen calculation is pending
+  the policy-required $\alpha=4$ consistency refits.
 
 The old sightline-attribution matrix is not used because its joint-fit values
 and statuses predate the July 14 residual adjudication.
@@ -31,9 +31,9 @@ cluster J115120.4+714435 at $b/R_{500}=0.83$. The fiducial foreground model give
 $\tau_{\rm int}=0.015$ ms, about 22% of the provisional
 $\tau_{1\,\mathrm{GHz}}=0.0676$ ms. This is consistent with a partial foreground
 contribution, not with the foreground model explaining all of the broadening.
-If the two-screen classification survives revalidation, the identified
-foreground structure is a plausible scattering-screen candidate, but the
-present products do not locate either screen.
+If a future policy-compliant two-screen analysis supports multiple layers, the
+identified foreground structure is a plausible scattering-screen candidate,
+but the present products do not locate a screen.
 
 FRB 20220310F (Whitney) has a confirmed foreground halo at approximately
 101 kpc, but its fiducial $\tau_{\rm int}=3.6\times10^{-4}$ ms is only about
@@ -41,7 +41,7 @@ FRB 20220310F (Whitney) has a confirmed foreground halo at approximately
 causal role for that halo in the observed scattering is disfavored by the
 current foreground model.
 
-The other four two-screen-favored sightlines have no budget-eligible foreground
+The other five accepted-fit sightlines have no budget-eligible foreground
 system, but every one is outside the deep-imaging footprints. They therefore
 cannot serve as clean foreground-free controls. Two have especially close
 inconclusive projected candidates: FRB 20221113A at 16 kpc and FRB 20230325A at

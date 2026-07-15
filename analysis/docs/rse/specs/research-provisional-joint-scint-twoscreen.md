@@ -34,18 +34,23 @@ that can be made from those products.
   `P = tau(nu) [ms] * Delta-nu-d [MHz] * 1000`, equivalent to
   `tau[s] * Delta-nu-d[Hz]`. A common screen is expected in the conservative
   interval `0.1 <= P <= 2` (`pipeline/flits/batch/analysis_logic.py:29-31`).
+- The accepted dual-$\tau$ policy in `pipeline/CONTEXT.md` requires this
+  statistic to use the $\alpha=4$ `tau_consistency` refit. The committed
+  `tau_consistency_catalog.csv` marks every row pending and contains no such
+  refit values. Free-$\alpha$ joint $\tau$ is reserved for the morphology and
+  citable-$\alpha$ track and cannot be substituted.
 
 ## Synthesis
 
 The manuscript can show all retained joint-fit panels and all DSA ACF panels as
-provisional diagnostics, while restricting the two-screen calculation to the
-seven residual-adjudicated joint fits and clean narrow (`component=1`) DSA
-components. Each DSA component should be paired with `tau` evaluated at its
+provisional diagnostics. The proper two-screen audit currently stops at
+readiness: seven residual-adjudicated fits have clean narrow (`component=1`)
+DSA components, but none has the required $\alpha=4$ consistency-$\tau$ refit.
+Those rows must remain pending, with no screen verdict. Once the refits exist,
+each DSA component should be paired with `tau_consistency` evaluated at its
 actual center frequency. This avoids fitting or assuming a DSA-only bandwidth
-power law. A burst is provisionally two-screen-favored only when every paired
-component remains above `P=2` at one propagated standard deviation; otherwise
-it is indeterminate. Because the fit summaries lack joint samples, uncertainty
-propagation must be labeled approximate and covariance-free.
+power law. Because full samples may still be unavailable, any later uncertainty
+propagation must remain explicit about covariance.
 
 ## References / Sources
 

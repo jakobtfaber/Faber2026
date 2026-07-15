@@ -12,8 +12,8 @@
 ## Overview
 
 Generate manuscript tables directly from the frozen July joint-fit and DSA
-catalogs, promote their existing figures, and report a component-level
-two-screen consistency calculation with conspicuous provisional status.
+catalogs, promote their existing figures, and report the policy-compliant
+readiness state of the component-level two-screen calculation.
 
 **Goal:** The compiled manuscript contains the best current figures and values,
 without weakening the existing robust-verification caveat.
@@ -27,8 +27,8 @@ without weakening the existing robust-verification caveat.
 
 ## Desired End State
 
-Generated tables provide traceable joint-fit, DSA, and screen-consistency
-values; the main text and appendix compile the matching diagnostic figures;
+Generated tables provide traceable joint-fit and DSA values plus explicit
+screen-consistency readiness; the main text and appendix compile the matching diagnostic figures;
 captions and prose distinguish best-so-far values from certified results.
 
 ## What We're NOT Doing
@@ -41,9 +41,10 @@ captions and prose distinguish best-so-far values from certified results.
 ## Implementation Approach
 
 One standard-library generator reads the frozen CSV/JSON inputs, validates
-their schema and roster, hashes every input, and emits three TeX tables plus a
-JSON provenance/result record. The screen product is evaluated per actual DSA
-sub-band; no DSA frequency-law fit is introduced.
+their schema and roster, hashes every input, and emits four TeX tables plus a
+JSON provenance/result record. It enforces the dual-$\tau$ policy: products are
+computed only from $\alpha=4$ consistency refits and otherwise remain pending.
+No DSA frequency-law fit is introduced.
 
 ## Implementation Phases
 
@@ -64,8 +65,8 @@ sub-band; no DSA frequency-law fit is introduced.
 
 - Replace reserved figure slots and empty appendix include files with the
   frozen PDFs; input the generated tables from `sections/results.tex`.
-- Rewrite the screen-attribution discussion to report only the bounded
-  provisional conclusion.
+- Rewrite the screen-attribution discussion to report the missing
+  consistency-refit gate and withhold screen verdicts.
 
 ### Phase 4: foreground-census alignment
 
@@ -121,6 +122,11 @@ measurements. Repeated status columns, captions, and section-level caveats
 mitigate that risk. Missing posterior covariance can understate propagated
 uncertainties, so the calculation reports component ranges and avoids distance
 inference.
+
+Independent review found that the first implementation incorrectly paired the
+free-$\alpha$ morphology track with DSA bandwidths. The corrected generator
+loads only the policy-required $\alpha=4$ consistency track and fail-closes all
+seven rows as pending because those refits are absent.
 
 The foreground extension adds two risks: treating a coverage-limited zero as a
 clean control, and treating projected alignment as causation. Explicit coverage

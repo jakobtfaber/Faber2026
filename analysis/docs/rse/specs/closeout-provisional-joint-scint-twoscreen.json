@@ -3,7 +3,7 @@
     {
       "repo": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
       "taskScoped": [
-        "analysis/provisional_propagation/",
+        "analysis/provisional_propagation/results.json",
         "docs/rse/specs/closeout-provisional-joint-scint-twoscreen.json",
         "docs/rse/specs/plan-provisional-joint-scint-twoscreen.md",
         "docs/rse/specs/research-foreground-propagation-alignment.md",
