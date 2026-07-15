@@ -22,6 +22,14 @@ HOST_CSV = ROOT / "scripts" / "dm_budget_uncertainty.csv"
 BASE_DATA = PIPELINE / "galaxies" / "foreground" / "budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 
+# These are usable project redshifts but do not yet have a citable published
+# provenance. Keep that distinction visible in distance-dependent results.
+PROVISIONAL_REDSHIFTS = {
+    "FRB 20221203A",
+    "FRB 20230913A",
+    "FRB 20240203A",
+}
+
 EMITTER = PIPELINE / "galaxies" / "foreground" / "budget_table_emitter.py"
 
 
@@ -75,7 +83,13 @@ def render() -> str:
         "convention of Section~\\ref{sec:toa}.",
         "adopted CHIME phase-coherence measurement from Table~\\ref{tab:dm-measurements}.",
     )
-    body = "\n".join(base.render_row(row) for row in rows)
+    rendered_rows = []
+    for row in rows:
+        cells = base.render_cells(row)
+        if row["burst"] in PROVISIONAL_REDSHIFTS:
+            cells[1] += r"\tablenotemark{r}"
+        rendered_rows.append(" & ".join(cells) + r" \\")
+    body = "\n".join(rendered_rows)
     # Super-repo overlay on the emitter footnotes/comments: (i) the f_IGM
     # sensitivity statement tracks the manuscript forward model (median -5
     # after the 2026-07-15 census remediation -> 0.2 sigma, conservative);
@@ -106,6 +120,11 @@ def render() -> str:
         "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
         "shallow-layer confirmed system (FRB~20240203A), the tabulated column\n"
         "is a lower bound rather than a complete census.}",
+    ).replace(
+        "\\tablenotetext{u}{Position lies outside",
+        "\\tablenotetext{r}{Provisional internal host redshift; no citable "
+        "published provenance is currently available.}\n"
+        "\\tablenotetext{u}{Position lies outside",
     )
     return head + body + "\n" + tail
 
