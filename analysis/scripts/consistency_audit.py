@@ -47,7 +47,8 @@ NUMBER_WORDS = {
 SAMPLE_COUNT_EXPECTATIONS = {
     "main.tex": [
         ("abstract sample", re.compile(
-            r"We present\s+(?P<count>\w+)\s+fast radio bursts co-detected",
+            r"(?:We present|Here we analyze)\s+(?P<count>\w+)\s+"
+            r"(?:fast radio bursts|FRBs)\s+co-detected",
             re.IGNORECASE)),
         ("abstract association census", re.compile(
             r"All\s+(?P<count>\w+)\s+pass timing", re.IGNORECASE)),
