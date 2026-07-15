@@ -1,10 +1,6 @@
 {
-  "updated": "2026-07-15T03:59-0700",
+  "updated": "2026-07-15T04:30-0700",
   "needs_you": [
-    {
-      "h": "Build P3 or stop",
-      "d": "P2 closed DOCUMENTED-FAIL but split the problem: the ratio statistic cancels the 35 kHz common mode (~100x, G2 clean) and the blocker is now pure radiometer sensitivity. P3 = delay-domain optimal quadratic estimator, full plan in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md (Gate 0b forecast first, ~free). Say 'build P3' or 'stop here' (paper takes P2's censored exclusion)."
-    },
     {
       "h": "F1/scattering: budget.tex alpha=4 wording",
       "d": "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
@@ -12,8 +8,8 @@
   ],
   "now": [
     {
-      "h": "Awaiting owner: P3 sanction",
-      "d": "P2 terminal (FLITS #180, pin #65); P3 plan handed off; Gate 0b forecast runs on sanction",
+      "h": "P3 build sanctioned; Gate 0b first",
+      "d": "owner said 'build P3' 2026-07-15; predeclaration frozen (experiment-chime-scint-p3-optimal-estimator.md); Gate 0b measured-noise forecast can still stop the build at < 3 sigma",
       "who": "claude"
     }
   ],
@@ -52,9 +48,9 @@
     {
       "name": "Scintillation",
       "lane": "B",
-      "status": "CHIME campaign OPEN; P2 documented-fail (common mode beaten, sensitivity short)",
-      "status_class": "pend",
-      "next": "P3 optimal estimator awaiting owner sanction; plan in handoff"
+      "status": "CHIME campaign OPEN; P3 optimal estimator IN BUILD (sanctioned 2026-07-15)",
+      "status_class": "now",
+      "next": "Gate 0b forecast, then T1-T6 + blinded G1''/G2'' on scint/p3-optimal-estimator"
     },
     {
       "name": "Energies",
