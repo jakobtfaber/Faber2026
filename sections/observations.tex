@@ -28,21 +28,31 @@ standardized to ascending order and its per-channel bandpass normalized, so the
 fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
 and figures in this paper are produced with a common open-source reduction and
 fitting pipeline, which we reference throughout for reproducibility.
-The dedispersed twelve-burst gallery and the joint data/model/residual panels
-are withheld from this draft while they pass the author figure-review gate.
-Candidate packets must expose the adopted and input-product DMs, exact fit
-artifacts, residual diagnostics, and intended layout before any figure is
-promoted into the manuscript (Section~\ref{sec:multicomp}).
+The dedispersed twelve-burst gallery (Figure~\ref{fig:codetection-data-grid})
+is included below; the joint data/model/residual panels remain withheld from
+this draft while they pass the author figure-review gate. Candidate packets
+must expose the adopted and input-product DMs, exact fit artifacts, residual
+diagnostics, and intended layout before any figure is promoted into the
+manuscript (Section~\ref{sec:multicomp}).
 
 \begin{figure*}[tp]
     \centering
-    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
-    \textbf{[AUTHOR REVIEW PENDING --- FIGURE 1]}\\[0.6em]
-    Twelve-burst CHIME/FRB and DSA-110 gallery. Candidate must be approved by
-    exact SHA-256 through the figure-review packet before promotion.\\
-    \vspace{1.6cm}}}
-    \caption{Reserved Figure~1 slot. \emph{Draft placeholder---the current
-    gallery candidates are not author-approved and are not compiled here.}}
+    \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{figures/codetection_data_grid.pdf}
+    \caption{Twelve-burst CHIME/FRB and DSA-110 co-detection gallery. Each panel
+    is one FRB, in chronological order, showing the archival Stokes-$I$ dynamic
+    spectrum in both bands---CHIME/FRB ($0.4$--$0.8$\,GHz) and DSA-110
+    ($\approx1.3$--$1.5$\,GHz)---with the band-summed burst profile on top and
+    the time-integrated on-pulse spectrum along the right margin. Every product
+    is re-dedispersed from its filename-stem delivery DM to the adopted
+    structure-optimizing CHIME phase-coherence DM
+    (Section~\ref{sec:dm-measurement}; Table~\ref{tab:dm-measurements}), so all
+    panels share a single dispersion reference; the CHIME correction is
+    negligible ($\lesssim0.004\,\mathrm{pc\,cm^{-3}}$) by construction while the
+    DSA correction carries the full CHIME$-$DSA offset for that sightline. The
+    hatched wedge marks the $\approx0.8$--$1.3$\,GHz gap between the two
+    receivers, and RFI-excised channels are masked and rendered in uniform gray.
+    Panels are drawn at near-native display resolution; no model or residual is
+    shown.}
     \label{fig:codetection-data-grid}
 \end{figure*}
 
@@ -56,7 +66,12 @@ band with a controlled implementation of the phase-coherence statistic used by
 \texttt{DM\_phase} \citep{Michilli2021}. The archival waterfalls are already
 dedispersed, so every trial coordinate is a physical residual about the exact
 DM encoded in that product's filename, not about the rounded catalog value.
-After robust per-channel normalization and masking, we Fourier transform each
+The per-channel normalization and masking are deterministic: each frequency
+channel is standardized by its median and its median-absolute-deviation
+(scaled by 1.4826 to Gaussian equivalence), and a channel is retained only
+when at least $90\%$ of its time samples are finite and its MAD is finite
+and positive (with a minimum of 16 surviving channels required); no
+interpolation is performed over masked channels. We then Fourier transform each
 channel along time, divide by its Fourier amplitude to retain unit phasors,
 apply the cold-plasma phase rotation for each trial residual DM, coherently sum
 the phasors over frequency channels, square the modulus, and integrate the
@@ -70,9 +85,17 @@ grid. We repeat the fit on the native waterfall and after factors of two in
 frequency, time, and both dimensions; the finest member of the stable
 resolution cluster is retained. We also repeat the phase-power integral with
 maximum fluctuation frequencies of 500, 1000, 1500, 2500, and 5000\,Hz and
-perform twelve leave-one-channel-block-out jackknifes. The reported band
+perform twelve leave-one-channel-group-out jackknifes, where the twelve
+groups are defined \emph{after} masking by assigning the surviving,
+frequency-sorted channels to groups cyclically (channel index modulo
+twelve)---an interleaved-comb blocking that makes each group span the full
+band rather than a contiguous sub-band, so the jackknife measures
+channel-weighting sensitivity rather than spectral-slope leverage. The reported band
 uncertainty is the maximum of the jackknife variation, resolution variation,
-cutoff variation, and a $0.005\,\mathrm{pc\,cm^{-3}}$ numerical floor. All 24
+cutoff variation, and a $0.005\,\mathrm{pc\,cm^{-3}}$ numerical floor---so
+mask-threshold sensitivity is bounded by construction: any channel subset
+whose removal moves the peak appears in the jackknife spread, which the
+adopted uncertainty dominates. All 24
 band fits select native time and frequency resolution and have interior
 fine-grid maxima.
 
@@ -147,6 +170,20 @@ sub-microsecond scattering broadening at CHIME frequencies
 $\text{DM}_{\text{MW}}$ reaching $\approx 97$\,pc\,cm$^{-3}$ and predicted
 CHIME-band scattering timescales of $\tau_{\text{MW}} \gtrsim 30\,\mu$s,
 which can dominate or mask the intrinsic extragalactic scattering.
+
+The adopted NE2025 disk columns are bracketed by the older models on every
+sightline. Evaluating NE2001 and YMW16 (via \texttt{pygedm}, integrated to
+the same 30\,kpc) at the twelve positions
+(\texttt{scripts/mw\_model\_comparison.py}), NE2001 exceeds the NE2025 disk
+column by $7$--$13\%$ on the nine host-redshift-constrained sightlines
+(reaching $41\%$ only on the lowest-latitude sightline, FRB~20240122A, which
+carries a placeholder redshift and enters no distance-dependent quantity),
+while YMW16 scatters from $-13\%$ to $+39\%$ about NE2025 on those nine.
+The $30\%$ lognormal disk uncertainty adopted in the forward model
+(Appendix~\ref{app:host-forward-model}) therefore covers the full NE2001
+spread and the YMW16 spread to within $\approx1.3\sigma$ on every sightline
+that contributes a host posterior, which is the model-dependence budget the
+disk term requires.
 
 The $\text{DM}_{\text{MW}}$ quoted in this section is the NE2025 \emph{disk}
 (ISM) column alone. In the dispersion-measure budget of
