@@ -5,9 +5,9 @@ Our sample consists of candidate co-detections of fast radio bursts seen
 by CHIME/FRB \citep{CHIMEFRB2018} at $0.4$--$0.8$\,GHz and by DSA-110
 \citep{Law2024} at $\sim$1.4\,GHz between February 2022 and February 2024. The
 key advantage of the sample is that each candidate event is observed across a
-wide frequency baseline, which---as developed in Section~\ref{sec:jointfit}---can
-separate scattering time from frequency scaling more strongly than a single-band
-fit. The twelve bursts, their TNS designations, sky positions,
+wide frequency baseline. As developed in Section~\ref{sec:jointfit}, this broad
+coverage separates scattering time from its frequency scaling more strongly
+than a single-band fit can. The twelve bursts, their TNS designations, sky positions,
 detection epochs, and association diagnostics are listed in
 Table~\ref{tab:sample}. The timing residuals in that table use the shared
 DSA-DM reference convention retained by the association analysis. The new
@@ -76,14 +76,15 @@ cutoff variation, and a $0.005\,\mathrm{pc\,cm^{-3}}$ numerical floor. All 24
 band fits select native time and frequency resolution and have interior
 fine-grid maxima.
 
-The CHIME/FRB fits are adopted as the total DMs (Table~\ref{tab:dm-measurements}).
-This is a uniform instrument-level choice, not an event-by-event selection:
-the cold-plasma delay per unit DM across 400--800\,MHz is approximately
-19.4\,ms, compared with 0.57\,ms across 1311--1499\,MHz, giving CHIME about 34
-times greater DM leverage. Correspondingly, its measured coherence curves are
-generally narrower and less cutoff-sensitive. The DSA fits remain independent
-cross-checks; all twelve differ from CHIME by less than
-$0.12\,\mathrm{pc\,cm^{-3}}$.
+We adopt the CHIME/FRB fits as the total DMs for all bursts
+(Table~\ref{tab:dm-measurements}). This choice is made at the instrument level
+rather than event by event, because the cold-plasma delay per unit DM is much
+larger across the 400--800\,MHz CHIME band (approximately 19.4\,ms) than
+across the 1311--1499\,MHz DSA-110 band (0.57\,ms), giving CHIME about 34
+times greater DM leverage. Correspondingly, the CHIME coherence curves are
+generally narrower and less cutoff-sensitive. The DSA fits are retained as
+independent cross-checks; for all twelve bursts, the DSA and CHIME DMs differ
+by less than $0.12\,\mathrm{pc\,cm^{-3}}$.
 
 For completeness, we also formed inverse-variance CHIME+DSA means with
 $w_i=\sigma_i^{-2}$. When the band scatter exceeded the stated errors, we
@@ -110,11 +111,12 @@ used to decide which per-sightline quantities are reported
 (Sections~\ref{sec:jointfit} and~\ref{sec:multicomp}). Scattering-fit results
 are presented in Section~\ref{sec:results-alpha}.
 
-The joint-model appendix is a morphology audit, not a blanket promotion of
-fit-derived scattering parameters. Only the seven panels that pass both the
-numerical and visual residual gates contribute pulse-broadening predictions to
-the scintillation diagnostics; the other retained panels document why those
-parameters are excluded.
+The joint-model appendix serves as a morphology audit rather than a blanket
+endorsement of all fit-derived scattering parameters. Only the seven panels
+that pass both the numerical and visual residual gates contribute
+pulse-broadening predictions to the scintillation diagnostics; the remaining
+panels are retained to document why their parameters are excluded from
+further analysis.
 
 \subsection{Milky Way foreground contributions}
 \label{sec:obs-mw}
