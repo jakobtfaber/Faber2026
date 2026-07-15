@@ -43,7 +43,7 @@ branch = ""
 worktree = ""
 pr = 0
 gates = ["predeclared experiment record with frozen thresholds before burst data", "detection admissible only inside the Gate-0 window (dnu_d >= 77-127 kHz)"]
-next_action = "draft Route B predeclared experiment record (estimator design + frozen gates), then implement on h17 freya baseband"
+next_action = "P2 record predeclared (experiment-chime-scint-routeb-voltage.md); implement S1-S3 statistics + G1/G2 blinded harness in FLITS, run on h17"
 needs_owner = false
 
 [[lane]]
