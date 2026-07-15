@@ -40,6 +40,13 @@ Self-contained: numpy + scipy only (plus a frozen per-system intervening CSV
 for the figure overlays). Point-estimate component inputs are taken from the
 V5-cleared budget table; the physics of the *scatter* is added here.
 
+DM_host here is the OBSERVER-FRAME residual (no 1+z factor); the rest-frame host
+column is (1+z) larger and is tabulated alongside it in the manuscript. For the
+six sightlines outside the deep-imaging footprints (UPPER_LIMIT below) the
+foreground census is incomplete and DM_int is a floor; with the IGM-marginal
+cosmic term (halos excluded), an undetected halo lands in the host residual, so
+those DM_host are upper limits (dagger on the figure panel titles).
+
 The figure is a 3x3 of peak-normalized PDFs per redshift-constrained sightline:
 faded MW-disk / MW-halo / IGM / per-system intervening curves under a bold
 P(DM_host). Tabulated host posteriors are unchanged (still use the
@@ -90,6 +97,16 @@ SIGHTLINES = [
     ("FRB 20240203A", 0.074, 272.638699, 111, 62, 26, "measured"),
     ("FRB 20240229A", 0.287, 491.207826, 74, 250, 117, "measured"),
 ]
+
+# Sightlines outside the deep-imaging footprints (budget_table.tex note u): the
+# intervening census is incomplete, so DM_int is a floor. With the IGM-marginal
+# cosmic term (which excludes virialized halos), any undetected foreground halo
+# is absorbed into the host residual -> DM_host is an UPPER LIMIT, flagged with a
+# dagger on the figure panel titles.
+UPPER_LIMIT = {
+    "FRB 20220207C", "FRB 20220506D", "FRB 20221113A",
+    "FRB 20221203A", "FRB 20230913A", "FRB 20240203A",
+}
 
 # --- Nuisance priors -----------------------------------------------------------
 # Diffuse cosmic (IGM) column: Connor et al. (2025) fit the IGM baryon fraction
@@ -343,9 +360,12 @@ def main():
     lo, hi = np.percentile(dm_cl, [2.5, 97.5])
     print(f"beta-model column: p50={p50:.0f}, [p16,p84]=[{p16:.0f},{p84:.0f}], "
           f"95% CI=[{lo:.0f},{hi:.0f}] pc cm^-3")
-    print("mNFW central (pipeline, V5): ~160 pc cm^-3")
-    span_lo = min(lo, 160)
-    span_hi = max(hi, 160)
+    # mNFW column carried in the budget (intervening census point for the
+    # J115120.4+714435 cluster; = DM_int - galaxy columns for FRB 20230307A).
+    mnfw_central = 184.0
+    print(f"mNFW central (budget census point): ~{mnfw_central:.0f} pc cm^-3")
+    span_lo = min(lo, mnfw_central)
+    span_hi = max(hi, mnfw_central)
     print(f"combined plausible range (mNFW + beta-model systematic): "
           f"~{span_lo:.0f}-{span_hi:.0f} pc cm^-3")
 
@@ -525,7 +545,8 @@ def _make_figure(results):
         ax.axvline(r["dm_host_p50"], color=_HOST_COLOR, lw=0.6, ls="--", alpha=0.7, zorder=4)
 
         short = r["name"].replace("FRB ", "")
-        ax.set_title(f"{short}  ($z={r['z']:.3f}$)", pad=3)
+        dagger = r"$\dagger$" if r["name"] in UPPER_LIMIT else ""
+        ax.set_title(f"{short}{dagger}  ($z={r['z']:.3f}$)", pad=3)
         ax.set_xlim(x_lo, x_hi)
         ax.set_ylim(0.0, 1.18)
         ax.set_yticks([0.0, 0.5, 1.0])

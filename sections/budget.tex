@@ -61,13 +61,24 @@ $\sigma_{\rm DM}=F\,z^{-1/2}$ form \citep{Macquart2020, McQuinn2014, James2022},
 which \citet{Connor2024} show overstates the diffuse scatter because
 $\sigma_{\rm DM}$ does not follow the $z^{-1/2}$ halo-Poisson scaling. The
 Galactic-disk, Galactic-halo, and intervening columns are drawn from their own
-priors (Appendix~\ref{app:host-forward-model}). We evaluate
-$\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-\mathrm{DM_{cosmic}}-
-\mathrm{DM_{int}}$ per draw. Because $P(\mathrm{DM_{cosmic}})$ is right-skewed,
-subtracting its \emph{mean}---as an arithmetic residual does---biases the
-inferred host low; sampling the full distribution removes that bias and returns
-an asymmetric posterior with a well-defined $P(\mathrm{DM_{host}}<0)$ per
-sightline (Table~\ref{tab:budget}, Appendix~\ref{app:host-forward-model}).
+priors (Appendix~\ref{app:host-forward-model}). We evaluate the observer-frame
+host column $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-
+\mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$ per draw; the rest-frame host contribution
+is $(1+z)\,\mathrm{DM_{host}}$. Sampling the full $P(\mathrm{DM_{cosmic}}\,|\,z)$
+rather than subtracting a single number returns an asymmetric posterior with a
+well-defined $P(\mathrm{DM_{host}}<0)$ per sightline; that interval, not a shift
+in the central value, is what the forward model buys. The host medians do sit
+above the old mean-subtracted residuals, but the offset is driven mainly by the
+updated IGM normalization---$f_{\rm IGM}=0.76$ here versus $f_{\rm IGM}=0.84$ for
+the earlier Macquart point estimate, which lowers the subtracted cosmic column by
+$\sim\!10\%$---with the log-normal skew a smaller contributor (at $z\simeq0.3$,
+$\approx26$ of a $\approx30\,\mathrm{pc\,cm^{-3}}$ shift is the $f_{\rm IGM}$
+recalibration and only a few come from the distribution shape). Because
+$f_{\rm IGM}$ was itself inferred partly from DSA-110 sightlines, the host budget
+is correspondingly sensitive to that normalization; and on the sightlines whose
+foreground census is incomplete (Table~\ref{tab:budget}, note~u) the
+IGM-marginal cosmic term leaves any undetected halo in the host residual, so
+those host DMs are upper limits (Appendix~\ref{app:host-forward-model}).
 
 \subsection{Intervening Foreground Galaxies and Clusters}
 \label{sec:foreground}

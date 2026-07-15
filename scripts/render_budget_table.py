@@ -85,6 +85,21 @@ def render() -> str:
         "within $0.3\\sigma$",
         "within $0.2\\sigma$",
     ).replace(
+        # (iii) The upward move of the host medians relative to the old
+        # mean-subtracted residuals is driven mainly by the f_IGM 0.84 -> 0.76
+        # recalibration (~26 of a ~30 pc/cm^3 shift at z~0.3), not by the
+        # log-normal skew; attribute it correctly.
+        "\\tablecomments{Because the diffuse cosmic term is drawn from a skewed log-normal,\n"
+        "the host posteriors are asymmetric and their medians exceed the naive\n"
+        "mean-subtracted residuals. One high-redshift sightline",
+        "\\tablecomments{The host posteriors are asymmetric because the diffuse cosmic\n"
+        "term is drawn from a skewed log-normal. Their medians sit above the naive\n"
+        "mean-subtracted residuals, but that offset is driven mainly by the lower IGM\n"
+        "normalization adopted here ($f_{\\rm IGM}=0.76$ versus $0.84$), not by the\n"
+        "skew; the forward model's value is the asymmetric interval and the\n"
+        "per-sightline $P(\\mathrm{DM_{host}}<0)$, not the shift in central value.\n"
+        "One high-redshift sightline",
+    ).replace(
         "not\nexcluded---absence of coverage is not absence of foreground\n"
         "(Section~\\ref{sec:obs-fg}).}",
         "not\nexcluded---absence of coverage is not absence of foreground\n"
