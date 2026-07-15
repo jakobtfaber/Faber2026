@@ -8,6 +8,7 @@
 **Faber2026 base at audit:** `995940abb406f929add771c57b5d7f16f5bed345`  
 **Pinned FLITS revision:** `91a5120ed702d04530b9c3aae32d53a3861e87bd`  
 **Handoff branch:** `agent/handoff-chime-repair-closeout-20260714`  
+**Publication PR:** [Faber2026 #42](https://github.com/jakobtfaber/Faber2026/pull/42)  
 **Scope:** CHIME-only scintillation inventory and diagnostics, artifact repair,
 figure-review governance, PR #36/#37 disposition, and remaining branch/worktree
 boundaries. DSA-110 scientific adjudication is explicitly out of scope.
