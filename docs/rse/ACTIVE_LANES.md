@@ -5,12 +5,12 @@
 
 Operational control surface for Faber2026, generated from `docs/rse/program-state.toml`. One row per lane. Live PR/issue/branch state is verified by `scripts/sync_state.py --check` (advisory), not baked into this table.
 
-**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 2/3
+**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 0/3
 
 | Lane | Title | Strand | Status | Owner | Issue | Branch | PR | Needs owner | Next action |
 |---|---|---|---|---|---|---|---|---|---|
-| `hybrid-control-system` | Hybrid control system: canonical state, generated views, CI drift gate | mechanics | in_progress | claude | [#54](https://github.com/jakobtfaber/Faber2026/issues/54) | `feat/hybrid-control-system` | — | no | land the flag-day PR |
-| `chime-successor-route` | CHIME scint successor-route assessment (external-calibrator vs voltage-domain) | scintillation | in_progress | claude | [#55](https://github.com/jakobtfaber/Faber2026/issues/55) | — | — | yes | draft predeclared external-calibrator vs voltage-domain assessment |
+| `hybrid-control-system` | Hybrid control system: canonical state, generated views, CI drift gate | mechanics | done | claude | [#54](https://github.com/jakobtfaber/Faber2026/issues/54) | `feat/hybrid-control-system` | [#59](https://github.com/jakobtfaber/Faber2026/pull/59) | no | none — flag day landed (PR #59); views are generated from this file |
+| `chime-successor-route` | CHIME scint successor-route assessment (external-calibrator vs voltage-domain) | scintillation | needs_owner | claude | [#55](https://github.com/jakobtfaber/Faber2026/issues/55) | `docs/chime-successor-routes` | [#53](https://github.com/jakobtfaber/Faber2026/pull/53) | yes | owner: sanction Gate 0 + route order (research-chime-scint-successor-routes.md, PR #53 merged) |
 | `a5-profile-fit-statistic` | A5 N-component profile-fit justification statistic | scattering | proposed | — | [#56](https://github.com/jakobtfaber/Faber2026/issues/56) | — | — | no | design after the control system lands |
 | `f3-consistency-audit` | F3 manuscript consistency audit | synthesis | proposed | — | [#57](https://github.com/jakobtfaber/Faber2026/issues/57) | — | — | no | runnable now; consumes the claims-audit view |
 | `fig1-gallery` | Figure 1 data-only twelve-burst gallery | association | proposed | — | [#58](https://github.com/jakobtfaber/Faber2026/issues/58) | — | — | no | fresh isolated batch under the locked 4-by-3 data-only contract |
