@@ -23,6 +23,20 @@ complete; owner sign-off on this trigger is not warranted. See
 [`report-chime-scintillation-inventory-2026-07-14.md`](report-chime-scintillation-inventory-2026-07-14.md)
 and the canonical pipeline inventory for the full qualification record.
 
+## Owner direction on closure (2026-07-15, in-session)
+
+The ΔlnZ **screen-escalation** trigger is retired as calibrated-unusable (this
+plan's Final outcome). The owner's standing requirement is a different
+statistic: **a calibrated model-comparison criterion that justifies fitting N
+profile components instead of 1** — burst-morphology component count, not
+scattering-screen count (the two are distinct; multi-component morphology does
+not imply multiple screens). Component counts are currently set by per-burst
+visual morphology vetting; the successor statistic puts that on quantitative
+footing. Chartered as **A5** in
+[plan-circulation-readiness.md](plan-circulation-readiness.md); the dynesty
+evidence engine built here (`acf_evidence.py`) is reusable groundwork for the
+profile-domain comparison.
+
 
 ## Overview
 
