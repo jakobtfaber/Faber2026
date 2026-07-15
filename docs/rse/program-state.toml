@@ -33,18 +33,18 @@ next_action = "none — flag day landed (PR #59); views are generated from this 
 needs_owner = false
 
 [[lane]]
-id = "chime-successor-route"
-title = "CHIME scint successor-route assessment (external-calibrator vs voltage-domain)"
+id = "chime-route-b-voltage"
+title = "Route B: voltage-domain common-mode separation (Gate 0 GO; calibrator data ask declined)"
 strand = "scintillation"
-status = "needs_owner"
+status = "in_progress"
 owner = "claude"
 issue = 55                        # GitHub issue (0 = not yet filed)
 branch = ""
 worktree = ""
-pr = 0                            # assessment landed via merged PR #53 (see next_action); no active PR
-gates = ["predeclared gates frozen before burst data inspected", "owner sanction of route"]
-next_action = "owner: sanction Gate 0 + route order (research-chime-scint-successor-routes.md, PR #53 merged)"
-needs_owner = true
+pr = 0
+gates = ["predeclared experiment record with frozen thresholds before burst data", "detection admissible only inside the Gate-0 window (dnu_d >= 77-127 kHz)"]
+next_action = "draft Route B predeclared experiment record (estimator design + frozen gates), then implement on h17 freya baseband"
+needs_owner = false
 
 [[lane]]
 id = "a5-profile-fit-statistic"
@@ -97,19 +97,15 @@ needs_owner = false
 # ---------------------------------------------------------------------------
 
 [owner_view]
-updated = "2026-07-15T01:32-0700"
+updated = "2026-07-15T02:55-0700"
 
 [[owner_view.needs_you]]
-h = "Review the two recorded amendments"
-d = "Your in-session directions are now written into the records: (1) scope-fork amendment — CHIME scint measurement stays an active goal, 'P1 is final' revoked, narrowing not executed (decision-2026-07-15-p1-scope-fork.md §Owner amendment); (2) A1 trigger closed with no operating point, successor A5 chartered (N-component profile-fit justification statistic). Confirm the wording binds, or edit."
-
-[[owner_view.needs_you]]
-h = "Sanction the next CHIME scint route — assessment is on main"
-d = "research-chime-scint-successor-routes.md (PR #53): Gate 0 burst-blind detectability calc first, then Route A (external calibrator; stationarity crux + CHIME data ask) vs Route B (voltage-domain cross-statistics; h17 assets in hand). Recommendation: sanction Gate 0 now, route order B-then-A conditional on it."
+h = "Nothing pending"
+d = "All four calls answered in-session 2026-07-15: amendments ratified; Gate 0 sanctioned (verdict GO, window dnu_d >= 77-127 kHz); Route B in build; CHIME calibrator-data ask declined (in-house only)."
 
 [[owner_view.now]]
-h = "Awaiting owner: Gate 0 sanction"
-d = "control system LANDED (PR #59, issues #54-58 track lanes); next active work starts on your route sanction"
+h = "Route B: voltage-domain separation"
+d = "Gate 0 GO — detection admissible for dnu_d >= 77-127 kHz only; predeclared experiment record next, then estimator on h17 freya baseband"
 who = "claude"
 
 [[owner_view.next]]
@@ -148,9 +144,9 @@ next = "A5 chartered · V1/V2 startable"
 [[owner_view.component]]
 name = "Scintillation"
 lane = "B"
-status = "CHIME campaign OPEN per owner amendment; C1+P1 documented-fail"
+status = "CHIME campaign OPEN; Gate 0 GO (window dnu_d >= 77-127 kHz)"
 status_class = "pend"
-next = "successor-route assessment (calibrator vs voltage-domain)"
+next = "Route B build (voltage-domain); calibrator ask declined by owner"
 
 [[owner_view.component]]
 name = "Energies"
