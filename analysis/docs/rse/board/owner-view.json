@@ -1,11 +1,11 @@
 {
-  "updated": "2026-07-15T06:55-0700",
+  "updated": "2026-07-15T07:55-0700",
   "needs_you": [],
   "now": [
     {
-      "h": "P4 sanctioned: envelope modeling",
-      "d": "owner chose the exploratory follow-up over immediate closure: model freya's intrinsic spectral envelope (spline/GP/delay-cut families), calibrate subtraction by injections on the real envelope, then physical discriminants (nu^4 sub-band scaling, component correlation, DSA-band consistency); plan in handoff-2026-07-15-06-50-p4-envelope-model-dev.md; manuscript closure wording deferred until P4 resolves",
-      "who": "claude"
+      "h": "P4 resolved: envelope not separable — ratify CHIME closure wording",
+      "d": "P4 hit its predeclared E2 fail branch: models stiff enough to keep a scintle leave 5–72 sigma of un-attributable envelope-mismatch structure, the one control-clean model (GP 0.5 MHz) absorbs the injected scintles; all three families dropped, the real residual was never scanned (0/3 looks). The intrinsic envelope is not removable in-house, so the CHIME constraint stays envelope-confusion-limited with no post-subtraction upper limit either. OWNER: ratify the manuscript closure wording with P3' + P4 in hand (FLITS PR #182; record §Outcome)",
+      "who": "owner"
     }
   ],
   "next": [
@@ -43,9 +43,9 @@
     {
       "name": "Scintillation",
       "lane": "B",
-      "status": "P3' terminal (envelope foreground); P4 envelope modeling SANCTIONED (exploratory)",
-      "status_class": "now",
-      "next": "P4 predeclaration, then E0 characterization -> E2 injection-calibrated subtraction -> E3 discriminants"
+      "status": "P4 DOCUMENTED-FAIL (envelope not separable): CHIME constraint is envelope-confusion-limited, foreground not removable in-house",
+      "status_class": "pend",
+      "next": "owner ratifies manuscript closure wording (P3' + P4); separate decision: sample-wide P3'/P4 across the other eleven co-detections"
     },
     {
       "name": "Energies",
