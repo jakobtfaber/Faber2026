@@ -95,3 +95,9 @@ F_X(ν) ambiguity (fluence vs flux density — the 1 Jy ms Hz conversion implies
 8. **S17, S18, S20** (ride the existing re-validation ladder)
 
 *Verification notes: P_cc arithmetic reproduced (4.4×10⁻⁷); residual mean computed from `sample_table.tex`; census absences confirmed in `intervening_census_registry.csv`, `foreground_table_data.json`, and `data/frozen_census/*`; √3 vs 1.5 gate confirmed in `results.tex` / `twoscreen_formalism.tex`; cross-ref slip confirmed at `budget.tex` §sec:dm.*
+
+## Addendum (2026-07-15, post-fix): P0 resolution and one escalation
+
+The S9/S10 audit found **six** phantom DM_int sightlines (zach 70, isha 41, wilhelm 84, freya 10, hamilton 41, johndoeii 70), not three; root cause was the registry-empty → legacy-CSV fallback in FLITS `sightline_budget.foreground_unified`. Fixed in FLITS PR #183 (registry authoritative for the census roster + regression tests + data-parity guard) and reconciled in the manuscript PR (pin bump, regenerated tables, re-run host posteriors, prose incl. abstract). S2 and S15 fixed in the same PR.
+
+**Escalation (owner decision needed, extends S12):** the census geometry flags (`observations.tex`, FG7: "eleven of fourteen pierced, three exceptions all toward FRB 20230307A — objs 983/832/953 at b/R_vir≈1.05–1.7") and the budget chain's contributor set (`scripts/dm_budget_intervening_systems.csv`: phineas halos 983 (b=122) and 832 (b=159) DO contribute ≈8.9+13.9 pc cm⁻³) assign opposite b/R_vir verdicts to the same two halos under their respective mass prescriptions. If the census flags are taken as governing, phineas DM_int would be ≈218, not 241. This is exactly the S12 borderline-b/R_vir mass-conditionality problem; the budget text now states the conditionality explicitly, but adjudicating which prescription governs (or moving to the S12 probabilistic mixture) is an owner-level science decision.
