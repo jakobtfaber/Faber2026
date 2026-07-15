@@ -56,15 +56,61 @@ fail-closed artifact controls, so any screen constraint that would have used a
 $600\,$MHz $\Delta\nu_d$ anchor---most notably a measured two-band
 frequency-scaling index---is unavailable for this sample. The failures are
 instrumental and sensitivity driven, not sky statements: they neither confirm
-nor exclude scintillation at CHIME frequencies. One DSA-band point now clears
-the current gates, $\gamma=0.446^{+0.239}_{-0.250}\,$MHz at $1328.24\,$MHz for
-FRB~20220506D. Its DM-locked pulse-broadening fit now also clears the independent
-residual ladder and is overlaid in the DSA diagnostic, but the absence of a
-qualified CHIME-band scintillation anchor still prevents an event-level
-two-screen inference. The other DSA panels remain fit diagnostics rather than
-certified bandwidth measurements. The two-screen machinery of
-Appendix~\ref{app:twoscreen} remains the formal framework for a later
-cross-band attribution.
+nor exclude scintillation at CHIME frequencies. One DSA-band point clears the
+current gates, $\gamma=0.446^{+0.239}_{-0.250}\,$MHz at $1328.24\,$MHz for
+FRB~20220506D. The other DSA panels remain fit diagnostics rather than
+certified bandwidth measurements.
+
+We nevertheless perform a bounded best-so-far consistency analysis with the
+frozen products (Table~\ref{tab:twoscreen-provisional}). For each of the seven
+joint fits that passed the July residual adjudication, we evaluate
+$\tau(\nu)\Delta\nu_d$ separately at the center frequency of every clean narrow
+DSA component; we do not impose a DSA bandwidth power law. The conservative
+common-screen interval is $0.1$--$2$. We call a two-screen interpretation
+favored only if every component for a burst remains above 2 after subtracting
+one propagated standard deviation. Six bursts meet that provisional rule;
+FRB~20220506D is indeterminate because its component products straddle the
+common-screen interval. This is evidence that the resolved DSA spectral
+structure and the fitted pulse broadening would arise from different screens
+if both input measurements survive revalidation. It is not yet a robust
+event-level attribution: the DSA widths are mostly uncalibrated, the joint-fit
+samples and covariance are unavailable, and there is no qualified CHIME
+bandwidth. We therefore infer neither screen distances nor Galactic/host
+identities from these products.
+
+\input{twoscreen_provisional_table}
+
+We next cross-match that conditional propagation result against the
+registry-authoritative V4 foreground census
+(Table~\ref{tab:foreground-propagation-provisional}). This comparison does not
+support a sample-wide association test: only seven propagation fits are
+accepted, only two of the four sightlines with budget-eligible foreground
+systems have accepted fits, and most foreground-negative sightlines lie outside
+the deep-imaging footprints. Those zeros are censored rather than clean
+foreground-free controls.
+
+FRB~20230307A is the strongest plausible partial foreground contribution. Its
+covered sightline intersects the confirmed cluster J115120.4+714435 at
+$b/R_{500}=0.83$ and three budget-eligible galaxy halos. The fiducial foreground
+model predicts $\tau_{\rm int}=0.015$ ms, approximately 22\% of the provisional
+$\tau_{1\,\mathrm{GHz}}=0.0676$ ms. Thus the identified structures could supply
+part of the observed broadening, but do not explain all of it under the current
+model. If the provisional two-screen result survives, this foreground complex
+is a candidate for a distinct scattering screen; the present data neither
+assign the scintillation screen to it nor determine a screen distance.
+
+The confirmed halo approximately 101 kpc from the FRB~20220310F sightline is a
+geometric alignment, but its fiducial scattering contribution is only about
+0.5\% of the provisional fitted value, disfavoring a dominant causal role.
+Conversely, FRBs~20221113A and 20230325A have close projected but inconclusive
+candidates at 16 and 60 kpc, respectively; redshift validation is required
+before either can enter the foreground budget. FRBs~20240229A and 20240203A
+contain confirmed foreground halos but lack accepted propagation fits. For
+FRB~20240229A the fiducial foreground prediction exceeds the retained
+morphology-only fit value by a factor of about 11, which is a fit--budget tension
+to resolve rather than evidence for causation.
+
+\input{foreground_propagation_provisional_table}
 
 \subsection{Event-by-event interpretation ledger}
 \label{sec:disc-sightline-ledger}
