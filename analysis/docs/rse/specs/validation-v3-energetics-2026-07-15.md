@@ -3,8 +3,9 @@
 > Session 2026-07-15. Owner decisions this session: (1) re-base the energy
 > table on the **data-driven** per-channel fluence estimator; (2) author this
 > **energies-scoped validation contract** now (to be folded into the V1 ADR
-> when authored); (3) keep hamilton/chromatica **footnoted provisional-z**
-> rows (8 rows); (4) **skip** the D5 fixed rest-frame-band variant.
+> when authored); (3) keep wilhelm/hamilton/chromatica **footnoted
+> provisional-z** rows (8 rows); (4) **skip** the D5 fixed rest-frame-band
+> variant.
 > Independent recomputation code: `analysis/v3_energetics/recompute_energies.py`
 > (manuscript repo — deliberately outside the pinned `pipeline/` submodule).
 
@@ -40,13 +41,18 @@ oran (0.3005), isha (0.2505), phineas (0.2710). Sharma et al. 2024
 negligible against the 0.20–0.25 dex scale systematics. **Adopted source
 should be cited as Connor+2024 Table 1** (or the difference footnoted).
 
-- **FLAG (open): wilhelm (FRB 20221203A) z = 0.5100** appears in NEITHER
+- **DISPOSITION (owner, 2026-07-15): wilhelm (FRB 20221203A) z = 0.5100 is
+  retained as a provisional internal value.** It appears in NEITHER
   Sharma+2024 Extended Data Table 1 NOR Connor+2024 (v2) Table 1/2 — the
   attribution "Connor+2024 Keck/MOSFIRE" in
   `research-energetics-followups.md` could not be confirmed against the
-  posted paper. Candidate source: Hussaini+2025 DM–z table (uncited copy) or
-  an internal reduction. **Pin before circulation**; the row is otherwise
-  clean.
+  posted paper. No additional redshift measurement or external source is
+  expected; the available project value is what this analysis has. The row
+  therefore remains in the eight-row roster with an explicit provisional
+  footnote, and redshift-source acquisition is no longer a V3 blocker.
+  The same qualifier is propagated to the compiled DM-budget, host-DM
+  appendix, results, and conclusions surfaces so the value is never presented
+  as a published measurement elsewhere in the manuscript.
 - hamilton (FRB 20230913A) and chromatica (FRB 20240203A): spec-provisional
   (no published host paper), footnoted per owner decision. Unchanged.
 
@@ -150,22 +156,24 @@ CHIME side (compute host, data staged):
    and fails if any adopted value or uncertainty depends on joint-fit
    `c0`/`gamma`. The current script intentionally accepts only the
    mixed-legacy artifact and is retained as the E4 arithmetic cross-check.
-6. casey adjudication per §5 flag; wilhelm z provenance pin per §2 flag.
+6. Encode the §2 owner disposition in the regenerated provenance and table:
+   wilhelm uses the available $z=0.5100$ as a provisional internal value;
+   casey remains excluded per §5 because its redshift is photometric.
 
 ## 7. V3 status after this session
 
 | Contract item | Status |
 |---|---|
-| E1 input lineage | **BLOCKED** on the wilhelm z source; casey z class resolved: photometric, excluded |
+| E1 input lineage | **PASS with explicit provisional flags** for wilhelm/hamilton/chromatica; casey is photometric and excluded |
 | E2 estimator independence | **PENDING**: DSA done; CHIME run pending (runbook §6) |
 | E3 prior-rail disposition | **RESOLVED** (this document §4) |
 | E4 independent cross-check | PASS (model-vs-data median 1.00; catalog anchors ×3) |
 | E5 explicit inclusion rule | **RESOLVED** (this document §5; caption updated) |
 
-V3 is **not** yet clearable: blocked on the CHIME-side data-driven run (§6)
-plus the wilhelm-z E1 flag. Everything else — math, rail disposition, selection
-rule, error model, manuscript text — is ready, so the CHIME run is the only
-compute left between here and an owner sign-off.
+V3 is **not** yet clearable: the CHIME-side data-driven run, its independent
+data-driven verification, regenerated-table review, and owner sign-off remain.
+The redshift roster is closed with the three provisional flags above; no new
+redshift acquisition is expected or required.
 
 ## 8. Publication validation
 
@@ -177,7 +185,8 @@ Validated against the V3 implementation at commit `2cb2323` on 2026-07-15.
   explicit selection rule, and owner-view state are implemented.
 - The Results table and its interpretation prose remain source-gated and do
   not compile before V3 clearance.
-- V3 itself remains blocked on the two items stated above; landing this
+- V3 itself remains pending on the CHIME-side computation, independent
+  verification, regenerated-table review, and owner sign-off; landing this
   contract does not mark the science lane complete.
 
 ### Automated verification results
@@ -207,15 +216,16 @@ Validated against the V3 implementation at commit `2cb2323` on 2026-07-15.
 ### Manual testing required
 
 No manual test remains for landing this contract. The CHIME-side computation,
-FRB~20221203A redshift provenance pin, regenerated artifact review, and owner
+independent data-driven verification, regenerated artifact review, and owner
 sign-off are follow-up science gates, not completed work in this change.
 
 ### Recommendations
 
 - **Critical for this contract:** none.
-- **Follow-up:** complete §6, implement the data-driven verifier, pin the
-  FRB~20221203A redshift source, review the regenerated table, then uncomment
-  and fill the gated Results and Discussion prose only after owner V3 clearance.
+- **Follow-up:** complete §6, implement the data-driven verifier, preserve the
+  three provisional-redshift flags in provenance and the table, review the
+  regenerated table, then uncomment and fill the gated Results and Discussion
+  prose only after owner V3 clearance.
 
 ## References
 
