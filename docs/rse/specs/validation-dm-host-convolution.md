@@ -65,6 +65,13 @@ is less accurate than Monte Carlo.
   consistent with the CSV.
 - Rendered page 31: all nine direct host/component PDFs are legible; the
   individual and convolved intervening curves appear only where expected.
+- A fresh detached worktree at parent commit
+  `6e5049fb859be2c10d8aae18d30fa1deb06cca3b`, initialized at pinned FLITS
+  `af78543d4747d339b9f13283b4b8528c91a71cb3`, reproduced the CSV and root
+  budget table at the exact SHA-256 hashes recorded in the implementation
+  record. Only the PDF figure became dirty after regeneration, consistent with
+  timestamp/metadata variability; its numerical source and PNG pixels remained
+  unchanged.
 
 Existing manuscript-wide float/box warnings remain outside this scoped change;
 there is no new LaTeX error from the rebuilt host section.
