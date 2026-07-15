@@ -156,8 +156,9 @@ Read these first:
 - Known incomplete science: fixed-index consistency refits, posterior/covariance preservation,
   component-level DSA certification, and final two-screen/foreground causal interpretation.
 - Before this document's own publication commit, the unrelated untracked
-  `handoff-2026-07-15-16-44-dm-host-budget-clarify.md` is present in the shared checkout. It belongs
-  to another lane and must not be swept into this handoff commit.
+  `handoff-2026-07-15-16-44-dm-host-budget-clarify.md` and
+  `handoff-2026-07-15-16-49-dm-host-convolution.md` are present in the shared checkout. They belong
+  to other lanes and must not be swept into this handoff commit.
 
 ## Learnings
 
