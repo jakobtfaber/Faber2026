@@ -47,45 +47,47 @@ twelve pairs as genuine co-detections in what follows.
 
 Table~\ref{tab:budget} reports the decomposition of Eq.~\ref{eq:dmbudget}
 along the twelve sightlines. Three features organize the sample. First, the
-intervening term is strongly concentrated: summed over the confirmed
-foreground systems of Section~\ref{sec:obs-fg}, $\mathrm{DM_{int}}$ exceeds
-$100\,\mathrm{pc\,cm^{-3}}$ on only one sightline (FRB~20230307A,
-$241\,\mathrm{pc\,cm^{-3}}$, dominated by the intracluster column of
-Section~\ref{sec:dominant-systems}), while the remaining sightlines carry
-$\lesssim 85\,\mathrm{pc\,cm^{-3}}$ and four tabulate
-$\mathrm{DM_{int}}=0$---for two distinct reasons. FRB~20220506D and
-FRB~20240122A lie outside the deep-imaging footprints, so their sightlines
-are constrained only by the shallow all-sky layers and their intervening
-terms are unconstrained rather than measured to be zero (note~u). FRB~20240203A
+intervening term is strongly concentrated: summed over the confirmed,
+budget-eligible foreground systems of Section~\ref{sec:obs-fg},
+$\mathrm{DM_{int}}$ is nonzero on only two sightlines---FRB~20230307A
+($241\,\mathrm{pc\,cm^{-3}}$, dominated by the intracluster column of
+Section~\ref{sec:dominant-systems}) and FRB~20220310F
+($11\,\mathrm{pc\,cm^{-3}}$ from a single outer-CGM halo)---while the
+remaining ten tabulate $\mathrm{DM_{int}}=0$, for two distinct reasons.
+Eight sightlines carry no confirmed budget-eligible system in the census;
+none of these eight positions is constrained by the deep-imaging footprints
+(DESI Legacy DR8-North, or SDSS DR12 with usable redshifts), so their
+intervening terms are unconstrained by the searched surveys rather than
+measured to be zero (note~u), and three of them additionally lack a
+spectroscopic host redshift against which any candidate could be classified
+(note~p). FRB~20240203A
 and FRB~20240229A carry confirmed foreground halos, but those halos lie
 beyond the virial radii implied by their assumed masses, so the modeled
 columns vanish; their zeros are conditional on the mass assumption (note~m),
-and FRB~20240203A is additionally outside the deep footprints. One sightline
-(FRB~20230814B) crosses a foreground halo in the
-galaxy-interior regime ($b \approx 4.6$\,kpc), where the reported column is
-capped at its $b=0.1\,R_{\rm vir}$ value rather than extrapolated through the
-core. Second, the forward-modeled host posteriors
+and FRB~20240203A is additionally outside the deep footprints.
+Second, the forward-modeled host posteriors
 (Section~\ref{sec:dm}, Appendix~\ref{app:host-forward-model}) are broad and
 asymmetric, dominated by the cosmological scatter: their medians span
 $\mathrm{DM_{host}}\approx-10$--$200\,\mathrm{pc\,cm^{-3}}$, the largest on
-FRB~20240229A ($198^{+59}_{-76}\,\mathrm{pc\,cm^{-3}}$), and every
+FRB~20240229A ($197^{+60}_{-75}\,\mathrm{pc\,cm^{-3}}$), and every
 redshift-known sightline is consistent with a host contributing a minority of
 the extragalactic column once the width of the cosmological term is folded in.
-Third, the two
-highest-redshift sightlines (FRB~20220310F, FRB~20221203A), whose
-mean-subtracted point residuals were negative, have host posteriors consistent
-with zero ($P(\mathrm{DM_{host}}<0)\approx0.5$; Table~\ref{tab:budget}); their
-marginally negative medians reflect sightline-to-sightline scatter about the
+Third, one high-redshift sightline (FRB~20220310F, $z=0.48$), whose
+mean-subtracted point residual was negative, has a host posterior consistent
+with zero ($P(\mathrm{DM_{host}}<0)\approx0.5$; Table~\ref{tab:budget}); its
+marginally negative median reflects sightline-to-sightline scatter about the
 diffuse cosmic normalization at these redshifts, not an unphysical host, and an
-IGM baryon fraction within $0.25\sigma$ of the adopted prior places either
-median at zero. The three sightlines without
+IGM baryon fraction within $0.3\sigma$ of the adopted prior places the
+median at zero. The highest-redshift sightline (FRB~20221203A, $z=0.51$) is
+likewise dominated by the cosmological term and consistent with zero at
+$P(\mathrm{DM_{host}}<0)=0.24$. The three sightlines without
 spectroscopic host redshifts are excluded from all distance-dependent terms
 (Table~\ref{tab:budget}, note p).
 
 The predicted intervening pulse broadening from the thin-screen two-phase
-model is small everywhere: $\tau_{\mathrm{int}} \le 0.024$\,ms at 1\,GHz,
-with the largest values on the sightlines whose confirmed halos are crossed
-at the smallest impact parameters. The comparison of these predictions with
+model is small on both sightlines with a nonzero intervening column:
+$\tau_{\mathrm{int}} \le 0.0079$\,ms at 1\,GHz. The comparison of these
+predictions with
 the measured scattering times is deferred to the scattering analysis
 (Section~\ref{sec:results-alpha}).
 
@@ -123,9 +125,11 @@ column drops steeply; they are excluded from the budget even where the profile
 remains formally nonzero, and none approaches the FRB~20230307A cluster in
 predicted contribution.
 
-The confirmed foreground galaxies lie at impact parameters of tens to a few
-hundred kpc, in the outer circumgalactic medium rather than the galaxy interior.
-Each therefore adds only a small dispersion-measure contribution, and no single galaxy halo dominates
+The confirmed foreground galaxies lie at impact parameters of
+$\sim$100--240\,kpc, in the outer circumgalactic medium rather than the galaxy
+interior.
+Each therefore adds only a small dispersion-measure contribution
+($\lesssim15\,\mathrm{pc\,cm^{-3}}$ per system), and no single galaxy halo dominates
 its sightline's intervening column.
 The intervening DM in this sample is thus concentrated almost entirely on
 the one cluster-crossing sightline and is small on the rest; the sightlines
