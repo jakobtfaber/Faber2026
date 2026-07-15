@@ -267,13 +267,13 @@
 
 <!-- OWNER:BEGIN -->
 <div class="own">
-<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-15T06:30-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
+<div class="own-head"><b>Owner view</b><span class="meta">updated 2026-07-15T06:55-0700 · data: docs/rse/board/owner-view.json (agents keep this current)</span></div>
 <div class="own-cols">
 <div class="own-col oc-you"><h4>Needs you</h4><ul>
-<li><b>Ratify CHIME scintillation closure wording</b><small>P3&#x27; passed both blinded gates (first of the campaign), you authorized the single permitted on-pulse computation, and it found 40-sigma broad spectral structure that is NOT scintillation: amplitude 11x the calibrated ceiling (implied m~0.6), width running off the 400 kHz scan edge, matching the burst&#x27;s intrinsic spectral envelope. Recorded fail-closed as &#x27;no admissible measurement; scintillation constraint is envelope-confusion-limited&#x27;. Ratify that as the manuscript statement, or sanction a P4 envelope-modeling experiment (exploratory-only: the burst spectrum has been seen). Figures: unblind_onpulse_scan.png on FLITS main.</small></li>
+
 </ul></div>
 <div class="own-col oc-now"><h4>In flight</h4><ul>
-<li><b>P3&#x27; complete; closure wording pending</b> <span class="who">claude</span><small>FLITS #181 merged (563645c) + pin bumped this PR; estimator calibrated (G1&#x27;&#x27;/G2&#x27;&#x27; PASS), unblinded once with owner authorization; verdict: intrinsic-envelope foreground, no admissible Delta-nu_d</small></li>
+<li><b>P4 sanctioned: envelope modeling</b> <span class="who">claude</span><small>owner chose the exploratory follow-up over immediate closure: model freya&#x27;s intrinsic spectral envelope (spline/GP/delay-cut families), calibrate subtraction by injections on the real envelope, then physical discriminants (nu^4 sub-band scaling, component correlation, DSA-band consistency); plan in handoff-2026-07-15-06-50-p4-envelope-model-dev.md; manuscript closure wording deferred until P4 resolves</small></li>
 </ul></div>
 <div class="own-col oc-next"><h4>Up next — your pick</h4><ul>
 <li><b>A5: N-component profile-fit statistic</b><small>calibrated N-vs-1 profile model comparison (owner charter at A1 closure); design after control system lands</small></li>
@@ -284,7 +284,7 @@
 <div class="comp"><span class="cnm"><b>Sample &amp; association</b><span class="cid">V6</span><span class="chip c-good">validated</span></span><span class="cnx">PR 17 merged — done</span></div>
 <div class="comp"><span class="cnm"><b>Budget &amp; census</b><span class="cid">V4·V5</span><span class="chip c-good">validated</span></span><span class="cnx">DM adopted; scattering after D</span></div>
 <div class="comp"><span class="cnm"><b>Scattering</b><span class="cid">V1·A·C</span><span class="chip c-pend">A1 trigger closed (no operating point)</span></span><span class="cnx">A5 chartered · V1/V2 startable</span></div>
-<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-pend">P3&#x27; done: calibrated estimator, unblinded once; intrinsic envelope dominates, no Delta-nu_d</span></span><span class="cnx">owner ratifies envelope-confusion-limited closure or sanctions P4 (exploratory)</span></div>
+<div class="comp"><span class="cnm"><b>Scintillation</b><span class="cid">B</span><span class="chip c-now">P3&#x27; terminal (envelope foreground); P4 envelope modeling SANCTIONED (exploratory)</span></span><span class="cnx">P4 predeclaration, then E0 characterization -&gt; E2 injection-calibrated subtraction -&gt; E3 discriminants</span></div>
 <div class="comp"><span class="cnm"><b>Energies</b><span class="cid">V3</span><span class="chip c-blocked">waiting</span></span><span class="cnx">after V1</span></div>
 <div class="comp"><span class="cnm"><b>Synthesis</b><span class="cid">D·E·F1</span><span class="chip c-blocked">blocked</span></span><span class="cnx">frozen until CHIME route resolves or owner closes campaign</span></div>
 <div class="comp"><span class="cnm"><b>Mechanics</b><span class="cid">P0·F·G</span><span class="chip c-now">active</span></span><span class="cnx">pin 563645c current (P3&#x27; landed) · control system LANDED (PR 59) · views generated</span></div>
@@ -624,6 +624,7 @@
 <div class="card" style="margin-top:10px">
 <!-- JOURNAL:BEGIN -->
 <ul class="journal">
+<li><span class="jts mono">07-15 05:23</span><span class="jagent">claude</span><span class="jlane">chime-p3-optimal-estimator</span><span class="jnote s-pend">FLITS #181 merged (563645c incl. unblind record); pin bumped; lane needs_owner: ratify envelope-confusion closure wording or sanction P4</span></li>
 <li><span class="jts mono">07-15 05:15</span><span class="jagent">claude</span><span class="jlane">chime-p3-optimal-estimator</span><span class="jnote s-now">owner authorized one-shot unblind: z_max 40.4 pinned at 400 kHz scan edge, a_hat ~1e-3 (11x scint ceiling, implied m~0.6) -&gt; intrinsic envelope; DECLINED as Dnu_d measurement (fail-closed); RESULT+INVENTORY updated on PR 181; pin bump after merge</span></li>
 <li><span class="jts mono">07-15 05:09</span><span class="jagent">claude</span><span class="jlane">chime-p3-optimal-estimator</span><span class="jnote s-now">blinded calibration PASS (first of campaign): G1&#x27;&#x27; all &gt;=213 cells certify, G2&#x27;&#x27; z_trials 2.06; verdict calibrated; FLITS PR #181; figures vetted; owner unblinding decision queued</span></li>
 <li><span class="jts mono">07-15 05:02</span><span class="jagent">claude</span><span class="jlane">chime-p3-optimal-estimator</span><span class="jnote s-now">P3&#x27; frozen (sha 0baf4ea2); unit tests 7/7; T battery PASS (T1 exact, T2 +3.7SE ~12% amp bias recorded, T3 0.88); launching blinded G1&#x27;&#x27;/G2&#x27;&#x27;</span></li>
@@ -643,7 +644,6 @@
 <li><span class="jts mono">07-15 00:26</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">chime-c1</span><span class="jnote s-ready">P1 closed DOCUMENTED-FAIL via PR #47 (0/5 window variants passed frozen 10x common-mode screen; no on-pulse fit; no Phase-4 route authorized) — landed 9 min after the scope-fork rule merged. Outcome addendum appended to decision-2026-07-15-p1-scope-fork.md: fail branch applies, paper narrows to DSA scint + CHIME limits/diagnostics, EXECUTION AWAITS OWNER RATIFICATION. Board updated: ratification is the top Needs-you item; scint component &#x27;CHIME closed: C1+P1 failed&#x27;. P1 worktree lane landed (plan file byte-identical on main) but lane-liveness=uncertain -&gt; preserved, prune decision pending.</span></li>
 <li><span class="jts mono">07-15 00:21</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">ms</span><span class="jnote s-now">hybrid control-system plan spec written (plan-hybrid-control-system.md): TOML state layers read via stdlib tomllib, fetched-vs-stored split (live gh queries at render time), claims-audit consumer for the evidence ledger, --check CI drift gate wired into test-science, flag-day migration, 1-day timebox. PR next; implementer choice = owner open question (Antigravity worktrees vs Devin vs Claude).</span></li>
 <li><span class="jts mono">07-15 00:16</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">chime-c1</span><span class="jnote s-good">pin PR #45 MERGED (main pins FLITS 80094de). Scope-fork predeclaration recorded: decision-2026-07-15-p1-scope-fork.md — P1 is the FINAL CHIME recovery attempt this paper; pass -&gt; 12-burst campaign, fail -&gt; narrow to DSA scint + CHIME limits. Owner ratification requested via board. owner-view.json refreshed (PR 170/171/17 verified merged, C1 verdict + P1 v1.2 lane reflected).</span></li>
-<li><span class="jts mono">07-15 00:13</span><span class="jagent">claude-fable-5/session-018uKsWX</span><span class="jlane">repo</span><span class="jnote s-now">pin-bump lane: PR #45 (pipeline gitlink 91a5120-&gt;80094de, FLITS #176 C1 DOCUMENTED-FAIL + #177 caveat hygiene) opened; CI 4/4 green; merging</span></li>
 </ul>
 <!-- JOURNAL:END -->
 </div>

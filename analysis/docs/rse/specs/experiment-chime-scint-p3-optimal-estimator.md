@@ -256,3 +256,18 @@ point nearest the injected width; "converged" = finite `â` and `σ_â`.
 (§Gate 0b result diagnostics). The G3 bar stays at 5σ; the owner sanctions
 the build understanding the realistic product is a calibrated upper limit on
 `Δν_d ∈ [127, 352] kHz`.
+
+## Outcome and successor (2026-07-15, same day)
+
+Both blinded gates passed (FLITS #181, pin PR #74) and the owner authorized
+the single permitted on-pulse computation. It found broad spectral structure
+at z = 40.4, pinned at the 400 kHz scan edge, with amplitude ~11× the
+calibrated scintillation ceiling — attributed to freya's intrinsic spectral
+envelope and **declined as a Δν_d measurement** (full record and figures:
+pinned pipeline `analysis/chime-scintillation/experiments/p3-optimal-estimator/`).
+The owner then **sanctioned P4** — exploratory envelope modeling +
+subtraction with a residual scintillation search — instead of ratifying an
+immediate closure wording; the manuscript statement is deferred until P4
+resolves. P4 plan:
+[handoff-2026-07-15-06-50-p4-envelope-model-dev.md](handoff-2026-07-15-06-50-p4-envelope-model-dev.md)
+(lane `chime-p4-envelope-model`, issue #75).

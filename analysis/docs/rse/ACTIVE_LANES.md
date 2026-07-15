@@ -5,13 +5,14 @@
 
 Operational control surface for Faber2026, generated from `docs/rse/program-state.toml`. One row per lane. Live PR/issue/branch state is verified by `scripts/sync_state.py --check` (advisory), not baked into this table.
 
-**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 0/3
+**Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 1/3
 
 | Lane | Title | Strand | Status | Owner | Issue | Branch | PR | Needs owner | Next action |
 |---|---|---|---|---|---|---|---|---|---|
 | `hybrid-control-system` | Hybrid control system: canonical state, generated views, CI drift gate | mechanics | done | claude | [#54](https://github.com/jakobtfaber/Faber2026/issues/54) | `feat/hybrid-control-system` | [#59](https://github.com/jakobtfaber/Faber2026/pull/59) | no | none — flag day landed (PR #59); views are generated from this file |
 | `chime-route-b-voltage` | P2 Route B: ratio statistics (G2 common-mode cancellation PASS; G1 sensitivity fail) | scintillation | documented_fail | claude | [#55](https://github.com/jakobtfaber/Faber2026/issues/55) | `scint/p2-routeb-voltage` | [#180](https://github.com/jakobtfaber/Faber2026/pull/180) | no | terminal; successor P3 (optimal quadratic estimator) planned in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md, awaiting owner sanction |
-| `chime-p3-optimal-estimator` | P3 delay-domain optimal quadratic estimator (owner-sanctioned successor to P2) | scintillation | needs_owner | claude | [#68](https://github.com/jakobtfaber/Faber2026/issues/68) | `scint/p3-optimal-estimator` | [#181](https://github.com/jakobtfaber/Faber2026/pull/181) | yes | gates passed, owner-authorized unblinding done: z_max 40.4 at scan edge, amplitude 11x scint ceiling -> intrinsic envelope, declined as measurement; owner ratifies closure wording (envelope-confusion-limited exclusion) or sanctions P4 envelope modeling (exploratory-only) |
+| `chime-p3-optimal-estimator` | P3 delay-domain optimal quadratic estimator (owner-sanctioned successor to P2) | scintillation | done | claude | [#68](https://github.com/jakobtfaber/Faber2026/issues/68) | `scint/p3-optimal-estimator` | [#181](https://github.com/jakobtfaber/Faber2026/pull/181) | no | terminal: calibrated estimator + declined unblinded structure (intrinsic envelope); owner chose P4 over immediate closure wording; successor lane chime-p4-envelope-model |
+| `chime-p4-envelope-model` | P4 exploratory intrinsic-envelope modeling + residual scintillation search (freya) | scintillation | in_progress | claude | [#75](https://github.com/jakobtfaber/Faber2026/issues/75) | `scint/p4-envelope-model` | — | no | write experiment-chime-scint-p4-envelope-model.md predeclaration per handoff-2026-07-15-06-50-p4-envelope-model-dev.md, then E0 envelope characterization |
 | `a5-profile-fit-statistic` | A5 N-component profile-fit justification statistic | scattering | proposed | — | [#56](https://github.com/jakobtfaber/Faber2026/issues/56) | — | — | no | design after the control system lands |
 | `f3-consistency-audit` | F3 manuscript consistency audit | synthesis | done | devin | [#57](https://github.com/jakobtfaber/Faber2026/issues/57) | `ms/f3-consistency-audit` | [#64](https://github.com/jakobtfaber/Faber2026/pull/64) | no | none — mechanical audit landed in PR #64; owner-approved endpoint wording resolved under F1 |
 | `fig1-gallery` | Figure 1 data-only twelve-burst gallery | association | proposed | — | [#58](https://github.com/jakobtfaber/Faber2026/issues/58) | — | — | no | fresh isolated batch under the locked 4-by-3 data-only contract |
@@ -21,6 +22,7 @@ Operational control surface for Faber2026, generated from `docs/rse/program-stat
 - **`hybrid-control-system`** — --check green on clean tree; golden-file tests pass; make test-science green
 - **`chime-route-b-voltage`** — predeclared experiment record with frozen thresholds before burst data; detection admissible only inside the Gate-0 window (dnu_d >= 77-127 kHz)
 - **`chime-p3-optimal-estimator`** — Gate 0b measured-noise forecast >= 3 sigma at 213 kHz before any implementation; G1''/G2'' frozen in experiment-chime-scint-p3-optimal-estimator.md before burst data; unblinding one-shot, orchestrator-only, after both gates pass
+- **`chime-p4-envelope-model`** — predeclare E1 model grids, E2 certification + operating-point rule + fail branch, E3 discriminant thresholds BEFORE computing any residual/sub-band/component statistic; every result labeled exploratory (blind computation spent 2026-07-15); amplitude-admissibility clause in the record
 - **`a5-profile-fit-statistic`** — calibrated N-vs-1 profile model comparison design
 - **`f3-consistency-audit`** — audit trusted association/census/budget claims vs ledger
 - **`fig1-gallery`** — adopted-DM revalidation; hash-bound owner approval of exact bytes
