@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-15
 **Author:** Codex
-**Status:** Approved
+**Status:** Implemented; manual verification pending
 **Related Documents:**
 - [Research: V4 census-gap extension](research-v4-census-gap-extension.md)
 ---
@@ -69,25 +69,25 @@ and zero budget effect before implementation.
 **Objective:** make the three adjudicated rows part of every rebuilt registry.
 
 **Tasks:**
-- [ ] Add failing assertions in
+- [x] Add failing assertions in
   `pipeline/galaxies/foreground/test_census_registry.py:14-35` for 52 rows,
   verdict counts, the three keys, and zero eligible extension rows.
-- [ ] Run
+- [x] Run
   `uv run pytest galaxies/foreground/test_census_registry.py -q`; expect the
   new assertions to fail against the 49-row registry.
-- [ ] Add `pipeline/galaxies/foreground/data/census_extensions/v4_extension.csv`
+- [x] Add `pipeline/galaxies/foreground/data/census_extensions/v4_extension.csv`
   with the three adjudicated rows.
-- [ ] Add `load_census_extensions()` and append/validation logic in
+- [x] Add `load_census_extensions()` and append/validation logic in
   `pipeline/galaxies/foreground/census_registry.py:85-163`; reject duplicate
   keys and derive `registry_tier`/`budget_eligible` rather than trusting CSV
   booleans.
-- [ ] Regenerate `data/intervening_census_registry.csv` from the checked-in
+- [x] Regenerate `data/intervening_census_registry.csv` from the checked-in
   frozen inputs and rerun the focused test; expect pass.
-- [ ] Commit the focused FLITS change.
+- [x] Commit the focused FLITS change.
 
 **Verification:**
-- [ ] `uv run pytest galaxies/foreground/test_census_registry.py -q`
-- [ ] `uv run pytest galaxies/foreground/test_sightline_budget.py -q`
+- [x] `uv run pytest galaxies/foreground/test_census_registry.py -q`
+- [x] `uv run pytest galaxies/foreground/test_sightline_budget.py -q`
 
 ### Phase 2: Generated foreground table
 
@@ -95,46 +95,46 @@ and zero budget effect before implementation.
 verdicts.
 
 **Tasks:**
-- [ ] Update failing row/count/empty-sightline assertions in
+- [x] Update failing row/count/empty-sightline assertions in
   `pipeline/galaxies/foreground/test_foreground_table_emitter.py:40-90`.
-- [ ] Run the focused test; expect failure.
-- [ ] Add the three table rows to `foreground_table_data.json`, replace the
+- [x] Run the focused test; expect failure.
+- [x] Add the three table rows to `foreground_table_data.json`, replace the
   FRB 20221113A no-candidate row, and revise emitter caption/comments.
-- [ ] Run `uv run python -m galaxies.foreground.foreground_table_emitter`.
-- [ ] Rerun the focused emitter tests; expect pass.
-- [ ] Commit the table change.
+- [x] Run `uv run python -m galaxies.foreground.foreground_table_emitter`.
+- [x] Rerun the focused emitter tests; expect pass.
+- [x] Commit the table change.
 
 **Verification:**
-- [ ] `uv run pytest galaxies/foreground/test_foreground_table_emitter.py -q`
-- [ ] `uv run python -m galaxies.foreground.foreground_table_emitter --check`
+- [x] `uv run pytest galaxies/foreground/test_foreground_table_emitter.py -q`
+- [x] `uv run python -m galaxies.foreground.foreground_table_emitter --check`
 
 ### Phase 3: Manuscript synchronization
 
 **Objective:** update prose, Appendix B, generated table, and submodule pin.
 
 **Tasks:**
-- [ ] Copy the generated FLITS export to `foreground_table.tex`.
-- [ ] Update `sections/observations.tex:298-335` with 38 total catalog rows,
+- [x] Copy the generated FLITS export to `foreground_table.tex`.
+- [x] Update `sections/observations.tex:298-335` with 38 total catalog rows,
   31 physical systems, 11 confirmed, 15 inconclusive, 5 refuted, and the
   discovery-handoff limitation.
-- [ ] Update `sections/appendix.tex:33-68` to disclose the WHL12 cluster and
+- [x] Update `sections/appendix.tex:33-68` to disclose the WHL12 cluster and
   explain why no column is assigned.
-- [ ] Update the `pipeline` gitlink to the reviewed FLITS commit.
-- [ ] Compile with `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`.
-- [ ] Commit the focused manuscript change.
+- [x] Update the `pipeline` gitlink to the reviewed FLITS commit.
+- [x] Compile with `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`.
+- [x] Commit the focused manuscript change.
 
 **Verification:**
-- [ ] `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`
-- [ ] `rg -n "WHL J115048|WISEA J044538|WISEA J211150" foreground_table.tex sections`
+- [x] `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`
+- [x] `rg -n "WHL J115048|WISEA J044538|WISEA J211150" foreground_table.tex sections`
 
 ## Success Criteria
 
 ### Automated Verification
 
-- [ ] All focused census and emitter tests pass.
-- [ ] Registry has 52 unique keys and no extension row is budget-eligible.
-- [ ] Budget table input and export are unchanged.
-- [ ] Manuscript compiles without a LaTeX error.
+- [x] All focused census and emitter tests pass.
+- [x] Registry has 52 unique keys and no extension row is budget-eligible.
+- [x] Budget table input and export are unchanged.
+- [x] Manuscript compiles without a LaTeX error.
 
 ### Manual Verification
 
@@ -144,9 +144,9 @@ verdicts.
 
 ### Reproducibility & Correctness
 
-- [ ] Extension coordinates, discovery geometry, verdict reason, and provenance
+- [x] Extension coordinates, discovery geometry, verdict reason, and provenance
   tag are committed in the CSV.
-- [ ] Exact regeneration/test commands are recorded in the implementation log.
+- [x] Exact regeneration/test commands are recorded in the implementation log.
 
 ## Testing Strategy
 
