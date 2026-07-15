@@ -49,6 +49,12 @@ SAMPLE_COUNT_EXPECTATIONS = {
         ("abstract sample", re.compile(
             r"We present\s+(?P<count>\w+)\s+fast radio bursts co-detected",
             re.IGNORECASE)),
+        ("abstract association census", re.compile(
+            r"All\s+(?P<count>\w+)\s+pass timing", re.IGNORECASE)),
+        ("abstract DM census", re.compile(
+            r"all\s+(?P<count>\w+)\s+events", re.IGNORECASE)),
+        ("abstract foreground census", re.compile(
+            r"all\s+(?P<count>\w+)\s+sightlines", re.IGNORECASE)),
     ],
     "sections/observations.tex": [
         ("sample-table introduction", re.compile(
@@ -235,12 +241,12 @@ def normalize_figure_path(raw: str) -> str:
     return path
 
 
-def manifest_entries() -> list[dict[str, str]]:
+def manifest_entries(kind: str | None = None) -> list[dict[str, str]]:
     with (ROOT / "repro_manifest.csv").open(newline="", encoding="utf-8") as fh:
         rows = csv.DictReader(fh)
         return [row for row in rows
                 if row.get("embedded_in_manuscript", "").lower() == "yes"
-                and row.get("type", "").lower() == "figure"]
+                and (kind is None or row.get("type", "").lower() == kind)]
 
 
 def patterns_overlap(a: str, b: str) -> bool:
@@ -255,10 +261,14 @@ def pipeline_is_pinned() -> bool:
     return result.returncode == 0 and result.stdout.startswith("160000 ")
 
 
+def figure_assets(pattern: str) -> list[Path]:
+    return list(ROOT.glob(pattern))
+
+
 def check_figures_and_provenance(
         files: Iterable[Path], findings: list[str]) -> None:
     """Require every compiled graphic to exist and have an embedded manifest row."""
-    entries = manifest_entries()
+    entries = manifest_entries("figure")
     included: list[tuple[Path, str]] = []
     needs_pipeline_pin = False
     for path in files:
@@ -277,9 +287,17 @@ def check_figures_and_provenance(
             needs_pipeline_pin |= any(
                 entry.get("producer", "").startswith("pipeline/")
                 for entry in matches)
-        if not list(ROOT.glob(figure)):
+        assets = figure_assets(figure)
+        if not assets:
             findings.append(
                 f"{source.relative_to(ROOT)}: compiled figure '{figure}' not found")
+        elif "*" in figure:
+            expected = len(table_roster(ROOT / "sample_table.tex"))
+            if len(assets) != expected:
+                findings.append(
+                    f"{source.relative_to(ROOT)}: compiled figure family "
+                    f"'{figure}' has {len(assets)} assets; expected {expected} "
+                    "from the canonical sample roster")
 
     if needs_pipeline_pin and not pipeline_is_pinned():
         findings.append(
@@ -289,6 +307,8 @@ def check_figures_and_provenance(
 def check_inputs_and_provenance(files: Iterable[Path], findings: list[str]) -> None:
     r"""Check that \input{} table/card files carry provenance comments."""
     generated_suffixes = ("_table.tex", "_cards.tex", "_data.tex")
+    table_entries = manifest_entries("table")
+    needs_pipeline_pin = False
     for path in files:
         text = read_text(path)
         for match in INPUT_RE.finditer(text):
@@ -310,6 +330,22 @@ def check_inputs_and_provenance(files: Iterable[Path], findings: list[str]) -> N
                 findings.append(
                     f"{target.relative_to(ROOT)}: missing provenance comment "
                     f"(expected a top-level Source/Generated/Provenance/Produced/From line)")
+            if target.name.endswith("_table.tex"):
+                output = str(target.relative_to(ROOT))
+                matches = [entry for entry in table_entries
+                           if entry.get("output") == output]
+                if not matches:
+                    findings.append(
+                        f"{output}: generated table has no embedded table row "
+                        "in repro_manifest.csv")
+                else:
+                    needs_pipeline_pin |= any(
+                        entry.get("producer", "").startswith("pipeline/")
+                        for entry in matches)
+
+    if needs_pipeline_pin and not pipeline_is_pinned():
+        findings.append(
+            "pipeline: expected a pinned gitlink for table provenance")
 
 
 def main(argv: list[str] | None = None) -> int:
