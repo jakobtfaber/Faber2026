@@ -319,20 +319,67 @@ promote scattering predictions only from the seven visually accepted fits.
 \subsection{Band-restricted burst energies}
 \label{sec:burst-energies}
 
-% TODO(results-energies): Insert only after the energy re-validation pass.
-% A citable row requires a trusted host redshift, trusted per-band spectral
-% amplitudes, a checked calibration path, and a resolved inclusion rule.
-%
-% Required before filling:
-% - Re-establish c0 and gamma values from trusted fits or an energy-specific
-%   trusted export.
-% - Resolve any prior-rail or selection-rule issues.
-% - State the burst list and exclusion reasons explicitly.
-%
-% Candidate future artifact, once trusted:
-% - tab:burst-energies
-%
-% TODO(energies-fixed-band-variant): Optional under V3 (D5 lock 2026-07-10) —
-% elect a fixed rest-frame-band companion E_iso for luminosity-function
-% comparison only if needed; not required for submission. See methods.tex
-% TODO and decision-d2-d5-scattering-design-locks.md.
+% V3 status (2026-07-15, validation-v3-energetics-2026-07-15.md): estimator
+% re-based on the data-driven per-channel fluence integral (no fitted spectral
+% parameters; prior-rail issue thereby moot for energies); inclusion rule made
+% explicit below; math/error propagation independently re-verified (ALL PASS).
+% NUMBERS REMAIN GATED: the table body fills from the regenerated
+% burst_energies.json only after the CHIME-side data-driven fluence run
+% completes on the compute host and the owner clears V3. Do not quote the
+% legacy (mixed-legacy c0/gamma) energies in prose.
+
+Energies are reported for the sightlines that satisfy both conditions of the
+inclusion rule stated in Section~\ref{sec:methods-energies}: a spectroscopic
+host redshift, and a validated absolute flux calibration in both bands at the
+burst position. Eight of the twelve co-detections qualify: FRBs~20220207C,
+20220310F, 20220506D, 20221113A, 20221203A, 20230307A, 20230913A, and
+20240203A. Six of the eight host redshifts are published spectroscopic
+values; FRBs~20230913A and 20240203A carry as-yet-unpublished spectroscopic
+redshifts and their rows are flagged provisional. The four exclusions are
+FRBs~20230325A, 20240122A, and 20230814B, which lack a host redshift, and
+FRB~20240229A, whose available redshift is photometric rather than
+spectroscopic \citep{Connor2024}. Because the energy estimator uses no
+fitted parameters (Eq.~\ref{eq:eiso}), scattering-model fit quality does not
+enter the selection: an energy row neither requires nor inherits a joint-fit
+quality verdict.
+
+% TODO(fill-at-V3-clear): uncomment and fill from the regenerated table —
+% the legacy artifact indicates ~three decades, E_iso ~ 1e38--1e41 erg
+% (zach lowest, wilhelm highest), but that range is a revoked-fit product
+% until the data-driven regeneration lands; do not compile it before then.
+%The resulting band-restricted energies span roughly three decades,
+%$E_{\mathrm{iso}}\sim10^{38}$--$10^{41}\,$erg, with the uncertainty budget
+%dominated by the absolute-scale systematic rather than by measurement noise
+%(Section~\ref{sec:methods-energies}).
+We re-emphasize that these are observed-band quantities: each row samples a
+different pair of rest-frame intervals, so the rows are not mutually
+comparable at the few-tens-of-percent level, and none is comparable to a
+fixed-rest-band literature energy without a spectral extrapolation we do not
+perform.
+
+% Table skeleton — fill from the regenerated burst_energies.tex after the
+% CHIME data-driven run + owner V3 clearance. Columns deliberately EXCLUDE
+% gamma_C/gamma_D (revoked fit products; indices await the C1 campaign).
+%\begin{deluxetable*}{lccccc}
+%\tablecaption{Band-restricted isotropic-equivalent energies of the
+%co-detected FRBs, from the per-channel calibrated fluence integrals over the
+%CHIME (0.400--0.800 GHz) and DSA (1.311--1.499 GHz) bands
+%(Eq.~\ref{eq:eiso}). Inclusion rule: spectroscopic host redshift and
+%validated two-band flux calibration; scattering-fit verdicts do not enter.
+%Excluded: FRB 20230325A, FRB 20240122A, FRB 20230814B (no host redshift);
+%FRB 20240229A (photometric redshift only). $1\sigma$ uncertainties combine
+%per-band statistical fluence errors with the absolute-scale systematics
+%($\sim$0.25 dex CHIME, $\sim$0.20 dex DSA) in quadrature.
+%\label{tab:burst-energies}}
+%\tablehead{\colhead{Burst} & \colhead{$z$} & \colhead{$D_L$ [Mpc]} &
+%\colhead{$E_{\rm CHIME}$ [erg]} & \colhead{$E_{\rm DSA}$ [erg]} &
+%\colhead{$E_{\rm iso}$ [erg]}}
+%\startdata
+%...rows from regenerated burst_energies.tex...
+%\enddata
+%\tablenotetext{a}{Host redshift not yet published; value provisional
+%(FRBs 20230913A, 20240203A).}
+%\tablenotetext{b}{DSA absolute scale catalog-anchored only for
+%FRBs 20220207C, 20220310F, 20220506D \citep{Law2024}; model-trusted
+%otherwise.}
+%\end{deluxetable*}
