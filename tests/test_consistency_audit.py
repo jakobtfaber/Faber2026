@@ -31,6 +31,8 @@ def test_sample_count_regression_is_reported(monkeypatch):
         text = original_read_text(path)
         if path == audit.ROOT / "main.tex":
             replacements = (
+                ("Here we analyze twelve FRBs",
+                 "Here we analyze eleven FRBs"),
                 ("We present twelve fast radio bursts",
                  "We present eleven fast radio bursts"),
                 ("All twelve pass timing", "All eleven pass timing"),
