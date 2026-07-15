@@ -2,7 +2,7 @@
 MAIN := main
 UV ?= uv
 
-.PHONY: all clean watch test-science
+.PHONY: all clean watch test-science check-state
 
 all: $(MAIN).pdf
 
@@ -18,7 +18,13 @@ clean:
 
 # Root manuscript/provenance tests use the pinned FLITS environment so the
 # parent repo and CI exercise the same (super-repo commit, submodule pin) pair.
-test-science:
+# Control-state drift/contradiction/rules gate (stdlib only, no submodule env).
+# --offline keeps CI hermetic; run `python3 scripts/sync_state.py --check`
+# locally for the live stored<->GitHub contradiction pass.
+check-state:
+	python3 scripts/sync_state.py --check --offline
+
+test-science: check-state
 	$(UV) run --project pipeline --frozen python -m pytest -q -ra \
 		--strict-config --strict-markers tests
 	python3 scripts/figure_review.py verify
