@@ -137,11 +137,63 @@ budget, foreground, scintillation, fit, and energy entries have been restored.
 \subsection{Energy interpretation}
 \label{sec:disc-energies}
 
-% TODO(disc-energies): Fill after Section~\ref{sec:burst-energies} is restored.
-% Explain what the band-restricted energies do and do not mean. Separate
-% calibration, spectral-shape, host-redshift, and selection-rule limitations.
-% Avoid using an energy row to support a population statement unless the
-% inclusion rule is explicit.
+% Scoped 2026-07-15 (V3 session; validation-v3-energetics-2026-07-15.md).
+% Structure below is settled; sentences marked [FILL] take numbers from the
+% regenerated (data-driven) burst_energies.json after owner V3 clearance.
+% Do not quote legacy c0/gamma-derived energies or any per-band spectral
+% index from the revoked fits anywhere in this subsection.
+
+% Draft lead-in — uncomment with the five scoped paragraphs after V3 clears.
+%The band-restricted energies of Section~\ref{sec:burst-energies} are
+%deliberately conservative objects: each is the energy radiated within the
+%two observed spectral windows, computed from the calibrated channel data with
+%no spectral model, no extrapolation across the unobserved
+%$0.8$--$1.3\,$GHz gap, and no fitted parameter inherited from the scattering
+%analysis. Their limitations separate cleanly into five categories that we
+%keep distinct.
+%
+% (1) Calibration. The absolute scale is catalog-anchored for three
+% sightlines (~2x confidence) and radiometer-model-trusted for the rest;
+% the 0.20-0.25 dex systematics dominate every row's error budget. No
+% ranking of two rows closer than ~a factor of 2 is meaningful.
+%
+% (2) Spectral shape. In-band indices are unconstrained by design (narrow
+% fractional bands; the DSA-band steepness the fits kept railing on is a
+% model-family statement, not a measurement — cite the descriptive finding
+% only if/when the C1 campaign re-establishes it). The two-band partition
+% E_C vs E_D is the one shape-like quantity we CAN discuss: [FILL] state
+% the observed E_C/E_D range; interpret order-unity scatter as evidence of
+% per-burst spectral-envelope diversity across the octave gap, while noting
+% that scintillation modulation and beam-model error enter that ratio and
+% cannot be separated from intrinsic narrowbandedness until the two-band
+% scintillation campaign concludes (Section~\ref{sec:disc-screen-attribution}).
+%
+% (3) Host redshift. Two provisional-z rows (FRBs 20230913A, 20240203A):
+% any population-facing sentence must survive their removal; check and say
+% so explicitly ([FILL] after table lands).
+%
+% (4) Selection. Co-detection requires threshold crossings at BOTH 600 MHz
+% and 1.4 GHz: the sample is biased toward bursts that are simultaneously
+% bright across the octave, i.e. against strongly banded events. The energy
+% rows are therefore not a fair draw from either instrument's fluence
+% function, and no luminosity-function normalization should be attempted
+% from them. What CAN be said: [FILL] the span of ~3 decades in E_iso within
+% a co-detected sample shows the joint-detection criterion still admits a
+% wide intrinsic energy range, with the low end (~1e38-1e39 erg at
+% z < 0.08 — zach, chromatica) illustrating that the local volume
+% contributes the faint tail, consistent with the strong E-z selection
+% correlation expected for flux-limited surveys. A qualitative comparison to
+% the CHIME/FRB first-catalog energy distribution (Shin et al. 2023) is
+% appropriate ONLY as an order-of-magnitude placement, with the band
+% non-comparability caveat stated in the same sentence.
+%
+% (5) Forward link (lane E2 seed). Energies are the propagation-independent
+% axis of the synthesis: fluence is conserved under scattering to first
+% order, so E_iso vs (DM_host residual, tau, foreground class) scatter plots
+% separate intrinsic brightness from path effects. With 8 rows this stays
+% qualitative — frame as "no evident correlation" / "consistent with
+% independence" unless something dramatic appears; a real statement needs
+% the C1-re-fit tau values (gate: post-C, lane E2).
 
 \subsection{Population limits and selection effects}
 \label{sec:disc-population-limits}
