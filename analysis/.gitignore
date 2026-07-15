@@ -49,3 +49,6 @@ graphify-out/
 /AGENTS.md
 /CLAUDE.md
 /GEMINI.md
+
+# agent scratch worktrees (never commit)
+/.worktrees/

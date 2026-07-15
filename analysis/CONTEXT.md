@@ -44,7 +44,19 @@ contaminant fix on the phineas cluster J114928.5+712526 and the discovery that
 all census clusters come from the Wen \& Han 2024 DESI Legacy/WISE catalog (not
 the X-ray/SZ catalogs the pinned code lists). The census now presents 35 systems
 (34 halos + the single cluster within $R_{500}$; 14 further foreground clusters
-at $b>R_{500}$ omitted). `tab:foreground`, the census verdicts/impact
+at $b>R_{500}$ omitted).
+**Census remediation (owner adjudications 2026-07-15, FLITS #184):** the 35
+catalog rows deduplicate to 28 physical systems (seven sub-arcsec same-z
+cross-listed pairs, five of them confirmed: the physical confirmed census is
+9 halos + the cluster, not 14 + 1); the budget adopts the B7 *empirical*
+per-candidate masses (`data/census_masses/halo_rvir_ADJUDICATED.csv`) with
+whitney-1473's WISE-blend mass overridden to its optical g−z estimate
+(logM*=9.605; `mass_overrides.csv`); halo impact parameters are uniformly
+recomputed from burst position + coordinates + adopted z (the cluster keeps
+its analysis-provenance b=603.6, b/R500=0.83 — a 2.6% recompute offset is
+flagged, unresolved). Budget outcome: DM_int nonzero on four sightlines
+(phineas 243, casey 117, chromatica 26, whitney 6); footnote m retired;
+7 of 9 physical confirmed halos pierce R_vir (b/R_vir 0.46–0.96). `tab:foreground`, the census verdicts/impact
 parameters, the two-phase mNFW `DM_int` columns, and `fig:clusters_icm` are
 restored for manuscript use. **Still revoked** (not unlocked by V4/V5): the
 measured-scattering side of fig:budget and its measured-vs-predicted overlay
