@@ -6,7 +6,8 @@
 to proceed autonomously on the declared critical path. This record is agent-recorded
 and owner-governed: the owner ratifies, amends, or revokes it by editing this file.
 **Status:** Amended by owner 2026-07-15 (in-session direction) — the fail-branch
-narrowing is NOT ratified; see §Owner amendment below
+narrowing is NOT ratified; see §Owner amendment below. **Amendment wording
+ratified by the owner 2026-07-15 (in-session, second confirmation).**
 **Related documents:**
 - [Decision: Figure 1 + CHIME C1 route (owner, 2026-07-14)](decision-2026-07-14-figure1-and-chime-c1.md) — the stop rule this record extends
 - [Plan: corrected CHIME products revival](plan-chime-scint-corrected-products-revival.md) — P1 design (a v1.2 revision is in flight in a separate worktree; this record governs scope regardless of that revision's final form)

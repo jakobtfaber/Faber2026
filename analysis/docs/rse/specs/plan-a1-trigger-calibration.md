@@ -23,7 +23,7 @@ complete; owner sign-off on this trigger is not warranted. See
 [`report-chime-scintillation-inventory-2026-07-14.md`](report-chime-scintillation-inventory-2026-07-14.md)
 and the canonical pipeline inventory for the full qualification record.
 
-## Owner direction on closure (2026-07-15, in-session)
+## Owner direction on closure (2026-07-15, in-session; wording ratified by the owner same day)
 
 The ΔlnZ **screen-escalation** trigger is retired as calibrated-unusable (this
 plan's Final outcome). The owner's standing requirement is a different

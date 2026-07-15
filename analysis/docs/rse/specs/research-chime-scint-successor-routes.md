@@ -5,8 +5,12 @@
 **Author:** Claude (Fable 5), under the owner's 2026-07-15 amendment to the
 scope-fork record: CHIME scintillation measurement remains an active goal of
 this paper.
-**Status:** Draft for owner sanction — no route runs until the owner picks one
-and its experiment record predeclares frozen gates
+**Status:** SANCTIONED by owner 2026-07-15 (in-session): Gate 0 approved;
+Route B (voltage-domain) approved to proceed immediately, conditional on
+Gate 0; Route A's external calibrator-data request to the CHIME collaboration
+is DECLINED — the owner keeps this in-house ("we'll keep hacking away at this
+ourselves"), so Route A is viable only if suitable calibrator baseband already
+exists on infrastructure we control
 **Related documents:**
 - [Decision: P1 scope fork §Owner amendment](decision-2026-07-15-p1-scope-fork.md) — governs this assessment
 - [Research: the common-mode instrumental response](research-chime-scint-instrumental-common-mode.md) — the measured confounder (untracked lane at time of writing; numbers restated here so this record is self-contained)
@@ -111,10 +115,13 @@ even a perfect bandpass separation leaves a detectable signature.
    frozen gates before burst data inspection, blinded where applicable),
    per the stop-rule discipline that C1 and P1 followed.
 
-## Owner ask
+## Owner ask — ANSWERED 2026-07-15 (in-session)
 
-- Sanction Gate 0 (recommended: yes, it is deterministic and burst-blind).
-- Pre-sanction the Gate-0-conditional route order (B then A), or hold the
-  route choice until Gate 0 reports.
-- Authorize the CHIME collaboration ask for calibrator baseband in parallel
-  (outward-facing: requires your explicit go).
+- Sanction Gate 0 → **YES.**
+- Route order → **Route B starts immediately** (conditional on Gate 0);
+  Route A demoted to in-house-data-only.
+- CHIME collaboration ask for calibrator baseband → **DECLINED.** No external
+  data request; self-reliant routes only.
+
+Gate 0 execution record:
+[experiment-chime-scint-gate0-detectability.md](experiment-chime-scint-gate0-detectability.md).
