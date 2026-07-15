@@ -1,8 +1,8 @@
 # Validation: provisional joint fits, DSA bandwidths, and two-screen analysis
 
-Validated against `plan-provisional-joint-scint-twoscreen.md` at implementation
-commit `02f43b29` on 2026-07-15. This report also covers the validation-time
-generator whitespace correction committed with the report.
+Validated against `plan-provisional-joint-scint-twoscreen.md` on 2026-07-15.
+This report covers the initial implementation, the validation-time generator
+whitespace correction, and the independent-review corrections.
 
 ## Implementation Status
 
@@ -11,9 +11,9 @@ generator whitespace correction committed with the report.
   tests are present and pass.
 - **Phase 2 — generated products: PASS.** The generator reproduces the four TeX
   tables and the machine-readable result ledger byte-for-byte. The ledger contains
-  12 DSA rows through the table product, 12 joint-fit rows, seven screen-analysis
+  12 DSA rows through the table product, 12 joint-fit rows, seven screen-readiness
   rows, 12 foreground-alignment rows, the exact build command, and SHA-256 hashes
-  for every frozen input.
+  for every frozen input. All seven screen rows correctly remain pending.
 - **Phase 3 — manuscript integration: PASS.** The representative and appendix
   figures and all generated tables compile from the intended manuscript include
   chain. Captions and prose preserve the provisional/not-certified boundary.
@@ -44,19 +44,22 @@ generator whitespace correction committed with the report.
   line. The emitter was corrected, all generated tables were regenerated, and
   the commit-range check was rerun before publication.
 
-## Code Review Findings
+## Code Review Findings and Resolution
 
-- The screen product uses the dimensionally correct
-  `tau[ms] * Delta-nu[MHz] * 1000 = tau[s] * Delta-nu[Hz]` conversion and evaluates
-  scattering at each actual component frequency.
-- The two-screen-favored verdict is conservative: every retained component must
-  remain above the single-screen upper bound at one propagated standard deviation.
+- **Resolved P1:** the first implementation incorrectly paired free-$\alpha$
+  joint $\tau$ with DSA bandwidths. The generator now enforces the accepted
+  dual-$\tau$ policy and emits no product or verdict without the fixed-index
+  `tau_consistency` refit. The frozen catalog contains no completed refits, so
+  all seven eligible rows are pending.
+- **Resolved P2:** the Results section now calls the 41 unflagged DSA values fit
+  components, not measurements.
+- **Resolved P2:** the Oran aggregate row is explicitly provisional and directs
+  readers to the separately reported certified 1328.24-MHz point.
 - Foreground interpretation is fit-adjudication- and coverage-aware; coverage-limited
   zero-foreground rows are not treated as clean controls, and the emitted language
   does not claim causation.
-- Full posterior covariance is unavailable. The generator, tables, ledger, and
-  prose consistently label the first-order independent propagation approximate
-  and the science products provisional.
+- The dimensionally correct screen-product function and analytic test remain in
+  place for later consistency refits, but no current manuscript row invokes it.
 - No unrelated, sensitive, submodule-pointer, cache, or credential-bearing path
   is part of the implementation commit.
 
@@ -77,9 +80,10 @@ No additional manual publication gate remains for this provisional lane.
 
 - **Critical:** none.
 - **Important:** none before merge.
-- **Follow-up:** preserve the provisional status until the V1 re-trust ladder and
-  component-level certification work are completed; do not use this change to
-  infer screen distances or a sample-wide foreground correlation.
+- **Follow-up:** run and validate the fixed-index consistency-$\tau$ refits,
+  preserve the provisional status until the V1 re-trust ladder and
+  component-level certification work are completed, and do not infer screen
+  distances or a sample-wide foreground correlation from this change.
 
 ## References
 

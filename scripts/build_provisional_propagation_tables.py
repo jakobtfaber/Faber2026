@@ -18,6 +18,8 @@ FOREGROUND = ROOT / "pipeline/galaxies/foreground"
 BUDGET_PATH = FOREGROUND / "budget_table_data.json"
 FOREGROUND_PATH = FOREGROUND / "foreground_table_data.json"
 CONTRIBUTORS_PATH = ROOT / "scripts/dm_budget_intervening_systems.csv"
+TAU_CONSISTENCY_PATH = FOREGROUND / "data/tau_consistency_catalog.csv"
+TAU_CONSISTENCY_DIR = FOREGROUND / "data/tau_consistency"
 
 
 def screen_product(tau_1ghz_ms, tau_err_ms, alpha, alpha_err,
@@ -93,12 +95,31 @@ def load_foreground_inputs():
     return budget, by_burst, contributors
 
 
+def consistency_tau_block(nick, catalog_row):
+    """Load the policy-required alpha=4 consistency-tau posterior, if present."""
+    value = catalog_row.get("tau_consistency_1ghz_ms", "")
+    if not value:
+        return None
+    path = TAU_CONSISTENCY_DIR / f"{nick}_joint_alpha4_pbf-exp-exp.json"
+    if not path.is_file():
+        raise ValueError(f"catalog claims consistency tau but refit is missing: {path}")
+    payload = json.loads(path.read_text())
+    block = payload.get("tau_1ghz", payload.get("percentiles", {}).get("tau_1ghz"))
+    if not isinstance(block, dict):
+        raise ValueError(f"consistency refit lacks tau posterior: {path}")
+    return block, path
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     adj_path = JOINT / "fit_adjudication.csv"
     comp_path = SCINT / "dsa_lorentzian_components.csv"
     adj = list(csv.DictReader(adj_path.open()))
     comps = list(csv.DictReader(comp_path.open()))
+    consistency_catalog = {
+        row["nickname"].casefold(): row
+        for row in csv.DictReader(TAU_CONSISTENCY_PATH.open())
+    }
     budget, foreground_by_burst, contributors = load_foreground_inputs()
     if len(adj) != 12:
         raise ValueError(f"expected 12 adjudication rows, found {len(adj)}")
@@ -134,19 +155,30 @@ def main():
             med = sorted(values)[len(values) // 2] if len(values) % 2 else (
                 sorted(values)[len(values)//2 - 1] + sorted(values)[len(values)//2]) / 2
             span = f"{min(values):.3g}--{max(values):.3g}" if len(values) > 1 else f"{values[0]:.3g}"
-            cert = "Oran 1328-MHz component only" if nick == "oran" else "provisional"
+            cert = ("provisional aggregate; certified point separate"
+                    if nick == "oran" else "provisional")
             dsa_rows.append(f"{tns.replace('FRB ', '')} & {len(values)} & {med:.3g} & {span} & {cert} \\\\")
         else:
             dsa_rows.append(f"{tns.replace('FRB ', '')} & 0 & \\nodata & \\nodata & no clean narrow component \\\\")
 
         if row["adjudication"] != "accepted_physical" or fit is None:
             continue
-        tau, alpha = fit["tau_1ghz"], fit["alpha"]
+        consistency = consistency_tau_block(nick, consistency_catalog[nick.casefold()])
+        if consistency is None:
+            verdict = "pending fixed-index consistency refit"
+            screen_rows.append(
+                f"{tns.replace('FRB ', '')} & {len(clean)} & \\nodata & \\nodata & "
+                f"\\nodata & {verdict} \\\\"
+            )
+            screen_json.append({"burst": nick, "tns": tns, "products": [],
+                                "verdict": verdict})
+            continue
+        tau, consistency_path = consistency
         pairs = []
         for c in clean:
             value, error = screen_product(
                 tau["median"], 0.5 * (tau["err_minus"] + tau["err_plus"]),
-                alpha["median"], 0.5 * (alpha["err_minus"] + alpha["err_plus"]),
+                4.0, 0.0,
                 float(c["center_freq_mhz"]), float(c["dnu_mhz"]),
                 float(c["dnu_err_mhz"]),
             )
@@ -160,8 +192,10 @@ def main():
             f"{min(vals):.2g}--{max(vals):.2g} & "
             f"{min(v - e for v, e in pairs):.2g} & {verdict} \\\\"
         )
-        screen_json.append({"burst": nick, "tns": tns, "products": [
-            {"value": v, "sigma_approx": e} for v, e in pairs], "verdict": verdict})
+        screen_json.append({"burst": nick, "tns": tns,
+                            "tau_consistency_source": str(consistency_path.relative_to(ROOT)),
+                            "products": [{"value": v, "sigma_approx": e}
+                                         for v, e in pairs], "verdict": verdict})
 
     screen_by_tns = {row["tns"]: row for row in screen_json}
     contributor_counts = {}
@@ -227,26 +261,37 @@ def main():
           "Best-so-far clean narrow-component DSA-110 bandwidth fits (provisional).",
           "lcccl", "\\colhead{FRB} & \\colhead{$N$} & \\colhead{Median $\\Delta\\nu_d$ (MHz)} & \\colhead{Range (MHz)} & \\colhead{Status}", dsa_rows)
     table(ROOT / "twoscreen_provisional_table.tex", "tab:twoscreen-provisional",
-          "Provisional component-level screen-consistency products.",
-          "lccccl", "\\colhead{FRB} & \\colhead{$N$} & \\colhead{Median $\\tau\\Delta\\nu_d$} & \\colhead{Range} & \\colhead{min$(P-\\sigma_P)$} & \\colhead{Inference}", screen_rows)
+          "Two-screen consistency evaluation readiness.",
+          "lccccl", "\\colhead{FRB} & \\colhead{$N$} & \\colhead{Median $\\tau\\Delta\\nu_d$} & \\colhead{Range} & \\colhead{min$(P-\\sigma_P)$} & \\colhead{Inference}", screen_rows,
+          "The accepted dual-$\\tau$ policy requires $\\alpha$ fixed to 4 in "
+          "$\\tau_{\\rm consistency}$ refits. No products or verdicts are "
+          "reported until those refits exist; free-$\\alpha$ joint $\\tau$ is "
+          "not substituted.")
     table(ROOT / "foreground_propagation_provisional_table.tex",
           "tab:foreground-propagation-provisional",
           "Foreground-census alignment with provisional propagation constraints.",
-          "llccccccc", "\\colhead{FRB} & \\colhead{Propagation} & \\colhead{Coverage} & "
+          "llccccccc", "\\colhead{FRB} & \\colhead{Screen test} & \\colhead{Coverage} & "
           "\\colhead{$N_{\\rm fg}$} & \\colhead{$b_{\\rm inc,min}$ (kpc)} & "
-          "\\colhead{$\\tau_{\\rm int}$ (ms)} & \\colhead{$\\tau_{\\rm fit}$ (ms)} & "
+          "\\colhead{$\\tau_{\\rm int}$ (ms)} & \\colhead{$\\tau_{\\rm joint}$ (ms)} & "
           "\\colhead{Fraction} & \\colhead{Reading}", foreground_rows,
           "$N_{\\rm fg}$ counts deduplicated budget-eligible systems; "
           "$b_{\\rm inc,min}$ is the nearest inconclusive projected candidate; "
-          "Fraction is $\\tau_{\\rm int}/\\tau_{\\rm fit}$. Ratios are suppressed "
+          "Fraction is $\\tau_{\\rm int}/\\tau_{\\rm joint}$. The latter is the "
+          "provisional free-$\\alpha$ morphology-track value and is used only for "
+          "this foreground diagnostic, never for screen consistency. Ratios are suppressed "
           "for coverage-limited zero-foreground rows. Values and causal readings "
           "remain provisional.")
 
+    consistency_refits = sorted(TAU_CONSISTENCY_DIR.glob("*_joint_alpha4_pbf-exp-exp.json"))
     inputs = [adj_path, comp_path, BUDGET_PATH, FOREGROUND_PATH,
+              TAU_CONSISTENCY_PATH,
               CONTRIBUTORS_PATH] + [JOINT / r["fit_json"] for r in adj if r["fit_json"]]
+    inputs += consistency_refits
     (OUT / "results.json").write_text(json.dumps({
         "status": "PROVISIONAL_UNVERIFIED", "single_screen_range": [0.1, 2.0],
         "uncertainty": "first-order independent marginal propagation; covariance unavailable",
+        "screen_analysis_status": "PENDING_ALPHA4_CONSISTENCY_REFITS",
+        "screen_tau_policy": "alpha-fixed tau_consistency only; free-alpha joint tau prohibited",
         "command": "python3 scripts/build_provisional_propagation_tables.py",
         "inputs": {str(p.relative_to(ROOT)): sha256(p) for p in inputs},
         "screen_rows": screen_json,
