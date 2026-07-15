@@ -4,10 +4,6 @@
     {
       "h": "P3: stop, or amend and build?",
       "d": "Gate 0b did its job: as frozen it FAILS (1.2 sigma at 213 kHz vs floor 3) and the culprit is the inherited 64-channel block demeaning, which erases scintles wider than one coarse block. A diagnostic without demeaning (safe now: the ratio already cancels the common mode) restores 3.0-4.5 sigma across 127-352 kHz, confirmed by end-to-end injections (3.2 sigma at 213 kHz). Honest ceiling stays below the 5-sigma G3 detection bar, so P3' would deliver a calibrated upper limit, not a likely detection. Say 'stop' (paper takes P2's exclusion) or 'amend P3' (build the estimator without demeaning, k>=11 envelope cut, ~day of work). Figure: gate0b_owner_decision.png on the FLITS branch."
-    },
-    {
-      "h": "F1/scattering: budget.tex alpha=4 wording",
-      "d": "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
     }
   ],
   "now": [
