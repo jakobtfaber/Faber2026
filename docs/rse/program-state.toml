@@ -64,7 +64,7 @@ needs_owner = false
 id = "f3-consistency-audit"
 title = "F3 manuscript consistency audit"
 strand = "synthesis"
-status = "in_progress"
+status = "done"
 owner = "devin"
 issue = 57                        # GitHub issue (0 = not yet filed)
 branch = "ms/f3-consistency-audit"
