@@ -2,7 +2,7 @@
 
 The foreground/cosmological columns remain owned by the pinned FLITS table
 data.  This super-repository layer replaces only ``DM_obs`` from the adopted
-phase-coherence catalog and ``DM_host`` from the forward Monte Carlo, keeping
+phase-coherence catalog and ``DM_host`` from deterministic convolution, keeping
 the manuscript table reproducible without changing the pipeline submodule pin.
 """
 
@@ -56,10 +56,12 @@ def render() -> str:
         raise ValueError("budget and adopted-DM rosters differ")
     for row in rows:
         burst = row["burst"]
-        row["dm_obs"] = f'{float(dm[burst]["adopted_dm"]):.4f}'
+        row["dm_obs"] = f"{float(dm[burst]['adopted_dm']):.4f}"
         if row["z"] is not None:
             h = host[burst]
-            p16, p50, p84 = (int(h[k]) for k in ("dm_host_p16", "dm_host_p50", "dm_host_p84"))
+            p16, p50, p84 = (
+                int(h[k]) for k in ("dm_host_p16", "dm_host_p50", "dm_host_p84")
+            )
             row["dm_host"] = [p50, p84 - p50, p50 - p16]
 
     head = base._HEAD.replace(  # noqa: SLF001 - pinned internal formatting contract
@@ -76,15 +78,10 @@ def render() -> str:
         "adopted CHIME phase-coherence measurement from Table~\\ref{tab:dm-measurements}.",
     )
     body = "\n".join(base.render_row(row) for row in rows)
-    # Super-repo overlay on the emitter footnotes/comments: (i) the f_IGM
-    # sensitivity statement tracks the manuscript forward model (median -5
-    # after the 2026-07-15 census remediation -> 0.2 sigma, conservative);
-    # (ii) note u needs the lower-bound clause for the one sightline with
+    # Super-repo overlay on the emitter footnotes/comments: note u needs the
+    # lower-bound clause for the one sightline with
     # both a shallow-layer confirmed system and no deep coverage.
     tail = base._TAIL.replace(  # noqa: SLF001
-        "within $0.3\\sigma$",
-        "within $0.2\\sigma$",
-    ).replace(
         "not\nexcluded---absence of coverage is not absence of foreground\n"
         "(Section~\\ref{sec:obs-fg}).}",
         "not\nexcluded---absence of coverage is not absence of foreground\n"
