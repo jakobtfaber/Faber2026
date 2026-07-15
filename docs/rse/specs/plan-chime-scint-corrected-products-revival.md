@@ -1,9 +1,9 @@
 # Implementation Plan: CHIME scintillation revival — decision-aligned C1 sequence
 
 ---
-**Date:** 2026-07-14 (v1.1 same day — reconciled with the owner C1 decision)
+**Date:** 2026-07-14 (v1.2 same day — P1 revised after direct common-mode measurement)
 **Author:** AI Assistant (v1.0 ladder approved by owner 2026-07-14 morning; v1.1 restructure approved 2026-07-14 evening after the C1 decision doc surfaced)
-**Status:** Draft
+**Status:** Phase 3 complete — P1 `DOCUMENTED-FAIL`; no Phase-4 route authorized
 **Related Documents:**
 - [Decision: Figure 1 + CHIME C1 route (OWNER, governs this plan)](decision-2026-07-14-figure1-and-chime-c1.md)
 - [Handoff: C1 estimator + first diagnostic (in-flight lane)](../../../pipeline/docs/rse/specs/handoff-2026-07-14-22-09-c1-allpairs-crossgp.md)
@@ -221,16 +221,26 @@ the coherently dedispersed baseband.
    - **Alternatives considered:** run the matrix on h17 unvectorized
      (rejected: still slow, and h17 adds no per-call speedup for a
      single-threaded Python loop).
-3. **Decision:** successor route implements windowed fine channelization as
-   a *local* `windowed_fine_channelize` rather than patching
-   `baseband_analysis` (unchanged from v1.0).
-   - **Rationale:** the docker image's package is pinned/broken in places
-     (see `upchannelize_chime.py` docstring API note); a local windowed
-     overlap-FFT on the coherently dedispersed baseband is self-contained
-     and testable.
-   - **Trade-offs:** slower than the package path; freya-only at first.
-   - **Alternatives considered:** upstream package patch (rejected: not
-     reproducible from this repo).
+3. **Decision:** successor route implements a local, shape-compatible
+   replacement for `baseband_analysis.core.sampling._upchannel`; it preserves
+   the package's polarization/time/coarse-channel contract, complex-bin
+   aggregation, frequency ordering, and baseline cadence while adding an
+   explicit window and optional overlap.
+   - **Rationale:** direct measurement on the retained freya product found a
+     common-mode off-pulse response (`rho_lag1=0.587`, Lorentzian amplitude
+     `0.586`, width `35.4 kHz`) at the same scale as every failed fit. The
+     saved v1.1 1-D white-noise prototype would not test or preserve the real
+     worker contract. A local implementation can reproduce the pinned
+     rectangular `2U/downfreq=2` baseline exactly, then isolate the effect of
+     Hann and Blackman-Harris windows without patching the Docker package.
+   - **Trade-offs:** the local implementation duplicates a small amount of
+     pinned package logic and must carry exact-equivalence, noise-gain, time
+     offset, and frequency-grid tests. The `4U` variants use 50% overlap to
+     retain the baseline `2U` hop/cadence.
+   - **Alternatives considered:** the v1.1 1-D decimating prototype (rejected:
+     wrong shape and sampling contract); upstream package patch (rejected:
+     not reproducible from this repo); immediate external-calibrator or
+     voltage-domain work (deferred until P1's direct product test).
 4. **Decision:** conditional phases execute only on a predeclared PASS; the
    fail branch at each rung is an inventory-closing task.
    - **Rationale:** mirrors the inventory's fail-closed vocabulary; avoids
@@ -425,88 +435,80 @@ that tree are a separate lane, never swept into C1 commits).
 ### Phase 3 (conditional on C1 FAIL): product-regeneration route — windowed fine channelization (freya, h17)
 
 **Objective:** change the input product's information content (the only
-sanctioned move after a C1 failure): regenerate freya with a windowed,
-oversampled fine channelization from the coherently dedispersed baseband.
-Mint a new experiment ID (`p1-window-upchan`) with its own frozen config
-and a fresh blinded campaign — same gate discipline as C1, new bytes.
+sanctioned move after a C1 failure): regenerate freya from the coherently
+dedispersed baseband with predeclared rectangular, Hann, and
+Blackman-Harris fine-channelization variants. First test the measured failure
+mechanism on off-pulse data only; then run a fresh blinded campaign on the one
+predeclared winner, if any. Mint a new experiment ID (`p1-window-upchan`) with
+its own frozen config — same scientific gates as C1, new bytes.
 
 **Tasks:**
-- [ ] **Failing test — windowed upchannelizer core (local, synthetic).** New
-  `pipeline/analysis/scattering-refit-2026-06/baseband_recovery/test_windowed_upchan.py`:
-
-  ```python
-  import numpy as np
-  from windowed_upchan import windowed_fine_channelize
-
-  def test_flat_tone_response_across_fine_channels():
-      # complex white noise through one synthetic coarse channel: the fine-channel
-      # mean power must be flat (scallop suppressed) to <1% ripple with hann+4x
-      rng = np.random.default_rng(20260714)
-      x = rng.normal(size=2**18) + 1j * rng.normal(size=2**18)
-      spec = windowed_fine_channelize(x, factor=64, window="hann", oversample=4)
-      band = spec.mean(axis=-1)              # (fine_channels,) time-averaged power
-      ripple = band.std() / band.mean()
-      assert ripple < 0.01
-
-  def test_white_noise_power_level():
-      # with P = |F|^2 / sum(w^2), white noise of per-sample power sigma^2
-      # has E[P] = sigma^2 per fine channel — the absolute calibration check
-      rng = np.random.default_rng(1)
-      x = rng.normal(size=2**16) + 1j * rng.normal(size=2**16)
-      spec = windowed_fine_channelize(x, factor=16, window="hann", oversample=2)
-      assert np.isclose(spec.mean(), np.mean(np.abs(x) ** 2), rtol=0.05)
-  ```
-- [ ] **Implement `windowed_upchan.py`** (same directory):
-
-  ```python
-  def windowed_fine_channelize(x, *, factor, window="hann", oversample=2):
-      """Overlap-FFT fine channelization of one coherently-dedispersed coarse channel.
-
-      factor: number of fine channels U; FFT length = factor * oversample,
-      hop = FFT length // oversample (50% overlap at oversample=2).
-      Returns (U, n_frames) power. Window normalized so white-noise expectation
-      is flat (divide by sum(w**2)).
-      """
-      n = factor * oversample
-      w = np.hanning(n) if window == "hann" else np.ones(n)
-      hop = n // oversample
-      frames = np.lib.stride_tricks.sliding_window_view(x, n)[::hop] * w
-      F = np.fft.fft(frames, axis=-1)
-      # keep every `oversample`-th bin -> U fine channels, critically sampled
-      P = (np.abs(F[:, ::oversample]) ** 2) / np.sum(w ** 2)
-      return P.T
-  ```
-
-  Finalize the Parseval test constant against this normalization; run both
-  tests → PASS; commit `feat(scint): windowed oversampled fine channelization`.
-- [ ] **Wire into the h17 worker:** `upchannelize_chime.py` — add
-  `--fine-window {none,hann}` and `--fine-oversample {2,4}` flags beside
-  `:371-381`, route `_waterfall`'s per-coarse-channel step through
-  `windowed_fine_channelize` when `--fine-window != none`, and suffix output
-  files `_{window}{oversample}` (e.g. `freya_chime_upchan_hann4.npy`).
-- [ ] **Generate freya variants on h17** (inside the docker image, per the
-  module docstring):
-
-  ```bash
-  ssh h17 'docker run --rm -v $COD:$COD chimefrb/baseband-analysis:latest \
-    python upchannelize_chime.py freya --no-time-shift --fine-window hann --fine-oversample 4'
-  # and the oversample=2 variant; pull products back to
-  # ~/Data/Faber2026/dsa110/scintillation-data/ alongside the existing npz
-  ```
-
-- [ ] **Build paired products:** run
-  `pipeline/scintillation/scripts/build_chime_product.py` on each variant
-  (algorithm 1 for the paired-raw bookkeeping; this route's correction *is*
-  the product) and `verify_product_manifest` them. Regenerate with
-  `--save-polarizations` so the C1 estimator (now the validated battery's
-  estimator of record) can run on the new product.
-- [ ] **Blinded campaign on the new product:** freeze a `p1-window-upchan`
-  config (window, oversample, masks, folds), then rerun the Phase-2
-  calibration matrix + gates via `validate_freya_c1.py`/`run_c1_calibration.py`
-  pointed at the regenerated pol-resolved product — no threshold changes
-  (a changed threshold would mint yet another experiment ID, decision-doc
-  rule). Go/no-go identical to Phase 2. FAIL → inventory-closing entry
-  (`p1-window-upchan`) and terminal state (b). PASS → Phase 4.
+- [x] **Failing tests — exact worker contract and failure mechanism (local,
+  synthetic).** Add
+  `analysis/scattering-refit-2026-06/baseband_recovery/test_windowed_upchan.py`
+  before implementation, with fixed seeds and these checks:
+  1. `rectangular`, `oversample=2`, `hop=2U` reproduces the Docker
+     `_upchannel(fftsize=2U, downfreq=2)` complex spectrum, frequency centres,
+     and channel IDs to floating-point tolerance on a synthetic
+     `(time, pol, coarse_channel)` input.
+  2. Output remains `(pol, frame, coarse_channel*U)` for both polarizations;
+     `oversample=4` uses `fftsize=4U`, `downfreq=4`, `hop=2U`, and records its
+     longer frame-centre offset without changing the baseline frame cadence.
+  3. Analytic grouped-bin noise-gain normalization preserves the rectangular
+     white-noise power expectation to 5% for Hann and Blackman-Harris.
+  4. Fractional-bin complex-tone sweeps measure peak scalloping and integrated
+     far-sidelobe leakage; Hann and Blackman-Harris must improve the declared
+     leakage metrics relative to rectangular. White-noise flatness alone is
+     explicitly insufficient.
+- [x] **Implement `windowed_upchan.py`** in the same directory. Mirror the
+  pinned Docker `_upchannel` axes, channel-ID mapping, `fftshift`, and complex
+  grouping exactly. Support `window in {rectangular,hann,blackmanharris}` and
+  `oversample in {2,4}`; set `fftsize=U*oversample`, `downfreq=oversample`,
+  and `hop=2U`. Average each group of `downfreq` adjacent *complex* FFT bins
+  before detection, as the baseline does. Normalize using the exact
+  noise-equivalent gain of the window plus grouped-bin operator, not merely
+  `sum(window**2)`. Return a metadata record containing window, FFT length,
+  downfreq, hop, frame-centre offset, normalization, and implementation
+  version. Run all synthetic tests → PASS.
+- [x] **Wire into the h17 worker:** extend `upchannelize_chime.py` with
+  `--fine-window {rectangular,hann,blackmanharris}` and
+  `--fine-oversample {2,4}`. The default remains the existing package path;
+  any explicit variant uses the local implementation. Preserve separate
+  polarization voltages until detection, suffix every variant output
+  (`_rect2`, `_hann2`, `_hann4`, `_blackmanharris2`,
+  `_blackmanharris4`), and include the complete channelizer metadata plus
+  source/producer/image hashes in the product metadata. Update time alignment
+  from the recorded hop and frame-centre offset rather than the historical
+  hard-coded `2U` assumption.
+- [x] **Clean-container reproduction before real data:** run the synthetic
+  suite inside the pinned h17 image digest
+  `sha256:8c903ec6a5a836e8a97fe3468fd3ee02177c220ead84e6d1d25e8f41b735db4b`
+  and record Python/NumPy versions, image digest, code commit, exact command,
+  seeds, and output tolerances in the experiment record.
+- [x] **Generate the five predeclared freya variants on h17:** rectangular-2
+  (exact baseline control), Hann-2, Hann-4, Blackman-Harris-2, and
+  Blackman-Harris-4, all with `--no-time-shift --save-polarizations`. Never
+  overwrite the retained product. Hash the source H5, worker, metadata,
+  Stokes-I, both polarization streams, and frequency array.
+- [x] **Off-pulse mechanism screen (still blinded):** add a deterministic
+  `measure_common_mode.py` under
+  `analysis/chime-scintillation/experiments/p1-window-upchan/` that applies
+  the same 64-channel block demeaning and pol0×pol1 normalization used for
+  the smoking-gun measurement. On the predeclared off-pulse window, emit
+  lag-1 correlation, 1–16-lag series, Lorentzian amplitude/width/constant,
+  fit quality, and comparison to the retained baseline (`rho_lag1=0.587`,
+  amplitude `0.586`, width `35.4 kHz`). A windowed candidate is eligible for
+  the expensive campaign only if both absolute lag-1 correlation and fitted
+  common-mode amplitude are at least 10× below baseline (`<=0.0587` and
+  `<=0.0586`). Select exactly one eligible candidate by minimum fitted
+  amplitude, then minimum lag-1 correlation, then lower oversample; if none
+  qualify, record a mechanism-level `DOCUMENTED-FAIL` and do not inspect the
+  on-pulse fit or run a futile calibration matrix.
+- [x] **Build and verify the selected paired product:** route not entered because
+  no candidate passed the mechanism gate; no on-pulse product was authorized.
+- [x] **Blinded campaign on the selected product:** not run. No variant passed
+  the off-pulse gate, so the predeclared stop rule closed P1 without an
+  on-pulse fit or calibration matrix.
 - [ ] **Commit** (FLITS fork PR) `feat(scint): p1 windowed fine-channelization route`.
 
 **Dependencies:** Phase 2 concluded with FAIL (this phase does not start
@@ -514,11 +516,14 @@ otherwise); Phase-2 vectorized estimator + validation script; h17 + docker
 + arc access (already verified per `upchannelize_chime.py` docstring).
 
 **Verification:**
-- [ ] `pytest .../test_windowed_upchan.py -v` → 2 passed.
-- [ ] Two freya variant npz exist locally with verified manifests
-      (`verify_product_manifest` exit 0), pol-resolved streams included.
-- [ ] `p1-window-upchan` calibration bundle complete with gate verdicts and
-      go/no-go recorded.
+- [x] Synthetic suite passes locally and in the pinned clean h17 container;
+      rectangular-2 equivalence, shape/cadence metadata, noise-gain, and
+      fractional-tone leakage are all covered.
+- [x] Five non-overwriting freya variants exist with verified hashes and
+      pol-resolved streams; the off-pulse comparison report is complete.
+- [x] No variant passes the predeclared 10× mechanism screen; P1 is closed
+  without unblinding. The compact verdict is indexed at
+  `analysis/chime-scintillation/experiments/p1-window-upchan/validation.json`.
 
 ### Phase 4 (conditional on a Phase-2 or Phase-3 PASS): sample-wide products + campaign rerun
 
@@ -625,8 +630,17 @@ generation path.
 - [ ] `pytest pipeline/scintillation/scint_analysis/tests/ -q` green
       (existing + caveat tests + pinned characterization test for the
       vectorized `all_pairs_cross_acf`).
+- [ ] P1 synthetic channelizer suite passes both locally and in the pinned
+      h17 Docker image: rectangular-2 exact equivalence, output shape and
+      cadence, noise-equivalent normalization, and fractional-tone
+      leakage/scalloping checks.
+- [ ] P1's five predeclared freya variants are hash-complete and its
+      off-pulse mechanism report either selects exactly one candidate under
+      the frozen 10x suppression rule or records a mechanism-level
+      `DOCUMENTED-FAIL` without an on-pulse fit.
 - [ ] Calibration completeness: 24 cells × ≥128 trials, all finite;
-      aggregate recomputes from checkpoints.
+      aggregate recomputes from checkpoints when (and only when) a P1 variant
+      passes the mechanism screen.
 - [ ] All decision-doc gates evaluated with recorded verdicts in
       `validation.json`; go/no-go entry present; no unblinded on-pulse
       artifact unless the go rule passed.
@@ -659,13 +673,17 @@ generation path.
 ## Testing Strategy
 
 **Unit (in-phase, test-first):** caveat encoding/propagation; pinned
-characterization test gating the `all_pairs_cross_acf` vectorization;
-windowed channelizer flatness + white-noise power level (Phase 3); config
-provenance completeness; figure-render regressions.
+characterization test gating the `all_pairs_cross_acf` vectorization; P1
+rectangular-baseline equivalence, shape/cadence metadata, analytic grouped-bin
+noise gain, and fractional-tone leakage/scalloping (Phase 3); config provenance
+completeness; figure-render regressions.
 
-**Integration:** the Phase-2 blinded calibration matrix is the integration
-test (estimator → nuisance training → injection recovery → full gate chain
-→ validation.json); Phase-4 campaign rerun end-to-end.
+**Integration:** P1 first reproduces the worker in the pinned h17 container,
+then applies the off-pulse-only common-mode screen to five non-overwriting
+freya variants. The Phase-2 blinded calibration matrix is the downstream
+integration test only for the frozen P1 winner (estimator → nuisance training
+→ injection recovery → full gate chain → validation.json); Phase-4 campaign
+rerun is end-to-end.
 
 **Manual:** figure reviews (predeclared visual-vetting rule); blinding
 audit.
@@ -710,13 +728,20 @@ caveat kwarg defaults to `None` (existing callers unaffected).
      unconstrained diagnostic numbers must not inform any threshold,
      window, or hyperparameter; blinding audit is a manual success
      criterion.
-4. **Risk:** Phase-3 windowed path too slow for U=512 targets (mahi,
+4. **Risk:** Hann/Blackman-Harris broadens the main lobe or introduces
+   grouped-bin covariance without suppressing the measured 35 kHz common mode.
+   - **Likelihood:** Medium-High · **Impact:** Low (bounded negative result)
+   - **Mitigation:** rectangular exact-equivalence plus fractional-tone tests;
+     five fixed variants; predeclared off-pulse 10x mechanism screen; no
+     on-pulse inspection or calibration campaign if the mechanism does not
+     improve.
+5. **Risk:** Phase-3 windowed path too slow for U=512 targets (mahi,
    johndoeII) at Phase 4.
    - **Likelihood:** Medium · **Impact:** Medium
    - **Mitigation:** freya-first gating means sample-wide cost is only paid
      on a win; the mahi `fftsize=2U` slow-path precedent shows overnight
      h17 runs are acceptable; batch per target.
-5. **Risk:** a route passes on freya but fails visually sample-wide.
+6. **Risk:** a route passes on freya but fails visually sample-wide.
    - **Likelihood:** Medium · **Impact:** Medium
    - **Mitigation:** per-burst figure review gate in Phase 4; DOCUMENTED-FAIL
      remains a valid per-burst exit; uniform-methods rule prevents rescue
@@ -724,13 +749,15 @@ caveat kwarg defaults to `None` (existing callers unaffected).
 
 ## Edge Cases and Error Handling
 
-1. **Case:** freya variant product has different fine-channel count than
-   configs assume (oversample changes grid).
-   - **Expected:** `grid_regularization` (`freya_chime.yaml`) handles
-     uniform grids as no-op; builder writes the actual frequency axis into
-     the npz — `run_analysis` reads it, no config change needed.
-   - **Implementation:** assert grid uniformity in the Phase-3 build step
-     (`np.allclose(np.diff(freq), df)`), abort the variant otherwise.
+1. **Case:** oversample=4 changes frame length and first-frame centre while
+   retaining the baseline `2U` hop.
+   - **Expected:** the fine-channel count and frequency centres remain the
+     same because `fftsize/downfreq=U`; the output cadence remains `2U` native
+     samples, but the frame-centre offset changes and the number of valid
+     frames may shrink at the edges.
+   - **Implementation:** record FFT length, hop, frame-centre offset, and
+     source `fpga_count`; assert a uniform frequency grid and align from the
+     recorded metadata. Never reuse the historical hard-coded centre offset.
 2. **Case:** calibration run crashes mid-matrix.
    - **Handling:** `run_c1_calibration.py` writes per-cell checkpoints
      (pattern: trigger-calibration campaign's 68-cell checkpoints) and is
@@ -748,8 +775,10 @@ caveat kwarg defaults to `None` (existing callers unaffected).
   current ~30 s/call that is ~26 CPU-days — hence vectorization first
   (target ≥50×, bringing the matrix to ≈ 0.5 day at 4 workers). Offload to
   h17 if the achieved speedup falls short.
-- Phase-3 h17: ~1 GB h5 pull already cached per target; windowed path is
-  python-loop-slow only for U≥256 targets (Phase 4 only, overnight).
+- Phase-3 h17: the ~1 GB freya H5 is already staged. Five variants are paid
+  once; only a variant that passes the cheap off-pulse mechanism screen incurs
+  the 24x128 blinded matrix. The windowed path may be Python-loop-slow for
+  U>=256 targets (Phase 4 only, overnight).
 
 ## Documentation Updates
 
@@ -827,3 +856,15 @@ repo's own routes, per the decision doc and `DATA_PROVENANCE.md`.)
   Windowed re-upchannelization retained as the conditional Phase-3
   successor (`p1-window-upchan`). H2 battery harness dropped. Phases
   renumbered 6→4, 7→5. Restructure owner-approved in-session.
+
+### Version 1.2 — 2026-07-14 (same day)
+- Incorporated the direct freya off-pulse common-mode measurement
+  (`rho_lag1=0.587`, Lorentzian amplitude `0.586`, width `35.4 kHz`) and the
+  owner direction to execute windowed re-upchannelization.
+- Replaced the v1.1 1-D white-noise prototype with a shape-compatible local
+  implementation of the pinned Docker `_upchannel` contract, including exact
+  rectangular-2 equivalence, grouped-bin noise-gain normalization, cadence and
+  frame-centre metadata, and fractional-tone leakage/scalloping tests.
+- Predeclared five non-overwriting freya variants and an off-pulse-only 10x
+  suppression screen that selects at most one candidate before the unchanged
+  blinded calibration. Revision approved in-session before implementation.
