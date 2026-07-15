@@ -71,6 +71,12 @@ is less accurate than Monte Carlo.
 - Rendered page 34: all nine direct host/component PDFs are legible; the
   individual and convolved intervening curves and six upper-limit daggers appear
   only where expected.
+- A fresh detached worktree at integrated parent commit
+  `d63aacc4`, initialized at pinned FLITS
+  `af78543d4747d339b9f13283b4b8528c91a71cb3`, reproduced the observer/rest
+  host CSV, root budget table, and PNG pixel artifact at the exact SHA-256
+  hashes in the implementation record. Only the PDF figure became dirty after
+  regeneration, consistent with timestamp/metadata variability.
 
 Existing manuscript-wide float/box warnings remain outside this scoped change;
 there is no new LaTeX error from the rebuilt host section.
