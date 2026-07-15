@@ -50,15 +50,29 @@ needs_owner = false
 id = "chime-p3-optimal-estimator"
 title = "P3 delay-domain optimal quadratic estimator (owner-sanctioned successor to P2)"
 strand = "scintillation"
-status = "needs_owner"
+status = "done"
 owner = "claude"
 issue = 68
 branch = "scint/p3-optimal-estimator"
-worktree = "~/Developer/scratch/worktrees/flits-p3-optimal-estimator"
-pr = 181                          # FLITS PR (merged 563645c); pin bump this PR
+worktree = ""
+pr = 181                          # FLITS PR (merged 563645c); pin bump #74
 gates = ["Gate 0b measured-noise forecast >= 3 sigma at 213 kHz before any implementation", "G1''/G2'' frozen in experiment-chime-scint-p3-optimal-estimator.md before burst data", "unblinding one-shot, orchestrator-only, after both gates pass"]
-next_action = "gates passed, owner-authorized unblinding done: z_max 40.4 at scan edge, amplitude 11x scint ceiling -> intrinsic envelope, declined as measurement; owner ratifies closure wording (envelope-confusion-limited exclusion) or sanctions P4 envelope modeling (exploratory-only)"
-needs_owner = true
+next_action = "terminal: calibrated estimator + declined unblinded structure (intrinsic envelope); owner chose P4 over immediate closure wording; successor lane chime-p4-envelope-model"
+needs_owner = false
+
+[[lane]]
+id = "chime-p4-envelope-model"
+title = "P4 exploratory intrinsic-envelope modeling + residual scintillation search (freya)"
+strand = "scintillation"
+status = "in_progress"
+owner = "claude"
+issue = 75
+branch = "scint/p4-envelope-model"
+worktree = "~/Developer/scratch/worktrees/flits-p4-envelope-model"
+pr = 0
+gates = ["predeclare E1 model grids, E2 certification + operating-point rule + fail branch, E3 discriminant thresholds BEFORE computing any residual/sub-band/component statistic", "every result labeled exploratory (blind computation spent 2026-07-15)", "amplitude-admissibility clause in the record"]
+next_action = "write experiment-chime-scint-p4-envelope-model.md predeclaration per handoff-2026-07-15-06-50-p4-envelope-model-dev.md, then E0 envelope characterization"
+needs_owner = false
 
 [[lane]]
 id = "a5-profile-fit-statistic"
@@ -111,15 +125,11 @@ needs_owner = false
 # ---------------------------------------------------------------------------
 
 [owner_view]
-updated = "2026-07-15T06:30-0700"
-
-[[owner_view.needs_you]]
-h = "Ratify CHIME scintillation closure wording"
-d = "P3' passed both blinded gates (first of the campaign), you authorized the single permitted on-pulse computation, and it found 40-sigma broad spectral structure that is NOT scintillation: amplitude 11x the calibrated ceiling (implied m~0.6), width running off the 400 kHz scan edge, matching the burst's intrinsic spectral envelope. Recorded fail-closed as 'no admissible measurement; scintillation constraint is envelope-confusion-limited'. Ratify that as the manuscript statement, or sanction a P4 envelope-modeling experiment (exploratory-only: the burst spectrum has been seen). Figures: unblind_onpulse_scan.png on FLITS main."
+updated = "2026-07-15T06:55-0700"
 
 [[owner_view.now]]
-h = "P3' complete; closure wording pending"
-d = "FLITS #181 merged (563645c) + pin bumped this PR; estimator calibrated (G1''/G2'' PASS), unblinded once with owner authorization; verdict: intrinsic-envelope foreground, no admissible Delta-nu_d"
+h = "P4 sanctioned: envelope modeling"
+d = "owner chose the exploratory follow-up over immediate closure: model freya's intrinsic spectral envelope (spline/GP/delay-cut families), calibrate subtraction by injections on the real envelope, then physical discriminants (nu^4 sub-band scaling, component correlation, DSA-band consistency); plan in handoff-2026-07-15-06-50-p4-envelope-model-dev.md; manuscript closure wording deferred until P4 resolves"
 who = "claude"
 
 [[owner_view.next]]
@@ -154,9 +164,9 @@ next = "A5 chartered · V1/V2 startable"
 [[owner_view.component]]
 name = "Scintillation"
 lane = "B"
-status = "P3' done: calibrated estimator, unblinded once; intrinsic envelope dominates, no Delta-nu_d"
-status_class = "pend"
-next = "owner ratifies envelope-confusion-limited closure or sanctions P4 (exploratory)"
+status = "P3' terminal (envelope foreground); P4 envelope modeling SANCTIONED (exploratory)"
+status_class = "now"
+next = "P4 predeclaration, then E0 characterization -> E2 injection-calibrated subtraction -> E3 discriminants"
 
 [[owner_view.component]]
 name = "Energies"
