@@ -64,15 +64,15 @@ needs_owner = false
 id = "f3-consistency-audit"
 title = "F3 manuscript consistency audit"
 strand = "synthesis"
-status = "in_progress"
+status = "done"
 owner = "devin"
 issue = 57                        # GitHub issue (0 = not yet filed)
 branch = "ms/f3-consistency-audit"
 worktree = ""
 pr = 64
 gates = ["audit trusted association/census/budget claims vs ledger"]
-next_action = "PR #64 open; defer budget.tex alpha=4 wording to owner/scattering gate"
-needs_owner = true
+next_action = "none — mechanical audit landed in PR #64; alpha=4 wording deferred to F1/scattering gate"
+needs_owner = false
 
 [[lane]]
 id = "fig1-gallery"
@@ -97,21 +97,16 @@ needs_owner = false
 # ---------------------------------------------------------------------------
 
 [owner_view]
-updated = "2026-07-15T03:30-0700"
+updated = "2026-07-15T03:59-0700"
 
 [[owner_view.needs_you]]
-h = "F3: budget.tex alpha=4 wording"
-d = "Mechanical audit is clean except for two retired-language findings in sections/budget.tex (lines 138, 162) where scattering methodology quotes alpha=4. Decide whether to rephrase now or defer to the scattering gate."
+h = "F1/scattering: budget.tex alpha=4 wording"
+d = "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
 
 [[owner_view.now]]
 h = "Route B: voltage-domain separation"
 d = "Gate 0 GO — detection admissible for dnu_d >= 77-127 kHz only; predeclared experiment record next, then estimator on h17 freya baseband"
 who = "claude"
-
-[[owner_view.now]]
-h = "F3 consistency audit"
-d = "script + provenance fixes ready for PR; two alpha=4-limit findings deferred pending owner/scattering gate"
-who = "devin"
 
 [[owner_view.next]]
 h = "A5: N-component profile-fit statistic"
