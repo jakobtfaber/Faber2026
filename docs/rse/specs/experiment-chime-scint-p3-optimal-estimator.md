@@ -164,3 +164,59 @@ creates a new experiment requiring fresh owner sanction.
    config + diagnostic figures; RESULT.md with one of the three terminal
    verdicts: `qualified measurement` (G3 detection), `censored exclusion`
    (G3 non-detection), or `DOCUMENTED-FAIL` (gate failure, no unblinding).
+
+## Gate 0b result (2026-07-15, same day): DOCUMENTED-FAIL-BY-FORECAST under the frozen spec
+
+Executed as predeclared (`gate0b_forecast.py` in the FLITS experiment dir,
+branch `scint/p3-optimal-estimator`): 100 null split-pair realizations from
+real off-pulse data (seeds 900000+i), Monte-Carlo templates carrying the T4
+demeaning transfer (seeds 700000+…), 50 end-to-end multiplicative injections
+at the floor cell (G1 cell-8 seeds). Input SHA-256s match the pipeline
+`DATA_MANIFEST.yaml`.
+
+**Frozen floor (m = 0.17, Δν_d = 213 kHz): FAILED.** Forecast SNR 1.24
+(full-band transform) and 0.61 (per-block), against the frozen floor of 3.
+End-to-end injection check: 1.6σ — the formula holds. σ̂ calibration
+(empirical/analytic) 1.03–1.29. Under the frozen spec the experiment is
+terminal: **nothing is built.**
+
+**Root cause — the 64-channel block demeaning, not the radiometer noise.**
+The forecast *decreases* with Δν_d (352 kHz: 0.73σ full-band), the opposite
+of Gate 0's idealized √w growth: a scintle wider than the 390.6 kHz coarse
+block is nearly constant within each block, so per-block demeaning removes
+most of its variance. The demeaning was inherited from the pre-ratio routes,
+where it protected against the instrumental common mode — protection the
+ratio statistic has made redundant (P2 G2: cancellation to ≲ 0.006).
+
+**Diagnostic (explicitly outside the frozen spec; off-pulse data only).**
+Removing block demeaning (global mean removal only, full-band FFT, same
+measured-noise weighting) restores the window at m = 0.17: 3.2σ at 127 kHz,
+4.1σ at 213 kHz, 5.2σ at 352 kHz — tracking Gate 0's idealized curve within
+~25 %. Excluding delay bins k < 11 (spectral structure smoother than
+~13 MHz, where an intrinsic burst envelope would contaminate) costs only
+~7 %: 3.0σ / 3.8σ / 4.5σ. End-to-end injections at the floor cell
+(null-mean-subtracted, k ≥ 11): **3.2σ**. The null distribution carries a
+~1σ positive mean offset, removable by null calibration.
+Artifacts: `gate0b_forecast.{py,json,png}`,
+`diagnostic_nodemean{,_hardening}.py`, `gate0b_nodemean_diagnostic{,2}.json`,
+`gate0b_owner_decision.png` (FLITS experiment dir).
+
+**Consequence and owner decision (per the unblinding rule, a spec change is a
+new experiment requiring fresh owner sanction):**
+
+- **Option A — stop (the predeclared fail branch).** The paper takes P2's
+  censored exclusion; the measured-noise curves close the campaign
+  quantitatively.
+- **Option B — sanction P3′ (amended spec):** identical discipline, three
+  amendments — no block demeaning (global mean only), delay-bin exclusion
+  k ≥ 11 frozen as the envelope control, null-mean-subtracted matched
+  estimator. Re-checked floor passes (3.8σ formula / 3.2σ injections at
+  213 kHz). **Honest ceiling:** 3–4.5σ across the admissible window, below
+  the inherited G3 detection bar of 5σ — so the realistic product is a
+  calibrated 3–4σ-sensitive upper limit on Δν_d ∈ [127, 352] kHz (a
+  quantified closure P2 could not deliver), with a qualified detection
+  possible only if the true signal sits at the favorable edge and fluctuates
+  upward. The G3 bar itself is NOT amended.
+
+**Status: awaiting owner choice between A and B. No further computation on
+burst data until then.**
