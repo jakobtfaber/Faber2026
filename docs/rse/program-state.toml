@@ -68,7 +68,7 @@ status = "in_progress"
 owner = "devin"
 issue = 57                        # GitHub issue (0 = not yet filed)
 branch = "ms/f3-consistency-audit"
-worktree = "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-f3-consistency-audit"
+worktree = ""
 pr = 64
 gates = ["audit trusted association/census/budget claims vs ledger"]
 next_action = "PR #64 open; defer budget.tex alpha=4 wording to owner/scattering gate"

@@ -14,7 +14,10 @@ written to a report file.
 from __future__ import annotations
 
 import argparse
+import csv
+import fnmatch
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import Iterable
@@ -27,6 +30,53 @@ REF_CMDS = (r"\\ref\*?", r"\\cref\*?", r"\\Cref\*?", r"\\nameref\*?",
 REF_RE = re.compile(r"(?:" + "|".join(REF_CMDS) + r")\{([^}]+)\}")
 LABEL_RE = re.compile(r"\\label\{([^}]+)\}")
 INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
+FIGURE_RE = re.compile(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}")
+
+NUMBER_WORDS = {
+    "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4,
+    "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
+    "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13,
+    "fourteen": 14, "fifteen": 15, "sixteen": 16,
+    "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20,
+}
+
+# Full-sample claims that must agree with the canonical roster.  These are
+# deliberately anchored to sentences that describe the complete sample, not
+# subset statements such as the eight DM-conditioned associations or nine
+# redshift-constrained sightlines.
+SAMPLE_COUNT_EXPECTATIONS = {
+    "main.tex": [
+        ("abstract sample", re.compile(
+            r"We present\s+(?P<count>\w+)\s+fast radio bursts co-detected",
+            re.IGNORECASE)),
+    ],
+    "sections/observations.tex": [
+        ("sample-table introduction", re.compile(
+            r"The\s+(?P<count>\w+)\s+bursts, their TNS designations",
+            re.IGNORECASE)),
+        ("paired spectra", re.compile(
+            r"\((?P<count>\d+)\s+spectra in total", re.IGNORECASE), 2),
+    ],
+    "sections/results.tex": [
+        ("association result", re.compile(
+            r"All\s+(?P<count>\w+)\s+candidate pairs pass",
+            re.IGNORECASE)),
+        ("scintillation census", re.compile(
+            r"Across the\s+(?P<count>\w+)\s+co-detections",
+            re.IGNORECASE)),
+    ],
+    "sections/toa.tex": [
+        ("TOA sample", re.compile(
+            r"the\s+(?P<count>\w+)\s+events are genuine co-detections",
+            re.IGNORECASE)),
+        ("TOA residual census", re.compile(
+            r"All\s+(?P<count>\w+)\s+residuals", re.IGNORECASE)),
+    ],
+    "sections/conclusions.tex": [
+        ("conclusion sample", re.compile(
+            r"the\s+(?P<count>\w+)-burst sample", re.IGNORECASE)),
+    ],
+}
 
 # Files whose entire purpose is to discuss a retired term in a derivation
 # context (not to quote it as a result) are excluded from the retired-language
@@ -119,6 +169,123 @@ def check_cross_refs(files: Iterable[Path], findings: list[str]) -> None:
                 f"in {cmd}")
 
 
+def parse_count(token: str) -> int | None:
+    token = token.lower()
+    if token.isdigit():
+        return int(token)
+    return NUMBER_WORDS.get(token)
+
+
+def table_roster(path: Path) -> set[str]:
+    """Return the FRB designations in a manuscript table's data rows."""
+    text = strip_comments(read_text(path))
+    match = re.search(r"\\startdata(?P<body>.*?)\\enddata", text, re.DOTALL)
+    if not match:
+        return set()
+    return set(re.findall(r"(?m)^\s*(FRB\s+\d{8}[A-Z])\b", match.group("body")))
+
+
+def check_sample_counts(files: Iterable[Path], findings: list[str]) -> None:
+    """Check complete-sample claims and generated-table rosters."""
+    canonical_path = ROOT / "sample_table.tex"
+    canonical = table_roster(canonical_path)
+    if not canonical:
+        findings.append("sample_table.tex: canonical sample roster not found")
+        return
+    expected = len(canonical)
+
+    for table_name in ("dm_measurements_table.tex", "budget_table.tex"):
+        roster = table_roster(ROOT / table_name)
+        if roster != canonical:
+            missing = ", ".join(sorted(canonical - roster)) or "none"
+            extra = ", ".join(sorted(roster - canonical)) or "none"
+            findings.append(
+                f"{table_name}: roster differs from sample_table.tex "
+                f"(missing: {missing}; extra: {extra})")
+
+    by_relpath = {str(path.relative_to(ROOT)): path for path in files}
+    for relpath, expectations in SAMPLE_COUNT_EXPECTATIONS.items():
+        path = by_relpath.get(relpath)
+        if path is None:
+            findings.append(f"{relpath}: required full-sample section not reachable")
+            continue
+        text = strip_comments(read_text(path))
+        for item in expectations:
+            description, pattern, *multiplier = item
+            match = pattern.search(text)
+            if not match:
+                findings.append(
+                    f"{relpath}: missing audited full-sample claim ({description})")
+                continue
+            observed = parse_count(match.group("count"))
+            wanted = expected * (multiplier[0] if multiplier else 1)
+            if observed != wanted:
+                findings.append(
+                    f"{relpath}: {description} count is {match.group('count')}; "
+                    f"expected {wanted} from the {expected}-burst canonical roster")
+
+
+def normalize_figure_path(raw: str) -> str:
+    """Normalize a TeX graphic path to the manifest's repo-relative form."""
+    path = raw.replace("#1", "*")
+    if not Path(path).suffix:
+        path += ".pdf"
+    if not path.startswith("figures/"):
+        path = "figures/" + path
+    return path
+
+
+def manifest_entries() -> list[dict[str, str]]:
+    with (ROOT / "repro_manifest.csv").open(newline="", encoding="utf-8") as fh:
+        rows = csv.DictReader(fh)
+        return [row for row in rows
+                if row.get("embedded_in_manuscript", "").lower() == "yes"
+                and row.get("type", "").lower() == "figure"]
+
+
+def patterns_overlap(a: str, b: str) -> bool:
+    """Return true for equal paths or when either manifest/glob covers the other."""
+    return a == b or fnmatch.fnmatch(a, b) or fnmatch.fnmatch(b, a)
+
+
+def pipeline_is_pinned() -> bool:
+    result = subprocess.run(
+        ["git", "ls-files", "--stage", "pipeline"], cwd=ROOT,
+        text=True, capture_output=True, check=False)
+    return result.returncode == 0 and result.stdout.startswith("160000 ")
+
+
+def check_figures_and_provenance(
+        files: Iterable[Path], findings: list[str]) -> None:
+    """Require every compiled graphic to exist and have an embedded manifest row."""
+    entries = manifest_entries()
+    included: list[tuple[Path, str]] = []
+    needs_pipeline_pin = False
+    for path in files:
+        text = strip_comments(read_text(path))
+        included.extend((path, normalize_figure_path(m.group(1)))
+                        for m in FIGURE_RE.finditer(text))
+
+    for source, figure in included:
+        matches = [entry for entry in entries
+                   if patterns_overlap(figure, entry["output"])]
+        if not matches:
+            findings.append(
+                f"{source.relative_to(ROOT)}: compiled figure '{figure}' has no "
+                "embedded figure row in repro_manifest.csv")
+        else:
+            needs_pipeline_pin |= any(
+                entry.get("producer", "").startswith("pipeline/")
+                for entry in matches)
+        if not list(ROOT.glob(figure)):
+            findings.append(
+                f"{source.relative_to(ROOT)}: compiled figure '{figure}' not found")
+
+    if needs_pipeline_pin and not pipeline_is_pinned():
+        findings.append(
+            "pipeline: expected a pinned gitlink for figure provenance")
+
+
 def check_inputs_and_provenance(files: Iterable[Path], findings: list[str]) -> None:
     r"""Check that \input{} table/card files carry provenance comments."""
     generated_suffixes = ("_table.tex", "_cards.tex", "_data.tex")
@@ -156,9 +323,11 @@ def main(argv: list[str] | None = None) -> int:
     files = tex_files()
     findings: list[str] = []
 
+    check_sample_counts(files, findings)
     check_retired_language(files, findings)
     check_cross_refs(files, findings)
     check_inputs_and_provenance(files, findings)
+    check_figures_and_provenance(files, findings)
 
     if args.write_report:
         lines = ["# F3 manuscript consistency audit findings", ""]
