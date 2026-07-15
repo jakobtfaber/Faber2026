@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-13
 **Author:** AI Assistant (claude-fable-5), owner direction 2026-07-13
-**Status:** In Progress (Phases 1-4 code complete; h17 campaign running, 2026-07-13)
+**Status:** Campaign complete; calibrated trigger failed the power requirement (2026-07-14)
 **Related Documents:**
 - [Plan: Circulation readiness — A1 charter](plan-circulation-readiness.md) (A-lane, trigger text revised 2026-07-13)
 - [Plan: Trust-reset revalidation — V1 contract / ADR-0008](plan-trust-reset-revalidation.md)
@@ -11,6 +11,18 @@
 - [Plan: CHIME scint γ campaign](plan-chime-scint-gamma-campaign.md)
 
 ---
+
+## Final outcome (2026-07-14)
+
+All 68 declared calibration cells completed and are preserved in the pinned
+pipeline, but the planned trigger did not reach a usable operating point. The
+conservative 1% false-escalation envelope is
+`Delta ln Z = 59699.69283336272`, and all eight two-component power cells have
+zero escalation probability. The implementation and calibration campaign are
+complete; owner sign-off on this trigger is not warranted. See
+[`report-chime-scintillation-inventory-2026-07-14.md`](report-chime-scintillation-inventory-2026-07-14.md)
+and the canonical pipeline inventory for the full qualification record.
+
 
 ## Overview
 
