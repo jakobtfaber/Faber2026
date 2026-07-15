@@ -1,28 +1,32 @@
 # Validation: F3 manuscript consistency audit
 
-> Validated the F3 subsection of `plan-circulation-readiness.md` and the PR #64
-> review-fix implementation through commit `fa225ca` on 2026-07-15. This is a scoped
-> F3 verdict, not a validation of the full circulation-readiness plan.
+> Validated the F3 subsection of `plan-circulation-readiness.md`, the PR #64
+> implementation, and the owner-approved endpoint wording resolution on
+> 2026-07-15. This is a scoped F3 verdict, not a validation of the full
+> circulation-readiness plan.
 
-## Overall status: decision pending
+## Overall status: complete
 
-The mechanical F3 implementation and all four PR review fixes are validated.
-F3 is not complete because the audit still reports the two deliberately
-owner-gated `alpha=4` passages in `sections/budget.tex`.
+The mechanical F3 implementation and all seven PR review threads are validated.
+The owner resolved the remaining scientific wording decision on 2026-07-15:
+the Methods text retains the square-law endpoint's theoretical
+`tau proportional to nu^-4` identity without presenting `alpha=4` as a
+quotable observational limit.
 
 ## Implementation status
 
 ### F3: mechanical consistency audit
 
-**Status:** validated; owner decision remains
+**Status:** complete
 
 - Per-section sample counts: implemented against the canonical twelve-row
   `sample_table.tex` roster, with roster parity checks for the DM and budget
   tables and explicit full-sample assertions for every current complete-sample
   claim in the abstract, observations,
   results, TOA, and conclusions sections.
-- Retired-language sweep: implemented; the two known `sections/budget.tex`
-  findings remain visible rather than being suppressed.
+- Retired-language sweep: implemented and clean. The two `sections/budget.tex`
+  passages now distinguish the theoretical square-law endpoint from a
+  per-sightline turbulence-index measurement.
 - Table and figure provenance: implemented for generated `\input{}` targets
   and every reachable `\includegraphics{}` target. Generated tables require
   embedded manifest rows; wildcard figure families require all twelve roster
@@ -37,22 +41,24 @@ owner-gated `alpha=4` passages in `sections/budget.tex`.
 
 All scoped automated checks passed:
 
-- `python3 -m pytest -q tests/test_consistency_audit.py` — 8 passed.
+- `python3 -m pytest -q tests/test_consistency_audit.py tests/test_sync_state.py`
+  — 22 passed.
 - `make test-science` — 76 passed, 1 documented xfail; state drift gate,
   figure approval gate, and journal append test passed.
 - `python3 scripts/sync_state.py --check --offline` — 3/3 views match;
   lane and ledger rules pass.
+- `python3 scripts/sync_state.py --check` — live state has no stored/live
+  contradictions.
 - `python3 -m py_compile scripts/consistency_audit.py scripts/render_dm_measurements_table.py`
   — passed.
-- `latexmk -pdf -g -interaction=nonstopmode -halt-on-error main.tex` — clean
-  31-page PDF build.
+- `make` — clean 31-page PDF build; extracted rendered text contains the
+  intended `tau proportional to nu^-4` and `square-law/exponential endpoint`
+  wording.
 - `git diff --check` — passed before commit.
 - `agent-closeout-check` — passed with all five implementation paths classified
   as task-scoped and no runtime restart required.
 
-The audit command itself exits 1 by design and reports exactly two findings:
-`sections/budget.tex:138` and `sections/budget.tex:162`, both retired
-`alpha=4`-limit language awaiting the owner/scattering-gate decision.
+The audit command now exits 0 with no findings.
 
 ## Code review findings
 
@@ -68,20 +74,19 @@ figure family, an unmanifested figure, and an unmanifested generated table.
 
 - The validation is intentionally limited to F3. Other unchecked phases in the
   circulation-readiness plan were not assessed.
-- The two `alpha=4` passages were not rewritten because that is an explicit
-  scientific wording decision, not a mechanical audit repair.
+- The owner-approved wording preserves the theoretical `tau proportional to
+  nu^-4` square-law endpoint while removing result-like `alpha=4` shorthand.
+  This resolves a narrow F1 sub-item; it does not mark the broader F1 rewrite
+  complete.
 
 ### Potential issues
 
-No additional implementation defects were identified. GitHub review threads
-have not been replied to or resolved; those outward writes require explicit
-user authorization under the review-feedback workflow.
+No additional implementation defects were identified. All seven PR #64 review
+threads were resolved before merge.
 
 ## Manual testing required
 
-No additional manual software test is required. The remaining action is an
-owner decision: retain/reframe the two scattering-methodology passages now, or
-defer their rewrite to the scattering gate.
+No additional manual software test is required.
 
 ## Recommendations
 
@@ -95,10 +100,8 @@ None for the review-fix implementation.
 
 ### Follow-up
 
-- Obtain the owner decision on the two `sections/budget.tex` findings.
-- After that decision, rerun the audit and update the F3 lane status.
-- Request a fresh PR review; reply to or resolve the four original threads only
-  when explicitly authorized.
+None for F3. The broader scattering re-fit, geometry adjudication, and F1
+manuscript restructuring remain governed by the circulation-readiness plan.
 
 ## References
 

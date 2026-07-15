@@ -85,7 +85,7 @@ branch = "ms/f3-consistency-audit"
 worktree = ""
 pr = 64
 gates = ["audit trusted association/census/budget claims vs ledger"]
-next_action = "none — mechanical audit landed in PR #64; alpha=4 wording deferred to F1/scattering gate"
+next_action = "none — mechanical audit landed in PR #64; owner-approved endpoint wording resolved under F1"
 needs_owner = false
 
 [[lane]]
@@ -112,10 +112,6 @@ needs_owner = false
 
 [owner_view]
 updated = "2026-07-15T04:30-0700"
-
-[[owner_view.needs_you]]
-h = "F1/scattering: budget.tex alpha=4 wording"
-d = "F3 audit found two retired-language passages in sections/budget.tex (lines 138, 162). Decide whether to rephrase during F1 or retain them through the scattering gate."
 
 [[owner_view.now]]
 h = "P3 build sanctioned; Gate 0b first"
