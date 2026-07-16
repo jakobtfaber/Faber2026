@@ -14,8 +14,9 @@
 ## Not done yet (claimed earlier; still open)
 
 - [ ] `pipeline/galaxies/foreground/results_library.py` — **do not add**; keep a single helper in parent `scripts/`
-- [ ] `RESULTS_LIBRARY.md` pointers in major `analysis/` / `results/` dirs
-- [ ] `DATA_LOCATIONS.md` section for the results library
+- [x] `RESULTS_LIBRARY.md` pointers in parent `analysis/` dirs (`dm-joint-phase-v2`, `provisional_propagation`, `v3_energetics`)
+- [ ] `RESULTS_LIBRARY.md` pointers under `pipeline/analysis/` + `pipeline/results/` (FLITS PR; no pin bump yet)
+- [ ] `DATA_LOCATIONS.md` section for the results library (in FLITS `pipeline/DATA_LOCATIONS.md`)
 - [ ] Producers calling `results_slot(...)`
 
 ## Next (Phase B — physical separation, needs PRs)
