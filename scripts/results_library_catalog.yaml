@@ -1,0 +1,193 @@
+# Faber2026 results-library catalog (data only).
+# Consumed by build_results_library_inventory.py and materialize_results_library.py.
+schema: faber2026-results-library-catalog/v1
+
+trust_legend:
+  live: In active manuscript use
+  manuscript-live: In active manuscript use
+  owner-approved-bytes: Figure bytes approved; science may still be provisional
+  provisional: Best-so-far; not V1-certified
+  pending-refits: Fail-closed until α=4 consistency clears
+  diagnostic_only: Must not enter screen/α claims
+  revoked-2026-07-06: Pre-reset; archival only
+  external: Lives on HPC/scratch/Drive, not git
+  mixed: Mixed trust within tree; inspect before citing
+  partial: Incomplete campaign products
+  archive: Archived; not for new claims
+
+# mode:
+#   materialize — Phase B: real bytes in library; repo path becomes symlink back
+#   link_only   — Phase A: library symlink → repo (Overleaf/git-small/live code couples)
+
+entries:
+  # --- scattering ---
+  - id: scattering.dm-locked-2026-07-14
+    domain: scattering
+    slot: scattering/2026-07-14_dm-locked
+    trust: provisional
+    repo: pipeline
+    mode: materialize
+    sources:
+      - analysis/scattering-dm-locked-2026-07-14/results
+    notes: July DM-locked joint adjudication + fit_summaries + ppc.
+
+  - id: scattering.refit-2026-06
+    domain: scattering
+    slot: scattering/2026-06_refit
+    trust: revoked-2026-07-06
+    repo: pipeline
+    mode: materialize
+    sources:
+      - analysis/scattering-refit-2026-06/_a1_fits
+      - analysis/scattering-refit-2026-06/joint_json
+    notes: Pre-reset June campaign; partial mirror of $FLITS_RUNS. Archival.
+
+  - id: scattering.beta-campaign-2026-07
+    domain: scattering
+    slot: scattering/2026-07_beta-campaign
+    trust: revoked-2026-07-06
+    repo: pipeline
+    mode: materialize
+    sources:
+      - analysis/beta_campaign/fits
+      - analysis/beta_campaign/beta_campaign_verdicts.json
+    notes: Full posteriors under $FLITS_RUNS, not in-repo.
+
+  # --- scintillation ---
+  - id: scintillation.dsa-lorentzian-2026-07-07
+    domain: scintillation
+    slot: scintillation/2026-07-07_dsa-lorentzian
+    trust: provisional
+    repo: pipeline
+    mode: materialize
+    sources:
+      - analysis/scintillation-dsa-lorentzian-2026-07-07/results
+    notes: Results only; drivers stay under analysis/.
+
+  - id: scintillation.chime
+    domain: scintillation
+    slot: scintillation/chime-diagnostic
+    trust: diagnostic_only
+    repo: pipeline
+    mode: link_only
+    sources:
+      - analysis/chime-scintillation
+    notes: Mixed experiments/docs; link-only until a results-only carve-out exists.
+
+  # --- dispersion ---
+  - id: dispersion.pipeline-results-root
+    domain: dispersion
+    slot: dispersion/pipeline-results-root
+    trust: mixed
+    repo: pipeline
+    mode: materialize
+    sources:
+      - results
+    notes: Flat pipeline/results/ tree (dm_phase/dm_power bulk + curated CSV/PNG).
+
+  - id: dispersion.dm-joint-phase-v2-parent
+    domain: dispersion
+    slot: dispersion/dm-joint-phase-v2
+    trust: provisional
+    repo: parent
+    mode: materialize
+    sources:
+      - analysis/dm-joint-phase-v2/results
+    notes: Parent DM phase results/; code/ stays in repo.
+
+  - id: dispersion.chime-dm
+    domain: dispersion
+    slot: dispersion/chime-dm
+    trust: mixed
+    repo: pipeline
+    mode: link_only
+    sources:
+      - analysis/chime_dm
+    notes: Mixed plot script + products; link-only for now.
+
+  # --- foreground ---
+  - id: foreground.tau-consistency-catalog
+    domain: foreground
+    slot: foreground/tau_consistency_catalog.csv
+    trust: pending-refits
+    repo: pipeline
+    mode: link_only
+    sources:
+      - galaxies/foreground/data/tau_consistency_catalog.csv
+    notes: Keep tracked in FLITS (small; code-coupled). Library links for navigation.
+
+  - id: foreground.budget-exports
+    domain: foreground
+    slot: foreground/tex-exports
+    trust: manuscript-live
+    repo: pipeline
+    mode: link_only
+    sources:
+      - exports
+    notes: Generated TeX for manuscript — stay in FLITS git.
+
+  - id: foreground.provisional-propagation
+    domain: foreground
+    slot: foreground/provisional-propagation
+    trust: provisional
+    repo: parent
+    mode: materialize
+    sources:
+      - analysis/provisional_propagation
+    notes: Parent ledger + results.json.
+
+  - id: foreground.v3-energetics
+    domain: foreground
+    slot: foreground/v3-energetics
+    trust: partial
+    repo: parent
+    mode: link_only
+    sources:
+      - analysis/v3_energetics
+    notes: Driver script + small outputs stay in parent git (not bulk results).
+
+  # --- manuscript (Overleaf-coupled — never materialize) ---
+  - id: manuscript.figures
+    domain: manuscript
+    slot: manuscript/figures
+    trust: owner-approved-bytes
+    repo: parent
+    mode: link_only
+    sources:
+      - figures
+    notes: Final embedded figures. Stay in parent repo for Overleaf.
+
+  - id: manuscript.repro-manifest
+    domain: manuscript
+    slot: manuscript/repro_manifest.csv
+    trust: live
+    repo: parent
+    mode: link_only
+    sources:
+      - repro_manifest.csv
+    notes: Producer→artifact ledger.
+
+  # --- review ---
+  - id: review.figure-review
+    domain: review-ledger
+    slot: review-ledger/figure_review
+    trust: live
+    repo: parent
+    mode: link_only
+    sources:
+      - figure_review
+    notes: Approval receipts + slots.
+
+  # --- compute scratch (external) ---
+  - id: compute.flits-runs-default
+    domain: compute-scratch
+    slot: compute-scratch/FLITS_RUNS
+    trust: external
+    repo: external
+    mode: link_only
+    sources: []
+    external_paths:
+      - env: FLITS_RUNS
+        default: /central/scratch/jfaber/flits-runs
+      - path: ~/Developer/scratch/flits-local-runs
+    notes: Joint-fit posteriors / samples; not git. Env FLITS_RUNS overrides default HPC path.
