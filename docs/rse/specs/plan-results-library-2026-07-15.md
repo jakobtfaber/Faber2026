@@ -15,8 +15,7 @@
 
 - [ ] `pipeline/galaxies/foreground/results_library.py` — **do not add**; keep a single helper in parent `scripts/`
 - [x] `RESULTS_LIBRARY.md` pointers in parent `analysis/` dirs (`dm-joint-phase-v2`, `provisional_propagation`, `v3_energetics`)
-- [ ] `RESULTS_LIBRARY.md` pointers under `pipeline/analysis/` + `pipeline/results/` (FLITS PR; no pin bump yet)
-- [ ] `DATA_LOCATIONS.md` section for the results library (in FLITS `pipeline/DATA_LOCATIONS.md`)
+- [x] FLITS docs branch pushed: `cursor/results-library-data-locations-7b14` (`DATA_LOCATIONS.md` section + `analysis/`/`results/` `RESULTS_LIBRARY.md`); open PR via compare link (cloud token cannot create FLITS PRs); **no** Faber2026 pin bump
 - [ ] Producers calling `results_slot(...)`
 
 ## Next (Phase B — physical separation, needs PRs)
