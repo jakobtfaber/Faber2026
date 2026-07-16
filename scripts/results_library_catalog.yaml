@@ -37,22 +37,22 @@ entries:
     slot: scattering/2026-06_refit
     trust: revoked-2026-07-06
     repo: pipeline
-    mode: materialize
+    mode: link_only
     sources:
       - analysis/scattering-refit-2026-06/_a1_fits
       - analysis/scattering-refit-2026-06/joint_json
-    notes: Pre-reset June campaign; partial mirror of $FLITS_RUNS. Archival.
+    notes: Small JSON stays git-tracked for FLITS CI; library link_only for nav.
 
   - id: scattering.beta-campaign-2026-07
     domain: scattering
     slot: scattering/2026-07_beta-campaign
     trust: revoked-2026-07-06
     repo: pipeline
-    mode: materialize
+    mode: link_only
     sources:
       - analysis/beta_campaign/fits
       - analysis/beta_campaign/beta_campaign_verdicts.json
-    notes: Full posteriors under $FLITS_RUNS, not in-repo.
+    notes: Small JSON stays git-tracked for FLITS CI; full posteriors under $FLITS_RUNS.
 
   # --- scintillation ---
   - id: scintillation.dsa-lorentzian-2026-07-07
@@ -84,7 +84,7 @@ entries:
     mode: materialize
     sources:
       - results
-    notes: Flat pipeline/results/ tree (dm_phase/dm_power bulk + curated CSV/PNG).
+    notes: Bulk dm_phase/etc in library; joint_fit_summary.md stays git-tracked for CI.
 
   - id: dispersion.dm-joint-phase-v2-parent
     domain: dispersion
