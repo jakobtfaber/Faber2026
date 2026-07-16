@@ -57,5 +57,5 @@ graphify-out/
 # Results-library Phase B: bytes live under ~/Data/Faber2026/results-library/
 # (see scripts/results_library_catalog.yaml). Recreate local symlinks with:
 #   python3 scripts/materialize_results_library.py
-/analysis/dm-joint-phase-v2/results
-/analysis/provisional_propagation
+# CI/manuscript-coupled curated files stay tracked; bulk diagnostics do not.
+/analysis/dm-joint-phase-v2/results/diagnostics

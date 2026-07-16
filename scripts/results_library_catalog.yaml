@@ -28,8 +28,9 @@ entries:
     repo: pipeline
     mode: materialize
     sources:
-      - analysis/scattering-dm-locked-2026-07-14/results
-    notes: July DM-locked joint adjudication + fit_summaries + ppc.
+      - analysis/scattering-dm-locked-2026-07-14/results/fit_summaries
+      - analysis/scattering-dm-locked-2026-07-14/results/ppc
+    notes: Bulk fit_summaries/ppc in library; fit_adjudication.csv stays git-tracked for CI.
 
   - id: scattering.refit-2026-06
     domain: scattering
@@ -62,7 +63,7 @@ entries:
     mode: materialize
     sources:
       - analysis/scintillation-dsa-lorentzian-2026-07-07/results
-    notes: Results only; drivers stay under analysis/.
+    notes: Library holds full results/; oran_qualified/ stays git-tracked for figure approval CI.
 
   - id: scintillation.chime
     domain: scintillation
@@ -92,8 +93,8 @@ entries:
     repo: parent
     mode: materialize
     sources:
-      - analysis/dm-joint-phase-v2/results
-    notes: Parent DM phase results/; code/ stays in repo.
+      - analysis/dm-joint-phase-v2/results/diagnostics
+    notes: Bulk diagnostics in library; fits.json + validation stay git-tracked for CI.
 
   - id: dispersion.chime-dm
     domain: dispersion
@@ -131,10 +132,10 @@ entries:
     slot: foreground/provisional-propagation
     trust: provisional
     repo: parent
-    mode: materialize
+    mode: link_only
     sources:
       - analysis/provisional_propagation
-    notes: Parent ledger + results.json.
+    notes: Small ledger — stays in parent git for CI.
 
   - id: foreground.v3-energetics
     domain: foreground
