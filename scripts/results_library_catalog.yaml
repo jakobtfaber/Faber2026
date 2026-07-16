@@ -1,0 +1,131 @@
+# Faber2026 results-library catalog (data only — edit here to add campaigns).
+# Builder: scripts/build_results_library_inventory.py
+schema: faber2026-results-library-catalog/v1
+
+trust_legend:
+  canonical: "Accepted for manuscript tables / figures pending final freeze."
+  provisional: "Usable for draft prose; science gates may still revoke."
+  exploratory: "Diagnostic or WIP; do not cite as final."
+  revoked: "Superseded or known-bad; keep for provenance only."
+  external: "Lives outside this checkout (HPC / Drive); often absent on laptop."
+
+entries:
+  - id: scattering-dm-locked-2026-07-14
+    slot: scattering/2026-07-14_dm-locked
+    trust: provisional
+    title: Scattering DM-locked campaign (2026-07-14)
+    sources:
+      - path: pipeline/analysis/scattering-dm-locked-2026-07-14/results
+
+  - id: scattering-refit-2026-06-a1
+    slot: scattering/2026-06_refit-a1
+    trust: exploratory
+    title: Scattering refit A1 fits tree (2026-06)
+    sources:
+      - path: pipeline/analysis/scattering-refit-2026-06/_a1_fits
+
+  - id: scintillation-dsa-lorentzian-2026-07-07
+    slot: scintillation/2026-07-07_dsa-lorentzian
+    trust: provisional
+    title: DSA Lorentzian scintillation fits (2026-07-07)
+    sources:
+      - path: pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results
+
+  - id: chime-scintillation
+    slot: scintillation/chime
+    trust: exploratory
+    title: CHIME scintillation campaign inventory
+    sources:
+      - path: pipeline/analysis/chime-scintillation
+
+  - id: beta-campaign
+    slot: scattering/beta-campaign
+    trust: provisional
+    title: Beta / two-screen campaign products
+    sources:
+      - path: pipeline/analysis/beta_campaign/fits
+      - path: pipeline/analysis/beta_campaign/beta_campaign_verdicts.json
+      - path: pipeline/analysis/beta_campaign/two_screen_consistency.json
+
+  - id: dm-phase-full-fcut
+    slot: dispersion/dm-phase-full-fcut-50-1500
+    trust: exploratory
+    title: DM-phase full fcut 50–1500 results
+    sources:
+      - path: pipeline/results/dm_phase_full_fcut_50_1500
+
+  - id: dmhost-posterior
+    slot: dispersion/dmhost-posterior
+    trust: provisional
+    title: Host-DM posterior summary
+    sources:
+      - path: pipeline/results/dmhost_posterior
+
+  - id: dm-joint-phase-v2
+    slot: dispersion/dm-joint-phase-v2
+    trust: provisional
+    title: Manuscript DM joint-phase v2 products
+    sources:
+      - path: analysis/dm-joint-phase-v2/results
+      - path: analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
+
+  - id: provisional-propagation
+    slot: manuscript/provisional-propagation
+    trust: provisional
+    title: Provisional propagation table inputs
+    sources:
+      - path: analysis/provisional_propagation/results.json
+
+  - id: v3-energetics
+    slot: manuscript/v3-energetics
+    trust: exploratory
+    title: V3 energetics recompute driver (code stays; slot reserved)
+    sources:
+      - path: analysis/v3_energetics/recompute_energies.py
+
+  - id: foreground-census
+    slot: foreground/census
+    trust: provisional
+    title: Foreground intervening census + attribution
+    sources:
+      - path: pipeline/galaxies/foreground/data
+      - path: pipeline/galaxies/foreground/adjudication
+
+  - id: foreground-artifacts
+    slot: foreground/table-artifacts
+    trust: provisional
+    title: Foreground / budget table JSON emitters
+    sources:
+      - path: pipeline/galaxies/foreground/budget_table_data.json
+      - path: pipeline/galaxies/foreground/foreground_table_data.json
+
+  - id: figure-review-ledger
+    slot: review-ledger/figure-review
+    trust: canonical
+    title: Figure-review approval receipts / slots
+    sources:
+      - path: figure_review
+
+  - id: chime-dm-section
+    slot: dispersion/chime-dm-section
+    trust: exploratory
+    title: CHIME DM manuscript section figures
+    sources:
+      - path: pipeline/analysis/chime_dm
+
+  - id: dm-power-json
+    slot: dispersion/dm-power
+    trust: exploratory
+    title: DM-power result JSON at pipeline/results root
+    sources:
+      - path: pipeline/results/dm_power_results.json
+      - path: pipeline/results/dm_power_h17_manifest_results.json
+
+  - id: compute-scratch-h17
+    slot: compute-scratch/h17
+    trust: external
+    title: h17 compute scratch (often absent on laptop)
+    external_paths:
+      - env: FABER2026_H17_SCRATCH
+        default: /home/jakobtfaber/scratch/faber2026-results
+      - path: /data/jakobtfaber/faber2026-compute-scratch
