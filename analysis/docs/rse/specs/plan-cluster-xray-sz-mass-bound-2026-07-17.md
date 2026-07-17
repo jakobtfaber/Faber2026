@@ -569,3 +569,19 @@ branch.)*
 - Froze the constraining-vs-null decision rule before any survey data inspection.
 - **Status: awaiting owner sanction** before Phase 1 data inspection (CONTEXT.md
   §V gate for a new quantitative manuscript input).
+
+### Version 1.1 — 2026-07-17 (same day)
+- Owner sanctioned; Phases 0–3 executed
+  (`experiment-cluster-xray-sz-mass-bound-2026-07-17.md`).
+- Phase 4 hit a gate edge: two rule ambiguities discovered at application time
+  (the plan's $M_{\rm rich}=10^{14.1}$ was a prose rounding of the registry's
+  $1.48\times10^{14}$, shifting the intended margin threshold from $10^{14.2}$
+  to $10^{14.27}$; and the ECF-endpoint convention was unpinned). Surfaced to
+  the owner rather than self-adjudicated.
+- **Owner adjudication: constraining, conservative endpoint**
+  ($M_{500}\le1.7\times10^{14}$, worst-case ECF). Prose bracket re-derived by
+  truncating the mass prior in `scripts/dm_budget_uncertainty.py`: ≈80–330
+  pc cm$^{-3}$ (factor ~4), landed via `ms/s1-xray-mass-cap-20260717`.
+- Deferred: landing `pipeline/analysis/cluster_mass_bound/` code+tests in the
+  FLITS submodule (its working tree carries the live joint-tf lane; the
+  scratchpad scripts and this record preserve reproducibility meanwhile).
