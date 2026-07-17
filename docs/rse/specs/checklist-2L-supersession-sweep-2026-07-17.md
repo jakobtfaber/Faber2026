@@ -26,7 +26,20 @@ Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
 3. **Scint summary figure** — `figures/dsa_lorentzian_summary.pdf` /
    `fig:dsa_scint_gamma` (results.tex L243–252): owner ruling 2026-07-17
    (recorded in the fig1-model-toa batch manifest) — replace with a joint
-   DSA+CHIME measurement figure; never resubmit DSA-only.
+   DSA+CHIME measurement figure; never resubmit DSA-only. Owner ruling
+   2026-07-17 (chat): this figure — **compiled figure 7** — must not remain
+   in the manuscript; replacement is mandatory, not optional.
+3b. **Compiled figures 11–16** — the six unlabeled `figure*` environments in
+   `sections/dsa_scint_acf.tex` (input at appendix.tex L259; two per-burst
+   `figures/dsa_scint_acf/<nick>_dsa_acf_lorentzian_fits.pdf` panels each,
+   order zach/whitney, oran/isha, wilhelm/phineas, freya/johndoeII,
+   hamilton/mahi, chromatica/casey). Owner ruling 2026-07-17 (chat): these
+   must not remain in the manuscript and need replacement — the July-7
+   single-component Lorentzian ACF fits are superseded by the 2L
+   two-component campaign products. Replace with the post-finalization
+   per-burst ACF/ladder figures from the official rerun (numbering note:
+   the jointmodel-pair grids that follow render as figures 17–22 and are
+   not covered by this ruling).
 4. **`dsa_scint_provisional_table.tex`** — frozen 2026-07-07 DSA Lorentzian
    catalog (only oran certified). DSA side is not superseded by the CHIME 2L
    work itself, but the caption's "sole certified measurement in the sample"
