@@ -3,6 +3,8 @@
 
 The four panels aggregate timing consistency, positional consistency, the new
 phase-coherence DM comparison, and conservative chance-coincidence probability.
+Timing reads the canonical ``measured_offset_ms`` field; at the pinned state
+the model correction is diagnostic-only, so this is the observed-peak offset.
 Run from the repository root with
 ``python scripts/plot_association_summary.py``.
 """
@@ -228,7 +230,7 @@ def render(rows: list[dict], output: Path = OUT) -> None:
     ax.axhline(0, color="0.80", lw=0.6, zorder=0)
     ax.set_ylim(*timing_ylim)
     ax.set_yticks([-10, -5, 0, 5, 10])
-    ax.set_ylabel(r"Arrival-time offset, $\Delta t_{400}$ (ms)")
+    ax.set_ylabel(r"Observed-peak offset, $\Delta t_{400}$ (ms)")
     ax.text(0.01, 0.92, r"(a)", transform=ax.transAxes)
     ax.scatter([], [], color="0.12", marker="D", s=18,
                label=r"$\tau_{\rm geo}$ prediction")

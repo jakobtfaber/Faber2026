@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import csv
 import fnmatch
+import json
 import re
 import subprocess
 import sys
@@ -113,6 +114,82 @@ def strip_comments(text: str) -> str:
         line = re.sub(r"(?<!\\)%.*", "", line)
         out.append(line)
     return "\n".join(out)
+
+
+def check_toa_correction_gate(findings: list[str]) -> None:
+    """Enforce the pinned peak-vs-model ToA promotion contract.
+
+    ``model_corrected_offset_ms`` is always useful as a diagnostic, but the
+    crossmatch adopts it into ``measured_offset_ms`` only when the fit is PASS
+    and its diagnostic figure has been reviewed.  While any committed row is
+    unvalidated, manuscript-facing timing products must remain on the observed
+    peak convention and must not claim that the model offset is primary.
+    """
+    results_path = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
+    try:
+        rows = json.loads(read_text(results_path))
+    except (OSError, json.JSONDecodeError) as exc:
+        findings.append(f"{results_path.relative_to(ROOT)}: cannot audit ToA gate: {exc}")
+        return
+    if not isinstance(rows, dict) or not rows:
+        findings.append(
+            "pipeline/crossmatching/toa_crossmatch_results.json: "
+            "expected a non-empty object for the ToA gate audit"
+        )
+        return
+
+    unvalidated: list[str] = []
+    for name, row in rows.items():
+        status = row.get("model_correction_status")
+        if status == "validated":
+            continue
+        unvalidated.append(name)
+        measured = row.get("measured_offset_ms")
+        peak = row.get("peak_measured_offset_ms")
+        if measured is None or peak is None:
+            findings.append(
+                f"{results_path.relative_to(ROOT)}: {name} is {status or 'unvalidated'} "
+                "but lacks measured_offset_ms or peak_measured_offset_ms"
+            )
+        elif measured != peak:
+            findings.append(
+                f"{results_path.relative_to(ROOT)}: {name} is {status or 'unvalidated'} "
+                "but measured_offset_ms does not preserve the observed-peak offset"
+            )
+
+    if not unvalidated:
+        return
+
+    promotion_patterns = {
+        "sections/toa.tex": (
+            (re.compile(r"\bWe adopt the model TOA\b", re.IGNORECASE),
+             "unconditional model-TOA adoption"),
+            (re.compile(
+                r"\bWe report the scatter-corrected offset.*?as\s+the primary "
+                r"timing quantities", re.IGNORECASE | re.DOTALL),
+             "unconditional model-offset promotion"),
+            (re.compile(
+                r"filled circle is the measured\s+model-\$t_0\$ offset",
+                re.IGNORECASE),
+             "diagnostic model offset labeled as measured"),
+        ),
+        "repro_manifest.csv": (
+            (re.compile(r"figure shows the adopted model-t0 offsets", re.IGNORECASE),
+             "manifest promotes diagnostic model offsets"),
+            (re.compile(r"pending the pin bump", re.IGNORECASE),
+             "manifest describes the superseded pre-gate pin state"),
+        ),
+    }
+    for relpath, patterns in promotion_patterns.items():
+        text = read_text(ROOT / relpath)
+        if relpath.endswith(".tex"):
+            text = strip_comments(text)
+        for pattern, reason in patterns:
+            if pattern.search(text):
+                findings.append(
+                    f"{relpath}: {reason} while {len(unvalidated)} ToA model "
+                    "correction(s) remain unvalidated"
+                )
 
 
 def tex_files() -> list[Path]:
@@ -364,6 +441,7 @@ def main(argv: list[str] | None = None) -> int:
     findings: list[str] = []
 
     check_sample_counts(files, findings)
+    check_toa_correction_gate(findings)
     check_retired_language(files, findings)
     check_cross_refs(files, findings)
     check_inputs_and_provenance(files, findings)
