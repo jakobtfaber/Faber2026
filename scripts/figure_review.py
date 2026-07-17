@@ -152,21 +152,6 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ],
         "scintillation-qualification": ["oran-qualification"],
     }
-    selected_slots = slots()
-    if args.only or args.only_family:
-        requested = set(args.only or [])
-        known = {slot["id"] for slot in selected_slots}
-        unknown = requested - known
-        if unknown:
-            raise SystemExit(f"unknown candidate IDs for --only: {sorted(unknown)}")
-        families = set(args.only_family or [])
-        selected_slots = [
-            slot
-            for slot in selected_slots
-            if slot["id"] in requested or slot["family"] in families
-        ]
-        if not selected_slots:
-            raise SystemExit("--only/--only-family selected no candidates")
     required_evidence = {
         evidence_id
         for slot in selected_slots
@@ -175,32 +160,6 @@ def command_new_batch(args: argparse.Namespace) -> None:
 
     provenance_dir = destination / "provenance"
     provenance_dir.mkdir()
-    family_evidence = {
-        "gallery": ["dm-catalog", "joint-render-manifest"],
-        "association": ["dm-catalog"],
-        "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-        "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-        "scintillation-summary": [
-            "oran-qualification",
-            "chime-campaign-validation",
-            "chromatica-hi-campaign",
-            "chime-campaign-figure-review",
-            "joint-scint-figure-provenance",
-        ],
-        "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
-        "chime-scintillation-acf": [
-            "chime-campaign-validation",
-            "chime-campaign-records",
-            "chime-campaign-figure-review",
-            "joint-scint-figure-provenance",
-        ],
-        "scintillation-qualification": ["oran-qualification"],
-    }
-    required_evidence = {
-        evidence_id
-        for slot in selected_slots
-        for evidence_id in family_evidence[slot["family"]]
-    }
     evidence_specs = [
         ("dm-catalog", "parent", "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"),
         ("joint-render-manifest", "parent", "scripts/jointmodel_triptych_manifest.yaml"),

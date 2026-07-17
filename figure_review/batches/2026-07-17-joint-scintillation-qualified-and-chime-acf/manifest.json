@@ -1307,7 +1307,7 @@
       "repository": "parent",
       "sha256": "b1eefe151122d03df3be0832b3ded723f9196f2cd32496d6661b87edaf7f9eac",
       "source_path": "analysis/scintillation-summary/joint_figure_provenance.json",
-      "source_revision": "a13d48562fae4eb1d4da184e9418dad621844ddd",
+      "source_revision": "42920d89befb2beabcd914efab8e1c2477459b9b",
       "stored_path": "provenance/joint-scint-figure-provenance.json"
     }
   ],
@@ -1318,6 +1318,6 @@
     "promotion_requires_exact_hash_match": true
   },
   "schema_version": 1,
-  "source_revision": "a13d48562fae4eb1d4da184e9418dad621844ddd",
+  "source_revision": "42920d89befb2beabcd914efab8e1c2477459b9b",
   "title": "Qualified joint scintillation summary and PR #192 CHIME ACF review"
 }
