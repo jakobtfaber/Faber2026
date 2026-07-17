@@ -116,81 +116,59 @@ def test_register_fit_grid_recovers_crop_offset():
     assert abs(got - start * dt) < r * dt + 1e-9
 
 
-def test_fit_toa_shift_uses_dominant_component(monkeypatch, tmp_path):
-    # Synthetic NPZ + JSON: two components, model peak on the later/brighter
-    # one; the anchor must pick t0 nearest the model peak, not the earliest.
-    dt_native = 0.032768
-    r_fit = 2
-    n_native = 4000
-    burst_native = 2000
-    native = np.zeros(n_native)
-    native[burst_native : burst_native + 20] = 50.0
-
-    start = 1500
-    n_fit = 900
-    fit_data = native[start : start + n_fit * r_fit].reshape(1, n_fit, r_fit).mean(axis=2)
-    fit_t = np.arange(n_fit) * (r_fit * dt_native)
-    model = np.zeros_like(fit_data)
-    peak_fit_idx = (burst_native - start) // r_fit
-    model[0, peak_fit_idx] = 1.0
-
-    npz = tmp_path / "syn_jointmodel_X.npz"
-    np.savez(
-        npz,
-        timeC=fit_t, dataC=fit_data, modelC=model,
-        timeD=fit_t, dataD=fit_data, modelD=model,
+def test_fit_toa_shift_applies_published_scatter_correction(monkeypatch, tmp_path):
+    # New convention (model-t0 ToA): the per-band shift is the published DSA-band
+    # scattering correction applied identically to both bands. This is a pure
+    # global translation -- ``_align_toa`` already separates the observed peaks by
+    # the measured peak offset, and adding +Delta_scat_DSA to both bands moves the
+    # DSA intrinsic arrival to t=0 while the CHIME intrinsic arrival lands at the
+    # model-corrected offset. The differential (Delta_scat_C - Delta_scat_D), which
+    # is what actually shifts the CHIME arrival, is carried by the peak offset that
+    # ``_align_toa`` receives, not re-applied here.
+    monkeypatch.setattr(
+        grid,
+        "_published_scatter_corr",
+        lambda nick: (0.85, 0.05) if nick == "tracked" else None,
     )
-    t_peak_fit = float(fit_t[peak_fit_idx])
-    fit_json = tmp_path / "syn_joint_fit_X.json"
+    shifts = grid.fit_toa_shift_ms(
+        {"nick": "tracked"}, root=tmp_path, data_root=tmp_path, target_dm=100.25
+    )
+    # both bands translated by the DSA correction; equal shift => zero spurious
+    # differential added on top of the measured peak offset
+    assert shifts == {"CHIME/FRB": 0.05, "DSA-110": 0.05}
+
+
+def test_fit_toa_shift_empty_when_no_tracked_correction(monkeypatch, tmp_path):
+    # A burst with no accepted joint fit (e.g. chromatica) has no tracked
+    # correction; the figure then keeps the observed-peak anchor (empty shift).
+    monkeypatch.setattr(grid, "_published_scatter_corr", lambda nick: None)
+    shifts = grid.fit_toa_shift_ms(
+        {"nick": "untracked"}, root=tmp_path, data_root=tmp_path, target_dm=100.25
+    )
+    assert shifts == {}
+
+
+def test_published_scatter_corr_reads_pipeline_json(monkeypatch, tmp_path):
+    # _published_scatter_corr resolves the burst nick through FILE_NICK and reads
+    # the scatter_corr_* fields from the crossmatch results in the pipeline
+    # submodule. Stub both so the reader is exercised without the real submodule.
     import json as _json
 
-    fit_json.write_text(_json.dumps({
-        "percentiles": {
-            "t0_C1": {"median": t_peak_fit - 5.0},   # early spurious component
-            "t0_C2": {"median": t_peak_fit - 0.2},   # dominant (near model peak)
-            "t0_D1": {"median": t_peak_fit - 0.2},
-        }
+    results = tmp_path / "toa_crossmatch_results.json"
+    results.write_text(_json.dumps({
+        "oran": {"scatter_corr_chime_ms": 3.1393, "scatter_corr_dsa_ms": 0.1087},
+        "casey": {"peak_measured_offset_ms": -2.37},  # no scatter_corr_* -> not tracked
     }))
+    import plot_codetection_triptych as trip
 
-    class _Prod:
-        path = "unused"
-        dm = 100.0
+    monkeypatch.setattr(trip, "TOA_RESULTS", str(results), raising=False)
+    monkeypatch.setattr(trip, "FILE_NICK", {"oran": "oran", "casey": "casey"}, raising=False)
 
-    monkeypatch.setattr(grid, "DISPLAY_FACTORS", {"dsa": (1, 2), "chime": (1, 2)})
-    import plot_codetection_gallery as gal
-
-    monkeypatch.setattr(gal, "discover_products", lambda root, nick: {"chime": _Prod, "dsa": _Prod})
-
-    load_calls = []
-
-    def _fake_load(path, band, telescope=None, residual_dm=0.0):
-        load_calls.append((telescope, residual_dm, band["t_factor"]))
-        r = band["t_factor"]
-        prof = native[: (native.size // r) * r].reshape(-1, r).mean(axis=1)
-        return prof[None, :], prof
-
-    monkeypatch.setattr(gal, "load_band", _fake_load)
-    monkeypatch.setattr(gal, "BANDS", {
-        "dsa": dict(dt_ms=dt_native, f_factor=1, t_factor=2),
-        "chime": dict(dt_ms=dt_native, f_factor=1, t_factor=2),
-    })
-
-    shifts = grid.fit_toa_shift_ms(
-        {"nick": "syn", "npz": npz.name},
-        root=tmp_path,
-        data_root=tmp_path,
-        target_dm=100.25,
-    )
-    # Anchor = dominant component 0.2 ms before the peak -> shift +0.2 (within
-    # one display bin of registration tolerance); the -5 ms component ignored.
-    for label in ("CHIME/FRB", "DSA-110"):
-        assert abs(shifts[label] - 0.2) < 2 * r_fit * dt_native
-    # Each band is loaded once at the original DM for fit-grid registration,
-    # then once at the adopted DM for the actual display-peak anchor.
-    assert load_calls == [
-        (None, 0.0, 1), ("chime", 0.25, 2),
-        (None, 0.0, 1), ("dsa", 0.25, 2),
-    ]
+    assert grid._published_scatter_corr("oran") == (3.1393, 0.1087)
+    # a row lacking scatter_corr_chime_ms is treated as untracked
+    assert grid._published_scatter_corr("casey") is None
+    # a nick absent from the results is untracked
+    assert grid._published_scatter_corr("nonexistent") is None
 
 
 def test_display_pad_scale_tightens_window():
