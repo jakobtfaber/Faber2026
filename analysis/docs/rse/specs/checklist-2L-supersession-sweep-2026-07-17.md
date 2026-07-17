@@ -22,7 +22,7 @@ Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
 | 5 | completed | `outputs/scintillation-acf-review/index.html` carries a fixed SUPERSEDED banner pointing to the final campaign. The packet bytes otherwise remain archival. |
 | 6 | completed | The technical-review triage has a dated status note replacing the stale S16/S17 current-state framing. |
 | 7 | completed | The referee matrix marks scintillation partially completed while keeping the remaining scattering/two-screen/turbulence/energy gates blocked. |
-| 8 | validated; upstream PR pending | The parent catalog now indexes the final campaign. dsa110-FLITS PR #199 adds the in-submodule Results Library pointer without advancing this manuscript's reviewed science pin merely for documentation. |
+| 8 | completed | The parent catalog indexes the final campaign, and dsa110-FLITS PR #199 merged as `8f5f06a4` with the in-submodule Results Library pointer. The manuscript intentionally retains the reviewed science pin `17d9d266`. |
 | 9 | decision pending | Do not rebake or deploy a joint-summary deck before exact-byte figure approval. The compiled manuscript intentionally retains a placeholder. |
 | 10 | decision pending | `stash@{0}` was inspected read-only and contains the pre-2L board/output lane. It was not popped or dropped; owner sign-off is required for destructive stash disposition. |
 
