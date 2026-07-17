@@ -24,7 +24,6 @@ gate clears — on-disk PDFs under `figures/` may be campaign-era.
 | `fig:ne2025_mw` | `ne2025_mw_characterization_nside32.pdf` | §Obs-MW |
 | `fig:sightline_halo_grid` | `sightline_halo_grid.pdf` | §Obs-FG |
 | `fig:assoc-cards-grid` | `association_cards/` | §ToA / appendix |
-| `fig:dsa-scint-acf-*` | `dsa_scint_acf/` | App DSA ACF |
 | `fig:jointmodel-pair-*` | `jointmodel_pair/` | App morphology audit (no τ/β quotes) |
 | `fig:clusters_icm` | `clusters_icm.pdf` | App / dominant systems |
 | `fig:dm_host_posteriors` | `dm_host_posteriors.pdf` | App C |
@@ -41,6 +40,7 @@ gate clears — on-disk PDFs under `figures/` may be campaign-era.
 | W4 | `fig:subband_tau_validation` | Sub-band EMG τ-slope diagnostic grid (D3: diagnostic only) | V1 | `subband_tau_validation_grid.pdf`, `chime_subband_compare.pdf` | `sections/results.tex` §results-alpha (+ Methods TODO) |
 | W5 | `fig:scint_screens` | Two-screen / screen-attribution summary (CHIME+DSA τ·Δν_d) | B5 + V1 scint + A1 | `codetection_scint_excess.pdf` (and related wilhelm scint PDFs) — regenerate | `sections/results.tex` §results-scintillation |
 | W6 | *(CHIME ACF gallery)* | Per-burst CHIME-band ACF diagnostics (peer of App DSA ACF) | Owner decision after PR #192 campaign review | PR #192 records 24 reviewed standard/high-resolution products; only `chromatica_hi` is a measurement | no manuscript slot yet |
+| W7 | *(joint DSA+CHIME ACF gallery)* | Replace the removed July-7 DSA-only appendix panels with post-finalization, status-labeled two-band diagnostics | New DSA rerun + exact-byte owner approval | PR #192 supplies 24 hash-reviewed CHIME renders; no matching post-finalization DSA products exist at pin `17d9d266` | `sections/appendix.tex` §scintillation ACF diagnostics |
 
 ---
 
