@@ -124,6 +124,74 @@ Each item maps to one `\fixme{...}` in the draft. Resolve by editing `main.tex` 
 
 ---
 
+## ISSUE-008 — "Twelve apparently non-repeating FRBs" is false for FRB 20230814B
+
+- **Assignee:** Jakob Faber (raise with Ayush)
+- **Location:** abstract + `\section{Search for codetected FRBs}` sample summary
+- **Status:** open (2026-07-17)
+- **Problem:** FRB 20230814B (johndoeII) is a repeater: the DSA-110 catalog carries a
+  prior DSA-only detection of the same source (row `johndoe`, S/N 72.6, DM 696.4,
+  47 days earlier, identical z=0.5535; raw data not saved). The Verdi et al.
+  DSA full-sample draft marks 20230814B with a repeater asterisk. Both this draft
+  and paper I currently describe the sample as "twelve apparently non-repeating
+  FRBs"; paper I's `toa.tex` no-repeat-detection claim is flagged on Faber2026
+  PR #106.
+
+**Acceptance criteria**
+
+- [ ] Abstract/sample prose amended (e.g. "one of which has a single earlier
+  DSA-110-only detection") or the non-repeating qualifier dropped.
+- [ ] Consistent wording agreed with paper I.
+
+---
+
+## ISSUE-009 — Redshift provenance: "adopted from paper I" is not the actual source
+
+- **Assignee:** Jakob Faber (raise with Ayush)
+- **Location:** `\section{...}` RM/budget methods ("The observed DM ... and host
+  galaxy redshift, z, of these FRBs are reported in paper I and adopted for this work")
+- **Status:** open (2026-07-17)
+- **Problem:** paper I currently has no z for 20230814B and carries a provisional
+  z=0.510 for 20221203A — this draft (correctly, per the Verdi et al. DSA
+  full-sample table, now the agreed standard) uses z=0.5535 for 20230814B and no
+  z for 20221203A. The provenance sentence should cite the actual source
+  (Verdi et al. in prep. / DSA-110 host program), and paper I is being updated to
+  match the same standard.
+
+**Acceptance criteria**
+
+- [ ] Provenance sentence corrected.
+- [ ] Both drafts agree on the z-set: nine z-constrained bursts including
+  20230814B (0.5535), excluding 20221203A/20230325A/20240122A.
+
+---
+
+## ISSUE-010 — RM budget for FRB 20230307A omits the intervening cluster (material)
+
+- **Assignee:** Jakob Faber (raise with Ayush)
+- **Location:** RM/budget methods (eqs. `eq:dm_comps`/`eq:rm_comps`) + Table
+  `tb:host_props` row FRB 20230307A
+- **Status:** open (2026-07-17)
+- **Problem:** the MC budget carries no intervening term, but paper I's census
+  crosses the cluster J115120.4+714435 at b/R500=0.83 with DM_cl ≈ 184
+  pc cm⁻³ (obs; 84–328 bracket, X-ray-capped mass). Neglecting its RM is
+  equivalent to asserting |⟨B∥,ICM⟩| < 0.04–0.16 μG — an order of magnitude
+  below measured outskirt fields (classification MATERIAL under the
+  predeclared record; ±0.5 μG shifts RM_host by ~7σ of its quoted error, and
+  the DM-side correction alone moves ⟨B∥,host⟩ from −2.0 to ≈ −4.5 μG).
+  Full memo with two language options:
+  `docs/rse/specs/memo-thread1-rm-repartition-2026-07-17.md` (paper I repo).
+
+**Acceptance criteria**
+
+- [ ] Both-owner decision recorded (Option A: add intervening term for this
+  burst; Option B: keep host-only + state the implied ICM-field ceiling; or C).
+- [ ] `tb:host_props` 20230307A row and its prose adjusted per the decision.
+- [ ] Paper I adds at most one forward-reference sentence (its side of the
+  both-owners gate).
+
+---
+
 ## Summary
 
 | ID | Assignee | Section |
@@ -135,5 +203,8 @@ Each item maps to one `\fixme{...}` in the draft. Resolve by editing `main.tex` 
 | ISSUE-005 | **Jakob Faber** | DSA-110 observations |
 | ISSUE-006 | **Jakob Faber** | FRB magnetoionic environments |
 | ISSUE-007 | **Jakob Faber** | Acknowledgements |
+| ISSUE-008 | **Jakob Faber** | Sample framing (non-repeating claim) |
+| ISSUE-009 | **Jakob Faber** | Redshift provenance |
+| ISSUE-010 | **Jakob Faber** | RM budget (intervening cluster) |
 
-**Jakob:** 7 issues (ISSUE-001–007).
+**Jakob:** 10 issues (ISSUE-001–010); 001–007 closed, 008–010 open.
