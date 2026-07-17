@@ -483,5 +483,6 @@
       "telescope": "dsa"
     }
   ],
+  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
   "schema_version": 1
 }

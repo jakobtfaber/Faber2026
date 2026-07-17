@@ -7,6 +7,7 @@ import argparse
 import csv
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -95,7 +96,9 @@ def audit(data_root: Path, metadata_root: Path, fixture_path: Path, manifest_pat
         records.append({"nick": nick, "instruments": instruments})
     return {
         "schema_version": 1,
-        "pipeline_revision": "5fb387ede57c9654a404ffd597d0f89a097d73b7",
+        "pipeline_revision": subprocess.check_output(
+            ["git", "-C", str(ROOT / "pipeline"), "rev-parse", "HEAD"], text=True
+        ).strip(),
         "audit_passed": len(records) == 12,
         "display_transform": "plot_codetection_gallery.load_band flips stored descending rows",
         "lineage_limit": "final _cntr_bpc builder is unverified; raw headers, byte-pinned products, and loader behavior are audited",

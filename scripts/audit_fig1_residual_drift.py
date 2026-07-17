@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -151,6 +152,9 @@ def audit(data_root: Path, catalog: Path) -> dict:
     )
     return {
         "schema_version": 1,
+        "pipeline_revision": subprocess.check_output(
+            ["git", "-C", str(PIPELINE), "rev-parse", "HEAD"], text=True
+        ).strip(),
         "gate": "EMG residual DM is consistent with zero within 2 sigma in every panel",
         "gate_passed": all_zero,
         "measurements": measurements,

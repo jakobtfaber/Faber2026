@@ -2,7 +2,7 @@
   "audit_passed": true,
   "display_transform": "plot_codetection_gallery.load_band flips stored descending rows",
   "lineage_limit": "final _cntr_bpc builder is unverified; raw headers, byte-pinned products, and loader behavior are audited",
-  "pipeline_revision": "5fb387ede57c9654a404ffd597d0f89a097d73b7",
+  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
   "records": [
     {
       "instruments": {
