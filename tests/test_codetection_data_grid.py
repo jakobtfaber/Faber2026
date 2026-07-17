@@ -1,4 +1,4 @@
-"""Tests for the 12-panel fit-grid data-only Figure 1 producer."""
+"""Tests for the 12-panel observed-peak Figure 1 producer."""
 
 from __future__ import annotations
 
@@ -51,13 +51,6 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
         )
         or [],
     )
-    fake_shift = {"CHIME/FRB": 0.1, "DSA-110": -0.05}
-    monkeypatch.setattr(
-        grid,
-        "fit_toa_shift_ms",
-        lambda row, root, data_root, target_dm: fake_shift if row.get("npz") else {},
-    )
-
     grid.load_row_bands(
         {"nick": "zach", "npz": "fits/zach.npz"}, root=tmp_path,
         data_root=tmp_path, target_dm=262.361665,
@@ -70,7 +63,7 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
     assert calls == [
         (
             tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
-            grid.DISPLAY_PAD_CAP_MS, 262.361665, fake_shift,
+            grid.DISPLAY_PAD_CAP_MS, 262.361665, None,
         ),
         (
             tmp_path,
@@ -79,7 +72,7 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
             grid.DISPLAY_PAD_SCALE,
             grid.DISPLAY_PAD_CAP_MS,
             272.638699,
-            {},
+            None,
         ),
     ]
 
@@ -102,73 +95,6 @@ def test_adopted_dm_catalog_rejects_non_chime_adoption(tmp_path):
         assert "chime_primary" in str(exc)
     else:
         raise AssertionError("expected invalid adoption to be rejected")
-
-
-def test_register_fit_grid_recovers_crop_offset():
-    rng = np.random.default_rng(7)
-    dt = 0.032768
-    native = rng.normal(size=4000)
-    native[1200:1230] += 30.0  # burst
-    start, r = 900, 2
-    fit_prof = native[start : start + 1200].reshape(-1, r).mean(axis=1)
-    fit_t = np.arange(fit_prof.size) * (r * dt)
-    got = grid._register_fit_grid_ms(fit_t, fit_prof, native, dt)
-    assert abs(got - start * dt) < r * dt + 1e-9
-
-
-def test_fit_toa_shift_applies_published_scatter_correction(monkeypatch, tmp_path):
-    # New convention (model-t0 ToA): the per-band shift is the published DSA-band
-    # scattering correction applied identically to both bands. This is a pure
-    # global translation -- ``_align_toa`` already separates the observed peaks by
-    # the measured peak offset, and adding +Delta_scat_DSA to both bands moves the
-    # DSA intrinsic arrival to t=0 while the CHIME intrinsic arrival lands at the
-    # model-corrected offset. The differential (Delta_scat_C - Delta_scat_D), which
-    # is what actually shifts the CHIME arrival, is carried by the peak offset that
-    # ``_align_toa`` receives, not re-applied here.
-    monkeypatch.setattr(
-        grid,
-        "_published_scatter_corr",
-        lambda nick: (0.85, 0.05) if nick == "tracked" else None,
-    )
-    shifts = grid.fit_toa_shift_ms(
-        {"nick": "tracked"}, root=tmp_path, data_root=tmp_path, target_dm=100.25
-    )
-    # both bands translated by the DSA correction; equal shift => zero spurious
-    # differential added on top of the measured peak offset
-    assert shifts == {"CHIME/FRB": 0.05, "DSA-110": 0.05}
-
-
-def test_fit_toa_shift_empty_when_no_tracked_correction(monkeypatch, tmp_path):
-    # A burst with no accepted joint fit (e.g. chromatica) has no tracked
-    # correction; the figure then keeps the observed-peak anchor (empty shift).
-    monkeypatch.setattr(grid, "_published_scatter_corr", lambda nick: None)
-    shifts = grid.fit_toa_shift_ms(
-        {"nick": "untracked"}, root=tmp_path, data_root=tmp_path, target_dm=100.25
-    )
-    assert shifts == {}
-
-
-def test_published_scatter_corr_reads_pipeline_json(monkeypatch, tmp_path):
-    # _published_scatter_corr resolves the burst nick through FILE_NICK and reads
-    # the scatter_corr_* fields from the crossmatch results in the pipeline
-    # submodule. Stub both so the reader is exercised without the real submodule.
-    import json as _json
-
-    results = tmp_path / "toa_crossmatch_results.json"
-    results.write_text(_json.dumps({
-        "oran": {"scatter_corr_chime_ms": 3.1393, "scatter_corr_dsa_ms": 0.1087},
-        "casey": {"peak_measured_offset_ms": -2.37},  # no scatter_corr_* -> not tracked
-    }))
-    import plot_codetection_triptych as trip
-
-    monkeypatch.setattr(trip, "TOA_RESULTS", str(results), raising=False)
-    monkeypatch.setattr(trip, "FILE_NICK", {"oran": "oran", "casey": "casey"}, raising=False)
-
-    assert grid._published_scatter_corr("oran") == (3.1393, 0.1087)
-    # a row lacking scatter_corr_chime_ms is treated as untracked
-    assert grid._published_scatter_corr("casey") is None
-    # a nick absent from the results is untracked
-    assert grid._published_scatter_corr("nonexistent") is None
 
 
 def test_display_pad_scale_tightens_window():

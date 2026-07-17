@@ -96,6 +96,15 @@ def render_preview(pdf: Path, preview: Path) -> None:
 
 
 def command_new_batch(args: argparse.Namespace) -> None:
+    available_slots = slots()
+    requested = set(args.candidate or [])
+    known = {slot["id"] for slot in available_slots}
+    unknown = requested - known
+    if unknown:
+        raise SystemExit(f"unknown candidate ids: {sorted(unknown)}")
+    selected_slots = [
+        slot for slot in available_slots if not requested or slot["id"] in requested
+    ]
     destination = batch_dir(args.batch_id)
     if destination.exists():
         raise SystemExit(f"batch already exists: {destination.relative_to(ROOT)}")
@@ -112,6 +121,20 @@ def command_new_batch(args: argparse.Namespace) -> None:
 
     provenance_dir = destination / "provenance"
     provenance_dir.mkdir()
+    family_evidence = {
+        "gallery": ["dm-catalog", "joint-render-manifest"],
+        "association": ["dm-catalog"],
+        "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+        "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+        "scintillation-summary": ["scint-component-catalog", "scint-fit-catalog"],
+        "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
+        "scintillation-qualification": ["oran-qualification"],
+    }
+    required_evidence = {
+        evidence_id
+        for slot in selected_slots
+        for evidence_id in family_evidence[slot["family"]]
+    }
     evidence_specs = [
         ("dm-catalog", "parent", "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"),
         ("joint-render-manifest", "parent", "scripts/jointmodel_triptych_manifest.yaml"),
@@ -123,6 +146,8 @@ def command_new_batch(args: argparse.Namespace) -> None:
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
+        if evidence_id not in required_evidence:
+            continue
         if repository == "parent":
             command = ["git", "show", f"{source_revision}:{source_path}"]
             revision = source_revision
@@ -143,7 +168,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
             }
         )
     records: list[dict] = []
-    for slot in slots():
+    for slot in selected_slots:
         source = args.candidate_root / slot["target"]
         if not source.exists() and not args.read_from_revision:
             raise SystemExit(f"missing candidate source for {slot['id']}: {slot['target']}")
@@ -166,15 +191,6 @@ def command_new_batch(args: argparse.Namespace) -> None:
         else:
             shutil.copy2(source, artifact)
         render_preview(artifact, destination / preview_rel)
-        family_evidence = {
-            "gallery": ["dm-catalog", "joint-render-manifest"],
-            "association": ["dm-catalog"],
-            "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-            "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-            "scintillation-summary": ["scint-component-catalog", "scint-fit-catalog"],
-            "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
-            "scintillation-qualification": ["oran-qualification"],
-        }
         record = {
                 **slot,
                 "artifact": str(artifact_rel),
@@ -451,6 +467,11 @@ def parser() -> argparse.ArgumentParser:
         help="stage target bytes from --source-revision instead of the worktree",
     )
     new.add_argument("--pipeline-revision", required=True)
+    new.add_argument(
+        "--candidate",
+        action="append",
+        help="stage only this candidate id; repeat for multiple candidates",
+    )
     new.add_argument(
         "--pipeline-repo",
         type=Path,
