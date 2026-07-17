@@ -79,7 +79,7 @@ Only rows with manuscript consumers appear here.
 
 ### oran · scintillation_dsa — `trusted`
 - artifact: `pipeline:scintillation (Oran DSA qualified measurement)` @ `2242124`
-- consumers: `sec:results-scintillation`, `fig:oran-dsa-scint-qualified`
+- consumers: `sec:results-scintillation`
 - claim: Oran has a qualified DSA-band scintillation-bandwidth measurement
 
 ### isha · association — `trusted`
@@ -295,7 +295,7 @@ Only rows with manuscript consumers appear here.
 | dm_obs | trusted | `sec:dm-measurement`, `sec:dm` | V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py |
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
-| scintillation_dsa | trusted | `sec:results-scintillation`, `fig:oran-dsa-scint-qualified` | qualified DSA-band scintillation measurement (Faber2026 PR #32; Oran) |
+| scintillation_dsa | trusted | `sec:results-scintillation` | qualified DSA-band scintillation measurement (Faber2026 PR #32; Oran) |
 | scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; Pass-2 re-admitted via mixed-legacy c0,gamma but uncitable pending §V (V3); do NOT FAIL-gate (energy is beta-independent) |
