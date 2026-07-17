@@ -24,6 +24,50 @@ def test_committed_sample_counts_and_rosters_are_consistent():
     assert findings == []
 
 
+def test_committed_toa_convention_respects_model_correction_gate():
+    findings = []
+    audit.check_toa_correction_gate(findings)
+    assert findings == []
+
+
+def test_unvalidated_toa_cannot_replace_peak_offset(monkeypatch):
+    original_read_text = audit.read_text
+
+    def read_with_promoted_unvalidated_model(path):
+        text = original_read_text(path)
+        if path == audit.ROOT / "pipeline/crossmatching/toa_crossmatch_results.json":
+            import json
+
+            rows = json.loads(text)
+            row = next(iter(rows.values()))
+            row["measured_offset_ms"] = row["model_corrected_offset_ms"]
+            return json.dumps(rows)
+        return text
+
+    monkeypatch.setattr(audit, "read_text", read_with_promoted_unvalidated_model)
+    findings = []
+    audit.check_toa_correction_gate(findings)
+    assert any(
+        "measured_offset_ms does not preserve the observed-peak offset" in finding
+        for finding in findings
+    )
+
+
+def test_unvalidated_toa_model_promotion_wording_is_reported(monkeypatch):
+    original_read_text = audit.read_text
+
+    def read_with_promotion(path):
+        text = original_read_text(path)
+        if path == audit.ROOT / "sections/toa.tex":
+            return text + "\nWe adopt the model TOA on each band.\n"
+        return text
+
+    monkeypatch.setattr(audit, "read_text", read_with_promotion)
+    findings = []
+    audit.check_toa_correction_gate(findings)
+    assert any("unconditional model-TOA adoption" in finding for finding in findings)
+
+
 def test_sample_count_regression_is_reported(monkeypatch):
     original_read_text = audit.read_text
 
