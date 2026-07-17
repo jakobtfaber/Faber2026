@@ -107,19 +107,18 @@ compact archival gallery, the Figure 1 data overview, and the
 main-text-plus-appendix triptych family were added later with verdicts assigned
 by inspection rather than execution. The Figure 1 data grid draws every panel
 from the archival `_cntr_bpc.npy` waterfalls (all 24 products, near-native
-display grids) and anchors the time axes on the fitted arrival times from the
-tracked jointmodel NPZ + joint_fit JSON pairs. The legacy CHIME-minus-DSA
-400-MHz timing offsets are re-referenced from their recorded DMs to the adopted
-DMs before those anchors are placed; the triptychs require the
-eleven local fit-delivery NPZ artifacts plus Chromatica's two archival
-waterfall products; the compact gallery remains diagnostic only and requires
-all 24 archival waterfalls.
+display grids). It uses the observed-profile convention: DSA-110's measured
+peak is at zero and CHIME/FRB is positioned with the recorded measured peak
+offset. No joint-model fit artifact or scattering-model correction participates
+in Figure 1. The triptychs require the eleven local fit-delivery NPZ artifacts
+plus Chromatica's two archival waterfall products; the compact gallery remains
+diagnostic only and requires all 24 archival waterfalls.
 
 8 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **4 of
 those 8 needed their `run_command` corrected first**, so the pre-audit manifest
 could not have rebuilt the manuscript. The two blocked embedded rows are the
 codetection data grid and triptych family; neither can be rebuilt from a fresh
-clone until the fit artifacts and Chromatica waterfall products are deposited
+clone until the 24 archival waterfalls and triptych fit artifacts are deposited
 (see hazard 6). Every other blocked or
 command-less row is a *staged* output waiting on a result SLOT; those cannot
 be promoted into the manuscript until their inputs are published alongside the
@@ -428,7 +427,8 @@ earned their keep once: they are what caught the drift described in hazard 1.
 
    **2026-07-11 update (revised 2026-07-13): this class has one embedded
    member.** The codetection Figure 1 data grid reads all 24 archival CHIME/DSA
-   `_cntr_bpc.npy` waterfalls (near-native display grids); the triptych family
+   `_cntr_bpc.npy` waterfalls (near-native display grids) and has no fit-artifact
+   dependency; the triptych family
    reads the 11 fit-delivery NPZ artifacts plus Chromatica's two archival
    waterfalls. Both rows are `embedded_in_manuscript = yes` while
    `blocked_external_data`; the compact gallery uses the same 24 archival
@@ -452,7 +452,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
 ## Suggested next steps
 
 - Deposit the 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls and the 11
-  fit-delivery artifacts: the Figure 1 grid (archival waterfalls) and triptych
+  fit-delivery artifacts: the Figure 1 grid (archival waterfalls only) and triptych
   family (fit artifacts plus Chromatica's waterfalls) are the two embedded
   rows the DA statement cannot cover, and data deposition is the only way to
   close them.

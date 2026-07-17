@@ -14,13 +14,16 @@ NaN-masked and render in a uniform gray in every panel. No model or residual
 values are drawn. Before display averaging, both native-resolution products
 are re-dedispersed from their filename-stem DMs to the adopted CHIME
 phase-coherence DM in ``analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv``.
+The time axes retain the measured-profile convention supplied by
+``bands_archival``: DSA-110's observed peak is at zero and CHIME/FRB is placed
+with the recorded measured peak offset. No scattering-model correction or
+joint-fit artifact participates in Figure 1.
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
-import json
 import warnings
 from pathlib import Path
 
@@ -97,102 +100,8 @@ def load_adopted_dms(path: Path) -> dict[str, float]:
     return out
 
 
-def _block_mean_1d(x: np.ndarray, r: int) -> np.ndarray:
-    n = (x.size // r) * r
-    return np.nanmean(x[:n].reshape(-1, r), axis=1)
-
-
-def _standardize(x: np.ndarray) -> np.ndarray:
-    x = np.nan_to_num(np.asarray(x, float))
-    x = x - x.mean()
-    s = x.std()
-    return x / s if s > 0 else x
-
-
-def _register_fit_grid_ms(
-    fit_t: np.ndarray, fit_prof: np.ndarray, native_prof: np.ndarray, dt_native_ms: float
-) -> float:
-    """Native-frame time (ms) of the fit grid's first sample.
-
-    The fit-delivery grid is a crop+downsample of the same archival stream, so
-    cross-correlating its band profile against the native archival profile
-    (downsampled to the fit dt) registers the two frames exactly, using the
-    whole profile rather than a single noisy peak sample.
-    """
-    dt_fit = float(np.median(np.diff(fit_t)))
-    r = int(round(dt_fit / dt_native_ms))
-    if r < 1 or abs(dt_fit - r * dt_native_ms) > 0.02 * dt_fit:
-        raise ValueError(f"fit dt {dt_fit} is not a multiple of native dt {dt_native_ms}")
-    arch = _standardize(_block_mean_1d(native_prof, r))
-    fit = _standardize(fit_prof)
-    if fit.size > arch.size:
-        raise ValueError("fit grid longer than archival window")
-    lag = int(np.argmax(np.correlate(arch, fit, mode="valid")))
-    return lag * r * dt_native_ms
-
-
-def _published_scatter_corr(nick: str) -> tuple[float, float] | None:
-    """Adopted per-band scattering correction (Delta_scat, ms) for a burst.
-
-    Reads the published values ``scatter_corr_chime_ms`` / ``scatter_corr_dsa_ms``
-    from the crossmatch results tracked in the pipeline submodule. These are the
-    band-averaged, flux-weighted peak shifts of the fitted scattering kernel
-    (intrinsic model arrival = observed profile peak - Delta_scat), computed in
-    the ToA analysis; using them here keeps the figure identical to that analysis
-    rather than re-deriving from the figure's display NPZs (a different, DM-locked
-    fit family whose Delta_scat diverges from the published free-DM values).
-
-    Returns ``None`` when no correction is tracked (e.g. chromatica, no accepted
-    joint fit): the burst then keeps the observed-peak anchor.
-    """
-    from plot_codetection_triptych import FILE_NICK, TOA_RESULTS
-
-    file_nick = FILE_NICK.get(nick, nick)
-    rows = json.loads(Path(TOA_RESULTS).read_text())
-    row = rows.get(file_nick) or rows.get(file_nick.lower())
-    if row is None:
-        row = next((v for k, v in rows.items() if k.lower() == file_nick.lower()), None)
-    if row is None or "scatter_corr_chime_ms" not in row:
-        return None
-    return float(row["scatter_corr_chime_ms"]), float(row["scatter_corr_dsa_ms"])
-
-
-def fit_toa_shift_ms(
-    row: dict, *, root: Path, data_root: Path, target_dm: float
-) -> dict[str, float]:
-    """Per-band shift (band label -> ms) anchoring each band on its adopted
-    intrinsic model arrival rather than on the observed (scattered) profile peak.
-
-    The ToA analysis defines the arrival time as the joint-fit model t0 with the
-    scattering tail deconvolved out: intrinsic arrival = observed peak minus the
-    band-averaged scattering peak shift Delta_scat (see ``_published_scatter_corr``).
-    The scattered peak lags the arrival, and by more at CHIME (0.6 GHz) than at
-    DSA (1.4 GHz) because tau ~ nu^-alpha; the earlier convention (dominant-component
-    t0 referenced to the top of each band) carried a dispersion mismatch and did not
-    cancel this differential, so the displayed CHIME-DSA separation disagreed with the
-    ToA analysis (most severely for oran: 3.4 ms off, sign flipped).
-
-    ``bands_archival`` first calls ``_align_toa`` with the measured CHIME-minus-DSA
-    *peak* offset, which places the two observed peaks at that separation. Adding the
-    same DSA scattering correction to both bands is a pure translation that moves the
-    DSA intrinsic arrival to t=0; the CHIME intrinsic arrival then lands at
-    peak_offset - (Delta_scat_C - Delta_scat_D) = the model-corrected offset. The
-    observed peaks stay separated by the measured peak offset (the scattering tail
-    remains visible); the intrinsic arrivals are separated by the model offset,
-    matching the ToA analysis. Everything is expressed at the adopted display DM,
-    consistent with the re-dedispersion applied to the waterfalls.
-
-    Empty for rows without a tracked scattering correction (observed-peak anchor kept).
-    """
-    corr = _published_scatter_corr(row["nick"])
-    if corr is None:
-        return {}
-    _scatter_corr_chime_ms, scatter_corr_dsa_ms = corr
-    return {"CHIME/FRB": scatter_corr_dsa_ms, "DSA-110": scatter_corr_dsa_ms}
-
-
 def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
-    """Near-native archival display bands for every burst (fit or no fit)."""
+    """Near-native archival bands, retaining the measured-profile peak anchor."""
     return bands_archival(
         data_root,
         row["nick"],
@@ -200,9 +109,7 @@ def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
         pad_scale=DISPLAY_PAD_SCALE,
         pad_cap_ms=DISPLAY_PAD_CAP_MS,
         target_dm=target_dm,
-        extra_shift_ms=fit_toa_shift_ms(
-            row, root=root, data_root=data_root, target_dm=target_dm
-        ),
+        extra_shift_ms=None,
     )
 
 
