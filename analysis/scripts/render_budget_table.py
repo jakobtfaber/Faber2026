@@ -25,7 +25,7 @@ OUT = ROOT / "budget_table.tex"
 # These are usable project redshifts but do not yet have a citable published
 # provenance. Keep that distinction visible in distance-dependent results.
 PROVISIONAL_REDSHIFTS = {
-    "FRB 20221203A",
+    "FRB 20230814B",
     "FRB 20230913A",
     "FRB 20240203A",
 }
