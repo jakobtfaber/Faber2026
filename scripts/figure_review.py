@@ -73,6 +73,17 @@ def slots() -> list[dict]:
     return expanded
 
 
+FAMILY_EVIDENCE = {
+    "gallery": ["dm-catalog", "joint-render-manifest"],
+    "association": ["dm-catalog"],
+    "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+    "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+    "scintillation-summary": ["scint-component-catalog", "scint-fit-catalog"],
+    "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
+    "scintillation-qualification": ["oran-qualification"],
+}
+
+
 def batch_dir(batch_id: str) -> Path:
     return REVIEW_ROOT / "batches" / batch_id
 
@@ -112,6 +123,18 @@ def command_new_batch(args: argparse.Namespace) -> None:
 
     provenance_dir = destination / "provenance"
     provenance_dir.mkdir()
+    only = set(args.only or [])
+    if only:
+        known = {slot["id"] for slot in slots()}
+        unknown = only - known
+        if unknown:
+            raise SystemExit(f"--only names unknown slot ids: {sorted(unknown)}")
+    staged_slots = [slot for slot in slots() if not only or slot["id"] in only]
+    needed_evidence = {
+        evidence_id
+        for slot in staged_slots
+        for evidence_id in FAMILY_EVIDENCE[slot["family"]]
+    }
     evidence_specs = [
         ("dm-catalog", "parent", "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"),
         ("joint-render-manifest", "parent", "scripts/jointmodel_triptych_manifest.yaml"),
@@ -123,6 +146,8 @@ def command_new_batch(args: argparse.Namespace) -> None:
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
+        if evidence_id not in needed_evidence:
+            continue
         if repository == "parent":
             command = ["git", "show", f"{source_revision}:{source_path}"]
             revision = source_revision
@@ -143,7 +168,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
             }
         )
     records: list[dict] = []
-    for slot in slots():
+    for slot in staged_slots:
         source = args.candidate_root / slot["target"]
         if not source.exists() and not args.read_from_revision:
             raise SystemExit(f"missing candidate source for {slot['id']}: {slot['target']}")
@@ -166,15 +191,6 @@ def command_new_batch(args: argparse.Namespace) -> None:
         else:
             shutil.copy2(source, artifact)
         render_preview(artifact, destination / preview_rel)
-        family_evidence = {
-            "gallery": ["dm-catalog", "joint-render-manifest"],
-            "association": ["dm-catalog"],
-            "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-            "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-            "scintillation-summary": ["scint-component-catalog", "scint-fit-catalog"],
-            "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
-            "scintillation-qualification": ["oran-qualification"],
-        }
         record = {
                 **slot,
                 "artifact": str(artifact_rel),
@@ -187,7 +203,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
                     "reviewed_at": utc_now() if args.reviewer else None,
                     "notes": args.note,
                 },
-                "evidence_ids": family_evidence[slot["family"]],
+                "evidence_ids": FAMILY_EVIDENCE[slot["family"]],
             }
         subject_nick = slot.get("subject", {}).get("nick")
         if subject_nick:
@@ -456,6 +472,11 @@ def parser() -> argparse.ArgumentParser:
         type=Path,
         default=ROOT / "pipeline",
         help="FLITS checkout used to read submodule artifacts",
+    )
+    new.add_argument(
+        "--only",
+        action="append",
+        help="stage only these slot ids (repeatable); default stages every slot",
     )
     new.add_argument("--initial-status", choices=("pending", "needs_revision"), default="pending")
     new.add_argument("--reviewer")

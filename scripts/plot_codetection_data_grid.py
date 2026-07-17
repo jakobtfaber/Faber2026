@@ -191,8 +191,34 @@ def fit_toa_shift_ms(
     return {"CHIME/FRB": scatter_corr_dsa_ms, "DSA-110": scatter_corr_dsa_ms}
 
 
-def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
-    """Near-native archival display bands for every burst (fit or no fit)."""
+def load_row_bands(
+    row: dict,
+    *,
+    root: Path,
+    data_root: Path,
+    target_dm: float,
+    anchor: str = "observed-peak",
+    dm_corrections: dict[str, dict[str, float]] | None = None,
+):
+    """Near-native archival display bands for every burst (fit or no fit).
+
+    ``anchor`` selects the per-band time anchor. The default ``observed-peak``
+    keeps the data-only convention (2026-07-14 lock; owner decision recorded in
+    figure_review batch 2026-07-17-fig1-model-toa): bands are aligned on the
+    measured peak offset with no model-derived translation. ``model-toa``
+    additionally applies the published scattering correction from the joint-fit
+    kernels via ``fit_toa_shift_ms`` -- gated: those kernels are wave-1
+    V1-revoked (RFI-contaminated downsample), so this mode may only feed a
+    review batch after V1 clearance, RFI-fixed refits, and an explicit lock
+    amendment.
+    """
+    if anchor not in ("observed-peak", "model-toa"):
+        raise ValueError(f"unknown anchor {anchor!r}")
+    extra = (
+        fit_toa_shift_ms(row, root=root, data_root=data_root, target_dm=target_dm)
+        if anchor == "model-toa"
+        else {}
+    )
     return bands_archival(
         data_root,
         row["nick"],
@@ -200,9 +226,8 @@ def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
         pad_scale=DISPLAY_PAD_SCALE,
         pad_cap_ms=DISPLAY_PAD_CAP_MS,
         target_dm=target_dm,
-        extra_shift_ms=fit_toa_shift_ms(
-            row, root=root, data_root=data_root, target_dm=target_dm
-        ),
+        extra_shift_ms=extra,
+        extra_dedisp_pc=(dm_corrections or {}).get(row["nick"].lower()),
     )
 
 
@@ -352,6 +377,8 @@ def render_grid(
     out: Path,
     dpi: int,
     dm_catalog: Path = DM_CATALOG_DEFAULT,
+    anchor: str = "observed-peak",
+    dm_corrections: dict[str, dict[str, float]] | None = None,
 ) -> None:
     adopted_dms = load_adopted_dms(dm_catalog)
     roster = {row["nick"].lower() for row in rows}
@@ -381,6 +408,8 @@ def render_grid(
             root=root,
             data_root=data_root,
             target_dm=adopted_dms[row["nick"].lower()],
+            anchor=anchor,
+            dm_corrections=dm_corrections,
         )
         fmap = _gap_display_map(bands)
         cell = outer[index // 3, index % 3].subgridspec(
@@ -424,8 +453,33 @@ def main() -> int:
     parser.add_argument("--out", type=Path, default=OUT_DEFAULT)
     parser.add_argument("--dm-catalog", type=Path, default=DM_CATALOG_DEFAULT)
     parser.add_argument("--dpi", type=int, default=600)
+    parser.add_argument(
+        "--anchor",
+        choices=("observed-peak", "model-toa"),
+        default="observed-peak",
+        help=(
+            "per-band time anchor; observed-peak is the data-only default "
+            "(2026-07-14 lock), model-toa consumes V1-revoked joint-fit "
+            "kernels and is gated on a lock amendment"
+        ),
+    )
+    parser.add_argument(
+        "--dm-correction-json",
+        type=Path,
+        default=None,
+        help=(
+            "JSON {nick: {telescope: delta_dm_pc_cm3}} of audit-derived "
+            "applied-DM corrections (scripts/audit_fig1_axes.py) added to the "
+            "stem-to-adopted residual dedispersion per product"
+        ),
+    )
     args = parser.parse_args()
     rows = load_manifest(args.manifest)
+    corrections = None
+    if args.dm_correction_json:
+        corrections = {
+            k.lower(): v for k, v in json.loads(args.dm_correction_json.read_text()).items()
+        }
     render_grid(
         rows,
         root=ROOT,
@@ -433,6 +487,8 @@ def main() -> int:
         out=args.out,
         dpi=args.dpi,
         dm_catalog=args.dm_catalog,
+        anchor=args.anchor,
+        dm_corrections=corrections,
     )
     print(f"wrote {args.out.with_suffix('.pdf')}")
     return 0

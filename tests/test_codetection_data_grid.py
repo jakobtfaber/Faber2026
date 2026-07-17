@@ -43,7 +43,7 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
         grid,
         "bands_archival",
         lambda data_root, nick, factors=None, pad_scale=1.0, pad_cap_ms=None,
-        target_dm=None, extra_shift_ms=None: calls.append(
+        target_dm=None, extra_shift_ms=None, extra_dedisp_pc=None: calls.append(
             (
                 data_root, nick, factors, pad_scale, pad_cap_ms,
                 target_dm, extra_shift_ms,
@@ -58,6 +58,8 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
         lambda row, root, data_root, target_dm: fake_shift if row.get("npz") else {},
     )
 
+    # default anchor (observed-peak): no model-derived shift, even for a burst
+    # with a tracked correction -- the data-only lock convention
     grid.load_row_bands(
         {"nick": "zach", "npz": "fits/zach.npz"}, root=tmp_path,
         data_root=tmp_path, target_dm=262.361665,
@@ -66,11 +68,16 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
         {"nick": "chromatica", "npz": None}, root=tmp_path,
         data_root=tmp_path, target_dm=272.638699,
     )
+    # gated model-toa anchor: the published-correction translation applies
+    grid.load_row_bands(
+        {"nick": "zach", "npz": "fits/zach.npz"}, root=tmp_path,
+        data_root=tmp_path, target_dm=262.361665, anchor="model-toa",
+    )
 
     assert calls == [
         (
             tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
-            grid.DISPLAY_PAD_CAP_MS, 262.361665, fake_shift,
+            grid.DISPLAY_PAD_CAP_MS, 262.361665, {},
         ),
         (
             tmp_path,
@@ -81,7 +88,23 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
             272.638699,
             {},
         ),
+        (
+            tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS, 262.361665, fake_shift,
+        ),
     ]
+
+
+def test_load_row_bands_rejects_unknown_anchor(tmp_path):
+    try:
+        grid.load_row_bands(
+            {"nick": "zach"}, root=tmp_path, data_root=tmp_path,
+            target_dm=262.361665, anchor="model-corrected",
+        )
+    except ValueError as exc:
+        assert "anchor" in str(exc)
+    else:
+        raise AssertionError("expected unknown anchor to be rejected")
 
 
 def test_adopted_dm_catalog_is_complete_and_chime_primary():
@@ -117,7 +140,8 @@ def test_register_fit_grid_recovers_crop_offset():
 
 
 def test_fit_toa_shift_applies_published_scatter_correction(monkeypatch, tmp_path):
-    # New convention (model-t0 ToA): the per-band shift is the published DSA-band
+    # Gated model-toa anchor (NOT the rendering default -- observed-peak is,
+    # per the 2026-07-14 data-only lock): the per-band shift is the published DSA-band
     # scattering correction applied identically to both bands. This is a pure
     # global translation -- ``_align_toa`` already separates the observed peaks by
     # the measured peak offset, and adding +Delta_scat_DSA to both bands moves the
