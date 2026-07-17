@@ -138,7 +138,8 @@ LITERATURE = {
             "bin": "within 360 kpc ~ 0.8 R500 (r200=0.7 Mpc); 76 polarized sources inside 1 deg",
             "sigma_rm_local": 17.0,
             "sigma_rm_local_err": 2.4,
-            "note": "16.8+/-2.4 quadrature excess (bootstrap 95%), M~6e13 BELOW target (conservative); enhancement asymmetric (merger axis); same physical system as Loi 2025 below -- Fornax enters the median twice unless adjudicated",
+            "system": "fornax",
+            "note": "16.8+/-2.4 quadrature excess (bootstrap 95%), M~6e13 BELOW target (conservative); enhancement asymmetric (merger axis); same physical system as Loi 2025 -- collapsed to one Fornax vote per the plan v1.3 adjudication",
         },
         {
             "study": "Khadir et al. 2025 (A3581, ApJ 997, 214; arXiv:2511.18532)",
@@ -156,7 +157,8 @@ LITERATURE = {
             "bin": "outer annuli 400-510 kpc ~ 0.86-1.10 R500 via R_vir=705 kpc, R500~0.66 R_vir (external conversion)",
             "sigma_rm_local": 11.5,
             "sigma_rm_local_err": 1.5,
-            "note": "outer plateau ~13 raw minus the authors' ~6 non-cluster floor in quadrature -> ~11.5 cluster-attributable; densest RM grid (80/deg^2), background-only; SAME SYSTEM as Anderson 2021 -- double-count caveat; observed frame (z~0.005)",
+            "system": "fornax",
+            "note": "outer plateau ~13 raw minus the authors' ~6 non-cluster floor in quadrature -> ~11.5 cluster-attributable; densest RM grid (80/deg^2), background-only; SAME SYSTEM as Anderson 2021 -- collapsed to one Fornax vote per the plan v1.3 adjudication; observed frame (z~0.005)",
         },
         {
             "study": "Alonso-Lopez et al. 2025 (Shapley SC core, A&A; arXiv:2511.14377)",
@@ -181,8 +183,19 @@ LITERATURE = {
 
 
 def rm_lit_obs() -> float:
-    """Median admitted local sigma_RM at ~0.6-1.0 R500, diluted to the z=0.2 screen."""
-    vals = sorted(s["sigma_rm_local"] for s in LITERATURE["admitted"])
+    """Median admitted local sigma_RM at ~0.6-1.0 R500, diluted to the z=0.2 screen.
+
+    One system, one vote (plan v1.3 adjudication, owner-delegated 2026-07-17):
+    entries sharing a "system" key collapse to their mean before the median,
+    so the two Fornax studies (Anderson 2021, Loi 2025) contribute a single
+    value. With the current set the median is 27.2 regardless of whether the
+    collapse takes the mean, Anderson alone, or Loi alone -- recorded in the
+    plan so the choice cannot be mistaken for tuning.
+    """
+    by_system: dict[str, list[float]] = {}
+    for s in LITERATURE["admitted"]:
+        by_system.setdefault(s.get("system", s["study"]), []).append(s["sigma_rm_local"])
+    vals = sorted(float(np.mean(v)) for v in by_system.values())
     med = float(np.median(vals))
     return med / (1.0 + Z_CL) ** 2
 
