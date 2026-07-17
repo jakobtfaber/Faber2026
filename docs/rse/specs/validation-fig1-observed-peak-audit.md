@@ -43,7 +43,7 @@ Status: validation complete; push and PR are the remaining publication actions.
 
 All automated verification checks passed:
 
-- `make test-science` — 132 passed, 1 expected failure; offline state check,
+- `make test-science` — 137 passed, 1 expected failure; offline state check,
   figure approval gate, and journal append test passed.
 - `python scripts/consistency_audit.py` in clean `flits` Conda — clean.
 - `make` / `latexmk` — manuscript compiled successfully after rebasing onto
