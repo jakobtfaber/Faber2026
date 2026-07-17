@@ -1,0 +1,370 @@
+{
+ "classification": "material",
+ "literature": {
+  "admitted": [
+   {
+    "bin": "0.5-1.0 r500",
+    "mass_range_1e14": [
+     0.02,
+     19.1
+    ],
+    "n_sightlines": 1722,
+    "note": "the only study tabulating exactly our radial bin; sample mean ~3e14, overlaps the target mass",
+    "sigma_rm_local": 144.0,
+    "sigma_rm_local_err": 43.0,
+    "study": "Boehringer, Chon & Kronberg 2016 (A&A 596, A22; CLASSIX)"
+   },
+   {
+    "bin": ">R500 floor (0.6-1.0 R500 shown in their Fig. 6, not tabulated)",
+    "mass_range_1e14": [
+     3.0,
+     15.0
+    ],
+    "n_sightlines": 124,
+    "note": "corrected sigma_RRM=28+/-4 beyond R500; within-R500 aggregate 209+/-37 -> the 0.83 R500 value is bounded BELOW by 28 (mean mass 5.7e14)",
+    "sigma_rm_local": 28.0,
+    "sigma_rm_local_err": 4.0,
+    "study": "Osinga et al. 2022 (A&A 665, A71) + 2025 (A&A, arXiv:2408.07178)"
+   },
+   {
+    "bin": "within 360 kpc ~ 0.8 R500 (r200=0.7 Mpc)",
+    "mass_range_1e14": [
+     0.6,
+     0.6
+    ],
+    "n_sightlines": 100,
+    "note": "M~6e13, BELOW the target mass (conservative); enhancement asymmetric (merger axis)",
+    "sigma_rm_local": 17.0,
+    "sigma_rm_local_err": 5.0,
+    "study": "Anderson et al. 2021 (Fornax, ASKAP/POSSUM grid)"
+   }
+  ],
+  "rejected": [
+   {
+    "reason": "no normalized-radius profile; sightlines concentrated inside ~0.6 R500-equivalent",
+    "study": "Clarke, Kronberg & Boehringer 2001"
+   },
+   {
+    "reason": "7 sightlines < 10 (criteria minimum)",
+    "study": "Bonafede et al. 2010 (Coma)"
+   },
+   {
+    "reason": "few extended sources in one cluster, < 10 sightlines",
+    "study": "Govoni et al. 2017 (A194)"
+   },
+   {
+    "reason": "single-cluster relic study, < 10 sightlines; no [0.6,1.0] profile",
+    "study": "Stuardi et al. 2021 (A2345)"
+   }
+  ]
+ },
+ "mc_config": {
+  "b_cl_grid": [
+   0.0,
+   0.1,
+   -0.1,
+   0.25,
+   -0.25,
+   0.5,
+   -0.5,
+   1.0,
+   -1.0
+  ],
+  "n": 10000,
+  "pool_size": 4000,
+  "seed": 20260707
+ },
+ "negligibility_table": {
+  "184.0": {
+   "b_neg_uG": 0.075,
+   "rm_per_uG_obs": 124.5
+  },
+  "200.0": {
+   "b_neg_uG": 0.069,
+   "rm_per_uG_obs": 135.3
+  },
+  "328.0": {
+   "b_neg_uG": 0.042,
+   "rm_per_uG_obs": 221.9
+  },
+  "84.0": {
+   "b_neg_uG": 0.163,
+   "rm_per_uG_obs": 56.8
+  }
+ },
+ "pinned": {
+  "b_host_mug": -2.0,
+  "b_kpc": 603.6,
+  "b_over_r500": 0.83,
+  "dm_cl_95ci": [
+   84.0,
+   328.0
+  ],
+  "dm_cl_beta_p16_p50_p84": [
+   137.0,
+   200.0,
+   265.0
+  ],
+  "dm_cl_mnfw_central": 184.0,
+  "dm_host": 464.0,
+  "dm_host_err_hi": 56.0,
+  "dm_host_err_lo": 130.0,
+  "m500_1e14": 1.48,
+  "r500_mpc": 0.729,
+  "rm_host": -756.0,
+  "rm_host_err": 15.0,
+  "rm_igm_sigma": 6.0,
+  "rm_obs": -473.49,
+  "rm_obs_err": 0.09,
+  "z_cl": 0.2,
+  "z_host": 0.271
+ },
+ "plan": "docs/rse/specs/plan-rm-cluster-bfield-repartition-2026-07-17.md",
+ "repartition_mc": {
+  "-0.1": {
+   "b_host_corr_p16_p50_p84": [
+    -9.433863850942359,
+    -4.43584485559855,
+    -2.9536830239282983
+   ],
+   "b_host_p50": -1.9578869891041673,
+   "b_host_pub_p16_p50_p84": [
+    -2.6949177381478866,
+    -1.9578869891041673,
+    -1.7361316901811716
+   ],
+   "frac_dm_host_nonpos_corr": 0.0866,
+   "frac_dm_host_nonpos_pub": 0.0002,
+   "rm_cl_obs_p16_p50_p84": [
+    -17.879498028907864,
+    -13.416300866343182,
+    -9.31100875605919
+   ],
+   "rm_host_p16_p50_p84": [
+    -750.7645244920135,
+    -734.1819695215561,
+    -717.3288961648605
+   ],
+   "rm_host_p50": -734.1819695215561
+  },
+  "-0.25": {
+   "b_host_corr_p16_p50_p84": [
+    -9.083720088239474,
+    -4.281217463515027,
+    -2.8762019342645546
+   ],
+   "b_host_p50": -1.8819481328611916,
+   "b_host_pub_p16_p50_p84": [
+    -2.5709786803908106,
+    -1.8819481328611916,
+    -1.6582747427239293
+   ],
+   "frac_dm_host_nonpos_corr": 0.087,
+   "frac_dm_host_nonpos_pub": 0.0003,
+   "rm_cl_obs_p16_p50_p84": [
+    -44.83870273212833,
+    -33.72440450676398,
+    -23.467573780874382
+   ],
+   "rm_host_p16_p50_p84": [
+    -723.85057226577,
+    -701.3843456105651,
+    -678.4068425380713
+   ],
+   "rm_host_p50": -701.3843456105651
+  },
+  "-0.5": {
+   "b_host_corr_p16_p50_p84": [
+    -8.287576526211915,
+    -3.932479234953325,
+    -2.6808345719574884
+   ],
+   "b_host_p50": -1.7548846252021757,
+   "b_host_pub_p16_p50_p84": [
+    -2.370269935654899,
+    -1.7548846252021757,
+    -1.5122538235283884
+   ],
+   "frac_dm_host_nonpos_corr": 0.0827,
+   "frac_dm_host_nonpos_pub": 0.0003,
+   "rm_cl_obs_p16_p50_p84": [
+    -89.37397061865616,
+    -67.33242359632143,
+    -46.32663993070262
+   ],
+   "rm_host_p16_p50_p84": [
+    -684.4772315579457,
+    -647.2128813312413,
+    -608.4090902434039
+   ],
+   "rm_host_p50": -647.2128813312413
+  },
+  "-1.0": {
+   "b_host_corr_p16_p50_p84": [
+    -6.588859369439846,
+    -3.2235610299813207,
+    -2.3392705483023977
+   ],
+   "b_host_p50": -1.4743055899475768,
+   "b_host_pub_p16_p50_p84": [
+    -1.9930781632686072,
+    -1.4743055899475768,
+    -1.200734038494819
+   ],
+   "frac_dm_host_nonpos_corr": 0.0883,
+   "frac_dm_host_nonpos_pub": 0.0001,
+   "rm_cl_obs_p16_p50_p84": [
+    -179.78134911791346,
+    -134.66484719264287,
+    -93.03704990115568
+   ],
+   "rm_host_p16_p50_p84": [
+    -606.9563611327253,
+    -537.4811786984046,
+    -464.41079890935976
+   ],
+   "rm_host_p50": -537.4811786984046
+  },
+  "0.0": {
+   "b_host_corr_p16_p50_p84": [
+    -9.994434117236716,
+    -4.543138633914711,
+    -3.0236721855491093
+   ],
+   "b_host_p50": -2.021311643689467,
+   "b_host_pub_p16_p50_p84": [
+    -2.7900346297450778,
+    -2.021311643689467,
+    -1.7889938764761255
+   ],
+   "frac_dm_host_nonpos_corr": 0.0865,
+   "frac_dm_host_nonpos_pub": 0.0,
+   "rm_cl_obs_p16_p50_p84": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "rm_host_p16_p50_p84": [
+    -770.9240802330953,
+    -755.7956658193564,
+    -741.0192370138053
+   ],
+   "rm_host_p50": -755.7956658193564
+  },
+  "0.1": {
+   "b_host_corr_p16_p50_p84": [
+    -10.112852342239911,
+    -4.684133048977295,
+    -3.0907329335809206
+   ],
+   "b_host_p50": -2.0809835334086655,
+   "b_host_pub_p16_p50_p84": [
+    -2.870622671143267,
+    -2.0809835334086655,
+    -1.8387403263495508
+   ],
+   "frac_dm_host_nonpos_corr": 0.0872,
+   "frac_dm_host_nonpos_pub": 0.0001,
+   "rm_cl_obs_p16_p50_p84": [
+    9.213330569095405,
+    13.44895283634822,
+    17.864671590144766
+   ],
+   "rm_host_p16_p50_p84": [
+    -794.3284924733149,
+    -778.0413354268848,
+    -761.330543613716
+   ],
+   "rm_host_p50": -778.0413354268848
+  },
+  "0.25": {
+   "b_host_corr_p16_p50_p84": [
+    -10.735394626218286,
+    -4.948840662774908,
+    -3.204416111683005
+   ],
+   "b_host_p50": -2.172694299818878,
+   "b_host_pub_p16_p50_p84": [
+    -3.0157655726323176,
+    -2.172694299818878,
+    -1.9142522191582407
+   ],
+   "frac_dm_host_nonpos_corr": 0.0879,
+   "frac_dm_host_nonpos_pub": 0.0002,
+   "rm_cl_obs_p16_p50_p84": [
+    23.503089037210792,
+    33.590971604827544,
+    44.57576047348197
+   ],
+   "rm_host_p16_p50_p84": [
+    -833.5781581838912,
+    -811.099227842236,
+    -788.363726582248
+   ],
+   "rm_host_p50": -811.099227842236
+  },
+  "0.5": {
+   "b_host_corr_p16_p50_p84": [
+    -11.423541320578138,
+    -5.244295331235609,
+    -3.3431094465759204
+   ],
+   "b_host_p50": -2.3284008434103116,
+   "b_host_pub_p16_p50_p84": [
+    -3.205013514864537,
+    -2.3284008434103116,
+    -2.02929262864397
+   ],
+   "frac_dm_host_nonpos_corr": 0.0886,
+   "frac_dm_host_nonpos_pub": 0.0002,
+   "rm_cl_obs_p16_p50_p84": [
+    46.32565624897604,
+    67.40589373509093,
+    89.75848459888417
+   ],
+   "rm_host_p16_p50_p84": [
+    -903.6639812537784,
+    -864.6898616555858,
+    -828.1937863503241
+   ],
+   "rm_host_p50": -864.6898616555858
+  },
+  "1.0": {
+   "b_host_corr_p16_p50_p84": [
+    -13.26287274611177,
+    -5.986996079090077,
+    -3.715699665677609
+   ],
+   "b_host_p50": -2.6447626163906195,
+   "b_host_pub_p16_p50_p84": [
+    -3.5954150429456706,
+    -2.6447626163906195,
+    -2.2640399916826723
+   ],
+   "frac_dm_host_nonpos_corr": 0.083,
+   "frac_dm_host_nonpos_pub": 0.0002,
+   "rm_cl_obs_p16_p50_p84": [
+    94.21089817464369,
+    135.51675049726455,
+    179.79017510811175
+   ],
+   "rm_host_p16_p50_p84": [
+    -1046.8546512200091,
+    -974.9844650477826,
+    -904.7688598046951
+   ],
+   "rm_host_p50": -974.9844650477826
+  }
+ },
+ "rm_lit_obs": 19.44,
+ "rm_mw_closure_substitution": {
+  "median": -5.506,
+  "note": "Galactic RM prior recovered by closure on the companion's MC medians (map not fetchable offline)",
+  "sigma": 7.086
+ },
+ "sigma_rm_obs": 9.285,
+ "thresholds_obs": {
+  "material_ge": 18.57,
+  "null_lt": 9.29
+ }
+}

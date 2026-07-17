@@ -71,7 +71,7 @@ lane and stays gated by `CONTEXT.md` and the plan-§V re-trust ladders.
 
 | Thread | Verdict | Gate |
 |---|---|---|
-| 1. RM → intervening cluster/CGM B-field | Chase (strongest; cross-paper seam). DM_int inputs are V4/V5-cleared; RM comes from the polarization companion. **CHARTERED 2026-07-17:** `plan-rm-cluster-bfield-repartition-2026-07-17.md` (frozen materiality rule + both-owners gate; awaiting owner sanction for Phases 1–3). | New predeclared lane; coordinate with companion-paper owners before any attribution claim. |
+| 1. RM → intervening cluster/CGM B-field | Chase (strongest; cross-paper seam). DM_int inputs are V4/V5-cleared; RM comes from the polarization companion. **EXECUTED 2026-07-17 (sanctioned): classification MATERIAL** — RM_lit(obs)=19.4 ≥ 18.6 rad m⁻²; ±0.5 μG at 0.83 R500 shifts their RM_host by ~7σ; memo + ISSUE-010 issued (`memo-thread1-rm-repartition-2026-07-17.md`). | Phase 4 (prose, both papers) gated on the both-owners agreement — companion-lead decision pending. |
 | 2. DM as gas calorimeter below SZ/X-ray floor | Chase; same archival query as S1. | Same record as S1. |
 | 3. δDM vs τ differential (ν⁻² test) | Valid design, but the τ side consumes wave-1-revoked scattering fits. δDM alone (V6-cleared) supports the ν⁻² bound half. | τ-correlation half blocked behind V1/C1; the pure δDM bound could be chartered now. |
 | 4. Steep-β cluster sightline (20230307A α=5.26) | Blocked. Built entirely on revoked fits; CONTEXT.md bars quoting β for any row pending V1 + geometry adjudication; the analyst layer itself flags component-multiplicity artifact risk. | V1 + geometry-selection campaign. |
