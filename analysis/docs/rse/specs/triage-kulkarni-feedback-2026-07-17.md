@@ -58,10 +58,12 @@ lane and stays gated by `CONTEXT.md` and the plan-§V re-trust ladders.
   result would sharpen the a-posteriori framing already in prose. Needs a
   predeclared method (cluster mass function + path integral) before the
   number is quotable.
-  **CHARTERED 2026-07-17:** predeclared method record
-  `plan-cluster-crossing-probability-2026-07-17.md` (thresholds pinned to the
-  registry mass; Verdi-standard z-vector primary; 30% cross-variant
-  quotability rule). Awaiting owner sanction.
+  **EXECUTED 2026-07-17 (sanctioned): QUOTABLE** — predeclared record
+  `plan-cluster-crossing-probability-2026-07-17.md`;
+  $N_{\rm exp} = 0.077$ (Verdi z-set, Tinker08, mass-integrated
+  $\pi R_{500}^2$), variants within 10% (Despali16 0.070, control z-set
+  0.077; ST diagnostic excluded as a mass-convention over-count), referee's
+  ~0.1 confirmed. Sentence landed in results §dominant-systems.
 - **S3. f_IGM non-circular normalization** (referee §5). Breaking the
   circularity requires an external f_IGM not derived from DSA-110 sightlines
   (or a joint refit). Larger scope; the sensitivity is now stated in prose.

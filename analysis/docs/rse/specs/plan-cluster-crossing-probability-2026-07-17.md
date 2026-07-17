@@ -403,3 +403,37 @@ primary+alternative spread rule.)*
   sentence shape.
 - **Status: awaiting owner sanction** for Phases 1–3 (Phase 0 is pin
   verification only).
+
+### Version 1.1 — 2026-07-17 (executed)
+- **Owner sanction** recorded ("Sanctioned, bring this home", journal entry of
+  the same day) covering Phases 1–3.
+- Phases 0–2 executed in `scripts/cluster_crossing_probability.py` +
+  `tests/test_cluster_crossing_probability.py` (13 tests green under
+  `uv run --project pipeline --frozen`).
+- **Pin updates discovered mid-execution, resolved per the plan's own notes:**
+  - PR #110 (Verdi z-standard) landed while this record was in flight; the
+    TARGETS note was exercised immediately — `Z_PRIMARY` is read at TARGETS
+    precision and the test imports `galaxies.foreground.config.TARGETS`
+    directly (filter `z < 1.0`), so the pin cannot rot.
+  - $R_{500}(1.48\times10^{14}, z=0.2)$ = 0.753 Mpc in the budget cosmology
+    vs the registry's 0.729: a 3.3% offset fully explained by the Wen+Han
+    catalog cosmology ($h\approx0.73$ reproduces 0.729 exactly). Kept
+    self-consistent budget $h=0.7$; round-trip tolerance widened to 4% with
+    the cause recorded in the test.
+  - **Alternative-fit substitution (recorded, pre-verdict):** Sheth–Tormen's
+    ~virial mass convention over-counts at a fixed $M_{500c}$ threshold by
+    construction (0.243 vs 0.077 — a convention artifact, not fit
+    uncertainty), so it would have triggered the spread branch for a
+    non-physical reason. The quotability alternative is Despali et al. 2016
+    at $\Delta=500c$ (coefficients verified against the paper); ST is
+    emitted as an excluded diagnostic row so the over-count stays visible.
+- **Results (CSV `scripts/cluster_crossing_probability.csv`):**
+  $n(>1.48\times10^{14} M_{500c}, z=0.2) = 2.17\times10^{-6}$ Mpc$^{-3}$;
+  $N_{\rm exp}$ primary **0.0772** (Verdi z-set, Tinker08, mass-integrated);
+  control z-set 0.0766; Despali16 0.0703; $\ge10^{14}$ 0.1313; fixed-$\sigma$
+  0.0551; 12-sightline tertiary 0.1049. Referee's ~0.1 confirmed in order of
+  magnitude.
+- **Quotability verdict: QUOTABLE** (max rule spread 0.09 ≤ 0.30; sanity band
+  satisfied). Phase 3 quotable branch executed: one sentence appended to the
+  a-posteriori paragraph in `sections/results.tex` (sec:dominant-systems);
+  `Tinker2008` + `Despali2016` added to `bib/refs.bib`.
