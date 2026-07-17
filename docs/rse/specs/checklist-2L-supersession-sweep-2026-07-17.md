@@ -45,17 +45,23 @@ Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
    DSA+CHIME measurement figure; never resubmit DSA-only. Owner ruling
    2026-07-17 (chat): this figure — **compiled figure 7** — must not remain
    in the manuscript; replacement is mandatory, not optional.
-3b. **Compiled figures 11–16** — the six unlabeled `figure*` environments in
-   `sections/dsa_scint_acf.tex` (input at appendix.tex L259; two per-burst
-   `figures/dsa_scint_acf/<nick>_dsa_acf_lorentzian_fits.pdf` panels each,
-   order zach/whitney, oran/isha, wilhelm/phineas, freya/johndoeII,
-   hamilton/mahi, chromatica/casey). Owner ruling 2026-07-17 (chat): these
-   must not remain in the manuscript and need replacement — the July-7
-   single-component Lorentzian ACF fits are superseded by the 2L
-   two-component campaign products. Replace with the post-finalization
-   per-burst ACF/ladder figures from the official rerun (numbering note:
-   the jointmodel-pair grids that follow render as figures 17–22 and are
-   not covered by this ruling).
+3b. **Compiled figures 11–16 — superseded item, updated post-#124.** The six
+   DSA-only ACF grids (`sections/dsa_scint_acf.tex`) were removed from the
+   appendix by PR #124 (provenance note retained in `appendix.tex`; the
+   source file is kept but no longer input). Compiled figures 11–16 are now
+   the six `figure*` envs of `sections/jointmodel_pairs.tex` (twelve
+   per-burst `figures/jointmodel_pair/<nick>_jointmodel_pair.pdf` panels).
+   Owner ruling 2026-07-17 (chat): these joint time–frequency model fits are
+   ALSO outdated — they predate the approved PL-PBF kernel change — and must
+   be replaced with post-PL-PBF production refit panels once the
+   joint-tf-fits refit campaign lands. Any DSA+CHIME ACF appendix
+   replacement additionally stays blocked on the post-finalization DSA rerun
+   per the #124 provenance note.
+3c. **Compiled figure 2** — `fig:codetection-triptych-whitney`
+   (`scripts/plot_codetection_triptych.py`). Owner ruling 2026-07-17 (chat):
+   same PL-PBF supersession — its joint-fit content is pre-PL-PBF and the
+   figure must be regenerated at the refit pin (the joint-tf-fits lane was
+   already editing the producer when the ruling landed).
 4. **`dsa_scint_provisional_table.tex`** — frozen 2026-07-07 DSA Lorentzian
    catalog (only oran certified). DSA side is not superseded by the CHIME 2L
    work itself, but the caption's "sole certified measurement in the sample"
