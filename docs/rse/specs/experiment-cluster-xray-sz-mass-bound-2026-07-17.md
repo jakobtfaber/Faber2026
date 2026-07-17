@@ -84,7 +84,10 @@ of truth (`intervening_census_registry.csv:23`, `m500_1e14msun = 1.48`).
   DM ∝ $M^{\approx0.72}$ at fixed $b$): capping the mass at the worst-case
   $1.67\times10^{14}$ instead of the $+0.2$ dex tail $2.34\times10^{14}$ trims
   **560 → ≈440**; central ECF gives **≈410**. Bracket becomes ≈100–440
-  (factor ~4.2) instead of 100–560 (factor ~5.6).
+  (factor ~4.2) instead of 100–560 (factor ~5.6). *(Analytic pre-MC estimate —
+  superseded by the realized truncated-prior MC, 95% CI [84, 328] ≈ 80–330,
+  factor ~3.9; see Status. The MC also renormalizes the low end, 96→84, the
+  correct consequence of right-truncating the mass prior.)*
 
 ## Phase 4 — frozen rule application: GATE-EDGE, two discovered ambiguities
 
@@ -112,7 +115,7 @@ inspection — even to correct an input rounding — is not the agent's call.
 **Owner adjudication required.** Both branches were journaled; no prose has
 been touched.
 
-## If adjudicated constraining — proposed prose (draft, NOT applied)
+## If adjudicated constraining — proposed prose (draft; superseded by the applied edit, which uses the MC-derived ≈80–330 / factor ~4 — see the landed diff)
 
 `sections/results.tex` (`sec:dominant-systems`): replace the bracket sentence's
 high end with the X-ray-capped value, e.g. "…spans
