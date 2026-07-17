@@ -17,6 +17,7 @@ Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
 | 1 | completed | Results, Discussion, and the generated CHIME gate table now report the one qualified `chromatica_hi` record and 23 diagnostic records. |
 | 2 | completed | All twelve ledger strands point at PR #192 evidence; Chromatica is trusted, Freya preserves its historical negative result plus the final diagnostic outcome, and Hamilton is explicitly unphysical-suspect. Generated views were refreshed. |
 | 3 | validated; promotion pending | The DSA-only figure is removed from compiled TeX and replaced by a joint-summary placeholder. A candidate-only PR is required before exact-byte owner approval and later promotion. |
+| 3b | diagnosed; stale panels removed | The six July-7 DSA-only ACF floats are no longer compiled. PR #192 supplies 24 hash-reviewed CHIME ACF renders but no matching post-finalization DSA rerun, so honest joint replacements are blocked on new DSA products plus exact-byte owner approval. |
 | 4 | completed | The DSA catalog remains explicitly provisional; Results now says Oran is the only certified DSA-band point, not the sole certified scintillation result in the sample. |
 | 5 | completed | `outputs/scintillation-acf-review/index.html` carries a fixed SUPERSEDED banner pointing to the final campaign. The packet bytes otherwise remain archival. |
 | 6 | completed | The technical-review triage has a dated status note replacing the stale S16/S17 current-state framing. |
