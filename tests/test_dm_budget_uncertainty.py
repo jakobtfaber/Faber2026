@@ -206,8 +206,8 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
         "FRB 20220310F",
         "FRB 20220506D",
         "FRB 20221113A",
-        "FRB 20221203A",
         "FRB 20230307A",
+        "FRB 20230814B",
         "FRB 20230913A",
         "FRB 20240203A",
         "FRB 20240229A",
@@ -263,7 +263,7 @@ def test_incomplete_census_upper_limit_roster_is_explicit():
         "FRB 20220207C",
         "FRB 20220506D",
         "FRB 20221113A",
-        "FRB 20221203A",
+        "FRB 20230814B",
         "FRB 20230913A",
         "FRB 20240203A",
     }

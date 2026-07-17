@@ -82,7 +82,7 @@ IGM_QUADRATURE_ORDER = 64
 
 # --- Per-sightline point-estimate budget ---------------------------------------
 # DM in pc cm^-3. DM_MW is disk(NE2025)+40 halo; we split the 40 back out below.
-# Placeholder-z sightlines (freya/mahi/johndoeii) are excluded: no cosmic/host term.
+# Placeholder-z sightlines (freya/mahi/wilhelm) are excluded: no cosmic/host term.
 DM_MW_HALO = 40.0
 
 
@@ -146,7 +146,7 @@ UPPER_LIMIT = {
     "FRB 20220207C",
     "FRB 20220506D",
     "FRB 20221113A",
-    "FRB 20221203A",
+    "FRB 20230814B",
     "FRB 20230913A",
     "FRB 20240203A",
 }
