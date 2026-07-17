@@ -96,6 +96,15 @@ def render_preview(pdf: Path, preview: Path) -> None:
 
 
 def command_new_batch(args: argparse.Namespace) -> None:
+    available_slots = slots()
+    requested = set(args.candidate or [])
+    known = {slot["id"] for slot in available_slots}
+    unknown = requested - known
+    if unknown:
+        raise SystemExit(f"unknown candidate ids: {sorted(unknown)}")
+    selected_slots = [
+        slot for slot in available_slots if not requested or slot["id"] in requested
+    ]
     destination = batch_dir(args.batch_id)
     if destination.exists():
         raise SystemExit(f"batch already exists: {destination.relative_to(ROOT)}")
@@ -143,7 +152,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
             }
         )
     records: list[dict] = []
-    for slot in slots():
+    for slot in selected_slots:
         source = args.candidate_root / slot["target"]
         if not source.exists() and not args.read_from_revision:
             raise SystemExit(f"missing candidate source for {slot['id']}: {slot['target']}")
@@ -451,6 +460,11 @@ def parser() -> argparse.ArgumentParser:
         help="stage target bytes from --source-revision instead of the worktree",
     )
     new.add_argument("--pipeline-revision", required=True)
+    new.add_argument(
+        "--candidate",
+        action="append",
+        help="stage only this candidate id; repeat for multiple candidates",
+    )
     new.add_argument(
         "--pipeline-repo",
         type=Path,
