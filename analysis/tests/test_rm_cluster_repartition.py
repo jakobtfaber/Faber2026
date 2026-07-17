@@ -112,9 +112,28 @@ def test_literature_admissions_meet_criteria():
         assert s["reason"]
 
 
-def test_rm_lit_dilution():
-    med = float(np.median([s["sigma_rm_local"] for s in rcr.LITERATURE["admitted"]]))
+def test_rm_lit_dilution_one_system_one_vote():
+    # plan v1.3 adjudication: same-"system" entries collapse to their mean
+    # before the median. Rederive independently of rm_lit_obs's internals.
+    groups: dict[str, list[float]] = {}
+    for s in rcr.LITERATURE["admitted"]:
+        groups.setdefault(s.get("system", s["study"]), []).append(s["sigma_rm_local"])
+    med = float(np.median(sorted(np.mean(v) for v in groups.values())))
     assert math.isclose(rcr.rm_lit_obs(), med / 1.44, rel_tol=1e-12)
+    # Fornax enters as exactly one vote though two studies are admitted
+    fornax = [s for s in rcr.LITERATURE["admitted"] if s.get("system") == "fornax"]
+    assert len(fornax) == 2
+    assert len(groups) == len(rcr.LITERATURE["admitted"]) - 1
+
+
+def test_adjudicated_classification_is_material_at_the_boundary():
+    # Records the plan v1.3 outcome: median 27.2 local -> 18.89 observed,
+    # 1.7% over the frozen material threshold. If any admitted value changes
+    # and silently flips this, the record must fail loudly.
+    rm_lit = rcr.rm_lit_obs()
+    assert math.isclose(rm_lit, 27.2 / 1.44, rel_tol=1e-12)
+    assert rcr.classify(rm_lit) == "material"
+    assert rm_lit / (2.0 * rcr.SIGMA_RM_OBS) < 1.05
 
 
 def test_closure_substitution_recovers_their_error_budget():

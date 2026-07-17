@@ -181,6 +181,12 @@ Each item maps to one `\fixme{...}` in the draft. Resolve by editing `main.tex` 
   the DM-side correction alone moves ⟨B∥,host⟩ from −2.0 to ≈ −4.5 μG).
   Full memo with two language options:
   `docs/rse/specs/memo-thread1-rm-repartition-2026-07-17.md` (paper I repo).
+- **Amendment (2026-07-17, post literature sweep):** a systematic Undermind
+  sweep expanded the record's literature set to six studies / five systems
+  (Fornax counted once, adjudicated). Classification remains **MATERIAL**
+  but at the boundary — outskirt σ_RM median 18.9 vs threshold 18.6
+  observed-frame (1.7% margin). The ~7σ field sensitivity and the DM-side
+  correction are independent of that margin; see memo (v1.3 table).
 
 **Acceptance criteria**
 

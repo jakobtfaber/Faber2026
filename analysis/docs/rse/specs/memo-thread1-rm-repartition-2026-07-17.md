@@ -52,16 +52,15 @@ screen):
 
 (Set updated 2026-07-17 after a systematic literature sweep; selection
 criteria unchanged from the predeclared record, every value re-verified
-against the paper full text.) Median 22.1 → 15.3 rad m⁻² at the observer =
-**1.65× your quoted RM_host error**. Under the record's frozen rule this now
-classifies as **marginal** (material ≥ 18.6, null < 9.3), which routes to
-explicit owner adjudication rather than an automatic verdict. One structural
-sensitivity worth both owners seeing: Fornax appears twice (Anderson and Loi
-are the same system); counting it once — under either study — moves the
-median to 27.2 → 18.9 observed, back over the material line. The
-qualitative point is unchanged either way: plausible outskirt fields
-contribute at or above your quoted RM_host uncertainty, and the ±0.5 μG
-sensitivity table below does not depend on the literature median at all.
+against the paper full text.) Fornax appears twice above (Anderson and Loi
+measure the same system), so the record's median counts it once — one
+system, one vote (adjudicated 2026-07-17; the median is 27.2 whichever
+Fornax value carries the vote). Median 27.2 → **18.9 rad m⁻² at the
+observer = 2.0× your quoted RM_host error**, which classifies the cluster
+term as **material** under the record's frozen rule (threshold 18.6) — by a
+slim 1.7% margin, which we state plainly. The operative results below do
+not depend on that margin: the ±0.5 μG sensitivity table and the DM-side
+correction are independent of the literature median.
 
 ## What re-partitioning does (MC, mirroring your procedure)
 
