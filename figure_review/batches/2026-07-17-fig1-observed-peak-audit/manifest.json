@@ -242,7 +242,7 @@
       "repository": "parent",
       "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8",
       "source_path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
-      "source_revision": "f9288ec4e1fe0709dc2e8e6dc8fa78afc23a8bbf",
+      "source_revision": "46565c921c40e2a906189e39a9273387100246f4",
       "stored_path": "provenance/dm-catalog.csv"
     },
     {
@@ -250,33 +250,33 @@
       "repository": "parent",
       "sha256": "0ab236d30ec0c3db450516a86f2147aaa803c49d844e00da9041e6ea5b7e7d19",
       "source_path": "scripts/jointmodel_triptych_manifest.yaml",
-      "source_revision": "f9288ec4e1fe0709dc2e8e6dc8fa78afc23a8bbf",
+      "source_revision": "46565c921c40e2a906189e39a9273387100246f4",
       "stored_path": "provenance/joint-render-manifest.yaml"
     },
     {
       "id": "frequency-axis-and-inputs",
       "repository": "parent",
-      "sha256": "20892d90c791a94cad0747e38cc01146fb786b065fb4bd8de9fc6ed54ca207b1",
+      "sha256": "bd5158a6620a3df82a3448174c0bd925907a2a8bcbecd6ad2e87a16ee2d83a37",
       "source_path": "scripts/audit_fig1_frequency_axes.py",
-      "source_revision": "f9a32415674225ed6a50621e1c5f646da763db0e",
+      "source_revision": "ead40ccedcfdfba0273c042bb84c9935de1dc1c5",
       "stored_path": "provenance/frequency-axis-and-inputs.json"
     },
     {
       "id": "residual-drift",
       "repository": "parent",
-      "sha256": "cc92538dd23737db34e067ac3e903f80fd5c6888365656baf8de83f6582f1dfd",
+      "sha256": "ccb36c7f727015f441eb5e25d27d25ff4ab02022215320a199a148a2575d3581",
       "source_path": "scripts/audit_fig1_residual_drift.py",
-      "source_revision": "f9a32415674225ed6a50621e1c5f646da763db0e",
+      "source_revision": "ead40ccedcfdfba0273c042bb84c9935de1dc1c5",
       "stored_path": "provenance/residual-drift.json"
     }
   ],
-  "pipeline_revision": "5fb387ede57c9654a404ffd597d0f89a097d73b7",
+  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
   "policy": {
     "agent_visual_review_is_not_author_approval": true,
     "approval_is_per_candidate": true,
     "promotion_requires_exact_hash_match": true
   },
   "schema_version": 1,
-  "source_revision": "f9288ec4e1fe0709dc2e8e6dc8fa78afc23a8bbf",
+  "source_revision": "46565c921c40e2a906189e39a9273387100246f4",
   "title": "Figure 1 observed-peak candidate and provenance audit"
 }

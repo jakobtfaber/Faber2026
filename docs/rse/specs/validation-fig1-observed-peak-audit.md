@@ -1,7 +1,7 @@
 # Validation Complete
 
 > Validated against `docs/rse/specs/plan-fig1-observed-peak-audit.md` /
-> `docs/rse/specs/implement-fig1-observed-peak-audit.md` at commit `05d1503`
+> `docs/rse/specs/implement-fig1-observed-peak-audit.md` at commit `ead40cce`
 > on 2026-07-17.
 
 ## Overall Status: Candidate ready; manuscript promotion blocked
@@ -47,11 +47,11 @@ All automated verification checks passed:
   figure approval gate, and journal append test passed.
 - `python scripts/consistency_audit.py` in clean `flits` Conda — clean.
 - `make` / `latexmk` — manuscript compiled successfully after rebasing onto
-  `origin/main` at `eef14f00`.
+  `origin/main` at `9aad8517` with pipeline pin `17d9d266`.
 - `scripts/audit_fig1_frequency_axes.py` — regenerated exact committed SHA-256
-  `20892d90c791a94cad0747e38cc01146fb786b065fb4bd8de9fc6ed54ca207b1`.
+  `bd5158a6620a3df82a3448174c0bd925907a2a8bcbecd6ad2e87a16ee2d83a37`.
 - `scripts/audit_fig1_residual_drift.py` — regenerated exact committed SHA-256
-  `cc92538dd23737db34e067ac3e903f80fd5c6888365656baf8de83f6582f1dfd`.
+  `ccb36c7f727015f441eb5e25d27d25ff4ab02022215320a199a148a2575d3581`.
 - `scripts/figure_review.py render/verify` — focused packet validates and the
   existing protected-target gate remains green.
 

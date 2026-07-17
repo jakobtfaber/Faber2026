@@ -23,8 +23,8 @@ and residual frequency-time drift for all 12 bursts and both instruments.
 
 ## Data and header evidence
 
-- The parent checkout is based on `03b2f0fa`; its pinned pipeline revision is
-  `5fb387ede57c9654a404ffd597d0f89a097d73b7`.
+- The review branch is rebased on parent revision `9aad8517`; its inherited
+  pipeline revision is `17d9d26675702e9f8917da655621bef3231f0ddb`.
 - All 24 local archival products match the byte counts and SHA-256 values in the
   pinned pipeline `data-manifest.csv`.
 - Live reads of the 12 DSA filterbank headers on `iacobus` agree with the tracked
