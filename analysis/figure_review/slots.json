@@ -11,7 +11,9 @@
         "adopted DM and uncertainty for every burst",
         "input waterfall path and SHA-256 for both telescopes",
         "input-product DM and applied re-dedispersion offset",
-        "time/frequency resolution and mask summary"
+        "time/frequency resolution and mask summary",
+        "raw-header band edges and channel ordering for both telescopes",
+        "per-panel residual frequency-time drift estimate and zero-consistency status"
       ]
     },
     {
