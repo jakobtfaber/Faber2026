@@ -606,3 +606,34 @@ marginal→owner-adjudication branch respectively.)*
   in-context; the freeze protects the derived comparison.
 - **Status: awaiting owner sanction** for Phases 1–3 (Phase 0 is pure pin
   verification and may run pre-sanction).
+
+### Version 1.1 — 2026-07-17 (same day)
+- **Owner sanctioned Phases 1–3** ("bring this home"); Phases 0–3 executed the
+  same session (`rse/thread1-execution-20260717`).
+- Phase 0: 12 pin/algebra/rule/corner tests green
+  (`tests/test_rm_cluster_repartition.py`). Two pin-level discoveries: the
+  registry carries nine cluster rows for this sightline (the excluded b>R500
+  systems and the near-miss) — the budget-eligible flag selects the pinned
+  row; and the closure median is −5.506 (the plan's prose said −5.52, a
+  hand-arithmetic slip caught by the test, thresholds unaffected).
+- Phase 1: criteria applied to the candidate pool. Admitted (3): Böhringer,
+  Chon & Kronberg 2016 (144±43 rad m⁻², 0.5–1.0 r500 bin, 1722 RMs, mean mass
+  ~3×10¹⁴); Osinga et al. 2022/2025 (28±4 beyond-R500 floor; within-R500
+  aggregate 209±37; 124 Planck clusters); Anderson et al. 2021 (Fornax,
+  6×10¹³, ~17). Rejected (4, criteria-based): Clarke 2001 (no normalized
+  profile), Bonafede 2010 / Govoni 2017 / Stuardi 2021 (<10 sightlines).
+  RM_lit(obs) = median 28/1.44 = **19.4 rad m⁻² ≥ 18.6 → MATERIAL** (gate-edge:
+  4% over threshold; an owner-run Undermind sweep may add studies — additions
+  re-run the median per the frozen criteria).
+- Phase 2: MC executed (seed 20260707, byte-deterministic). Zero-cluster
+  corner reproduces the companion row (−755.8 / −2.02 vs −756 / −2.0).
+  Headline rows: ±0.5 μG moves RM_host by ~7σ of their quoted error; the
+  DM-side correction alone (B_cl=0) gives ⟨B∥,host⟩ ≈ −4.5 μG with ~9% of
+  draws unable to absorb the cluster column. Artifact:
+  `scripts/rm_cluster_repartition.json`; figure:
+  `thread1-figures/rm_repartition_sensitivity.pdf`.
+- Phase 3: coordination memo drafted
+  (`memo-thread1-rm-repartition-2026-07-17.md`, Options A/B); ISSUE-010
+  appended to the companion ledger (working tree, pol-companion lane).
+- **Phase 4 remains gated**: material classification opens coordination, not
+  edits; awaiting the companion-lead decision (both-owners gate).
