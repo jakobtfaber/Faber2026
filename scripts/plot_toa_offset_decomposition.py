@@ -128,6 +128,11 @@ def main() -> None:
         plt.style.use(["science", "notebook"])
     except Exception:
         pass
+    plt.rcParams["text.usetex"] = False
+    plt.rcParams["font.family"] = "serif"
+    plt.rcParams["font.serif"] = ["cmr10"]
+    plt.rcParams["mathtext.fontset"] = "cm"
+    plt.rcParams["axes.formatter.use_mathtext"] = True
     rows = load_rows()
     if len(rows) < 2:
         raise SystemExit(f"need >=2 rows with offset+geometry, got {len(rows)} from {TOA_RESULTS}")
