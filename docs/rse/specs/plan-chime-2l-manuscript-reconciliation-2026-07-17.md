@@ -113,8 +113,8 @@ finite-scintle terms in quadrature; the DSA interval remains asymmetric.
 - [x] `python scripts/figure_review.py verify` passes with no unapproved
   protected inclusion.
 - [x] `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` passes.
-- [ ] `agent-closeout-check` passes with a packet describing the gitlink and
-  generated/table paths.
+- [x] `agent-closeout-check` passes; the clean committed worktree and exact
+  staged gitlink required no dirty-state packet or runtime restart inventory.
 
 ### Manual Verification
 
