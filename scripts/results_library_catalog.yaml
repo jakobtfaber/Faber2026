@@ -73,7 +73,17 @@ entries:
     mode: link_only
     sources:
       - analysis/chime-scintillation
-    notes: Mixed experiments/docs; link-only until a results-only carve-out exists.
+    notes: Archival mixed experiments/docs predating the finalized objective-window campaign.
+
+  - id: scintillation.chime-window-2026-07-17
+    domain: scintillation
+    slot: scintillation/2026-07-17_window-tuning
+    trust: mixed
+    repo: pipeline
+    mode: link_only
+    sources:
+      - analysis/window-tuning-campaign-2026-07-17/results
+    notes: "PR #192 closed the 24-product campaign; chromatica_hi is a measurement and the other 23 records remain diagnostic only. The compact result tree is git-tracked."
 
   # --- dispersion ---
   - id: dispersion.pipeline-results-root

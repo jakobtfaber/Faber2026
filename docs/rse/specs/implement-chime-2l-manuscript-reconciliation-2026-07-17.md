@@ -18,6 +18,9 @@
   revisions.
 - Reconciled `sections/results.tex`, `CONTEXT.md`, the evidence ledger and its
   generated claims audit, the figure wishlist, and reproducibility records.
+- Added the finalized campaign to the parent Results Library catalog and opened
+  dsa110-FLITS PR #199 for the corresponding upstream pointer; the manuscript
+  gitlink remains at the reviewed PR #192 science commit.
 - Removed the owner-rejected DSA-only summary from the compiled manuscript and
   reserved its slot with an explicit exact-byte-review placeholder.
 

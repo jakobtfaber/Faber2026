@@ -35,3 +35,5 @@ uses the repository's AASTeX `deluxetable*` pattern with compact gate codes.
 The joint DSA+CHIME summary is a candidate-only artifact. Its exact PDF bytes
 must be reviewed and approved by the manuscript owner in a later promotion PR;
 the current manuscript intentionally compiles the placeholder instead.
+The upstream Results Library documentation follow-up is ready for review as
+dsa110-FLITS PR #199 and is deliberately not part of the parent science pin.
