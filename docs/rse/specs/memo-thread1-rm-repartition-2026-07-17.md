@@ -43,13 +43,25 @@ screen):
 
 | study | sample | σ_RM at ~0.6–1.0 R500 |
 |---|---|---|
-| Böhringer, Chon & Kronberg 2016 (CLASSIX) | 1722 RMs; masses 0.02–19×10¹⁴, mean ~3×10¹⁴ | **144 ± 43** (their 0.5–1.0 r500 bin) |
-| Osinga et al. 2022/2025 (124 Planck clusters, mean 5.7×10¹⁴) | 124 clusters | ≥ **28 ± 4** (their beyond-R500 floor; within-R500 aggregate 209 ± 37) |
-| Anderson et al. 2021 (Fornax, 6×10¹³ — *below* our cluster's mass) | ASKAP grid | ~**17** |
+| Böhringer, Chon & Kronberg 2016 (CLASSIX) | 1722 RMs; masses 0.02–19×10¹⁴, mean ~3×10¹⁴; mixed member/background | **112 ± 43** (Table 1, Galactic-corrected, their 0.5–1.0 r500 bin; their text prints 144 ± 43 for the same bin — table adopted) |
+| Osinga et al. 2024/25 (124 Planck clusters, mean 5.7×10¹⁴) | 363 background sources | **51 ± 6** (their tabulated 0.5–1.0 R500 background bin, cluster rest frame — the FRB's source class) |
+| Alonso-López et al. 2025 (Shapley SC core; 0.5–9.8×10¹⁴ incl. two group-scale members) | 34 cluster-region sources | **27.2 ± 5.0** (printed excess after off-target subtraction; overlapping halos) |
+| Anderson et al. 2021 (Fornax, 6×10¹³ — *below* our cluster's mass) | 76 sources < 1° | **16.8 ± 2.4** |
+| Loi et al. 2025 (Fornax again — densest grid, same system as Anderson) | 503 background sources | ~**11.5** (outer 0.86–1.10 R500 annuli, non-cluster floor removed) |
+| Khadir et al. 2025 (A3581, 2.15×10¹⁴ — nearest mass to ours) | 111 background sources | ~**8** (5–12 across the bin, figure estimate) |
 
-Median 28 → 19.4 rad m⁻² at the observer = **2.1× your quoted RM_host
-error**. Under the record's frozen rule this classifies the cluster term as
-**material** (threshold 2σ = 18.6).
+(Set updated 2026-07-17 after a systematic literature sweep; selection
+criteria unchanged from the predeclared record, every value re-verified
+against the paper full text.) Median 22.1 → 15.3 rad m⁻² at the observer =
+**1.65× your quoted RM_host error**. Under the record's frozen rule this now
+classifies as **marginal** (material ≥ 18.6, null < 9.3), which routes to
+explicit owner adjudication rather than an automatic verdict. One structural
+sensitivity worth both owners seeing: Fornax appears twice (Anderson and Loi
+are the same system); counting it once — under either study — moves the
+median to 27.2 → 18.9 observed, back over the material line. The
+qualitative point is unchanged either way: plausible outskirt fields
+contribute at or above your quoted RM_host uncertainty, and the ±0.5 μG
+sensitivity table below does not depend on the literature median at all.
 
 ## What re-partitioning does (MC, mirroring your procedure)
 
