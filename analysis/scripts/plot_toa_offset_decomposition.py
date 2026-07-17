@@ -2,9 +2,9 @@
 """Decompose the CHIME-DSA arrival offset into geometric pedestal + residual.
 
 Reproduces figures/toa_offset_decomposition.pdf (fig:toa-offset-decomposition,
-sec:toa). For each of the twelve co-detections the measured 400-MHz arrival
-offset (``measured_offset_ms``, the adopted model-t0 offset once the pipeline pin
-carries the ToA definition switch) is split as
+sec:toa). For each of the twelve co-detections the model 400-MHz arrival
+offset (``model_corrected_offset_ms``, the validation-gated model-t0 field;
+the canonical ``measured_offset_ms`` remains the peak offset) is split as
 
     offset = geometric_delay + residual,
 
