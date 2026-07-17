@@ -35,10 +35,31 @@ def test_review_slots_are_unique_and_cover_requested_families() -> None:
         "association",
         "scintillation-summary",
         "scintillation-acf",
+        "chime-scintillation-acf",
         "joint-model",
         "codetection-triptych",
         "scintillation-qualification",
     }
+
+
+def test_new_batch_can_select_one_stable_candidate() -> None:
+    module = load_review_module()
+    parsed = module.parser().parse_args(
+        [
+            "new-batch",
+            "example",
+            "--title",
+            "example",
+            "--pipeline-revision",
+            "deadbeef",
+            "--only",
+            "fig6-scint-summary",
+            "--only-family",
+            "chime-scintillation-acf",
+        ]
+    )
+    assert parsed.candidate == ["fig6-scint-summary"]
+    assert parsed.only_family == ["chime-scintillation-acf"]
 
 
 def test_gate_rejects_unapproved_protected_inclusion() -> None:
