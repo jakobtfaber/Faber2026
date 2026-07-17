@@ -10,6 +10,21 @@ same lane as the manuscript rewrite.
 
 Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
 
+## Execution status (2026-07-17)
+
+| Item | Status | Resolution |
+|---|---|---|
+| 1 | completed | Results, Discussion, and the generated CHIME gate table now report the one qualified `chromatica_hi` record and 23 diagnostic records. |
+| 2 | completed | All twelve ledger strands point at PR #192 evidence; Chromatica is trusted, Freya preserves its historical negative result plus the final diagnostic outcome, and Hamilton is explicitly unphysical-suspect. Generated views were refreshed. |
+| 3 | validated; promotion pending | The DSA-only figure is removed from compiled TeX and replaced by a joint-summary placeholder. A candidate-only PR is required before exact-byte owner approval and later promotion. |
+| 4 | completed | The DSA catalog remains explicitly provisional; Results now says Oran is the only certified DSA-band point, not the sole certified scintillation result in the sample. |
+| 5 | completed | `outputs/scintillation-acf-review/index.html` carries a fixed SUPERSEDED banner pointing to the final campaign. The packet bytes otherwise remain archival. |
+| 6 | completed | The technical-review triage has a dated status note replacing the stale S16/S17 current-state framing. |
+| 7 | completed | The referee matrix marks scintillation partially completed while keeping the remaining scattering/two-screen/turbulence/energy gates blocked. |
+| 8 | validated; upstream PR pending | The parent catalog now indexes the final campaign. dsa110-FLITS PR #199 adds the in-submodule Results Library pointer without advancing this manuscript's reviewed science pin merely for documentation. |
+| 9 | decision pending | Do not rebake or deploy a joint-summary deck before exact-byte figure approval. The compiled manuscript intentionally retains a placeholder. |
+| 10 | decision pending | `stash@{0}` was inspected read-only and contains the pre-2L board/output lane. It was not popped or dropped; owner sign-off is required for destructive stash disposition. |
+
 ## Must update (canonical / compiled surfaces)
 
 1. **Manuscript prose** — `sections/results.tex` L177, L212, L285–302,

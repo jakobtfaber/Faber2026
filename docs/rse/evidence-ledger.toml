@@ -5,8 +5,8 @@
 #
 # Twelve co-detection sightlines x eight evidence strands. Bootstrapped from
 # CONTEXT.md trust boundaries (2026-07-15 state), the 2026-07-14/15 decision
-# records, and the C1/P1 DOCUMENTED-FAIL records indexed in the pipeline
-# INVENTORY at pin 2242124 — NOT from the stale boards.
+# records, the C1/P1 DOCUMENTED-FAIL records, and the PR #192 objective-window
+# campaign indexed at pipeline pin 17d9d266 — NOT from the stale boards.
 #
 # evidence.status vocabulary:
 #   trusted        — re-validated for manuscript use (passed its §V ladder)
@@ -69,10 +69,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -145,10 +145,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -213,18 +213,18 @@ consumers = ["sec:foreground", "sec:dominant-systems", "fig:clusters_icm", "fig:
 [[sightline.evidence]]
 strand = "scintillation_dsa"
 status = "trusted"
-artifact = "pipeline:scintillation (Oran DSA qualified measurement)"
-commit = "2242124"
-scope = "qualified DSA-band scintillation measurement (Faber2026 PR #32; Oran)"
+artifact = "pipeline:analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "qualified DSA-band scintillation measurement retained at the PR #192 pipeline pin (Faber2026 PR #32; Oran)"
 claims = ["Oran has a qualified DSA-band scintillation-bandwidth measurement"]
-consumers = ["sec:results-scintillation"]
+consumers = ["sec:results-scintillation", "fig:scint-qualified-summary"]
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -297,10 +297,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -373,10 +373,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -449,10 +449,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -526,11 +526,11 @@ consumers = []
 [[sightline.evidence]]
 strand = "scintillation_chime"
 status = "documented_fail"
-artifact = "pipeline:scintillation/experiments (C1 + P1 records; INVENTORY at pin 2242124)"
-commit = "2242124"
-scope = "C1 all-pairs cross-GP DOCUMENTED-FAIL (0/8 gated low-modulation cells, FLITS #176); P1 windowed re-upchannelization mechanism-level DOCUMENTED-FAIL (0/5 window variants, FLITS #179); P1 refuted the FFT-leakage origin, placing the common mode in the baseband within each 390.625 kHz coarse channel"
-claims = ["the retained CHIME product is information-limited for Delta-nu_d at the observed modulation depth (C1 and P1 both DOCUMENTED-FAIL)"]
-consumers = ["sec:results-scintillation", "tab:chime_scint_gates"]
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/freya_hi_campaign.json"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "Earlier C1/P1 recovery routes remain DOCUMENTED-FAIL; PR #192 re-ran standard/high-resolution objective-window fits, and both Freya records remain diagnostic_only under support, low-lag, slope, and figure gates"
+claims = ["the retained Freya CHIME products remain unqualified for a scintillation bandwidth after both the C1/P1 negative-result routes and the PR #192 objective-window campaign"]
+consumers = ["sec:results-scintillation"]
 
 [[sightline.evidence]]
 strand = "scattering"
@@ -601,10 +601,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -677,10 +677,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/hamilton_hi_campaign.json"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 retains both Hamilton products as diagnostic_only; the apparent within-band slope is unphysical and figure/low-lag gates do not support promotion"
 claims = []
 consumers = []
 
@@ -753,10 +753,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 
@@ -829,12 +829,12 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
-claims = []
-consumers = []
+status = "trusted"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 qualified the chromatica_hi CHIME record: four resolved subbands pass injection, artifact, support, and figure gates; the standard-resolution record remains diagnostic_only"
+claims = ["FRB 20240203A has a qualified CHIME-band decorrelation-bandwidth measurement in four high-resolution subbands"]
+consumers = ["sec:results-scintillation", "fig:scint-qualified-summary"]
 
 [[sightline.evidence]]
 strand = "scattering"
@@ -905,10 +905,10 @@ consumers = []
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
-status = "unavailable"
-artifact = ""
-commit = ""
-scope = "no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment"
+status = "diagnostic"
+artifact = "pipeline:analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"
+commit = "17d9d26675702e9f8917da655621bef3231f0ddb"
+scope = "PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates"
 claims = []
 consumers = []
 

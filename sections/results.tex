@@ -174,9 +174,12 @@ coverage-weighted accident.
 \subsection{Scintillation and screen attribution}
 \label{sec:results-scintillation}
 
-We report one certified DSA-band measurement (FRB~20220506D) and, separately,
-the provisional DSA-band fit catalog together with the outcome of the
-CHIME-band scintillation campaign. The provisional scattering fits that enter the
+We report two certified scintillation results: one DSA-band measurement
+(FRB~20220506D) and one qualified CHIME-band sightline (FRB~20240203A),
+together with the provisional DSA-band fit catalog and the fail-closed outcome
+of the full CHIME campaign. Because the two certified results belong to
+different bursts, they do not define a cross-band frequency scaling or a
+two-screen constraint. The provisional scattering fits that enter the
 $\tau\,\Delta\nu_d$ screen products are listed in
 Table~\ref{tab:joint-fit-provisional}, and their bounded interpretation is made
 in Section~\ref{sec:disc-screen-attribution}. None of those scattering values,
@@ -209,8 +212,9 @@ components are shown separately below and excluded from that scaling fit. For
 the nine bursts with at least two narrow-component frequencies, the fitted
 within-band slope is retained as a descriptive interpolation, not a physical
 turbulence-index measurement: the DSA-only frequency lever arm is too short,
-and no CHIME-band decorrelation-bandwidth anchor survives the artifact controls
-below. Each diagnostic also shows the bandwidth predicted from the accepted
+and the one qualified CHIME-band result below belongs to a different burst, so
+it cannot extend any of these within-burst tracks. Each diagnostic also shows
+the bandwidth predicted from the accepted
 DM-locked pulse-broadening fit through
 $\Delta\nu_d=C_1/(2\pi\tau)$ with $C_1=1.16$; the comparison is used only after
 the pulse-broadening fit clears its independent residual gates.
@@ -242,96 +246,64 @@ Appendix~\ref{app:dsa-scint-acf}.
 
 \begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{figures/dsa_lorentzian_summary.pdf}
-    \caption{Best-so-far DSA-110 Lorentzian decorrelation-bandwidth fits. Clean
-    narrow components are summarized by burst; broader components are shown
-    separately. This is a provisional fit diagnostic: only the FRB~20220506D
-    component at 1328.24 MHz has passed the full injection, off-pulse, and
-    stability qualification described in the text.}
-    \label{fig:dsa_scint_gamma}
+    \fbox{\parbox{0.92\textwidth}{\centering\vspace{1.6cm}
+    \textbf{[AUTHOR REVIEW PENDING]}\\
+    \textbf{JOINT DSA+CHIME SCINTILLATION SUMMARY}\\[0.6em]
+    The replacement candidate shows only the qualified FRB~20220506D DSA-110
+    measurement and qualified FRB~20240203A CHIME/FRB sub-band measurements.
+    It must not connect the two bursts with a scaling law or screen inference.
+    Promotion requires approval of the exact candidate SHA-256.\\
+    \vspace{1.6cm}}}
+    \caption{Reserved qualified-scintillation summary slot. \emph{Draft
+    placeholder---the joint DSA+CHIME replacement is awaiting exact-byte
+    manuscript-owner review.}}
+    \label{fig:scint-qualified-summary}
 \end{figure*}
 
-\paragraph{CHIME-band campaign.} We attempted the same decorrelation-bandwidth
-measurement on the up-channelized CHIME/FRB baseband products of all twelve
-co-detections, using the estimator lineage recovered from the original
-collaboration analysis (frequency-ACF Lorentzian fits in
-equal-signal-to-noise sub-bands, half-width-at-half-maximum convention, with
-the zero-lag and first-lag bins excluded from the fit). Because the CHIME
-up-channelization imprints frequency structure that can mimic narrow
-scintillation---a coarse-channel harmonic comb, bandpass scalloping, and
-low-lag correlations documented previously for FRB~20230325A---every fit was
-subjected to a set of fail-closed artifact controls: an off-pulse null test
-(the same fit applied to off-burst spectra must not reproduce the on-burst
-width), a two-sided low-lag excision test (the fitted width must be stable,
-neither collapsing nor growing by more than a factor of two, when the lowest
-lags are removed), a modulation-index consistency bound, a minimum of three
-valid
-sub-bands, and a provenance requirement that the input product carry the full
-instrumental mitigation stack. The modulation bound is framed against the
-propagation models of Appendix~\ref{app:twoscreen}: single-screen
-point-source diffractive scintillation gives $m\lesssim1$, while an
-unresolved pair of fully modulated screens can physically reach
-$m=\sqrt{3}\approx1.73$ (Eq.~\ref{eq:sqrt3}); the enforced tolerance
-$m\leq1.5$ is therefore a single-screen bound with noise headroom, not a
-ceiling on all plausible propagation. Accordingly, a rejection resting
-\emph{solely} on $1.5<m\leq\sqrt{3}$ would be re-examined under the
-two-screen ACF model before being attributed to instrumental origin; no
-verdict in the present campaign rests on that interval alone, because every
-burst that fails the modulation bound also lacks the validated
-instrumental-background product that the provenance control requires
-(Table~\ref{tab:chime_scint_gates}). A verdict that cannot be evaluated is treated
-as a failure, never as a pass.
+\paragraph{CHIME-band campaign.} We analyzed both the standard and available
+high-resolution up-channelized CHIME/FRB products for all twelve
+co-detections. Objective on/off-pulse windows and matched profile weights are
+applied to fixed channel slices. The frequency ACF is fit with either one
+Lorentzian or an identifiable narrow-plus-broad pair; the two-component model
+is adopted only when it improves the BIC by at least six and the broad scale
+exceeds the narrow one by a factor of four. Known-truth injections spanning
+$0.02$--$3\,$MHz recover the isolated and narrow two-component widths with
+median relative error below one percent, adopt the injected two-component
+model in every trial, and produce no false split in the envelope-only or
+noise controls. These injections validate the fitter, not the sky origin of
+any individual feature.
 
-No CHIME-band decorrelation bandwidth survives these controls: all twelve
-bursts are demoted to diagnostic status, each with a named physical cause
-(Table~\ref{tab:chime_scint_gates}). For FRB~20230325A we first ran a
-factor-isolation sweep over the preprocessing mode and the first fitted lag
-(six variants); the fitted widths remain pinned at $36$--$45\,$kHz, clustered
-just above the previously documented $35\,$kHz instrumental scale. We then
-formed four independent-time ACF streams from the two polarizations and
-subtracted a leave-one-window-out off-pulse instrumental template. This
-correction passes its independent noise null, demonstrating that the repeatable
-instrumental covariance can be removed. Real-background injections nevertheless
-recover all tested widths only at modulation index $m=1$ and fail at
-$m=0.15$, $0.20$, and $0.30$; the burst diagnostic gives only
-$m\simeq0.15$--$0.17$, and its fitted width moves with the fit boundary with an
-uncertainty larger than the value. The corrected product therefore remains
-below the estimator's demonstrated sensitivity rather than yielding a sky
-measurement. The other eleven bursts still lack an equivalently validated
-instrumental-background product. The CHIME-band data consequently contribute
-no certified $\Delta\nu_d$ and no scaling-index anchor to the screen analysis.
+Every real-data record is therefore also required to pass an off-pulse null,
+low-lag stability, minimum-three-sub-band support, amplitude and modulation
+physicality, and visual morphology review. A failed or inconclusive control is
+fail-closed. Under these gates the campaign yields one qualified CHIME-band
+sightline: the high-resolution product for FRB~20240203A. Its four resolved
+sub-bands give
+\begin{align}
+\gamma(749.2\,\mathrm{MHz}) &= 0.1136 \pm 0.0296\,\mathrm{MHz}, \\
+\gamma(687.2\,\mathrm{MHz}) &= 0.0779 \pm 0.0121\,\mathrm{MHz}, \\
+\gamma(661.1\,\mathrm{MHz}) &= 0.0770 \pm 0.0198\,\mathrm{MHz}, \\
+\gamma(623.6\,\mathrm{MHz}) &= 0.0641 \pm 0.0104\,\mathrm{MHz}.
+\end{align}
+The quoted $1\sigma$ errors combine the fit, objective-window, and
+finite-scintle terms in quadrature. A power law across these four CHIME
+sub-bands gives a descriptive within-band slope
+$\gamma\propto\nu^{3.09\pm0.99}$. The off-pulse width differs from the
+on-pulse reference by a factor 2.91, the width remains stable when the lowest
+lags are excised, all four sub-bands pass support and shape gates, and the
+upstream ACF figure passes morphology review.
 
-\begin{table}
-    \centering
-    \caption{CHIME-band scintillation campaign gate outcomes. Every burst
-    fails at least one fail-closed artifact control and is reported as
-    diagnostic only; no CHIME-band decorrelation bandwidth is certified. All
-    eleven additionally lack a validated instrumental-background product;
-    FRB~20230325A passes an independent corrected noise null but fails recovery
-    at its observed modulation. ``Inconclusive'' verdicts count as failures;
-    only the decisive controls are listed per burst, and the bursts whose
-    best-fit ACF model carries no modulation amplitude also hold an
-    inconclusive modulation verdict.}
-    \label{tab:chime_scint_gates}
-    \begin{tabular}{ll}
-    \hline
-    FRB & Failed physical controls \\
-    \hline
-    20220207C & off-pulse null \\
-    20220310F & modulation physicality \\
-    20220506D & low-lag stability; off-pulse null inconclusive \\
-    20221113A & modulation physicality; off-pulse null inconclusive \\
-    20221203A & low-lag stability; modulation physicality \\
-    20230307A & low-lag stability; modulation physicality \\
-    20230325A & injection recovery at observed modulation; fit stability \\
-    20230814B & modulation physicality; off-pulse null inconclusive \\
-    20230913A & off-pulse null \\
-    20240122A & flat-field provenance; modulation physicality \\
-    20240203A & off-pulse null \\
-    20240229A & low-lag stability \\
-    \hline
-    \end{tabular}
-\end{table}
+The other 23 standard/high-resolution product records remain diagnostic only
+with their decisive gates listed in Table~\ref{tab:chime_scint_gates}. This
+includes both CHIME products for the other eleven sightlines and the standard
+FRB~20240203A product. The earlier FRB~20230325A corrected-product recovery
+failure remains part of that diagnostic history, but it no longer justifies a
+sample-wide statement that no CHIME measurement exists. Because the qualified
+DSA and CHIME measurements are for different bursts, neither is used as the
+other's frequency anchor and no $\tau\,\Delta\nu_d$ screen inference is made
+from their juxtaposition.
+
+\input{chime_scintillation_campaign_table}
 
 \FloatBarrier
 \subsection{Turbulence spectrum and burst multiplicity}

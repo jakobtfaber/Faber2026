@@ -8,6 +8,7 @@
 <style>
 :root{--bg:#1b1e28;--bg-alt:#303340;--fg:#a6accd;--bright:#fff;--dim:#5c6078;--accent:#add7ff;--green:#5de4c7;--pink:#d0679d;--cyan:#89ddff;--border:#303340}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:"IBM Plex Mono",monospace;background:var(--bg);color:var(--fg);line-height:1.6;overflow:hidden}
+.superseded{position:fixed;z-index:10;top:0;left:0;width:100%;padding:10px 24px;background:#6e1f45;color:#fff;text-align:center;font-weight:700;letter-spacing:.02em}
 .slide{display:none;min-height:100vh;padding:60px 80px;flex-direction:column;justify-content:center;align-items:center;text-align:center}.slide.active{display:flex}
 h1{font-size:3rem;font-weight:600;margin-bottom:1rem;color:var(--bright)}h2{font-size:2.2rem;font-weight:500;margin-bottom:1.2rem;color:var(--bright)}p{font-size:1.3rem;margin-bottom:1rem}.subtitle{font-size:1.4rem;color:var(--dim);margin-top:.5rem}.small{font-size:1rem}.muted{color:var(--dim)}.accent{color:var(--accent)}.green{color:var(--green)}.pink{color:var(--pink)}.cyan{color:var(--cyan)}
 .plate{width:min(92vw,1500px);height:72vh;object-fit:contain;background:#fff;border:1px solid var(--bg-alt);border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
@@ -15,6 +16,7 @@ h1{font-size:3rem;font-weight:600;margin-bottom:1rem;color:var(--bright)}h2{font
 @media(max-width:800px){.slide{padding:40px 24px}h1{font-size:2rem}h2{font-size:1.5rem}.subtitle{font-size:1rem}.plate{height:65vh}}
 </style></head>
 <body>
+<div class="superseded">SUPERSEDED ARCHIVE (2026-07-17): the finalized PR #192 campaign replaces the Freya instrumental-origin conclusion; use analysis/window-tuning-campaign-2026-07-17/results.</div>
 <section class="slide active"><h1>Representative ACF outputs</h1><p class="subtitle">Scintillation revalidation — DSA diagnostics + CHIME instrumental control</p><p class="small muted" style="margin-top:3rem">Faber2026 · July 2026 · <span class="pink">DIAGNOSTIC ONLY</span> · Phase 0 validation pending</p></section>
 <section class="slide"><h2>Freya — DSA diagnostic ACF</h2><p class="subtitle">One usable bandwidth component · PBF-derived comparison shown · slope withheld</p><img class="plate" src="freya_dsa_acf_lorentzian_fits.png" alt="Freya DSA experiment-style bandwidth and symmetric-lag ACF diagnostic"></section>
 <section class="slide"><h2>Casey — DSA diagnostic ACF</h2><p class="subtitle">Four approximately equal-S/N sub-bands · fitted bandwidth law + PBF prediction</p><img class="plate" src="casey_dsa_acf_lorentzian_fits.png" alt="Casey DSA experiment-style bandwidth and symmetric-lag ACF diagnostic"></section>
