@@ -13,7 +13,7 @@
 |---|---|
 | Clean-Conda generated-output rebuild and `--check` | pass |
 | `pytest -q tests/test_scintillation_campaign_manuscript.py` | 5 passed |
-| `make test-science` | 130 passed, 1 xfailed |
+| `make test-science` | 137 passed, 1 xfailed |
 | `python scripts/consistency_audit.py` | clean |
 | `python scripts/sync_state.py --check --offline` | pass |
 | `python scripts/figure_review.py verify` | pass |

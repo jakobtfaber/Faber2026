@@ -34,7 +34,8 @@ connecting them by a cross-burst scaling law or deriving a shared screen.
 ## Verification summary
 
 - Focused campaign contract: 5 passed.
-- Repository science suite: 130 passed, 1 expected failure.
+- Repository science suite after the final origin/main rebase: 137 passed, 1
+  expected failure.
 - Consistency audit, state drift/rules, and figure approval gate: passed.
 - Clean `latexmk` rebuild: passed; generated table and review placeholder were
   visually inspected in the rendered PDF.
