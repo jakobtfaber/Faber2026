@@ -4,6 +4,16 @@
 
 **Bottom line:** 16 of 20 suggestions are valid against the *current* tex, not just the reviewed docx. One (S9/S10) exposes a genuine data-integrity bug in the DM budget that must be fixed before submission. Two complaints (S9 first half, S10 fragments) are docx-conversion artifacts. S18 restates the already-tracked V/A/C re-validation blocker.
 
+**Current-status note (2026-07-17):** dsa110-FLITS PR #192 supersedes the
+campaign assumptions behind S16 and S17. Its objective-window injection
+harness passes, and the official 24-product rerun qualifies the high-resolution
+FRB 20240203A record while retaining the other 23 products as diagnostic only.
+Thus the old "no certified $\Delta\nu_d$" framing and the six-of-twelve
+modulation-rejection count are historical, not current gates. A known
+scintillator through the full acquisition chain could still strengthen the
+instrumental validation, but is no longer required to justify a sample-wide
+non-detection claim because the manuscript no longer makes that claim.
+
 ## P0 — Correctness bugs (fix before anything else)
 
 **S9 (part 2) + S10 — DM_int provenance broken for three sightlines. VALID, CONFIRMED IN DATA.**

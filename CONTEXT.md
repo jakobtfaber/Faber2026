@@ -64,7 +64,8 @@ parameters, the two-phase mNFW `DM_int` columns, and `fig:clusters_icm` are
 restored for manuscript use. **Still revoked** (not unlocked by V4/V5): the
 measured-scattering side of fig:budget and its measured-vs-predicted overlay
 (wave-1 τ fits, V1 / plan D1), the τ·Δν_d two-screen test and scintillation
-excess (pending the CHIME-band scint campaign), the FRB 20230913A intervening
+excess (the closed CHIME-band campaign qualifies only FRB 20240203A, while the
+certified DSA point belongs to FRB 20220506D), the FRB 20230913A intervening
 attribution (rides on revoked scint strands), `tab:beta`, and
 `tab:burst-energies`.
 Outside lanes that have passed their V re-validation, no analysis product
@@ -212,7 +213,13 @@ inputs share the gen-1 de-chirp defect lineage found in the scintillation
 products. (1) Geometry-selection campaign (extended-medium kernel + per-sightline model
 selection, scint-informed) — supersedes the narrower "ADR-0007 re-analysis of
 the nine railed rows"; blocks any α quoting for the nine ex-railed rows and
-the restructured abstract/co-model-methods/results language. (2) CHIME-band scintillation campaign — status 2026-07-15: three
+the restructured abstract/co-model-methods/results language. (2) CHIME-band scintillation campaign — status 2026-07-17: the objective-window campaign is
+closed at dsa110-FLITS PR #192 / pin `17d9d266...`. Exactly one of 24 products,
+the high-resolution FRB 20240203A record (`chromatica_hi`), is a qualified
+measurement; its four resolved sub-bands support a descriptive within-band
+slope. The other 23 products remain diagnostic only. The certified DSA point
+is FRB 20220506D, so these measurements do not establish a cross-band scaling
+law or a common screen. Historical route status: three
 freya-qualification routes closed `DOCUMENTED-FAIL` in sequence — C1
 (cross-fitted all-pairs estimator: 0/8 required low-modulation calibration
 cells passed, nulls failed the family-wise gate, FLITS #176); P1 (windowed
@@ -224,7 +231,9 @@ each 390.625 kHz coarse channel — FLITS #179, pin #50); P2/Route B (ratio
 statistic: G2 common-mode cancellation PASS, ~100x, but G1 sensitivity fail
 — FLITS PR #180, pin #65). The owner declined to ratify narrowing the paper
 to DSA-only scintillation (`decision-2026-07-15-p1-scope-fork.md`, owner
-amendment): the campaign stays OPEN. Sanctioned successor routes: P3
+amendment). That scope decision is now satisfied by the closed objective-window
+campaign rather than by the previously proposed successor routes. Historical
+routes included P3
 (delay-domain optimal quadratic estimator,
 `handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md`, Gate 0b forecast
 first) awaiting owner sanction; external instrumental characterization
@@ -232,9 +241,11 @@ first) awaiting owner sanction; external instrumental characterization
 voltage-domain cross-statistics (separating the multiplicative common
 bandpass from source-flux modulation before detection) — each requires its
 own predeclared experiment record with frozen gates before burst data is
-inspected. Full-sample campaign work (burst configs for
+inspected. Those routes are no longer prerequisites for reporting the reviewed
+PR #192 outcome, but they do not convert any of the 23 diagnostic records into
+measurements. Earlier full-sample work (burst configs for
 whitney/phineas/mahi/isha; U sizing + regeneration for the six
-never-generated co-detections; ACF/Δν_d across the sample) remains blocked
+never-generated co-detections; ACF/Δν_d across the sample) was blocked
 behind a qualifying route on freya (the existing DSA-band Δν_d fits and
 two-screen table are themselves revoked pending §V; the campaign
 re-establishes both bands).

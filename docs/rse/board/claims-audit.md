@@ -7,7 +7,7 @@ Generated from `docs/rse/evidence-ledger.toml`, cross-checked against `\label{}`
 
 **Sightlines:** 12 · **Evidence rows:** 96 · **Errors:** 0 · **Warnings:** 0
 
-**Status totals:** blocked 34 · diagnostic 1 · documented_fail 2 · trusted 48 · unavailable 11
+**Status totals:** blocked 34 · diagnostic 11 · documented_fail 2 · trusted 49
 
 ## Cross-check findings
 
@@ -78,8 +78,8 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### oran · scintillation_dsa — `trusted`
-- artifact: `pipeline:scintillation (Oran DSA qualified measurement)` @ `2242124`
-- consumers: `sec:results-scintillation`
+- artifact: `pipeline:analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json` @ `17d9d26675702e9f8917da655621bef3231f0ddb`
+- consumers: `sec:results-scintillation`, `fig:scint-qualified-summary`
 - claim: Oran has a qualified DSA-band scintillation-bandwidth measurement
 
 ### isha · association — `trusted`
@@ -163,9 +163,9 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### freya · scintillation_chime — `documented_fail`
-- artifact: `pipeline:scintillation/experiments (C1 + P1 records; INVENTORY at pin 2242124)` @ `2242124`
-- consumers: `sec:results-scintillation`, `tab:chime_scint_gates`
-- claim: the retained CHIME product is information-limited for Delta-nu_d at the observed modulation depth (C1 and P1 both DOCUMENTED-FAIL)
+- artifact: `pipeline:analysis/window-tuning-campaign-2026-07-17/results/freya_hi_campaign.json` @ `17d9d26675702e9f8917da655621bef3231f0ddb`
+- consumers: `sec:results-scintillation`
+- claim: the retained Freya CHIME products remain unqualified for a scintillation bandwidth after both the C1/P1 negative-result routes and the PR #192 objective-window campaign
 
 ### johndoeII · association — `trusted`
 - artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
@@ -242,6 +242,11 @@ Only rows with manuscript consumers appear here.
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
+### chromatica · scintillation_chime — `trusted`
+- artifact: `pipeline:analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json` @ `17d9d26675702e9f8917da655621bef3231f0ddb`
+- consumers: `sec:results-scintillation`, `fig:scint-qualified-summary`
+- claim: FRB 20240203A has a qualified CHIME-band decorrelation-bandwidth measurement in four high-resolution subbands
+
 ### casey · association — `trusted`
 - artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
@@ -272,7 +277,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; re-admitted railed-hi Tier-B (PPC-verified C1D1 joint fit) but suspended pending §V (V1) and geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -284,7 +289,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; Pass-2 re-admitted via mixed-legacy c0,gamma but uncitable pending §V (V3); do NOT FAIL-gate (energy is beta-independent) |
 
@@ -295,8 +300,8 @@ Only rows with manuscript consumers appear here.
 | dm_obs | trusted | `sec:dm-measurement`, `sec:dm` | V6; adoption uniformly chime_primary; CHIME-DSA agreement documented; byte parity enforced by tests/test_verified_dm_manuscript.py |
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
-| scintillation_dsa | trusted | `sec:results-scintillation` | qualified DSA-band scintillation measurement (Faber2026 PR #32; Oran) |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_dsa | trusted | `sec:results-scintillation`, `fig:scint-qualified-summary` | qualified DSA-band scintillation measurement retained at the PR #192 pipeline pin (Faber2026 PR #32; Oran) |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; Pass-2 re-admitted via mixed-legacy c0,gamma but uncitable pending §V (V3); do NOT FAIL-gate (energy is beta-independent) |
 
@@ -308,7 +313,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -320,7 +325,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; EMG guardrail: a coherent bright-pulse residual within the preferred exponential-tail model, not a rejected EMG/PBF family; suspended pending §V (V1) |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -332,7 +337,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; interior beta=3.23 under the retired thin-screen campaign, suspended pending §V (V1) and geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -344,7 +349,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | documented_fail | `sec:results-scintillation`, `tab:chime_scint_gates` | C1 all-pairs cross-GP DOCUMENTED-FAIL (0/8 gated low-modulation cells, FLITS #176); P1 windowed re-upchannelization mechanism-level DOCUMENTED-FAIL (0/5 window variants, FLITS #179); P1 refuted the FFT-leakage origin, placing the common mode in the baseband within each 390.625 kHz coarse channel |
+| scintillation_chime | documented_fail | `sec:results-scintillation` | Earlier C1/P1 recovery routes remain DOCUMENTED-FAIL; PR #192 re-ran standard/high-resolution objective-window fits, and both Freya records remain diagnostic_only under support, low-lag, slope, and figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; interior beta=3.72 under the retired thin-screen campaign, suspended pending §V (V1) and geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -356,7 +361,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | diagnostic | — | V4 cleared the census verdict, but johndoeII's interior z=0.77 dominant-halo attribution is provisional until a spectroscopic host redshift exists |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -368,7 +373,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 retains both Hamilton products as diagnostic_only; the apparent within-band slope is unphysical and figure/low-lag gates do not support promotion |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -380,7 +385,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -392,7 +397,7 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | trusted | `sec:results-scintillation`, `fig:scint-qualified-summary` | PR #192 qualified the chromatica_hi CHIME record: four resolved subbands pass injection, artifact, support, and figure gates; the standard-resolution record remains diagnostic_only |
 | scattering | documented_fail | — | joint-fit quality gate FAIL (chi2_r ~ 11.6/9.3); excluded from the beta roster (tab:beta) |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |
 
@@ -404,6 +409,6 @@ Only rows with manuscript consumers appear here.
 | dm_budget | trusted | `sec:budget`, `sec:results-budget`, `eq:dmbudget` | V5 cleared 2026-07-07; NE2001/YMW16 disk terms, 40 pc/cc halo prior, Macquart mean, and mNFW two-phase DM_int restored |
 | foreground_census | trusted | `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid` | V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored |
 | scintillation_dsa | blocked | — | DSA-band decorrelation-bandwidth fits and the two-screen table are revoked pending plan-circulation-readiness §V; the CHIME campaign re-establishes both bands |
-| scintillation_chime | unavailable | — | no qualified CHIME scintillation-bandwidth measurement; six co-detections were never generated; campaign OPEN per the 2026-07-15 owner amendment |
+| scintillation_chime | diagnostic | — | PR #192 executed standard and high-resolution CHIME products; this sightline has no qualified record and remains diagnostic_only under named artifact/support/figure gates |
 | scattering | blocked | — | wave-1 fit-trust reset 2026-07-06; beta/tau/alpha not citable pending §V (V1) and per-sightline geometry model selection |
 | energies | blocked | — | fit-trust reset; no energy citable pending §V (V3); requires spectroscopic host z and a joint c0,gamma fit; gamma_D pile-up near -5 and a selection-rule contradiction flagged for the pass |

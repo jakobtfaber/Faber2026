@@ -1,7 +1,7 @@
 # Figure wishlist — Faber2026
 
-**Status:** living inventory  
-**Date:** 2026-07-10  
+**Status:** living inventory
+**Date:** 2026-07-17
 **Purpose:** single list of figures we intend to put in the manuscript but have
 not yet (re)inserted under the trust-reset / V-ladder gates.
 
@@ -24,7 +24,6 @@ gate clears — on-disk PDFs under `figures/` may be campaign-era.
 | `fig:ne2025_mw` | `ne2025_mw_characterization_nside32.pdf` | §Obs-MW |
 | `fig:sightline_halo_grid` | `sightline_halo_grid.pdf` | §Obs-FG |
 | `fig:assoc-cards-grid` | `association_cards/` | §ToA / appendix |
-| `fig:dsa_scint_gamma` | `dsa_lorentzian_summary.pdf` | §Results-scint (DSA-only; CHIME/two-screen still deferred) |
 | `fig:dsa-scint-acf-*` | `dsa_scint_acf/` | App DSA ACF |
 | `fig:jointmodel-pair-*` | `jointmodel_pair/` | App morphology audit (no τ/β quotes) |
 | `fig:clusters_icm` | `clusters_icm.pdf` | App / dominant systems |
@@ -38,9 +37,10 @@ gate clears — on-disk PDFs under `figures/` may be campaign-era.
 |----|----------------|------|------|-------------------|----------------|
 | W1 | `fig:budget` | Measured-vs-predicted scattering budget (τ overlay on intervening predictions) | V1 + C + plan D1 | `sightline_dm_scattering_budget.pdf` (measured side revoked) | `sections/results.tex` §budget |
 | W2 | `fig:jointmodel_montage` | Joint two-band model/data/residual montage for the sample | V1 + C | `jointmodel_montage.pdf` (revoked fits) | `sections/observations.tex` §obs-scatt |
+| W3 | `fig:scint-qualified-summary` | Qualified DSA+CHIME scintillation measurements, kept separate by burst | Exact-byte owner approval | New joint candidate required; the 2026-07-17 owner decision rejected the DSA-only `dsa_lorentzian_summary.pdf` concept | `sections/results.tex` §results-scintillation |
 | W4 | `fig:subband_tau_validation` | Sub-band EMG τ-slope diagnostic grid (D3: diagnostic only) | V1 | `subband_tau_validation_grid.pdf`, `chime_subband_compare.pdf` | `sections/results.tex` §results-alpha (+ Methods TODO) |
 | W5 | `fig:scint_screens` | Two-screen / screen-attribution summary (CHIME+DSA τ·Δν_d) | B5 + V1 scint + A1 | `codetection_scint_excess.pdf` (and related wilhelm scint PDFs) — regenerate | `sections/results.tex` §results-scintillation |
-| W6 | *(CHIME ACF gallery)* | Per-burst CHIME-band ACF diagnostics (peer of App DSA ACF) | B4 + V1 | not yet as ms set | note only until B campaign lands a stem |
+| W6 | *(CHIME ACF gallery)* | Per-burst CHIME-band ACF diagnostics (peer of App DSA ACF) | Owner decision after PR #192 campaign review | PR #192 records 24 reviewed standard/high-resolution products; only `chromatica_hi` is a measurement | no manuscript slot yet |
 
 ---
 

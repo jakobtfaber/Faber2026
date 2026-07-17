@@ -1,0 +1,33 @@
+{
+  "campaign": "CHIME objective-window scintillation campaign",
+  "campaign_status": "closed",
+  "command": "env -i HOME=/Users/jakobfaber PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin /opt/anaconda3/bin/conda run -n py312 python scripts/build_scintillation_campaign_summary.py",
+  "expected_measurement": "chromatica_hi",
+  "generator_sha256": "594eb021afac1c9a6d402cdc0baf8c2f119dc8089ad005c9ec0079aad98f1672",
+  "inputs": [
+    {
+      "path": "pipeline/analysis/window-tuning-campaign-2026-07-17/results/validation.json",
+      "sha256": "190d4d935eb19c9c884761daaf641893cfb29a336391af6c4791bcbfec133512"
+    },
+    {
+      "path": "pipeline/analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl",
+      "sha256": "08f8678fda6c5f112debad55e95ceeb8ab7993277b63cc09b04251974af6a147"
+    },
+    {
+      "path": "pipeline/analysis/window-tuning-campaign-2026-07-17/results/injection_recovery.json",
+      "sha256": "71de88051bd67be8b4475e30d837ab299efefccbeea2b96914ef9a4585de12e7"
+    },
+    {
+      "path": "pipeline/analysis/window-tuning-campaign-2026-07-17/results/figures.review.json",
+      "sha256": "7fe226eb688a8c10d78751ede80e5f9f86f96b9d8f83209af17fe2114d0edc09"
+    }
+  ],
+  "output": {
+    "path": "chime_scintillation_campaign_table.tex",
+    "sha256": "2855314386422e1e31154e558cf4a73fac9b68a4e0d5d8804752743b35a1d520"
+  },
+  "parent_base_revision": "03b2f0fadd2872743b97023b37b73ec0877ecf5b",
+  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+  "python": "3.12.13",
+  "recorded_date": "2026-07-17"
+}
