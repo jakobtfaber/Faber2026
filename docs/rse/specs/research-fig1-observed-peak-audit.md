@@ -23,7 +23,7 @@ and residual frequency-time drift for all 12 bursts and both instruments.
 
 ## Data and header evidence
 
-- The review branch is rebased on parent revision `9aad8517`; its inherited
+- The review branch is rebased on parent revision `26e37e4e`; its inherited
   pipeline revision is `17d9d26675702e9f8917da655621bef3231f0ddb`.
 - All 24 local archival products match the byte counts and SHA-256 values in the
   pinned pipeline `data-manifest.csv`.
