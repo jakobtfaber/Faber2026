@@ -690,3 +690,33 @@ marginal→owner-adjudication branch respectively.)*
   outcome to avoid a second churn of the pol-lane file.
 - **Status: owner adjudication pending** (material vs marginal-stands vs
   null); Phase 4 both-owners gate unchanged.
+
+### Version 1.3 — 2026-07-17 (marginal-branch adjudication, owner-delegated)
+
+- The owner delegated the v1.2 marginal adjudication ("I'm leaving this to
+  you", 2026-07-17, in-session).
+- **Decision: one system, one vote.** Entries sharing a physical system
+  collapse to their mean before the median. Rationale: the median is meant
+  to summarize independent systems; Fornax appearing as two admitted studies
+  (Anderson 2021, Loi 2025) is a sampling artifact of the literature, not
+  two pieces of evidence. The criteria's silence on independence was an
+  oversight in v1.0, resolved here as adjudication — the selection criteria
+  and thresholds are untouched.
+- **Robustness of the decision:** the median is 27.2 whether the Fornax
+  collapse takes the mean (14.25), Anderson alone (17), or Loi alone (11.5)
+  — every one-vote reading lands on the same median, so the collapse-rule
+  choice cannot tune the outcome.
+- **Result:** median 27.2 local → **18.89 rad m⁻² observed** ≥ 18.57 →
+  **MATERIAL**, by a 1.7% margin. That gate-edge margin is recorded
+  prominently: the classification label is boundary-sensitive, and the
+  memo's operative results (±0.5 μG ⇒ ~7σ shift in RM_host; DM-side
+  correction doubling ⟨B∥,host⟩) are independent of the literature median.
+- Implementation: `system` keys on the two Fornax entries;
+  `rm_lit_obs()` groups by system (mean within, median across); dilution
+  test rewritten to mirror the grouping; new pin test records the
+  adjudicated outcome (fails loudly if a value change silently flips it).
+  13/13 tests green; JSON + figure regenerated; corner reproduces.
+- Memo classification paragraph, triage row, ISSUE-010 (amendment line),
+  and the transmittal draft updated to "adjudicated material (boundary)".
+- **Status:** Phase 4 both-owners gate unchanged — awaiting the
+  companion-lead decision on Options A/B.
