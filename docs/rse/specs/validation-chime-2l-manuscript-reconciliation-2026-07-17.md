@@ -47,9 +47,14 @@ contains 25 pending candidates: one two-panel qualified-measurement summary and
 24 standard/high-resolution CHIME ACF diagnostics. All 24 diagnostic hashes
 match the PR #192 `figures.review.json`; the packet freezes the campaign
 validation, JSONL records, Chromatica measurement, figure-review verdicts, Oran
-qualification, and generator provenance. Focused loader/approval tests pass
-(11 tests), packet validation passes, and the summary plus representative ACF
-panels and contact sheet were inspected visually.
+qualification, and generator provenance. After rebasing onto `origin/main` at
+`341e2200`, the shared review registry and CLI preserve both the Figure 1 and
+joint-scintillation candidate families and their separate evidence rules.
+Focused loader/approval tests pass (12 tests), the full science suite passes
+(139 passed, 1 expected xfail), packet validation, consistency, offline state
+sync, and the figure gate pass, and a clean strict LaTeX rebuild produces 47
+pages. The summary, representative ACF panels, and contact sheet were inspected
+visually.
 
 No post-finalization DSA ACF campaign exists at pipeline pin `17d9d266`.
 Consequently the packet does not claim that its CHIME-only diagnostic panels
