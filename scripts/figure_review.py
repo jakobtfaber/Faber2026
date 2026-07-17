@@ -121,6 +121,20 @@ def command_new_batch(args: argparse.Namespace) -> None:
 
     provenance_dir = destination / "provenance"
     provenance_dir.mkdir()
+    family_evidence = {
+        "gallery": ["dm-catalog", "joint-render-manifest"],
+        "association": ["dm-catalog"],
+        "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+        "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+        "scintillation-summary": ["scint-component-catalog", "scint-fit-catalog"],
+        "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
+        "scintillation-qualification": ["oran-qualification"],
+    }
+    required_evidence = {
+        evidence_id
+        for slot in selected_slots
+        for evidence_id in family_evidence[slot["family"]]
+    }
     evidence_specs = [
         ("dm-catalog", "parent", "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"),
         ("joint-render-manifest", "parent", "scripts/jointmodel_triptych_manifest.yaml"),
@@ -132,6 +146,8 @@ def command_new_batch(args: argparse.Namespace) -> None:
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
+        if evidence_id not in required_evidence:
+            continue
         if repository == "parent":
             command = ["git", "show", f"{source_revision}:{source_path}"]
             revision = source_revision
@@ -175,15 +191,6 @@ def command_new_batch(args: argparse.Namespace) -> None:
         else:
             shutil.copy2(source, artifact)
         render_preview(artifact, destination / preview_rel)
-        family_evidence = {
-            "gallery": ["dm-catalog", "joint-render-manifest"],
-            "association": ["dm-catalog"],
-            "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-            "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-            "scintillation-summary": ["scint-component-catalog", "scint-fit-catalog"],
-            "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
-            "scintillation-qualification": ["oran-qualification"],
-        }
         record = {
                 **slot,
                 "artifact": str(artifact_rel),
