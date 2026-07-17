@@ -94,7 +94,7 @@ false-alarm expectation is the sum $\sum_j \mu_j$ over the \emph{trial set}: the
 complete list of DSA-110 triggers searched for a CHIME/FRB counterpart over the
 2022~February--2024~February overlap, not merely the twelve that matched. The
 look-elsewhere penalty is therefore carried explicitly by that sum. Under the
-chance-maximizing windows below, the eight pairs whose pre-specified
+conservative windows defined below, the eight pairs whose pre-specified
 association statistic included a DM constraint have
 $\mu_j\sim2$--$6\times10^{-9}$, while the four position-and-time-only pairs use
 $f_{\rm DM}=1$ and have $\mu_j=4.4\times10^{-7}$. The twelve reported pairs sum
@@ -180,7 +180,7 @@ residual is consistent with the geometric delay to within $|\Delta t_i| \le
 bursts, so the largest raw residual---$+8.4$\,ms for FRB~20220506D, a $74$\,ms-wide
 burst---is only $0.1\sigma$. All twelve residuals ($-2.7$ to $+8.4$\,ms,
 tabulated with their $\sigma_i$ in Table~\ref{tab:sample}) satisfy the criterion;
-the tightest is FRB~20221203A at $2.6\sigma$. A residual of several tens of ms
+the largest normalized residual is $2.6\sigma$ (FRB~20221203A). A residual of several tens of ms
 for a narrow, well-localized burst---inconsistent with both its few-ms budget and
 the $\lesssim\!4.5$\,ms geometric delay---would fail.
 Because nine of the twelve residuals are positive, we also test for a
@@ -195,10 +195,10 @@ verdicts are unchanged in either convention; we retain the unsubtracted
 residuals in Table~\ref{tab:sample} and flag the weighted mean as a candidate
 inter-site calibration term for the archival release. We stress
 that the association verdict does not rest on the timing residual alone: the
-decisive gates are the chance-coincidence probability, positional coincidence,
+decisive tests are the chance-coincidence probability, positional coincidence,
 and (for the eight bursts with a pre-specified DM-conditioned association
-term) DM agreement, for which the residual is a
-supporting consistency diagnostic.
+term) DM agreement; the timing residual is a supporting consistency
+diagnostic.
 
 Evaluated with the conservative windows above, the eight originally
 DM-conditioned bursts

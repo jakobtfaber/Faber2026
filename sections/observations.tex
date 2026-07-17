@@ -23,17 +23,17 @@ For each co-detection, we analyze a pair of total-intensity dynamic spectra---on
 per facility---derived from the CHIME/FRB and DSA-110 baseband recordings
 (24 spectra in total; per-spectrum provenance and array geometry accompany the
 archival data release, Section~\ref{sec:data-availability}). Each spectrum is
-loaded with its frequency axis
-standardized to ascending order and its per-channel bandpass normalized, so the
-fitted amplitudes are free of the band-edge rolloff. All fits, quality gates,
-and figures in this paper are produced with a common open-source reduction and
-fitting pipeline, which we reference throughout for reproducibility.
+standardized to an ascending frequency axis and normalized by its per-channel
+bandpass, so the fitted amplitudes are free of the band-edge rolloff. All
+fits, quality gates, and figures in this paper are produced with a common
+open-source reduction and fitting pipeline, which we reference throughout for
+reproducibility.
 The dedispersed twelve-burst gallery (Figure~\ref{fig:codetection-data-grid})
-is included below; the joint data/model/residual panels remain withheld from
-this draft while they pass the author figure-review gate. Candidate packets
-must expose the adopted and input-product DMs, exact fit artifacts, residual
-diagnostics, and intended layout before any figure is promoted into the
-manuscript (Section~\ref{sec:multicomp}).
+is included below; the joint data/model/residual panels are withheld from
+this draft pending author figure review (Section~\ref{sec:multicomp}).
+% Figure-review gate: candidate packets must expose the adopted and
+% input-product DMs, exact fit artifacts, residual diagnostics, and intended
+% layout before any figure is promoted into the manuscript.
 
 \begin{figure*}[tp]
     \centering
@@ -222,10 +222,11 @@ density of the Universe at the cluster redshift) and,
 through its DESI members, a spectroscopic redshift---together with the all-sky
 Planck Sunyaev--Zel'dovich (PSZ2) and X-ray (MCXC, MCXC-II) catalogs; at the
 sample's declination every matched cluster comes from the optical catalog.
+
 The wide discovery cone sets only the search completeness; galaxy retention is
 then physical, keyed to each candidate's own circumgalactic scale rather than to
 a single fixed impact parameter. For every galaxy candidate we estimate a
-stellar mass---from Pan-STARRS1 $g-i$ colour \citep[the][relation]{Taylor2011}
+stellar mass---from Pan-STARRS1 $g-i$ color \citep[the][relation]{Taylor2011}
 where a clean optical detection exists, and otherwise from the WISE $W1$
 luminosity \citep{Cluver2014}---convert it to a halo mass through the
 stellar-to-halo-mass relation of \citet{Moster2013}, and assign a virial radius
@@ -241,6 +242,7 @@ system before any census statistic is quoted (five confirmed and two refuted
 pairs; both identifiers are retained in Table~\ref{tab:foreground}), and the
 impact parameters of confirmed systems are uniformly recomputed from the
 burst position, the object coordinates, and the adopted redshift.
+
 Among the nine physical confirmed foreground galaxy halos
 the recovered $R_{\rm vir}$ span $\sim\!90$--$380\,\mathrm{kpc}$, and seven
 are pierced within $R_{\rm vir}$ (impact parameters
@@ -248,8 +250,9 @@ $b\approx101$--$270\,\mathrm{kpc}$, $b/R_{\rm vir}\approx0.46$--$0.96$); the two
 exceptions---both toward FRB~20230307A---graze just outside their virial radii
 ($b\approx116$--$194\,\mathrm{kpc}$, $b/R_{\rm vir}\approx1.3$--$1.4$) and are
 flagged accordingly. The full
-non-refuted galaxy census reaches $b\approx60$--$280\,\mathrm{kpc}$. Cluster
-retention is unchanged from the fixed-aperture scheme. Cluster cones are far
+non-refuted galaxy census reaches $b\approx60$--$280\,\mathrm{kpc}$.
+
+Cluster retention, by contrast, uses a fixed aperture. Cluster cones are far
 wider ($\sim\!5\,\mathrm{Mpc}$), and a cluster is kept when the sightline passes
 within twice its virial radius ($\lesssim2\,R_{200}\approx3\,R_{500}$), so a
 grazing outskirt is still recovered. Only crossings within $R_{500}$ enter the
@@ -264,9 +267,9 @@ The virial-radius criterion is applied only \emph{after} redshift confirmation,
 not in its place. Applied on its own, the geometric test would admit refuted
 background galaxies whose sightlines happen to fall within an (often
 mass-overestimated) virial radius. Stellar masses derived from WISE $W1$ without an optical
-corroborating colour can be inflated by source blending or nuclear emission at
+corroborating color can be inflated by source blending or nuclear emission at
 the sample's redshifts ($z\sim0.3$--0.6). Six physical candidates have a WISE mass with
-no usable Pan-STARRS1 colour to corroborate it; for four of these the WISE
+no usable Pan-STARRS1 color to corroborate it; for four of these the WISE
 estimate is implausibly large for an individual galaxy
 ($\log M_\star=11.7$--13.0), and the other two, though nominally lower, remain
 uncorroborated. Their circumgalactic intersection is therefore formally
@@ -295,8 +298,8 @@ $1\sigma$ of the host, when the host redshift is a placeholder, or when no
 trustworthy redshift or galaxy classification exists (including the
 PS1-STRM ``unsure'' class).
 
-An audit of the discovery-to-validation handoff recovered three catalogued
-systems that the frozen 49-row validation sheet never evaluated. Two are
+A completeness audit of the validation stage recovered three cataloged
+systems that the original 49-row validation set never evaluated. Two are
 galaxy candidates in the shallow all-sky layer: WISEA
 J044538.83$+$701843.3 at $b\simeq16$\,kpc toward FRB~20221113A and WISEA
 J211150.32$+$724807.8 at $b\simeq208$\,kpc toward FRB~20220506D. Their
@@ -308,14 +311,14 @@ the WHL12 cluster WHL J115048.0$+$714428 at $z=0.1893$ and
 $b\simeq614$\,kpc toward FRB~20230307A. It is catalog-confirmed foreground but
 absent from the adopted \citet{WenHan2024} source, so it lacks the $M_{500}$
 and $R_{500}$ inputs required by our cluster-column model and is likewise
-budget-ineligible (Appendix~\ref{app:clusters}). These rows carry the explicit
-provenance tag \texttt{v4-extension-2026-07-15}; the frozen inputs remain
-unchanged.
+budget-ineligible (Appendix~\ref{app:clusters}). In the released census
+tables these rows carry the provenance tag \texttt{v4-extension-2026-07-15};
+the original validation inputs are unchanged.
 
 The extended census evaluates 38 catalog rows along the twelve sightlines,
 which the cross-listing deduplication above reduces to 31 physical systems.
 Table~\ref{tab:foreground} lists the 26 retained for census interpretation:
-11 confirmed foreground (9 galaxy halos and 2 catalogued clusters) and
+11 confirmed foreground (9 galaxy halos and 2 cataloged clusters) and
 15 inconclusive---candidates the
 available redshifts could not place on either side of the host, which
 therefore bound the systematic uncertainty on each sightline's intervening
@@ -339,7 +342,7 @@ DESI Legacy DR9 photometric redshift alone. Our confirmation criterion
 Gaussian probability that the true redshift exceeds $z_{\rm phot}+1\sigma$, plus
 the few-percent catastrophic-outlier rate characteristic of Legacy DR9
 photometric redshifts. Across the four photometric confirmations, this amounts
-to somewhat below one expected misclassification of a background galaxy as
+to fewer than one expected misclassification of a background galaxy as
 foreground.
 Each of these four lies in the outer circumgalactic medium
 ($b\approx101$--$243\,\mathrm{kpc}$) and contributes a modest DM

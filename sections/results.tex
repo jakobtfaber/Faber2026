@@ -12,8 +12,9 @@ and predicted scattering.
 \label{sec:results-association}
 
 All twelve candidate pairs pass the association tests of
-Section~\ref{sec:toa}. Under the conservative, chance-maximizing windows of
-Section~\ref{sec:toa-pcc}, every pair has $P_{\rm cc}<10^{-6}$ and passes the
+Section~\ref{sec:toa}. Under the deliberately conservative windows of
+Section~\ref{sec:toa-pcc}, chosen to maximize the estimated chance rate,
+every pair has $P_{\rm cc}<10^{-6}$ and passes the
 positional-coincidence check; the
 timing residuals, referenced to
 400\,MHz under the shared DSA-DM convention, are consistent with the
@@ -71,13 +72,13 @@ $\mathrm{DM_{host}}\approx-10$--$171\,\mathrm{pc\,cm^{-3}}$, the largest on
 FRB~20230913A ($171^{+65}_{-81}\,\mathrm{pc\,cm^{-3}}$), and every
 redshift-known sightline is consistent with a host contributing a minority of
 the extragalactic column once the width of the cosmological term is folded in.
-Third, one high-redshift sightline (FRB~20220310F, $z=0.48$), whose
-mean-subtracted point residual was negative, has a host posterior consistent
-with zero ($P(\mathrm{DM_{host}}<0)\approx0.5$; Table~\ref{tab:budget}); its
-marginally negative median reflects sightline-to-sightline scatter about the
-diffuse cosmic normalization at these redshifts, not an unphysical host, and an
-small downward shift of the IGM baryon fraction within its quoted uncertainty
-median at zero. The highest-redshift sightline (FRB~20221203A, using the
+Third, one high-redshift sightline (FRB~20220310F, $z=0.48$) has a host
+posterior consistent with zero ($P(\mathrm{DM_{host}}<0)\approx0.5$;
+Table~\ref{tab:budget}); its marginally negative median reflects
+sightline-to-sightline scatter about the diffuse cosmic normalization at
+these redshifts, not an unphysical host, and a small downward shift of the
+IGM baryon fraction within its quoted uncertainty places the median at zero.
+The highest-redshift sightline (FRB~20221203A, using the
 provisional internal value $z=0.51$) is
 likewise dominated by the cosmological term and consistent with zero at
 $P(\mathrm{DM_{host}}<0)=0.25$. The three sightlines without
@@ -108,7 +109,7 @@ density is 500 times the critical density at the cluster redshift
 (Section~\ref{sec:obs-fg}). The FRB~20230307A sightline passes at $b/R_{500}=0.83$
 from the \citet{WenHan2024} cluster J115120.4$+$714435 ($z=0.200$,
 $\log M_{500}=14.1$), for which the two-phase modified-NFW model predicts an
-intracluster column of order $160\,\mathrm{pc\,cm^{-3}}$
+intracluster column of order $180\,\mathrm{pc\,cm^{-3}}$
 (Figure~\ref{fig:clusters_icm}). This column is uncertain at the factor-of-two
 level: an X-ray/SZ-motivated isothermal $\beta$-model with the same $M_{500}$
 and a cosmic gas fraction gives a somewhat higher central value
@@ -158,14 +159,14 @@ carrying no confirmed within-aperture system are limited by survey depth
 \subsection{Scintillation and screen attribution}
 \label{sec:results-scintillation}
 
-We report the certified Oran DSA-band measurement and, separately, the
-best-so-far DSA-band fit catalog together with the outcome of the CHIME-band
-scintillation campaign. The provisional scattering fits that enter the
+We report one certified DSA-band measurement (FRB~20220506D) and, separately,
+the provisional DSA-band fit catalog together with the outcome of the
+CHIME-band scintillation campaign. The provisional scattering fits that enter the
 $\tau\,\Delta\nu_d$ screen products are listed in
 Table~\ref{tab:joint-fit-provisional}, and their bounded interpretation is made
 in Section~\ref{sec:disc-screen-attribution}. None of those scattering values,
-nor any DSA bandwidth except the qualified Oran point below, is yet a robustly
-verified measurement. The estimator used for the decorrelation bandwidth and
+nor any DSA bandwidth except the qualified FRB~20220506D point below, is yet a
+robustly verified measurement. The estimator used for the decorrelation bandwidth and
 modulation index, and the two-screen framework that the attribution will draw
 on---including the $\tau_{s}\leftrightarrow\nu_{s}$ relation, the two-screen
 ACF product term, and the screen-distance constraint---are set out in
@@ -182,7 +183,7 @@ described in Section~\ref{sec:methods}; components that fail the bandwidth,
 modulation, or fractional-uncertainty quality flags are retained in the
 component tables but excluded from the summary measurements.
 
-Across the twelve co-detections, the regenerated fit diagnostics contain at
+Across the twelve co-detections, the fit diagnostics contain at
 least one unflagged DSA-band decorrelation-bandwidth fit component per burst,
 for a total of 41 clean Lorentzian
 components across the sample. Individual clean components span
@@ -200,8 +201,9 @@ $\Delta\nu_d=C_1/(2\pi\tau)$ with $C_1=1.16$; the comparison is used only after
 the pulse-broadening fit clears its independent residual gates.
 
 The clean-component label is a fit-quality classification, not by itself a
-certified astrophysical measurement. A targeted frozen qualification of the
-strongest candidate clears the full calibration battery. For the low-frequency
+certified astrophysical measurement. We therefore subjected the strongest
+candidate to a dedicated qualification, with all acceptance criteria fixed in
+advance, and it passes every test. For the low-frequency
 DSA-110 sub-band of FRB~20220506D, centered at $1328.24\,$MHz, we measure
 \begin{equation}
     \gamma = 0.446\ \mathrm{MHz}, \qquad
@@ -217,8 +219,8 @@ as a single sub-band point, does not determine a frequency-scaling index.
 
 Table~\ref{tab:dsa-scint-provisional} summarizes the narrow-component
 best-fit catalog for completeness. Its medians and ranges describe clean
-component fits and are not substitutes for Oran-style injection calibration;
-the individual sub-band values are shown in
+component fits and are not substitutes for the injection calibration applied
+to FRB~20220506D; the individual sub-band values are shown in
 Appendix~\ref{app:dsa-scint-acf}.
 
 \input{dsa_scint_provisional_table}
@@ -346,15 +348,17 @@ morphology independent of the turbulence-parameter values themselves.
 Figure~\ref{fig:codetection-triptych-whitney} provides the representative
 main-text audit, and Appendix~\ref{app:jointmodel-pairs} shows the ten other
 retained DM-locked model audits. Table~\ref{tab:joint-fit-provisional} records
-their best-so-far marginal values. Seven fits pass the July reduced-$\chi^2$
-and visual-residual adjudication. Three displayed models---FRBs~20220207C,
-20230913A, and 20240229A---remain morphology-only, while FRB~20221203A is
-rejected because coherent residual
-structure survives the best tested component count; FRB~20240203A has no
-retained joint-model panel. We therefore show all usable audit products but
-use scattering predictions only from the seven visually accepted fits. This
-adjudication predates full V1 re-trust certification, so every numerical fit
-value remains provisional.
+their provisional marginal values; the model label C$m$D$n$ gives the
+selected number of temporal components in the CHIME ($m$) and DSA-110 ($n$)
+bands (Section~\ref{sec:multicomp}). Seven fits pass both the
+reduced-$\chi^2$ and visual-residual adjudication. Three of the displayed
+models---FRBs~20220207C, 20230913A, and 20240229A---remain morphology-only
+diagnostics, FRB~20221203A is rejected because coherent residual structure
+survives the best tested component count, and FRB~20240203A has no retained
+joint model. We therefore show all usable audit products but draw scattering
+predictions only from the seven accepted fits. The fit family has not yet
+passed independent re-validation, so every numerical value in the table
+remains provisional.
 
 \input{joint_fit_provisional_table}
 

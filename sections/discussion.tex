@@ -56,30 +56,32 @@ fail-closed artifact controls, so any screen constraint that would have used a
 $600\,$MHz $\Delta\nu_d$ anchor---most notably a measured two-band
 frequency-scaling index---is unavailable for this sample. The failures are
 instrumental and sensitivity driven, not sky statements: they neither confirm
-nor exclude scintillation at CHIME frequencies. One DSA-band point clears the
-current gates, $\gamma=0.446^{+0.239}_{-0.250}\,$MHz at $1328.24\,$MHz for
-FRB~20220506D. The other DSA panels remain fit diagnostics rather than
+nor exclude scintillation at CHIME frequencies. One DSA-band point passes the
+full qualification, $\gamma=0.446^{+0.239}_{-0.250}\,$MHz at $1328.24\,$MHz
+for FRB~20220506D. The other DSA panels remain fit diagnostics rather than
 certified bandwidth measurements.
 
-The two-screen calculation is not yet evaluable under the accepted dual-$\tau$
-policy (Table~\ref{tab:twoscreen-provisional}). Scintillation consistency must
-pair each DSA component with the single-exponential $\alpha$ fixed to 4
-$\tau_{\rm consistency}$ refit, not with the free-$\alpha$ joint-fit track used
-for the morphology and citable-$\alpha$ audit. Those consistency refits are not
-present in the frozen catalog. We therefore report the seven otherwise
-eligible sightlines as pending rather than computing products or screen
-verdicts from the wrong $\tau$ track. Once those refits exist, the planned
-calculation will evaluate $\tau_{\rm consistency}(\nu)\Delta\nu_d$ separately
-at every clean narrow DSA component frequency, without imposing a DSA
-bandwidth power law, and will compare it with the conservative common-screen
-interval $0.1$--$2$. The mostly uncalibrated DSA widths and unavailable full
-posterior covariance remain additional gates. No two-screen, screen-distance,
-or Galactic/host identity inference is made from the current products.
+The two-screen consistency test is not yet evaluable
+(Table~\ref{tab:twoscreen-provisional}). The $\tau\,\Delta\nu_d$ product must
+pair each DSA-band decorrelation bandwidth with a scattering time refit under
+the same fixed convention---a single-exponential pulse-broadening function
+with $\alpha$ fixed to 4---rather than with the free-$\alpha$ joint-fit
+values, which serve the morphology audit and would mix two different $\tau$
+definitions in one product. Those fixed-index refits do not yet exist. We
+therefore report the seven otherwise eligible sightlines as pending rather
+than compute screen products from an inconsistent $\tau$ track. Once the
+refits exist, the calculation will evaluate $\tau(\nu)\,\Delta\nu_d$
+separately at every clean narrow DSA component frequency, without imposing a
+bandwidth power law, and compare it with the conservative common-screen
+interval $0.1$--$2$. The largely uncalibrated DSA widths and the unavailable
+full posterior covariance remain additional prerequisites. No two-screen,
+screen-distance, or Galactic/host attribution is made from the current
+products.
 
 \input{twoscreen_provisional_table}
 
-We next cross-match the independent fitted-scattering and foreground budgets
-against the registry-authoritative V4 foreground census
+We next cross-match the provisional fitted-scattering values against the
+validated foreground census of Section~\ref{sec:obs-fg}
 (Table~\ref{tab:foreground-propagation-provisional}). This comparison does not
 support a sample-wide association test: only seven propagation fits are
 accepted, only two of the four sightlines with budget-eligible foreground
@@ -87,20 +89,22 @@ systems have accepted fits, and most foreground-negative sightlines lie outside
 the deep-imaging footprints. Those zeros are censored rather than clean
 foreground-free controls.
 
-FRB~20230307A is the strongest plausible partial foreground contribution. Its
-covered sightline intersects the confirmed cluster J115120.4+714435 at
-$b/R_{500}=0.83$ and three budget-eligible galaxy halos. The fiducial foreground
-model predicts $\tau_{\rm int}=0.015$ ms, approximately 22\% of the provisional
-$\tau_{1\,\mathrm{GHz}}=0.0676$ ms. Thus the identified structures could supply
-part of the observed broadening, but do not explain all of it under the current
-model. If a future policy-compliant two-screen result supports multiple
-propagation layers, this foreground complex would be a candidate scattering
-screen; the present data neither assign a scintillation screen to it nor
-determine a screen distance.
+FRB~20230307A offers the strongest case for a partial foreground
+contribution. Its sightline lies within the deep-imaging footprints and
+intersects the confirmed cluster J115120.4+714435 at $b/R_{500}=0.83$ along
+with three budget-eligible galaxy halos. The fiducial foreground model
+predicts $\tau_{\rm int}=0.015$ ms, approximately 22\% of the provisional
+$\tau_{1\,\mathrm{GHz}}=0.0676$ ms: the identified structures could supply
+part of the observed broadening, but not all of it under the current model.
+If a future two-screen result computed under the fixed-index convention
+supports multiple propagation layers, this foreground complex would be a
+candidate scattering screen; the present data neither assign a scintillation
+screen to it nor determine a screen distance.
 
-The confirmed halo approximately 101 kpc from the FRB~20220310F sightline is a
-geometric alignment, but its fiducial scattering contribution is only about
-0.5\% of the provisional fitted value, disfavoring a dominant causal role.
+The confirmed halo approximately 101 kpc from the FRB~20220310F sightline
+intersects it geometrically, but its fiducial scattering contribution is only
+about 0.5\% of the provisional fitted value, disfavoring a dominant causal
+role.
 Conversely, FRBs~20221113A and 20230325A have close projected but inconclusive
 candidates at 16 and 60 kpc, respectively; redshift validation is required
 before either can enter the foreground budget. FRBs~20240229A and 20240203A
