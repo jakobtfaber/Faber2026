@@ -13,7 +13,7 @@ lane and stays gated by `CONTEXT.md` and the plan-§V re-trust ladders.
    a factor ~5.6 end to end, not 2. Fixed in five places (abstract,
    results §dominant-systems, conclusions, appendix geometry note,
    `fig:clusters_icm` caption): the bracket is now quoted explicitly and the
-   results text calls it "a factor of ~5 end to end".
+   results text calls it "a factor of ~6 end to end" (560/100 = 5.6).
 2. **Induced α-prior.** A prior uniform in β∈[3,4] induces a prior density on
    α ∝ (β−2)², four times higher at the β=4 endpoint than at β=3. Now stated
    in the methods priors paragraph, with the endpoint-degenerate treatment as
