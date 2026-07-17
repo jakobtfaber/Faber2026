@@ -217,7 +217,7 @@ artifact = "pipeline:scintillation (Oran DSA qualified measurement)"
 commit = "2242124"
 scope = "qualified DSA-band scintillation measurement (Faber2026 PR #32; Oran)"
 claims = ["Oran has a qualified DSA-band scintillation-bandwidth measurement"]
-consumers = ["sec:results-scintillation", "fig:oran-dsa-scint-qualified"]
+consumers = ["sec:results-scintillation"]
 
 [[sightline.evidence]]
 strand = "scintillation_chime"
