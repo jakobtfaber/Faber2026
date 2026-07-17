@@ -97,6 +97,20 @@ def b_negligibility(dm_cl_obs: float) -> float:
 # for Osinga 2025 and Boehringer 2016; Anderson 2021 via the MeerKAT Fornax IV
 # summary of its ASKAP grid). Local-universe values; the (1+z_cl)^-2 dilution
 # is applied to our predicted contribution at the z=0.2 screen.
+#
+# 2026-07-17 Undermind sweep (criteria UNCHANGED; additions + per-study value
+# corrections only, each re-verified against the paper full text):
+#   * Boehringer 0.5-1.0 r500: the paper's own text (144+/-43) and Table 1
+#     (Galactic-corrected 112+/-43, uncorrected 114+/-43) disagree; the
+#     tabulated Galactic-corrected value is adopted. 144 -> 112.
+#   * The prior "Osinga 2022+2025" entry conflated the 2022 depolarization
+#     paper (per-source sigma_RM fits, not a population excess -> rejected
+#     below) with the 2024/25 RM-scatter paper. The 2024/25 paper tabulates
+#     our exact bin for BACKGROUND sources (the FRB's class): 51+/-6
+#     rest-frame, replacing the beyond-R500 floor of 28.
+#   * Values are entered as published with the RM frame noted per study
+#     (v1.0 convention); only Osinga is rest-frame, all others observed-frame
+#     at z_cl <= 0.05 (<=10% effect, small vs the study-to-study spread).
 LITERATURE = {
     "admitted": [
         {
@@ -104,27 +118,54 @@ LITERATURE = {
             "n_sightlines": 1722,
             "mass_range_1e14": (0.02, 19.1),
             "bin": "0.5-1.0 r500",
-            "sigma_rm_local": 144.0,
+            "sigma_rm_local": 112.0,
             "sigma_rm_local_err": 43.0,
-            "note": "the only study tabulating exactly our radial bin; sample mean ~3e14, overlaps the target mass",
+            "note": "Table 1 Galactic-corrected (verified 2026-07-17); the running text prints 144+/-43 for the same bin -- internal discrepancy recorded, table adopted; mixed member/background sources, signal weighted toward luminous systems (158+/-34 vs 62+/-11 luminosity halves)",
         },
         {
-            "study": "Osinga et al. 2022 (A&A 665, A71) + 2025 (A&A, arXiv:2408.07178)",
-            "n_sightlines": 124,
-            "mass_range_1e14": (3.0, 15.0),
-            "bin": ">R500 floor (0.6-1.0 R500 shown in their Fig. 6, not tabulated)",
-            "sigma_rm_local": 28.0,
-            "sigma_rm_local_err": 4.0,
-            "note": "corrected sigma_RRM=28+/-4 beyond R500; within-R500 aggregate 209+/-37 -> the 0.83 R500 value is bounded BELOW by 28 (mean mass 5.7e14)",
+            "study": "Osinga et al. 2024/25 (A&A, arXiv:2408.07178; 124 Planck clusters)",
+            "n_sightlines": 363,
+            "mass_range_1e14": (2.0, 15.0),
+            "bin": "0.5-1.0 R500, background sources, cluster rest frame (their Table 2)",
+            "sigma_rm_local": 51.0,
+            "sigma_rm_local_err": 6.0,
+            "note": "direct tabulated bin for the FRB-relevant background class (all-source 127+/-30, embedded 219+/-59, outside control 28+/-5); mean mass 5.7e14 (only 15/124 below 3e14) -> ABOVE-target bracket; supersedes the v1.0 beyond-R500 floor of 28",
         },
         {
             "study": "Anderson et al. 2021 (Fornax, ASKAP/POSSUM grid)",
-            "n_sightlines": 100,
+            "n_sightlines": 76,
             "mass_range_1e14": (0.6, 0.6),
-            "bin": "within 360 kpc ~ 0.8 R500 (r200=0.7 Mpc)",
+            "bin": "within 360 kpc ~ 0.8 R500 (r200=0.7 Mpc); 76 polarized sources inside 1 deg",
             "sigma_rm_local": 17.0,
+            "sigma_rm_local_err": 2.4,
+            "note": "16.8+/-2.4 quadrature excess (bootstrap 95%), M~6e13 BELOW target (conservative); enhancement asymmetric (merger axis); same physical system as Loi 2025 below -- Fornax enters the median twice unless adjudicated",
+        },
+        {
+            "study": "Khadir et al. 2025 (A3581, ApJ 997, 214; arXiv:2511.18532)",
+            "n_sightlines": 111,
+            "mass_range_1e14": (2.15, 2.15),
+            "bin": "moving-bin corrected profile across 0.6-1.0 R500 (their Fig. 2b; figure estimate)",
+            "sigma_rm_local": 8.0,
+            "sigma_rm_local_err": 3.0,
+            "note": "figure-estimated 5-12 across the bin (10-12 @0.6, 5-7 @0.8, 8-10 @1.0 R500); control 7.0+/-1.3 subtracted in quadrature; background-only; M500=2.15e14 just above the 1.7e14 target cap (nearest-mass single-cluster profile in the set); observed frame (z=0.022, <5%)",
+        },
+        {
+            "study": "Loi et al. 2025 (MeerKAT Fornax IV, A&A 694, A125; arXiv:2501.05519)",
+            "n_sightlines": 503,
+            "mass_range_1e14": (0.5, 0.5),
+            "bin": "outer annuli 400-510 kpc ~ 0.86-1.10 R500 via R_vir=705 kpc, R500~0.66 R_vir (external conversion)",
+            "sigma_rm_local": 11.5,
+            "sigma_rm_local_err": 1.5,
+            "note": "outer plateau ~13 raw minus the authors' ~6 non-cluster floor in quadrature -> ~11.5 cluster-attributable; densest RM grid (80/deg^2), background-only; SAME SYSTEM as Anderson 2021 -- double-count caveat; observed frame (z~0.005)",
+        },
+        {
+            "study": "Alonso-Lopez et al. 2025 (Shapley SC core, A&A; arXiv:2511.14377)",
+            "n_sightlines": 34,
+            "mass_range_1e14": (0.5, 9.8),
+            "bin": "cluster regions, nearest-object d/r500 in 0.3-1.8 (printed aggregate; profile flattens beyond ~0.7 r500)",
+            "sigma_rm_local": 27.2,
             "sigma_rm_local_err": 5.0,
-            "note": "M~6e13, BELOW the target mass (conservative); enhancement asymmetric (merger axis)",
+            "note": "printed cluster-regions excess 27.20+/-4.97 after off-target subtraction (SSC total 30.52+/-4.55); includes below-target SC1329 (0.5e14) and near-target SC1327 (2.0e14); overlapping halos / supercluster geometry -- not an isolated-halo profile; observed frame (z=0.048, ~10%)",
         },
     ],
     "rejected": [
@@ -132,6 +173,9 @@ LITERATURE = {
         {"study": "Bonafede et al. 2010 (Coma)", "reason": "7 sightlines < 10 (criteria minimum)"},
         {"study": "Govoni et al. 2017 (A194)", "reason": "few extended sources in one cluster, < 10 sightlines"},
         {"study": "Stuardi et al. 2021 (A2345)", "reason": "single-cluster relic study, < 10 sightlines; no [0.6,1.0] profile"},
+        {"study": "Anderson et al. 2024 (POSSUM groups, MNRAS)", "reason": "0-2 splashback-radius aperture (~0-4 R200c) mixes radii far inside and outside the target bin -- neither extractable nor one-sided-boundable at 0.6-1.0 R500; K-band group-halo masses with no M500 convention"},
+        {"study": "Osinga et al. 2022 (A&A 665, A71; depolarization)", "reason": "per-source Faraday-dispersion fits, not a population cluster-induced sigma_RM radial measurement (was conflated into the v1.0 Osinga entry; split out 2026-07-17)"},
+        {"study": "Kim, Kronberg & Tribble 1991", "reason": "Abell-radius bins only (R_A=3 h50^-1 Mpc), no modern mass or R500/R200 convention; mixed member/background classes (same class of defect as Clarke 2001)"},
     ],
 }
 

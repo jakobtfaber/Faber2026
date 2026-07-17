@@ -637,3 +637,56 @@ marginal→owner-adjudication branch respectively.)*
   appended to the companion ledger (working tree, pol-companion lane).
 - **Phase 4 remains gated**: material classification opens coordination, not
   edits; awaiting the companion-lead decision (both-owners gate).
+
+### Version 1.2 — 2026-07-17 (Undermind literature sweep; criteria unchanged)
+
+- Owner ran the pre-agreed Undermind deep search (query as issued in-session;
+  report archived as `undermind-cluster-outskirts-rm-2026-07-17.md`, 9 candidates).
+  Selection criteria were NOT modified; this pass applies them to the
+  expanded candidate set, with every load-bearing value re-verified against
+  the paper full text (ar5iv/arXiv HTML, 2026-07-17).
+- **Corrections to already-admitted entries (verified):**
+  - Böhringer 0.5–1.0 r500: the paper's Table 1 (Galactic-corrected
+    112 ± 43; uncorrected 114 ± 43) and its running text (144 ± 43) disagree.
+    Table adopted: 144 → **112**. (v1.0 had taken the text value; the
+    discrepancy is internal to the paper, surfaced by the sweep.)
+  - The v1.0 "Osinga 2022+2025" entry conflated the 2022 depolarization
+    paper with the 2024/25 RM-scatter paper and used the beyond-R500 floor
+    (28) as a bound. The 2024/25 paper tabulates the exact 0.5–1.0 R500 bin
+    for **background** sources (the FRB's class), cluster rest frame:
+    **51 ± 6**. Floor replaced by the direct value; the 2022 depol paper is
+    moved to `rejected` (per-source fits, not a population excess).
+  - Anderson 2021: error corrected 5.0 → 2.4 (their bootstrap 95%);
+    n_sightlines 100 → 76 (sources inside 1°); value unchanged.
+- **Admitted additions (criteria met):** Khadir et al. 2025 (A3581,
+  M500 = 2.15e14, 111 background RMs, direct R500-normalized corrected
+  profile; ~8 [5–12 figure estimate] across the bin); Loi et al. 2025
+  (Fornax densest grid, 503 background sources, outer annuli ≈ 0.86–1.10
+  R500 via external R_vir conversion; ~11.5 after removing the authors'
+  ~6 rad m⁻² non-cluster floor); Alonso-López et al. 2025 (Shapley SC core,
+  34 cluster-region sources, printed excess 27.2 ± 5.0, overlapping-halo
+  caveat).
+- **Rejected additions (reasons recorded in the dict):** Anderson et al.
+  2024 (splashback aperture not mappable to the bin; no M500 convention);
+  Kim, Kronberg & Tribble 1991 (Abell-radius bins, no modern convention);
+  Osinga et al. 2022 (depolarization, split out of the v1.0 entry).
+- **Re-run of the frozen rule:** admitted set {8, 11.5, 17, 27.2, 51, 112};
+  median 22.1 local → **15.35 rad m⁻² observed**. Thresholds unchanged
+  (material ≥ 18.57, null < 9.29) → classification **MARGINAL** → owner
+  adjudication branch (v1.0 §rule). Tests 12/12 green; JSON + figure
+  regenerated; zero-cluster corner still reproduces the companion row.
+- **Structural sensitivity recorded for the adjudication:** Fornax enters
+  twice (Anderson 2021 and Loi 2025 are the same system). Counting Fornax
+  once — under either study — gives median 27.2 → 18.9 observed →
+  **material** (the criteria as frozen contain no system-independence
+  clause, so the mechanical rule counts both; the owner may adjudicate
+  either way). Excluding Alonso-López (overlapping halos) instead gives
+  median 17 → 11.8 → marginal. A printed-values-only reading (Böhringer,
+  Osinga, Alonso-López, Anderson) gives 39.1 → 27.2 → material.
+- Memo literature table + classification paragraph updated to match
+  (marginal, adjudication pending, double-count sensitivity stated).
+  ISSUE-010's "material" wording in the companion ledger intentionally NOT
+  amended yet — it will be corrected in the same pass as the adjudication
+  outcome to avoid a second churn of the pol-lane file.
+- **Status: owner adjudication pending** (material vs marginal-stands vs
+  null); Phase 4 both-owners gate unchanged.
