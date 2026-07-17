@@ -242,7 +242,7 @@
       "repository": "parent",
       "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8",
       "source_path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
-      "source_revision": "6ee5089c671e3151f1068ff925d90ca538c0f17b",
+      "source_revision": "49d5d5cbd373e5b89c0826943be60e4ec5b1ec4d",
       "stored_path": "provenance/dm-catalog.csv"
     },
     {
@@ -250,7 +250,7 @@
       "repository": "parent",
       "sha256": "0ab236d30ec0c3db450516a86f2147aaa803c49d844e00da9041e6ea5b7e7d19",
       "source_path": "scripts/jointmodel_triptych_manifest.yaml",
-      "source_revision": "6ee5089c671e3151f1068ff925d90ca538c0f17b",
+      "source_revision": "49d5d5cbd373e5b89c0826943be60e4ec5b1ec4d",
       "stored_path": "provenance/joint-render-manifest.yaml"
     },
     {
@@ -258,7 +258,7 @@
       "repository": "parent",
       "sha256": "20892d90c791a94cad0747e38cc01146fb786b065fb4bd8de9fc6ed54ca207b1",
       "source_path": "scripts/audit_fig1_frequency_axes.py",
-      "source_revision": "51800b4",
+      "source_revision": "21b920ed0fb0fc055231968d8ab375fe3397fe5b",
       "stored_path": "provenance/frequency-axis-and-inputs.json"
     },
     {
@@ -266,7 +266,7 @@
       "repository": "parent",
       "sha256": "cc92538dd23737db34e067ac3e903f80fd5c6888365656baf8de83f6582f1dfd",
       "source_path": "scripts/audit_fig1_residual_drift.py",
-      "source_revision": "51800b4",
+      "source_revision": "21b920ed0fb0fc055231968d8ab375fe3397fe5b",
       "stored_path": "provenance/residual-drift.json"
     }
   ],
@@ -277,6 +277,6 @@
     "promotion_requires_exact_hash_match": true
   },
   "schema_version": 1,
-  "source_revision": "6ee5089c671e3151f1068ff925d90ca538c0f17b",
+  "source_revision": "49d5d5cbd373e5b89c0826943be60e4ec5b1ec4d",
   "title": "Figure 1 observed-peak candidate and provenance audit"
 }
