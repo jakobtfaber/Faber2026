@@ -41,4 +41,8 @@ connecting them by a cross-burst scaling law or deriving a shared screen.
   visually inspected in the rendered PDF.
 
 The separately stacked candidate-only figure work is governed by the same plan
-and cannot be promoted until the manuscript owner approves its exact bytes.
+and cannot be promoted until the manuscript owner approves its exact bytes. Its
+review packet contains one joint qualified-measurement summary plus all 24
+hash-matched PR #192 CHIME ACF renders as diagnostic candidates. PR #192 has no
+matching post-finalization DSA rerun, so those CHIME-only panels are explicitly
+not proposed as replacements for the removed appendix gallery.

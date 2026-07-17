@@ -36,4 +36,22 @@ The joint DSA+CHIME summary is a candidate-only artifact. Its exact PDF bytes
 must be reviewed and approved by the manuscript owner in a later promotion PR;
 the current manuscript intentionally compiles the placeholder instead.
 The upstream Results Library documentation follow-up is ready for review as
-dsa110-FLITS PR #199 and is deliberately not part of the parent science pin.
+dsa110-FLITS PR #199, merged as `8f5f06a4`, and is deliberately not part of the
+parent science pin.
+
+## Candidate-only figure validation
+
+The immutable batch
+`figure_review/batches/2026-07-17-joint-scintillation-qualified-and-chime-acf`
+contains 25 pending candidates: one two-panel qualified-measurement summary and
+24 standard/high-resolution CHIME ACF diagnostics. All 24 diagnostic hashes
+match the PR #192 `figures.review.json`; the packet freezes the campaign
+validation, JSONL records, Chromatica measurement, figure-review verdicts, Oran
+qualification, and generator provenance. Focused loader/approval tests pass
+(11 tests), packet validation passes, and the summary plus representative ACF
+panels and contact sheet were inspected visually.
+
+No post-finalization DSA ACF campaign exists at pipeline pin `17d9d266`.
+Consequently the packet does not claim that its CHIME-only diagnostic panels
+replace the owner-removed joint appendix gallery. That replacement remains
+blocked on new DSA products and exact-byte owner review.

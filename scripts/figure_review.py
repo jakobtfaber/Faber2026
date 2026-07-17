@@ -131,6 +131,48 @@ def command_new_batch(args: argparse.Namespace) -> None:
         dm_rows = list(csv.DictReader(stream))
     dm_by_nick = {row["nick"].casefold(): row for row in dm_rows}
 
+    family_evidence = {
+        "gallery": ["dm-catalog", "joint-render-manifest"],
+        "association": ["dm-catalog"],
+        "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+        "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+        "scintillation-summary": [
+            "oran-qualification",
+            "chime-campaign-validation",
+            "chromatica-hi-campaign",
+            "chime-campaign-figure-review",
+            "joint-scint-figure-provenance",
+        ],
+        "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
+        "chime-scintillation-acf": [
+            "chime-campaign-validation",
+            "chime-campaign-records",
+            "chime-campaign-figure-review",
+            "joint-scint-figure-provenance",
+        ],
+        "scintillation-qualification": ["oran-qualification"],
+    }
+    selected_slots = slots()
+    if args.only or args.only_family:
+        requested = set(args.only or [])
+        known = {slot["id"] for slot in selected_slots}
+        unknown = requested - known
+        if unknown:
+            raise SystemExit(f"unknown candidate IDs for --only: {sorted(unknown)}")
+        families = set(args.only_family or [])
+        selected_slots = [
+            slot
+            for slot in selected_slots
+            if slot["id"] in requested or slot["family"] in families
+        ]
+        if not selected_slots:
+            raise SystemExit("--only/--only-family selected no candidates")
+    required_evidence = {
+        evidence_id
+        for slot in selected_slots
+        for evidence_id in family_evidence[slot["family"]]
+    }
+
     provenance_dir = destination / "provenance"
     provenance_dir.mkdir()
     family_evidence = {
@@ -350,7 +392,7 @@ def render_packet(batch_id: str) -> None:
     except ImportError:
         contact_sheet.unlink(missing_ok=True)
     else:
-        cell_width, cell_height, columns = 360, 320, 4
+        cell_width, cell_height, columns = 720, 220, 2
         rows = (len(preview_paths) + columns - 1) // columns
         sheet = Image.new("RGB", (columns * cell_width, rows * cell_height), "white")
         for index, path in enumerate(preview_paths):
