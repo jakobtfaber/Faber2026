@@ -436,37 +436,21 @@ earned their keep once: they are what caught the drift described in hazard 1.
    fit artifacts must be part of the data release before the DA statement
    can cover Figures 1--2 and the morphology-audit appendix.
 
-7. **The manifest does not enumerate every embedded output. (OPEN — this is the
-   weakest link in the DA statement.)**
+7. **Scintillation-output manifest coverage. (CLOSED 2026-07-17.)**
 
-   `repro_manifest.csv` is treated as the authoritative list of manuscript
-   outputs, but the built manuscript `\includegraphics` two families for which it
-   has **no rows at all**:
-
-   - `figures/dsa_lorentzian_summary.pdf` — `sections/results.tex:157`
-   - `figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf` — 12 committed panels,
-     pulled in via `sections/appendix.tex:193` → `sections/dsa_scint_acf.tex`
-
-   That is **13 embedded files with zero reproducibility evidence.** A producer
-   does exist in the submodule —
-   `pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py`
-   — but it has never been given a manifest row, a `run_command`, or a
-   `clone_verified` verdict, and this audit did **not** execute it.
-
-   The consequence is worse than a gap: because the manifest defines the set it
-   audits, a green sweep over its 28 rows reads as "the manuscript reproduces"
-   while silently skipping the scintillation figures. Any future coverage check
-   must derive the output set from the manuscript's `\includegraphics` and
-   `\input` directives, not from the manifest's own row list. Until these rows
-   exist and are executed, the DA statement can claim only that *the outputs the
-   manifest tracks* regenerate.
+   `repro_manifest.csv` now has explicit rows for both scintillation figure
+   families identified by the earlier audit. The twelve embedded
+   `figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf` panels share a producer
+   row and retain their candidate-level clone verdict. The owner-rejected
+   DSA-only `figures/dsa_lorentzian_summary.pdf` is also recorded, but is no
+   longer embedded; `sections/results.tex` reserves that slot for a separately
+   reviewed joint DSA+CHIME candidate. The generated CHIME campaign table has
+   its own row, exact command, and hashed provenance record. A future coverage
+   check should still derive the output set from manuscript `\includegraphics`
+   and `\input` directives rather than trusting the manifest to enumerate itself.
 
 ## Suggested next steps
 
-- **Close hazard 7 first.** Add rows for `dsa_lorentzian_summary.pdf` and the 12
-  `dsa_scint_acf/` panels, run their producer from a fresh clone, and record a
-  `clone_verified` verdict. Nothing else in this file matters to the DA statement
-  as much as this.
 - Deposit the 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls and the 11
   fit-delivery artifacts: the Figure 1 grid (archival waterfalls) and triptych
   family (fit artifacts plus Chromatica's waterfalls) are the two embedded

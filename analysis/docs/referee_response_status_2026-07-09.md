@@ -68,12 +68,16 @@ Every item from the referee report, its current status, and the PR / commit / fi
 
 | | Ref | Item | Status | Evidence |
 |---|---|---|---|---|
-| ✗ | **SCI** | Scattering / scintillation / turbulence / energetics sections | BLOCKED (core science) | Board phases V/A/B/C/D: fit re-validation ladder, geometry-selection campaign, two-screen analysis. Not autonomously completable — new data analysis + author design. |
+| △ | **SCI** | Scattering / scintillation / turbulence / energetics sections | PARTIAL / BLOCKED (remaining core science) | The CHIME objective-window campaign closed in dsa110-FLITS PR #192: FRB 20240203A has one qualified high-resolution record and the other 23 products remain diagnostic. Scattering fit re-validation, same-sightline two-screen analysis, turbulence interpretation, and energetics remain blocked on V/A/B/C/D. |
 
 ## What is genuinely still open, and why it is not autonomously completable
 
 - **D2–D5 (design decisions).** Owner-accepted 2026-07-10 (`decision-d2-d5-scattering-design-locks.md`). Presentation contracts locked; table/Results fill still blocked on V/A/C (and V3 for energies).
-- **Scattering / scintillation / turbulence / energetics sections.** Board phases V/A/B/C/D: the fit re-validation ladder, geometry-selection campaign, and two-screen analysis on joint CHIME+DSA scintillation. New data analysis on real burst products — the paper's central contribution — and cannot be written without running that campaign.
+- **Remaining scattering / turbulence / energetics work.** The CHIME
+  objective-window scintillation campaign has run and is now reported. The fit
+  re-validation ladder, geometry-selection campaign, same-sightline two-screen
+  analysis, and energy re-validation remain open; the qualified CHIME and DSA
+  measurements belong to different bursts and do not close those gates.
 - **Submission-time actions.** B5/M11 Zenodo DOI mint, M16 abstract-slot fill from frozen B2 numbers, MW4 NE2025 publication-status watch. Each is a one-step author action at submission.
 
 *This matrix is a tracking artifact; it makes no science claims of its own.*
