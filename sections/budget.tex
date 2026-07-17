@@ -127,8 +127,7 @@ We measure the pulse-broadening time and its frequency scaling from the
 co-detected dynamic spectra and compare them against the scattering predicted
 by each candidate screen. The candidate screens are the Milky-Way ISM, an
 intervening circumgalactic medium, and a host galaxy, where the host can
-dominate the scattering of a heavily broadened burst \citep{Ocker2022}. The fits are produced with a common
-open-source reduction and fitting pipeline.
+dominate the scattering of a heavily broadened burst \citep{Ocker2022}.
 
 The predicted intervening broadening $\tau_{\rm int}$ of
 Table~\ref{tab:budget} is an \emph{order-of-magnitude prior}, not a
@@ -214,8 +213,7 @@ formally shallow empirical scaling is not interpreted by itself as a turbulence
 spectral index; it instead indicates that the assumed scattering family, burst
 morphology, or inertial-range closure is incomplete.
 
-The square-law endpoint requires a further caution, which we build into the
-results rather than append as a caveat. When the diffractive scale drops below
+The square-law endpoint requires a further caution. When the diffractive scale drops below
 the turbulence inner scale, the phase structure function becomes locally
 quadratic and $\alpha\to4$ regardless of the underlying spectral index. An
 inner-scale-dominated medium and a genuine $\beta=4$ spectrum are therefore
@@ -226,8 +224,7 @@ thin-screen inertial-range mapping no longer determines $\beta$. To make this
 explicit, the per-sightline results table (Section~\ref{sec:results-alpha})
 carries a closure-regime label alongside each entry: \texttt{inertial} for a
 resolved $\beta$ within the inertial range, and \texttt{endpoint-degenerate}
-for the square-law / inner-scale endpoint. This ensures that no square-law
-endpoint is read as an inertial-range spectral index. Geometry family (thin vs
+for the square-law / inner-scale endpoint. Geometry family (thin vs
 extended) is recorded separately and is not folded into this label.
 
 Concretely, the model dynamic spectrum in each band is built per frequency
@@ -265,13 +262,13 @@ by the upstream masking, dead channels, and channels with vanishing
 off-pulse variance are excluded from the likelihood through a per-channel
 validity mask rather than interpolated.
 
-\subsubsection{Sub-band validation of the frequency scaling}
+\subsubsection{Sub-band cross-check of the frequency scaling}
 \label{sec:subband}
 \label{sec:beta-subband}
 
-The frequency scaling recovered by the joint fit can be validated independently
-of the PBF parametrization by fitting the scattering time directly in frequency
-sub-bands. We split each band into sub-bands (four across CHIME, three across
+The frequency scaling recovered by the joint fit can be cross-checked,
+independently of the PBF parametrization, by fitting the scattering time
+directly in frequency sub-bands. We split each band into sub-bands (four across CHIME, three across
 DSA-110), collapse each to a one-dimensional profile, and fit a scattered
 pulse---a Gaussian intrinsic shape convolved with a one-sided exponential tail,
 the exponentially-modified Gaussian---to each sub-band independently, leaving the
@@ -289,9 +286,9 @@ informative only insofar as that bias is common to all sub-bands and cancels in
 the ratio; it does not cancel when the mismatch is frequency-dependent, which is
 the generic case (the fraction of the pulse in the power-law tail, and hence the
 bias on a per-band exponential $\tau_i$, itself varies with frequency). We
-therefore report the sub-band slope as a validation diagnostic---a consistency
-check on the joint-fit frequency scaling---and never as a measurement of the
-turbulence spectral index. The sub-band validation figure and event-level
+therefore report the sub-band slope as a consistency
+check on the joint-fit frequency scaling and never as a measurement of the
+turbulence spectral index. The sub-band comparison figure and event-level
 sub-band comparisons are presented with the scattering analysis
 (Section~\ref{sec:results-alpha}).
 
@@ -340,7 +337,13 @@ one anchor, independent of the initialization, as evidence-based model
 comparison requires. $\tau_{1\,\mathrm{GHz}}$ and each intrinsic width
 $\zeta$ are log-uniform over $10^{-4}$--$10^{3}$\,ms. $\beta$ is uniform over
 the thin-screen inertial branch, by default $3\le\beta\le4$, the image of
-$4\le\alpha\le6$ under $\alpha=2\beta/(\beta-2)$. Each per-band
+$4\le\alpha\le6$ under $\alpha=2\beta/(\beta-2)$. A prior uniform in $\beta$
+is not uniform in $\alpha$: the induced prior density on $\alpha$ scales as
+$(\beta-2)^{2}$ and is four times higher at the $\beta=4$ endpoint than at
+$\beta=3$, mildly favoring the square-law limit. A posterior concentrating at
+$\beta=4$ is therefore treated as endpoint-degenerate
+(Section~\ref{sec:jointfit}), not as a prior-independent detection of
+square-law statistics. Each per-band
 $\delta\mathrm{DM}$ is uniform over $\pm50\,\mathrm{pc\,cm^{-3}}$ about the
 dedispersion reference; bounding the residual keeps a broad, heavily
 smeared solution from escaping into an unphysically large

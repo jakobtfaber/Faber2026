@@ -1,29 +1,21 @@
 \section{Association cards}
 \label{app:assoc-cards}
 
-This appendix collects the per-burst association-card figures referenced in the
-main text. Each card is a compact cross-check that the CHIME/FRB and
-DSA-110 triggers correspond to the same astrophysical burst, and that the
-association used throughout the manuscript is internally consistent.
-
-Across the sample, the cards summarize (i) the timing consistency between the
-two pipelines after accounting for the dispersive delay and the inter-site
-geometric delay (both arrival times are topocentric; Section~\ref{sec:toa}), (ii)
-sky-position consistency between the candidate localizations (to the extent
-available for each burst), and (iii) dispersion-measure consistency and
-bookkeeping (e.g., the CHIME/FRB-reported DM compared to any independently
-reconstructed DM used in downstream analysis). Many cards also include catalog
-context (nearby galaxies, foreground structures, or survey footprints) that is
-used as a qualitative consistency check on the association and as a pointer to
-the foreground-census layer described in the main text.
-
-When reading the cards, the most important failure modes they are designed to
-catch are: a mis-identified counterpart between instruments, a bookkeeping
-mismatch (wrong TOA, wrong DM, or wrong metadata version), or an association
-that is only explainable by implausible timing/DM offsets. We treat the cards as
-validation artifacts: they motivate which bursts advance to the joint
-DM/scattering analysis, but we avoid over-interpreting any individual panel
-beyond confirming that the association inputs are coherent.
+This appendix collects the per-burst association-card figures referenced in
+the main text. Each card cross-checks that the CHIME/FRB and DSA-110 triggers
+correspond to the same astrophysical burst, summarizing (i) timing consistency
+after the dispersive and inter-site geometric delays (both arrival times are
+topocentric; Section~\ref{sec:toa}), (ii) sky-position consistency between the
+candidate localizations (to the extent available for each burst), and (iii)
+dispersion-measure consistency and
+bookkeeping (the CHIME/FRB-reported DM against any independently reconstructed
+DM used downstream). Many cards add catalog context (nearby galaxies,
+foreground structures, survey footprints) as a qualitative pointer to the
+foreground census. The cards are validation artifacts, designed to catch a
+mis-identified counterpart, a bookkeeping mismatch (wrong TOA, DM, or metadata
+version), or an association explainable only by implausible timing/DM offsets;
+they motivate which bursts advance to the joint DM/scattering analysis and are
+not interpreted beyond that.
 
 \clearpage
 \input{sections/association_cards.tex}
@@ -45,8 +37,8 @@ the registry centroid, the burst position, and the fiducial cosmology---the
 convention applied to the galaxy halos---gives $619$\,kpc
 ($b/R_{500}=0.85$). We carry this $\approx3\%$ provenance difference as a
 systematic on the cluster geometry; it corresponds to a $\mp3\%$ shift in
-the modeled intracluster column, negligible against the factor-of-two
-profile and cluster-parameter systematics quoted in the main text.
+the modeled intracluster column, negligible against the profile and
+cluster-parameter systematics quoted in the main text.
 
 The discovery-completeness audit also recovers WHL
 J115048.0$+$714428, a WHL12 cluster at $z=0.1893$ whose centroid lies
@@ -75,8 +67,8 @@ catalog entries represent distinct gas halos.
     inside $R_{500}$. Only J115120.4$+$714435 ($b/R_{500}=0.83$) meets the
     $b\le R_{500}$ budget cut and enters $\mathrm{DM_{int}}$
     ($\sim$184\,pc\,cm$^{-3}$ from this mNFW profile, the value carried in the
-    Table~\ref{tab:budget} $\mathrm{DM_{int}}$ sum, factor-of-two uncertain across
-    profile and cluster-parameter systematics,
+    Table~\ref{tab:budget} $\mathrm{DM_{int}}$ sum; profile and
+    cluster-parameter systematics span $\approx100$--$560$\,pc\,cm$^{-3}$,
     Appendix~\ref{app:host-forward-model}; Table~\ref{tab:foreground}); the
     others lie beyond
     $R_{500}$ and are excluded even where the profile remains formally nonzero
