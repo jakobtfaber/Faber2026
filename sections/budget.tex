@@ -21,14 +21,15 @@ cosmological, host, and (where the sightline intersects a foreground galaxy)
 intervening contributions \citep{CordesChatterjee2019},
 \begin{equation}
 \mathrm{DM_{obs}} = \mathrm{DM_{MW}} + \langle\mathrm{DM_{cosmic}}\rangle(z)
-+ \mathrm{DM_{int}} + \mathrm{DM_{host}},
++ \mathrm{DM_{int}} + \mathrm{DM_{host}}.
 \label{eq:dmbudget}
 \end{equation}
 Here $\mathrm{DM_{obs}}$ is the adopted CHIME phase-coherence measurement in
 Table~\ref{tab:dm-measurements}, rather than the rounded discovery-catalog
 value. This convention is used consistently in Table~\ref{tab:budget} and the
-forward host-DM calculation. The Galactic term $\mathrm{DM_{MW}} = \mathrm{DM_{MW,ISM}} +
-\mathrm{DM_{MW,halo}}$ split between disk and halo. We estimate the disk
+forward host-DM calculation. The Galactic term
+$\mathrm{DM_{MW}} = \mathrm{DM_{MW,ISM}} + \mathrm{DM_{MW,halo}}$ splits into
+disk and halo contributions. We estimate the disk
 contribution $\mathrm{DM_{MW,ISM}}$ from the NE2025 \citep{Ocker2026}
 electron-density model integrated to $30\,\mathrm{kpc}$ (consistent with the
 Galactic characterization of Section~\ref{sec:obs-mw}), with the older NE2001
@@ -68,19 +69,18 @@ host column $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-
 PDF about the exact observed DM; the rest-frame host contribution is
 $(1+z)\,\mathrm{DM_{host}}$. Propagating the full $P(\mathrm{DM_{cosmic}}\,|\,z)$
 rather than subtracting a single number returns an asymmetric posterior with a
-well-defined $P(\mathrm{DM_{host}}<0)$ per sightline; that interval, not a shift
-in the central value, is what the forward model buys. The host medians do sit
-above the old mean-subtracted residuals, but the offset is driven mainly by the
-updated IGM normalization---$f_{\rm IGM}=0.76$ here versus $f_{\rm IGM}=0.84$ for
-the earlier Macquart point estimate, which lowers the subtracted cosmic column by
-$\sim\!10\%$---with the log-normal skew a smaller contributor (at $z\simeq0.3$,
-$\approx26$ of a $\approx30\,\mathrm{pc\,cm^{-3}}$ shift is the $f_{\rm IGM}$
-recalibration and only a few come from the distribution shape). Because
-$f_{\rm IGM}$ was itself inferred partly from DSA-110 sightlines, the host budget
-is correspondingly sensitive to that normalization; and on the sightlines whose
-foreground census is incomplete (Table~\ref{tab:budget}, note~u) the
-IGM-marginal cosmic term leaves any undetected halo in the host residual, so
-those host DMs are upper limits (Appendix~\ref{app:host-forward-model}).
+well-defined $P(\mathrm{DM_{host}}<0)$ per sightline; that interval, not a
+shift in the central value, is what the forward model adds. The host medians
+do sit above the simple mean-subtracted residuals, but the offset is driven
+mainly by the lower IGM normalization ($f_{\rm IGM}=0.76$ here versus the
+$0.84$ of the Macquart point estimate), not by the log-normal skew; the
+decomposition of that offset is quantified in
+Appendix~\ref{app:host-forward-model}. Because $f_{\rm IGM}$ was itself
+inferred partly from DSA-110 sightlines, the host budget is correspondingly
+sensitive to that normalization; and on the sightlines whose foreground
+census is incomplete (Table~\ref{tab:budget}, note~u) the IGM-marginal cosmic
+term leaves any undetected halo in the host residual, so those host DMs are
+upper limits (Appendix~\ref{app:host-forward-model}).
 
 \subsection{Intervening Foreground Galaxies and Clusters}
 \label{sec:foreground}
@@ -99,7 +99,7 @@ J115120.4$+$714435 at $b/R_{500}=0.83$). The halo masses are the
 per-candidate empirical estimates of the census (Section~\ref{sec:obs-fg}):
 the vetted PS1/Legacy optical (and, where corroborated, WISE) stellar masses
 converted through the \citet{Moster2013} stellar-to-halo-mass relation, so
-the geometric census flags and the budget's intersection verdicts descend
+the geometric census flags and the budget's intersection verdicts derive
 from the same masses. Seven of the nine physical confirmed foreground galaxy
 halos satisfy $b\le R_{\rm vir}$ and contribute: the single halos toward
 FRB~20220310F and FRB~20240203A, two toward FRB~20240229A, and three of the

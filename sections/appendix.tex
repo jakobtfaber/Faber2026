@@ -2,19 +2,20 @@
 \label{app:assoc-cards}
 
 This appendix collects the per-burst association-card figures referenced in the
-main text. Each card is a compact, at-a-glance cross-check that the CHIME/FRB and
+main text. Each card is a compact cross-check that the CHIME/FRB and
 DSA-110 triggers correspond to the same astrophysical burst, and that the
 association used throughout the manuscript is internally consistent.
 
 Across the sample, the cards summarize (i) the timing consistency between the
-two pipelines after accounting for barycentric corrections and dispersive delays, (ii)
+two pipelines after accounting for the dispersive delay and the inter-site
+geometric delay (both arrival times are topocentric; Section~\ref{sec:toa}), (ii)
 sky-position consistency between the candidate localizations (to the extent
 available for each burst), and (iii) dispersion-measure consistency and
 bookkeeping (e.g., the CHIME/FRB-reported DM compared to any independently
 reconstructed DM used in downstream analysis). Many cards also include catalog
 context (nearby galaxies, foreground structures, or survey footprints) that is
-used as a qualitative sanity check on the association and as a pointer to the
-foreground-census layer described in the main text.
+used as a qualitative consistency check on the association and as a pointer to
+the foreground-census layer described in the main text.
 
 When reading the cards, the most important failure modes they are designed to
 catch are: a mis-identified counterpart between instruments, a bookkeeping
@@ -152,11 +153,12 @@ Table~\ref{tab:host-forward-model}). The tabulated $\mathrm{DM_{host}}$ is the
 is listed alongside it in Table~\ref{tab:host-forward-model}. The medians do sit
 above the naive mean-subtracted residuals, but---contrary to a purely
 shape-driven reading---the dominant cause is the lower IGM normalization adopted
-here ($f_{\rm IGM}=0.76$ versus the $f_{\rm IGM}=0.84$ of the earlier Macquart
-point estimate, which lowers the subtracted cosmic column by $\sim\!10\%$), not
+here ($f_{\rm IGM}=0.76$, versus $0.84$ for a Macquart point estimate; the
+lower value reduces the subtracted cosmic column by $\sim\!10\%$), not
 the log-normal skew: at $z\simeq0.3$ the recalibration accounts for $\approx26$
 of a $\approx30\,\mathrm{pc\,cm^{-3}}$ upward shift and the distribution shape for
-only a few. What the forward model adds over the old residual is therefore the
+only a few. What the forward model adds over a point-estimate residual is
+therefore the
 asymmetric interval and the $P(\mathrm{DM_{host}}<0)$ diagnostic, not the change
 in central value. Because $f_{\rm IGM}$ was itself inferred partly from DSA-110
 sightlines, these host DMs are correspondingly sensitive to that normalization.
@@ -255,8 +257,8 @@ census is incomplete and $\mathrm{DM_{int}}$ is a floor, so the tabulated host D
 \section{DSA-110 scintillation ACF diagnostics}
 \label{app:dsa-scint-acf}
 
-The per-burst DSA-110 diagnostics below expose the complete best-so-far fit
-family. They are provisional: numerical fit quality and visual inspection are
+The per-burst DSA-110 diagnostics below expose the complete provisional fit
+family: numerical fit quality and visual inspection are
 not substitutes for injection and null-test qualification.
 
 \clearpage
@@ -266,10 +268,10 @@ not substitutes for injection and null-test qualification.
 \begin{figure*}[p]
     \centering
     \includegraphics[width=0.9\textwidth]{pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png}
-    \caption{Frozen injection-response calibration for the certified
+    \caption{Injection-response calibration for the certified
     FRB~20220506D DSA-110 component at 1328.24 MHz. Unlike the broader
-    best-so-far catalog, this component passed the real-background injection,
-    off-pulse null, fit-window, low-lag, and resolved-interval gates.}
+    provisional catalog, this component passed the real-background injection,
+    off-pulse null, fit-window, low-lag, and resolved-interval tests.}
     \label{fig:oran-dsa-scint-qualified}
 \end{figure*}
 
@@ -283,10 +285,11 @@ not substitutes for injection and null-test qualification.
 \section{Joint-model morphology audits}
 \label{app:jointmodel-pairs}
 
-The panels below show every retained best-so-far DM-locked joint model. They
+The panels below show every retained provisional DM-locked joint model. They
 are morphology audits, not robust scattering measurements; the residual
-adjudication and the still-pending V1 re-trust certification are reported in
-Table~\ref{tab:joint-fit-provisional}.
+adjudication and each fit's acceptance status are reported in
+Table~\ref{tab:joint-fit-provisional}, and the fit family as a whole awaits
+independent re-validation.
 
 \input{sections/jointmodel_pairs.tex}
 
