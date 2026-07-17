@@ -131,61 +131,64 @@ def _register_fit_grid_ms(
     return lag * r * dt_native_ms
 
 
+def _published_scatter_corr(nick: str) -> tuple[float, float] | None:
+    """Adopted per-band scattering correction (Delta_scat, ms) for a burst.
+
+    Reads the published values ``scatter_corr_chime_ms`` / ``scatter_corr_dsa_ms``
+    from the crossmatch results tracked in the pipeline submodule. These are the
+    band-averaged, flux-weighted peak shifts of the fitted scattering kernel
+    (intrinsic model arrival = observed profile peak - Delta_scat), computed in
+    the ToA analysis; using them here keeps the figure identical to that analysis
+    rather than re-deriving from the figure's display NPZs (a different, DM-locked
+    fit family whose Delta_scat diverges from the published free-DM values).
+
+    Returns ``None`` when no correction is tracked (e.g. chromatica, no accepted
+    joint fit): the burst then keeps the observed-peak anchor.
+    """
+    from plot_codetection_triptych import FILE_NICK, TOA_RESULTS
+
+    file_nick = FILE_NICK.get(nick, nick)
+    rows = json.loads(Path(TOA_RESULTS).read_text())
+    row = rows.get(file_nick) or rows.get(file_nick.lower())
+    if row is None:
+        row = next((v for k, v in rows.items() if k.lower() == file_nick.lower()), None)
+    if row is None or "scatter_corr_chime_ms" not in row:
+        return None
+    return float(row["scatter_corr_chime_ms"]), float(row["scatter_corr_dsa_ms"])
+
+
 def fit_toa_shift_ms(
     row: dict, *, root: Path, data_root: Path, target_dm: float
 ) -> dict[str, float]:
-    """Per-band shift (band label -> ms) moving the display anchor from the
-    data profile peak to the fitted arrival time from the accepted joint fit:
-    the t0 (referenced to the top of each band) of the model component nearest
-    the model profile peak, i.e. the dominant component.
+    """Per-band shift (band label -> ms) anchoring each band on its adopted
+    intrinsic model arrival rather than on the observed (scattered) profile peak.
 
-    Empty for rows without an accepted joint fit (peak anchor kept).
+    The ToA analysis defines the arrival time as the joint-fit model t0 with the
+    scattering tail deconvolved out: intrinsic arrival = observed peak minus the
+    band-averaged scattering peak shift Delta_scat (see ``_published_scatter_corr``).
+    The scattered peak lags the arrival, and by more at CHIME (0.6 GHz) than at
+    DSA (1.4 GHz) because tau ~ nu^-alpha; the earlier convention (dominant-component
+    t0 referenced to the top of each band) carried a dispersion mismatch and did not
+    cancel this differential, so the displayed CHIME-DSA separation disagreed with the
+    ToA analysis (most severely for oran: 3.4 ms off, sign flipped).
+
+    ``bands_archival`` first calls ``_align_toa`` with the measured CHIME-minus-DSA
+    *peak* offset, which places the two observed peaks at that separation. Adding the
+    same DSA scattering correction to both bands is a pure translation that moves the
+    DSA intrinsic arrival to t=0; the CHIME intrinsic arrival then lands at
+    peak_offset - (Delta_scat_C - Delta_scat_D) = the model-corrected offset. The
+    observed peaks stay separated by the measured peak offset (the scattering tail
+    remains visible); the intrinsic arrivals are separated by the model offset,
+    matching the ToA analysis. Everything is expressed at the adopted display DM,
+    consistent with the re-dedispersion applied to the waterfalls.
+
+    Empty for rows without a tracked scattering correction (observed-peak anchor kept).
     """
-    npz_rel = row.get("npz")
-    if not npz_rel:
+    corr = _published_scatter_corr(row["nick"])
+    if corr is None:
         return {}
-    npz_path = root / npz_rel
-    from plot_codetection_triptych import dominant_t0_ms, fit_json_path
-
-    percentiles = json.loads(fit_json_path(npz_path).read_text())["percentiles"]
-    z = np.load(npz_path, allow_pickle=True)
-
-    from plot_codetection_gallery import BANDS, FILE_NICK, discover_products, load_band
-
-    file_nick = FILE_NICK.get(row["nick"], row["nick"])
-    products = discover_products(data_root, file_nick)
-
-    shifts: dict[str, float] = {}
-    for band_key, tel, label in (("C", "chime", "CHIME/FRB"), ("D", "dsa", "DSA-110")):
-        fit_t = np.asarray(z[f"time{band_key}"], float)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", category=RuntimeWarning)
-            fit_prof = np.nansum(np.asarray(z[f"data{band_key}"], float), axis=0)
-            model_prof = np.nansum(np.asarray(z[f"model{band_key}"], float), axis=0)
-        t0 = dominant_t0_ms(percentiles, band_key, fit_t, model_prof)
-
-        # Register against the original archival stream because the fit NPZ
-        # was made at the product's filename-stem DM. Compute the display
-        # anchor separately after applying the same adopted-DM correction as
-        # bands_archival; re-dedispersion changes the band-summed peak.
-        f_factor, t_factor_disp = DISPLAY_FACTORS[tel]
-        dt_native = BANDS[tel]["dt_ms"]
-        band_native = dict(BANDS[tel], f_factor=f_factor, t_factor=1)
-        _, native_prof = load_band(products[tel].path, band_native)
-        band_disp = dict(BANDS[tel], f_factor=f_factor, t_factor=t_factor_disp)
-        residual_dm = float(target_dm - products[tel].dm)
-        _, disp_prof = load_band(
-            products[tel].path,
-            band_disp,
-            telescope=tel,
-            residual_dm=residual_dm,
-        )
-        pk_native_ms = int(np.nanargmax(disp_prof)) * t_factor_disp * dt_native
-
-        start_native_ms = _register_fit_grid_ms(fit_t, fit_prof, native_prof, dt_native)
-        toa_display_ms = start_native_ms + (t0 - float(fit_t[0])) - pk_native_ms
-        shifts[label] = -toa_display_ms
-    return shifts
+    _scatter_corr_chime_ms, scatter_corr_dsa_ms = corr
+    return {"CHIME/FRB": scatter_corr_dsa_ms, "DSA-110": scatter_corr_dsa_ms}
 
 
 def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):

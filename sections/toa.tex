@@ -49,9 +49,108 @@ with \texttt{astropy}: observatory \texttt{EarthLocation}s (DRAO and OVRO)
 transformed to GCRS at the CHIME arrival time---which carries the IERS Earth
 orientation data---projected onto the ICRS source direction.
 Peak-sample TOAs on asymmetric (scattered) profiles are
-morphology-dependent; this bias is common-mode only in part, which is one
-reason the residual is a supporting diagnostic and the per-burst timing
-budget is dominated by the pulse width for broad bursts.
+morphology-dependent, and---because the scattering timescale is strongly
+frequency-dependent---this bias does not cancel between the two bands. We
+therefore adopt a model-based TOA and remove the differential scattering bias
+explicitly, as described next.
+
+\subsubsection{Time-of-arrival definition: peak sample versus model \texorpdfstring{$t_0$}{t0}}
+\label{sec:toa-definition}
+
+The peak sample of a scattered profile is not the burst arrival time. The
+observed profile in each channel is the intrinsic pulse convolved with a
+pulse-broadening function (PBF) of scattering timescale $\tau(\nu)$, and the
+convolution displaces the profile peak \emph{later} than the intrinsic
+arrival by an amount that grows monotonically with $\tau$. Because
+$\tau\propto\nu^{-\alpha}$ with $\alpha\simeq4$, CHIME (band centre
+$\sim0.6$\,GHz) is broadened far more than DSA-110 ($\sim1.4$\,GHz), so the two
+peak-sample TOAs are displaced by different amounts. Referring both bands to
+400\,MHz through Eq.~\eqref{eq:dmdelay} removes the \emph{dispersive} delay but
+leaves this \emph{scattering} displacement untouched; its inter-band difference
+propagates directly into the measured CHIME$-$DSA offset as a frequency-dependent
+systematic that the dispersive referral cannot absorb.
+
+The joint two-dimensional (time--frequency) scattering fits
+(Section~\ref{sec:jointfit}) already provide the unbiased estimator. The
+forward model is an intrinsic Gaussian of centroid $t_0$, dispersed and then
+convolved with the PBF, so $t_0$ is the intrinsic, pre-scattering arrival time
+with the scattering tail deconvolved out. We adopt the model TOA on each band
+and quantify the correction it applies to the peak-sample TOA as the
+band-averaged peak shift of the fitted kernel,
+\begin{equation}
+\Delta_{\rm scat}(\mathrm{band}) =
+\Big\langle\, t_{\rm peak}\!\big[\,G(\sigma_\nu)\ast \mathrm{PBF}(\tau_\nu,\beta)\,\big]
+- t_0(\nu) \,\Big\rangle_\nu ,
+\label{eq:scatshift}
+\end{equation}
+where $G(\sigma_\nu)$ is the per-channel intrinsic Gaussian (width set by the
+fitted intra-channel smearing), $\mathrm{PBF}(\tau_\nu,\beta)$ is the fitted
+broadening function, and the average is weighted by the model's per-channel
+flux. The peak shift is evaluated on a dense grid and is by construction
+independent of the per-channel amplitude gains and of the residual-dispersion
+tilt across the band, so it is stable even for the multi-component bursts. Each
+band's TOA is corrected as $t_{\rm arr} = t_{\rm peak} - \Delta_{\rm scat}$
+(the peak lags the arrival, so the shift is subtracted), and the scatter-corrected
+inter-site offset is
+\begin{equation}
+\Delta t_{\rm inter\text{-}site}^{\rm model} =
+\Delta t_{\rm inter\text{-}site}^{\rm peak}
+- \big[\Delta_{\rm scat}(\mathrm{CHIME}) - \Delta_{\rm scat}(\mathrm{DSA})\big].
+\label{eq:offsetcorr}
+\end{equation}
+
+The corrections behave as the physics requires: $\Delta_{\rm scat}$ is
+non-negative, scales with $\tau$, and is always larger for CHIME than for DSA.
+Across the twelve bursts the CHIME correction ranges from $0.04$ to $3.14$\,ms
+and the DSA correction stays below $0.11$\,ms, so the differential shift
+applied to the offset is $+0.03$ to $+3.03$\,ms (median $0.20$\,ms; four bursts
+exceed $0.5$\,ms). The most heavily scattered pair, FRB~20220506D
+($\tau_{1\,\rm GHz}=0.84$\,ms), carries a $3.03$\,ms differential---its
+peak-sample offset of $+6.19$\,ms becomes $+3.16$\,ms once the scattering bias
+is removed. Because the differential is strictly positive, every offset moves
+earlier, reflecting the removal of the larger CHIME scattering delay.
+
+Adopting the model TOA also supplies a genuine localization uncertainty. The
+peak-sample budget carried only the DM-referral term
+(Eq.~\ref{eq:dmdelay} with the DM uncertainty); the joint fit instead yields a
+posterior width on $t_0$ per band, which we fold into the per-band arrival error
+in quadrature with the DM-referral term. These posterior widths are small
+($3\times10^{-4}$ to $9\times10^{-2}$\,ms), and the combined CHIME$+$DSA offset
+error remains dominated by the DSA DM-referral term ($\simeq2.42$\,ms); the
+localization contribution is significant only for the most scattered bursts
+(e.g. the CHIME arrival error of FRB~20220506D grows from $5\,\mu$s to
+$92\,\mu$s). We report the scatter-corrected offset and this folded error as
+the primary timing quantities, and retain the peak-sample offset alongside them
+for reference; the per-band corrections and both offsets are tabulated in the
+accompanying machine-readable catalog.
+
+Beyond the DM-referral and $t_0$-localization terms, three further
+contributions enter the per-burst arrival-time budget, and we account for each
+explicitly. First, the scattering correction $\Delta_{\rm scat}$ itself carries
+an uncertainty propagated from the $\tau$ and $\beta$ posteriors of the joint
+fit; this term is largest for the most heavily scattered sightline
+(FRB~20220506D, $0.10$\,ms) and negligible ($\lesssim0.01$\,ms) elsewhere.
+Second, for the multi-component bursts the arrival time depends on which
+component is taken to define it; we quantify this ambiguity as the flux-weighted
+spread of the fitted component centroids, weighting each candidate by the
+observed profile amplitude at its location so that a decisively dominant
+component contributes negligibly and only genuinely comparable, separated
+components inflate the budget. This term is zero for the six single-component
+bursts and dominates the budget where components overlap in flux
+(FRB~20230307A $2.99$\,ms, FRB~20221113A $1.90$\,ms). Third, the inter-site
+geometric delay depends on the source position through the projection onto the
+$1345$\,km DRAO--OVRO baseline; at the arcsecond localization of DSA-110 this
+term is only $\sim0.06\,\mu$s and is included for completeness rather than
+significance. Folding the scatter-correction and component-ambiguity terms into
+the per-band errors, and the geometric-position term into the combined offset
+error, leaves the six clean single-component bursts unchanged at the
+DM-dominated $\simeq2.42$\,ms but raises the combined offset error for the
+multi-component bursts by factors of $1.15$--$1.60$ (e.g. FRB~20230307A to
+$3.88$\,ms, FRB~20221113A to $3.08$\,ms). The multi-component ambiguity---not
+scattering or dispersion---is therefore the dominant systematic on the timing
+consistency of the blended bursts, and the association significance
+(Section~\ref{sec:toa-pcc}) uses the full folded error as its coincidence
+tolerance.
 
 \subsubsection{Chance-coincidence probability}
 \label{sec:toa-pcc}
@@ -137,11 +236,15 @@ extension to $\lesssim10^{-4}$), leaving the association verdict unchanged.
 Second, the model assumes non-repeating background sources, while repeaters
 make close-time coincidences more likely than Poisson within the $\pm1$\,s
 gate. The DSA-110 detection list over the overlap window includes two bursts
-of the known repeater FRB~20220912A, and none of the twelve co-detected
-counterparts has a repeat detection in either dataset; because repetition
-enters Eq.~\eqref{eq:pcc_mu} only through the effective CHIME rate inside the
-$\pm1$\,s gate, even a repeater-driven rate enhancement of $10^{3}$ leaves
-$\sum_i\mu_i\lesssim10^{-2}$.
+of the known repeater FRB~20220912A, and one co-detected counterpart,
+FRB~20230814B, has a single earlier DSA-110-only detection ($47$\,d prior, same
+beam declination and redshift $z=0.5535$; the earlier burst's raw data were not
+retained). No repeat of any co-detected source lands within the $\pm1$\,s
+association gate, and the earlier FRB~20230814B detection is already counted as
+a separate trial in the $N=64$ chance-coincidence denominator. Because
+repetition enters Eq.~\eqref{eq:pcc_mu} only through the effective CHIME rate
+inside the $\pm1$\,s gate, even a repeater-driven rate enhancement of $10^{3}$
+leaves $\sum_i\mu_i\lesssim10^{-2}$.
 
 \subsubsection{Residuals and systematics}
 
@@ -199,6 +302,53 @@ decisive tests are the chance-coincidence probability, positional coincidence,
 and (for the eight bursts with a pre-specified DM-conditioned association
 term) DM agreement; the timing residual is a supporting consistency
 diagnostic.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/toa_offset_decomposition.pdf}
+    \caption{Decomposition of the CHIME$-$DSA arrival offset (referred to
+    400\,MHz with the shared DSA DM) for the twelve co-detections, sorted by
+    offset. The shaded band marks the range of the predicted geometric delay
+    across all twelve sightlines ($-2.30$ to $-2.03\,$ms); each burst's own
+    geometric delay is the vertical tick, and the filled circle is the measured
+    model-$t_0$ offset. The grey connector is the residual (offset minus
+    geometry). Because the sources cluster in declination near CHIME transit,
+    the geometric term is a near-constant $-2.17\,$ms pedestal (CHIME leads DSA)
+    and cannot flip the arrival order; the sign is set instead by the residual.
+    The upper axis expresses the offset as an equivalent shared-DM error
+    ($\mathrm{d}\Delta t/\mathrm{d}\mathrm{DM}=-9.41\,\mathrm{ms\,pc^{-1}\,cm^{3}}$):
+    the full $\sim\!10\,$ms sample spread corresponds to only
+    $\approx1.1\,\mathrm{pc\,cm^{-3}}$. The vertical line at zero separates the
+    two formal arrival orders; it is a bookkeeping boundary in the 400-MHz frame,
+    not an input to any association gate.}
+    \label{fig:toa-offset-decomposition}
+\end{figure}
+
+The mixed sign of the referenced offsets---seven pairs with the CHIME arrival
+formally earlier and five with the DSA arrival earlier once both are referred to
+400\,MHz---is a consequence of this decomposition rather than a tension with it
+(Figure~\ref{fig:toa-offset-decomposition}). The geometric term supplies a
+near-constant $-2.17\,$ms pedestal (spread $0.26\,$ms across the twelve
+sightlines, because the sources cluster in declination near CHIME transit so the
+DRAO--OVRO baseline projects almost identically), and cannot by itself reverse
+the order. The sign is instead set by the residual, whose $\sim\!10\,$ms
+sample spread corresponds to only $\approx1.1\,\mathrm{pc\,cm^{-3}}$ of
+equivalent shared-DM offset ($\mathrm{d}\Delta t/\mathrm{d}\mathrm{DM}=
+-9.41\,\mathrm{ms\,pc^{-1}\,cm^{3}}$; Section~\ref{sec:toa-definition})---i.e.\
+sub-$\mathrm{pc\,cm^{-3}}$ differences between each sightline's true dispersion
+and the adopted shared DM, plus intrinsic band-to-band emission-time structure.
+Crucially, the arrival order and its sign are \emph{not} inputs to any
+association gate: the chance-coincidence window ($\pm1\,$s) is larger than the
+largest referenced offset ($5.8\,$ms for FRB~20240203A) by more than two orders
+of magnitude, so a sign flip of a few milliseconds is invisible to
+$P_{\rm cc}$. The shared $-2.17\,$ms pedestal is not an \emph{independent}
+association signature---a position-matched chance interloper, lying within the
+same $0.5^{\circ}$ gate, has essentially the same DRAO--OVRO projection and
+would carry the same pedestal (the geometric delay varies by only
+$\lesssim0.04\,$ms across the gate). What the pedestal provides is a
+\emph{consistency} check: the measured offsets sit on the geometric prediction
+to within the per-burst budget, so no pair shows an anomalous residual that
+would flag a mis-association or an uncorrected instrumental delay.
 
 Evaluated with the conservative windows above, the eight originally
 DM-conditioned bursts
