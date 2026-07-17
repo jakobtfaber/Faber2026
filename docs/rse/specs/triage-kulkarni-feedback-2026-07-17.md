@@ -47,6 +47,11 @@ lane and stays gated by `CONTEXT.md` and the plan-§V re-trust ladders.
   the factor-~5 column bracket. Cheap (one archival query) but it is a new
   quantitative manuscript input → needs a predeclared experiment record and
   owner sanction before any number enters prose. **Recommended first.**
+  **DONE 2026-07-17:** sanctioned, executed, and owner-adjudicated
+  *constraining* at the conservative endpoint — RASS non-detection caps
+  $M_{500}\le1.7\times10^{14}\,M_\odot$ (SZ limb null; eROSITA out of the
+  public footprint); bracket 100–560 → ≈80–330 pc cm$^{-3}$ (factor ~4).
+  Record: `experiment-cluster-xray-sz-mass-bound-2026-07-17.md`.
 - **S2. A-priori cluster-crossing probability** (referee §6). Expected
   crossings within R_500 of ≥10¹⁴ M_⊙ clusters across twelve sightlines
   (referee's rough estimate ~0.1). Small, self-contained calculation; the

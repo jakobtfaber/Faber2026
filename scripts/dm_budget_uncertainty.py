@@ -557,6 +557,11 @@ CL_M500 = 1.48e14  # Msun
 CL_R500_KPC = 729.0  # kpc
 CL_Z = 0.200
 CL_B_KPC = 603.6  # impact parameter (b/R500 = 0.83)
+# RASS non-detection mass cap (owner-adjudicated conservative endpoint,
+# ECF=1.2e-11): L_X(0.1-2.4 keV) < 9.1e43 erg/s at z=0.200 through the MCXC
+# L500-M500 relation. Truncates the richness-mass prior's upper tail.
+# docs/rse/specs/experiment-cluster-xray-sz-mass-bound-2026-07-17.md
+CL_M500_XRAY_UL = 1.67e14  # Msun
 
 
 def beta_model_dm(m500, r500_kpc, b_kpc, z, f_gas, rc_over_r500, beta):
@@ -592,8 +597,19 @@ def beta_model_dm(m500, r500_kpc, b_kpc, z, f_gas, rc_over_r500, beta):
 
 
 def cluster_column_range(n=40_000):
-    """MC the beta-model column over M500, f_gas, and shape; report the range."""
+    """MC the beta-model column over M500, f_gas, and shape; report the range.
+
+    The 0.2 dex richness-mass prior is truncated above at the RASS X-ray
+    upper limit (CL_M500_XRAY_UL): non-detection excludes the prior's upper
+    tail, so masses above the cap are redrawn from the allowed range
+    (one-sided truncated lognormal).
+    """
+    log_cap = math.log10(CL_M500_XRAY_UL)
     log_m500 = RNG.normal(math.log10(CL_M500), 0.20, n)  # 0.2 dex richness-mass scatter
+    over = log_m500 > log_cap
+    while over.any():
+        log_m500[over] = RNG.normal(math.log10(CL_M500), 0.20, int(over.sum()))
+        over = log_m500 > log_cap
     m500 = 10.0**log_m500
     r500 = CL_R500_KPC * (m500 / CL_M500) ** (1.0 / 3.0)  # R500 ~ M500^{1/3}
     f_gas = RNG.uniform(0.10, 0.16, n)  # X-ray/SZ cluster gas fractions
