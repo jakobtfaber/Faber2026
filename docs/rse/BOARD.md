@@ -109,6 +109,28 @@ Consensus.)
 
 ---
 
+## §0 — Results provenance & organization (pre-manuscript)
+
+Owner directive 2026-07-18: before section work, establish one reliable view
+of what results exist, where they originated (scripts, pipeline pin, external
+survey/catalog queries), and what is trusted — the repo + auxiliary worktrees
+are currently too dispersed to know what is current. Canonical artifact:
+[`results-registry.toml`](results-registry.toml) (skeleton landed) →
+generated `RESULTS.md` view. **This inventory is phase 1 of the trust-ledger
+overhaul** ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)):
+populate first, adjudicate row-by-row on top.
+
+- [ ] Registry generator: `results-registry.toml` → `RESULTS.md`
+  (sync_state pattern); wire into `check-state`
+- [ ] Dispersion sweep: inventory artifacts across the repo, pipeline
+  submodule, worktrees, `~/Data`, and h17; mark current vs superseded;
+  quarantine stale products (PR #131 precedent)
+- [ ] Populate the registry: every manuscript-facing number/table/figure/
+  verdict, with producing script, pipeline pin, external-source provenance
+  (survey/DR/DOI/query date), and trust seeded from the `CONTEXT.md` ledger
+- [ ] Re-point the tier-2 prose-number parity gate at the registry (single
+  source of truth for the CI check)
+
 ## Abstract
 
 - [ ] ⏳ Fill the cluster-column slot with the intracluster-DM uncertainty
