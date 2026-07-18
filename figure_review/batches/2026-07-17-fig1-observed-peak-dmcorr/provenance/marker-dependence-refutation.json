@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "purpose": "Post-staging check of the stem-misstatement interpretation behind this batch's DM corrections. A true dedispersion error shifts every timing marker by the same Delta-DM; a scattering-lag artifact grows with the marker's sensitivity to the tau(nu) tail.",
+  "markers": {
+    "phase_coherence_dm_catalog": {
+      "method": "DM_phase-style phase-coherence statistic (manuscript adopted-DM analysis, analysis/dm-joint-phase-v2)",
+      "scattering_sensitivity": "low (by design)",
+      "isha_chime_delta_dm": 0.0,
+      "isha_chime_sigma": 0.005,
+      "phineas_chime_delta_dm": 0.0,
+      "phineas_chime_sigma": 0.005
+    },
+    "pulse_onset": {
+      "method": "sub-band 35%-of-peak leading-edge crossing vs K_DM nu^-2, 6 sub-bands, channel bootstrap (seed 20260707), display grid via plot_codetection_gallery.load_band at the adopted DM",
+      "scattering_sensitivity": "moderate (rise time scales with tau when scattering dominates)",
+      "isha_chime_delta_dm": 0.138,
+      "isha_chime_sigma": 0.077,
+      "phineas_chime_delta_dm": 0.160,
+      "phineas_chime_sigma": 0.083,
+      "hamilton_control_delta_dm": -0.018,
+      "hamilton_control_sigma": 0.001
+    },
+    "peak_sharpness_scan": {
+      "method": "this batch's frequency-drift-scan.json (band-summed profile peak maximization)",
+      "scattering_sensitivity": "high (peak lag ~ tau)",
+      "isha_chime_delta_dm": 0.377,
+      "isha_chime_sigma": 0.08,
+      "phineas_chime_delta_dm": 0.3,
+      "phineas_chime_sigma": null
+    }
+  },
+  "verdict": "REFUTED: the apparent Delta-DM is marker-dependent, increasing monotonically with scattering sensitivity (0.000 -> ~0.15 -> ~0.35), and the phase-coherence measurement excludes the applied corrections at >40 sigma. The corrections in this batch absorb scattering morphology into spurious dispersion; the archival stems are consistent with the actually-applied DMs. The uncorrected companion batch (2026-07-17-fig1-observed-peak-audit) displays the products at the adopted DM; the visual smear in isha/phineas CHIME is scattering, not residual sweep.",
+  "consequence": "This candidate should not be promoted. The merged sharpness-scan audit remains valid as a measurement; its stem-misstatement interpretation and the derived corrections do not."
+}
