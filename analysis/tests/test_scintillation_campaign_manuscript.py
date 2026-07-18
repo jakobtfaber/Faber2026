@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_PIPELINE = "17d9d26675702e9f8917da655621bef3231f0ddb"
+EXPECTED_PIPELINE = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import build_scintillation_campaign_summary as campaign_builder  # noqa: E402

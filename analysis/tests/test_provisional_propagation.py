@@ -47,19 +47,10 @@ def test_foreground_alignment_classification_is_cautious_and_coverage_aware():
 
 def test_frozen_result_roster_and_status_are_explicit():
     result = json.loads(Path("analysis/provisional_propagation/results.json").read_text())
-    assert result["status"] == "PROVISIONAL_UNVERIFIED"
+    assert result["status"] == "SCREEN_ANALYSIS_PENDING"
     assert result["screen_analysis_status"] == "PENDING_ALPHA4_CONSISTENCY_REFITS"
     assert len(result["screen_rows"]) == 7
     assert all(r["verdict"] == "pending fixed-index consistency refit"
                for r in result["screen_rows"])
     assert all(not r["products"] for r in result["screen_rows"])
-    foreground = result["foreground_alignment_rows"]
-    assert len(foreground) == 12
-    assert sum(r["interpretation"] == "plausible partial foreground contribution"
-               for r in foreground) == 1
-    by_tns = {r["tns"]: r for r in foreground}
-    assert math.isclose(by_tns["FRB 20230307A"]["tau_int_over_tau_fit"],
-                        0.015 / 0.0675886, rel_tol=1e-5)
-    assert math.isclose(by_tns["FRB 20220310F"]["tau_int_over_tau_fit"],
-                        0.00036 / 0.0667457, rel_tol=1e-5)
-    assert "exceeds fit" in by_tns["FRB 20240229A"]["interpretation"]
+    assert "foreground_alignment_rows" not in result

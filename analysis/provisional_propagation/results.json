@@ -1,5 +1,5 @@
 {
-  "status": "PROVISIONAL_UNVERIFIED",
+  "status": "SCREEN_ANALYSIS_PENDING",
   "single_screen_range": [
     0.1,
     2.0
@@ -14,18 +14,7 @@
     "pipeline/galaxies/foreground/budget_table_data.json": "e8ca970d48c06709ddc141182f5c61729f99ed1fa1f33cfbb00fdcd95111a90b",
     "pipeline/galaxies/foreground/foreground_table_data.json": "ee797579d61e1b1498de34c8b4837103263b88b049bdcc48f13544699feec8dc",
     "pipeline/galaxies/foreground/data/tau_consistency_catalog.csv": "1df14886479bff1942a5b7c3aa3b3fae51452ae3a567f322007c97b740eafa6b",
-    "scripts/dm_budget_intervening_systems.csv": "8a50fd78c48c61c0ba08ca348710100e7c1840893c68318b186de7e915ec4376",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/zach_joint_fit_C2D4.json": "e202e3ffbfc1b2d5c71705fd08c9a5596cda464cc01cb0f0eb1317f8de9d6527",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/whitney_joint_fit_C2D3.json": "ac1542de11537150430e5f8f89c4487abd620f571c4cb5125300fe5e128e82cc",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/oran_joint_fit_C2D1.json": "e6a7aa3845b173a79d91a900d1b4280e8e190afbeebe00193581b59da6368d4c",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/isha_joint_fit_C2D1.json": "b42480838d49bb867aa5e73824c349a052c48e7730771b9b2a37f061b55e6758",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/wilhelm_joint_fit_C1D4.json": "d5bfaf0c61768e8f1516116c02f884a5334aa00f65b9b0a9ca392c0c029e962b",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/phineas_joint_fit_C3D3.json": "641db36863f68d61f060aad1cb05afe30b7f71fffb9447f3161a21767796139f",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/freya_joint_fit.json": "f216ab896fd568e33fc47e975cda4a208d97d1914f2b19ae28fd355937f5ff77",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/johndoeII_joint_fit_C2D2.json": "61a988d2e983d9fdd1c83faa2f10d6b421742c09e59e170679100f6c110d2220",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/hamilton_joint_fit_C4D1.json": "b5e79ac4400cae3c088925096ce28560e416bd19eda27bc05f2eff1187c047d6",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/mahi_joint_fit_C1D2.json": "3912922220a1f18e2a45cd9c5d0044011cfb82e52b46b3b3d5a7ffd660a5dea7",
-    "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries/casey_joint_fit_C2D1.json": "50adbce45f3f16f5a6c3988afa5a765cf3155f24e9acffb1dc865b945ab40284"
+    "scripts/dm_budget_intervening_systems.csv": "8a50fd78c48c61c0ba08ca348710100e7c1840893c68318b186de7e915ec4376"
   },
   "screen_rows": [
     {
@@ -69,152 +58,6 @@
       "tns": "FRB 20240122A",
       "products": [],
       "verdict": "pending fixed-index consistency refit"
-    }
-  ],
-  "foreground_alignment_rows": [
-    {
-      "tns": "FRB 20220207C",
-      "adjudication": "morphology_only",
-      "propagation_status": "fit unusable",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": 76.0,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.17093985930321307,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "fit unusable; comparison deferred"
-    },
-    {
-      "tns": "FRB 20220310F",
-      "adjudication": "accepted_physical",
-      "propagation_status": "pending fixed-index consistency refit",
-      "coverage": "covered",
-      "eligible_foreground_systems": 1,
-      "nearest_inconclusive_impact_kpc": 184.0,
-      "tau_int_ms": 0.00036,
-      "tau_fit_1ghz_ms": 0.0667457077673584,
-      "tau_int_over_tau_fit": 0.005393605252562112,
-      "interpretation": "foreground contribution small in fiducial model"
-    },
-    {
-      "tns": "FRB 20220506D",
-      "adjudication": "accepted_physical",
-      "propagation_status": "pending fixed-index consistency refit",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": 74.0,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.022006398271738652,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "coverage-limited; no eligible foreground identified"
-    },
-    {
-      "tns": "FRB 20221113A",
-      "adjudication": "accepted_physical",
-      "propagation_status": "pending fixed-index consistency refit",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": 16.0,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.11631269895330733,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "coverage-limited; no eligible foreground identified"
-    },
-    {
-      "tns": "FRB 20221203A",
-      "adjudication": "rejected",
-      "propagation_status": "fit unusable",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": 232.0,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.15266374386838918,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "fit unusable; comparison deferred"
-    },
-    {
-      "tns": "FRB 20230307A",
-      "adjudication": "accepted_physical",
-      "propagation_status": "pending fixed-index consistency refit",
-      "coverage": "covered",
-      "eligible_foreground_systems": 4,
-      "nearest_inconclusive_impact_kpc": 105.0,
-      "tau_int_ms": 0.015,
-      "tau_fit_1ghz_ms": 0.06758863108810399,
-      "tau_int_over_tau_fit": 0.22193081526458214,
-      "interpretation": "plausible partial foreground contribution"
-    },
-    {
-      "tns": "FRB 20230325A",
-      "adjudication": "accepted_physical",
-      "propagation_status": "pending fixed-index consistency refit",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": 60.0,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.11826818458099604,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "coverage-limited; no eligible foreground identified"
-    },
-    {
-      "tns": "FRB 20230814B",
-      "adjudication": "accepted_physical",
-      "propagation_status": "pending fixed-index consistency refit",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": null,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.12227405312613455,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "coverage-limited; no eligible foreground identified"
-    },
-    {
-      "tns": "FRB 20230913A",
-      "adjudication": "morphology_only",
-      "propagation_status": "fit unusable",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": 136.0,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.0158384779528462,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "fit unusable; comparison deferred"
-    },
-    {
-      "tns": "FRB 20240122A",
-      "adjudication": "accepted_physical",
-      "propagation_status": "pending fixed-index consistency refit",
-      "coverage": "limited",
-      "eligible_foreground_systems": 0,
-      "nearest_inconclusive_impact_kpc": null,
-      "tau_int_ms": 0.0,
-      "tau_fit_1ghz_ms": 0.1964102886734679,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "coverage-limited; no eligible foreground identified"
-    },
-    {
-      "tns": "FRB 20240203A",
-      "adjudication": "rejected",
-      "propagation_status": "fit unusable",
-      "coverage": "limited",
-      "eligible_foreground_systems": 1,
-      "nearest_inconclusive_impact_kpc": 104.0,
-      "tau_int_ms": 0.0034,
-      "tau_fit_1ghz_ms": null,
-      "tau_int_over_tau_fit": null,
-      "interpretation": "fit unusable; comparison deferred"
-    },
-    {
-      "tns": "FRB 20240229A",
-      "adjudication": "morphology_only",
-      "propagation_status": "fit unusable",
-      "coverage": "covered",
-      "eligible_foreground_systems": 2,
-      "nearest_inconclusive_impact_kpc": 281.0,
-      "tau_int_ms": 0.073,
-      "tau_fit_1ghz_ms": 0.006543175301986818,
-      "tau_int_over_tau_fit": 11.15666272579213,
-      "interpretation": "fit unusable; foreground prediction exceeds fit"
     }
   ]
 }
