@@ -145,7 +145,7 @@ consumed_by = ["sections/observations.tex"]
 trust = "pending"
 cleared_by = ""
 current = false
-notes = "contract locked 2026-07-14 (data-only 4x3); current bytes = rejected candidate (needs_revision); fresh isolated batch + hash-bound owner approval required"
+notes = "contract locked 2026-07-14 (data-only 4x3); UPDATE 2026-07-18: observed-peak candidate merged + promotable (PRs #121/#128/#130; batch 2026-07-17-fig1-observed-peak-audit); dmcorr variant REFUTED by marker-dependence (PR #132 kill record); awaits owner figure_review decide, then promotion PR"
 
 # ── Milky Way foreground (budget lane, legacy V5) ─────────────────────────
 
@@ -357,7 +357,7 @@ consumed_by = ["sections/results.tex"]
 trust = "revoked"
 cleared_by = ""
 current = false
-notes = "wave-1 fit-trust revocation; interior rows (freya 3.72, phineas 3.23) NOT quotable; refill from re-fit campaign under ratified contract + geometry adjudication"
+notes = "wave-1 fit-trust revocation; legacy interior rows NOT quotable. UPDATE 2026-07-18 (jointtf handoff): 12/12 production mass-refit landscape landed on h17 (4 interior incl. freya 4.357/3.697 Kolmogorov-2.3sigma; phineas flipped off steep corner; new floor-rail class hamilton/whitney); PL-PBF collapses to production EMG; free-alpha win = mismatch signature, leakage injection is the discriminant. Not yet manuscript-facing: awaits leakage verdict, count adoption (mode-trap caveat), validation + owner ratifications"
 
 [[result]]
 id = "scattering.jointmodel_figures"
@@ -507,4 +507,4 @@ consumed_by = ["sections/results.tex L285-302 (rewrite reserved to owner; not ye
 trust = "pending"
 cleared_by = ""
 current = true
-notes = "PENDING = awaits owner merge of PR #140, results.tex integration, evidence-ledger science_status sync, and wf-02 method ratification; supersedes the #192-era chromatica_hi/oran picture"
+notes = "BLOCKED 2026-07-18 by owner data review (owner-data-review-findings-2026-07-18.md): inputs carry unexcised RFI, over-dedispersion, and per-burst DM inconsistency (up to ±0.13 pc/cm3); detections/scalings suspect until campaign re-runs on remediated inputs; PR #140 must not merge"

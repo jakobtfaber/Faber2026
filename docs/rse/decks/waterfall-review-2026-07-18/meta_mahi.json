@@ -1,0 +1,131 @@
+{
+ "mahi": {
+  "chime_full": {
+   "file": "mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
+   "md5": "d69d4b0e",
+   "shape": [
+    1024,
+    32000
+   ],
+   "window": [
+    14618,
+    17018
+   ],
+   "peak": 15818
+  },
+  "chime_upchan": {
+   "file": "mahi_chime_upchan.npy",
+   "md5": "6248c2cd",
+   "fmin": 400.5859382450595,
+   "fmax": 799.0234352648215,
+   "shape": [
+    387072,
+    54
+   ],
+   "window": [
+    0,
+    54
+   ],
+   "peak": 49
+  },
+  "dsa": {
+   "file": "mahi_dsa_I_960_128_2500b_cntr_bpc.npy",
+   "md5": "df3ea285",
+   "shape": [
+    6144,
+    2500
+   ],
+   "window": [
+    10,
+    2500
+   ],
+   "peak": 1260
+  }
+ },
+ "oran": {
+  "chime_full": {
+   "file": "oran_chime_I_397_0153_32000b_cntr_bpc.npy",
+   "md5": "93fcecee",
+   "shape": [
+    1024,
+    32000
+   ],
+   "window": [
+    13581,
+    15981
+   ],
+   "peak": 14781
+  },
+  "chime_upchan": {
+   "file": "oran_chime_upchan.npy",
+   "md5": "bc012cd4",
+   "fmin": 400.1953125,
+   "fmax": 799.41405653949,
+   "shape": [
+    108928,
+    284
+   ],
+   "window": [
+    0,
+    284
+   ],
+   "peak": 157
+  },
+  "dsa": {
+   "file": "oran_dsa_I_396_882_2500b_cntr_bpc.npy",
+   "md5": "fd011636",
+   "shape": [
+    6144,
+    2500
+   ],
+   "window": [
+    2,
+    2500
+   ],
+   "peak": 1252
+  }
+ },
+ "phineas": {
+  "chime_full": {
+   "file": "phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
+   "md5": "eb9c525e",
+   "shape": [
+    1024,
+    32000
+   ],
+   "window": [
+    15347,
+    17747
+   ],
+   "peak": 16547
+  },
+  "chime_upchan": {
+   "file": "phineas_chime_upchan.npy",
+   "md5": "1283ccee",
+   "fmin": 400.1953125,
+   "fmax": 799.8046636566868,
+   "shape": [
+    14512,
+    2276
+   ],
+   "window": [
+    201,
+    1949
+   ],
+   "peak": 1075
+  },
+  "dsa": {
+   "file": "phineas_dsa_I_610_274_2500b_cntr_bpc.npy",
+   "md5": "90cd4686",
+   "shape": [
+    6144,
+    2500
+   ],
+   "window": [
+    6,
+    2500
+   ],
+   "peak": 1256
+  }
+ }
+}
