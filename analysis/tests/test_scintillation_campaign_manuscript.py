@@ -55,3 +55,9 @@ def test_campaign_loader_enforces_the_reviewed_measurement_contract() -> None:
     assert measurements == ["chromatica_hi"]
     assert campaign.validation["n_records"] == 24
     assert campaign.validation["n_diagnostic_only"] == 23
+
+
+def test_dsa_loader_enforces_qualification_gates() -> None:
+    dsa = campaign_builder.load_dsa_measurement()
+    assert dsa["center_frequency_mhz"] == 1328.235796841934
+    assert dsa["calibrated_measurement"]["dnu_mhz"] == 0.44624819758756973
