@@ -1,8 +1,10 @@
 # Ratify the CHIME-band scintillation method and unblock the full-sample campaign
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
-- Assignee: —
+- Status: open — **claimed, in grilling 2026-07-18**
+- Assignee: claude (cowork session, with owner)
+- Scope expanded 2026-07-18: also covers the **2L scint table ratification**
+  (owner-decision item from handoff-2026-07-18-14-51) — same conversation.
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 
