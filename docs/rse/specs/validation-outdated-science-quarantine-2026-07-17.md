@@ -63,8 +63,7 @@
   restart inventory or dirty-state packet required.
 
 All automated implementation checks passed. The dsa110-FLITS merge-commit
-GitHub workflow was still running when this report was written and is treated as
-a publication check, not a substitute for the completed local validation.
+GitHub workflow subsequently completed successfully.
 
 ## Code Review Findings
 
@@ -88,9 +87,9 @@ a publication check, not a substitute for the completed local validation.
 - **Pipeline merge preceded completion of a non-required merge-commit workflow.**
   - **Reason:** Focused tests, the near-full suite, clean-environment dependency
     reruns, diff checks, and closeout had already passed.
-  - **Impact:** The workflow remains a publication check and must be observed
-    before final parent delivery.
-  - **Assessment:** Acceptable, provided the final workflow succeeds.
+  - **Impact:** The workflow remained a publication check and subsequently
+    completed successfully before final parent delivery.
+  - **Assessment:** Acceptable; the final workflow succeeded.
 
 ### Potential Issues
 
