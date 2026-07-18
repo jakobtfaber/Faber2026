@@ -61,10 +61,10 @@ def slots() -> list[dict]:
             nick = item["nick"]
             expanded.append(
                 {
-                    "id": group["id_pattern"].format(nick=nick),
+                    "id": group["id_pattern"].format(**item),
                     "title": group["title_pattern"].format(**item),
                     "family": group["family"],
-                    "target": group["target_pattern"].format(nick=nick),
+                    "target": group["target_pattern"].format(**item),
                     "generator": group["generator"],
                     "subject": item,
                     "required_provenance": group["required_provenance"],
@@ -102,8 +102,20 @@ def command_new_batch(args: argparse.Namespace) -> None:
     unknown = requested - known
     if unknown:
         raise SystemExit(f"unknown candidate ids: {sorted(unknown)}")
+    requested_families = set(args.only_family or [])
+    known_families = {slot["family"] for slot in available_slots}
+    unknown_families = requested_families - known_families
+    if unknown_families:
+        raise SystemExit(f"unknown candidate families: {sorted(unknown_families)}")
     selected_slots = [
-        slot for slot in available_slots if not requested or slot["id"] in requested
+        slot
+        for slot in available_slots
+        if (
+            not requested
+            and not requested_families
+            or slot["id"] in requested
+            or slot["family"] in requested_families
+        )
     ]
     destination = batch_dir(args.batch_id)
     if destination.exists():
@@ -119,15 +131,25 @@ def command_new_batch(args: argparse.Namespace) -> None:
         dm_rows = list(csv.DictReader(stream))
     dm_by_nick = {row["nick"].casefold(): row for row in dm_rows}
 
-    provenance_dir = destination / "provenance"
-    provenance_dir.mkdir()
     family_evidence = {
         "gallery": ["dm-catalog", "joint-render-manifest"],
         "association": ["dm-catalog"],
         "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
         "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-        "scintillation-summary": ["scint-component-catalog", "scint-fit-catalog"],
+        "scintillation-summary": [
+            "oran-qualification",
+            "chime-campaign-validation",
+            "chromatica-hi-campaign",
+            "chime-campaign-figure-review",
+            "joint-scint-figure-provenance",
+        ],
         "scintillation-acf": ["scint-component-catalog", "scint-fit-catalog"],
+        "chime-scintillation-acf": [
+            "chime-campaign-validation",
+            "chime-campaign-records",
+            "chime-campaign-figure-review",
+            "joint-scint-figure-provenance",
+        ],
         "scintillation-qualification": ["oran-qualification"],
     }
     required_evidence = {
@@ -135,6 +157,9 @@ def command_new_batch(args: argparse.Namespace) -> None:
         for slot in selected_slots
         for evidence_id in family_evidence[slot["family"]]
     }
+
+    provenance_dir = destination / "provenance"
+    provenance_dir.mkdir()
     evidence_specs = [
         ("dm-catalog", "parent", "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"),
         ("joint-render-manifest", "parent", "scripts/jointmodel_triptych_manifest.yaml"),
@@ -143,6 +168,11 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ("scint-component-catalog", "pipeline", "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv"),
         ("scint-fit-catalog", "pipeline", "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_fits.json"),
         ("oran-qualification", "pipeline", "analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json"),
+        ("chime-campaign-validation", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/validation.json"),
+        ("chime-campaign-records", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"),
+        ("chromatica-hi-campaign", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json"),
+        ("chime-campaign-figure-review", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json"),
+        ("joint-scint-figure-provenance", "parent", "analysis/scintillation-summary/joint_figure_provenance.json"),
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
@@ -321,7 +351,7 @@ def render_packet(batch_id: str) -> None:
     except ImportError:
         contact_sheet.unlink(missing_ok=True)
     else:
-        cell_width, cell_height, columns = 360, 320, 4
+        cell_width, cell_height, columns = 720, 220, 2
         rows = (len(preview_paths) + columns - 1) // columns
         sheet = Image.new("RGB", (columns * cell_width, rows * cell_height), "white")
         for index, path in enumerate(preview_paths):
@@ -469,6 +499,8 @@ def parser() -> argparse.ArgumentParser:
     new.add_argument("--pipeline-revision", required=True)
     new.add_argument(
         "--candidate",
+        "--only",
+        dest="candidate",
         action="append",
         help="stage only this candidate id; repeat for multiple candidates",
     )
@@ -481,6 +513,11 @@ def parser() -> argparse.ArgumentParser:
     new.add_argument("--initial-status", choices=("pending", "needs_revision"), default="pending")
     new.add_argument("--reviewer")
     new.add_argument("--note")
+    new.add_argument(
+        "--only-family",
+        action="append",
+        help="stage every candidate in this configured family; repeat as needed",
+    )
     new.set_defaults(func=command_new_batch)
     render = sub.add_parser("render")
     render.add_argument("batch_id")
