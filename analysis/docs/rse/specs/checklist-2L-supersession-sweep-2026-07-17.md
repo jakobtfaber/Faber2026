@@ -17,12 +17,13 @@ Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
 | 1 | completed | Results, Discussion, and the generated CHIME gate table now report the one qualified `chromatica_hi` record and 23 diagnostic records. |
 | 2 | completed | All twelve ledger strands point at PR #192 evidence; Chromatica is trusted, Freya preserves its historical negative result plus the final diagnostic outcome, and Hamilton is explicitly unphysical-suspect. Generated views were refreshed. |
 | 3 | validated; promotion pending | The DSA-only figure is removed from compiled TeX and replaced by a joint-summary placeholder. A candidate-only PR is required before exact-byte owner approval and later promotion. |
-| 3b | diagnosed; stale panels removed | The six July-7 DSA-only ACF floats are no longer compiled. PR #192 supplies 24 hash-reviewed CHIME ACF renders but no matching post-finalization DSA rerun, so honest joint replacements are blocked on new DSA products plus exact-byte owner approval. |
+| 3b | diagnosed; stale panels suppressed | The six post-#124 joint-model grids (eleven actual retained panels; Chromatica has no retained fit) are no longer compiled. The reviewed pin has no complete post-PL-PBF production refit or matching model dumps, so replacements are blocked on that campaign plus exact-byte owner approval. The earlier DSA-only ACF suppression remains in force. |
+| 3c | diagnosed; stale figure suppressed | The pre-PL-PBF Whitney representative triptych is no longer compiled. Regeneration is blocked on the same complete production refit, matching dump, and review-bound replacement artifact. |
 | 4 | completed | The DSA catalog remains explicitly provisional; Results now says Oran is the only certified DSA-band point, not the sole certified scintillation result in the sample. |
 | 5 | completed | `outputs/scintillation-acf-review/index.html` carries a fixed SUPERSEDED banner pointing to the final campaign. The packet bytes otherwise remain archival. |
 | 6 | completed | The technical-review triage has a dated status note replacing the stale S16/S17 current-state framing. |
 | 7 | completed | The referee matrix marks scintillation partially completed while keeping the remaining scattering/two-screen/turbulence/energy gates blocked. |
-| 8 | validated; upstream PR pending | The parent catalog now indexes the final campaign. dsa110-FLITS PR #199 adds the in-submodule Results Library pointer without advancing this manuscript's reviewed science pin merely for documentation. |
+| 8 | completed | The parent catalog indexes the final campaign, and dsa110-FLITS PR #199 merged as `8f5f06a4` with the in-submodule Results Library pointer. The manuscript intentionally retains the reviewed science pin `17d9d266`. |
 | 9 | decision pending | Do not rebake or deploy a joint-summary deck before exact-byte figure approval. The compiled manuscript intentionally retains a placeholder. |
 | 10 | decision pending | `stash@{0}` was inspected read-only and contains the pre-2L board/output lane. It was not popped or dropped; owner sign-off is required for destructive stash disposition. |
 
@@ -45,17 +46,23 @@ Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
    DSA+CHIME measurement figure; never resubmit DSA-only. Owner ruling
    2026-07-17 (chat): this figure — **compiled figure 7** — must not remain
    in the manuscript; replacement is mandatory, not optional.
-3b. **Compiled figures 11–16** — the six unlabeled `figure*` environments in
-   `sections/dsa_scint_acf.tex` (input at appendix.tex L259; two per-burst
-   `figures/dsa_scint_acf/<nick>_dsa_acf_lorentzian_fits.pdf` panels each,
-   order zach/whitney, oran/isha, wilhelm/phineas, freya/johndoeII,
-   hamilton/mahi, chromatica/casey). Owner ruling 2026-07-17 (chat): these
-   must not remain in the manuscript and need replacement — the July-7
-   single-component Lorentzian ACF fits are superseded by the 2L
-   two-component campaign products. Replace with the post-finalization
-   per-burst ACF/ladder figures from the official rerun (numbering note:
-   the jointmodel-pair grids that follow render as figures 17–22 and are
-   not covered by this ruling).
+3b. **Compiled figures 11–16 — superseded item, updated post-#124.** The six
+   DSA-only ACF grids (`sections/dsa_scint_acf.tex`) were removed from the
+   appendix by PR #124 (provenance note retained in `appendix.tex`; the
+   source file is kept but no longer input). Compiled figures 11–16 are now
+   the six `figure*` envs of `sections/jointmodel_pairs.tex` (twelve
+   per-burst `figures/jointmodel_pair/<nick>_jointmodel_pair.pdf` panels).
+   Owner ruling 2026-07-17 (chat): these joint time–frequency model fits are
+   ALSO outdated — they predate the approved PL-PBF kernel change — and must
+   be replaced with post-PL-PBF production refit panels once the
+   joint-tf-fits refit campaign lands. Any DSA+CHIME ACF appendix
+   replacement additionally stays blocked on the post-finalization DSA rerun
+   per the #124 provenance note.
+3c. **Compiled figure 2** — `fig:codetection-triptych-whitney`
+   (`scripts/plot_codetection_triptych.py`). Owner ruling 2026-07-17 (chat):
+   same PL-PBF supersession — its joint-fit content is pre-PL-PBF and the
+   figure must be regenerated at the refit pin (the joint-tf-fits lane was
+   already editing the producer when the ruling landed).
 4. **`dsa_scint_provisional_table.tex`** — frozen 2026-07-07 DSA Lorentzian
    catalog (only oran certified). DSA side is not superseded by the CHIME 2L
    work itself, but the caption's "sole certified measurement in the sample"

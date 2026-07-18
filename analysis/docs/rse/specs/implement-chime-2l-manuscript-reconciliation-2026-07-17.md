@@ -34,11 +34,17 @@ connecting them by a cross-burst scaling law or deriving a shared screen.
 ## Verification summary
 
 - Focused campaign contract: 5 passed.
-- Repository science suite after the final origin/main rebase: 137 passed, 1
-  expected failure.
+- Repository science suite for the merged parent reconciliation: 137 passed,
+  1 expected failure. The candidate-only branch was subsequently rebased onto
+  `origin/main` at `341e2200` (including the Figure 1 candidate merge) and
+  passed the expanded suite with 139 passed and 1 expected failure.
 - Consistency audit, state drift/rules, and figure approval gate: passed.
 - Clean `latexmk` rebuild: passed; generated table and review placeholder were
   visually inspected in the rendered PDF.
 
 The separately stacked candidate-only figure work is governed by the same plan
-and cannot be promoted until the manuscript owner approves its exact bytes.
+and cannot be promoted until the manuscript owner approves its exact bytes. Its
+review packet contains one joint qualified-measurement summary plus all 24
+hash-matched PR #192 CHIME ACF renders as diagnostic candidates. PR #192 has no
+matching post-finalization DSA rerun, so those CHIME-only panels are explicitly
+not proposed as replacements for the removed appendix gallery.

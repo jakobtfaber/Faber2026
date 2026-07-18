@@ -1,0 +1,191 @@
+{
+  "artifact_sha256": "c677c111edb27b7a06bf283682d3729aa12697cc3b03c7af7a65b3d368c76770",
+  "campaign_measurement": "chromatica_hi",
+  "chime_acf_candidates": [
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Consistent with low-lag and support failure; diagnostic only.",
+      "sha256": "a34757637cc60cda446ffbaf115376424eed43246535708df5e3bb5ebd846d6e",
+      "source": "casey_acf_fits.png",
+      "target": "figures/chime_scint_acf/casey_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "The off-pulse control also fails.",
+      "sha256": "a24fbf27eba468f8e58248a0673c6ef48881d0cc5d5e62b4d599bff1c1920348",
+      "source": "casey_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/casey_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Off-pulse evidence is inconclusive.",
+      "sha256": "de0787e17f4dea6dd3fe228297816263c0df2ec0751ad588414f97733c5f8ea7",
+      "source": "chromatica_acf_fits.png",
+      "target": "figures/chime_scint_acf/chromatica_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "match",
+      "science_disposition": "Legends are readable and agree with four resolved physical subbands.",
+      "sha256": "30f4902abea8054f8d2e2b23bad45508d6f5fc3dd1d4bf3517854659d40dbe36",
+      "source": "chromatica_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/chromatica_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Only two subbands are supported.",
+      "sha256": "53367497e22babf8c1eced1fd18b99d9ed140a93d974a1a666a444391574e135",
+      "source": "freya_acf_fits.png",
+      "target": "figures/chime_scint_acf/freya_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Diagnostic only despite three nominally resolved subbands.",
+      "sha256": "35c5efb113195c916c17000e88808cdb44c207ac893c91eb2d482c7a6713af09",
+      "source": "freya_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/freya_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Artifact controls pass numerically, but the required visual morphology does not.",
+      "sha256": "9c2c7e5fdf8f4cbd3e614af1d90492583b40316cf0d11d924ca68fc0d60c5d41",
+      "source": "hamilton_acf_fits.png",
+      "target": "figures/chime_scint_acf/hamilton_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Low-lag stability fails.",
+      "sha256": "a3a82c49431e8a033652286ac497aff4921410531224b64df8bd4b5c95df5ab7",
+      "source": "hamilton_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/hamilton_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Only one valid subband; off-pulse evidence is inconclusive.",
+      "sha256": "48d72159123e7c06bc13fb3552360ef1cb52fed4111b94f95b6dd1928d0231e4",
+      "source": "isha_acf_fits.png",
+      "target": "figures/chime_scint_acf/isha_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "No valid supported subbands.",
+      "sha256": "58825e748f36178d23daa42fb08fe343f8788912e7e164e60b307ed37c8def50",
+      "source": "isha_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/isha_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "The fit support gate fails.",
+      "sha256": "059ae81179b630ed13c053537204e27a18d81f7a19c75fcd740041d1700298e6",
+      "source": "johndoeII_acf_fits.png",
+      "target": "figures/chime_scint_acf/johndoeII_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "No valid supported subbands.",
+      "sha256": "8b11cae52d15a9f98feb4f63e55abe948779042230c34038cdf45e7b63a912b4",
+      "source": "johndoeII_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/johndoeII_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "No valid supported subbands.",
+      "sha256": "31b8e9b3970f0a6281b2ec9795d9f04869f27f414c33ca9aa2e60c482606feaa",
+      "source": "mahi_acf_fits.png",
+      "target": "figures/chime_scint_acf/mahi_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "No valid supported subbands.",
+      "sha256": "99f419a0e9aadbec97c8fe4e0e03b7801d71295588bb02986418c7c5c9a97b9a",
+      "source": "mahi_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/mahi_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "No valid supported subbands.",
+      "sha256": "17bd1e89d1ff2523a816c40452125c61bce76401fa6fe00405a5872ab1f4e509",
+      "source": "oran_acf_fits.png",
+      "target": "figures/chime_scint_acf/oran_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Off-pulse and low-lag pass, but subband support is zero.",
+      "sha256": "a1837d268a4c2a31605d6295d620c93fed4331d363fb176fa86f572d747439d4",
+      "source": "oran_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/oran_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Only one valid subband.",
+      "sha256": "56977a247ac4975e6ad5c6fe5f7357c1f9d79f63a5ac101720322200ee45a118",
+      "source": "phineas_acf_fits.png",
+      "target": "figures/chime_scint_acf/phineas_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Low-lag stability and support fail.",
+      "sha256": "f8f41336fce6ece134cc5c06d46efdb50b4aa868f1017590d44af408d0eea296",
+      "source": "phineas_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/phineas_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "The off-pulse null fails and amplitudes are flagged.",
+      "sha256": "e7ced148d35643d28dd3872a2d4fccc7cc01a0bbb68267cbc5ae37451a1b69a8",
+      "source": "whitney_acf_fits.png",
+      "target": "figures/chime_scint_acf/whitney_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Only two physical supported subbands and alpha is unphysical.",
+      "sha256": "5e3ecf3690b2e7e26774d0262af3dd182ecf1f5b74e77db01acdb9694764664e",
+      "source": "whitney_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/whitney_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "match",
+      "science_disposition": "Visual morphology matches, but low-lag and support controls keep the record diagnostic.",
+      "sha256": "41abb1f5dcc9e4f7f691b100c8ca557267400b4d96f1378ca82457526f7f2eb7",
+      "source": "wilhelm_acf_fits.png",
+      "target": "figures/chime_scint_acf/wilhelm_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "match",
+      "science_disposition": "Off-pulse and support controls fail independently.",
+      "sha256": "e7ffab4d26f98a71f5d1b635e4fac6d40c547677f8c31e8f0dd8f667c8d1e182",
+      "source": "wilhelm_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/wilhelm_high_resolution_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Off-pulse evidence is inconclusive despite four nominally resolved fits.",
+      "sha256": "a663beb4a3c1aab9e3087688ac450671f180e4b7076b43ee48a8895af2ea15ff",
+      "source": "zach_acf_fits.png",
+      "target": "figures/chime_scint_acf/zach_standard_acf_fits.png"
+    },
+    {
+      "review_verdict": "anomaly",
+      "science_disposition": "Off-pulse evidence is inconclusive.",
+      "sha256": "5164298f3d633dd9d70294333a12918d612d13d695ad261e42bef076eb9bf4ca",
+      "source": "zach_hi_acf_fits.png",
+      "target": "figures/chime_scint_acf/zach_high_resolution_acf_fits.png"
+    }
+  ],
+  "chime_input": {
+    "path": "pipeline/analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json",
+    "sha256": "e2e1fd4761c6e09bbd1d07b5bb55752700c395a0b45c558c18703a35b19f13e8",
+    "status": "measurement"
+  },
+  "command": "env -i HOME=/Users/jakobfaber PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin /opt/anaconda3/bin/conda run -n py312 python scripts/build_scintillation_campaign_summary.py --figure-root <candidate-root> --chime-figure-source <PR192-results-library-directory>",
+  "dsa_input": {
+    "path": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json",
+    "sha256": "e0c455e1c73e1a9bd24bbc833029cd5506d1d710fe18585251094b48d11e89f9",
+    "status": "qualified"
+  },
+  "generator_sha256": "444a33c814932844e9fbd403aa88a1c8733cf429a2ba670b53ad916aead9a298",
+  "output": "figures/dsa_lorentzian_summary.pdf",
+  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+  "policy": "different bursts; separate panels; no cross-burst scaling or shared-screen inference",
+  "python": "3.12.13",
+  "recorded_date": "2026-07-17"
+}

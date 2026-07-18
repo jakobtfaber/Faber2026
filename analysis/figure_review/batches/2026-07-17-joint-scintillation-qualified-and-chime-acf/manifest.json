@@ -1,0 +1,1323 @@
+{
+  "batch_id": "2026-07-17-joint-scintillation-qualified-and-chime-acf",
+  "candidates": [
+    {
+      "artifact": "candidates/fig6-scint-summary.pdf",
+      "artifact_sha256": "c677c111edb27b7a06bf283682d3729aa12697cc3b03c7af7a65b3d368c76770",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "evidence_ids": [
+        "oran-qualification",
+        "chime-campaign-validation",
+        "chromatica-hi-campaign",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "scintillation-summary",
+      "generator": "scripts/build_scintillation_campaign_summary.py --figure-root <candidate-root>",
+      "id": "fig6-scint-summary",
+      "preview": "previews/fig6-scint-summary.png",
+      "required_provenance": [
+        "qualified DSA validation JSON and SHA-256",
+        "qualified CHIME campaign record and SHA-256",
+        "fit, window-systematic, and finite-scintle error convention",
+        "different-burst panels with no cross-burst scaling or screen inference"
+      ],
+      "target": "figures/dsa_lorentzian_summary.pdf",
+      "title": "Joint qualified DSA-110 and CHIME/FRB scintillation summary"
+    },
+    {
+      "artifact": "candidates/chime-acf-zach-standard.png",
+      "artifact_sha256": "a663beb4a3c1aab9e3087688ac450671f180e4b7076b43ee48a8895af2ea15ff",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "262.361665",
+        "adopted_sigma": "0.010372",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.023274",
+        "chime_dm": "262.361665",
+        "chime_minus_dsa": "0.045268",
+        "chime_sigma": "0.010372",
+        "dsa_dm": "262.316397",
+        "dsa_sigma": "0.029297",
+        "gaussian_joint_dm": "262.347322",
+        "gaussian_joint_sigma": "0.021060",
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-zach-standard",
+      "preview": "previews/chime-acf-zach-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "zach",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20220207C"
+      },
+      "target": "figures/chime_scint_acf/zach_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20220207C (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-zach-high_resolution.png",
+      "artifact_sha256": "5164298f3d633dd9d70294333a12918d612d13d695ad261e42bef076eb9bf4ca",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "262.361665",
+        "adopted_sigma": "0.010372",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.023274",
+        "chime_dm": "262.361665",
+        "chime_minus_dsa": "0.045268",
+        "chime_sigma": "0.010372",
+        "dsa_dm": "262.316397",
+        "dsa_sigma": "0.029297",
+        "gaussian_joint_dm": "262.347322",
+        "gaussian_joint_sigma": "0.021060",
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-zach-high_resolution",
+      "preview": "previews/chime-acf-zach-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "zach",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20220207C"
+      },
+      "target": "figures/chime_scint_acf/zach_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20220207C (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-whitney-standard.png",
+      "artifact_sha256": "e7ced148d35643d28dd3872a2d4fccc7cc01a0bbb68267cbc5ae37451a1b69a8",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "462.188773",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "462.188773",
+        "chime_minus_dsa": "-0.004032",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "462.192806",
+        "dsa_sigma": "0.029313",
+        "gaussian_joint_dm": "462.188887",
+        "gaussian_joint_sigma": "0.004929",
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-whitney-standard",
+      "preview": "previews/chime-acf-whitney-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "whitney",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20220310F"
+      },
+      "target": "figures/chime_scint_acf/whitney_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20220310F (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-whitney-high_resolution.png",
+      "artifact_sha256": "5e3ecf3690b2e7e26774d0262af3dd182ecf1f5b74e77db01acdb9694764664e",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "462.188773",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "462.188773",
+        "chime_minus_dsa": "-0.004032",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "462.192806",
+        "dsa_sigma": "0.029313",
+        "gaussian_joint_dm": "462.188887",
+        "gaussian_joint_sigma": "0.004929",
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-whitney-high_resolution",
+      "preview": "previews/chime-acf-whitney-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "whitney",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20220310F"
+      },
+      "target": "figures/chime_scint_acf/whitney_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20220310F (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-oran-standard.png",
+      "artifact_sha256": "17bd1e89d1ff2523a816c40452125c61bce76401fa6fe00405a5872ab1f4e509",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "397.015535",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "397.015535",
+        "chime_minus_dsa": "0.074489",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "396.941046",
+        "dsa_sigma": "0.082506",
+        "gaussian_joint_dm": "397.015263",
+        "gaussian_joint_sigma": "0.004991",
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-oran-standard",
+      "preview": "previews/chime-acf-oran-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "oran",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20220506D"
+      },
+      "target": "figures/chime_scint_acf/oran_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20220506D (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-oran-high_resolution.png",
+      "artifact_sha256": "a1837d268a4c2a31605d6295d620c93fed4331d363fb176fa86f572d747439d4",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "397.015535",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "397.015535",
+        "chime_minus_dsa": "0.074489",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "396.941046",
+        "dsa_sigma": "0.082506",
+        "gaussian_joint_dm": "397.015263",
+        "gaussian_joint_sigma": "0.004991",
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-oran-high_resolution",
+      "preview": "previews/chime-acf-oran-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "oran",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20220506D"
+      },
+      "target": "figures/chime_scint_acf/oran_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20220506D (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-isha-standard.png",
+      "artifact_sha256": "48d72159123e7c06bc13fb3552360ef1cb52fed4111b94f95b6dd1928d0231e4",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "411.435717",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.064884",
+        "chime_dm": "411.435717",
+        "chime_minus_dsa": "-0.116990",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "411.552707",
+        "dsa_sigma": "0.072400",
+        "gaussian_joint_dm": "411.471916",
+        "gaussian_joint_sigma": "0.054079",
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-isha-standard",
+      "preview": "previews/chime-acf-isha-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "isha",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20221113A"
+      },
+      "target": "figures/chime_scint_acf/isha_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20221113A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-isha-high_resolution.png",
+      "artifact_sha256": "58825e748f36178d23daa42fb08fe343f8788912e7e164e60b307ed37c8def50",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "411.435717",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.064884",
+        "chime_dm": "411.435717",
+        "chime_minus_dsa": "-0.116990",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "411.552707",
+        "dsa_sigma": "0.072400",
+        "gaussian_joint_dm": "411.471916",
+        "gaussian_joint_sigma": "0.054079",
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-isha-high_resolution",
+      "preview": "previews/chime-acf-isha-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "isha",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20221113A"
+      },
+      "target": "figures/chime_scint_acf/isha_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20221113A (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-wilhelm-standard.png",
+      "artifact_sha256": "41abb1f5dcc9e4f7f691b100c8ca557267400b4d96f1378ca82457526f7f2eb7",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "602.377821",
+        "adopted_sigma": "0.006047",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "602.377821",
+        "chime_minus_dsa": "-0.001370",
+        "chime_sigma": "0.006047",
+        "dsa_dm": "602.379192",
+        "dsa_sigma": "0.012800",
+        "gaussian_joint_dm": "602.378071",
+        "gaussian_joint_sigma": "0.005467",
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-wilhelm-standard",
+      "preview": "previews/chime-acf-wilhelm-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "wilhelm",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20221203A"
+      },
+      "target": "figures/chime_scint_acf/wilhelm_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20221203A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-wilhelm-high_resolution.png",
+      "artifact_sha256": "e7ffab4d26f98a71f5d1b635e4fac6d40c547677f8c31e8f0dd8f667c8d1e182",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "602.377821",
+        "adopted_sigma": "0.006047",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "602.377821",
+        "chime_minus_dsa": "-0.001370",
+        "chime_sigma": "0.006047",
+        "dsa_dm": "602.379192",
+        "dsa_sigma": "0.012800",
+        "gaussian_joint_dm": "602.378071",
+        "gaussian_joint_sigma": "0.005467",
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-wilhelm-high_resolution",
+      "preview": "previews/chime-acf-wilhelm-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "wilhelm",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20221203A"
+      },
+      "target": "figures/chime_scint_acf/wilhelm_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20221203A (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-phineas-standard.png",
+      "artifact_sha256": "56977a247ac4975e6ad5c6fe5f7357c1f9d79f63a5ac101720322200ee45a118",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "610.289070",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.039496",
+        "chime_dm": "610.289070",
+        "chime_minus_dsa": "0.056527",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "610.232543",
+        "dsa_sigma": "0.007096",
+        "gaussian_joint_dm": "610.261030",
+        "gaussian_joint_sigma": "0.028262",
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-phineas-standard",
+      "preview": "previews/chime-acf-phineas-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "phineas",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20230307A"
+      },
+      "target": "figures/chime_scint_acf/phineas_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230307A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-phineas-high_resolution.png",
+      "artifact_sha256": "f8f41336fce6ece134cc5c06d46efdb50b4aa868f1017590d44af408d0eea296",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "610.289070",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.039496",
+        "chime_dm": "610.289070",
+        "chime_minus_dsa": "0.056527",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "610.232543",
+        "dsa_sigma": "0.007096",
+        "gaussian_joint_dm": "610.261030",
+        "gaussian_joint_sigma": "0.028262",
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-phineas-high_resolution",
+      "preview": "previews/chime-acf-phineas-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "phineas",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20230307A"
+      },
+      "target": "figures/chime_scint_acf/phineas_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230307A (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-freya-standard.png",
+      "artifact_sha256": "53367497e22babf8c1eced1fd18b99d9ed140a93d974a1a666a444391574e135",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "912.407552",
+        "adopted_sigma": "0.015668",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.055841",
+        "chime_dm": "912.407552",
+        "chime_minus_dsa": "-0.083539",
+        "chime_sigma": "0.015668",
+        "dsa_dm": "912.491091",
+        "dsa_sigma": "0.022292",
+        "gaussian_joint_dm": "912.447817",
+        "gaussian_joint_sigma": "0.041742",
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-freya-standard",
+      "preview": "previews/chime-acf-freya-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "freya",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20230325A"
+      },
+      "target": "figures/chime_scint_acf/freya_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230325A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-freya-high_resolution.png",
+      "artifact_sha256": "35c5efb113195c916c17000e88808cdb44c207ac893c91eb2d482c7a6713af09",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "912.407552",
+        "adopted_sigma": "0.015668",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.055841",
+        "chime_dm": "912.407552",
+        "chime_minus_dsa": "-0.083539",
+        "chime_sigma": "0.015668",
+        "dsa_dm": "912.491091",
+        "dsa_sigma": "0.022292",
+        "gaussian_joint_dm": "912.447817",
+        "gaussian_joint_sigma": "0.041742",
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-freya-high_resolution",
+      "preview": "previews/chime-acf-freya-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "freya",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20230325A"
+      },
+      "target": "figures/chime_scint_acf/freya_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230325A (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-johndoeII-standard.png",
+      "artifact_sha256": "059ae81179b630ed13c053537204e27a18d81f7a19c75fcd740041d1700298e6",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "696.518001",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "696.518001",
+        "chime_minus_dsa": "0.052497",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "696.465504",
+        "dsa_sigma": "0.068454",
+        "gaussian_joint_dm": "696.517722",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-johndoeII-standard",
+      "preview": "previews/chime-acf-johndoeII-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "johndoeII",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20230814B"
+      },
+      "target": "figures/chime_scint_acf/johndoeII_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230814B (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-johndoeII-high_resolution.png",
+      "artifact_sha256": "8b11cae52d15a9f98feb4f63e55abe948779042230c34038cdf45e7b63a912b4",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "696.518001",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "696.518001",
+        "chime_minus_dsa": "0.052497",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "696.465504",
+        "dsa_sigma": "0.068454",
+        "gaussian_joint_dm": "696.517722",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-johndoeII-high_resolution",
+      "preview": "previews/chime-acf-johndoeII-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "johndoeII",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20230814B"
+      },
+      "target": "figures/chime_scint_acf/johndoeII_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230814B (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-hamilton-standard.png",
+      "artifact_sha256": "9c2c7e5fdf8f4cbd3e614af1d90492583b40316cf0d11d924ca68fc0d60c5d41",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "518.796993",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "518.796993",
+        "chime_minus_dsa": "-0.000663",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "518.797655",
+        "dsa_sigma": "0.063024",
+        "gaussian_joint_dm": "518.796997",
+        "gaussian_joint_sigma": "0.004984",
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-hamilton-standard",
+      "preview": "previews/chime-acf-hamilton-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "hamilton",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20230913A"
+      },
+      "target": "figures/chime_scint_acf/hamilton_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230913A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-hamilton-high_resolution.png",
+      "artifact_sha256": "a3a82c49431e8a033652286ac497aff4921410531224b64df8bd4b5c95df5ab7",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "518.796993",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "518.796993",
+        "chime_minus_dsa": "-0.000663",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "518.797655",
+        "dsa_sigma": "0.063024",
+        "gaussian_joint_dm": "518.796997",
+        "gaussian_joint_sigma": "0.004984",
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-hamilton-high_resolution",
+      "preview": "previews/chime-acf-hamilton-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "hamilton",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20230913A"
+      },
+      "target": "figures/chime_scint_acf/hamilton_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20230913A (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-mahi-standard.png",
+      "artifact_sha256": "31b8e9b3970f0a6281b2ec9795d9f04869f27f414c33ca9aa2e60c482606feaa",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "960.131611",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "960.131611",
+        "chime_minus_dsa": "0.045776",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "960.085835",
+        "dsa_sigma": "0.069745",
+        "gaussian_joint_dm": "960.131377",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-mahi-standard",
+      "preview": "previews/chime-acf-mahi-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "mahi",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20240122A"
+      },
+      "target": "figures/chime_scint_acf/mahi_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20240122A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-mahi-high_resolution.png",
+      "artifact_sha256": "99f419a0e9aadbec97c8fe4e0e03b7801d71295588bb02986418c7c5c9a97b9a",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "960.131611",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "960.131611",
+        "chime_minus_dsa": "0.045776",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "960.085835",
+        "dsa_sigma": "0.069745",
+        "gaussian_joint_dm": "960.131377",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-mahi-high_resolution",
+      "preview": "previews/chime-acf-mahi-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "mahi",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20240122A"
+      },
+      "target": "figures/chime_scint_acf/mahi_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20240122A (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-chromatica-standard.png",
+      "artifact_sha256": "de0787e17f4dea6dd3fe228297816263c0df2ec0751ad588414f97733c5f8ea7",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "272.638699",
+        "adopted_sigma": "0.011918",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "272.638699",
+        "chime_minus_dsa": "0.077283",
+        "chime_sigma": "0.011918",
+        "dsa_dm": "272.561416",
+        "dsa_sigma": "0.086174",
+        "gaussian_joint_dm": "272.637248",
+        "gaussian_joint_sigma": "0.011806",
+        "nick": "chromatica",
+        "tns": "FRB 20240203A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-chromatica-standard",
+      "preview": "previews/chime-acf-chromatica-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "chromatica",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20240203A"
+      },
+      "target": "figures/chime_scint_acf/chromatica_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20240203A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-chromatica-high_resolution.png",
+      "artifact_sha256": "30f4902abea8054f8d2e2b23bad45508d6f5fc3dd1d4bf3517854659d40dbe36",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "272.638699",
+        "adopted_sigma": "0.011918",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "272.638699",
+        "chime_minus_dsa": "0.077283",
+        "chime_sigma": "0.011918",
+        "dsa_dm": "272.561416",
+        "dsa_sigma": "0.086174",
+        "gaussian_joint_dm": "272.637248",
+        "gaussian_joint_sigma": "0.011806",
+        "nick": "chromatica",
+        "tns": "FRB 20240203A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-chromatica-high_resolution",
+      "preview": "previews/chime-acf-chromatica-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "chromatica",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20240203A"
+      },
+      "target": "figures/chime_scint_acf/chromatica_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20240203A (high resolution)"
+    },
+    {
+      "artifact": "candidates/chime-acf-casey-standard.png",
+      "artifact_sha256": "a34757637cc60cda446ffbaf115376424eed43246535708df5e3bb5ebd846d6e",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "491.207826",
+        "adopted_sigma": "0.005165",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "491.207826",
+        "chime_minus_dsa": "0.010334",
+        "chime_sigma": "0.005165",
+        "dsa_dm": "491.197492",
+        "dsa_sigma": "0.039550",
+        "gaussian_joint_dm": "491.207653",
+        "gaussian_joint_sigma": "0.005122",
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-casey-standard",
+      "preview": "previews/chime-acf-casey-standard.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "casey",
+        "product": "standard",
+        "product_title": "standard",
+        "tns": "FRB 20240229A"
+      },
+      "target": "figures/chime_scint_acf/casey_standard_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20240229A (standard)"
+    },
+    {
+      "artifact": "candidates/chime-acf-casey-high_resolution.png",
+      "artifact_sha256": "a24fbf27eba468f8e58248a0673c6ef48881d0cc5d5e62b4d599bff1c1920348",
+      "decision": {
+        "notes": "Candidate-only review packet. The joint summary separates different bursts and makes no cross-burst inference. The 24 CHIME ACF renders are hash-matched PR #192 diagnostics, not replacements for the missing post-finalization DSA rerun.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "491.207826",
+        "adopted_sigma": "0.005165",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "491.207826",
+        "chime_minus_dsa": "0.010334",
+        "chime_sigma": "0.005165",
+        "dsa_dm": "491.197492",
+        "dsa_sigma": "0.039550",
+        "gaussian_joint_dm": "491.207653",
+        "gaussian_joint_sigma": "0.005122",
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "evidence_ids": [
+        "chime-campaign-validation",
+        "chime-campaign-records",
+        "chime-campaign-figure-review",
+        "joint-scint-figure-provenance"
+      ],
+      "family": "chime-scintillation-acf",
+      "generator": "dsa110-FLITS PR #192 objective-window campaign (hash-verified Results Library render)",
+      "id": "chime-acf-casey-high_resolution",
+      "preview": "previews/chime-acf-casey-high_resolution.png",
+      "required_provenance": [
+        "PR #192 campaign record and science disposition",
+        "figure-review SHA-256 and morphology verdict",
+        "standard versus high-resolution product identity",
+        "diagnostic status distinct from qualified measurement status",
+        "no claim that a CHIME-only panel replaces a missing joint DSA+CHIME product"
+      ],
+      "subject": {
+        "nick": "casey",
+        "product": "high_resolution",
+        "product_title": "high resolution",
+        "tns": "FRB 20240229A"
+      },
+      "target": "figures/chime_scint_acf/casey_high_resolution_acf_fits.png",
+      "title": "PR #192 CHIME/FRB ACF diagnostic: FRB 20240229A (high resolution)"
+    }
+  ],
+  "created_at": "2026-07-17T23:32:13+00:00",
+  "dm_catalog": {
+    "path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8"
+  },
+  "evidence": [
+    {
+      "id": "oran-qualification",
+      "repository": "pipeline",
+      "sha256": "e0c455e1c73e1a9bd24bbc833029cd5506d1d710fe18585251094b48d11e89f9",
+      "source_path": "analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json",
+      "source_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+      "stored_path": "provenance/oran-qualification.json"
+    },
+    {
+      "id": "chime-campaign-validation",
+      "repository": "pipeline",
+      "sha256": "190d4d935eb19c9c884761daaf641893cfb29a336391af6c4791bcbfec133512",
+      "source_path": "analysis/window-tuning-campaign-2026-07-17/results/validation.json",
+      "source_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+      "stored_path": "provenance/chime-campaign-validation.json"
+    },
+    {
+      "id": "chime-campaign-records",
+      "repository": "pipeline",
+      "sha256": "08f8678fda6c5f112debad55e95ceeb8ab7993277b63cc09b04251974af6a147",
+      "source_path": "analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl",
+      "source_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+      "stored_path": "provenance/chime-campaign-records.jsonl"
+    },
+    {
+      "id": "chromatica-hi-campaign",
+      "repository": "pipeline",
+      "sha256": "e2e1fd4761c6e09bbd1d07b5bb55752700c395a0b45c558c18703a35b19f13e8",
+      "source_path": "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json",
+      "source_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+      "stored_path": "provenance/chromatica-hi-campaign.json"
+    },
+    {
+      "id": "chime-campaign-figure-review",
+      "repository": "pipeline",
+      "sha256": "7fe226eb688a8c10d78751ede80e5f9f86f96b9d8f83209af17fe2114d0edc09",
+      "source_path": "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json",
+      "source_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+      "stored_path": "provenance/chime-campaign-figure-review.json"
+    },
+    {
+      "id": "joint-scint-figure-provenance",
+      "repository": "parent",
+      "sha256": "b1eefe151122d03df3be0832b3ded723f9196f2cd32496d6661b87edaf7f9eac",
+      "source_path": "analysis/scintillation-summary/joint_figure_provenance.json",
+      "source_revision": "42920d89befb2beabcd914efab8e1c2477459b9b",
+      "stored_path": "provenance/joint-scint-figure-provenance.json"
+    }
+  ],
+  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+  "policy": {
+    "agent_visual_review_is_not_author_approval": true,
+    "approval_is_per_candidate": true,
+    "promotion_requires_exact_hash_match": true
+  },
+  "schema_version": 1,
+  "source_revision": "42920d89befb2beabcd914efab8e1c2477459b9b",
+  "title": "Qualified joint scintillation summary and PR #192 CHIME ACF review"
+}
