@@ -137,7 +137,7 @@ the intervening pin delta.
   files in the implementation report.
 - [x] Re-run the parent focused tests, consistency audit, and LaTeX build against
   the new pin.
-- [ ] Run `agent-closeout-check` for both repositories with touched-path and
+- [x] Run `agent-closeout-check` for both repositories with touched-path and
   dirty-state packets.
 - [ ] Commit the parent quarantine/pin change and publish through a focused PR.
 
@@ -156,8 +156,8 @@ repositories are clean on their feature branches; no primary-checkout dirt moved
 - [x] `latexmk` succeeds.
 - [x] `main.fls` contains `twoscreen_provisional_table.tex` but none of the three
   quarantined table inputs.
-- [ ] `git status --short` is clean after task-scoped commits in both worktrees.
-- [ ] `agent-closeout-check` passes for both repositories.
+- [x] `git status --short` is clean after task-scoped commits in both worktrees.
+- [x] `agent-closeout-check` passes for both repositories.
 
 ### Manual Verification
 
@@ -201,7 +201,7 @@ status.
 ## Documentation Updates
 
 - [x] Add quarantine indexes in both repositories.
-- [ ] Add implementation and validation reports under `docs/rse/specs/`.
+- [x] Add implementation and validation reports under `docs/rse/specs/`.
 - [x] Update current navigation surfaces; leave dated historical specs intact.
 
 ## References
