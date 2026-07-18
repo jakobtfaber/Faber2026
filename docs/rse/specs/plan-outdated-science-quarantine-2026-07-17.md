@@ -130,11 +130,12 @@ the intervening pin delta.
 
 **Tasks:**
 
-- [ ] Merge the focused pipeline PR after its checks pass.
-- [ ] Update the parent submodule gitlink to the merged pipeline commit.
-- [ ] Inspect `git diff --name-status 17d9d266..NEW_PIN` and record all imported
+- [x] Merge the focused pipeline PR after local checks pass; retain the merge
+  workflow result as a final publication check.
+- [x] Update the parent submodule gitlink to the merged pipeline commit.
+- [x] Inspect `git diff --name-status 17d9d266..NEW_PIN` and record all imported
   files in the implementation report.
-- [ ] Re-run the parent focused tests, consistency audit, and LaTeX build against
+- [x] Re-run the parent focused tests, consistency audit, and LaTeX build against
   the new pin.
 - [ ] Run `agent-closeout-check` for both repositories with touched-path and
   dirty-state packets.
@@ -149,11 +150,11 @@ repositories are clean on their feature branches; no primary-checkout dirt moved
 
 ### Automated Verification
 
-- [ ] Focused parent and pipeline quarantine tests pass.
-- [ ] Existing provisional-propagation, attribution-matrix, joint-summary, and
+- [x] Focused parent and pipeline quarantine tests pass.
+- [x] Existing provisional-propagation, attribution-matrix, joint-summary, and
   consistency-audit tests pass after their path/policy updates.
-- [ ] `latexmk` succeeds.
-- [ ] `main.fls` contains `twoscreen_provisional_table.tex` but none of the three
+- [x] `latexmk` succeeds.
+- [x] `main.fls` contains `twoscreen_provisional_table.tex` but none of the three
   quarantined table inputs.
 - [ ] `git status --short` is clean after task-scoped commits in both worktrees.
 - [ ] `agent-closeout-check` passes for both repositories.
@@ -199,9 +200,9 @@ status.
 
 ## Documentation Updates
 
-- [ ] Add quarantine indexes in both repositories.
+- [x] Add quarantine indexes in both repositories.
 - [ ] Add implementation and validation reports under `docs/rse/specs/`.
-- [ ] Update current navigation surfaces; leave dated historical specs intact.
+- [x] Update current navigation surfaces; leave dated historical specs intact.
 
 ## References
 
