@@ -103,26 +103,27 @@ Result: of the manifest's 28 rows, **12 regenerate from a fresh clone** (5 as
 written, 7 only after correcting the command), **4 exit 0 while writing nothing
 at the declared path**, 10 are blocked on data outside both repos, and 2 have
 no command. The 2026-07-09 execution sweep ran the 25 rows then present. The
-compact archival gallery, the Figure 1 data overview, and the
-main-text-plus-appendix triptych family were added later with verdicts assigned
+compact archival gallery, the Figure 1 data overview, and the historical
+triptych family were added later with verdicts assigned
 by inspection rather than execution. The Figure 1 data grid draws every panel
 from the archival `_cntr_bpc.npy` waterfalls (all 24 products, near-native
 display grids). It uses the observed-profile convention: DSA-110's measured
 peak is at zero and CHIME/FRB is positioned with the recorded measured peak
 offset. No joint-model fit artifact or scattering-model correction participates
-in Figure 1. The triptychs require the eleven local fit-delivery NPZ artifacts
-plus Chromatica's two archival waterfall products; the compact gallery remains
-diagnostic only and requires all 24 archival waterfalls.
+in Figure 1. The historical triptychs require the eleven local fit-delivery NPZ
+artifacts plus Chromatica's two archival waterfall products; the compact gallery
+remains diagnostic only and requires all 24 archival waterfalls.  On 2026-07-17
+the pre-PL-PBF triptych and joint-model-pair families were removed from the
+compiled manuscript.  Their bytes remain provenance records, not replacement
+candidates.
 
-8 of the 10 rows marked `embedded_in_manuscript = yes` regenerate — **4 of
-those 8 needed their `run_command` corrected first**, so the pre-audit manifest
-could not have rebuilt the manuscript. The two blocked embedded rows are the
-codetection data grid and triptych family; neither can be rebuilt from a fresh
-clone until the 24 archival waterfalls and triptych fit artifacts are deposited
-(see hazard 6). Every other blocked or
-command-less row is a *staged* output waiting on a result SLOT; those cannot
-be promoted into the manuscript until their inputs are published alongside the
-code.
+Of the 17 rows currently marked `embedded_in_manuscript = yes`, 15 have a
+clone-verified reproduction status, one is a candidate, and the Figure 1 data
+grid remains blocked on external archival waterfalls (see hazard 6).  The
+pre-PL-PBF triptych and joint-model-pair rows are deliberately unembedded.
+Every other blocked or command-less row is a staged or historical output; it
+cannot be promoted until its inputs and scientific provenance are published
+alongside the code.
 
 ⚠️ **This is a statement about the manifest, not about the manuscript.** The
 manifest does not enumerate every embedded output — see hazard 7. Until it does,
@@ -149,13 +150,12 @@ regeneration section below.)
 
 ## Status: what's embedded now vs. staged
 
-The manuscript is mid-draft. Of 29 tracked outputs (24 figures + 5 tables),
-ten are currently `\input`/`\includegraphics`'d (the
-`embedded_in_manuscript = yes` rows, most recently the Figure 1 data grid and
-the redistributed triptych family); the other 18 (seventeen figures + the
-staged `beta_table.tex`) are produced and sit in the repo but are not yet
-placed — they are waiting on the abstract's bracketed result SLOTs (joint
-two-band scattering, scintillation attribution, band-restricted energies). One
+The manuscript is mid-draft. Of 39 tracked output rows (29 figures + 10
+tables), 17 are currently `\input`/`\includegraphics`'d (the
+`embedded_in_manuscript = yes` rows).  The other 22 are staged, historical, or
+superseded outputs.  In particular, the triptych and joint-model-pair families
+are retained only as pre-PL-PBF provenance records while the post-PL-PBF
+production campaign remains outstanding. One
 of the staged figures, `ne2025_mw_characterization.pdf`, is a true orphan: it
 is the default-resolution (`--nside 8`) sibling of the embedded `_nside32`
 variant and is not referenced anywhere. Both classes are tracked so nothing is
@@ -425,16 +425,14 @@ earned their keep once: they are what caught the drift described in hazard 1.
    manuscript must have its inputs published — a committed data file, or a
    deposited archive — before the DA statement can cover it.
 
-   **2026-07-11 update (revised 2026-07-13): this class has one embedded
-   member.** The codetection Figure 1 data grid reads all 24 archival CHIME/DSA
-   `_cntr_bpc.npy` waterfalls (near-native display grids) and has no fit-artifact
-   dependency; the triptych family
-   reads the 11 fit-delivery NPZ artifacts plus Chromatica's two archival
-   waterfalls. Both rows are `embedded_in_manuscript = yes` while
-   `blocked_external_data`; the compact gallery uses the same 24 archival
-   waterfalls but is diagnostic and non-embedded. The archival waterfalls and
-   fit artifacts must be part of the data release before the DA statement
-   can cover Figures 1--2 and the morphology-audit appendix.
+   **2026-07-17 update: this class has one embedded member.** The codetection
+   Figure 1 data grid reads all 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls
+   (near-native display grids) and has no fit-artifact dependency.  The
+   pre-PL-PBF triptych family reads 11 fit-delivery NPZ artifacts plus
+   Chromatica's two archival waterfalls, but it and the joint-model-pair family
+   are now unembedded and marked superseded.  New joint-fit panels require a
+   complete post-PL-PBF production refit and review-bound dumps; depositing the
+   old fit artifacts would not make them current.
 
 7. **Scintillation-output manifest coverage. (CLOSED 2026-07-17.)**
 
@@ -451,11 +449,11 @@ earned their keep once: they are what caught the drift described in hazard 1.
 
 ## Suggested next steps
 
-- Deposit the 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls and the 11
-  fit-delivery artifacts: the Figure 1 grid (archival waterfalls only) and triptych
-  family (fit artifacts plus Chromatica's waterfalls) are the two embedded
-  rows the DA statement cannot cover, and data deposition is the only way to
-  close them.
+- Deposit the 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls needed by the
+  embedded Figure 1 grid.  Separately, run and review the complete post-PL-PBF
+  production campaign before generating replacement triptych or
+  joint-model-pair panels; the old eleven fit-delivery artifacts are not
+  promotion candidates.
 - Fill the two unresolved producers (author knowledge) and promote their rows
   to `writer_verified = yes`.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,
