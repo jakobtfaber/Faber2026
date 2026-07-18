@@ -1,0 +1,710 @@
+{
+  "casey": {
+    "name": "casey",
+    "burst_lims": [
+      889,
+      898
+    ],
+    "off_lims": [
+      0,
+      860
+    ],
+    "cw_khz": 24.416,
+    "nchan": 16320,
+    "ntime": 1758,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.0,
+    "subband_meta": [
+      {
+        "center_mhz": 700.6,
+        "n_chan": 5290,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 129.16,
+        "slice": [
+          8254,
+          16320
+        ]
+      },
+      {
+        "center_mhz": 562.1,
+        "n_chan": 2670,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 65.19,
+        "slice": [
+          4975,
+          8254
+        ]
+      },
+      {
+        "center_mhz": 491.0,
+        "n_chan": 2256,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 55.08,
+        "slice": [
+          2431,
+          4975
+        ]
+      },
+      {
+        "center_mhz": 430.3,
+        "n_chan": 1995,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 48.71,
+        "slice": [
+          0,
+          2431
+        ]
+      }
+    ]
+  },
+  "whitney": {
+    "name": "whitney",
+    "burst_lims": [
+      1012,
+      1028
+    ],
+    "off_lims": [
+      200,
+      950
+    ],
+    "cw_khz": 24.416,
+    "nchan": 16352,
+    "ntime": 1930,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.0097,
+    "subband_meta": [
+      {
+        "center_mhz": 753.2,
+        "n_chan": 2576,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 62.89,
+        "slice": [
+          12563,
+          16352
+        ]
+      },
+      {
+        "center_mhz": 688.3,
+        "n_chan": 1458,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 35.6,
+        "slice": [
+          11041,
+          12563
+        ]
+      },
+      {
+        "center_mhz": 627.5,
+        "n_chan": 2797,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 68.29,
+        "slice": [
+          7578,
+          11041
+        ]
+      },
+      {
+        "center_mhz": 492.7,
+        "n_chan": 6309,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 154.04,
+        "slice": [
+          0,
+          7578
+        ]
+      }
+    ]
+  },
+  "phineas": {
+    "name": "phineas",
+    "burst_lims": [
+      1035,
+      1130
+    ],
+    "off_lims": [
+      200,
+      950
+    ],
+    "cw_khz": 24.416,
+    "nchan": 16368,
+    "ntime": 2430,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.0348,
+    "subband_meta": [
+      {
+        "center_mhz": 746.6,
+        "n_chan": 3088,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 75.4,
+        "slice": [
+          12005,
+          16368
+        ]
+      },
+      {
+        "center_mhz": 650.9,
+        "n_chan": 2624,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 64.07,
+        "slice": [
+          8535,
+          12005
+        ]
+      },
+      {
+        "center_mhz": 565.8,
+        "n_chan": 2828,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 69.05,
+        "slice": [
+          5035,
+          8535
+        ]
+      },
+      {
+        "center_mhz": 461.6,
+        "n_chan": 4931,
+        "chan_width_khz": 24.42,
+        "bw_mhz": 120.39,
+        "slice": [
+          0,
+          5035
+        ]
+      }
+    ]
+  },
+  "mahi": {
+    "name": "mahi",
+    "burst_lims": [
+      20,
+      45
+    ],
+    "off_lims": [
+      0,
+      18
+    ],
+    "cw_khz": 0.763,
+    "nchan": 522240,
+    "ntime": 55,
+    "descalloped": true,
+    "descallop_method": "time-median flat-field (off-pulse < 50 bins)",
+    "rfi_acf_power_share": 0.0047,
+    "subband_meta": [
+      {
+        "center_mhz": 740.0,
+        "n_chan": 96454,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 73.59,
+        "slice": [
+          367418,
+          522240
+        ]
+      },
+      {
+        "center_mhz": 630.3,
+        "n_chan": 97862,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 74.66,
+        "slice": [
+          234740,
+          367418
+        ]
+      },
+      {
+        "center_mhz": 535.3,
+        "n_chan": 96309,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 73.48,
+        "slice": [
+          118463,
+          234740
+        ]
+      },
+      {
+        "center_mhz": 445.8,
+        "n_chan": 96447,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 73.58,
+        "slice": [
+          0,
+          118463
+        ]
+      }
+    ]
+  },
+  "freya": {
+    "name": "freya",
+    "burst_lims": [
+      253,
+      268
+    ],
+    "off_lims": [
+      10,
+      200
+    ],
+    "cw_khz": 6.104,
+    "nchan": 65472,
+    "ntime": 446,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.002,
+    "subband_meta": [
+      {
+        "center_mhz": 753.4,
+        "n_chan": 10521,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 64.22,
+        "slice": [
+          50271,
+          65472
+        ]
+      },
+      {
+        "center_mhz": 682.3,
+        "n_chan": 7218,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 44.06,
+        "slice": [
+          42154,
+          50271
+        ]
+      },
+      {
+        "center_mhz": 607.0,
+        "n_chan": 13220,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 80.69,
+        "slice": [
+          25614,
+          42154
+        ]
+      },
+      {
+        "center_mhz": 478.4,
+        "n_chan": 24227,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 147.87,
+        "slice": [
+          0,
+          25614
+        ]
+      }
+    ]
+  },
+  "zach": {
+    "name": "zach",
+    "burst_lims": [
+      232,
+      248
+    ],
+    "off_lims": [
+      55,
+      220
+    ],
+    "cw_khz": 6.104,
+    "nchan": 65408,
+    "ntime": 486,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.0081,
+    "subband_meta": [
+      {
+        "center_mhz": 739.1,
+        "n_chan": 13329,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 81.36,
+        "slice": [
+          45632,
+          65408
+        ]
+      },
+      {
+        "center_mhz": 643.1,
+        "n_chan": 9794,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 59.78,
+        "slice": [
+          33950,
+          45632
+        ]
+      },
+      {
+        "center_mhz": 560.4,
+        "n_chan": 12964,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 79.13,
+        "slice": [
+          18554,
+          33950
+        ]
+      },
+      {
+        "center_mhz": 456.8,
+        "n_chan": 17129,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 104.55,
+        "slice": [
+          0,
+          18554
+        ]
+      }
+    ]
+  },
+  "chromatica": {
+    "name": "chromatica",
+    "burst_lims": [
+      184,
+      198
+    ],
+    "off_lims": [
+      20,
+      175
+    ],
+    "cw_khz": 6.104,
+    "nchan": 65280,
+    "ntime": 452,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.0002,
+    "subband_meta": [
+      {
+        "center_mhz": 724.8,
+        "n_chan": 16089,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 98.2,
+        "slice": [
+          40949,
+          65280
+        ]
+      },
+      {
+        "center_mhz": 601.9,
+        "n_chan": 10871,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 66.35,
+        "slice": [
+          25021,
+          40949
+        ]
+      },
+      {
+        "center_mhz": 516.8,
+        "n_chan": 9938,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 60.66,
+        "slice": [
+          13072,
+          25021
+        ]
+      },
+      {
+        "center_mhz": 440.5,
+        "n_chan": 10315,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 62.96,
+        "slice": [
+          0,
+          13072
+        ]
+      }
+    ]
+  },
+  "wilhelm": {
+    "name": "wilhelm",
+    "burst_lims": [
+      239,
+      250
+    ],
+    "off_lims": [
+      35,
+      220
+    ],
+    "cw_khz": 6.104,
+    "nchan": 65472,
+    "ntime": 466,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.01,
+    "subband_meta": [
+      {
+        "center_mhz": 755.2,
+        "n_chan": 7299,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 44.55,
+        "slice": [
+          50841,
+          65472
+        ]
+      },
+      {
+        "center_mhz": 696.4,
+        "n_chan": 4372,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 26.68,
+        "slice": [
+          46213,
+          50841
+        ]
+      },
+      {
+        "center_mhz": 663.9,
+        "n_chan": 5960,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 36.38,
+        "slice": [
+          40189,
+          46213
+        ]
+      },
+      {
+        "center_mhz": 522.8,
+        "n_chan": 33290,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 203.19,
+        "slice": [
+          0,
+          40189
+        ]
+      }
+    ]
+  },
+  "oran": {
+    "name": "oran",
+    "burst_lims": [
+      100,
+      250
+    ],
+    "off_lims": [
+      60,
+      95
+    ],
+    "cw_khz": 3.052,
+    "nchan": 130816,
+    "ntime": 337,
+    "descalloped": true,
+    "descallop_method": "time-median flat-field (off-pulse < 50 bins)",
+    "rfi_acf_power_share": 0.2165,
+    "subband_meta": [
+      {
+        "center_mhz": 743.9,
+        "n_chan": 26328,
+        "chan_width_khz": 3.05,
+        "bw_mhz": 80.35,
+        "slice": [
+          94403,
+          130816
+        ]
+      },
+      {
+        "center_mhz": 642.7,
+        "n_chan": 25601,
+        "chan_width_khz": 3.05,
+        "bw_mhz": 78.13,
+        "slice": [
+          64526,
+          94403
+        ]
+      },
+      {
+        "center_mhz": 543.6,
+        "n_chan": 27664,
+        "chan_width_khz": 3.05,
+        "bw_mhz": 84.42,
+        "slice": [
+          29479,
+          64526
+        ]
+      },
+      {
+        "center_mhz": 445.2,
+        "n_chan": 27483,
+        "chan_width_khz": 3.05,
+        "bw_mhz": 83.87,
+        "slice": [
+          0,
+          29479
+        ]
+      }
+    ]
+  },
+  "hamilton": {
+    "name": "hamilton",
+    "burst_lims": [
+      204,
+      215
+    ],
+    "off_lims": [
+      10,
+      190
+    ],
+    "cw_khz": 6.104,
+    "nchan": 65408,
+    "ntime": 440,
+    "descalloped": true,
+    "descallop_method": "off-pulse mean (pipeline bandpass_normalization)",
+    "rfi_acf_power_share": 0.0109,
+    "subband_meta": [
+      {
+        "center_mhz": 738.8,
+        "n_chan": 11954,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 72.96,
+        "slice": [
+          45415,
+          65408
+        ]
+      },
+      {
+        "center_mhz": 648.7,
+        "n_chan": 7233,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 44.15,
+        "slice": [
+          35899,
+          45415
+        ]
+      },
+      {
+        "center_mhz": 569.8,
+        "n_chan": 12898,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 78.72,
+        "slice": [
+          19537,
+          35899
+        ]
+      },
+      {
+        "center_mhz": 460.2,
+        "n_chan": 16698,
+        "chan_width_khz": 6.1,
+        "bw_mhz": 101.92,
+        "slice": [
+          0,
+          19537
+        ]
+      }
+    ]
+  },
+  "johndoeII": {
+    "name": "johndoeII",
+    "burst_lims": [
+      34,
+      40
+    ],
+    "off_lims": [
+      10,
+      30
+    ],
+    "cw_khz": 0.763,
+    "nchan": 521728,
+    "ntime": 78,
+    "descalloped": true,
+    "descallop_method": "time-median flat-field (off-pulse < 50 bins)",
+    "rfi_acf_power_share": 0.0134,
+    "subband_meta": [
+      {
+        "center_mhz": 740.9,
+        "n_chan": 95602,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 72.94,
+        "slice": [
+          371342,
+          521728
+        ]
+      },
+      {
+        "center_mhz": 633.8,
+        "n_chan": 98995,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 75.53,
+        "slice": [
+          241115,
+          371342
+        ]
+      },
+      {
+        "center_mhz": 536.7,
+        "n_chan": 99413,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 75.85,
+        "slice": [
+          116614,
+          241115
+        ]
+      },
+      {
+        "center_mhz": 444.7,
+        "n_chan": 98694,
+        "chan_width_khz": 0.76,
+        "bw_mhz": 75.3,
+        "slice": [
+          0,
+          116614
+        ]
+      }
+    ]
+  },
+  "isha": {
+    "name": "isha",
+    "burst_lims": [
+      50,
+      63
+    ],
+    "off_lims": [
+      10,
+      45
+    ],
+    "cw_khz": 1.526,
+    "nchan": 261888,
+    "ntime": 116,
+    "descalloped": true,
+    "descallop_method": "time-median flat-field (off-pulse < 50 bins)",
+    "rfi_acf_power_share": 0.0038,
+    "subband_meta": [
+      {
+        "center_mhz": 739.0,
+        "n_chan": 52076,
+        "chan_width_khz": 1.53,
+        "bw_mhz": 79.46,
+        "slice": [
+          182155,
+          261888
+        ]
+      },
+      {
+        "center_mhz": 631.2,
+        "n_chan": 51590,
+        "chan_width_khz": 1.53,
+        "bw_mhz": 78.72,
+        "slice": [
+          120685,
+          182155
+        ]
+      },
+      {
+        "center_mhz": 533.3,
+        "n_chan": 51700,
+        "chan_width_khz": 1.53,
+        "bw_mhz": 78.89,
+        "slice": [
+          53732,
+          120685
+        ]
+      },
+      {
+        "center_mhz": 441.2,
+        "n_chan": 52138,
+        "chan_width_khz": 1.53,
+        "bw_mhz": 79.56,
+        "slice": [
+          0,
+          53732
+        ]
+      }
+    ]
+  }
+}

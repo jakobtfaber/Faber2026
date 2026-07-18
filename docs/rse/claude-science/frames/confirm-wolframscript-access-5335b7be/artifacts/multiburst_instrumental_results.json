@@ -1,0 +1,528 @@
+{
+  "casey": {
+    "cw_khz": 32.301,
+    "nchan": 12336,
+    "burst_lims": [
+      889,
+      898
+    ],
+    "off_lims": [
+      0,
+      860
+    ],
+    "arm_a": {
+      "on_dnu_khz": 45.85,
+      "on_dnu_err_khz": 32.95,
+      "off_dnu_khz": [
+        48.2,
+        48.2,
+        48.0,
+        44.5,
+        48.2,
+        46.2,
+        47.6,
+        48.4,
+        48.1,
+        48.6,
+        48.6,
+        47.8,
+        48.5,
+        45.8,
+        49.9,
+        46.8,
+        48.4,
+        47.8,
+        48.0,
+        48.8,
+        46.9,
+        49.9,
+        46.8,
+        49.2,
+        48.4,
+        45.9,
+        49.2,
+        49.3,
+        48.8,
+        46.7,
+        48.7,
+        47.1,
+        47.8,
+        48.3,
+        46.8,
+        50.0,
+        49.1,
+        48.1,
+        48.0,
+        50.5,
+        49.1,
+        48.0,
+        51.2,
+        49.7,
+        47.3,
+        49.1,
+        48.0,
+        47.2,
+        46.4,
+        48.3,
+        44.1,
+        47.2,
+        47.3,
+        47.7,
+        47.4,
+        47.4,
+        49.4,
+        49.4,
+        48.4,
+        48.6,
+        47.3,
+        48.0,
+        47.9,
+        46.7,
+        47.5,
+        45.5
+      ],
+      "n_off": 66,
+      "off_dnu_median_khz": 48.0,
+      "sep_z": -0.07,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 16.39,
+      "on_acf_1_6": 0.370377,
+      "off_acf_1_6": 46025.198105,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 0.3709,
+      "z_1_6": 110.88,
+      "denom": 6.641385421282024e+18,
+      "note": "ok"
+    }
+  },
+  "whitney": {
+    "cw_khz": 24.416,
+    "nchan": 16352,
+    "burst_lims": [
+      1012,
+      1028
+    ],
+    "off_lims": [
+      200,
+      950
+    ],
+    "arm_a": {
+      "on_dnu_khz": 45.92,
+      "on_dnu_err_khz": 25.88,
+      "off_dnu_khz": [
+        48.1,
+        43.8,
+        46.5,
+        46.3,
+        45.6,
+        46.3,
+        46.1,
+        46.6,
+        44.9,
+        48.3,
+        47.2,
+        46.5,
+        46.0,
+        43.5,
+        45.1,
+        44.6,
+        45.7,
+        44.4,
+        46.3
+      ],
+      "n_off": 37,
+      "off_dnu_median_khz": 46.1,
+      "sep_z": -0.01,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 14.66,
+      "on_acf_1_6": 74.11893,
+      "off_acf_1_6": 28823.800763,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 127.43387,
+      "z_1_6": 127.84,
+      "denom": 2442952387869642.0,
+      "note": "ok"
+    }
+  },
+  "phineas": {
+    "cw_khz": 24.416,
+    "nchan": 16368,
+    "burst_lims": [
+      1035,
+      1130
+    ],
+    "off_lims": [
+      200,
+      950
+    ],
+    "arm_a": {
+      "on_dnu_khz": 63.96,
+      "on_dnu_err_khz": 26.82,
+      "off_dnu_khz": [
+        56.8,
+        56.7,
+        56.3,
+        57.7,
+        57.0,
+        57.2,
+        56.9
+      ],
+      "n_off": 7,
+      "off_dnu_median_khz": 56.9,
+      "sep_z": 0.26,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 4.78,
+      "on_acf_1_6": 104.774186,
+      "off_acf_1_6": 1352056.056974,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 156.49315,
+      "z_1_6": 153.53,
+      "denom": 2279482139538709.0,
+      "note": "ok"
+    }
+  },
+  "mahi": {
+    "cw_khz": 0.763,
+    "nchan": 522240,
+    "burst_lims": [
+      20,
+      45
+    ],
+    "off_lims": [
+      0,
+      18
+    ],
+    "arm_a": {
+      "on_dnu_khz": null,
+      "off_dnu_khz": [],
+      "off_dnu_median_khz": null,
+      "n_off": 0,
+      "sep_z": null,
+      "verdict": "no-fit",
+      "agg_z_1_6": null,
+      "on_acf_1_6": null,
+      "off_acf_1_6": null,
+      "ratio_on_off": null
+    },
+    "arm_b2": {
+      "ccf_1_6": 5247.82623,
+      "z_1_6": 129.54,
+      "denom": 3.4258794999191e+17,
+      "note": "ok"
+    }
+  },
+  "freya": {
+    "cw_khz": 6.104,
+    "nchan": 65472,
+    "burst_lims": [
+      253,
+      268
+    ],
+    "off_lims": [
+      10,
+      200
+    ],
+    "arm_a": {
+      "on_dnu_khz": 54.13,
+      "on_dnu_err_khz": 10.32,
+      "off_dnu_khz": [
+        53.4,
+        52.8,
+        55.8,
+        54.5,
+        53.6,
+        54.7,
+        54.3,
+        53.5,
+        55.3,
+        55.3
+      ],
+      "n_off": 10,
+      "off_dnu_median_khz": 54.4,
+      "sep_z": -0.03,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 8.49,
+      "on_acf_1_6": 7.872017,
+      "off_acf_1_6": 233044.937318,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 12.53036,
+      "z_1_6": 307.19,
+      "denom": 6.876294368640061e+17,
+      "note": "ok"
+    }
+  },
+  "zach": {
+    "cw_khz": 6.104,
+    "nchan": 65408,
+    "burst_lims": [
+      232,
+      248
+    ],
+    "off_lims": [
+      55,
+      220
+    ],
+    "arm_a": {
+      "on_dnu_khz": 86.35,
+      "on_dnu_err_khz": 14.8,
+      "off_dnu_khz": [
+        46.5,
+        47.0,
+        45.5,
+        46.9,
+        47.7,
+        46.9,
+        45.4,
+        50.0
+      ],
+      "n_off": 8,
+      "off_dnu_median_khz": 46.9,
+      "sep_z": 2.67,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 8.01,
+      "on_acf_1_6": 2.142761,
+      "off_acf_1_6": 34532.800501,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 2.1067,
+      "z_1_6": 133.32,
+      "denom": 2.136341305141027e+19,
+      "note": "ok"
+    }
+  },
+  "chromatica": {
+    "cw_khz": 6.104,
+    "nchan": 65280,
+    "burst_lims": [
+      184,
+      198
+    ],
+    "off_lims": [
+      20,
+      175
+    ],
+    "arm_a": {
+      "on_dnu_khz": 41.12,
+      "on_dnu_err_khz": 10.44,
+      "off_dnu_khz": [
+        41.2,
+        41.4,
+        41.0,
+        63.9,
+        40.8,
+        63.0,
+        40.5,
+        40.5
+      ],
+      "n_off": 8,
+      "off_dnu_median_khz": 41.1,
+      "sep_z": 0.0,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 5.23,
+      "on_acf_1_6": 5.137753,
+      "off_acf_1_6": 199588.529363,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 5.13528,
+      "z_1_6": 285.71,
+      "denom": 2.773018812479183e+18,
+      "note": "ok"
+    }
+  },
+  "wilhelm": {
+    "cw_khz": 6.104,
+    "nchan": 65472,
+    "burst_lims": [
+      239,
+      250
+    ],
+    "off_lims": [
+      35,
+      220
+    ],
+    "arm_a": {
+      "on_dnu_khz": 47.48,
+      "on_dnu_err_khz": 10.17,
+      "off_dnu_khz": [
+        47.2,
+        47.1,
+        47.7,
+        46.5,
+        47.4,
+        46.6,
+        47.4,
+        47.1,
+        47.3,
+        47.0,
+        47.0,
+        45.6
+      ],
+      "n_off": 12,
+      "off_dnu_median_khz": 47.1,
+      "sep_z": 0.04,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 9.85,
+      "on_acf_1_6": 86.990541,
+      "off_acf_1_6": 116536.955542,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 109.40994,
+      "z_1_6": 232.75,
+      "denom": 9.821086847496851e+16,
+      "note": "ok"
+    }
+  },
+  "oran": {
+    "cw_khz": 3.052,
+    "nchan": 130816,
+    "burst_lims": [
+      100,
+      250
+    ],
+    "off_lims": [
+      60,
+      95
+    ],
+    "arm_a": {
+      "on_dnu_khz": 51.91,
+      "off_dnu_khz": [],
+      "off_dnu_median_khz": null,
+      "n_off": 0,
+      "sep_z": null,
+      "verdict": "no-fit",
+      "agg_z_1_6": null,
+      "on_acf_1_6": null,
+      "off_acf_1_6": null,
+      "ratio_on_off": null
+    },
+    "arm_b2": {
+      "ccf_1_6": 200.34863,
+      "z_1_6": 251.35,
+      "denom": 3.8118252265252256e+17,
+      "note": "ok"
+    }
+  },
+  "hamilton": {
+    "cw_khz": 6.104,
+    "nchan": 65408,
+    "burst_lims": [
+      204,
+      215
+    ],
+    "off_lims": [
+      10,
+      190
+    ],
+    "arm_a": {
+      "on_dnu_khz": 46.37,
+      "on_dnu_err_khz": 9.26,
+      "off_dnu_khz": [
+        46.2,
+        45.9,
+        45.0,
+        43.8,
+        46.4,
+        45.7,
+        44.4,
+        45.1,
+        45.9,
+        47.3,
+        45.3,
+        50.3
+      ],
+      "n_off": 12,
+      "off_dnu_median_khz": 45.8,
+      "sep_z": 0.06,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 9.06,
+      "on_acf_1_6": 24.88472,
+      "off_acf_1_6": 77406.567485,
+      "ratio_on_off": 0.0
+    },
+    "arm_b2": {
+      "ccf_1_6": 48.7134,
+      "z_1_6": 238.68,
+      "denom": 1.341602995519866e+17,
+      "note": "ok"
+    }
+  },
+  "johndoeII": {
+    "cw_khz": 0.763,
+    "nchan": 521728,
+    "burst_lims": [
+      34,
+      40
+    ],
+    "off_lims": [
+      10,
+      30
+    ],
+    "arm_a": {
+      "on_dnu_khz": 579.47,
+      "on_dnu_err_khz": 10.49,
+      "off_dnu_khz": [
+        511.0,
+        936.2
+      ],
+      "n_off": 2,
+      "off_dnu_median_khz": 723.6,
+      "sep_z": -0.65,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 114.28,
+      "on_acf_1_6": 3.226089,
+      "off_acf_1_6": 2.964673,
+      "ratio_on_off": 1.09
+    },
+    "arm_b2": {
+      "ccf_1_6": 19850.78819,
+      "z_1_6": 75.91,
+      "denom": 9.267616580993129e+17,
+      "note": "ok"
+    }
+  },
+  "isha": {
+    "cw_khz": 1.526,
+    "nchan": 261888,
+    "burst_lims": [
+      50,
+      63
+    ],
+    "off_lims": [
+      10,
+      45
+    ],
+    "arm_a": {
+      "on_dnu_khz": 62.62,
+      "on_dnu_err_khz": 5.38,
+      "off_dnu_khz": [
+        57.6,
+        59.1
+      ],
+      "n_off": 2,
+      "off_dnu_median_khz": 58.4,
+      "sep_z": 0.79,
+      "verdict": "INSTRUMENTAL (off reproduces on)",
+      "agg_z_1_6": 330.6,
+      "on_acf_1_6": 0.140641,
+      "off_acf_1_6": 0.139614,
+      "ratio_on_off": 1.01
+    },
+    "arm_b2": {
+      "ccf_1_6": 678.18148,
+      "z_1_6": 566.52,
+      "denom": 1.9328640224157357e+17,
+      "note": "ok"
+    }
+  }
+}
