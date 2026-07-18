@@ -95,14 +95,18 @@ finite-scintle terms in quadrature; the DSA interval remains asymmetric.
 **Objective:** Produce reviewable bytes without manuscript promotion.
 
 **Tasks:**
-- [ ] Add a loader/plot path to the builder that requires the DSA qualification
+- [x] Add a loader/plot path to the builder that requires the DSA qualification
   gates and the CHIME measurement/artifact/figure statuses to pass.
-- [ ] Render only qualified measurements to a temporary candidate root under
+- [x] Render only qualified measurements to a temporary candidate root under
   the protected `fig6-scint-summary` target; include no cross-burst scaling
   curve.
-- [ ] Stage an immutable batch with SHA-256, input paths, pipeline revision,
+- [x] Stage an immutable batch with SHA-256, input paths, pipeline revision,
   status fields, and preview. Keep this phase in a stacked candidate-only PR.
-- [ ] Run the focused loader tests and visually inspect the rendered preview.
+- [x] Add all 24 hash-matched PR #192 CHIME ACF renders as separately labeled
+  diagnostic candidates; do not present them as the unavailable joint DSA+CHIME
+  appendix replacements.
+- [x] Run the focused loader tests and visually inspect the summary, selected
+  ACF panels, and full contact sheet.
 
 ## Success Criteria
 
