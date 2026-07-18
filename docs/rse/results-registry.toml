@@ -1,0 +1,66 @@
+# Results registry — canonical inventory of every manuscript-facing result.
+# Owner decisions 2026-07-18: TOML canonical + generated RESULTS.md view
+# (sync_state pattern); scope = manuscript-facing products only (numbers,
+# tables, figures, verdicts quoted or shown in the tex); this inventory is
+# PHASE 1 of the trust-ledger overhaul (wayfinder ticket 13) — the overhaul
+# adjudicates trust row-by-row on top of it. The tier-2 prose-number parity
+# CI gate (verification-protocol.md) checks tex against THIS file.
+#
+# Field reference (one [[result]] per product):
+#   id                stable dotted id: <area>.<name>
+#   kind              number | table | figure | verdict
+#   description       one line, plain language
+#   value             the quoted value (numbers/verdicts) or "" (tables/figures)
+#   units             "" if dimensionless/na
+#   producing_script  repo-relative path (pipeline/ or scripts/)
+#   pipeline_pin      submodule commit/pin at production time
+#   inputs            in-repo data artifacts consumed
+#   external_sources  third-party queries: catalog/survey, version/DR, DOI,
+#                     query date — one string each
+#   artifact          output path (+ md5 where applicable)
+#   consumed_by       tex locations quoting/showing it
+#   trust             trusted | revoked | pending
+#   cleared_by        which validation cleared it ("" if revoked/pending)
+#   current           true | false (false = superseded; keep row for history)
+#   notes             free text
+#
+# STATUS: skeleton. Two seed rows below (one trusted, one revoked) illustrate
+# the schema; every field of every row must be verified against artifacts
+# during population — do not trust seed values.
+
+schema_version = 1
+updated = "2026-07-18"
+
+[[result]]
+id = "association.pcc_sum"
+kind = "number"
+description = "Summed chance-coincidence expectation over the DSA-110 trial set"
+value = "~3e-7"
+units = ""
+producing_script = "pipeline/analysis/chance-coincidence/run.py"
+pipeline_pin = ""
+inputs = ["toa_crossmatch_results.json"]
+external_sources = []
+artifact = ""
+consumed_by = ["sections/toa.tex"]
+trust = "trusted"
+cleared_by = "association + DM re-validation 2026-07-07 (legacy V6)"
+current = true
+notes = "SEED EXAMPLE — verify all fields during population"
+
+[[result]]
+id = "scattering.beta_table"
+kind = "table"
+description = "Per-sightline turbulence spectral index roster (tab:beta)"
+value = ""
+units = ""
+producing_script = "pipeline/analysis/beta_campaign/"
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "beta_table.tex"
+consumed_by = ["sections/results.tex"]
+trust = "revoked"
+cleared_by = ""
+current = false
+notes = "SEED EXAMPLE — wave-1 fit-trust revocation; refill from the re-fit campaign"

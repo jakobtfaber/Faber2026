@@ -28,6 +28,12 @@ trusted and what's not"). Re-audit the ledger lane by lane:
 - **The re-entry bar itself**: is the five-term contract the right bar
   everywhere, or proportionate per lane?
 
+**Phase 1 (owner decision 2026-07-18): the results registry.** Before
+adjudication, populate `docs/rse/results-registry.toml` (BOARD.md §0) — every
+manuscript-facing result with its producing script, pipeline pin,
+external-source provenance, and current trust state seeded from `CONTEXT.md`.
+The overhaul grilling then walks the registry row-by-row.
+
 Resolution = a revised trust ledger that supersedes the `CONTEXT.md`
 trust-reset block, plus revised re-validation requirements per lane. This
 sets the evidence bar the re-fit and scintillation campaigns run against;
