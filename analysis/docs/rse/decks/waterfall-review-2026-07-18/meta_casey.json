@@ -1,0 +1,131 @@
+{
+ "casey": {
+  "chime_full": {
+   "file": "casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+   "md5": "89737b89",
+   "shape": [
+    1024,
+    32000
+   ],
+   "window": [
+    14822,
+    17222
+   ],
+   "peak": 16022
+  },
+  "chime_upchan": {
+   "file": "casey_chime_upchan.npy",
+   "md5": "f6a6ab14",
+   "fmin": 400.5859613433132,
+   "fmax": 799.0233659700605,
+   "shape": [
+    12336,
+    1748
+   ],
+   "window": [
+    14,
+    1748
+   ],
+   "peak": 888
+  },
+  "dsa": {
+   "file": "casey_dsa_I_491_211_2500b_cntr_bpc.npy",
+   "md5": "a5ab9797",
+   "shape": [
+    6144,
+    2500
+   ],
+   "window": [
+    12,
+    2500
+   ],
+   "peak": 1262
+  }
+ },
+ "chromatica": {
+  "chime_full": {
+   "file": "chromatica_chime_I_272_6382_32000b_cntr_bpc.npy",
+   "md5": "ca3ff8ed",
+   "shape": [
+    1024,
+    32000
+   ],
+   "window": [
+    14914,
+    17314
+   ],
+   "peak": 16114
+  },
+  "chime_upchan": {
+   "file": "chromatica_chime_upchan.npy",
+   "md5": "fc18f679",
+   "fmin": 400.5859434605554,
+   "fmax": 799.0234196183337,
+   "shape": [
+    49088,
+    437
+   ],
+   "window": [
+    0,
+    437
+   ],
+   "peak": 187
+  },
+  "dsa": {
+   "file": "chromatica_dsa_I_272_368_2500b_cntr_bpc.npy",
+   "md5": "820d69c8",
+   "shape": [
+    6144,
+    2500
+   ],
+   "window": [
+    6,
+    2500
+   ],
+   "peak": 1256
+  }
+ },
+ "freya": {
+  "chime_full": {
+   "file": "freya_chime_I_912_4067_32000b_cntr_bpc.npy",
+   "md5": "60e9414b",
+   "shape": [
+    1024,
+    32000
+   ],
+   "window": [
+    14829,
+    17229
+   ],
+   "peak": 16029
+  },
+  "chime_upchan": {
+   "file": "freya_chime_upchan.npy",
+   "md5": "8215e051",
+   "fmin": 400.1953125,
+   "fmax": 799.8046815394446,
+   "shape": [
+    57024,
+    437
+   ],
+   "window": [
+    0,
+    437
+   ],
+   "peak": 255
+  },
+  "dsa": {
+   "file": "freya_dsa_I_912_4_2500b_cntr_bpc.npy",
+   "md5": "bb4507e9",
+   "shape": [
+    6144,
+    2500
+   ],
+   "window": [
+    31,
+    2500
+   ],
+   "peak": 1281
+  }
+ }
+}

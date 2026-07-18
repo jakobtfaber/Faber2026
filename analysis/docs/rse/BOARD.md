@@ -38,7 +38,20 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   spectra feeding the scattering fits share the gen-1 de-chirp defect?
 
 ### Both-band scintillation campaign
-- [ ] ✋ Ratify the qualifying CHIME-band method
+
+**⛔ INPUT REMEDIATION FIRST (owner adjudication 2026-07-18,
+[findings](specs/owner-data-review-findings-2026-07-18.md)):**
+
+- [ ] RFI excision pass: all CHIME upchannelized products + DSA
+  central-channel RFI; per-burst masks documented
+- [ ] One authoritative DM per burst across all products (reconcile upchan
+  TARGETS vs full-res vs adopted catalog; marker-dependence rule governs);
+  rebuild aligned upchan npz set at adopted DMs, fresh checksums/provenance
+- [ ] Re-run the windowed-refit campaign on remediated inputs (same
+  predeclared gates); rerun closure/finalization + validation.json + figures
+- [ ] Fresh 36-panel input review + both-band ACF review for owner
+
+- [ ] ✋ Ratify the qualifying CHIME-band method — **blocked on remediation**
   ([wf-02](wayfinder/tickets/02-ratify-chime-scintillation-method.md))
 - [ ] Burst configs for the four unconfigured sightlines
   (whitney/phineas/mahi/isha) (legacy B1)
