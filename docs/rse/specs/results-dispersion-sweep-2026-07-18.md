@@ -98,3 +98,25 @@ tier-2 gate build will mechanize); external-source query dates (census DR9/
 DESI/NED/PS1-STRM — in FLITS provenance docs, pull at next population pass);
 the five unmerged-branch dispositions above; owner approval of the quarantine
 list; registry↔results-library integration decision.
+
+## Addendum — owner dispositions (2026-07-18, same day)
+
+1. **Branches:** audit each, PR individually. Small three audited + opened:
+   DSA-ACF removal (#137, land first), PL-PBF suppression (#138, land second
+   — may absorb #137), TOA convention (#139, land last, rebase manifest).
+   Big two (quarantine+pin-bump; 30K-line scint joint-candidate batch) still
+   need full audits before PRs.
+2. **Registry vs results-library:** registry = claim-level canonical;
+   results-library = byte-level store; library index regenerated post wf-13;
+   its trust tags map onto trusted/revoked/pending.
+3. **Quarantine list:** approved in principle, executed only after the 07-17
+   branches land (they properly retire part of the list); re-cut then archive
+   the remainder.
+
+Audit finding of record: the 07-17 branches reference a **finalized
+two-component CHIME campaign (FLITS PR #192)** — 24 hash-reviewed ACF
+renders, one qualified `chromatica_hi` measurement, oran as the only
+certified DSA-band point, pin `17d9d266`, and an approved **PL-PBF
+(power-law pulse-broadening-function) production model**. This is the
+concrete candidate for the wf-02 CHIME-method ratification and updates
+several registry scint rows once landed.
