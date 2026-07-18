@@ -431,7 +431,7 @@ consumed_by = ["sections/results.tex"]
 trust = "pending"
 cleared_by = ""
 current = true
-notes = "campaign-QA product, not a sky claim; modulation-gate vs sqrt(3) inconsistency open (review S16); supersedes on CHIME-method ratification (wf-02); VERIFY: fig:scint-qualified-summary belongs to this lane"
+notes = "campaign-QA product, not a sky claim; modulation-gate vs sqrt(3) inconsistency open (review S16); SUPERSESSION IN FLIGHT: R5/R6 two-band campaign (FLITS #201 merged at 666306d1; Faber2026 PR #140) replaces the #192-era picture; VERIFY against post-#140 regeneration"
 
 [[result]]
 id = "scint.twoscreen_table"
@@ -490,3 +490,21 @@ trust = "revoked"
 cleared_by = ""
 current = false
 notes = "both supporting diagnostics (scint excess, tau*dnu_d) sit on revoked strands; re-derive post campaigns"
+
+[[result]]
+id = "scint.two_band_campaign"
+section = "S4.3"
+kind = "figure_set"
+description = "R5/R6 two-band scintillation campaign: per-burst ACF ladders (chromatica, zach, hamilton, freya) + two-band summary"
+value = "chromatica det (+1.72, n=4); zach det (+3.03, n=3); hamilton diagnostic_only; freya non_detection; tau*dnu_d = 26.7/61.0/386.7/1.3"
+units = ""
+producing_script = "pipeline window_refit.py + two-band campaign driver (FLITS #201)"
+pipeline_pin = "666306d1 (FLITS main post-#201; staged for Faber2026 by PR #140)"
+inputs = []
+external_sources = []
+artifact = "figures/scint_two_band_campaign/ (5 figures, PNG+PDF; lands with PR #140)"
+consumed_by = ["sections/results.tex L285-302 (rewrite reserved to owner; not yet referenced)"]
+trust = "pending"
+cleared_by = ""
+current = true
+notes = "PENDING = awaits owner merge of PR #140, results.tex integration, evidence-ledger science_status sync, and wf-02 method ratification; supersedes the #192-era chromatica_hi/oran picture"

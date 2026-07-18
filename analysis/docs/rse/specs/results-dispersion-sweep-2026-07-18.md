@@ -120,3 +120,26 @@ certified DSA-band point, pin `17d9d266`, and an approved **PL-PBF
 (power-law pulse-broadening-function) production model**. This is the
 concrete candidate for the wf-02 CHIME-method ratification and updates
 several registry scint rows once landed.
+
+## Correction (2026-07-18, later same day) — scint state superseded
+
+The "audit finding of record" above is **outdated**: it reflected the
+2026-07-17 branch snapshots. The claude-science lane
+(proj_55f9c893cfe1) has since completed campaign rounds 5/6:
+FLITS **PR #201 merged** to FLITS main at `666306d1` (round-6
+`window_refit.py` with restored API + per-subband null, campaign driver,
+two-band scripts, regenerated results/JSONL), and Faber2026 **PR #140**
+stages the submodule bump `23fbd295 → 666306d1` + five finalized figures
+(PNG+PDF) under `figures/scint_two_band_campaign/`. Pinned R5/R6 science:
+**chromatica detection (+1.72, n=4), zach detection (+3.03, n=3), hamilton
+diagnostic_only, freya non_detection; τ·Δν_d = 26.7 / 61.0 / 386.7 / 1.3.**
+The earlier "one qualified chromatica_hi + oran sole certified DSA point"
+picture is superseded. Owner-reserved (per that lane's ruling): results.tex
+rewrite (L285–302), \includegraphics hooks, evidence-ledger science_status
+sync, superseded-figure removal, and the #140 merge itself.
+
+**Sequencing impact:** the unaudited `ms/quarantine-outdated-science-20260717`
+branch carries its own pipeline-pin commit — now stale against `666306d1`;
+its audit must assume #140's pin wins and the branch rebases or drops that
+commit. #137–#139 are docs/tex-side and unaffected except manifest-hunk
+rebases.
