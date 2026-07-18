@@ -1,0 +1,29 @@
+[
+ {
+  "id": "a6fc6bed-1a43-43bf-9266-ed39ca7e859d",
+  "filename": "two_screen_refs.bib",
+  "content_type": "application/octet-stream",
+  "size_bytes": 2541,
+  "checksum": "d5356eda32a09b7330ea7fba41c58cac27640f05989126a774de8a6f5765f029",
+  "created_at": "2026-07-09T15:22:21.801Z",
+  "versions": 4
+ },
+ {
+  "id": "bada7218-fd52-42c4-92cd-fbcb76d9a8b7",
+  "filename": "two_screen_scintillation_formalism.tex",
+  "content_type": "text/x-latex",
+  "size_bytes": 11936,
+  "checksum": "909fd79dd431a2b4377b08684333c16872e73333221dc3d2dd22054942229f3e",
+  "created_at": "2026-07-09T15:13:31.132Z",
+  "versions": 2
+ },
+ {
+  "id": "a05495e7-648d-4ce1-946b-f181a0a3e964",
+  "filename": "agentone_verification_memo.md",
+  "content_type": "text/markdown",
+  "size_bytes": 3660,
+  "checksum": "9f17784529001d7658a010d35fd99f49122d2be7603dcc8667e2e9eb171c87c5",
+  "created_at": "2026-07-09T15:13:31.137Z",
+  "versions": 2
+ }
+]

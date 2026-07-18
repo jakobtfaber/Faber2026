@@ -1,0 +1,17 @@
+burst,band,center_freq_mhz,dnu_mhz,dnu_err_mhz
+hamilton,dsa,1321.8,0.13,0.0835
+hamilton,dsa,1351.6,0.5542,0.5163
+hamilton,dsa,1395.4,0.1917,0.0602
+hamilton,dsa,1459.3,0.2879,0.1145
+hamilton,chime,537.0,0.0638,0.0065
+zach,dsa,1345.5,0.7355,0.0403
+zach,dsa,1439.2,0.7302,0.0394
+zach,chime,461.0,0.0564,0.0066
+zach,chime,751.0,0.15,0.0144
+casey,dsa,1352.3,8.8806,0.1876
+casey,dsa,1446.0,24.4831,0.6652
+casey,chime,522.6,0.0383,0.0367
+wilhelm,dsa,1332.0,0.1378,0.0343
+wilhelm,dsa,1424.1,0.1288,0.0583
+wilhelm,dsa,1472.3,0.2212,0.0697
+freya,chime,519.8,0.0682,0.0065

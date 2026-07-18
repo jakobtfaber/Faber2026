@@ -1,0 +1,50 @@
+{
+  "version": 3,
+  "created_at": "2026-07-09T13:10:10.206Z",
+  "task_summary": "Harden CHIME artifact controls in the scintillation Lorentzian driver",
+  "agents": [],
+  "phases": [
+    {
+      "name": "Plan",
+      "delegations": [
+        {
+          "steps": [
+            {
+              "title": "Wire harmonic mask into the Lorentzian driver",
+              "description": "In run_dsa_lorentzian_fits.py, read analysis.fitting.harmonic_mask from the config and apply harmonic_lag_mask (imported from scint_analysis.analysis) to the fit lags inside _fit_prepared_config, between _slice_fit_window and compare_lorentzian_components. Record n_harmonic_bins_removed, spacing_mhz, halfwidth_mhz, and harmonic_mask_enabled per sub-band into the JSON. This closes the confirmed --band chime trap. Keep DSA behavior identical when the block is absent/disabled."
+            },
+            {
+              "title": "Add fail-closed CHIME provenance gate",
+              "description": "Add a helper that, for telescope==chime, checks explicit records for grid_regularization, bandpass_normalization, harmonic_mask, and fit-window status. If any required mitigation is absent/disabled, mark the burst result measurement_status='diagnostic_only' (not a measurement) and emit the missing-mitigation list into JSON; DSA remains 'measurement'. Surface the status in the per-burst summary and the Markdown report."
+            },
+            {
+              "title": "Add off-pulse ACF null test",
+              "description": "Extend the fresh-ACF config path to also extract an off-pulse ACF (from the configured manual_noise_window / off-burst region) and fit it with the same compare_lorentzian_components call. Record off_pulse_dnu_mhz per sub-band and a null_pass boolean (fail when off-pulse fits the same tens-of-kHz scale as on-pulse, within a configurable ratio). For CHIME, a failed null forces diagnostic_only."
+            },
+            {
+              "title": "Add low-lag excision stability check",
+              "description": "Re-fit each sub-band ACF after dropping the first k positive-lag bins (k configurable, default 1-3) and compare the recovered Lorentzian width to the full fit. Flag low_lag_unstable when the width collapses or the wing disappears (the exact test Freya CHIME fails). Write dnu_full vs dnu_excised and the stability verdict to JSON; feed the flag into the CHIME gate."
+            },
+            {
+              "title": "Record harmonic-mask sensitivity as a systematic",
+              "description": "Fit each sub-band both with and without the harmonic mask, report both widths and their fractional difference as harmonic_mask_systematic in JSON, and state in the Markdown report that the mask is a systematic bound, not a correction. No new fit machinery beyond reusing step 1's masked fit plus the unmasked baseline."
+            },
+            {
+              "title": "Extend tests and run the suite",
+              "description": "Add/extend pytest cases in scint_analysis/tests: (a) driver applies harmonic mask and removes the expected comb bins; (b) CHIME config missing grid/bandpass yields diagnostic_only; (c) off-pulse null failure forces diagnostic_only; (d) low-lag instability flag fires on a synthetic noise-carried ACF. Run the existing scint test suite (test_revalidation, test_freya_scintillation, test_multicomponent_select, test_analysis) with the direct py312 interpreter to confirm no regressions."
+            },
+            {
+              "title": "Document and summarize changes",
+              "description": "Update the driver README and add a short CHANGES note describing the new JSON fields (measurement_status, harmonic bins removed, off-pulse null, low-lag stability, mask systematic) and the CHIME fail-closed policy. Produce a concise assessment artifact (markdown) mapping each of ChatGPT's 6 recommendations to what was implemented, deferred, or judged policy-only (#6 screen attribution), for co-author review. Save all changed files as artifacts."
+            }
+          ]
+        }
+      ],
+      "id": "phase-0"
+    }
+  ],
+  "feasibility": {
+    "rationale": "All target files and functions are confirmed present in the pipeline submodule; the review's factual claims are verified. Changes are localized to run_dsa_lorentzian_fits.py plus a small shared helper, with existing pytest coverage in scint_analysis/tests to extend. Main uncertainty is off-pulse-null wiring (#3), which needs an off-pulse ACF the driver does not currently extract — feasible but the largest lift.",
+    "confidence": "high"
+  }
+}
