@@ -111,3 +111,34 @@ All automated verification checks passed:
 
 - Plan: `docs/rse/specs/plan-fig1-observed-peak-audit.md`
 - Implementation: `docs/rse/specs/implement-fig1-observed-peak-audit.md`
+
+## Addendum — Codex auto-review response (2026-07-17, commit cf2f875)
+
+PR #121's automated review raised four findings; disposition:
+
+- **P1 (drift helper absent at pin):** stale — it applied to the pre-rebase pin
+  `5fb387e`. FLITS #185 merged (`f9d7dfe`) and is an ancestor of the current pin
+  `17d9d266`, where `render_dm_zoom_comparison`, `chime_dm`, and
+  `dm_power_analysis` all resolve. The stale `repro_manifest.csv` caveat that
+  seeded the finding is corrected.
+- **P2 (fixture posing as raw header):** `audit_fig1_frequency_axes.py` now
+  takes `--raw-header-host`; the committed evidence was regenerated with
+  `--raw-header-host iacobus`, reading every DSA filterbank's SIGPROC header
+  remotely (12/12 `raw_header_read: true`, all matching the tracked fixture,
+  mismatch fails closed). Per-instrument `header_validation` fields state the
+  lineage explicitly; CHIME remains hash-pinned extracted-metadata lineage.
+- **P2 (mask summary missing):** per-product `product_mask_summary`
+  (valid/masked channel counts + fraction) and channel widths are now recorded
+  for all 24 products in `frequency-axis-and-inputs.json`.
+- **P2 (vacuous all-panel gate):** `audit_fig1_residual_drift.py` validates the
+  catalog against the twelve-burst roster in
+  `scripts/jointmodel_triptych_manifest.yaml` and requires 24 measurements
+  before `gate_passed` is evaluated; partial catalogs raise.
+
+Evidence refresh: `frequency-axis-and-inputs.json` SHA-256 is now
+`d87d9da635dccb1ff9612e825d3c63604af7ab736f69c4d7829546741b375b34`
+(generated at cf2f875 with the raw-header read). `residual-drift.json` is
+unchanged: regeneration in a fresh environment reproduces every
+zero-consistency classification and `gate_passed`; only sub-1e-9 float LSBs
+differ, so the committed bytes (`ccb36c7f…`) stand. The science disposition is
+unchanged — the residual-drift gate remains unmet pending owner adjudication.

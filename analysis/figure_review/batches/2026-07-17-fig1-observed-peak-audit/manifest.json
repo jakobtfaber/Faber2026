@@ -202,6 +202,7 @@
       "family": "gallery",
       "generator": "scripts/plot_codetection_data_grid.py",
       "id": "fig1-gallery",
+      "preview": "previews/fig1-gallery.png",
       "previous_decision": {
         "artifact_sha256": "dda668128aa6e4f942f07a3feffc447526d21ff56ef7bbfcacd3f87ff7892e76",
         "batch_id": "2026-07-17-fig1-model-toa",
@@ -210,7 +211,6 @@
         "reviewer": "Jakob Faber",
         "status": "needs_revision"
       },
-      "preview": "previews/fig1-gallery.png",
       "required_provenance": [
         "adopted DM and uncertainty for every burst",
         "input waterfall path and SHA-256 for both telescopes",
@@ -256,9 +256,9 @@
     {
       "id": "frequency-axis-and-inputs",
       "repository": "parent",
-      "sha256": "bd5158a6620a3df82a3448174c0bd925907a2a8bcbecd6ad2e87a16ee2d83a37",
+      "sha256": "d87d9da635dccb1ff9612e825d3c63604af7ab736f69c4d7829546741b375b34",
       "source_path": "scripts/audit_fig1_frequency_axes.py",
-      "source_revision": "773a79a2ad040c968d5fe3aa79c8509700c71cda",
+      "source_revision": "cf2f875cef57012bc0209411cf09bddec16cbfbf",
       "stored_path": "provenance/frequency-axis-and-inputs.json"
     },
     {

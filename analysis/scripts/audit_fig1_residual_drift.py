@@ -30,6 +30,18 @@ from dispersion.dm_power_analysis import (  # noqa: E402
 
 DATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 CATALOG_DEFAULT = ROOT / "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+ROSTER_DEFAULT = ROOT / "scripts/jointmodel_triptych_manifest.yaml"
+
+
+def roster_nicks(manifest_path: Path) -> set[str]:
+    """The twelve-burst Figure 1 roster from the shared render manifest."""
+    import yaml
+
+    bursts = yaml.safe_load(manifest_path.read_text())["bursts"]
+    nicks = [burst["nick"].lower() for burst in bursts]
+    if len(nicks) != 12 or len(set(nicks)) != 12:
+        raise ValueError(f"render manifest roster is not 12 unique bursts: {nicks}")
+    return set(nicks)
 
 
 def product_dm(path: Path) -> float:
@@ -123,10 +135,17 @@ def emg_slope(path: Path, telescope: str, target_dm: float) -> dict:
     }
 
 
-def audit(data_root: Path, catalog: Path) -> dict:
+def audit(data_root: Path, catalog: Path, roster_manifest: Path = ROSTER_DEFAULT) -> dict:
     measurements = []
     with catalog.open(newline="") as stream:
         rows = list(csv.DictReader(stream))
+    catalog_nicks = [row["nick"].lower() for row in rows]
+    expected = roster_nicks(roster_manifest)
+    if len(catalog_nicks) != len(set(catalog_nicks)) or set(catalog_nicks) != expected:
+        raise ValueError(
+            "catalog does not cover the twelve-burst Figure 1 roster exactly: "
+            f"catalog={sorted(catalog_nicks)} roster={sorted(expected)}"
+        )
     for row in rows:
         nick = row["nick"].lower()
         target_dm = float(row["adopted_dm"])
@@ -146,6 +165,8 @@ def audit(data_root: Path, catalog: Path) -> dict:
                     "emg_estimator": emg,
                 }
             )
+    if len(measurements) != 24:
+        raise ValueError(f"expected 24 panel measurements (12 bursts x 2 bands), got {len(measurements)}")
     all_zero = all(
         item["emg_estimator"]["zero_consistency"] == "consistent_zero"
         for item in measurements
@@ -165,9 +186,12 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-root", type=Path, default=DATA_DEFAULT)
     parser.add_argument("--catalog", type=Path, default=CATALOG_DEFAULT)
+    parser.add_argument("--roster-manifest", type=Path, default=ROSTER_DEFAULT)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    payload = json.dumps(audit(args.data_root, args.catalog), indent=2, sort_keys=True) + "\n"
+    payload = json.dumps(
+        audit(args.data_root, args.catalog, args.roster_manifest), indent=2, sort_keys=True
+    ) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(payload)
