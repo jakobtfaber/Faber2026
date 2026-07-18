@@ -1,5 +1,12 @@
 # Plan: circulation readiness — Faber2026
 
+> **ARCHIVED 2026-07-18 (owner decision).** Superseded as the canonical task
+> list by the manuscript-aligned board, [`../BOARD.md`](../BOARD.md); open
+> decisions live on the wayfinder map
+> ([`../wayfinder/map-apj-submission.md`](../wayfinder/map-apj-submission.md)).
+> Frozen as history — do not update statuses here. The letter+number stage
+> codes below are legacy; the board carries their descriptive names.
+
 ---
 **Date:** 2026-07-06
 **Status:** Active — gates set by owner decision (this date)
