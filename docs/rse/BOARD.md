@@ -77,6 +77,31 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 - [ ] Wishlist figures: (re)insert per `specs/figure-wishlist.md` as their
   gates clear; strip draft `\fbox` placeholders before circulation
 
+### Verification & rigor
+
+Protocol: [`verification-protocol.md`](verification-protocol.md) (adopted
+2026-07-18). Five tiers by claim class; a section task is not done until its
+inherited tiers are green. Approved tooling: WolframScript + MATLAB (hpcc),
+SymPy, astropy.units, Undermind, Perplexity, ADS, Retraction Watch/Crossref,
+Semantic Scholar, hypothesis, SBC. (Excluded by owner: scite.ai, Elicit,
+Consensus.)
+
+- [ ] Prose-number parity gate — extend table-parity CI to all numeric
+  claims in prose; **blocking**; `\draftnum{}` escape hatch, zero-tolerance
+  at circulation freeze (tier 2)
+- [ ] Dual-CAS derivation checks (WolframScript + SymPy; MATLAB tiebreak)
+  for all displayed equations; `astropy.units` dimensional audit of budget
+  and delay arithmetic (tier 1)
+- [ ] Simulation-based-calibration harness for the dynesty fit pipelines;
+  runs at each campaign closeout (tier 3; rides the re-fit campaign)
+- [ ] Reference sweep script: ADS metadata + Retraction Watch via Crossref +
+  Semantic Scholar version check for every `refs.bib` entry (tier 4)
+- [ ] Prior-work coverage search per headline results claim (Undermind;
+  Perplexity for point facts), findings into the evidence ledger (tier 4)
+- [ ] Multi-model adversarial referee protocol: ≥2 independent cold reads
+  per round, dispositions doc per round, convergence = no new valid P0/P1
+  (tier 5; pre-circulation + pre-submission)
+
 ### Board hygiene
 - [ ] Descriptive-names glossary for the frozen letter+number docs
   ([wf-12](wayfinder/tickets/12-retire-letter-number-stage-names.md), scope
