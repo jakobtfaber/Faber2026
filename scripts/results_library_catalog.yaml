@@ -140,12 +140,22 @@ entries:
   - id: foreground.provisional-propagation
     domain: foreground
     slot: foreground/provisional-propagation
-    trust: provisional
+    trust: pending-refits
     repo: parent
     mode: link_only
     sources:
       - analysis/provisional_propagation
-    notes: Small ledger — stays in parent git for CI.
+    notes: Active ledger is screen-readiness only and fails closed pending fixed-index refits.
+
+  - id: archive.outdated-science-2026-07-17
+    domain: archive
+    slot: archive/2026-07-17-outdated-science
+    trust: archive
+    repo: parent
+    mode: link_only
+    sources:
+      - quarantine/2026-07-17-outdated-science
+    notes: Exact obsolete science bytes retained for re-examination; never a current claim source.
 
   - id: foreground.v3-energetics
     domain: foreground
