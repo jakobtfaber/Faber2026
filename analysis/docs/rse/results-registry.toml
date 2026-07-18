@@ -8,12 +8,13 @@
 #
 # Field reference (one [[result]] per product):
 #   id                stable dotted id: <area>.<name>
-#   kind              number | table | figure | verdict
+#   kind              number | table | figure | figure_set | verdict
 #   description       one line, plain language
 #   value             the quoted value (numbers/verdicts) or "" (tables/figures)
 #   units             "" if dimensionless/na
 #   producing_script  repo-relative path (pipeline/ or scripts/)
-#   pipeline_pin      submodule commit/pin at production time
+#   pipeline_pin      submodule commit at production ("" = confirm per-artifact;
+#                     current gitlink 23fbd295)
 #   inputs            in-repo data artifacts consumed
 #   external_sources  third-party queries: catalog/survey, version/DR, DOI,
 #                     query date — one string each
@@ -22,19 +23,57 @@
 #   trust             trusted | revoked | pending
 #   cleared_by        which validation cleared it ("" if revoked/pending)
 #   current           true | false (false = superseded; keep row for history)
-#   notes             free text
+#   notes             free text; "VERIFY:" marks fields to confirm during the
+#                     dispersion sweep
 #
-# STATUS: skeleton. Two seed rows below (one trusted, one revoked) illustrate
-# the schema; every field of every row must be verified against artifacts
-# during population — do not trust seed values.
+# STATUS: population pass 1 (2026-07-18) — product-level rows (tables,
+# figures, headline numbers/verdicts). Granular prose numbers enter when the
+# tier-2 extractor lands. Trust seeded from the CONTEXT.md ledger as of
+# 2026-07-18; the wf-13 overhaul re-adjudicates row-by-row.
 
 schema_version = 1
 updated = "2026-07-18"
 
+# ── Association & sample (re-validated 2026-07-07, legacy V6) ─────────────
+
+[[result]]
+id = "association.sample_roster"
+kind = "verdict"
+description = "Twelve-burst co-detection sample membership (association verdicts, all pairs)"
+value = "12/12 associated"
+units = ""
+producing_script = "pipeline/analysis/chance-coincidence/run.py"
+pipeline_pin = ""
+inputs = ["toa_crossmatch_results.json"]
+external_sources = []
+artifact = ""
+consumed_by = ["sections/observations.tex", "sections/toa.tex", "sections/results.tex"]
+trust = "trusted"
+cleared_by = "association + DM_obs re-validation 2026-07-07 (legacy V6); shared DSA-DM convention"
+current = true
+notes = "VERIFY: producing script + V6 artifact paths"
+
+[[result]]
+id = "association.sample_table"
+kind = "table"
+description = "Sample table: positions, timing residuals with per-burst 1-sigma budget (tab:sample)"
+value = ""
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = ["toa_crossmatch_results.json"]
+external_sources = []
+artifact = "sample_table.tex"
+consumed_by = ["sections/observations.tex"]
+trust = "trusted"
+cleared_by = "legacy V6; timing budget added PR #61"
+current = true
+notes = "VERIFY: generator script"
+
 [[result]]
 id = "association.pcc_sum"
 kind = "number"
-description = "Summed chance-coincidence expectation over the DSA-110 trial set"
+description = "Summed chance-coincidence expectation over the 64-trigger DSA-110 trial set"
 value = "~3e-7"
 units = ""
 producing_script = "pipeline/analysis/chance-coincidence/run.py"
@@ -44,14 +83,245 @@ external_sources = []
 artifact = ""
 consumed_by = ["sections/toa.tex"]
 trust = "trusted"
-cleared_by = "association + DM re-validation 2026-07-07 (legacy V6)"
+cleared_by = "legacy V6; rate-definition rewrite (review S2) landed 2026-07-15"
 current = true
-notes = "SEED EXAMPLE — verify all fields during population"
+notes = "exact trial denominator still order-of-magnitude in prose — wf-09"
+
+[[result]]
+id = "association.cards_figures"
+kind = "figure_set"
+description = "Per-burst association cards + summary (fig:assoc-cards-grid, fig:association-summary, fig:toa-offset-decomposition)"
+value = ""
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "figures/association_cards/"
+consumed_by = ["sections/appendix.tex", "sections/toa.tex"]
+trust = "trusted"
+cleared_by = "legacy V6"
+current = true
+notes = "VERIFY: generator + artifact hashes vs V6 report"
+
+[[result]]
+id = "association.dm_measurements_table"
+kind = "table"
+description = "Per-burst per-telescope DM measurements + provenance (tab:dm-measurements)"
+value = ""
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "dm_measurements_table.tex"
+consumed_by = ["sections/observations.tex"]
+trust = "trusted"
+cleared_by = "legacy V6 (per-telescope provenance + CHIME-DSA agreement documented)"
+current = true
+notes = "VERIFY: generator; ties to v6-association-dm-report-2026-07-07"
+
+# ── Figure 1 ──────────────────────────────────────────────────────────────
+
+[[result]]
+id = "sample.gallery_fig1"
+kind = "figure"
+description = "Twelve-burst data-only 4x3 dynamic-spectra gallery (fig:codetection-data-grid)"
+value = ""
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "figures/codetection_data_grid.pdf"
+consumed_by = ["sections/observations.tex"]
+trust = "pending"
+cleared_by = ""
+current = false
+notes = "contract locked 2026-07-14 (data-only 4x3); current bytes = rejected candidate (needs_revision); fresh isolated batch + hash-bound owner approval required"
+
+# ── Milky Way foreground (budget lane, legacy V5) ─────────────────────────
+
+[[result]]
+id = "mw.foreground_characterization"
+kind = "figure"
+description = "NE2025 MW disk characterization map (fig:ne2025_mw)"
+value = ""
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = []
+external_sources = ["NE2025 (Ocker 2026) electron-density model", "NE2001/YMW16 via pygedm (cross-checks)"]
+artifact = "figures/ne2025_mw_characterization_nside32.pdf"
+consumed_by = ["sections/observations.tex"]
+trust = "trusted"
+cleared_by = "DM-budget re-validation 2026-07-07 (legacy V5)"
+current = true
+notes = "NE2025 publication status = submission-time watch (referee MW4)"
+
+[[result]]
+id = "mw.disk_halo_values"
+kind = "number"
+description = "Per-sightline MW disk DM + 40 pc/cm3 halo term (text-table reconciled, +40 offset explicit)"
+value = "disk per-sightline; halo median 40"
+units = "pc cm^-3"
+producing_script = "scripts/dm_budget_uncertainty.py"
+pipeline_pin = ""
+inputs = []
+external_sources = ["NE2025", "NE2001", "YMW16"]
+artifact = "scripts/dm_budget_uncertainty.csv"
+consumed_by = ["sections/observations.tex", "sections/budget.tex"]
+trust = "trusted"
+cleared_by = "legacy V5"
+current = true
+notes = "halo prior width is a fiducial awaiting sign-off (wf-07)"
+
+# ── Foreground census (re-validated 2026-07-07 + remediated 2026-07-15) ───
+
+[[result]]
+id = "census.foreground_table"
+kind = "table"
+description = "Foreground census: candidates, verdicts, impact parameters (tab:foreground)"
+value = ""
+units = ""
+producing_script = "pipeline/galaxies/foreground/"
+pipeline_pin = ""
+inputs = ["pipeline/galaxies/foreground/data/intervening_census_registry.csv", "foreground_table_data.json"]
+external_sources = ["Legacy Survey DR9 photo-z", "DESI DR1", "NED", "PS1-STRM", "Wen & Han 2024 DESI Legacy/WISE cluster catalog"]
+artifact = "foreground_table.tex"
+consumed_by = ["sections/observations.tex"]
+trust = "trusted"
+cleared_by = "census re-validation 2026-07-07 (legacy V4) + remediation 2026-07-15 (FLITS #184)"
+current = true
+notes = "35 catalog rows dedupe to 28 physical systems; per-sightline no-candidate rows still to add (review S9 action); VERIFY: query dates for external sources"
+
+[[result]]
+id = "census.counts"
+kind = "number"
+description = "Census headline counts: 28 physical systems; confirmed = 9 halos + 1 cluster; 7/9 confirmed halos pierce R_vir"
+value = "28 systems; 9+1 confirmed; 7/9 pierce"
+units = ""
+producing_script = "pipeline/galaxies/foreground/"
+pipeline_pin = ""
+inputs = ["intervening_census_registry.csv"]
+external_sources = []
+artifact = ""
+consumed_by = ["sections/observations.tex", "sections/results.tex"]
+trust = "trusted"
+cleared_by = "legacy V4 + 2026-07-15 dedup adjudication"
+current = true
+notes = ""
+
+[[result]]
+id = "census.halo_grid_figure"
+kind = "figure"
+description = "Sightline-halo grid (fig:sightline_halo_grid)"
+value = ""
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "figures/sightline_halo_grid.pdf"
+consumed_by = ["sections/observations.tex"]
+trust = "trusted"
+cleared_by = "legacy V4"
+current = true
+notes = "caption must state panel count/omissions (referee M15, open)"
+
+[[result]]
+id = "census.clusters_icm_figure"
+kind = "figure"
+description = "Foreground clusters ICM figure (fig:clusters_icm)"
+value = ""
+units = ""
+producing_script = "pipeline (clusters_icm lane)"
+pipeline_pin = ""
+inputs = []
+external_sources = ["Wen & Han 2024 cluster catalog"]
+artifact = "figures/clusters_icm.pdf"
+consumed_by = ["sections/appendix.tex"]
+trust = "trusted"
+cleared_by = "restored by census remediation 2026-07-15"
+current = true
+notes = ""
+
+# ── DM budget (re-validated 2026-07-07; bugfix FLITS #183) ────────────────
+
+[[result]]
+id = "budget.budget_table"
+kind = "table"
+description = "Per-sightline DM budget decomposition (tab:budget)"
+value = ""
+units = ""
+producing_script = "pipeline sightline_budget.foreground_unified + scripts/dm_budget_uncertainty.py"
+pipeline_pin = ""
+inputs = ["budget_table_data.json", "intervening_census_registry.csv (authoritative roster)"]
+external_sources = ["NE2025/NE2001/YMW16", "TNG IGM lognormal (cosmic DM)", "Macquart relation f_IGM/chi_e as stated"]
+artifact = "budget_table.tex"
+consumed_by = ["sections/results.tex"]
+trust = "trusted"
+cleared_by = "legacy V5 + phantom-DM_int fix FLITS #183 (registry authoritative + regression tests)"
+current = true
+notes = "phineas DM_int (243 in CONTEXT.md; 241 vs ~218 prescription conflict) awaits wf-06 adjudication"
+
+[[result]]
+id = "budget.dm_int_nonzero"
+kind = "number"
+description = "Nonzero intervening DM sightlines after remediation"
+value = "phineas 243, casey 117, chromatica 26, whitney 6"
+units = "pc cm^-3"
+producing_script = "pipeline sightline_budget.foreground_unified"
+pipeline_pin = ""
+inputs = ["data/census_masses/halo_rvir_ADJUDICATED.csv", "mass_overrides.csv"]
+external_sources = []
+artifact = "scripts/dm_budget_intervening_systems.csv"
+consumed_by = ["sections/results.tex", "sections/budget.tex"]
+trust = "trusted"
+cleared_by = "legacy V5 + 2026-07-15 empirical-mass adjudication (B7 masses)"
+current = true
+notes = "phineas value conditional on wf-06 (prescription conflict, 241/243 vs ~218)"
+
+[[result]]
+id = "budget.cluster_column"
+kind = "number"
+description = "FRB 20230307A intracluster DM column (beta-model)"
+value = "p50=252, [p16,p84]=[159,383], 95% CI [96,561]"
+units = "pc cm^-3"
+producing_script = "pipeline (clusters_icm lane)"
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = ""
+consumed_by = ["sections/budget.tex", "budget_table.tex", "sections/appendix.tex"]
+trust = "trusted"
+cleared_by = "referee B2 resolution; census lane"
+current = true
+notes = "cluster b=603.6 kpc carried with documented ±3% geometry systematic (2026-07-15); abstract slot fill at submission (M16)"
+
+[[result]]
+id = "budget.host_dm_posteriors"
+kind = "table"
+description = "Forward-modeled host DM posteriors (tab:host-forward-model + fig:dm_host_posteriors)"
+value = ""
+units = ""
+producing_script = "scripts/dm_budget_uncertainty.py"
+pipeline_pin = ""
+inputs = ["scripts/dm_budget_uncertainty.csv"]
+external_sources = ["TNG IGM lognormal"]
+artifact = "figures/dm_host_posteriors.pdf"
+consumed_by = ["sections/appendix.tex", "sections/results.tex"]
+trust = "pending"
+cleared_by = ""
+current = true
+notes = "machinery V5-cleared; PENDING = fiducial priors + right-skew headline await owner sign-off (wf-07); two sightlines P(DM_host<0)~0.45"
+
+# ── Scattering fits (wave-1 revoked; refill from re-fit campaign) ─────────
 
 [[result]]
 id = "scattering.beta_table"
 kind = "table"
-description = "Per-sightline turbulence spectral index roster (tab:beta)"
+description = "Per-sightline turbulence spectral-index roster (tab:beta)"
 value = ""
 units = ""
 producing_script = "pipeline/analysis/beta_campaign/"
@@ -63,4 +333,129 @@ consumed_by = ["sections/results.tex"]
 trust = "revoked"
 cleared_by = ""
 current = false
-notes = "SEED EXAMPLE — wave-1 fit-trust revocation; refill from the re-fit campaign"
+notes = "wave-1 fit-trust revocation; interior rows (freya 3.72, phineas 3.23) NOT quotable; refill from re-fit campaign under ratified contract + geometry adjudication"
+
+[[result]]
+id = "scattering.jointmodel_figures"
+kind = "figure_set"
+description = "Per-burst joint-model pairs (12 panels, jointmodel_pair/)"
+value = ""
+units = ""
+producing_script = "pipeline/analysis/beta_campaign/"
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "figures/jointmodel_pair/"
+consumed_by = ["sections/jointmodel_pairs.tex", "sections/appendix.tex"]
+trust = "revoked"
+cleared_by = ""
+current = false
+notes = "wave-1 revocation (fig:jointmodel_montage lineage)"
+
+[[result]]
+id = "scattering.multiplicity_demo"
+kind = "figure"
+description = "Whitney multiplicity-bias demonstration triptych (fig:codetection-triptych-whitney)"
+value = ""
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "figures/codetection_triptych/whitney_triptych.pdf"
+consumed_by = ["sections/results.tex", "abstract (closing claim)", "conclusions item 7"]
+trust = "revoked"
+cleared_by = ""
+current = false
+notes = "wave-1; profile-bias demonstrator claim withheld (ADR-0003)"
+
+# ── Scintillation (wave-1 revoked; both-band campaign rebuilds) ───────────
+
+[[result]]
+id = "scint.dsa_acf_figures"
+kind = "figure_set"
+description = "Per-burst DSA-band ACF Lorentzian fits (12 panels, dsa_scint_acf/)"
+value = ""
+units = ""
+producing_script = "pipeline scintillation lane"
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "figures/dsa_scint_acf/"
+consumed_by = ["sections/dsa_scint_acf.tex", "sections/appendix.tex"]
+trust = "revoked"
+cleared_by = ""
+current = false
+notes = "wave-1 (ACF fits / decorrelation bandwidths revoked); re-run under ratified contract in both-band campaign"
+
+[[result]]
+id = "scint.chime_gate_table"
+kind = "table"
+description = "CHIME scintillation qualification/gate matrix (tab:chime_scint_gates)"
+value = ""
+units = ""
+producing_script = "pipeline chime-scint-artifact-guards driver"
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "chime_scintillation_campaign_table"
+consumed_by = ["sections/results.tex"]
+trust = "pending"
+cleared_by = ""
+current = true
+notes = "campaign-QA product, not a sky claim; modulation-gate vs sqrt(3) inconsistency open (review S16); supersedes on CHIME-method ratification (wf-02); VERIFY: fig:scint-qualified-summary belongs to this lane"
+
+[[result]]
+id = "scint.twoscreen_table"
+kind = "table"
+description = "Two-screen tau*dnu_d provisional table (tab:twoscreen-provisional)"
+value = ""
+units = ""
+producing_script = "pipeline two-screen lane"
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = "twoscreen_provisional_table.tex"
+consumed_by = ["sections/discussion.tex"]
+trust = "revoked"
+cleared_by = ""
+current = false
+notes = "rests on revoked DSA-band ACF + tau fits; rebuild on joint CHIME+DSA products"
+
+# ── Energies (wave-1 revoked) ─────────────────────────────────────────────
+
+[[result]]
+id = "energies.burst_energies_table"
+kind = "table"
+description = "Band-restricted burst energies, 8-row roster (tab:burst-energies)"
+value = ""
+units = ""
+producing_script = "pipeline energies lane (joint c0,gamma export)"
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = ""
+consumed_by = ["sections/results.tex", "sections/methods.tex"]
+trust = "revoked"
+cleared_by = ""
+current = false
+notes = "wave-1; refill via energies re-validation (gamma_D pile-up at ~-5 + selection-rule contradiction to resolve; presentation locked band-restricted + disclaimer)"
+
+# ── Attributions (revoked diagnostics) ────────────────────────────────────
+
+[[result]]
+id = "attribution.frb20230913a_intervening"
+kind = "verdict"
+description = "FRB 20230913A intervening-system scattering attribution"
+value = "withheld"
+units = ""
+producing_script = ""
+pipeline_pin = ""
+inputs = []
+external_sources = []
+artifact = ""
+consumed_by = ["sections/discussion.tex"]
+trust = "revoked"
+cleared_by = ""
+current = false
+notes = "both supporting diagnostics (scint excess, tau*dnu_d) sit on revoked strands; re-derive post campaigns"
