@@ -3,7 +3,9 @@
 ---
 **Date:** 2026-07-18
 **Author:** AI Assistant (team-lead session)
-**Status:** DECISION PENDING (owner)
+**Status:** DECIDED 2026-07-18 — owner selected **Option A** (charter the
+forward model, non-gating parallel lane). Execution charter:
+`charter-two-screen-forward-model-2026-07-18.md`.
 **Evidence base:** `report-jointtf-mechanism-closure-2026-07-18.md` §1–2; deck slide 6.
 
 ---
