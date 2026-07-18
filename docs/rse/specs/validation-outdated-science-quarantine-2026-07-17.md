@@ -7,7 +7,7 @@
 
 ## Summary
 
-- Phases: 3 of 3 implemented; parent publication is the remaining delivery step.
+- Phases: 3 of 3 fully implemented; parent PR #131 is published.
 - Automated Checks: 10 passing, 0 implementation failures.
 - Manual Testing: 1 later owner-review item, intentionally outside this migration.
 - Critical Issues: 0.
@@ -133,3 +133,4 @@ None.
 - Plan: `docs/rse/specs/plan-outdated-science-quarantine-2026-07-17.md`
 - Implementation: `docs/rse/specs/implement-outdated-science-quarantine-2026-07-17.md`
 - Pipeline PR: https://github.com/jakobtfaber/dsa110-FLITS/pull/202
+- Parent PR: https://github.com/jakobtfaber/Faber2026/pull/131

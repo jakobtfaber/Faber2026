@@ -139,7 +139,8 @@ the intervening pin delta.
   the new pin.
 - [x] Run `agent-closeout-check` for both repositories with touched-path and
   dirty-state packets.
-- [ ] Commit the parent quarantine/pin change and publish through a focused PR.
+- [x] Commit the parent quarantine/pin change and publish through focused parent
+  PR [#131](https://github.com/jakobtfaber/Faber2026/pull/131).
 
 **Dependencies:** Phases 1 and 2.
 

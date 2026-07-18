@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-17
 **Author:** Codex
-**Status:** Complete; publication validation in progress
+**Status:** Complete
 **Plan Reference:** [plan-outdated-science-quarantine-2026-07-17.md](plan-outdated-science-quarantine-2026-07-17.md)
 ---
 
@@ -115,11 +115,12 @@ promoted; other DSA and foreground-attribution claims await certified refits.
 
 - Owner review later decides whether each quarantined family is removed,
   rehabilitated with new science, or retained indefinitely.
-- Complete repository closeout and publication checks, then publish the parent
-  PR.
+- Parent delivery is published for review as Faber2026 PR
+  [#131](https://github.com/jakobtfaber/Faber2026/pull/131).
 
 ## References
 
 - [Research](research-outdated-science-quarantine-2026-07-17.md)
 - [Plan](plan-outdated-science-quarantine-2026-07-17.md)
 - [Pipeline PR #202](https://github.com/jakobtfaber/dsa110-FLITS/pull/202)
+- [Parent PR #131](https://github.com/jakobtfaber/Faber2026/pull/131)
