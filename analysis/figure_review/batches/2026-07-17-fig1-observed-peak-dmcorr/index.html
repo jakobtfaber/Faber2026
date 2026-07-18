@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Fig1 gallery: observed-peak with audit-derived stem-DM corrections (isha +0.234, phineas +0.300)</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1500px;margin:auto;padding:2rem;background:#f5f6f8;color:#17202a}
+.summary,.card{background:white;border:1px solid #ccd2d8;border-radius:10px;padding:1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:1rem}
+.card{margin:0;border-left:8px solid #c17d00} .status-approved{border-left-color:#16803c} .status-needs_revision{border-left-color:#b42318}
+img{width:100%;max-height:680px;object-fit:contain;background:white} code{word-break:break-all} dt{font-weight:700;margin-top:.5rem}
+</style></head><body>
+<h1>Fig1 gallery: observed-peak with audit-derived stem-DM corrections (isha +0.234, phineas +0.300)</h1>
+<section class="summary"><p><strong>Batch:</strong> <code>2026-07-17-fig1-observed-peak-dmcorr</code><br>
+<strong>Source revision:</strong> <code>33ecbb66643e14aa074298aeb07d34b880c2c4b1</code><br>
+<strong>Pipeline revision:</strong> <code>17d9d26675702e9f8917da655621bef3231f0ddb</code><br>
+<strong>DM catalog:</strong> <code>86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8</code></p>
+<p>Approval is per candidate. Reply with the stable candidate ID and either <em>approve</em> or <em>needs revision</em>, plus notes. Promotion is impossible unless the approved candidate bytes still match this packet.</p>
+<p><a href="contact-sheet.png">Open the full contact sheet</a> before reviewing individual evidence cards.</p>
+<h3>Packet validation</h3><ul><li>None</li></ul></section>
+<main class="grid">
+<article id="fig1-gallery" class="card status-pending">
+  <h2>fig1-gallery: Figure 1: twelve-burst CHIME/FRB and DSA-110 gallery</h2>
+  <p><strong>Status:</strong> pending</p>
+  <p></p>
+  <a href="candidates/fig1-gallery.pdf"><img src="previews/fig1-gallery.png" alt="Figure 1: twelve-burst CHIME/FRB and DSA-110 gallery"></a>
+  <dl>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_data_grid.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>6f95bcae8f36643b410c0372880ce5711d8d0caaa0837aafa6e16d1e0157a108</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_data_grid.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and uncertainty for every burst; input waterfall path and SHA-256 for both telescopes; input-product DM and applied re-dedispersion offset; time/frequency resolution and mask summary; raw-header band edges and channel ordering for both telescopes; per-panel residual frequency-time drift estimate and zero-consistency status</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/frequency-drift-scan.json">frequency-drift-scan</a>, <a href="provenance/frequency-drift-scan.png">frequency-drift-scan-figure</a>, <a href="provenance/dm-corrections.json">dm-corrections</a>, <a href="provenance/drift-closure.json">drift-closure</a></dd>
+    <dt>DM record</dt><dd><pre>[
+  {
+    &quot;adopted_dm&quot;: &quot;262.361665&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.010372&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.023274&quot;,
+    &quot;chime_dm&quot;: &quot;262.361665&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.045268&quot;,
+    &quot;chime_sigma&quot;: &quot;0.010372&quot;,
+    &quot;dsa_dm&quot;: &quot;262.316397&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.029297&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;262.347322&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.021060&quot;,
+    &quot;nick&quot;: &quot;zach&quot;,
+    &quot;tns&quot;: &quot;FRB 20220207C&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;462.188773&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;462.188773&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.004032&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;462.192806&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.029313&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;462.188887&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004929&quot;,
+    &quot;nick&quot;: &quot;whitney&quot;,
+    &quot;tns&quot;: &quot;FRB 20220310F&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;397.015535&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;397.015535&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.074489&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;396.941046&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.082506&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;397.015263&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004991&quot;,
+    &quot;nick&quot;: &quot;oran&quot;,
+    &quot;tns&quot;: &quot;FRB 20220506D&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;411.435717&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.064884&quot;,
+    &quot;chime_dm&quot;: &quot;411.435717&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.116990&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;411.552707&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.072400&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;411.471916&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.054079&quot;,
+    &quot;nick&quot;: &quot;isha&quot;,
+    &quot;tns&quot;: &quot;FRB 20221113A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;602.377821&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.006047&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;602.377821&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.001370&quot;,
+    &quot;chime_sigma&quot;: &quot;0.006047&quot;,
+    &quot;dsa_dm&quot;: &quot;602.379192&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.012800&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;602.378071&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.005467&quot;,
+    &quot;nick&quot;: &quot;wilhelm&quot;,
+    &quot;tns&quot;: &quot;FRB 20221203A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;610.289070&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.039496&quot;,
+    &quot;chime_dm&quot;: &quot;610.289070&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.056527&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;610.232543&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.007096&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;610.261030&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.028262&quot;,
+    &quot;nick&quot;: &quot;phineas&quot;,
+    &quot;tns&quot;: &quot;FRB 20230307A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;912.407552&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.015668&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.055841&quot;,
+    &quot;chime_dm&quot;: &quot;912.407552&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.083539&quot;,
+    &quot;chime_sigma&quot;: &quot;0.015668&quot;,
+    &quot;dsa_dm&quot;: &quot;912.491091&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.022292&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;912.447817&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.041742&quot;,
+    &quot;nick&quot;: &quot;freya&quot;,
+    &quot;tns&quot;: &quot;FRB 20230325A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;696.518001&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;696.518001&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.052497&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;696.465504&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.068454&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;696.517722&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+    &quot;nick&quot;: &quot;johndoeII&quot;,
+    &quot;tns&quot;: &quot;FRB 20230814B&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;518.796993&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;518.796993&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;-0.000663&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;518.797655&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.063024&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;518.796997&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004984&quot;,
+    &quot;nick&quot;: &quot;hamilton&quot;,
+    &quot;tns&quot;: &quot;FRB 20230913A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;960.131611&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;960.131611&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.045776&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+    &quot;dsa_dm&quot;: &quot;960.085835&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.069745&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;960.131377&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+    &quot;nick&quot;: &quot;mahi&quot;,
+    &quot;tns&quot;: &quot;FRB 20240122A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;272.638699&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.011918&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;272.638699&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.077283&quot;,
+    &quot;chime_sigma&quot;: &quot;0.011918&quot;,
+    &quot;dsa_dm&quot;: &quot;272.561416&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.086174&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;272.637248&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.011806&quot;,
+    &quot;nick&quot;: &quot;chromatica&quot;,
+    &quot;tns&quot;: &quot;FRB 20240203A&quot;
+  },
+  {
+    &quot;adopted_dm&quot;: &quot;491.207826&quot;,
+    &quot;adopted_sigma&quot;: &quot;0.005165&quot;,
+    &quot;adoption&quot;: &quot;chime_primary&quot;,
+    &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+    &quot;chime_dm&quot;: &quot;491.207826&quot;,
+    &quot;chime_minus_dsa&quot;: &quot;0.010334&quot;,
+    &quot;chime_sigma&quot;: &quot;0.005165&quot;,
+    &quot;dsa_dm&quot;: &quot;491.197492&quot;,
+    &quot;dsa_sigma&quot;: &quot;0.039550&quot;,
+    &quot;gaussian_joint_dm&quot;: &quot;491.207653&quot;,
+    &quot;gaussian_joint_sigma&quot;: &quot;0.005122&quot;,
+    &quot;nick&quot;: &quot;casey&quot;,
+    &quot;tns&quot;: &quot;FRB 20240229A&quot;
+  }
+]</pre></dd>
+    <dt>Reviewer notes</dt><dd>Corrected companion to the 2026-07-17-fig1-observed-peak-audit candidate: identical convention and code path, plus audit-established extra dedispersion for two CHIME archival filename-stem DM misstatements (isha +0.234 pc/cm3, phineas +0.300 pc/cm3) applied via --dm-correction-json. Scattering-robust sharpness-scan audit (provenance/frequency-drift-scan.json) measures the raw drifts (isha +0.377+/-0.080, phineas significant) that centroid/EMG estimators leave unconstrained; post-correction residuals are consistent with zero (provenance/drift-closure.json: isha +0.043+/-0.113, phineas -0.001+/-0.056). Approving this candidate supersedes the uncorrected one; approving the uncorrected one rejects this.</dd>
+  </dl>
+</article></main></body></html>

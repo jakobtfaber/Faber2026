@@ -43,10 +43,10 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
         grid,
         "bands_archival",
         lambda data_root, nick, factors=None, pad_scale=1.0, pad_cap_ms=None,
-        target_dm=None, extra_shift_ms=None: calls.append(
+        target_dm=None, extra_shift_ms=None, extra_dedisp_pc=None: calls.append(
             (
                 data_root, nick, factors, pad_scale, pad_cap_ms,
-                target_dm, extra_shift_ms,
+                target_dm, extra_shift_ms, extra_dedisp_pc,
             )
         )
         or [],
@@ -59,11 +59,23 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
         {"nick": "chromatica", "npz": None}, root=tmp_path,
         data_root=tmp_path, target_dm=272.638699,
     )
+    # audit-established stem-misstatement correction: applied only to the named
+    # burst, passed straight through as extra dedispersion
+    grid.load_row_bands(
+        {"nick": "isha", "npz": None}, root=tmp_path,
+        data_root=tmp_path, target_dm=411.435717,
+        dm_corrections={"isha": {"chime": 0.234}},
+    )
+    grid.load_row_bands(
+        {"nick": "zach", "npz": None}, root=tmp_path,
+        data_root=tmp_path, target_dm=262.361665,
+        dm_corrections={"isha": {"chime": 0.234}},
+    )
 
     assert calls == [
         (
             tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
-            grid.DISPLAY_PAD_CAP_MS, 262.361665, None,
+            grid.DISPLAY_PAD_CAP_MS, 262.361665, None, None,
         ),
         (
             tmp_path,
@@ -73,6 +85,15 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
             grid.DISPLAY_PAD_CAP_MS,
             272.638699,
             None,
+            None,
+        ),
+        (
+            tmp_path, "isha", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS, 411.435717, None, {"chime": 0.234},
+        ),
+        (
+            tmp_path, "zach", grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS, 262.361665, None, None,
         ),
     ]
 

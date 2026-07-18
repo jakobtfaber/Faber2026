@@ -289,6 +289,7 @@ def bands_archival(
     pad_cap_ms: float | None = None,
     target_dm: float | None = None,
     extra_shift_ms: dict[str, float] | None = None,
+    extra_dedisp_pc: dict[str, float] | None = None,
 ) -> list[BandSpectrum]:
     """Archival `_cntr_bpc.npy` products as BandSpectrum pairs (no model).
 
@@ -301,6 +302,10 @@ def bands_archival(
     `extra_shift_ms` (band label -> ms) is applied after the TOA alignment
     and before windowing, e.g. to move the per-band anchor from the data
     profile peak to a fitted arrival time.
+    `extra_dedisp_pc` (telescope key -> pc cm^-3) adds a per-product residual
+    dedispersion on top of the stem-to-target shift -- the audit-derived
+    correction for products whose filename stem misstates the actually-applied
+    DM (scripts/audit_fig1_axes.py; the chromatica precedent).
     """
     file_nick = FILE_NICK.get(nick, nick)
     products = discover_products(data_root, file_nick)
@@ -310,6 +315,8 @@ def bands_archival(
         if factors and tel in factors:
             band["f_factor"], band["t_factor"] = factors[tel]
         residual_dm = 0.0 if target_dm is None else float(target_dm - products[tel].dm)
+        if extra_dedisp_pc:
+            residual_dm += float(extra_dedisp_pc.get(tel, 0.0))
         ds, profile = load_band(
             products[tel].path,
             band,

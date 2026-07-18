@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import warnings
 from pathlib import Path
 
@@ -100,8 +101,23 @@ def load_adopted_dms(path: Path) -> dict[str, float]:
     return out
 
 
-def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
-    """Near-native archival bands, retaining the measured-profile peak anchor."""
+def load_row_bands(
+    row: dict,
+    *,
+    root: Path,
+    data_root: Path,
+    target_dm: float,
+    dm_corrections: dict[str, dict[str, float]] | None = None,
+):
+    """Near-native archival bands, retaining the measured-profile peak anchor.
+
+    ``dm_corrections`` maps burst nick -> telescope -> extra dedispersion
+    (pc cm^-3) applied on top of the stem-DM-to-adopted-DM shift. It exists to
+    correct audit-established archival filename-stem DM misstatements (the
+    stem disagrees with the DM actually applied to the stored product); it is
+    not a model correction and does not touch the time-axis convention.
+    """
+    extra = (dm_corrections or {}).get(row["nick"].lower())
     return bands_archival(
         data_root,
         row["nick"],
@@ -110,6 +126,7 @@ def load_row_bands(row: dict, *, root: Path, data_root: Path, target_dm: float):
         pad_cap_ms=DISPLAY_PAD_CAP_MS,
         target_dm=target_dm,
         extra_shift_ms=None,
+        extra_dedisp_pc=extra,
     )
 
 
@@ -259,6 +276,7 @@ def render_grid(
     out: Path,
     dpi: int,
     dm_catalog: Path = DM_CATALOG_DEFAULT,
+    dm_corrections: dict[str, dict[str, float]] | None = None,
 ) -> None:
     adopted_dms = load_adopted_dms(dm_catalog)
     roster = {row["nick"].lower() for row in rows}
@@ -288,6 +306,7 @@ def render_grid(
             root=root,
             data_root=data_root,
             target_dm=adopted_dms[row["nick"].lower()],
+            dm_corrections=dm_corrections,
         )
         fmap = _gap_display_map(bands)
         cell = outer[index // 3, index % 3].subgridspec(
@@ -331,8 +350,21 @@ def main() -> int:
     parser.add_argument("--out", type=Path, default=OUT_DEFAULT)
     parser.add_argument("--dm-catalog", type=Path, default=DM_CATALOG_DEFAULT)
     parser.add_argument("--dpi", type=int, default=600)
+    parser.add_argument(
+        "--dm-correction-json",
+        type=Path,
+        help="JSON {nick: {telescope: extra pc cm^-3}} of audit-established "
+        "stem-DM misstatement corrections applied before display averaging",
+    )
     args = parser.parse_args()
     rows = load_manifest(args.manifest)
+    dm_corrections = None
+    if args.dm_correction_json:
+        raw = json.loads(args.dm_correction_json.read_text())
+        dm_corrections = {
+            nick.lower(): {tel.lower(): float(val) for tel, val in per.items()}
+            for nick, per in raw.items()
+        }
     render_grid(
         rows,
         root=ROOT,
@@ -340,6 +372,7 @@ def main() -> int:
         out=args.out,
         dpi=args.dpi,
         dm_catalog=args.dm_catalog,
+        dm_corrections=dm_corrections,
     )
     print(f"wrote {args.out.with_suffix('.pdf')}")
     return 0
