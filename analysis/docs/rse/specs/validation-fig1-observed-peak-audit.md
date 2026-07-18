@@ -142,3 +142,22 @@ unchanged: regeneration in a fresh environment reproduces every
 zero-consistency classification and `gate_passed`; only sub-1e-9 float LSBs
 differ, so the committed bytes (`ccb36c7f…`) stand. The science disposition is
 unchanged — the residual-drift gate remains unmet pending owner adjudication.
+
+## Addendum — dmcorr corrections refuted by marker dependence (2026-07-17)
+
+Before any decide/promote on the corrected candidate
+(`2026-07-17-fig1-observed-peak-dmcorr`, PR #129), a cross-estimator check
+was run on the two "stem misstatement" panels. The apparent Delta-DM is
+marker-dependent: phase-coherence (manuscript DM analysis, scattering-robust)
+0.000 +/- 0.005; pulse-onset crossing +0.138 +/- 0.077 (isha) and
++0.160 +/- 0.083 (phineas); peak-sharpness scan +0.377 and +0.300. A real
+dedispersion error is marker-independent; a monotonic gradient with
+scattering sensitivity is the tau(nu) peak-lag signature. The corrections
+are therefore refuted — they absorb scattering morphology into spurious
+dispersion and would contradict the adopted-DM catalog at >40 sigma.
+Evidence: `provenance/marker-dependence-refutation.json` in the dmcorr
+batch. Consequence: the corrected candidate should not be promoted; the
+uncorrected candidate (`2026-07-17-fig1-observed-peak-audit`) is the
+faithful adopted-DM display, and the isha/phineas CHIME smear is scattering.
+The sharpness-scan audit remains a valid measurement; its stem-misstatement
+interpretation does not. Owner decision on the two candidates remains open.

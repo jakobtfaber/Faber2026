@@ -199,7 +199,8 @@
         "frequency-drift-scan",
         "frequency-drift-scan-figure",
         "dm-corrections",
-        "drift-closure"
+        "drift-closure",
+        "marker-dependence-refutation"
       ],
       "family": "gallery",
       "generator": "scripts/plot_codetection_data_grid.py",
@@ -270,6 +271,14 @@
       "source_path": "scripts/audit_fig1_axes.py (audit_dm_drift at adopted_dm + correction)",
       "source_revision": "d4db93ebec40b1490360a99e0b24d73e61adf29b",
       "stored_path": "provenance/drift-closure.json"
+    },
+    {
+      "id": "marker-dependence-refutation",
+      "repository": "parent",
+      "sha256": "87a4eff2ea06c429bed7469967f40ce624248985c51df77d5fb36395071d6727",
+      "source_path": "in-session marker-dependence test (recorded in this file)",
+      "source_revision": "post-staging",
+      "stored_path": "provenance/marker-dependence-refutation.json"
     }
   ],
   "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
