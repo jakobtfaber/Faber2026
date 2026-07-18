@@ -1,0 +1,92 @@
+[
+ {
+  "id": "dbde0c4e-bf8c-461e-b021-711357cccef8",
+  "filename": "plan_harden-chime-artifact-controls-in-the-sc_a1d05406.json",
+  "content_type": "application/json",
+  "size_bytes": 4591,
+  "checksum": "2f5b9f47d3a8b9523f07d336966b50a3e9499d60263be13e0a1b4580856c8995",
+  "created_at": "2026-07-09T13:10:10.221Z",
+  "versions": 1
+ },
+ {
+  "id": "b976a4aa-8629-404f-bd6e-941596003155",
+  "filename": "chime_artifact_guards.py",
+  "content_type": "text/x-python",
+  "size_bytes": 16619,
+  "checksum": "b04649dccff9050f1c1ceb2dcab915fb55ffe0a0a19be9315a4e79ec9a96ec80",
+  "created_at": "2026-07-09T14:28:57.195Z",
+  "versions": 1
+ },
+ {
+  "id": "6a1923f3-04f9-4fe4-aeb2-01ffa2b3a1c2",
+  "filename": "test_chime_artifact_guards.py",
+  "content_type": "text/x-python",
+  "size_bytes": 8078,
+  "checksum": "b298426d0119ca34e6d58790a655fba33b49a75e83668d55deb899fcab2a8583",
+  "created_at": "2026-07-09T14:28:57.203Z",
+  "versions": 1
+ },
+ {
+  "id": "8fc0bc14-4d4b-4614-9601-cb40ac3c29b2",
+  "filename": "test_driver_guards.py",
+  "content_type": "text/x-python",
+  "size_bytes": 4688,
+  "checksum": "dfbb8a6485074bd2e547909c8b4e39a31672cf049bfeabbe3b819f794a3176f9",
+  "created_at": "2026-07-09T14:28:57.207Z",
+  "versions": 1
+ },
+ {
+  "id": "9960ad21-a270-4494-9041-7dace1a50021",
+  "filename": "run_dsa_lorentzian_fits.py",
+  "content_type": "text/x-python",
+  "size_bytes": 60409,
+  "checksum": "fa20010406e37dbd8a7a72b9ff635fcd7cee1aac76cda21519e54f73f9de028d",
+  "created_at": "2026-07-09T14:28:57.211Z",
+  "versions": 1
+ },
+ {
+  "id": "787a92e9-b0d3-4a85-8cbe-db08a7ec3711",
+  "filename": "freya_chime_guards_demo.json",
+  "content_type": "application/json",
+  "size_bytes": 11552,
+  "checksum": "72e46ce47f1c5efb73c2b1491922f1f6e200db533e95f82c2dc2ee57b2d043a8",
+  "created_at": "2026-07-09T14:28:57.216Z",
+  "versions": 1
+ },
+ {
+  "id": "cd9f67d7-c687-4ed2-88fd-e47990fceb50",
+  "filename": "CHANGES-artifact-controls.md",
+  "content_type": "text/markdown",
+  "size_bytes": 4642,
+  "checksum": "7fd83bfa76be2a016a5d61df5a55a890417634bf5333f60db1ac078437cfa3d2",
+  "created_at": "2026-07-09T14:28:57.223Z",
+  "versions": 1
+ },
+ {
+  "id": "9875420d-8f18-4441-b386-f4cd164b54cf",
+  "filename": "assessment-chatgpt-scint-decombing-review.md",
+  "content_type": "text/markdown",
+  "size_bytes": 4541,
+  "checksum": "3175635d7b7731eb2d3ca7ecde974f78f1ac50a97345157d5d5fc137e0298c73",
+  "created_at": "2026-07-09T14:28:57.228Z",
+  "versions": 1
+ },
+ {
+  "id": "32496e6b-7cf2-44a0-b1ce-76be546b817e",
+  "filename": "chime_guard_diagnostics.png",
+  "content_type": "image/png",
+  "size_bytes": 226245,
+  "checksum": "6dc5dcc68414b8e23d36f39defe8fb2f12a82ceba8d8f6519de7502257579a22",
+  "created_at": "2026-07-09T14:39:35.500Z",
+  "versions": 1
+ },
+ {
+  "id": "5c1b8a1a-f414-4ac7-879d-a25a41e90491",
+  "filename": "chime_provenance_gate.png",
+  "content_type": "image/png",
+  "size_bytes": 180152,
+  "checksum": "cdf06945ef72e1fbfba0d0cef68fce1f1c5ff42445fe1a77f39d7adb7b20eab4",
+  "created_at": "2026-07-09T14:39:35.509Z",
+  "versions": 1
+ }
+]

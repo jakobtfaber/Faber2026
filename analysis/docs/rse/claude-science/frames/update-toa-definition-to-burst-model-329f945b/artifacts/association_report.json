@@ -1,0 +1,264 @@
+{
+  "inputs": {
+    "rate_per_day": 1000.0,
+    "omega_win_deg2": 0.7853981633974483,
+    "dt_s": 1.0,
+    "ddm": 5.0,
+    "dm_model": "lognormal(500,0.7) [assumption]",
+    "chime_dm_method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6) on library coherent_dedisp; 8/12 bursts constrained, 4 unconstrained (<3 sub-bands above S/N 4). Supersedes the retracted DM-phase extraction (1e-3*K_DM inter-channel unit bug). Per-burst DMs and CHIME-DSA agreement in dm_provenance.csv; see .agents/audit-chime-side-dm.md.",
+    "chime_localization_radius_deg": 0.1,
+    "chime_localization_note": "tiedbeam pointing; no multi-beam error ellipse (Michilli+2021 sub-arcmin assumed)"
+  },
+  "expected_chance_associations": 5.460165706874625e-08,
+  "geometric_pedestal": {
+    "geometric_delay_mean_ms": -2.1669346696978353,
+    "geometric_delay_spread_ms": 0.2623092203544699,
+    "residual_weighted_mean_ms": 1.8712933975417347,
+    "residual_error_ms": 0.741931575562576,
+    "residual_n_sigma": 2.522191343754052,
+    "n_pairs": 12,
+    "note": "residual = measured_offset_ms - geometric_delay_ms, weighted by combined_error_full_ms; tests the shared geometric pedestal. Arrival order / offset sign is a DM-referral + intrinsic-band diagnostic and is NOT an input to the chance-coincidence gate."
+  },
+  "bursts": [
+    {
+      "name": "zach",
+      "chime_id": "210456524",
+      "dm": 262.368,
+      "chance_coincidence_P": 6.262785512411995e-09,
+      "dm_agreement": {
+        "delta": 0.8439999999999941,
+        "sigma": 1.0,
+        "n_sigma": 0.8439999999999941,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.01622778466857792,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "whitney",
+      "chime_id": "215063905",
+      "dm": 462.174,
+      "chance_coincidence_P": 5.400264901922469e-09,
+      "dm_agreement": {
+        "delta": null,
+        "sigma": null,
+        "n_sigma": null,
+        "consistent": null,
+        "reason": "no CHIME DM available"
+      },
+      "dm_confidence": "unconstrained",
+      "position": {
+        "separation_deg": 0.01169248782450516,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "oran",
+      "chime_id": "224263996",
+      "dm": 396.882,
+      "chance_coincidence_P": 5.993225582479056e-09,
+      "dm_agreement": {
+        "delta": null,
+        "sigma": null,
+        "n_sigma": null,
+        "consistent": null,
+        "reason": "no CHIME DM available"
+      },
+      "dm_confidence": "unconstrained",
+      "position": {
+        "separation_deg": 0.030569719709358414,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "isha",
+      "chime_id": "252069198",
+      "dm": 411.568,
+      "chance_coincidence_P": 5.871290675862895e-09,
+      "dm_agreement": {
+        "delta": 0.35300000000000864,
+        "sigma": 1.0,
+        "n_sigma": 0.35300000000000864,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.014981182817416784,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "wilhelm",
+      "chime_id": "253635173",
+      "dm": 602.346,
+      "chance_coincidence_P": 4.0248395727360275e-09,
+      "dm_agreement": {
+        "delta": 0.44399999999996,
+        "sigma": 1.0,
+        "n_sigma": 0.44399999999996,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.007464782164573644,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "phineas",
+      "chime_id": "274819243",
+      "dm": 610.274,
+      "chance_coincidence_P": 3.9521710348822126e-09,
+      "dm_agreement": {
+        "delta": 0.45299999999997453,
+        "sigma": 1.0,
+        "n_sigma": 0.45299999999997453,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.0059361239707202435,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "freya",
+      "chime_id": "278720455",
+      "dm": 912.4,
+      "chance_coincidence_P": 1.903084689836021e-09,
+      "dm_agreement": {
+        "delta": 0.1229999999999336,
+        "sigma": 1.0,
+        "n_sigma": 0.1229999999999336,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.018192650112516265,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "johndoeII",
+      "chime_id": "311723353",
+      "dm": 696.506,
+      "chance_coincidence_P": 3.2236500135951474e-09,
+      "dm_agreement": {
+        "delta": null,
+        "sigma": null,
+        "n_sigma": null,
+        "consistent": null,
+        "reason": "no CHIME DM available"
+      },
+      "dm_confidence": "unconstrained",
+      "position": {
+        "separation_deg": 0.017079836415563276,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "hamilton",
+      "chime_id": "318353610",
+      "dm": 518.799,
+      "chance_coincidence_P": 4.83459627886873e-09,
+      "dm_agreement": {
+        "delta": 0.03499999999996817,
+        "sigma": 1.0,
+        "n_sigma": 0.03499999999996817,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.013362385474048047,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "mahi",
+      "chime_id": "354049284",
+      "dm": 960.128,
+      "chance_coincidence_P": 1.6942627301119728e-09,
+      "dm_agreement": {
+        "delta": null,
+        "sigma": null,
+        "n_sigma": null,
+        "consistent": null,
+        "reason": "no CHIME DM available"
+      },
+      "dm_confidence": "unconstrained",
+      "position": {
+        "separation_deg": 0.03773422254784797,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "chromatica",
+      "chime_id": "356959136",
+      "dm": 272.664,
+      "chance_coincidence_P": 6.3298608576900506e-09,
+      "dm_agreement": {
+        "delta": 0.2799999999999727,
+        "sigma": 1.0,
+        "n_sigma": 0.2799999999999727,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.0140542339747058,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "casey",
+      "chime_id": "362593221",
+      "dm": 491.207,
+      "chance_coincidence_P": 5.111624901132927e-09,
+      "dm_agreement": {
+        "delta": 0.03899999999998727,
+        "sigma": 1.0,
+        "n_sigma": 0.03899999999998727,
+        "consistent": true,
+        "reason": null
+      },
+      "dm_confidence": "constrained",
+      "position": {
+        "separation_deg": 0.010302202214218584,
+        "radius_deg": 0.1,
+        "consistent": true,
+        "reason": null
+      }
+    }
+  ]
+}
