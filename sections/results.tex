@@ -176,48 +176,21 @@ coverage-weighted accident.
 
 We report two certified scintillation results: one DSA-band measurement
 (FRB~20220506D) and one qualified CHIME-band sightline (FRB~20240203A),
-together with the provisional DSA-band fit catalog and the fail-closed outcome
-of the full CHIME campaign. Because the two certified results belong to
-different bursts, they do not define a cross-band frequency scaling or a
-two-screen constraint. The provisional scattering fits that enter the
-$\tau\,\Delta\nu_d$ screen products are listed in
-Table~\ref{tab:joint-fit-provisional}, and their bounded interpretation is made
-in Section~\ref{sec:disc-screen-attribution}. None of those scattering values,
-nor any DSA bandwidth except the qualified FRB~20220506D point below, is yet a
-robustly verified measurement. The estimator used for the decorrelation bandwidth and
-modulation index, and the two-screen framework that the attribution will draw
-on---including the $\tau_{s}\leftrightarrow\nu_{s}$ relation, the two-screen
-ACF product term, and the screen-distance constraint---are set out in
+together with the fail-closed outcome of the full CHIME campaign. Because the
+two certified results belong to different bursts, they do not define a
+cross-band frequency scaling or a two-screen constraint. Across the twelve
+co-detections, no other DSA bandwidth and no current scattering fit is promoted
+as a measurement. The
+decorrelation-bandwidth estimator and the two-screen framework---including the
+$\tau_{s}\leftrightarrow\nu_{s}$ relation, the two-screen ACF product term,
+and the screen-distance constraint---are set out in
 Appendix~\ref{app:twoscreen}.
 
-For each burst we recompute the spectral autocorrelation function (ACF) of the
-DSA-110 dynamic spectrum in equal-signal-to-noise frequency sub-bands and fit
-it with a sum of Lorentzian components, whose half-width at half-maximum defines
-the diffractive decorrelation bandwidth $\gamma$
-\citep{Rickett1990, Cordes2016}. The number of sub-bands and the number of
-Lorentzian components per sub-band are selected internally, from fixed
-model-comparison and viability gates rather than inherited fit choices, as
-described in Section~\ref{sec:methods}; components that fail the bandwidth,
-modulation, or fractional-uncertainty quality flags are retained in the
-component tables but excluded from the summary measurements.
-
-Across the twelve co-detections, the fit diagnostics contain at
-least one unflagged DSA-band decorrelation-bandwidth fit component per burst,
-for a total of 41 clean Lorentzian
-components across the sample. Individual clean components span
-$0.129$--$23.4$\,MHz across the $1.28$--$1.53$\,GHz DSA band. The upper-left
-panel of each per-burst diagnostic (Appendix~\ref{app:dsa-scint-acf}) fits a
-power law only to the narrow $\gamma_1$ component track; broader selected
-components are shown separately below and excluded from that scaling fit. For
-the nine bursts with at least two narrow-component frequencies, the fitted
-within-band slope is retained as a descriptive interpolation, not a physical
-turbulence-index measurement: the DSA-only frequency lever arm is too short,
-and the one qualified CHIME-band result below belongs to a different burst, so
-it cannot extend any of these within-burst tracks. Each diagnostic also shows
-the bandwidth predicted from the accepted
-DM-locked pulse-broadening fit through
-$\Delta\nu_d=C_1/(2\pi\tau)$ with $C_1=1.16$; the comparison is used only after
-the pulse-broadening fit clears its independent residual gates.
+The exploratory DSA campaign fit spectral ACFs with Lorentzian components, but
+an unflagged component fit is not by itself a certified astrophysical
+measurement. We therefore report only the candidate that passed the dedicated
+qualification below; the unqualified numerical catalog is withheld from the
+manuscript pending re-examination.
 
 The clean-component label is a fit-quality classification, not by itself a
 certified astrophysical measurement. We therefore subjected the strongest
@@ -235,14 +208,6 @@ off-pulse matched-template null, fit-window and low-lag stability checks,
 monotonic response calibration, and a resolved-interval requirement. It is the
 only presently certified DSA-band scintillation measurement in the sample and,
 as a single sub-band point, does not determine a frequency-scaling index.
-
-Table~\ref{tab:dsa-scint-provisional} summarizes the narrow-component
-best-fit catalog for completeness. Its medians and ranges describe clean
-component fits and are not substitutes for the injection calibration applied
-to FRB~20220506D; the individual sub-band values are shown in
-Appendix~\ref{app:dsa-scint-acf}.
-
-\input{dsa_scint_provisional_table}
 
 \begin{figure*}
     \centering
@@ -330,18 +295,12 @@ from their juxtaposition.
 % Draft figure metadata: docs/rse/specs/figure-wishlist.md (W4), gate V1.
 % Keep it out of the compiled manuscript until the gate clears.
 
-The previously compiled representative triptych and appendix morphology grids
-have been removed because their joint fits predate the approved power-law
-pulse-broadening-function (PL-PBF) production model.  They must not be used as
-current scattering diagnostics.  Regeneration is blocked until the complete
-twelve-burst post-PL-PBF production refit, model dumps, and review-bound panel
-artifacts exist at a reviewed pipeline pin.  Table~\ref{tab:joint-fit-provisional}
-is retained only as an explicitly provisional historical catalog; the model
-label C$m$D$n$ gives the selected number of temporal components in the CHIME
-($m$) and DSA-110 ($n$) bands (Section~\ref{sec:multicomp}).  None of its
-pre-PL-PBF numerical values is promoted as a current scattering result.
-
-\input{joint_fit_provisional_table}
+The previously compiled morphology grids and numerical joint-fit catalog have
+been removed because they predate the approved power-law
+pulse-broadening-function production model. No scattering $\tau$, $\alpha$, or
+$\beta$ value is reported until the complete twelve-burst production refit,
+model dumps, and review-bound diagnostics clear the fit-validation ladder at a
+reviewed pipeline pin.
 
 \FloatBarrier
 \subsection{Band-restricted burst energies}
