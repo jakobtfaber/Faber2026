@@ -38,7 +38,20 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   spectra feeding the scattering fits share the gen-1 de-chirp defect?
 
 ### Both-band scintillation campaign
-- [ ] ✋ Ratify the qualifying CHIME-band method
+
+**⛔ INPUT REMEDIATION FIRST (owner adjudication 2026-07-18,
+[findings](specs/owner-data-review-findings-2026-07-18.md)):**
+
+- [ ] RFI excision pass: all CHIME upchannelized products + DSA
+  central-channel RFI; per-burst masks documented
+- [ ] One authoritative DM per burst across all products (reconcile upchan
+  TARGETS vs full-res vs adopted catalog; marker-dependence rule governs);
+  rebuild aligned upchan npz set at adopted DMs, fresh checksums/provenance
+- [ ] Re-run the windowed-refit campaign on remediated inputs (same
+  predeclared gates); rerun closure/finalization + validation.json + figures
+- [ ] Fresh 36-panel input review + both-band ACF review for owner
+
+- [ ] ✋ Ratify the qualifying CHIME-band method — **blocked on remediation**
   ([wf-02](wayfinder/tickets/02-ratify-chime-scintillation-method.md))
 - [ ] Burst configs for the four unconfigured sightlines
   (whitney/phineas/mahi/isha) (legacy B1)
@@ -61,7 +74,15 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 - [ ] Per-sightline geometry model selection, thin vs extended,
   scint-informed (legacy A3)
 - [ ] From-scratch re-fit of all twelve co-detections under the ratified
-  contract with geometry adjudication (legacy C1)
+  contract with geometry adjudication (legacy C1) — **12/12 production
+  mass-refit landscape landed 2026-07-18** (jointtf lane, h17): 4 interior /
+  3 ceiling-adjacent / 3 ceiling-rail / new floor-rail class
+  (hamilton, whitney); PL-PBF collapsed to production EMG; free-α win =
+  mismatch signature. Remaining: leakage-injection verdict, count adoption
+  ([wf-15](wayfinder/tickets/15-count-audit-remediation-standing-method.md)),
+  free-α reporting
+  ([wf-14](wayfinder/tickets/14-free-alpha-diagnostic-reporting.md)),
+  validation + ratification before manuscript use
 - [ ] Per-band systematics pass on flagged sightlines (legacy C2)
 - [ ] Pipeline pin bump + table/figure regeneration from the campaign (legacy C3)
 
@@ -72,8 +93,11 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   integration, SEFD/beam prior budget) (legacy V3 + review S20)
 
 ### Figures
-- [ ] Figure 1 twelve-burst gallery: fresh isolated batch under the locked
-  4×3 data-only contract; hash-bound owner approval of exact bytes
+- [ ] Figure 1 twelve-burst gallery — **at owner-decide gate** (2026-07-18):
+  observed-peak candidate merged + promotable
+  (`2026-07-17-fig1-observed-peak-audit`); dmcorr variant refuted
+  (marker-dependence); owner runs the two `figure_review.py decide` commands
+  (handoff-2026-07-18-14-44), then any session runs the promotion PR
 - [ ] Wishlist figures: (re)insert per `specs/figure-wishlist.md` as their
   gates clear; strip draft `\fbox` placeholders before circulation
 
