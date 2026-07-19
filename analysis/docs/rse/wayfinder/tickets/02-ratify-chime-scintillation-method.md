@@ -9,6 +9,9 @@
   remediation + campaign re-run + fresh input/ACF review. Grilling decisions
   already recorded: bar = campaign's own predeclared gates with five-term
   contract mapping (owner choice (a)); τ·Δν_d excluded from any ratification.
+- **Re-wired 2026-07-19 (stratified restructure):** Blocked by
+  [22](22-redo-scintillation-certified.md) — the campaign re-run on
+  certified inputs. Resumes as the last step of stratum 6.
 - Assignee: claude (cowork session, with owner)
 - Scope expanded 2026-07-18: also covers the **2L scint table ratification**
   (owner-decision item from handoff-2026-07-18-14-51) — same conversation.

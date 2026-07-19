@@ -3,7 +3,7 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: —
-- Blocked by: —
+- Blocked by: [21](21-redo-scattering-certified.md) (stratified restructure 2026-07-19)
 - Map: [ApJ submission](../map-apj-submission.md)
 
 ## Question
