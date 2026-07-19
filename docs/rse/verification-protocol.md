@@ -1,5 +1,38 @@
 # Verification & rigor protocol
 
+**Amended 2026-07-19 (owner): Tier 0 added — data-integrity strata.** Root
+cause of repeated backtracking: issues were structured by analysis topic while
+trust flows along the data DAG; work opened on inputs never certified. The
+strata below gate all other tiers.
+
+## Tier 0 — Input certification (data-integrity strata) — GATES EVERYTHING
+
+Work is stratified by data level; **an issue at level Ln may not open until
+the L(n−1) certificates it consumes exist**:
+
+- **L0 — bytes:** raw/archival products — checksums, lineage, axis
+  conventions (freq order asserted from freq files, never assumed). Certified
+  once, mechanically.
+- **L1 — derived inputs:** dedispersed/upchannelized arrays, applied DMs,
+  RFI masks. Certification artifact = a per-(burst, product) **data card**:
+  waterfall + timeseries + spectrum + DM strip + mask overlay, the applied DM
+  with named authority and a sign-test receipt, axis conventions, and the
+  owner's hash-bound approval (the figure-review pattern extended to data).
+- **L2 — measurements:** fits (ACF, joint TF, TOA, DM) — predeclared gates +
+  injections, run only on certified L1.
+- **L3 — composites:** τ·Δν_d, budget overlays, attributions — certified L2
+  inputs only.
+- **L4 — manuscript claims:** registry parity (tier 2 below).
+
+Supporting rules: (a) **one authority per physical quantity per purpose**,
+declared in an input-authority table in the results registry (value, source,
+rule — e.g. structure-aligned DM for scint-input alignment vs catalog DM for
+the measurement tables); (b) **conventions are executable tests** — sign
+tests and axis-order asserts live in the loaders/CI, not prose; (c)
+**mechanical invalidation** — superseding an L0/L1 certificate flips every
+consuming registry row to `pending` via the `inputs` edges. The owner's eye
+is spent bottom-up once per level (12 data cards), not top-down repeatedly.
+
 **Adopted 2026-07-18 (owner).** Companion to [`BOARD.md`](BOARD.md)'s
 Verification & rigor lane. Five tiers, keyed to claim class; every manuscript
 unit inherits the tiers its claims touch. Tool exclusions per owner:
