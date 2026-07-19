@@ -41,6 +41,15 @@ existing lane system. The map does not carry the execution itself.
   qualifying CHIME route postdates the 2026-07-15 docs and must be named and
   ratified (see its ticket).
 
+## Resume pointer (2026-07-19)
+
+The live thread is
+[Adjudicate the scint-input DM authority](tickets/16-adjudicate-scint-input-dm-authority.md)
+— mid-grilling with the owner, full context in
+`docs/rse/specs/handoff-2026-07-19-14-56-scint-input-remediation-casey-dm-calibration.md`.
+A resuming session should open that ticket first and show the owner the
+decision figure it names.
+
 ## Decisions so far
 
 <!-- one line per closed ticket: gist + link -->
