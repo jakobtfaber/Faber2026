@@ -41,14 +41,26 @@ existing lane system. The map does not carry the execution itself.
   qualifying CHIME route postdates the 2026-07-15 docs and must be named and
   ratified (see its ticket).
 
-## Resume pointer (2026-07-19)
+## Resume pointer (2026-07-19 — STRATIFIED RESTRUCTURE)
 
-The live thread is
-[Adjudicate the scint-input DM authority](tickets/16-adjudicate-scint-input-dm-authority.md)
-— mid-grilling with the owner, full context in
-`docs/rse/specs/handoff-2026-07-19-14-56-scint-input-remediation-casey-dm-calibration.md`.
-A resuming session should open that ticket first and show the owner the
-decision figure it names.
+**Owner decision 2026-07-19:** issues are restructured along the data DAG
+(verification-protocol Tier 0 — data-integrity strata). The route through
+the analyses is now the ticket chain, worked in order:
+
+1. [Certify the raw data layer](tickets/17-certify-raw-data-layer.md) ← **start here**
+2. [Redo the DM analysis on certified bytes](tickets/18-redo-dm-analysis-certified.md) (carries the casey calibration + its handoff)
+3. [Redo the TOA analysis on certified DMs](tickets/19-redo-toa-analysis-certified.md)
+4. [Rebuild the upchannelized products + data cards](tickets/20-rebuild-upchannelized-products.md)
+5. [Redo the scattering analysis on certified inputs](tickets/21-redo-scattering-certified.md) (folds tickets 14/15)
+6. [Redo the scintillation campaign on certified inputs](tickets/22-redo-scintillation-certified.md) → [CHIME-method ratification](tickets/02-ratify-chime-scintillation-method.md)
+
+Master resume doc:
+`docs/rse/specs/handoff-2026-07-19-stratified-restart.md`. Strata tickets
+may carry HITL execution where owner calibration is intrinsic (owner
+amendment to the planning-only rule). Downstream decision tickets
+(priors 07, phineas 06, census wording 08, trust overhaul 13, etc.) remain
+open and re-anchor to certified strata as they land; ticket 16 closed as
+superseded into 18.
 
 ## Decisions so far
 

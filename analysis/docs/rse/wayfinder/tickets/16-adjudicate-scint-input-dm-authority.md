@@ -1,7 +1,10 @@
 # Adjudicate the scint-input DM authority (calibrated on casey)
 
 - Type: `wayfinder:grilling` (HITL — figure-driven; session must display PNGs full-size)
-- Status: open — **frontier; the live resume point**
+- Status: **closed 2026-07-19 — SUPERSEDED by the stratified restructure.**
+  Its content (casey calibration, DM-authority adjudication) is carried by
+  [ticket 18](18-redo-dm-analysis-certified.md) within the data-integrity
+  strata (verification-protocol Tier 0). No decision was reached here.
 - Assignee: —
 - Blocked by: —
 - Blocks: remediation rollout to 11 bursts → scint campaign re-run → [02](02-ratify-chime-scintillation-method.md)
