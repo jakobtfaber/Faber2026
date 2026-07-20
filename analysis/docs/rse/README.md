@@ -10,7 +10,7 @@ under a role or science-strand folder below.
 | `control/` | Execution control plane: program state, ledgers, registries, board |
 | `protocols/` | Standing protocols + append-only journal |
 | `certificates/` | Machine-checkable certification products (e.g. L0 JSON) |
-| `ops/` | Operator docs (knowledge base, …) |
+| `ops/` | Operator docs (knowledge base, review-status, …) |
 | `wayfinder/` | Wayfinder skill outputs (map + tickets); project store, not `.scratch/` |
 | `specs/` | **Markdown only** — workflow docs under prefix folders (see below) |
 | `decks/` | Review/evidence binaries, nested by science strand |
