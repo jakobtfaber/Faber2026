@@ -29,9 +29,9 @@ From the Faber2026 repository with live SSH access to h17:
 ```bash
 python3 -m py_compile scripts/revalidate_jointtf_v2_harvest.py
 python3 scripts/revalidate_jointtf_v2_harvest.py \
-  --output docs/rse/decks/jointtf-v2-harvest-2026-07-19/manifest.json
+  --output docs/rse/decks/scintillation/jointtf-v2-harvest-2026-07-19/manifest.json
 python3 -m json.tool \
-  docs/rse/decks/jointtf-v2-harvest-2026-07-19/manifest.json >/dev/null
+  docs/rse/decks/scintillation/jointtf-v2-harvest-2026-07-19/manifest.json >/dev/null
 ```
 
 The script sends itself to h17 worker mode and performs read-only inspection.

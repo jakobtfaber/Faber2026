@@ -17,7 +17,7 @@ structural review support the same three candidate dispositions, but no count
 was owner-adopted and no rung-2 work was launched. Evidence and remaining
 reproducibility gaps are recorded in
 `../validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md` and
-`../../decks/jointtf-v2-harvest-2026-07-19/`.
+`../../decks/scintillation/jointtf-v2-harvest-2026-07-19/`.
 
 The original recovery snapshot below remains as historical context.
 

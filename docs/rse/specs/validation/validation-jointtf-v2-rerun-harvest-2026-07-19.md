@@ -37,7 +37,7 @@
 - `python3 -m json.tool .../manifest.json` — pass.
 - Six input arrays, six run configurations, 14 logs, 14 JSON files, 14 sample
   archives, executed code, job scripts, and both figures are SHA-256 bound in
-  `docs/rse/decks/jointtf-v2-harvest-2026-07-19/manifest.json`.
+  `docs/rse/decks/scintillation/jointtf-v2-harvest-2026-07-19/manifest.json`.
 
 ### Fresh fit extraction
 
@@ -145,6 +145,6 @@ not a scientific acceptance rule by itself.
 - Recovery handoff: `../handoff/handoff-2026-07-19-23-24-jointtf-grok-harvest-revalidation.md`
 - Handoff: `../handoff/handoff-2026-07-19-16-33-jointtf-audit-twoscreen-stage0.md`
 - Decision: `../decision/decision-two-screen-charter-2026-07-18.md`
-- Evidence: `../../decks/jointtf-v2-harvest-2026-07-19/README.md`
-- Manifest: `../../decks/jointtf-v2-harvest-2026-07-19/manifest.json`
+- Evidence: `../../decks/scintillation/jointtf-v2-harvest-2026-07-19/README.md`
+- Manifest: `../../decks/scintillation/jointtf-v2-harvest-2026-07-19/manifest.json`
 - Remote audit: h17 `COMPONENT_COUNT_LADDER_AUDIT.md`, lines 132–180
