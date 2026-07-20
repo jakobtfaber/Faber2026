@@ -1,0 +1,506 @@
+[
+ {
+  "id": "WenHan2024",
+  "zotero_key": "CPAYX8AK",
+  "DOI": null,
+  "title": "A catalog of 1.58 million clusters of galaxies identified from the DESI Legacy Imaging Surveys",
+  "abstract": "",
+  "matched_by": "title"
+ },
+ {
+  "id": "Rickett1990",
+  "zotero_key": "BLREG26K",
+  "DOI": "10.1146/annurev.aa.28.090190.003021",
+  "title": "Radio Propagation Through the Turbulent Interstellar Plasma",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "CordesLazio2002",
+  "zotero_key": "HY296I5G",
+  "DOI": null,
+  "title": "NE2001.I. A New Model for the Galactic Distribution of Free Electrons and its Fluctuations",
+  "abstract": "",
+  "matched_by": "title"
+ },
+ {
+  "id": "YMW2017",
+  "zotero_key": "FVNI9QW5",
+  "DOI": "10.3847/1538-4357/835/1/29",
+  "title": "A New Electron Density Model for Estimation of Pulsar and FRB Distances",
+  "abstract": "We present a new model for the distribution of free electrons in the Galaxy, the Magellanic Clouds and the intergalactic medium (IGM) that can be used to estimate distances to real or simulated pulsars and fast radio bursts (FRBs) based on their dispersion measure (DM). The Galactic model has an extended thick disk representing the so-called warm interstellar medium, a thin disk representing the Galactic molecular ring, spiral arms based on a recent \ufb01t to Galactic HII regions, a Galactic Center disk and seven local features including the Gum Nebula, Galactic Loop I and the Local Bubble. An o\ufb00set of the Sun from the Galactic plane and a warp of the outer Galactic disk are included in the model. Parameters of the Galactic model are determined by \ufb01tting to 189 pulsars with independently determined distances and DMs. Simple models are used for the Magellanic Clouds and the IGM. Galactic model distances are within the uncertainty range for 86 of the 189 independently determined distances and within 20% of the nearest limit for a further 38 pulsars. We estimate that 95% of predicted Galactic pulsar distances will have a relative error of less than a factor of 0.9. The predictions of YMW16 are compared to those of the TC93 and NE2001 models showing that YMW16 performs signi\ufb01cantly better on all measures. Timescales for pulse broadening due to interstellar scattering are estimated for (real or simulated) Galactic and Magellanic Cloud pulsars and FRBs.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "YamasakiTotani2020",
+  "zotero_key": "6YXMA6U5",
+  "DOI": "10.3847/1538-4357/ab58c4",
+  "title": "The Galactic Halo Contribution to the Dispersion Measure of Extragalactic Fast Radio Bursts",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Macquart2020",
+  "zotero_key": "EJFGJFL4",
+  "DOI": "10.1038/s41586-020-2300-2",
+  "title": "A census of baryons in the Universe from localized fast radio bursts",
+  "abstract": "More than three quarters of the baryonic content of the Universe resides in a highly diffuse state that is difficult to observe, with only a small fraction directly observed in galaxies and galaxy clusters. Censuses of the nearby Universe have used absorption line spectroscopy to observe these invisible baryons, but these measurements rely on large and uncertain corrections and are insensitive to the majority of the volume, and likely mass. Specifically, quasar spectroscopy is sensitive either to only the very trace amounts of Hydrogen that exists in the atomic state, or highly ionized and enriched gas in denser regions near galaxies. Sunyaev-Zel'dovich analyses provide evidence of some of the gas in filamentary structures and studies of X-ray emission are most sensitive to gas near galaxy clusters. Here we report the direct measurement of the baryon content of the Universe using the dispersion of a sample of localized fast radio bursts (FRBs), thus utilizing an effect that measures the electron column density along each sight line and accounts for every ionised baryon. We augment the sample of published arcsecond-localized FRBs with a further four new localizations to host galaxies which have measured redshifts of 0.291, 0.118, 0.378 and 0.522, completing a sample sufficiently large to account for dispersion variations along the line of sight and in the host galaxy environment to derive a cosmic baryon density of $\\Omega_{b} = 0.051_{-0.025}^{+0.021} \\, h_{70}^{-1}$ (95% confidence). This independent measurement is consistent with Cosmic Microwave Background and Big Bang Nucleosynthesis values.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Speagle2020",
+  "zotero_key": "4V9U8QKM",
+  "DOI": "10.1093/mnras/staa278",
+  "title": "dynesty: a dynamic nested sampling package for estimating Bayesian posteriors and evidences",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Skilling2004",
+  "zotero_key": "AJHXDDER",
+  "DOI": "10.1063/1.1835238",
+  "title": "Nested Sampling",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "CordesChatterjee2019",
+  "zotero_key": "G984JDCJ",
+  "DOI": "10.1146/annurev-astro-091918-104501",
+  "title": "Fast Radio Bursts: An Extragalactic Enigma",
+  "abstract": "We summarize our understanding of millisecond radio bursts from an extragalactic population of sources. FRBs occur at an extraordinary rate, thousands per day over the entire sky with radiation energy densities at the source about ten billion times larger than those from Galactic pulsars. We survey FRB phenomenology, source models and host galaxies, coherent radiation models, and the role of plasma propagation e\ufb00ects in burst detection. The FRB \ufb01eld is guaranteed to be exciting: new telescopes will expand the sample from the current \u223c 80 unique burst sources (and a few secure localizations and redshifts) to thousands, with burst localizations that enable host-galaxy redshifts emerging directly from interferometric surveys.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Pleunis2021",
+  "zotero_key": "C855SX6A",
+  "DOI": "10.3847/1538-4357/ac33ac",
+  "title": "Fast Radio Burst Morphology in the First CHIME/FRB Catalog",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Hessels2019",
+  "zotero_key": "B4BCQRN5",
+  "DOI": "10.3847/2041-8213/ab13ae",
+  "title": "FRB 121102 Bursts Show Complex Time-Frequency Structure",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Prochaska2019",
+  "zotero_key": "553VSSZQ",
+  "DOI": "10.1126/science.aay0073",
+  "title": "The low density and magnetization of a massive galaxy halo exposed by a fast radio burst",
+  "abstract": "Present-day galaxies are surrounded by cool and enriched halo gas extending to hundreds of kiloparsecs. This halo gas is thought to be the dominant reservoir of material available to fuel future star formation, but direct constraints on its mass and physical properties have been difficult to obtain. We report the detection of a fast radio burst (FRB 181112) with arcsecond precision, which passes through the halo of a foreground galaxy. Analysis of the burst shows the halo gas has low net magnetization and turbulence. Our results imply predominantly diffuse gas in massive galactic halos, even those hosting active supermassive black holes, contrary to some previous results.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Ocker2021",
+  "zotero_key": "DJCNCLZN",
+  "DOI": "10.3847/1538-4357/abeb6e",
+  "title": "Constraining Galaxy Halos from the Dispersion and Scattering of Fast Radio Bursts and Pulsars",
+  "abstract": "Abstract\n            \n              Fast radio bursts (FRBs) can be scattered by ionized gas in their local environments, host galaxies, intervening galaxies along their lines of sight (LOS), the intergalactic medium, and the Milky Way. The relative contributions of these different media depend on their geometric configuration and the internal properties of the gas. When these relative contributions are well understood, FRB scattering is a powerful probe of density fluctuations along the LOS. The precise scattering measurements for\n              FRB 121102\n              and\n              FRB 180916\n              allow us to place an upper limit on the amount of scattering contributed by the Milky Way halo to these FRBs. The scattering time\n              \n                \n                  \n                \n                \n                  \u03c4\n                  \u221d\n                  (\n                  \n                    \n                      F\n                    \n                    \n                      \u02dc\n                    \n                  \n                  \u00d7\n                  \n                    \n                      DM\n                    \n                    \n                      2\n                    \n                  \n                  )\n                  \n                    \n                      A\n                    \n                    \n                      \u03c4\n                    \n                  \n                \n                \n              \n              , where DM is the dispersion measure,\n              \n                \n                  \n                \n                \n                  \n                    \n                      F\n                    \n                    \n                      \u02dc\n                    \n                  \n                \n                \n              \n              quantifies electron density variations with\n              \n                \n                  \n                \n                \n                  \n                    \n                      F\n                    \n                    \n                      \u02dc\n                    \n                  \n                  =\n                  0\n                \n                \n              \n              for a smooth medium, and the dimensionless constant\n              A\n              \n                \u03c4\n              \n              quantifies the difference between the mean scattering delay and the 1/\n              e\n              scattering time typically measured. A likelihood analysis of the observed scattering and halo DM constraints finds that\n              \n                \n                  \n                \n                \n                  \n                    \n                      F\n                    \n                    \n                      \u02dc\n                    \n                  \n                \n                \n              \n              is at least an order of magnitude smaller in the halo than in the Galactic disk. The maximum pulse broadening from the halo is\n              \u03c4\n              \u2272 12\n              \u03bc\n              s at 1 GHz. We compare our analysis of the Milky Way halo with other galaxy halos by placing limits on the scattering contributions from halos intersecting the LOS to\n              FRB 181112\n              and\n              FRB 191108\n              . Our results are consistent with halos making negligible or very small contributions to the scattering times of these FRBs.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Ocker2022",
+  "zotero_key": "QV75UFG2",
+  "DOI": "10.3847/1538-4357/ac6504",
+  "title": "The Large Dispersion and Scattering of FRB 20190520B Are Dominated by the Host Galaxy",
+  "abstract": "Abstract\n            \n              The repeating fast radio burst FRB 20190520B is localized to a galaxy at\n              z\n              = 0.241, much closer than expected given its dispersion measure DM = 1205 \u00b1 4  pc cm\n              \u22123\n              . Here we assess implications of the large DM and scattering observed from FRB 20190520B for the host galaxy\u2019s plasma properties. A sample of 75 bursts detected with the Five-hundred-meter Aperture Spherical radio Telescope shows scattering on two scales: a mean temporal delay\n              \u03c4\n              (1.41 GHz) = 10.9 \u00b1 1.5 ms, which is attributed to the host galaxy, and a mean scintillation bandwidth \u0394\n              \u03bd\n              d\n              (1.41 GHz) = 0.21 \u00b1 0.01 MHz, which is attributed to the Milky Way. Balmer line measurements for the host imply an H\n              \u03b1\n              emission measure (galaxy frame) EM\n              s\n              = 620 pc cm\n              \u22126\n              \u00d7 (\n              T\n              /10\n              4\n              K)\n              0.9\n              , implying DM\n              \n                H\n                \u03b1\n              \n              of order the value inferred from the FRB DM budget,\n              \n                \n                  \n                \n                \n                  \n                    \n                      DM\n                    \n                    \n                      h\n                    \n                  \n                  =\n                  \n                    \n                      1121\n                    \n                    \n                      \u2212\n                      138\n                    \n                    \n                      +\n                      89\n                    \n                  \n                \n                \n              \n              pc cm\n              \u22123\n              for plasma temperatures greater than the typical value 10\n              4\n              K. Combining\n              \u03c4\n              and DM\n              h\n              yields a nominal constraint on the scattering amplification from the host galaxy\n              \n                \n                  \n                \n                \n                  \n                    \n                      F\n                    \n                    \n                      \u02dc\n                    \n                  \n                  G\n                  \n                  =\n                  \n                  \n                    \n                      1.5\n                    \n                    \n                      \u2212\n                      0.3\n                    \n                    \n                      +\n                      0.8\n                    \n                  \n                  \n                    \n                      (\n                      \n                        \n                          pc\n                        \n                        \n                          2\n                        \n                      \n                      \n                      km\n                      )\n                    \n                    \n                      \u2212\n                      1\n                      \n                        /\n                      \n                      3\n                    \n                  \n                \n                \n              \n              , where\n              \n                \n                  \n                \n                \n                  \n                    \n                      F\n                    \n                    \n                      \u02dc\n                    \n                  \n                \n                \n              \n              describes turbulent density fluctuations and\n              G\n              represents the geometric leverage to scattering that depends on the location of the scattering material. For a two-screen scattering geometry where\n              \u03c4\n              arises from the host galaxy and \u0394\n              \u03bd\n              d\n              from the Milky Way, the implied distance between the FRB source and dominant scattering material is \u2272100 pc. The host galaxy scattering and DM contributions support a novel technique for estimating FRB redshifts using the\n              \u03c4\n              \u2013DM relation, and are consistent with previous findings that scattering of localized FRBs is largely dominated by plasma within host galaxies and the Milky Way.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Bhat2004",
+  "zotero_key": "48Z6LE6D",
+  "DOI": "10.1086/382680",
+  "title": "Multifrequency Observations of Radio Pulse Broadening and Constraints on Interstellar Electron Density Microstructure",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "ProchaskaZheng2019",
+  "zotero_key": "UQ4L5SBX",
+  "DOI": "10.1093/mnras/stz261",
+  "title": "Probing Galactic Halos with Fast Radio Bursts",
+  "abstract": "The precise localization (< 1 ) of multiple fast radio bursts (FRBs) to z > 0.1 galaxies has con\ufb01rmed that the dispersion measures (DMs) of these enigmatic sources a\ufb00ord a new opportunity to probe the di\ufb00use ionized gas around and in between galaxies. In this manuscript, we examine the signatures of gas in dark matter halos (aka halo gas) on DM observations in current and forthcoming FRB surveys. Combining constraints from observations of the high velocity clouds, O vii absorption, and the DM to the Large Magellanic Cloud with hydrostatic models of halo gas, we estimate that our Galactic halo will contribute DMMW,halo \u2248 50 \u2212 80pc cm\u22123 from the Sun to 200 kpc independent of any contribution from the Galactic ISM. Extending analysis to the Local Group, we demonstrate that M31\u2019s halo will be easily detected by high-sample FRB surveys (e.g. CHIME) although signatures from a putative Local Group medium may compete. We then review current empirical constraints on halo gas in distant galaxies and discuss the implications for their DM contributions. We further examine the DM probability distribution function of a population of FRBs at z 0 using an updated halo mass function and new models for the halo density pro\ufb01le. Lastly, we illustrate the potential of FRB experiments for resolving the baryonic fraction of halos by analyzing simulated sightlines through the CASBaH survey. All of the code and data products of our analysis are available at https://github.com/FRBs.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Lorimer2007",
+  "zotero_key": "5EKR6Y43",
+  "DOI": "10.1126/science.1147532",
+  "title": "A Bright Millisecond Radio Burst of Extragalactic Origin",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Thornton2013",
+  "zotero_key": "8ZZC8YES",
+  "DOI": "10.1126/science.1236789",
+  "title": "A Population of Fast Radio Bursts at Cosmological Distances",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Beck2021",
+  "zotero_key": "UZQA9IE7",
+  "DOI": "10.1093/mnras/staa2587",
+  "title": "PS1-STRM: neural network source classification and photometric redshift catalogue for PS1 3\u03c0 DR1",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Zhou2021",
+  "zotero_key": "7QSWYP7W",
+  "DOI": "10.1093/mnras/staa3764",
+  "title": "The clustering of DESI-like luminous red galaxies using photometric redshifts",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Planck2018",
+  "zotero_key": "JTWHKH3R",
+  "DOI": "10.1051/0004-6361/201833910",
+  "title": "Planck 2018 results. VI. Cosmological parameters",
+  "abstract": "We present cosmological parameter results from the \ufb01nal full-mission Planck measurements of the cosmic microwave background (CMB) anisotropies, combining information from the temperature and polarization maps and the lensing reconstruction. Compared to the 2015 results, improved measurements of large-scale polarization allow the reionization optical depth to be measured with higher precision, leading to signi\ufb01cant gains in the precision of other correlated parameters. Improved modelling of the small-scale polarization leads to more robust constraints on many parameters, with residual modelling uncertainties estimated to a\ufb00ect them only at the 0.5 \u03c3 level. We \ufb01nd good consistency with the standard spatially-\ufb02at 6-parameter \u039bCDM cosmology having a power-law spectrum of adiabatic scalar perturbations (denoted \u201cbase \u039bCDM\u201d in this paper), from polarization, temperature, and lensing, separately and in combination. A combined analysis gives dark matter density \u03a9ch2 = 0.120 \u00b1 0.001, baryon density \u03a9bh2 = 0.0224 \u00b1 0.0001, scalar spectral index ns = 0.965 \u00b1 0.004, and optical depth \u03c4 = 0.054 \u00b1 0.007 (in this abstract we quote 68 % con\ufb01dence regions on measured parameters and 95 % on upper limits). The angular acoustic scale is measured to 0.03 % precision, with 100\u03b8\u2217 = 1.0411 \u00b1 0.0003. These results are only weakly dependent on the cosmological model and remain stable, with somewhat increased errors, in many commonly considered extensions. Assuming the base-\u039bCDM cosmology, the inferred (model-dependent) late-Universe parameters are: Hubble constant H0 = (67.4\u00b10.5) km s\u22121Mpc\u22121; matter density parameter \u03a9m = 0.315\u00b10.007; and matter \ufb02uctuation amplitude \u03c38 = 0.811\u00b10.006. We \ufb01nd no compelling evidence for extensions to the base-\u039bCDM model. Combining with baryon acoustic oscillation (BAO) measurements (and considering single-parameter extensions) we constrain the e\ufb00ective extra relativistic degrees of freedom to be Ne\ufb00 = 2.99 \u00b1 0.17, in agreement with the Standard Model prediction Ne\ufb00 = 3.046, and \ufb01nd that the neutrino mass is tightly constrained to m\u03bd < 0.12 eV. The CMB spectra continue to prefer higher lensing amplitudes than predicted in base \u039bCDM at over 2 \u03c3, which pulls some parameters that a\ufb00ect the lensing amplitude away from the \u039bCDM model; however, this is not supported by the lensing reconstruction or (in models that also change the background geometry) BAO data. The joint constraint with BAO measurements on spatial curvature is consistent with a \ufb02at universe, \u03a9K = 0.001\u00b10.002. Also combining with Type Ia supernovae (SNe), the dark-energy equation of state parameter is measured to be w0 = \u22121.03 \u00b1 0.03, consistent with a cosmological constant. We \ufb01nd no evidence for deviations from a purely power-law primordial spectrum, and combining with data from BAO, BICEP2, and Keck Array data, we place a limit on the tensor-to-scalar ratio r0.002 < 0.06. Standard big-bang nucleosynthesis predictions for the helium and deuterium abundances for the base-\u039bCDM cosmology are in excellent agreement with observations. The Planck base-\u039bCDM results are in good agreement with BAO, SNe, and some galaxy lensing observations, but in slight tension with the Dark Energy Survey\u2019s combined-probe results including galaxy clustering (which prefers lower \ufb02uctuation amplitudes or matter density parameters), and in signi\ufb01cant, 3.6 \u03c3, tension with local measurements of the Hubble constant (which prefer a higher value). Simple model extensions that can partially resolve these tensions are not favoured by the Planck data.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Law2024",
+  "zotero_key": "JN9CFTGV",
+  "DOI": "10.48550/arXiv.2307.03344",
+  "title": "Deep Synoptic Array Science: First FRB and Host Galaxy Catalog",
+  "abstract": "Fast Radio Bursts (FRBs) are a powerful and mysterious new class of transient that are luminous enough to be detected at cosmological distances. By associating FRBs to host galaxies, we can measure intrinsic and environmental properties that test FRB origin models, in addition to using them as precise probes of distant cosmic gas. The Deep Synoptic Array (DSA-110) is a radio interferometer built to maximize the rate at which it can simultaneously detect and localize FRBs. Here, we present the first sample of FRBs and host galaxies discovered by the DSA-110. This sample of 11 FRBs is the largest, most uniform sample of localized FRBs to date , as it is selected based on association to host galaxies identified in optical imaging by Pan-STARRS1 . These FRBs have not been observed to repeat and their radio properties (dispersion, temporal scattering, energy) are similar to that of the known non-repeating FRB population. Most host galaxies have ongoing star formation, as has been identified before for FRB hosts. Two hosts of the new sample are massive, quiescent galaxies. The distribution of star-formation history across this host-galaxy sample shows that the delay-time distribution is wide, with a powerlaw model that spans from \u223c 100 Myr to \u2273 2Gyr. This requires the existence of one or more progenitor formation channels associated with old stellar populations, such as the binary evolution of compact objects.",
+  "matched_by": "title"
+ },
+ {
+  "id": "CHIMEFRB2018",
+  "zotero_key": "P3W5KRAJ",
+  "DOI": "10.3847/1538-4357/aad188",
+  "title": "The CHIME Fast Radio Burst Project: System Overview",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Michilli2021",
+  "zotero_key": "A2NP5KIM",
+  "DOI": "10.3847/1538-4357/abe626",
+  "title": "An Analysis Pipeline for CHIME/FRB Full-array Baseband Data",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Ocker2026",
+  "zotero_key": "RQWZ7GGD",
+  "DOI": "10.3847/1538-4357/ae5825",
+  "title": "NE2025: An Updated Electron Density Model for the Galactic Interstellar Medium",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Cordes2025",
+  "zotero_key": "5EV4DJD5",
+  "DOI": null,
+  "title": "Fundamental Noise Processes for Pulsar Timing Arrays",
+  "abstract": "We develop metrics to assess the timing quality of a pulsar and use them to evaluate sources currently included in pulsar timing arrays like NANOGrav. Timing precision is limited by spin noise, magnetospheric beam variability, and multi-path propagation through a turbulent interstellar medium. We identify sources of non-Gaussianity in timing residuals and separate chromatic from achromatic effects on short and long timescales, and recommend timing-procedure changes that leverage wide-bandwidth instrumentation to improve precision.",
+  "matched_by": "title"
+ },
+ {
+  "id": "mwprop",
+  "zotero_key": "2AMPNKLE",
+  "DOI": null,
+  "title": "mwprop: Milky Way propagation properties from Galactic electron-density models",
+  "abstract": "",
+  "matched_by": "title"
+ },
+ {
+  "id": "Masui2015",
+  "zotero_key": "L6Q8VBMV",
+  "DOI": "10.1038/nature15769",
+  "title": "Dense magnetized plasma associated with a fast radio burst",
+  "abstract": "Fast Radio Bursts are bright, unresolved, non-repeating, broadband, millisecond flashes, found primarily at high Galactic latitudes, with dispersion measures much larger than expected for a Galactic source. The inferred all-sky burst rate is comparable to the core-collapse supernova rate out to redshift 0.5. If the observed dispersion measures are assumed to be dominated by the intergalactic medium, the sources are at cosmological distances with redshifts of 0.2 to 1. These parameters are consistent with a wide range of source models. One fast radio burst showed circular polarization [21(7)%] of the radio emission, but no linear polarization was detected, and hence no Faraday rotation measure could be determined. Here we report the examination of archival data revealing Faraday rotation in a newly detected burst - FRB 110523. It has radio flux at least 0.6 Jy and dispersion measure 623.30(5) pc cm$^{-3}$. Using Galactic contribution 45 pc cm$^{-3}$ and a model of intergalactic electron density, we place the source at a maximum redshift of 0.5. The burst has rotation measure -186.1(1.4) rad m$^{-2}$, much higher than expected for this line of sight through the Milky Way and the intergalactic medium, indicating magnetization in the vicinity of the source itself or within a host galaxy. The pulse was scattered by two distinct plasma screens during propagation, which requires either a dense nebula associated with the source or a location within the central region of its host galaxy. Keeping in mind that there may be more than one type of fast radio burst source, the detection in this instance of source-local magnetization and scattering favours models involving young stellar populations such as magnetars over models involving the mergers of older neutron stars, which are more likely to be located in low density regions of the host galaxy.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "CHIME2021Catalog",
+  "zotero_key": "LRAD46LQ",
+  "DOI": "10.3847/1538-4365/ac33ab",
+  "title": "The First CHIME/FRB Fast Radio Burst Catalog",
+  "abstract": "We present a catalog of 536 fast radio bursts (FRBs) detected by the Canadian Hydrogen Intensity Mapping Experiment Fast Radio Burst (CHIME/FRB) Project between 400 and 800 MHz from 2018 July 25 to 2019 July 1, including 62 bursts from 18 previously reported repeating sources. The catalog represents the \ufb01rst large sample, including bursts from repeaters and non-repeaters, observed in a single survey with uniform selection e\ufb00ects. This facilitates comparative and absolute studies of the FRB population. We show that repeaters and apparent non-repeaters have sky locations and dispersion measures (DMs) that are consistent with being drawn from the same distribution. However, bursts from repeating sources di\ufb00er from apparent non-repeaters in intrinsic temporal width and spectral bandwidth. Through injection of simulated events into our detection pipeline, we perform an absolute calibration of selection e\ufb00ects to account for systematic biases. We \ufb01nd evidence for a population of FRBs\u2014comprising a large fraction of the overall population\u2014with a scattering time at 600 MHz in excess of 10 ms, of which only a small fraction are observed by CHIME/FRB. We infer a powerlaw index for the cumulative \ufb02uence distribution of \u03b1 = \u22121.40 \u00b1 0.11(stat.)+\u221200..0096(sys.), consistent with the \u22123/2 expectation for a non-evolving population in Euclidean space. We \ufb01nd \u03b1 is steeper for high-DM events and shallower for low-DM events, which is what would be expected when DM is correlated with distance. We infer a sky rate of [525 \u00b1 30(stat.)+\u2212113400(sys.)]/sky/day above a \ufb02uence of 5 Jy ms at 600 MHz, with scattering time at 600 MHz under 10 ms, and DM above 100 pc cm\u22123.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Chawla2022",
+  "zotero_key": "QKDT8FUH",
+  "DOI": "10.3847/1538-4357/ac49e1",
+  "title": "Modeling Fast Radio Burst Dispersion and Scattering Properties in the First CHIME/FRB Catalog",
+  "abstract": "We present a Monte Carlo-based population synthesis study of fast radio burst (FRB) dispersion and scattering focusing on the first catalog of sources detected with the Canadian Hydrogen Intensity Mapping Experiment Fast Radio Burst (CHIME/FRB) project. We simulate intrinsic properties and propagation effects for a variety of FRB population models and compare the simulated distributions of dispersion measures (DMs) and scattering timescales with the corresponding distributions from the CHIME/FRB catalog. Our simulations confirm the results of previous population studies, which suggested that the interstellar medium of the host galaxy alone (simulated based on the NE2001 model) cannot explain the observed scattering timescales of FRBs. We therefore consider additional sources of scattering, namely, the circumgalactic medium (CGM) of intervening galaxies and the circumburst medium whose properties are modeled based on typical Galactic plane environments. We find that a population of FRBs with scattering contributed by these media is marginally consistent with the CHIME/FRB catalog. In this scenario, our simulations favor a population of FRBs offset from their galaxy centers over a population which is distributed along the spiral arms. However, if the models proposing the CGM as a source of intense scattering are incorrect, then we conclude that FRBs may inhabit environments with more extreme properties than those inferred for pulsars in the Milky Way.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "astropy2013",
+  "zotero_key": "BP83K2K2",
+  "DOI": "10.1051/0004-6361/201322068",
+  "title": "Astropy: A community Python package for astronomy",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "astropy2018",
+  "zotero_key": "7UTN9RC5",
+  "DOI": "10.3847/1538-3881/aabc4f",
+  "title": "The Astropy Project: Building an Open-science Project and Status of the v2.0 Core Package",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "astropy2022",
+  "zotero_key": "U9DWQRZ5",
+  "DOI": "10.3847/1538-4357/ac7c74",
+  "title": "The Astropy Project: Sustaining and Growing a Community-oriented Open-source Project and the Latest Major Release (v5.0) of the Core Package",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Price2021",
+  "zotero_key": "YD3SLZT5",
+  "DOI": "10.1017/pasa.2021.33",
+  "title": "A comparison of Galactic electron density models using PyGEDM",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "James2022",
+  "zotero_key": "22YF64ZU",
+  "DOI": "10.1093/mnras/stab3051",
+  "title": "The z-DM distribution of fast radio bursts",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "McQuinn2014",
+  "zotero_key": "RJVVPVVQ",
+  "DOI": "10.1088/2041-8205/780/2/L33",
+  "title": "Locating the \"missing\" baryons with extragalactic dispersion measure estimates",
+  "abstract": "Recently, Thornton and coworkers con\ufb01rmed a class of millisecond radio bursts likely of extragalactic origin that is well-suited for estimating dispersion measures (DMs). We calculate the probability distribution of DM(z) in di\ufb00erent models for how the cosmic baryons are distributed (both analytically and with cosmological simulations). We show that the distribution of DM is quite sensitive to whether the \u201cmissing\u201d baryons lie around the virial radius of 1011 \u2212 1013 M\u2299 halos or further out, which is not easily constrained with other observational techniques. The intrinsic contribution to DM from each source could complicate studies of the extragalactic contribution. This di\ufb03culty is avoided by stacking based on the impact parameter to foreground galaxies. We show that a stacking analysis using a sample of \u223c 100 DM measurements from arcminute-localized, z 0.5 sources would place interesting constraints at 0.2 \u2212 2 halo virial radii on the baryonic mass pro\ufb01le surrounding di\ufb00erent galaxy types. Conveniently for intergalactic studies, sightlines that intersect intervening galactic disks should be easily identi\ufb01ed owing to scattering. A detectable level of scattering may also result from turbulence in the circumgalactic medium.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Cordes2016",
+  "zotero_key": "ZI8F4PJN",
+  "DOI": null,
+  "title": "Radio Wave Propagation and the Provenance of Fast Radio Bursts",
+  "abstract": "We analyze plasma dispersion and scattering of fast radio bursts (FRBs) to identify the dominant locations of free electrons along their lines of sight and thus constrain the distances of the burst sources themselves. We establish the average \u03c4 -DM relation for Galactic pulsars and use it as a benchmark for discussing FRB scattering. Though scattering times \u03c4 for FRBs are large in the majority of the 17 events we analyze, they are systematically smaller than those of Galactic pulsars that have similar dispersion measures (DMs). The lack of any correlation between \u03c4 and DM for FRBs suggests that the intergalactic medium (IGM) cannot account for both \u03c4 and DM. We therefore consider mixed models involving the IGM and host galaxies. If the IGM contributes signi\ufb01cantly to DM while host galaxies dominate \u03c4 , the scattering de\ufb01cit with respect to the mean Galactic trend can be explained with a \u03c4 -DM relation in the host that matches that for the Milky Way. However, it is possible that hosts dominate both \u03c4 and DM, in which case the observed scattering de\ufb01cits require free electrons in the host to be less turbulent than in the Galaxy, such as if they are in hot rather than warm ionized regions. Our results imply that distances or redshifts of FRB sources can be signi\ufb01cantly overestimated if they are based on the assumption that the extragalactic portion of DM is dominated by the IGM.",
+  "matched_by": "title"
+ },
+ {
+  "id": "Arnaud2010",
+  "zotero_key": "M7679MHV",
+  "DOI": "10.1051/0004-6361/200913416",
+  "title": "The universal galaxy cluster pressure profile from a representative sample of nearby systems (REXCESS) and the Y<sub>SZ</sub>-M<sub>500</sub> relation",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "KeatingPen2020",
+  "zotero_key": "7HT5T2B7",
+  "DOI": "10.1093/mnrasl/slaa095",
+  "title": "Exploring the dispersion measure of the Milky Way halo",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Cook2023",
+  "zotero_key": "PJTR6QML",
+  "DOI": "10.3847/1538-4357/acbbd0",
+  "title": "An FRB Sent Me a DM: Constraining the Electron Column of the Milky Way Halo with Fast Radio Burst Dispersion Measures from CHIME/FRB",
+  "abstract": "The CHIME/FRB project has detected hundreds of fast radio bursts (FRBs), providing an unparalleled population to probe statistically the foreground media that they illuminate. One such foreground medium is the ionized halo of the Milky Way (MW). We estimate the total Galactic electron column density from FRB dispersion measures (DMs) as a function of Galactic latitude using four di\ufb00erent estimators, including ones that assume spherical symmetry of the ionized MW halo and ones that imply more latitudinal-variation in density. Our observation-based constraints of the total Galactic DM contribution for |b| \u2265 30\u25e6, depending on the Galactic latitude and selected model, span 87.8 \u2212 141 pc cm\u22123. This constraint implies upper limits on the MW halo DM contribution that range over 52\u2212111 pc cm\u22123. We discuss the viability of various gas density pro\ufb01les for the MW halo that have been used to estimate the halo\u2019s contribution to DMs of extragalactic sources. Several models overestimate the DM contribution, especially when assuming higher halo gas masses (\u223c 3.5 \u00d7 1012M ). Some halo models predict a higher MW halo DM contribution than can be supported by our observations unless the e\ufb00ect of feedback is increased within them, highlighting the impact of feedback processes in galaxy formation.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Moster2013",
+  "zotero_key": "2HMJ45U6",
+  "DOI": "10.1093/mnras/sts261",
+  "title": "Galactic star formation and accretion histories from matching galaxies to dark matter haloes",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Taylor2011",
+  "zotero_key": "FWFTSFKB",
+  "DOI": "10.1111/j.1365-2966.2011.19536.x",
+  "title": "Galaxy And Mass Assembly (GAMA): stellar mass estimates",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Cluver2014",
+  "zotero_key": "3NI3M9TW",
+  "DOI": "10.1088/0004-637X/782/2/90",
+  "title": "Galaxy And Mass Assembly (GAMA): Mid-infrared Properties and Empirical Relations from WISE",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "DuttonMaccio2014",
+  "zotero_key": "P5496ZHA",
+  "DOI": "10.1093/mnras/stu742",
+  "title": "Cold dark matter haloes in the Planck era: evolution of structural parameters for Einasto and NFW profiles",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Connor2024",
+  "zotero_key": "LJM3K8X8",
+  "DOI": "10.48550/arXiv.2409.16952",
+  "title": "A gas-rich cosmic web revealed by the partitioning of the missing baryons",
+  "abstract": "Approximately half of the Universe's dark matter resides in collapsed halos; significantly less than half of the baryonic matter (protons and neutrons) remains confined to halos. A small fraction of baryons are in stars and the interstellar medium within galaxies. The lion's share are diffuse ($<$10$^{-3}$ cm$^{-3}$) and ionized (neutral fraction $<$10$^{-4}$), located in the intergalactic medium (IGM) and in the halos of galaxy clusters, groups, and galaxies. This diffuse ionized gas is notoriously difficult to measure, but has wide implications for galaxy formation, astrophysical feedback, and precision cosmology. Recently, the dispersion of extragalactic Fast Radio Bursts (FRBs) has been used to measure the total content of cosmic baryons. Here, we present a large cosmological sample of FRB sources localized to their host galaxies. We have robustly partitioned the missing baryons into the IGM, galaxy clusters, and galaxies, providing a late-Universe measurement of the total baryon density of $\\Omega_b\\,h_{70} = 0.051_{-0.006}^{+0.006}$. Our results indicate efficient feedback processes that can deplete galaxy halos and enrich the IGM ($f_{\\rm IGM}=0.76_{-0.11}^{+0.10}$), agreeing with the baryon-rich cosmic web scenario seen in cosmological simulations. Our results may reduce the ``$S_8$ tension'' in cosmology, as strong feedback leads to suppression of the matter power spectrum.",
+  "matched_by": "title"
+ },
+ {
+  "id": "Walker2024",
+  "zotero_key": "U6DDKHTZ",
+  "DOI": "10.1051/0004-6361/202347139",
+  "title": "The dispersion measure contributions of the cosmic web",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Pradeep2025",
+  "zotero_key": "MCUHBGHA",
+  "DOI": "10.1051/0004-6361/202554202",
+  "title": "Scintillometry of Fast Radio Bursts: Resolution Effects in Two-Screen Models",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Sammons2023",
+  "zotero_key": "HF5VUAGU",
+  "DOI": "10.48550/arXiv.2305.11477",
+  "title": "Two-Screen Scattering in CRAFT FRBs",
+  "abstract": "Temporal broadening is a commonly observed property of fast radio bursts (FRBs), associated with turbulent media which cause radiowave scattering. Similarly to dispersion, scattering is an important probe of the media along the line of sight to an FRB source, such as the circum-burst or circum-galactic mediums (CGM). Measurements of characteristic scattering times alone are insufficient to constrain the position of the dominant scattering media along the line of sight. However, where more than one scattering screen exists, Galactic scintillation can be leveraged to form strong constraints. We quantify the scattering and scintillation in 10 FRBs with 1) known host galaxies and redshifts and 2) captured voltage data enabling high-time resolution analysis. We find strong evidence for two screens in three cases. For FRBs 20190608B and 20210320C, we find evidence for scattering screens less than approximately 16.7 and 3000 kpc respectively, from their sources, consistent with the scattering occurring in the circum-burst environment, the host ISM (inter-stellar medium) or the CGM. For FRB 20201124A we find a low modulation index that evolves over the burst\u2019s scattering tail, indicating the presence of a scattering screen \u2248 9 kpc from the host, and excluding the circum-burst environment from potential scattering sites. By assuming that pulse broadening is contributed by the host galaxy ISM or circum-burst environment, the lack of observed scintillation in four FRBs in our sample suggests that existing models may be poor estimators of scattering times associated with the Milky Way\u2019s ISM, similar to the anomalously low scattering observed for FRB 20201124A.",
+  "matched_by": "title"
+ },
+ {
+  "id": "Gwinn1998",
+  "zotero_key": "PDJESQKY",
+  "DOI": "10.1086/306178",
+  "title": "Interstellar Optics",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "LambertRickett1999",
+  "zotero_key": "RC3AQB4Z",
+  "DOI": "10.1086/307181",
+  "title": "On the Theory of Pulse Propagation and Two-Frequency Field Statistics in Irregular Interstellar Plasmas",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "LorimerKramer2004",
+  "zotero_key": "ZTADPXWD",
+  "DOI": null,
+  "title": "Handbook of Pulsar Astronomy",
+  "abstract": "",
+  "matched_by": "title"
+ },
+ {
+  "id": "Harris2020numpy",
+  "zotero_key": "J4J3Z2EH",
+  "DOI": "10.1038/s41586-020-2649-2",
+  "title": "Array programming with NumPy",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Virtanen2020scipy",
+  "zotero_key": "ERTDHCQN",
+  "DOI": "10.1038/s41592-019-0686-2",
+  "title": "SciPy 1.0: fundamental algorithms for scientific computing in Python",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Hunter2007",
+  "zotero_key": "PNMPD8JL",
+  "DOI": "10.1109/MCSE.2007.55",
+  "title": "Matplotlib: A 2D Graphics Environment",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Zibetti2009",
+  "zotero_key": "T38K6SHT",
+  "DOI": "10.1111/j.1365-2966.2009.15528.x",
+  "title": "Resolved stellar mass maps of galaxies - I. Method and implications for global mass estimates",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "MacquartKoay2013",
+  "zotero_key": "F3IYEXSL",
+  "DOI": "10.1088/0004-637X/776/2/125",
+  "title": "Temporal Smearing of Transient Radio Sources by the Intergalactic Medium",
+  "abstract": "The temporal smearing of impulsive radio events at cosmological redshifts probes the properties of the ionized Inter-Galactic Medium (IGM). We relate the degree of temporal smearing and the pro\ufb01le of a scattered source to the evolution of turbulent structure in the IGM as a function of redshift. We estimate the degree of scattering expected by analysing the contributions to the Scattering Measure (SM) of the various components of baryonic matter embedded in the IGM, including the di\ufb00use IGM, intervening galaxies and intracluster gas. These estimates predict that the amount of temporal smearing expected at 300 MHz is typically as low as \u223c 1 ms and suggests that these bursts may be detectable with low frequency wide\ufb01eld arrays. A generalization of the DM-SM relation observed for Galactic scattering to the densities and turbulent conditions relevant to the IGM suggests that scattering measures of order 10\u22126 kpc m\u221220/3 would be expected at z \u223c 1. This scattering is su\ufb03ciently low that its e\ufb00ects would, for most lines of sight, not be manifest in existing observations of the scattering broadening in images of extragalactic compact sources. The redshift dependence of the temporal smearing discriminates between scattering that occurs in the host galaxy of the burst and the IGM, with \u03c4host \u221d (1 + z)\u22123 if the scattering probes length scales below the inner scale of the turbulence or \u03c4host \u221d (1 + z)\u221217/5 if the turbulence follows a Kolmogorov spectrum. This di\ufb00ers strongly from the expected IGM scaling \u03c4IGM \u223c z2 for z 1 and (1 + z)0.2\u22120.5 for z 1.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Werk2014",
+  "zotero_key": "2GQIWCPG",
+  "DOI": "10.1088/0004-637X/792/1/8",
+  "title": "The COS-Halos Survey: Physical Conditions and Baryonic Mass in the Low-Redshift Circumgalactic Medium",
+  "abstract": "We analyze the physical conditions of the cool, photoionized (T \u223c 104K) circumgalactic medium (CGM) using the COS-Halos suite of gas column density measurements for 44 gaseous halos within 160 kpc of L \u223c L\u2217 galaxies at z \u223c 0.2. These data are well described by simple photoionization models, with the gas highly ionized (nHII/nH 99%) by the extragalactic ultraviolet background (EUVB). Scaling by estimates for the virial radius, Rvir, we show that the ionization state (tracked by the dimensionless ionization parameter, U) increases with distance from the host galaxy. The ionization parameters imply a decreasing volume density pro\ufb01le nH = (10\u22124.2\u00b10.25)(R/Rvir)\u22120.8\u00b10.3. Our derived gas volume densities are several orders of magnitude lower than predictions from standard two-phase models with a cool medium in pressure equilibrium with a hot, coronal medium expected in virialized halos at this mass scale. Applying the ionization corrections to the H I column densities, we estimate a lower limit to the cool gas mass McCoGoM l > 6.5 \u00d7 1010 M\u2299 for the volume within R < Rvir. Allowing for an additional warm-hot, OVI-traced phase, the CGM accounts for at least half of the baryons purported to be missing from dark matter halos at the 1012 M\u2299 scale.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "LanMo2018",
+  "zotero_key": "43JCYLFC",
+  "DOI": "10.3847/1538-4357/aadc08",
+  "title": "The Circumgalactic Medium of eBOSS Emission Line Galaxies: Compact Star-forming Regions and the Baryon Budget",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "McCourt2018",
+  "zotero_key": "DG7AMZTS",
+  "DOI": "10.1093/mnras/stx2687",
+  "title": "A Characteristic Scale for Cold Gas",
+  "abstract": "We \ufb01nd that clouds of optically-thin, pressure-con\ufb01ned gas are prone to fragmentation as they cool below \u223c 106 K. This fragmentation follows the lengthscale \u223c cs tcool, ultimately reaching very small scales (\u223c 0.1 pc/n) as they reach the temperature \u223c 104 K at which hydrogen recombines. While this lengthscale depends on the ambient pressure con\ufb01ning the clouds, we \ufb01nd that the column density through an individual fragment Ncloudlet \u223c 1017 cm\u22123 is essentially independent of environment; this column density represents a characteristic scale for atomic gas at 104 K. We therefore suggest that \u201cclouds\u201d of cold, atomic gas may in fact have the structure of a mist or a fog, composed of tiny fragments dispersed throughout the ambient medium. We show that this scale emerges in hydrodynamic simulations, and that the corresponding increase in the surface area may imply rapid entrainment of cold gas. We also apply it to a number of observational puzzles, including the large covering fraction of diffuse gas in galaxy halos, the broad line widths seen in quasar and AGN spectra, and the entrainment of cold gas in galactic winds. While our simulations make a number of assumptions and thus have associated uncertainties, we show that this characteristic scale is consistent with a number of observations, across a wide range of astrophysical environments. We discuss future steps for testing, improving, and extending our model.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "VedanthamPhinney2019",
+  "zotero_key": "PXL5ZSG3",
+  "DOI": "10.1093/mnras/sty2948",
+  "title": "Radio wave scattering by circumgalactic cool gas clumps",
+  "abstract": "We consider the effects of radio wave scattering by cool ionized clumps (T \u223c 104 K) in circumgalactic media (CGMs). The existence of such clumps is inferred from intervening quasar absorption systems, but has long been something of a theoretical mystery. We consider the implications for compact radio sources of the \u2018fog-like\u2019 two-phase model of the CGM recently proposed by McCourt et al. In this model, the CGM consists of a diffuse coronal gas (T 106 K) in pressure equilibrium with numerous 1 pc scale cool clumps or \u2018cloudlets\u2019 formed by shattering in a cooling instability. The areal \ufb01lling factor of the cloudlets is expected to exceed unity in 1011.5 M haloes, and the ensuing radio wave scattering is akin to that caused by turbulence in the Galactic warm ionized medium. If 30 per cent of cosmic baryons are in the CGM, we show that for a cool-gas volume fraction of fv \u223c 10\u22123, sources at zs \u223c 1 suffer angular broadening by \u223c15 \u03bcas and temporal broadening by \u223c1 ms at \u03bb = 30 cm, due to scattering by the clumps in intervening CGM. The former prediction will be dif\ufb01cult to test (the angular broadening will suppress Galactic scintillation only for <10 \u03bcJy compact synchrotron sources). However the latter prediction, of temporal broadening of localized fast radio bursts, can constrain the size and mass fraction of cool ionized gas clumps as a function of halo mass and redshift, and thus provides a test of the model proposed by McCourt et al.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Piffaretti2011",
+  "zotero_key": "JSYGFIVP",
+  "DOI": "10.1051/0004-6361/201015377",
+  "title": "The MCXC: a meta-catalogue of x-ray detected clusters of galaxies",
+  "abstract": "",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Tinker2008",
+  "zotero_key": "2N4U7XJK",
+  "DOI": "10.1086/591439",
+  "title": "Toward a halo mass function for precision cosmology: the limits of universality",
+  "abstract": "We measure the mass function of dark matter halos in a large set of collisionless cosmological simulations of \ufb02at \u039bCDM cosmology and investigate its evolution at z 2. Halos are identi\ufb01ed as isolated density peaks, and their masses are measured within a series of radii enclosing speci\ufb01c overdensities. We argue that these spherical overdensity masses are more directly linked to cluster observables than masses measured using the friends-of-friends algorithm (FOF), and are therefore preferable for accurate forecasts of halo abundances. Our simulation set allows us to calibrate the mass function at z = 0 for virial masses in the range 1011 h\u22121 M\u2299 \u2264 M \u2264 1015 h\u22121 M\u2299 to 5%. We derive \ufb01tting functions for the halo mass function in this mass range for a wide range of overdensities, both at z = 0 and earlier epochs. In addition to these formulae, which improve on previous approximations by 10-20%, our main \ufb01nding is that the mass function cannot be represented by a universal \ufb01tting function at this level of accuracy. The amplitude of the \u201cuniversal\u201d function decreases monotonically by \u2248 20 \u2212 50%, depending on the mass de\ufb01nition, from z = 0 to 2.5. We also \ufb01nd evidence for redshift evolution in the overall shape of the mass function.",
+  "matched_by": "doi"
+ },
+ {
+  "id": "Despali2016",
+  "zotero_key": "N4YNF5SX",
+  "DOI": "10.1093/mnras/stv2842",
+  "title": "The universality of the virial halo mass function and models for non-universality of other halo definitions",
+  "abstract": "",
+  "matched_by": "doi"
+ }
+]
