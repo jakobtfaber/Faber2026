@@ -1,0 +1,39 @@
+site_name: Faber2026 Analysis
+site_description: >-
+  Campaign analysis pages for Faber2026 (DM, ToA, scattering, scintillation, …).
+  Plot panels are SVG; prose and tables live in Markdown.
+
+docs_dir: .
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - content.code.copy
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+
+markdown_extensions:
+  - admonition
+  - tables
+  - footnotes
+  - attr_list
+  - md_in_html
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Overview: index.md
+  - DM:
+      - Window sweep (manual envelopes): dm/window-sweep.md
