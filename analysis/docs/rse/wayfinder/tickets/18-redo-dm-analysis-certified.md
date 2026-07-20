@@ -1,4 +1,4 @@
-# Stratum 2 — Redo the DM analysis on certified bytes (L1/L2)
+# Redo DM analysis (Measurements and Fits on certified Raw Data)
 
 - Type: `wayfinder:grilling` (HITL — figure-driven, casey-first calibration)
 - Status: open
@@ -7,10 +7,10 @@
 - Blocks: [19](19-redo-toa-analysis-certified.md), [20](20-rebuild-upchannelized-products.md), [21](21-redo-scattering-certified.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - **Carries forward ticket 16 (superseded) + its handoff:**
-  `docs/rse/specs/handoff-2026-07-19-14-56-scint-input-remediation-casey-dm-calibration.md`
+  `docs/rse/specs/handoff/handoff-2026-07-19-14-56-scint-input-remediation-casey-dm-calibration.md`
   — corrected-sign transform, sign-test recipe, disqualified peak-S/N metric,
   casey state (pick pending: 491.148 vs 491.178 vs finer strip;
-  decision figure `docs/rse/decks/casey-dm-calibration-2026-07-19/casey_dm_strip_CORRECTED.png`).
+  decision figure `docs/rse/decks/dm/casey-dm-calibration-2026-07-19/casey_dm_strip_CORRECTED.png`).
 
 ## Question
 

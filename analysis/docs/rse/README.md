@@ -9,7 +9,7 @@ under a role or science-strand folder below.
 |------|------|
 | `control/` | Execution control plane: program state, ledgers, registries, board |
 | `protocols/` | Standing protocols + append-only journal |
-| `certificates/` | Machine-checkable certification products (e.g. L0 JSON) |
+| `certificates/` | Machine-checkable certs for **Raw Data** / **Input Data Products** (JSON; filenames may still say `l0-`) |
 | `ops/` | Operator docs (knowledge base, review-status, …) |
 | `wayfinder/` | Wayfinder skill outputs (map + tickets); project store, not `.scratch/` |
 | `specs/` | **Markdown only** — workflow docs under prefix folders (see below) |
@@ -35,14 +35,14 @@ shared CSV inputs under repo-root `data/`.
 
 | File | Notes |
 |------|--------|
-| `verification-protocol.md` | CAS / science verification + data-integrity strata |
+| `verification-protocol.md` | Data chain + Equation/Calculation/Model/Fit/Reference/No-Context checks |
 | `journal-protocol.md` | Agent journal rules |
 | `journal.jsonl` | Append-only session journal (historical paths may be stale) |
 
 ## `certificates/`
 
-L0 (and later L1) certificate JSON products. New cert artifacts go here, not
-under `specs/` or `control/`.
+Certificate JSON for Raw Data and Input Data Products. New cert artifacts go
+here, not under `specs/` or `control/`.
 
 ## `decks/` by science strand
 

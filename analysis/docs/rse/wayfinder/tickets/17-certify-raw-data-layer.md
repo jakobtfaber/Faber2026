@@ -1,4 +1,4 @@
-# Stratum 1 — Certify the raw data layer (stratum 0)
+# Certify Raw Data (CHIME singlebeam voltages)
 
 - Type: `wayfinder:task` (agent-driven build + owner spot-check)
 - Status: **closed** (2026-07-19)
@@ -17,16 +17,23 @@ h17 at
 (checksums, lineage, host path; upstream CANFAR path recorded). Owner
 spot-check only.
 
-Full-resolution `.npy` cubes and upchannelized products are **not** raw —
-they are derived inputs (stratum 1). Any inventory of those products
+Full-resolution `.npy` cubes and upchannelized products are **not** Raw Data —
+they are **Input Data Products**. Any inventory of those products
 (including the draft `l0.*` registry rows / `l0-certificates.json` from the
-2026-07-19 mis-scoped pass) must be relabeled as derived-product
+2026-07-19 mis-scoped pass) must be relabeled as Input Data Product
 certificates, with applied dispersion measure and build provenance, not as
-raw-layer certification.
+Raw Data certification.
 
 ## Resolution
 
-Certified true Stratum 0 (L0) raw CHIME layer: 12 singlebeam HDF5 voltage files on h17 (`/data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam/singlebeam_<event_id>.h5`) with recorded CANFAR upstream paths. Generator: [`scripts/build_raw_voltage_certificates.py`](../../../scripts/build_raw_voltage_certificates.py); output: [`docs/rse/certificates/l0-raw-voltage-certificates.json`](../../certificates/l0-raw-voltage-certificates.json). Intensity `.npy` cubes and upchannelized products categorized as Stratum 1 derived inputs.
+**Raw Data** certified: 12 singlebeam HDF5 voltage files on h17
+(`/data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam/singlebeam_<event_id>.h5`)
+with recorded CANFAR upstream paths. Generator:
+[`scripts/build_raw_voltage_certificates.py`](../../../scripts/build_raw_voltage_certificates.py);
+output:
+[`docs/rse/certificates/l0-raw-voltage-certificates.json`](../../certificates/l0-raw-voltage-certificates.json)
+(filename keeps `l0-` for path stability). Intensity `.npy` / upchan =
+Input Data Products.
 
 ## Prior mis-scope (do not treat as resolution)
 
