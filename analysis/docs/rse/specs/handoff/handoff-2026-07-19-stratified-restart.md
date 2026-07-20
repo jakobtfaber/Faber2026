@@ -14,11 +14,10 @@ remains authoritative and is consumed by stratum 2)
 Owner strategic decision: repeated backtracking (three trust-reset waves,
 R5/R6 rejection, two failed remediations, one sign bug) had a single root
 cause — issues structured by analysis topic while trust flows along the
-data DAG. The cure is codified in **verification-protocol.md** as the
-**data chain** (Raw Data → Input Data Products → Measurements and Fits →
-Analyses and Interpretations → In-Manuscript Claims), plus per-burst data
-cards, input-authority table, executable convention tests, and mechanical
-downstream invalidation. All open work is restructured under it.
+data DAG. The cure is codified as **verification-protocol.md Tier 0**
+(data-integrity strata L0–L4, per-burst data cards, input-authority table,
+executable convention tests, mechanical downstream invalidation). All open
+work is restructured under it.
 
 ## The route (work strictly in this order)
 
@@ -29,7 +28,7 @@ downstream invalidation. All open work is restructured under it.
 | 3 | ticket 19 | TOA analysis redo on certified DMs | moderate |
 | 4 | ticket 20 | Upchan rebuild at adjudicated DMs + aggressive RFI + 12 hash-bound data cards | card approvals |
 | 5 | ticket 21 | Scattering re-anchor on certified inputs (folds free-α reporting + count remediation decisions) | moderate |
-| 6 | ticket 22 → 02 | Scintillation campaign re-run on certified Input Data Products → CHIME-method ratification | ratification grilling |
+| 6 | ticket 22 → 02 | Scintillation campaign re-run on certified L1 → CHIME-method ratification | ratification grilling |
 
 Map: `docs/rse/wayfinder/map-apj-submission.md` (resume pointer encodes the
 chain). Execution board: `docs/rse/control/BOARD.md`. Claim trust:

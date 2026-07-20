@@ -169,7 +169,7 @@
   "z_cl": 0.2,
   "z_host": 0.271
  },
- "plan": "docs/rse/specs/plan/plan-rm-cluster-bfield-repartition-2026-07-17.md",
+ "plan": "docs/rse/specs/plan-rm-cluster-bfield-repartition-2026-07-17.md",
  "repartition_mc": {
   "-0.1": {
    "b_host_corr_p16_p50_p84": [
