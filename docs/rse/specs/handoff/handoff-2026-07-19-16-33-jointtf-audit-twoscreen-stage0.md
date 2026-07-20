@@ -17,10 +17,10 @@
 | Two-screen decision → charter (owner chose A) | ✅ Complete | `charter-two-screen-forward-model-2026-07-18.md`; non-gating parallel lane; rung-1 = double-exp PBF, shared β, r=τ₂/τ₁, nested. |
 | Two-screen Stage-0 wedge-reproduction falsifier | ✅ Complete (verdict) / 🔄 write-up | **FAIL, wrong sign, 16/16 injection points positive**: r-grid (casey +0.17/+0.42/+0.56; wilhelm +0.90/+1.45/+1.68) + W/τ envelope sweep 0.1–10 (casey +0.25…+2.00 rail; wilhelm +1.42…+2.00 rail). Same-α mixing pushes apparent α ABOVE 4 — opposite the observed sub-4 wedges. No real-data two-screen fits ever run. Teammate owes: envelope numbers into `TWOSCREEN_FITTER_PROVENANCE.md` + two-screen lane PR (kernel currently local-only on h17). |
 | Rung-2 decision (independent β₂) | 📋 Owner decision PENDING | Only remaining mechanism that can flip the deformation sign. Charter §2 rung-2 clause; gate condition met. Owner has the framing in-chat; not yet answered. |
-| zach D3-vs-D4 (task #10) | ✅ Harvested | Fine pair (133/134) INVALID (off-window). v2 ladder 177–182 all RC=0: s2=10 D3→D4 MODE-JUMP (+1425, β 3.18→3.98) invalid; s2=100 mode-continuous prefers **C2D3** (D4−D3 −10.1). Owner D=4 not supported under v2. |
+| zach D3-vs-D4 (task #10) | ✅ Independently re-harvested / 📋 owner pending | Fine pair (133/134) INVALID (off-window). v2 ladder 177–182 all RC=0: s2=10 D3→D4 MODE-JUMP (+1425, β 3.18→3.98) invalid; s2=100 candidate is **C2D3** after structural rejection of a null-like D5 member. Owner adoption remains pending. |
 | t0-prior bug (root cause + fix) | ✅ Fix landed / 🔄 consequences | `build_priors` t0 half-width 2·max(τ,10) → ±20 ms priors campaign-wide. Fix = FLITS PR #205 (`_clamp_t0_priors_to_window`, all 5 spec variants, validated). Prior-spec v1/v2 split versioned in `COMPONENT_COUNT_LADDER_AUDIT.md`. |
 | Production off-window audit (12/12) | ✅ Complete | **2 production ghosts CONFIRMED by visual vet**: oran C2D1 (t0_C1=−5.2 ms, fluence ≈ real C2) and johndoeII C2D2 (t0_C1=−6.2 ms, fluence 26.2 vs real 8.4 — severe). 6 clean (casey, wilhelm, chromatica, freya, mahi, whitney_fine); isha edge-watch; phineas npz-unresolved; hamilton/zach TOA rows empty. TOA rows oran+johndoeII CHIME structure SUSPECT pending v2 re-runs. |
-| oran/johndoeII v2 audit re-runs | ✅ Harvested | Jobs 169–176 RC=0. **oran → C1D1** (ΔlnZ C2−C1 = −9.0 / +0.1; C2 ζ-null or runaway). **johndoeII → C1D2** (ΔlnZ −2.4 / −1.2; C2 ζ=90/757). Report: `validation-jointtf-v2-rerun-harvest-2026-07-19.md`. |
+| oran/johndoeII v2 audit re-runs | ✅ Independently re-harvested / 📋 owner pending | Jobs 169–176 RC=0. Evidence supports candidate drops: **oran → C1D1** and **johndoeII → C1D2**. Owner adoption and production changes remain pending. Report: `validation-jointtf-v2-rerun-harvest-2026-07-19.md`. |
 | hamilton probes (task #12-adjacent) | 🔄 Diagnosed | C5D1 rejected (−41, same floor mode). C4D2 flips hamilton to healthy corner (β=3.978, τ 19×) = whitney-twin pattern, but cross-mode ΔlnZ invalid → profiled-gain fallback needed. |
 | phineas C4D4 | 🔄 Diagnosed | Mode-trapped (β=3.018 floor vs production 4.043 healthy) → invalid; whole phineas neighbor story suspect until re-run under v2. |
 | TOA table + triptychs (task #6) | 📋 Blocked | On count verdicts + owner ratifications. |
@@ -46,12 +46,12 @@
 - **Prior-spec versioning:** v1 = ±20 ms t0 (ALL evidences landed before 2026-07-19); v2 = windowed (PR #205). NEVER cross-compare v1 and v2 lnZ. Stage-0 grid + envelope ran v1 (verified immaterial: single component injected at 30% of window).
 - **Snapshots:** `~/flits-runs/data/joint/_v1_preclamp_20260719/` (23–24 files, pre-overwrite); `_invalid_zachfine_offwindow_20260718/` (the invalid pair).
 - **Stage-0 products:** `~/flits-runs/data/twoscreen_stage0/*.json` (6 r-grid) + envelope-sweep logs `jtfts0_159–168`.
-- **In-flight at handoff:** jobs 180–182 (zach C2D5 arms) RUNNING; 169–179 DONE RC=0 unharvested. Check: `ssh h17 squeue`; results land in `~/flits-runs/data/joint/`. Teammate "joint-tf-fits" (SendMessage) has monitors armed and owns harvest→vet→verdict; messages CROSS frequently — always re-verify on disk.
+- **Historical state at 16:33 handoff; superseded:** jobs 180–182 were then RUNNING and 169–179 were unharvested. Jobs 169–182 later finished `RC=0` and were independently re-harvested in `validation-jointtf-v2-rerun-harvest-2026-07-19.md`. Count adoption remains owner-pending.
 
 ## Verification State / Known-Broken
 
 - **Adjudicated this session, verified on disk by team-lead:** Stage-0 16/16 wrong-sign; zach fine pair INVALID; oran/johndoeII ghosts (visual vets rendered by team-lead: zachfine_vet.png, ghost_vet.png — embedded in deck).
-- **Landed but UNADJUDICATED:** jobs 169–179 outputs (oran/johndoeII count-drops, zach D3/D4 v2). No verdicts exist yet; do not quote their numbers without mode-check + in-window check + visual vet.
+- **Historical state at 16:33 handoff; superseded:** jobs 169–179 were then unadjudicated. Jobs 169–182 now have an independent arithmetic, fit-window, artifact-hash, and visual re-harvest. Candidate dispositions exist; owner ratification and production changes do not.
 - **Not yet landed anywhere:** two-screen kernel code + `TWOSCREEN_FITTER_PROVENANCE.md` (h17 worktree local-only; teammate owes the lane PR). `build_toa_table.py` + `residual_check.py` deferred (entangled, land with task #6).
 - **Suspect until v2 re-adjudication:** oran + johndoeII TOA-row CHIME structure; phineas neighbor evidences (C4 +75/D4 +27); 29 higher-count diagnostics untestable without npz regen (list in audit doc).
 - **Separate lane in this working tree (PRESERVE, not this session's):** dirty `docs/rse/protocols/journal.jsonl` (shared append log — fine), `docs/rse/control/results-registry.toml`, `docs/rse/specs/handoff/handoff-2026-07-19-stratified-restart.md`, `docs/rse/wayfinder/*`, untracked `docs/rse/certificates/l0-certificates.json`, `scripts/build_l0_certificates.py`, `scripts/l0_conventions.py`, `tests/test_l0_axis_conventions.py` — the stratified-restructure/L0-certification lane (PR #145, merged eb09bb39, another session). Do not sweep into any commit from this lane.
@@ -67,7 +67,7 @@
 
 ## Action Items & Next Steps
 
-1. [x] Harvest + adjudicate jobs 169–182 — done 2026-07-19 (this resume): oran C1D1, johndoeII C1D2, zach C2D3@s2=100; vets in `_v2_harvest_20260719/`; audit section appended on h17.
+1. [x] Independently re-harvest jobs 169–182 — arithmetic, fit-window checks, hashes, and visual review complete. Candidate dispositions: oran C1D1, johndoeII C1D2, zach C2D3. Owner adoption remains pending; no production rewrite occurred.
 2. [ ] Verify teammate's two-screen lane PR when it lands (kernel + TWOSCREEN_FITTER_PROVENANCE.md with envelope table + v1-label clause) and the Stage-0 FAIL write-up; then update deck slide 6/15 with the envelope numbers. (Still local-only on h17 at harvest.)
 3. [ ] Put the rung-2 charter decision to the owner if unanswered (charter §2 rung-2 = independent β₂, Stage-0-first, ~6 injection fits; Stage-0 FAIL gate met).
 4. [ ] After owner ratifies count drops: hamilton profiled-gain fallback + whitney rail (task #12), phineas re-run under v2, then task #6 TOA table (oran/johndoeII rows per v2).

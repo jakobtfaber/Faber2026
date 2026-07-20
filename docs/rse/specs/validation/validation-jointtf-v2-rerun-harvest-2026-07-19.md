@@ -1,123 +1,150 @@
-# Validation: joint-TF v2 re-run harvest (jobs 169–182)
+# Validation: JointTF v2 re-run harvest, jobs 169–182
 
-Validated against handoff
-`docs/rse/specs/handoff/handoff-2026-07-19-16-33-jointtf-audit-twoscreen-stage0.md`
-and h17 audit
-`~/worktrees/joint-tf-fits/analysis/scattering-refit-2026-06/COMPONENT_COUNT_LADDER_AUDIT.md`
-at Faber2026 commit `8fc1179e` on 2026-07-19.
+> Independently re-harvested against
+> `handoff-2026-07-19-16-33-jointtf-audit-twoscreen-stage0.md` at Faber2026
+> commit `b5d593cd` on 2026-07-19. Remote evidence: h17 worktree `d292f4b`
+> plus dirty/untracked executed code. Prior-spec: v2 window-bounded t₀.
 
-**Prior-spec:** v2 windowed t₀ (FLITS PR #205). Never cross-compare lnZ with
-pre-2026-07-19 v1 evidence.
+## Overall Status: Candidate verdicts supported; owner adoption pending
+
+- Jobs: 14/14 present; 14/14 logs end `RC=0`.
+- Products: 14/14 JSON and sample-archive pairs present and hashed.
+- Fit-window check: every t₀ median and central interval is inside its band window.
+- Figures: both reviewed full-size; local copies match remote SHA-256 hashes.
+- Reproducibility: harvest reproducible; original fits not exactly rerunnable.
+- Owner gates: count adoption and rung 2 remain open. No production changes made.
 
 ## Implementation Status
 
-| Item | Claimed | Verified |
-|------|---------|----------|
-| Jobs 169–176 oran/johndoeII DONE RC=0 | handoff: landed unharvested | ✅ all 8 stdout `RC=0`; JSON+npz on disk |
-| Jobs 177–182 zach fine ladder DONE | handoff: 177–179 done, 180–182 running | ✅ all 6 DONE RC=0 (last 182 @ 17:53 PDT) |
-| Mode-check + in-window + ΔlnZ harvest | pending | ✅ this session (tables below) |
-| Visual structural vet | pending | ✅ `/tmp/v2_harvest_vet.png` → `~/flits-runs/data/joint/_v2_harvest_20260719/` |
-| Residual ladder vet (zach DSA) | pending | ✅ `zach_v2_ladder_vet.png` rendered; durable under `_v2_harvest_20260719/` |
-| Two-screen lane PR + envelope write-up | teammate owes | ❌ still local-only on h17 worktree; provenance §5 still says PENDING |
-| Rung-2 owner decision | pending | 📋 surfaced below |
+| Item | Status | Fresh evidence |
+|---|---|---|
+| Jobs 169–182 completion | Validated | All 14 endpoint logs end `RC=0`; queue empty at live check. |
+| Numerical harvest | Validated | Re-extracted from 14 JSON files; arithmetic below. |
+| Structural checks | Validated | All t₀ central intervals inside logged windows; ζ diagnostics extracted. |
+| Visual check | Validated, bounded | Both preserved PNGs reviewed; findings below. |
+| Count dispositions | Decision pending | Evidence supports candidates; owner has not adopted them. |
+| Original-fit reproducibility | Incomplete | No seeds; executed code includes modified and untracked files. |
+| Rung-1 two-screen closure | Incomplete | Separate provenance remains local-only on h17. |
+| Rung 2 | Not authorized | Explicit owner gate; no launch performed. |
 
 ## Automated Verification Results
 
-### Job inventory (fresh disk read, 2026-07-19)
+### Passing checks
 
-All outputs under `~/flits-runs/data/joint/`. Queue empty (`squeue` no jobs).
+- `python3 -m py_compile scripts/revalidate_jointtf_v2_harvest.py` — pass.
+- Fresh manifest generation over live SSH — 14 jobs; all return codes zero;
+  all JSON/sample pairs present; all t₀ medians and central intervals in-window.
+- `python3 -m json.tool .../manifest.json` — pass.
+- Six input arrays, six run configurations, 14 logs, 14 JSON files, 14 sample
+  archives, executed code, job scripts, and both figures are SHA-256 bound in
+  `docs/rse/decks/jointtf-v2-harvest-2026-07-19/manifest.json`.
 
-| Job | Burst | Config | lnZ | β | RC |
-|----:|-------|--------|----:|--:|:--:|
-| 169 | oran | C1D1 s2=10 | 13634.95 | 3.965 | 0 |
-| 170 | oran | C2D1 s2=10 | 13625.93 | 3.806 | 0 |
-| 171 | oran | C1D1 s2=100 | 13603.01 | 3.988 | 0 |
-| 172 | oran | C2D1 s2=100 | 13603.16 | 3.929 | 0 |
-| 173 | johndoeII | C1D2 s2=10 | 11725.69 | 3.799 | 0 |
-| 174 | johndoeII | C2D2 s2=10 | 11723.33 | 3.748 | 0 |
-| 175 | johndoeII | C1D2 s2=100 | 11679.91 | 3.866 | 0 |
-| 176 | johndoeII | C2D2 s2=100 | 11678.68 | 3.519 | 0 |
-| 177 | zach | C2D3 s2=10 fine | 25134.98 | 3.178 | 0 |
-| 178 | zach | C2D3 s2=100 fine | 25074.60 | 3.165 | 0 |
-| 179 | zach | C2D4 s2=10 fine | 26560.30 | 3.979 | 0 |
-| 180 | zach | C2D4 s2=100 fine | 25064.50 | 3.166 | 0 |
-| 181 | zach | C2D5 s2=10 fine | 26584.89 | 3.979 | 0 |
-| 182 | zach | C2D5 s2=100 fine | 25081.73 | 3.161 | 0 |
+### Fresh fit extraction
 
-### Count-step ΔlnZ (same prior-spec, same s2 only)
+| Job | Fit | lnZ ± fit error | β median | Return |
+|---:|---|---:|---:|:---:|
+| 169 | oran C1D1 s2=10 | 13634.947 ± 0.561 | 3.965 | 0 |
+| 170 | oran C2D1 s2=10 | 13625.933 ± 0.576 | 3.806 | 0 |
+| 171 | oran C1D1 s2=100 | 13603.009 ± 0.548 | 3.988 | 0 |
+| 172 | oran C2D1 s2=100 | 13603.158 ± 0.542 | 3.929 | 0 |
+| 173 | johndoeII C1D2 s2=10 | 11725.690 ± 0.612 | 3.799 | 0 |
+| 174 | johndoeII C2D2 s2=10 | 11723.327 ± 0.685 | 3.748 | 0 |
+| 175 | johndoeII C1D2 s2=100 | 11679.909 ± 0.641 | 3.866 | 0 |
+| 176 | johndoeII C2D2 s2=100 | 11678.678 ± 0.648 | 3.519 | 0 |
+| 177 | zach C2D3 s2=10 | 25134.978 ± 0.730 | 3.178 | 0 |
+| 178 | zach C2D3 s2=100 | 25074.597 ± 0.708 | 3.165 | 0 |
+| 179 | zach C2D4 s2=10 | 26560.305 ± 0.774 | 3.979 | 0 |
+| 180 | zach C2D4 s2=100 | 25064.495 ± 0.726 | 3.166 | 0 |
+| 181 | zach C2D5 s2=10 | 26584.890 ± 0.705 | 3.979 | 0 |
+| 182 | zach C2D5 s2=100 | 25081.728 ± 0.869 | 3.161 | 0 |
 
-| Step | ΔlnZ | Δβ | Mode-check | Adjudication |
-|------|-----:|----:|------------|--------------|
-| oran C2−C1 s2=10 | **−9.0** | 0.16 | mild β drift | **C1 wins** |
-| oran C2−C1 s2=100 | +0.1 | 0.06 | ok | null; C2 is ζ-runaway |
-| johndoeII C2−C1 s2=10 | **−2.4** | 0.05 | ok | **C1 wins** |
-| johndoeII C2−C1 s2=100 | **−1.2** | 0.35 | mode drift | **C1 wins**; C2 ζ=757 |
-| zach D4−D3 s2=10 | +1425.3 | **0.80** | **MODE JUMP** | **INVALID** count BF |
-| zach D5−D4 s2=10 | +24.6 | 0.00 | within ceiling family | not a D3 baseline |
-| zach D4−D3 s2=100 | **−10.1** | 0.00 | continuous β≈3.16 | **D3 preferred** |
-| zach D5−D3 s2=100 | +7.1 | 0.00 | continuous | weak; null high-ζ members remain |
+### Recomputed count steps
 
-### In-window / ghost structural check
+Uncertainty is the two reported lnZ errors added in quadrature. “β overlap” asks
+whether the two central β intervals overlap; it is a mode-continuity diagnostic,
+not a scientific acceptance rule by itself.
 
-| Burst | v1 ghost | v2 extra component | Verdict |
-|-------|----------|--------------------|---------|
-| oran C2 | t0_C1≈−5.2 ms off-window, fluence≈real | C2 t0 in-window; ζ=0.02 (s2=10) or **737** (s2=100) | ghost remediated → **C1D1** |
-| johndoeII C2 | t0_C1≈−6.2 ms, fluence 26 vs 8 | C2 ζ=**90** / **757** | ghost remediated → **C1D2** |
-| zach fine v1 | D1 at −8…−9 ms | all D t0 ∈ [0, 5.9] ms under v2 | off-window class fixed; count still not D4 |
-
-Every v2 fit still has at least one high-ζ DSA “null-like” member on zach (ζ∼170–450).
-That is residual model slack, not a clean extra physical pulse.
+| Step | ΔlnZ ± error | Δβ | β overlap | Evidence reading |
+|---|---:|---:|:---:|---|
+| oran C2−C1 s2=10 | −9.014 ± 0.804 | −0.160 | no | C2 disfavored; mode differs. |
+| oran C2−C1 s2=100 | +0.149 ± 0.771 | −0.059 | no | Null evidence; added C2 has ζ≈737. |
+| johndoeII C2−C1 s2=10 | −2.364 ± 0.919 | −0.051 | yes | C2 disfavored. |
+| johndoeII C2−C1 s2=100 | −1.231 ± 0.912 | −0.347 | no | C2 disfavored; mode differs; ζ≈757. |
+| zach D4−D3 s2=10 | +1425.327 ± 1.064 | +0.801 | no | Mode jump; invalid count comparison. |
+| zach D5−D4 s2=10 | +24.586 ± 1.047 | −0.000 | yes | Same ceiling-β family; not a D3 comparison. |
+| zach D4−D3 s2=100 | −10.102 ± 1.015 | +0.001 | yes | D4 disfavored. |
+| zach D5−D3 s2=100 | +7.130 ± 1.121 | −0.004 | yes | Numerical gain, but D5 contains a ζ≈337 null-like member. |
 
 ## Code Review Findings
 
-- v2 clamp (PR #205) did what it was meant to: no off-window t₀ medians in this wave.
-- Mode-trap class still active on zach s2=10 (ceiling β≈3.98 family with inflated lnZ).
-  Guardrail “screen params continuous across count step” kills the +1425 D4 claim.
-- Two-screen kernel + `TWOSCREEN_FITTER_PROVENANCE.md` still uncommitted on h17
-  detached worktree (`d292f4b` + local dirty); Stage-0 envelope table not yet in §5
-  (still “PENDING” despite 16/16 FAIL sealed in handoff).
+### What the evidence supports
+
+- v2 removed the off-window class: all component central t₀ intervals lie
+  inside the logged CHIME/FRB or DSA-110 fit windows.
+- oran: C2 loses strongly on s2=10 and is null on s2=100 with a high-ζ extra
+  component. Candidate disposition: C1D1.
+- johndoeII: C2 loses on both arms; its extra component has ζ≈90 or ζ≈757.
+  Candidate disposition: C1D2.
+- zach: s2=10 crosses β modes and cannot supply a count Bayes factor. On s2=100,
+  D4 loses to D3. D5 gains lnZ but includes a null-like member, failing the
+  resolved positive-power structural condition. Candidate disposition: C2D3.
+
+### Visual review
+
+- `v2_harvest_vet.png`: no plotted central interval crosses a window boundary.
+  High-ζ extra components are visible for oran, johndoeII, and every zach count.
+- `zach_v2_ladder_vet.png`: residual structure near the main pulse and the
+  3.5–4.5 ms cluster persists across D3/D4/D5. Added components do not produce
+  a clean, stable resolution; null-like components move between rungs.
+- The figures validate structural diagnostics only. They do not establish a
+  unique physical component count.
+
+### Reproducibility gaps
+
+- Dynesty was called without `rstate`; no seed appears in logs or JSON.
+- Executed paths are not commit-bound: `joint_tf_prep.py` and
+  `burstfit_joint.py` are modified; `run_joint_fit_zachfine.py` is untracked.
+- Current hashes and mtimes are captured, but cannot prove byte identity at job
+  start for those uncommitted paths.
+- The exact conda package list and input hashes are captured. No clean rerun was
+  attempted because missing seeds and non-versioned executed code prevent exact
+  reproduction; rerunning now would be a new stochastic experiment.
+- Therefore: existing-result harvest is reproducible; fit generation is not.
 
 ## Manual Testing Required
 
-1. **Owner: rung-2 charter decision** (charter §2–§3). Stage-0 FAIL wrong-sign on
-   rung-1 met the pre-registered gate. Options:
-   - **Charter rung-2** (independent β₂, Stage-0-first, ~6 injection fits, no real data
-     until Stage-0 PASS) — only remaining mechanism that can flip deformation sign.
-   - **Close two-screen lane** — accept elimination table as final for multi-screen
-     exponential tails at this campaign scope.
-2. Spot-check residual figure `zach_v2_ladder_vet.png` (cluster residuals remain;
-   not resolved by D4/D5). Structural harvest figure sufficient for count verdicts.
-3. Ratify production count drops (oran C1D1, johndoeII C1D2) before TOA table rewrite.
+1. Owner spot-check and ratify, reject, or defer the three candidate counts:
+   oran C1D1; johndoeII C1D2; zach C2D3.
+2. Reconstruct and commit the executed v2 code before any new fit wave. Add an
+   explicit sampler seed and persist it in each result.
+3. Independently close the rung-1 two-screen code/provenance lane. Its Stage-0
+   claim was not revalidated in this harvest.
+4. Separately decide whether to charter independent β₂. This validation does
+   not authorize rung 2.
 
 ## Recommendations
 
 ### Critical
-- Treat oran / johndoeII production C2 as **superseded ghosts**; rewrite TOA rows only
-  after owner ratifies count drops.
-- Do **not** publish zach s2=10 D4/D5 ΔlnZ; quote only mode-continuous s2=100 ladder.
+
+- Do not rewrite production or time-of-arrival tables before owner ratification.
+- Do not publish the zach s2=10 D4/D5 evidence steps.
+- Do not call jobs 169–182 exactly reproducible.
 
 ### Important
-- Land teammate two-screen PR: kernel + provenance with Stage-0 FAIL table (r-grid +
-  W/τ envelope, all positive bias) + v1-label clause.
-- Update jointtf-day2 deck slides 6 / 11 / 15 with harvest + Stage-0 envelope numbers.
-- Close task #10 as **D3 stands under v2 fine binning**.
+
+- Use the manifest and preserved figures as the evidence packet for owner review.
+- Land clean, versioned fitting code with seed capture before further production fits.
 
 ### Follow-up
-- hamilton profiled-gain fallback + whitney rail (task #12).
-- phineas re-run under v2 (neighbor story still suspect).
-- Task #6 TOA table once count verdicts ratified.
 
-## Verdicts (this harvest)
-
-1. **oran → C1D1** (drop C2).
-2. **johndoeII → C1D2** (drop C2).
-3. **zach fine ladder → C2D3** on s2=100; owner D=4 not supported under v2.
-4. **Stage-0 rung-1 FAIL** remains sealed; **rung-2 is the open owner decision**.
+- After owner count decisions: handle production-table changes in a separate lane.
+- Rung 2 remains a separate owner decision; no launch occurred here.
 
 ## References
 
-- `docs/rse/specs/handoff/handoff-2026-07-19-16-33-jointtf-audit-twoscreen-stage0.md`
-- `docs/rse/specs/notes/charter-two-screen-forward-model-2026-07-18.md`
-- `docs/rse/specs/notes/report-jointtf-mechanism-closure-2026-07-18.md`
-- h17: `COMPONENT_COUNT_LADDER_AUDIT.md` (append harvest section 2026-07-19)
-- h17 products: `~/flits-runs/data/joint/_v2_harvest_20260719/`
+- Recovery handoff: `../handoff/handoff-2026-07-19-23-24-jointtf-grok-harvest-revalidation.md`
+- Handoff: `../handoff/handoff-2026-07-19-16-33-jointtf-audit-twoscreen-stage0.md`
+- Decision: `../decision/decision-two-screen-charter-2026-07-18.md`
+- Evidence: `../../decks/jointtf-v2-harvest-2026-07-19/README.md`
+- Manifest: `../../decks/jointtf-v2-harvest-2026-07-19/manifest.json`
+- Remote audit: h17 `COMPONENT_COUNT_LADDER_AUDIT.md`, lines 132–180

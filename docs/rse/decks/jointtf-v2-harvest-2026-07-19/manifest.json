@@ -1,0 +1,2774 @@
+{
+  "checks": {
+    "all_json_npz_present": true,
+    "all_rc_zero": true,
+    "all_t0_central_intervals_in_window": true,
+    "all_t0_medians_in_window": true,
+    "jobs_present": 14
+  },
+  "code": {
+    "files_at_revalidation": [
+      {
+        "mtime_utc": "2026-07-17T11:05:54.673420+00:00",
+        "path": "/home/ubuntu/worktrees/joint-tf-fits/analysis/scattering-refit-2026-06/run_joint_fit.py",
+        "sha256": "55a6333fbc81ff0a993837f1000891254692bcaedd1dc546454e6cd994516d26",
+        "size_bytes": 16661
+      },
+      {
+        "mtime_utc": "2026-07-18T20:02:27.859660+00:00",
+        "path": "/home/ubuntu/worktrees/joint-tf-fits/analysis/scattering-refit-2026-06/run_joint_fit_zachfine.py",
+        "sha256": "88c61aa8d61dabf68dd5ab7192938f9459a47ed0a07d2a9fdf97cd78b0395194",
+        "size_bytes": 19663
+      },
+      {
+        "mtime_utc": "2026-07-17T20:25:10+00:00",
+        "path": "/home/ubuntu/worktrees/joint-tf-fits/analysis/scattering-refit-2026-06/joint_tf_prep.py",
+        "sha256": "86019f2ed07cfe215a18811450403cbdb9bce627773b2e9eea0c1ef8a82e3395",
+        "size_bytes": 24020
+      },
+      {
+        "mtime_utc": "2026-07-19T21:34:45.166827+00:00",
+        "path": "/home/ubuntu/worktrees/joint-tf-fits/scattering/scat_analysis/burstfit_joint.py",
+        "sha256": "347d07a0d11e323952b5f3acfe1e45b8050c6548787263143b79b79bb11aaf90",
+        "size_bytes": 51268
+      },
+      {
+        "mtime_utc": "2026-07-17T23:02:41.027211+00:00",
+        "path": "/home/ubuntu/flits-runs/jobs/fit.sbatch",
+        "sha256": "6f024921d81c5ad927c407a4c863d085f34a963903d6e296920887658bee400b",
+        "size_bytes": 993
+      },
+      {
+        "mtime_utc": "2026-07-18T19:35:36.704268+00:00",
+        "path": "/home/ubuntu/flits-runs/jobs/fit_zachfine.sbatch",
+        "sha256": "35fbe140018117333d2a6e1093ade4330bcfe7257f30f834ae19531443447f8a",
+        "size_bytes": 1384
+      }
+    ],
+    "git_sha": "d292f4b91ef02dfd120a816c015fbb67cb15261f",
+    "production_sampler_has_rstate": false,
+    "seed_status": "ABSENT: no seed in logs/results; production sampler call has no rstate",
+    "tracked_state_for_executed_paths": [
+      " M analysis/scattering-refit-2026-06/joint_tf_prep.py",
+      "M  scattering/scat_analysis/burstfit_joint.py",
+      "?? analysis/scattering-refit-2026-06/run_joint_fit_zachfine.py"
+    ],
+    "warning": "Hashes describe files at revalidation. Uncommitted files are not proven immutable since execution.",
+    "worktree": "/home/ubuntu/worktrees/joint-tf-fits"
+  },
+  "comparisons": [
+    {
+      "base_job": 169,
+      "beta_central_intervals_overlap": false,
+      "delta_beta_median": -0.1596029851484202,
+      "delta_log_evidence": -9.01434582915499,
+      "delta_log_evidence_err_quadrature": 0.8044277516206807,
+      "label": "oran C2-C1 s2=10",
+      "new_job": 170
+    },
+    {
+      "base_job": 171,
+      "beta_central_intervals_overlap": false,
+      "delta_beta_median": -0.05866088097997357,
+      "delta_log_evidence": 0.14870606757540372,
+      "delta_log_evidence_err_quadrature": 0.7710404695501036,
+      "label": "oran C2-C1 s2=100",
+      "new_job": 172
+    },
+    {
+      "base_job": 173,
+      "beta_central_intervals_overlap": true,
+      "delta_beta_median": -0.050848957110224635,
+      "delta_log_evidence": -2.363507975709581,
+      "delta_log_evidence_err_quadrature": 0.9189694461231617,
+      "label": "johndoeII C2-C1 s2=10",
+      "new_job": 174
+    },
+    {
+      "base_job": 175,
+      "beta_central_intervals_overlap": false,
+      "delta_beta_median": -0.346511685870841,
+      "delta_log_evidence": -1.2312976428074762,
+      "delta_log_evidence_err_quadrature": 0.911508530384138,
+      "label": "johndoeII C2-C1 s2=100",
+      "new_job": 176
+    },
+    {
+      "base_job": 177,
+      "beta_central_intervals_overlap": false,
+      "delta_beta_median": 0.8010074053484848,
+      "delta_log_evidence": 1425.3269324076464,
+      "delta_log_evidence_err_quadrature": 1.0642712846557891,
+      "label": "zach D4-D3 s2=10",
+      "new_job": 179
+    },
+    {
+      "base_job": 179,
+      "beta_central_intervals_overlap": true,
+      "delta_beta_median": -5.148071851079905e-05,
+      "delta_log_evidence": 24.58551570631971,
+      "delta_log_evidence_err_quadrature": 1.0469173514125876,
+      "label": "zach D5-D4 s2=10",
+      "new_job": 181
+    },
+    {
+      "base_job": 177,
+      "beta_central_intervals_overlap": false,
+      "delta_beta_median": 0.800955924629974,
+      "delta_log_evidence": 1449.912448113966,
+      "delta_log_evidence_err_quadrature": 1.0150490372560235,
+      "label": "zach D5-D3 s2=10",
+      "new_job": 181
+    },
+    {
+      "base_job": 178,
+      "beta_central_intervals_overlap": true,
+      "delta_beta_median": 0.0006847535959941808,
+      "delta_log_evidence": -10.102266464396962,
+      "delta_log_evidence_err_quadrature": 1.0146424371464398,
+      "label": "zach D4-D3 s2=100",
+      "new_job": 180
+    },
+    {
+      "base_job": 180,
+      "beta_central_intervals_overlap": true,
+      "delta_beta_median": -0.004714619078191262,
+      "delta_log_evidence": 17.232456962246943,
+      "delta_log_evidence_err_quadrature": 1.1322919682364971,
+      "label": "zach D5-D4 s2=100",
+      "new_job": 182
+    },
+    {
+      "base_job": 178,
+      "beta_central_intervals_overlap": true,
+      "delta_beta_median": -0.004029865482197081,
+      "delta_log_evidence": 7.130190497849981,
+      "delta_log_evidence_err_quadrature": 1.1208960069556335,
+      "label": "zach D5-D3 s2=100",
+      "new_job": 182
+    }
+  ],
+  "configs": [
+    {
+      "mtime_utc": "2026-07-17T11:08:58.141469+00:00",
+      "path": "/home/ubuntu/flits-runs/configs/oran_chime_run.yaml",
+      "sha256": "56321a767a61d7cfa672af59ec3111c130f1fb11465b94a7ed46b1a415b8c6c3",
+      "size_bytes": 514
+    },
+    {
+      "mtime_utc": "2026-07-17T11:08:58.141469+00:00",
+      "path": "/home/ubuntu/flits-runs/configs/oran_dsa_run.yaml",
+      "sha256": "f91edb28079d4dd486425e2109bdd401f3a0c60ac846bf9a6113b7153969ba39",
+      "size_bytes": 516
+    },
+    {
+      "mtime_utc": "2026-07-17T11:08:58.141469+00:00",
+      "path": "/home/ubuntu/flits-runs/configs/johndoeII_chime_run.yaml",
+      "sha256": "9cb9fd17b60f7eced8d4833f5e5060a0ec621f41c1603fecb86d5fdd0e15291f",
+      "size_bytes": 764
+    },
+    {
+      "mtime_utc": "2026-07-17T11:08:58.141469+00:00",
+      "path": "/home/ubuntu/flits-runs/configs/johndoeII_dsa_run.yaml",
+      "sha256": "1149557245442e106e6255c18928bd5628ac8b1075a6aacc1c608419d1e5f036",
+      "size_bytes": 765
+    },
+    {
+      "mtime_utc": "2026-07-17T11:08:58.141469+00:00",
+      "path": "/home/ubuntu/flits-runs/configs/zach_chime_run.yaml",
+      "sha256": "e85bb5e1085e5674b27317fb5a9fcb3fe8f46115c4e1176bcd1c038985491b21",
+      "size_bytes": 744
+    },
+    {
+      "mtime_utc": "2026-07-17T11:08:58.141469+00:00",
+      "path": "/home/ubuntu/flits-runs/configs/zach_dsa_run.yaml",
+      "sha256": "be1a67ea388e809dcc12cebc2c0af56559f0b7f717be36a3234101f29e7d14d3",
+      "size_bytes": 750
+    }
+  ],
+  "environment": {
+    "conda_explicit": [
+      "# This file may be used to create an environment using:",
+      "# $ conda create --name <env> --file <this file>",
+      "# platform: linux-64",
+      "@EXPLICIT",
+      "https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2025.1.31-hbcca054_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libgomp-15.2.0-he0feb66_19.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libzlib-1.3.2-h25fd6f3_2.conda",
+      "https://conda.anaconda.org/conda-forge/noarch/tzdata-2025c-hc9c84f9_1.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/_openmp_mutex-4.5-20_gnu.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/ld_impl_linux-64-2.45.1-default_hbd61a6d_102.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libgcc-15.2.0-he0feb66_19.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/bzip2-1.0.8-hda65f42_9.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libexpat-2.8.1-hecca717_1.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libffi-3.5.2-h3435931_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libgcc-ng-15.2.0-h69a702a_19.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/liblzma-5.8.3-hb03c661_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libnsl-2.0.1-hb9d3cd8_1.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.53.3-h0c1763c_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libuuid-2.42.2-h5347b49_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/ncurses-6.6-hdb14827_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/openssl-3.6.3-h35e630c_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/tk-8.6.13-noxft_h366c992_103.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/libxcrypt-4.4.36-hd590300_1.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/readline-8.3-h853b02a_0.conda",
+      "https://conda.anaconda.org/conda-forge/linux-64/python-3.12.13-hd63d673_0_cpython.conda",
+      "https://conda.anaconda.org/conda-forge/noarch/packaging-26.2-pyhc364b38_0.conda",
+      "https://conda.anaconda.org/conda-forge/noarch/setuptools-83.0.0-pyh332efcf_0.conda",
+      "https://conda.anaconda.org/conda-forge/noarch/wheel-0.47.0-pyhd8ed1ab_0.conda",
+      "https://conda.anaconda.org/conda-forge/noarch/pip-26.1.2-pyh8b19718_0.conda"
+    ],
+    "conda_explicit_sha256": "328b9ee096904ee97473ccfbbf2d6dc1fb47d788ab4759a3884cfab733a804d2",
+    "cpu_count": 40,
+    "cpu_model": "Intel(R) Xeon(R) Silver 4210 CPU @ 2.20GHz",
+    "platform": "Linux-5.4.0-216-generic-x86_64-with-glibc2.31",
+    "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:50:00) [GCC 14.3.0]",
+    "python_distributions": {
+      "PyYAML": "6.0.3",
+      "Pygments": "2.20.0",
+      "SciencePlots": "2.2.2",
+      "SecretStorage": "3.5.0",
+      "adjustText": "1.4.0",
+      "annotated-types": "0.7.0",
+      "asteval": "1.0.9",
+      "astropy": "8.0.1",
+      "astropy-iers-data": "0.2026.7.13.0.54.2",
+      "astroquery": "0.4.11",
+      "asttokens": "3.0.2",
+      "beautifulsoup4": "4.15.0",
+      "certifi": "2026.6.17",
+      "cffi": "2.1.0",
+      "chainconsumer": "1.3.0",
+      "charset-normalizer": "3.4.9",
+      "comm": "0.2.3",
+      "contourpy": "1.3.3",
+      "corner": "2.3.0",
+      "cryptography": "49.0.0",
+      "cycler": "0.12.1",
+      "decorator": "5.3.1",
+      "dill": "0.4.1",
+      "dynesty": "3.0.0",
+      "emcee": "3.1.6",
+      "executing": "2.2.1",
+      "flits": "0.1.0",
+      "fonttools": "4.63.0",
+      "h5py": "3.16.0",
+      "html5lib": "1.1",
+      "idna": "3.18",
+      "ipython": "9.15.0",
+      "ipython_pygments_lexers": "1.1.1",
+      "ipywidgets": "8.1.8",
+      "jaraco.classes": "3.4.0",
+      "jaraco.context": "6.1.2",
+      "jaraco.functools": "4.5.0",
+      "jedi": "0.20.0",
+      "jeepney": "0.9.0",
+      "jupyterlab_widgets": "3.0.16",
+      "keyring": "25.7.0",
+      "kiwisolver": "1.5.0",
+      "llvmlite": "0.48.0",
+      "lmfit": "1.3.4",
+      "matplotlib": "3.10.9",
+      "matplotlib-inline": "0.2.2",
+      "more-itertools": "11.1.0",
+      "numba": "0.66.0",
+      "numpy": "2.4.6",
+      "packaging": "26.2",
+      "pandas": "2.3.3",
+      "parso": "0.8.7",
+      "patsy": "1.0.2",
+      "pexpect": "4.9.0",
+      "pillow": "12.3.0",
+      "pip": "26.1.2",
+      "prompt_toolkit": "3.0.52",
+      "psutil": "7.2.2",
+      "ptyprocess": "0.7.0",
+      "pure_eval": "0.2.3",
+      "py-spy": "0.4.2",
+      "pycparser": "3.0",
+      "pydantic": "2.13.4",
+      "pydantic_core": "2.46.4",
+      "pyerfa": "2.0.1.5",
+      "pyparsing": "3.3.2",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.2",
+      "pyvo": "1.9.1",
+      "requests": "2.34.2",
+      "scipy": "1.18.0",
+      "setuptools": "83.0.0",
+      "six": "1.17.0",
+      "soupsieve": "2.8.4",
+      "stack-data": "0.6.3",
+      "statsmodels": "0.14.6",
+      "tqdm": "4.68.4",
+      "traitlets": "5.15.1",
+      "typing-inspection": "0.4.2",
+      "typing_extensions": "4.16.0",
+      "tzdata": "2026.3",
+      "uncertainties": "3.2.3",
+      "urllib3": "2.7.0",
+      "wcwidth": "0.8.2",
+      "webencodings": "0.5.1",
+      "wheel": "0.47.0",
+      "widgetsnbextension": "4.0.15"
+    }
+  },
+  "figures": [
+    {
+      "mtime_utc": "2026-07-20T05:07:40.860573+00:00",
+      "path": "/home/ubuntu/flits-runs/data/joint/_v2_harvest_20260719/v2_harvest_vet.png",
+      "sha256": "9c01505c9ec8f9600d3d69142a6312952ab2dc7ec8ebcb385ee5e98cf6f06169",
+      "size_bytes": 299134
+    },
+    {
+      "mtime_utc": "2026-07-20T05:07:40.860573+00:00",
+      "path": "/home/ubuntu/flits-runs/data/joint/_v2_harvest_20260719/zach_v2_ladder_vet.png",
+      "sha256": "3cddc2f96afeb75dc3a71418f414d289cb05680cd1acfcaeb2b87fdbf0c317fd",
+      "size_bytes": 385663
+    }
+  ],
+  "generated_utc": "2026-07-20T06:46:45.045096+00:00",
+  "host": {
+    "hostname": "lxd110h17",
+    "user": "ubuntu"
+  },
+  "inputs": [
+    {
+      "mtime_utc": "2026-06-23T01:33:57+00:00",
+      "path": "/home/ubuntu/flits-runs/data/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
+      "sha256": "73ca14a4d467e7a612cb5c8a9df5d1b17e4dba448e23710663dd1195b0f12092",
+      "size_bytes": 131072128
+    },
+    {
+      "mtime_utc": "2026-06-23T01:27:56+00:00",
+      "path": "/home/ubuntu/flits-runs/data/dsa/oran_dsa_I_396_882_2500b_cntr_bpc.npy",
+      "sha256": "09ae92f6434da213487ffc5f97ff22109fd883b0297b495c593334933e6fb3d0",
+      "size_bytes": 122880128
+    },
+    {
+      "mtime_utc": "2026-06-23T01:37:34+00:00",
+      "path": "/home/ubuntu/flits-runs/data/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy",
+      "sha256": "d5f35c8b94de82dbc080938bf8e2ce4b725d189d8e5c66ef83b3ca6c84edede6",
+      "size_bytes": 131072128
+    },
+    {
+      "mtime_utc": "2026-06-23T01:23:33+00:00",
+      "path": "/home/ubuntu/flits-runs/data/dsa/johndoeII_dsa_I_696_506_2500b_cntr_bpc.npy",
+      "sha256": "92279ca8d987e5b3b93582caf2f7116c2ac1ac4a265483b9f483aadbc53f1051",
+      "size_bytes": 122880128
+    },
+    {
+      "mtime_utc": "2026-06-23T01:41:02+00:00",
+      "path": "/home/ubuntu/flits-runs/data/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
+      "sha256": "bf317648879936ce4d019f116c17e0c33a22042610e37bddceef0ba48fe40deb",
+      "size_bytes": 131072128
+    },
+    {
+      "mtime_utc": "2026-06-23T01:22:35+00:00",
+      "path": "/home/ubuntu/flits-runs/data/dsa/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
+      "sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01",
+      "size_bytes": 122880128
+    }
+  ],
+  "jobs": [
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:01:00.202441+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_169.out",
+          "sha256": "dadddbd6eedb7e96e5e5e29bac072bdf496ceb953d206d5a8ccdf17e3e8e8e4b",
+          "size_bytes": 702
+        },
+        {
+          "mtime_utc": "2026-07-19T22:00:59.622441+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_fit_C1D1_s2-10.json",
+          "sha256": "c0183ec0f2770fce4f966162209f0a98b35fae66135a15e972b87f06661e1e0f",
+          "size_bytes": 2674
+        },
+        {
+          "mtime_utc": "2026-07-19T22:00:59.718441+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_samples_C1D1_s2-10.npz",
+          "sha256": "896d78f8d7d85d7075202792f72ec6f5fa48cbdc901136cc47067e80f6d67f11",
+          "size_bytes": 1322075
+        },
+        {
+          "mtime_utc": "2026-07-19T22:00:59.470441+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_169.err",
+          "sha256": "0a6f489c25ac25adb7caf034aa8d72f7b00b5eeb7fe084ff5c11001103c12e7e",
+          "size_bytes": 1631007
+        }
+      ],
+      "burst": "oran",
+      "config": "C1D1",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.023842595439273,
+          4.035261449106751,
+          4.061045435583249
+        ],
+        "beta": [
+          3.940762649353265,
+          3.965349464932648,
+          3.9764382907119336
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.8
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.4
+            ]
+          }
+        },
+        "log_evidence": 13634.947238954459,
+        "log_evidence_err": 0.5613409996002765,
+        "ncall": 523044,
+        "t0_ms": {
+          "t0_C1": [
+            8.748386939323852,
+            8.907526670145218,
+            9.07197773880964
+          ],
+          "t0_D1": [
+            11.631642204026566,
+            11.632470323078996,
+            11.633289621587197
+          ]
+        },
+        "tau_1ghz_ms": [
+          1.078592436583011,
+          1.1271761110718361,
+          1.1775659886443077
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.9678560148580431,
+            1.1379506113609594,
+            1.3100947223022053
+          ],
+          "zeta_D1": [
+            0.0004972590686429431,
+            0.002143030504128732,
+            0.0031509367162630727
+          ]
+        }
+      },
+      "gain_s2": 10,
+      "job_id": 169,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 327.7,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 6.0,
+            "time_factor": 128,
+            "window_ms": 33.8
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 11.0,
+            "time_factor": 2,
+            "window_ms": 33.4
+          }
+        },
+        "done": "DONE BURST=oran RC=0 WALL_SEC=1508 END=2026-07-19T15:01:00-07:00",
+        "end": "2026-07-19T15:01:00-07:00",
+        "extra_args": "--components-C 1 --components-D 1 --force-multi --gain-s2 10",
+        "header": "HOST=lxd110h17 JOB=169 START=2026-07-19T14:35:52-07:00 BURST=oran NLIVE=400 EARGS=[--components-C 1 --components-D 1 --force-multi --gain-s2 10]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:52-07:00",
+        "wall_seconds": 1508
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:05:04.730400+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_170.out",
+          "sha256": "d1e9d87d9ba7c6495e5a930a0e44b6c9dee62dacbe54564faf40d5084f53c8fb",
+          "size_bytes": 710
+        },
+        {
+          "mtime_utc": "2026-07-19T22:05:04.186400+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_fit_C2D1_s2-10.json",
+          "sha256": "c071914bc36a209c1b3e7044c5c9c94326ab654405736b80016849bbd4366756",
+          "size_bytes": 3084
+        },
+        {
+          "mtime_utc": "2026-07-19T22:05:04.282400+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_samples_C2D1_s2-10.npz",
+          "sha256": "67f24066a8bb7e272b48e03c014b07f6aca23b8e42fcb8d903ecde4bc1d9b4d8",
+          "size_bytes": 1585994
+        },
+        {
+          "mtime_utc": "2026-07-19T22:05:04.078400+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_170.err",
+          "sha256": "dba7aab77ddc20606db1f1d3727c499e002a108aa00a0c6172c846269feba874",
+          "size_bytes": 1728611
+        }
+      ],
+      "burst": "oran",
+      "config": "C2D1",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.09732738619141,
+          4.215150379513943,
+          4.220442527147953
+        ],
+        "beta": [
+          3.8014427084216402,
+          3.805746479784228,
+          3.907189133339693
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.8
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.8
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.4
+            ]
+          }
+        },
+        "log_evidence": 13625.932893125304,
+        "log_evidence_err": 0.5761946630655875,
+        "ncall": 541610,
+        "t0_ms": {
+          "t0_C1": [
+            8.762993492805421,
+            8.995307757365115,
+            9.06621480578882
+          ],
+          "t0_C2": [
+            16.62440109090712,
+            16.646435329201957,
+            17.14811416504859
+          ],
+          "t0_D1": [
+            11.629748026524378,
+            11.631425499650538,
+            11.649273460181437
+          ]
+        },
+        "tau_1ghz_ms": [
+          1.080473676419647,
+          1.099308800359534,
+          1.1080604173358384
+        ],
+        "zeta": {
+          "zeta_C1": [
+            1.101056693631049,
+            1.2505576264393727,
+            1.433149617066713
+          ],
+          "zeta_C2": [
+            0.017015681227859673,
+            0.0208075512356117,
+            0.036911574647361285
+          ],
+          "zeta_D1": [
+            0.05217453744931089,
+            0.05324458591323778,
+            0.061021670150974795
+          ]
+        }
+      },
+      "gain_s2": 10,
+      "job_id": 170,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 327.7,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 6.0,
+            "time_factor": 128,
+            "window_ms": 33.8
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 11.0,
+            "time_factor": 2,
+            "window_ms": 33.4
+          }
+        },
+        "done": "DONE BURST=oran RC=0 WALL_SEC=1752 END=2026-07-19T15:05:04-07:00",
+        "end": "2026-07-19T15:05:04-07:00",
+        "extra_args": "--components-C 2 --components-D 1 --gain-s2 10",
+        "header": "HOST=lxd110h17 JOB=170 START=2026-07-19T14:35:52-07:00 BURST=oran NLIVE=400 EARGS=[--components-C 2 --components-D 1 --gain-s2 10]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:52-07:00",
+        "wall_seconds": 1752
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T21:55:42.514422+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_171.out",
+          "sha256": "909bf5190ed08ff3bca76b74d355e109e746496a9c818a4ffec467f50708a423",
+          "size_bytes": 727
+        },
+        {
+          "mtime_utc": "2026-07-19T21:55:41.978422+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_fit_C1D1_s2-100.json",
+          "sha256": "bdfbb3a49b2427db7fbdff20c67fe14c4d94396da503c06d5dda220a6e4cd609",
+          "size_bytes": 2586
+        },
+        {
+          "mtime_utc": "2026-07-19T21:55:42.050422+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_samples_C1D1_s2-100.npz",
+          "sha256": "e5ffdd345b0576d32f168d23e74310de9e25e95b6661def2e570a9bb1e3a61bf",
+          "size_bytes": 1190357
+        },
+        {
+          "mtime_utc": "2026-07-19T21:55:41.890422+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_171.err",
+          "sha256": "95f8e408ad8320769ec425bc7af4cf8aef4a2af940d0d676057b4291d552582e",
+          "size_bytes": 1418437
+        }
+      ],
+      "burst": "oran",
+      "config": "C1D1",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.0,
+          4.0,
+          4.029536342273624
+        ],
+        "beta": [
+          3.9708935073904263,
+          3.9875661891811602,
+          3.9959580362777825
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.8
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.4
+            ]
+          }
+        },
+        "log_evidence": 13603.009177015148,
+        "log_evidence_err": 0.548291387767624,
+        "ncall": 466622,
+        "t0_ms": {
+          "t0_C1": [
+            8.89473553401887,
+            9.072859450978674,
+            9.254227651926787
+          ],
+          "t0_D1": [
+            11.599638940608102,
+            11.617069335955286,
+            11.639890755454935
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.8562933666394015,
+          0.9217613716033976,
+          0.9847668148093051
+        ],
+        "zeta": {
+          "zeta_C1": [
+            1.2814598153274401,
+            1.4373087013920134,
+            1.576860355553069
+          ],
+          "zeta_D1": [
+            0.06976787140263804,
+            0.08137339555212747,
+            0.0930069440255011
+          ]
+        }
+      },
+      "gain_s2": 100,
+      "job_id": 171,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 327.7,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 6.0,
+            "time_factor": 128,
+            "window_ms": 33.8
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 11.0,
+            "time_factor": 2,
+            "window_ms": 33.4
+          }
+        },
+        "done": "DONE BURST=oran RC=0 WALL_SEC=1190 END=2026-07-19T14:55:42-07:00",
+        "end": "2026-07-19T14:55:42-07:00",
+        "extra_args": "--components-C 1 --components-D 1 --force-multi --gain-s2 100",
+        "header": "HOST=lxd110h17 JOB=171 START=2026-07-19T14:35:52-07:00 BURST=oran NLIVE=400 EARGS=[--components-C 1 --components-D 1 --force-multi --gain-s2 100]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:52-07:00",
+        "wall_seconds": 1190
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:03:55.402416+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_172.out",
+          "sha256": "ae2bf5464c3aa84a24d471170726c0550c7d6611e4050b64cacd853544416e8c",
+          "size_bytes": 712
+        },
+        {
+          "mtime_utc": "2026-07-19T22:03:54.890416+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_fit_C2D1_s2-100.json",
+          "sha256": "ff0adceb8af34aa6d336511ce8bd091097cdd58e9fc8c99f795992dbc8eac7ed",
+          "size_bytes": 3061
+        },
+        {
+          "mtime_utc": "2026-07-19T22:03:54.978415+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/oran_joint_samples_C2D1_s2-100.npz",
+          "sha256": "b55c8a8bf21d3cbef3a513b5ede98dd0bfcb3210fad7a1ef95bb53a3e4662a72",
+          "size_bytes": 1534743
+        },
+        {
+          "mtime_utc": "2026-07-19T22:03:54.770416+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_172.err",
+          "sha256": "4dd6cb29a8164b8d7e04a246d11049e983e2ec0d79e779fcaf1d3b9aaba92e57",
+          "size_bytes": 1655165
+        }
+      ],
+      "burst": "oran",
+      "config": "C2D1",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.029757876311439,
+          4.073715066775479,
+          4.154386161921562
+        ],
+        "beta": [
+          3.8566773546448516,
+          3.9289053082011867,
+          3.970678397991473
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.8
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.8
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              33.4
+            ]
+          }
+        },
+        "log_evidence": 13603.157883082724,
+        "log_evidence_err": 0.5421069634157979,
+        "ncall": 521277,
+        "t0_ms": {
+          "t0_C1": [
+            8.86671665965994,
+            9.039046020500761,
+            9.217257308407323
+          ],
+          "t0_C2": [
+            13.882547983416167,
+            19.000404241521842,
+            24.38556364780726
+          ],
+          "t0_D1": [
+            11.618490281710475,
+            11.635609600964017,
+            11.650578485337794
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.9510826093408049,
+          1.0241051275564286,
+          1.108290846411908
+        ],
+        "zeta": {
+          "zeta_C1": [
+            1.3012984449450056,
+            1.4568094736539943,
+            1.595269097786918
+          ],
+          "zeta_C2": [
+            558.309909174878,
+            736.8950752415434,
+            910.2414863220772
+          ],
+          "zeta_D1": [
+            0.06310048844279376,
+            0.07304896047383042,
+            0.08501069221290548
+          ]
+        }
+      },
+      "gain_s2": 100,
+      "job_id": 172,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 327.7,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 6.0,
+            "time_factor": 128,
+            "window_ms": 33.8
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 11.0,
+            "time_factor": 2,
+            "window_ms": 33.4
+          }
+        },
+        "done": "DONE BURST=oran RC=0 WALL_SEC=1683 END=2026-07-19T15:03:55-07:00",
+        "end": "2026-07-19T15:03:55-07:00",
+        "extra_args": "--components-C 2 --components-D 1 --gain-s2 100",
+        "header": "HOST=lxd110h17 JOB=172 START=2026-07-19T14:35:52-07:00 BURST=oran NLIVE=400 EARGS=[--components-C 2 --components-D 1 --gain-s2 100]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:52-07:00",
+        "wall_seconds": 1683
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:14:37.494293+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_173.out",
+          "sha256": "b34448c517f18ba4b63760dfd4dc769ae06240af4357d54b3c1e8ab5e97d958c",
+          "size_bytes": 771
+        },
+        {
+          "mtime_utc": "2026-07-19T22:14:36.886293+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_fit_C1D2_s2-10.json",
+          "sha256": "0488458cdf5a759853238bc12ab602669a9f4ba9a586a5e079f8a1d6b69b846f",
+          "size_bytes": 3101
+        },
+        {
+          "mtime_utc": "2026-07-19T22:14:37.010293+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_samples_C1D2_s2-10.npz",
+          "sha256": "39cfcd2e1ac0313c7a2802558103b20b161140eb16d79f6d7e88d81fe381bdd3",
+          "size_bytes": 1804138
+        },
+        {
+          "mtime_utc": "2026-07-19T22:14:36.714293+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_173.err",
+          "sha256": "3a941e7f88d8549245f5ea75cf20ce65aa3cef70e9e83507817344a7fd107880",
+          "size_bytes": 2900626
+        }
+      ],
+      "burst": "johndoeII",
+      "config": "C1D2",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.040830802412934,
+          4.223207298570457,
+          4.361186140231653
+        ],
+        "beta": [
+          3.6940638147264258,
+          3.7992024417030468,
+          3.9599860974612318
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          }
+        },
+        "log_evidence": 11725.690138858832,
+        "log_evidence_err": 0.6123447136831074,
+        "ncall": 635372,
+        "t0_ms": {
+          "t0_C1": [
+            5.096984563670914,
+            5.109138313596508,
+            5.1184290399204535
+          ],
+          "t0_D1": [
+            5.334580446204346,
+            5.341618362118714,
+            5.346915714789011
+          ],
+          "t0_D2": [
+            5.748728303300605,
+            5.768867338101213,
+            5.784591698949214
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.11986608955842239,
+          0.1320640405942749,
+          0.14436132658099904
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.08143149169593521,
+            0.09094146068790579,
+            0.09875961872138009
+          ],
+          "zeta_D1": [
+            0.06148918913780108,
+            0.06605964527125217,
+            0.0694452495112819
+          ],
+          "zeta_D2": [
+            0.39129266532940593,
+            0.4056505408561999,
+            0.4203392658263693
+          ]
+        }
+      },
+      "gain_s2": 10,
+      "job_id": 173,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 41.0,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 15.0,
+            "time_factor": 16,
+            "window_ms": 17.2
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 16.0,
+            "time_factor": 2,
+            "window_ms": 17.2
+          }
+        },
+        "done": "DONE BURST=johndoeII RC=0 WALL_SEC=2325 END=2026-07-19T15:14:37-07:00",
+        "end": "2026-07-19T15:14:37-07:00",
+        "extra_args": "--components-C 1 --components-D 2 --force-multi --gain-s2 10",
+        "header": "HOST=lxd110h17 JOB=173 START=2026-07-19T14:35:52-07:00 BURST=johndoeII NLIVE=400 EARGS=[--components-C 1 --components-D 2 --force-multi --gain-s2 10]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:52-07:00",
+        "wall_seconds": 2325
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:36:58.522106+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_174.out",
+          "sha256": "a27436861127559cecb69d3cd269a848845c903f049df826b22cbc0f2b6acecc",
+          "size_bytes": 757
+        },
+        {
+          "mtime_utc": "2026-07-19T22:36:58.030107+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_fit_C2D2_s2-10.json",
+          "sha256": "ab590caf4e419553b0baa2c0aff9fe62dc4501b599233193775e8ec01e496253",
+          "size_bytes": 3493
+        },
+        {
+          "mtime_utc": "2026-07-19T22:36:58.174107+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_samples_C2D2_s2-10.npz",
+          "sha256": "68278a8a3dbc28cec1d56146099b5269e00b2726ff83db0ee27e70e681eec9af",
+          "size_bytes": 2525394
+        },
+        {
+          "mtime_utc": "2026-07-19T22:36:57.890107+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_174.err",
+          "sha256": "d9b0143324814c4d08c2a64ce74611f01fec749a971d008302dc8989799a2ca5",
+          "size_bytes": 4256528
+        }
+      ],
+      "burst": "johndoeII",
+      "config": "C2D2",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.023897179072242,
+          4.287866861735668,
+          4.643121774446948
+        ],
+        "beta": [
+          3.5133619792591535,
+          3.748353484592822,
+          3.97638498702469
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          }
+        },
+        "log_evidence": 11723.326630883123,
+        "log_evidence_err": 0.6852290088227904,
+        "ncall": 825503,
+        "t0_ms": {
+          "t0_C1": [
+            5.095905348008945,
+            5.101579145057707,
+            5.117871162908432
+          ],
+          "t0_C2": [
+            6.46217444453245,
+            7.010898784127503,
+            14.356084641326182
+          ],
+          "t0_D1": [
+            5.340762787121649,
+            5.343056615816332,
+            5.349295853459266
+          ],
+          "t0_D2": [
+            5.740505640204231,
+            5.754108410744698,
+            5.773624378096761
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.10763689937635804,
+          0.12828314878834884,
+          0.1405592049379199
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.08507019475926056,
+            0.0921194972258258,
+            0.1041447039416128
+          ],
+          "zeta_C2": [
+            0.0008776939841374135,
+            89.8347520033197,
+            430.3870076517485
+          ],
+          "zeta_D1": [
+            0.05806169607046302,
+            0.06533085189182104,
+            0.06948127258928455
+          ],
+          "zeta_D2": [
+            0.38277171333285,
+            0.40865458342176164,
+            0.4162454005795603
+          ]
+        }
+      },
+      "gain_s2": 10,
+      "job_id": 174,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 41.0,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 15.0,
+            "time_factor": 16,
+            "window_ms": 17.2
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 16.0,
+            "time_factor": 2,
+            "window_ms": 17.2
+          }
+        },
+        "done": "DONE BURST=johndoeII RC=0 WALL_SEC=3665 END=2026-07-19T15:36:58-07:00",
+        "end": "2026-07-19T15:36:58-07:00",
+        "extra_args": "--components-C 2 --components-D 2 --gain-s2 10",
+        "header": "HOST=lxd110h17 JOB=174 START=2026-07-19T14:35:53-07:00 BURST=johndoeII NLIVE=400 EARGS=[--components-C 2 --components-D 2 --gain-s2 10]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:53-07:00",
+        "wall_seconds": 3665
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:21:16.462230+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_175.out",
+          "sha256": "9698d3903cd0c2789708f46227cb3b78e3a1881ba40469394b0513d074d518b1",
+          "size_bytes": 773
+        },
+        {
+          "mtime_utc": "2026-07-19T22:21:15.986230+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_fit_C1D2_s2-100.json",
+          "sha256": "c95a126664fc017a607f38dad13d32ca6961f859c3bed97e649119429941bf36",
+          "size_bytes": 3097
+        },
+        {
+          "mtime_utc": "2026-07-19T22:21:16.114230+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_samples_C1D2_s2-100.npz",
+          "sha256": "d48e4b167f6bd0aff6a4abcd9e58e2d8a421a2925c34a4c8588932923bdb545d",
+          "size_bytes": 2115862
+        },
+        {
+          "mtime_utc": "2026-07-19T22:21:15.834230+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_175.err",
+          "sha256": "3efed16d7921e8887be7788deacde72a33d32e1012cc79c4fd0ce65b77d879b1",
+          "size_bytes": 3314823
+        }
+      ],
+      "burst": "johndoeII",
+      "config": "C1D2",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.049642223812246,
+          4.143928789002516,
+          4.278043253189854
+        ],
+        "beta": [
+          3.755892911339132,
+          3.865733610425111,
+          3.9515601081637426
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          }
+        },
+        "log_evidence": 11679.90903162756,
+        "log_evidence_err": 0.6408974880666963,
+        "ncall": 759751,
+        "t0_ms": {
+          "t0_C1": [
+            5.099722761585274,
+            5.108952383162233,
+            5.1191009317166785
+          ],
+          "t0_D1": [
+            5.337333595826278,
+            5.342434286554754,
+            5.3475043940421685
+          ],
+          "t0_D2": [
+            5.745576735430292,
+            5.76470444904196,
+            5.782006616685417
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.1256864588831911,
+          0.13817983339963447,
+          0.14876854659281202
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.08437496297822615,
+            0.09285086493397879,
+            0.1013292223225013
+          ],
+          "zeta_D1": [
+            0.062456524953640444,
+            0.06671080165749241,
+            0.07113345546052662
+          ],
+          "zeta_D2": [
+            0.38563411562023964,
+            0.3982244779592491,
+            0.4138514392812893
+          ]
+        }
+      },
+      "gain_s2": 100,
+      "job_id": 175,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 41.0,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 15.0,
+            "time_factor": 16,
+            "window_ms": 17.2
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 16.0,
+            "time_factor": 2,
+            "window_ms": 17.2
+          }
+        },
+        "done": "DONE BURST=johndoeII RC=0 WALL_SEC=2723 END=2026-07-19T15:21:16-07:00",
+        "end": "2026-07-19T15:21:16-07:00",
+        "extra_args": "--components-C 1 --components-D 2 --force-multi --gain-s2 100",
+        "header": "HOST=lxd110h17 JOB=175 START=2026-07-19T14:35:53-07:00 BURST=johndoeII NLIVE=400 EARGS=[--components-C 1 --components-D 2 --force-multi --gain-s2 100]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:53-07:00",
+        "wall_seconds": 2723
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:41:32.926070+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_176.out",
+          "sha256": "67d93e43344e3e4f827f2dc801c0d9b5f99c37ac6d7bedc1a3ad02d31e33532f",
+          "size_bytes": 737
+        },
+        {
+          "mtime_utc": "2026-07-19T22:41:32.430070+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_fit_C2D2_s2-100.json",
+          "sha256": "495561ed3fb641856d2c548d871056b0a1698ca6250cfeaccd7f684c13696a6a",
+          "size_bytes": 3494
+        },
+        {
+          "mtime_utc": "2026-07-19T22:41:32.582070+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/johndoeII_joint_samples_C2D2_s2-100.npz",
+          "sha256": "3243a384706614d4e7f0e791ab6c9934c06d0820f3c6e28d0ee4ed7cde9a35b1",
+          "size_bytes": 2717948
+        },
+        {
+          "mtime_utc": "2026-07-19T22:41:32.258070+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtf_176.err",
+          "sha256": "6392692c8cb941d8c08fd980faf424e98aeeb460584da1b73f1c916c1c23b498",
+          "size_bytes": 4526960
+        }
+      ],
+      "burst": "johndoeII",
+      "config": "C2D2",
+      "fine": false,
+      "fit": {
+        "alpha": [
+          4.426300743785605,
+          4.63292672081044,
+          4.861247311412831
+        ],
+        "beta": [
+          3.397991702445628,
+          3.51922192455427,
+          3.648600244732667
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              17.2
+            ]
+          }
+        },
+        "log_evidence": 11678.677733984752,
+        "log_evidence_err": 0.6481498366526446,
+        "ncall": 866702,
+        "t0_ms": {
+          "t0_C1": [
+            5.104347542389335,
+            5.113197294111522,
+            5.12277531015125
+          ],
+          "t0_C2": [
+            7.116690326116299,
+            11.122771521942816,
+            15.101368987225742
+          ],
+          "t0_D1": [
+            5.3400312835364705,
+            5.3454136878298115,
+            5.350691763882892
+          ],
+          "t0_D2": [
+            5.750575647529597,
+            5.767132056779008,
+            5.784170342813307
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.09533461940561724,
+          0.11015186709363983,
+          0.12465081967885058
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.08657044376816465,
+            0.09505809807299799,
+            0.10414751246207761
+          ],
+          "zeta_C2": [
+            542.2288090405897,
+            756.9443183260214,
+            919.345074004595
+          ],
+          "zeta_D1": [
+            0.06404359472051932,
+            0.06762101070069707,
+            0.07142148821783313
+          ],
+          "zeta_D2": [
+            0.3861727800971849,
+            0.4011685326472074,
+            0.4161288456807921
+          ]
+        }
+      },
+      "gain_s2": 100,
+      "job_id": 176,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 50.0,
+            "channels": 8,
+            "dt_us": 41.0,
+            "frequency_factor": 128,
+            "peak_snr_per_pixel": 15.0,
+            "time_factor": 16,
+            "window_ms": 17.2
+          },
+          "DSA": {
+            "channel_width_mhz": 15.6,
+            "channels": 12,
+            "dt_us": 65.5,
+            "frequency_factor": 512,
+            "peak_snr_per_pixel": 16.0,
+            "time_factor": 2,
+            "window_ms": 17.2
+          }
+        },
+        "done": "DONE BURST=johndoeII RC=0 WALL_SEC=3939 END=2026-07-19T15:41:32-07:00",
+        "end": "2026-07-19T15:41:32-07:00",
+        "extra_args": "--components-C 2 --components-D 2 --gain-s2 100",
+        "header": "HOST=lxd110h17 JOB=176 START=2026-07-19T14:35:53-07:00 BURST=johndoeII NLIVE=400 EARGS=[--components-C 2 --components-D 2 --gain-s2 100]",
+        "nlive": 400,
+        "nproc": 1,
+        "rc": 0,
+        "start": "2026-07-19T14:35:53-07:00",
+        "wall_seconds": 3939
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:49:41.214017+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_177.out",
+          "sha256": "e6e8cf474b520db820630502c573958825dfe9badf7fef156c362c6f18a8d376",
+          "size_bytes": 719
+        },
+        {
+          "mtime_utc": "2026-07-19T22:49:40.634017+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_fit_C2D3_s2-10_fine.json",
+          "sha256": "50d57dd857153c7f45108429ce3db8c0c80057915f1634e63099dd2fb9a0e375",
+          "size_bytes": 3929
+        },
+        {
+          "mtime_utc": "2026-07-19T22:49:40.850017+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_samples_C2D3_s2-10_fine.npz",
+          "sha256": "c6cd8f1c782a7f6258b99531fb31d045f2f360bc487c41f1f763ae6940df76e4",
+          "size_bytes": 3898299
+        },
+        {
+          "mtime_utc": "2026-07-19T22:49:40.398017+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_177.err",
+          "sha256": "692fe1c9259e96d34670f3e4a75269988b24bf725e8110356a929fba3f8d67f2",
+          "size_bytes": 1552142
+        }
+      ],
+      "burst": "zach",
+      "config": "C2D3",
+      "fine": true,
+      "fit": {
+        "alpha": [
+          5.370254553933815,
+          5.395291229235595,
+          5.420393320435724
+        ],
+        "beta": [
+          3.1694561488298194,
+          3.178102180324763,
+          3.1868539708168737
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D3": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          }
+        },
+        "log_evidence": 25134.977891971874,
+        "log_evidence_err": 0.7303978281349544,
+        "ncall": 1177372,
+        "t0_ms": {
+          "t0_C1": [
+            15.121567449783214,
+            15.122657004292376,
+            15.123822007202781
+          ],
+          "t0_C2": [
+            21.6185105012268,
+            21.659305740273997,
+            21.699406114539
+          ],
+          "t0_D1": [
+            1.5077437536081797,
+            1.5101367765196936,
+            1.512582117611765
+          ],
+          "t0_D2": [
+            3.9803780405977887,
+            3.9889058568955016,
+            3.997063002177692
+          ],
+          "t0_D3": [
+            4.172127185974903,
+            4.817182586986756,
+            5.533253659434726
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.1665117506493896,
+          0.16838229626456902,
+          0.1703552262844297
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.12362873428171915,
+            0.12457304898052063,
+            0.1254591691289847
+          ],
+          "zeta_C2": [
+            2.4894917564459584,
+            2.5398911716576413,
+            2.589308159681803
+          ],
+          "zeta_D1": [
+            0.0916966654954988,
+            0.09281057926867643,
+            0.09392753437637683
+          ],
+          "zeta_D2": [
+            0.34069490514173817,
+            0.34938767355001993,
+            0.35803644448401734
+          ],
+          "zeta_D3": [
+            136.20742393791443,
+            172.99094177464787,
+            220.62103906178012
+          ]
+        }
+      },
+      "gain_s2": 10,
+      "job_id": 177,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 6.2,
+            "channels": 64,
+            "dt_us": 163.8,
+            "frequency_factor": 16,
+            "peak_snr_per_pixel": 107.0,
+            "time_factor": 64,
+            "window_ms": 44.1
+          },
+          "DSA": {
+            "channel_width_mhz": 7.8,
+            "channels": 24,
+            "dt_us": 32.8,
+            "frequency_factor": 256,
+            "peak_snr_per_pixel": 33.0,
+            "time_factor": 1,
+            "window_ms": 5.9
+          }
+        },
+        "done": "DONE BURST=zach RC=0 WALL_SEC=4428 END=2026-07-19T15:49:41-07:00",
+        "end": "2026-07-19T15:49:41-07:00",
+        "extra_args": "--components-C 2 --components-D 3 --gain-s2 10",
+        "header": "HOST=lxd110h17 JOB=177 START=2026-07-19T14:35:53-07:00 BURST=zach NLIVE=400 NPROC=4 EARGS=[--components-C 2 --components-D 3 --gain-s2 10] MAXCH=def SNRT=def",
+        "nlive": 400,
+        "nproc": 4,
+        "rc": 0,
+        "start": "2026-07-19T14:35:53-07:00",
+        "wall_seconds": 4428
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T22:59:09.365905+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_178.out",
+          "sha256": "64f4549cb4f1aeb98c66926e434655f8407caf770bc423c577421985628ecdaa",
+          "size_bytes": 722
+        },
+        {
+          "mtime_utc": "2026-07-19T22:59:08.841905+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_fit_C2D3_s2-100_fine.json",
+          "sha256": "a0a1adaa1918e6b58cd9e14ff832794e71f069cd5812dfb03389f646bab561dc",
+          "size_bytes": 3927
+        },
+        {
+          "mtime_utc": "2026-07-19T22:59:09.041905+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_samples_C2D3_s2-100_fine.npz",
+          "sha256": "45cfd5ee520ce6a452bae5642501b08c207a7ab2d60757c7d394c5d3b1e4c0d9",
+          "size_bytes": 3653463
+        },
+        {
+          "mtime_utc": "2026-07-19T22:59:08.621905+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_178.err",
+          "sha256": "8d0f227d635d2b06aaad1c15921a42e76a97b17803303de18d29463397a9fbb1",
+          "size_bytes": 1438935
+        }
+      ],
+      "burst": "zach",
+      "config": "C2D3",
+      "fine": true,
+      "fit": {
+        "alpha": [
+          5.415594521194262,
+          5.433383798888669,
+          5.4602571009800585
+        ],
+        "beta": [
+          3.1559834669126374,
+          3.1650314192356634,
+          3.1710991966931132
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D3": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          }
+        },
+        "log_evidence": 25074.597462774283,
+        "log_evidence_err": 0.7084567849680987,
+        "ncall": 1094534,
+        "t0_ms": {
+          "t0_C1": [
+            15.122052735275373,
+            15.122857247320164,
+            15.123850912616202
+          ],
+          "t0_C2": [
+            21.58647925718776,
+            21.629792752579537,
+            21.6602095104996
+          ],
+          "t0_D1": [
+            1.509225908367921,
+            1.511229867303201,
+            1.513610836301873
+          ],
+          "t0_D2": [
+            2.178761542245326,
+            2.7166806478458194,
+            3.245296026815903
+          ],
+          "t0_D3": [
+            3.982042214924339,
+            3.990237350648616,
+            3.9987578354374915
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.16418797493608703,
+          0.16581585261116208,
+          0.1670111110717169
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.12343888279255988,
+            0.12441384233392833,
+            0.12548243037134263
+          ],
+          "zeta_C2": [
+            2.5308112212242917,
+            2.57840243565933,
+            2.61967965949172
+          ],
+          "zeta_D1": [
+            0.09175429185778122,
+            0.09289943168836917,
+            0.0938667312464588
+          ],
+          "zeta_D2": [
+            382.99062068056065,
+            445.9844044796071,
+            486.6382858246775
+          ],
+          "zeta_D3": [
+            0.34399972907602594,
+            0.35174928747835993,
+            0.3598829506096908
+          ]
+        }
+      },
+      "gain_s2": 100,
+      "job_id": 178,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 6.2,
+            "channels": 64,
+            "dt_us": 163.8,
+            "frequency_factor": 16,
+            "peak_snr_per_pixel": 107.0,
+            "time_factor": 64,
+            "window_ms": 44.1
+          },
+          "DSA": {
+            "channel_width_mhz": 7.8,
+            "channels": 24,
+            "dt_us": 32.8,
+            "frequency_factor": 256,
+            "peak_snr_per_pixel": 33.0,
+            "time_factor": 1,
+            "window_ms": 5.9
+          }
+        },
+        "done": "DONE BURST=zach RC=0 WALL_SEC=4098 END=2026-07-19T15:59:09-07:00",
+        "end": "2026-07-19T15:59:09-07:00",
+        "extra_args": "--components-C 2 --components-D 3 --gain-s2 100",
+        "header": "HOST=lxd110h17 JOB=178 START=2026-07-19T14:50:51-07:00 BURST=zach NLIVE=400 NPROC=4 EARGS=[--components-C 2 --components-D 3 --gain-s2 100] MAXCH=def SNRT=def",
+        "nlive": 400,
+        "nproc": 4,
+        "rc": 0,
+        "start": "2026-07-19T14:50:51-07:00",
+        "wall_seconds": 4098
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T23:20:30.981652+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_179.out",
+          "sha256": "e8343817519386647c933cd71051b148bc1fd6243f4935fd781616f7578b9d46",
+          "size_bytes": 722
+        },
+        {
+          "mtime_utc": "2026-07-19T23:20:30.405652+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_fit_C2D4_s2-10_fine.json",
+          "sha256": "a9687a608ab6ca0bfe2f846aeaf8e82c7c1408241acc02b134a83d8203638288",
+          "size_bytes": 4370
+        },
+        {
+          "mtime_utc": "2026-07-19T23:20:30.677652+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_samples_C2D4_s2-10_fine.npz",
+          "sha256": "f43768120a96645818eb52b49bda96a640351fd6f9527b22ce4716badbf511af",
+          "size_bytes": 4699854
+        },
+        {
+          "mtime_utc": "2026-07-19T23:20:30.125652+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_179.err",
+          "sha256": "133b32fd4957bb262f77c2117228043a3c2fd399ac949418c9414bb8d033d873",
+          "size_bytes": 1640888
+        }
+      ],
+      "burst": "zach",
+      "config": "C2D4",
+      "fine": true,
+      "fit": {
+        "alpha": [
+          4.020426384172483,
+          4.0211109222834125,
+          4.022511833665862
+        ],
+        "beta": [
+          3.9777387372561783,
+          3.979109585673248,
+          3.979780125291871
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D3": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D4": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          }
+        },
+        "log_evidence": 26560.30482437952,
+        "log_evidence_err": 0.7740751772267507,
+        "ncall": 1314985,
+        "t0_ms": {
+          "t0_C1": [
+            15.14694048472645,
+            15.148173930278631,
+            15.149338481412356
+          ],
+          "t0_C2": [
+            16.61281181980715,
+            16.62669498454742,
+            16.64081580052552
+          ],
+          "t0_D1": [
+            0.22109308615694734,
+            0.6588458279867765,
+            1.112625552551635
+          ],
+          "t0_D2": [
+            1.4445133593386916,
+            1.4489039623005415,
+            1.4533186238280225
+          ],
+          "t0_D3": [
+            1.546780071240571,
+            1.5521712678090172,
+            1.5583050486259091
+          ],
+          "t0_D4": [
+            3.9695321865299897,
+            3.9788094767955937,
+            3.987585089978755
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.18215574565132092,
+          0.1831104985404833,
+          0.18410005693660292
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.1309807557330766,
+            0.13195891661303702,
+            0.1328668608493116
+          ],
+          "zeta_C2": [
+            1.4060735556087574,
+            1.4165868837813307,
+            1.4271969471967636
+          ],
+          "zeta_D1": [
+            128.76415722299626,
+            161.91289322342024,
+            205.5090607062379
+          ],
+          "zeta_D2": [
+            0.05362029058159441,
+            0.055603665397635824,
+            0.0577602830823864
+          ],
+          "zeta_D3": [
+            0.11038895539365018,
+            0.11396296349889215,
+            0.11745644183439245
+          ],
+          "zeta_D4": [
+            0.35197332694865735,
+            0.36040526656831395,
+            0.36879742289942685
+          ]
+        }
+      },
+      "gain_s2": 10,
+      "job_id": 179,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 6.2,
+            "channels": 64,
+            "dt_us": 163.8,
+            "frequency_factor": 16,
+            "peak_snr_per_pixel": 107.0,
+            "time_factor": 64,
+            "window_ms": 44.1
+          },
+          "DSA": {
+            "channel_width_mhz": 7.8,
+            "channels": 24,
+            "dt_us": 32.8,
+            "frequency_factor": 256,
+            "peak_snr_per_pixel": 33.0,
+            "time_factor": 1,
+            "window_ms": 5.9
+          }
+        },
+        "done": "DONE BURST=zach RC=0 WALL_SEC=5365 END=2026-07-19T16:20:30-07:00",
+        "end": "2026-07-19T16:20:30-07:00",
+        "extra_args": "--components-C 2 --components-D 4 --gain-s2 10",
+        "header": "HOST=lxd110h17 JOB=179 START=2026-07-19T14:51:05-07:00 BURST=zach NLIVE=400 NPROC=4 EARGS=[--components-C 2 --components-D 4 --gain-s2 10] MAXCH=def SNRT=def",
+        "nlive": 400,
+        "nproc": 4,
+        "rc": 0,
+        "start": "2026-07-19T14:51:05-07:00",
+        "wall_seconds": 5365
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T23:57:03.365173+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_180.out",
+          "sha256": "ac90959e86a3a39308fb749b700f51afcbc8949ba68761171a344f6cd8bf8b1a",
+          "size_bytes": 722
+        },
+        {
+          "mtime_utc": "2026-07-19T23:57:02.809173+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_fit_C2D4_s2-100_fine.json",
+          "sha256": "55bc7397ae1d100718bdb7b9cb9b2a7dd9c0ca70908c60ed684e8795e0e05590",
+          "size_bytes": 4345
+        },
+        {
+          "mtime_utc": "2026-07-19T23:57:03.057173+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_samples_C2D4_s2-100_fine.npz",
+          "sha256": "87681b33410cc60e42630c3cbc4e666f63c16c0976d14db9197dedbff39730be",
+          "size_bytes": 4529954
+        },
+        {
+          "mtime_utc": "2026-07-19T23:57:02.561173+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_180.err",
+          "sha256": "9d4d6c6f02bdabbd9c1841fc3bb6e73dd174561f4f4af7efe3cbfbaeff4cf04b",
+          "size_bytes": 1577207
+        }
+      ],
+      "burst": "zach",
+      "config": "C2D4",
+      "fine": true,
+      "fit": {
+        "alpha": [
+          5.409491906747841,
+          5.431366994148793,
+          5.454777933055599
+        ],
+        "beta": [
+          3.157816819925724,
+          3.1657161728316576,
+          3.1731953350830557
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D3": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D4": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          }
+        },
+        "log_evidence": 25064.495196309887,
+        "log_evidence_err": 0.7263527098394637,
+        "ncall": 1257486,
+        "t0_ms": {
+          "t0_C1": [
+            15.121938110482944,
+            15.123031068069958,
+            15.124088438976948
+          ],
+          "t0_C2": [
+            21.57315458773162,
+            21.61473086907528,
+            21.656115424730363
+          ],
+          "t0_D1": [
+            1.505016477519518,
+            1.5073909565738,
+            1.5097329027703439
+          ],
+          "t0_D2": [
+            3.530686262478944,
+            3.534581319947264,
+            3.5382814616353797
+          ],
+          "t0_D3": [
+            4.035079229603725,
+            4.04303586543174,
+            4.050603813254438
+          ],
+          "t0_D4": [
+            4.290544182306397,
+            4.723581149269058,
+            5.40513124200951
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.16456924648148716,
+          0.16618905090554445,
+          0.1679209660757755
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.12348227394234608,
+            0.12437049518778386,
+            0.12527811918012569
+          ],
+          "zeta_C2": [
+            2.533925222191541,
+            2.580318013803107,
+            2.6284779560931266
+          ],
+          "zeta_D1": [
+            0.09191904548668822,
+            0.0929922298331751,
+            0.09397807803647656
+          ],
+          "zeta_D2": [
+            0.039898040930870834,
+            0.04306181723011713,
+            0.046304978015505226
+          ],
+          "zeta_D3": [
+            0.2700445405880496,
+            0.2802404492343091,
+            0.29064540690773155
+          ],
+          "zeta_D4": [
+            321.2095557335053,
+            350.23531131967604,
+            367.6403889840353
+          ]
+        }
+      },
+      "gain_s2": 100,
+      "job_id": 180,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 6.2,
+            "channels": 64,
+            "dt_us": 163.8,
+            "frequency_factor": 16,
+            "peak_snr_per_pixel": 107.0,
+            "time_factor": 64,
+            "window_ms": 44.1
+          },
+          "DSA": {
+            "channel_width_mhz": 7.8,
+            "channels": 24,
+            "dt_us": 32.8,
+            "frequency_factor": 256,
+            "peak_snr_per_pixel": 33.0,
+            "time_factor": 1,
+            "window_ms": 5.9
+          }
+        },
+        "done": "DONE BURST=zach RC=0 WALL_SEC=7280 END=2026-07-19T16:57:03-07:00",
+        "end": "2026-07-19T16:57:03-07:00",
+        "extra_args": "--components-C 2 --components-D 4 --gain-s2 100",
+        "header": "HOST=lxd110h17 JOB=180 START=2026-07-19T14:55:43-07:00 BURST=zach NLIVE=400 NPROC=4 EARGS=[--components-C 2 --components-D 4 --gain-s2 100] MAXCH=def SNRT=def",
+        "nlive": 400,
+        "nproc": 4,
+        "rc": 0,
+        "start": "2026-07-19T14:55:43-07:00",
+        "wall_seconds": 7280
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-19T23:56:12.741192+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_181.out",
+          "sha256": "b5c4884cc2ea0dcf00f8cd3ad33d3f45bf8bc3dc63da70f1ab15a48e817b386d",
+          "size_bytes": 722
+        },
+        {
+          "mtime_utc": "2026-07-19T23:56:12.125192+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_fit_C2D5_s2-10_fine.json",
+          "sha256": "b13ca3e2e95d8055f359e8b6edc38b26eba5dd8a21a086ccb5b6d41fedc050be",
+          "size_bytes": 4787
+        },
+        {
+          "mtime_utc": "2026-07-19T23:56:12.429192+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_samples_C2D5_s2-10_fine.npz",
+          "sha256": "1d4bb9b9ccdcba0eeed5589bab48b6f65fb0ba803e88f26ab5c8204905e8cb8d",
+          "size_bytes": 5611365
+        },
+        {
+          "mtime_utc": "2026-07-19T23:56:11.849192+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_181.err",
+          "sha256": "5c61e0cadb5db5e3b4ce6c6c2154927184c9b54480bb9c17c0cf04baa44bfae4",
+          "size_bytes": 1745259
+        }
+      ],
+      "burst": "zach",
+      "config": "C2D5",
+      "fine": true,
+      "fit": {
+        "alpha": [
+          4.020440599943705,
+          4.021163496910812,
+          4.022815210453187
+        ],
+        "beta": [
+          3.977442120926038,
+          3.979058104954737,
+          3.979766195606765
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D3": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D4": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D5": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          }
+        },
+        "log_evidence": 26584.89034008584,
+        "log_evidence_err": 0.7048713078925272,
+        "ncall": 1474417,
+        "t0_ms": {
+          "t0_C1": [
+            15.146903129973664,
+            15.148141609034086,
+            15.14930590559987
+          ],
+          "t0_C2": [
+            16.61225492277422,
+            16.626292584678236,
+            16.640127365730397
+          ],
+          "t0_D1": [
+            0.22800365960512142,
+            0.7218197755727084,
+            1.183537582516722
+          ],
+          "t0_D2": [
+            1.4375639242950415,
+            1.4420546288076002,
+            1.4462523608950153
+          ],
+          "t0_D3": [
+            1.5403318596292792,
+            1.5457610688389372,
+            1.5524989451272795
+          ],
+          "t0_D4": [
+            3.496678194536321,
+            3.5011955137403916,
+            3.5059335917475614
+          ],
+          "t0_D5": [
+            4.018395551859383,
+            4.026513539277847,
+            4.033927954910488
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.18216820021092966,
+          0.18302266185394603,
+          0.18390507179033247
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.13093828402072277,
+            0.1318672542104534,
+            0.1328044426937326
+          ],
+          "zeta_C2": [
+            1.4067900092133114,
+            1.4171193673018545,
+            1.4279336036783867
+          ],
+          "zeta_D1": [
+            150.9152639021859,
+            188.95048741458234,
+            242.93139603959924
+          ],
+          "zeta_D2": [
+            0.05341206074298902,
+            0.055510036332942686,
+            0.05757043188148509
+          ],
+          "zeta_D3": [
+            0.10828201977184752,
+            0.11172632944645498,
+            0.11519691461615816
+          ],
+          "zeta_D4": [
+            0.0322565077371259,
+            0.0355964808688907,
+            0.039301695952261836
+          ],
+          "zeta_D5": [
+            0.2833551005807884,
+            0.29182119477622537,
+            0.30104906297156164
+          ]
+        }
+      },
+      "gain_s2": 10,
+      "job_id": 181,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 6.2,
+            "channels": 64,
+            "dt_us": 163.8,
+            "frequency_factor": 16,
+            "peak_snr_per_pixel": 107.0,
+            "time_factor": 64,
+            "window_ms": 44.1
+          },
+          "DSA": {
+            "channel_width_mhz": 7.8,
+            "channels": 24,
+            "dt_us": 32.8,
+            "frequency_factor": 256,
+            "peak_snr_per_pixel": 33.0,
+            "time_factor": 1,
+            "window_ms": 5.9
+          }
+        },
+        "done": "DONE BURST=zach RC=0 WALL_SEC=6737 END=2026-07-19T16:56:12-07:00",
+        "end": "2026-07-19T16:56:12-07:00",
+        "extra_args": "--components-C 2 --components-D 5 --gain-s2 10",
+        "header": "HOST=lxd110h17 JOB=181 START=2026-07-19T15:03:55-07:00 BURST=zach NLIVE=400 NPROC=4 EARGS=[--components-C 2 --components-D 5 --gain-s2 10] MAXCH=def SNRT=def",
+        "nlive": 400,
+        "nproc": 4,
+        "rc": 0,
+        "start": "2026-07-19T15:03:55-07:00",
+        "wall_seconds": 6737
+      }
+    },
+    {
+      "artifacts": [
+        {
+          "mtime_utc": "2026-07-20T00:53:41.443976+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_182.out",
+          "sha256": "6a94e226d7904225a48cdbb4fb4ef38cb24ab379cb5cb5953d0fa9b839879ea2",
+          "size_bytes": 722
+        },
+        {
+          "mtime_utc": "2026-07-20T00:53:40.783976+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_fit_C2D5_s2-100_fine.json",
+          "sha256": "ac46bda3ca9152eb91bdbf99a5bce39ec8b819e34c37c659548fee6ddeff6941",
+          "size_bytes": 4789
+        },
+        {
+          "mtime_utc": "2026-07-20T00:53:41.171976+00:00",
+          "path": "/home/ubuntu/flits-runs/data/joint/zach_joint_samples_C2D5_s2-100_fine.npz",
+          "sha256": "d94a65fea5faf55bf26b8a886436f8c7bf750a55d367cf8680e32e6232052157",
+          "size_bytes": 7301344
+        },
+        {
+          "mtime_utc": "2026-07-20T00:53:40.403976+00:00",
+          "path": "/home/ubuntu/flits-runs/logs/jtfzf_182.err",
+          "sha256": "43654ff3a7957449897c4719c5bf0b33a6792bc0d70a20af55a829133f08464f",
+          "size_bytes": 2284805
+        }
+      ],
+      "burst": "zach",
+      "config": "C2D5",
+      "fine": true,
+      "fit": {
+        "alpha": [
+          5.4195152725557065,
+          5.445301160078708,
+          5.47103665967569
+        ],
+        "beta": [
+          3.152393475548522,
+          3.1610015537534664,
+          3.1697564365637256
+        ],
+        "beta_bounds": [
+          3.0,
+          4.0
+        ],
+        "containment": {
+          "t0_C1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_C2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              44.1
+            ]
+          },
+          "t0_D1": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D2": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D3": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D4": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          },
+          "t0_D5": {
+            "central_interval_in_window": true,
+            "median_in_window": true,
+            "window_ms": [
+              0.0,
+              5.9
+            ]
+          }
+        },
+        "log_evidence": 25081.727653272133,
+        "log_evidence_err": 0.8686177768395883,
+        "ncall": 1932556,
+        "t0_ms": {
+          "t0_C1": [
+            15.121898438092568,
+            15.123059079470446,
+            15.124233268723929
+          ],
+          "t0_C2": [
+            21.575169029300778,
+            21.616148029286133,
+            21.657201494418135
+          ],
+          "t0_D1": [
+            1.4501594429915905,
+            1.4522661802890366,
+            1.454470555359267
+          ],
+          "t0_D2": [
+            1.5506802415281855,
+            1.5540038538982042,
+            1.5588651593241525
+          ],
+          "t0_D3": [
+            1.9138974843968595,
+            2.513295879322412,
+            3.1188977132885283
+          ],
+          "t0_D4": [
+            3.5214163313563684,
+            3.5219485668986614,
+            3.522462185805214
+          ],
+          "t0_D5": [
+            4.003478078832558,
+            4.01172515229292,
+            4.019913606115918
+          ]
+        },
+        "tau_1ghz_ms": [
+          0.1633100405651247,
+          0.1652214259786366,
+          0.16710462937755674
+        ],
+        "zeta": {
+          "zeta_C1": [
+            0.1234942660366681,
+            0.12438305204048071,
+            0.1252666067503594
+          ],
+          "zeta_C2": [
+            2.5342563688833133,
+            2.585194529260636,
+            2.6368600332759993
+          ],
+          "zeta_D1": [
+            0.057742516850258926,
+            0.05966104240716566,
+            0.061687130574145335
+          ],
+          "zeta_D2": [
+            0.10174037730410684,
+            0.1046949589191438,
+            0.10764791655346462
+          ],
+          "zeta_D3": [
+            308.0822965226851,
+            337.29324626079426,
+            353.2273828642952
+          ],
+          "zeta_D4": [
+            0.00014214935204246996,
+            0.0002794460053899554,
+            0.0006042820554362067
+          ],
+          "zeta_D5": [
+            0.2980430813211112,
+            0.3072225364845109,
+            0.31651347688996295
+          ]
+        }
+      },
+      "gain_s2": 100,
+      "job_id": 182,
+      "log": {
+        "bands": {
+          "CHIME": {
+            "channel_width_mhz": 6.2,
+            "channels": 64,
+            "dt_us": 163.8,
+            "frequency_factor": 16,
+            "peak_snr_per_pixel": 107.0,
+            "time_factor": 64,
+            "window_ms": 44.1
+          },
+          "DSA": {
+            "channel_width_mhz": 7.8,
+            "channels": 24,
+            "dt_us": 32.8,
+            "frequency_factor": 256,
+            "peak_snr_per_pixel": 33.0,
+            "time_factor": 1,
+            "window_ms": 5.9
+          }
+        },
+        "done": "DONE BURST=zach RC=0 WALL_SEC=9591 END=2026-07-19T17:53:41-07:00",
+        "end": "2026-07-19T17:53:41-07:00",
+        "extra_args": "--components-C 2 --components-D 5 --gain-s2 100",
+        "header": "HOST=lxd110h17 JOB=182 START=2026-07-19T15:13:50-07:00 BURST=zach NLIVE=400 NPROC=4 EARGS=[--components-C 2 --components-D 5 --gain-s2 100] MAXCH=def SNRT=def",
+        "nlive": 400,
+        "nproc": 4,
+        "rc": 0,
+        "start": "2026-07-19T15:13:50-07:00",
+        "wall_seconds": 9591
+      }
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Independent read-only re-harvest of JointTF prior-spec v2 jobs 169-182"
+}
