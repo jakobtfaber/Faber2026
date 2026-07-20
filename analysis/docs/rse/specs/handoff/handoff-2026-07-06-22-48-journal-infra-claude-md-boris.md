@@ -31,14 +31,14 @@
 - [research-trust-reset-revalidation.md](../research/research-trust-reset-revalidation.md) — explorer inventories backing the plan
 - [plan-circulation-readiness.md](../plan/plan-circulation-readiness.md) — master lane ledger (A/B/C/D/E/F/G + V), decisions ledger (all re-opened as working choices)
 - [handoff-2026-07-06-22-30-provenance-p0-p2-machine-verification.md](../handoff/handoff-2026-07-06-22-30-provenance-p0-p2-machine-verification.md) — the concurrent provenance session's handoff (P0.1/P2.1/P2.2 closed) — read for research-lane state
-- [machine-inventory-verification-2026-07-06.md](../misc/machine-inventory-verification-2026-07-06.md) — live-verified machine inventory
+- [machine-inventory-verification-2026-07-06.md](../notes/machine-inventory-verification-2026-07-06.md) — live-verified machine inventory
 - [implement-route-a-crosscheck.md](../implement/implement-route-a-crosscheck.md) — in-flight Codex P2.3 work (cube integrity crosscheck)
 
 ## Critical References
 
-- `docs/rse/journal-protocol.md` — the journal contract every agent in this repo must follow (cadence, agent tags, enforcement matrix incl. Codex trust-gate + JSON-output constraints)
-- `docs/rse/journal.jsonl` — live activity log; **read the tail before doing anything** — it is the coordination ground truth for concurrent writers
-- `docs/rse/board/readiness.html` — task board (artifact URL in journal-protocol.md §2); lanes, trust state, journal panel
+- `docs/rse/protocols/journal-protocol.md` — the journal contract every agent in this repo must follow (cadence, agent tags, enforcement matrix incl. Codex trust-gate + JSON-output constraints)
+- `docs/rse/protocols/journal.jsonl` — live activity log; **read the tail before doing anything** — it is the coordination ground truth for concurrent writers
+- `docs/rse/control/board/readiness.html` — task board (artifact URL in journal-protocol.md §2); lanes, trust state, journal panel
 
 ## Recent Changes (this session)
 
@@ -52,7 +52,7 @@
 - **Codex hook layer:** VERIFIED (canary transcripts in session scratchpad). Constraint: trust entries live in `~/.codex/config.toml`, machine-local — **any change to a hook command string in `.codex/hooks.json` silently disables that hook until re-trusted** (script-content edits are safe).
 - **Cursor hook layer:** NOT yet exercised by a live Cursor session — gating + JSON parsing smoke-tested only.
 - **Unpushed:** Faber2026 main is **11 commits ahead of origin** (push gated — Overleaf pulls main; owner go required).
-- **Dirty working tree:** `CLAUDE.md` (repo) — owner's own uncommitted preamble edit, separate lane, do not sweep. `docs/rse/journal.jsonl` accumulates live entries between commits by design.
+- **Dirty working tree:** `CLAUDE.md` (repo) — owner's own uncommitted preamble edit, separate lane, do not sweep. `docs/rse/protocols/journal.jsonl` accumulates live entries between commits by design.
 - **P2.3 (other session):** cube-integrity detector failing on 4/12 CHIME cubes (no >5σ detection under pre-registered statistic), 7 lag-table triage rows — per its own journal entries; not this session's claim to verify.
 
 ## Learnings

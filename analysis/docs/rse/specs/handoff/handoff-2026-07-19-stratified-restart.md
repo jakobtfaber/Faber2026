@@ -31,8 +31,8 @@ work is restructured under it.
 | 6 | ticket 22 → 02 | Scintillation campaign re-run on certified L1 → CHIME-method ratification | ratification grilling |
 
 Map: `docs/rse/wayfinder/map-apj-submission.md` (resume pointer encodes the
-chain). Execution board: `docs/rse/BOARD.md`. Claim trust:
-`docs/rse/results-registry.toml`.
+chain). Execution board: `docs/rse/control/BOARD.md`. Claim trust:
+`docs/rse/control/results-registry.toml`.
 
 ## Pinned state (as of this handoff)
 

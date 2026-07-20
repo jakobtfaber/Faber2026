@@ -2,13 +2,13 @@
 
 > **Historical audit, superseded 2026-07-13.** This file describes the state
 > before the controlled phase-coherence campaign. The adopted values and final
-> method are recorded in [verified-dm-adoption-2026-07-13.md](../misc/verified-dm-adoption-2026-07-13.md)
+> method are recorded in [verified-dm-adoption-2026-07-13.md](../notes/verified-dm-adoption-2026-07-13.md)
 > and `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv`.
 
 **Date:** 2026-07-09
 **Scope:** both — internal (DM provenance, dispersion code inventory, DM treatment in the 2D joint model) and external (DM-estimation package survey with disconfirming checks)
 **Codebase state:** Faber2026 `ms/codetection-gallery` tip (main `29f7a81` + gallery lane), pipeline pin `14e0d1f`
-**Related Documents:** [research-unified-12burst-figure.md](../research/research-unified-12burst-figure.md), [dm-provenance-audit-2026-07-07.md](../dm/dm-provenance-audit-2026-07-07.md), [v6-association-dm-report-2026-07-07.md](../v6/v6-association-dm-report-2026-07-07.md)
+**Related Documents:** [research-unified-12burst-figure.md](../research/research-unified-12burst-figure.md), [dm-provenance-audit-2026-07-07.md](../dm/dm-provenance-audit-2026-07-07.md), [v6-association-dm-report-2026-07-07.md](../notes/v6-association-dm-report-2026-07-07.md)
 
 ## Question / Scope
 

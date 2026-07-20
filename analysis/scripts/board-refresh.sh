@@ -4,5 +4,5 @@ set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 python3 scripts/render_journal_panel.py
-echo "Board: $ROOT/docs/rse/board/readiness.html"
-echo "Open:  open docs/rse/board/readiness.html"
+echo "Board: $ROOT/docs/rse/control/board/readiness.html"
+echo "Open:  open docs/rse/control/board/readiness.html"

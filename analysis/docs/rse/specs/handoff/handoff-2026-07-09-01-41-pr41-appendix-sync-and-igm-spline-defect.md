@@ -73,7 +73,7 @@ within hours, so the session became a repair job:
 - `sections/conclusions.tex:34-40` — same two corrections.
 
 **Commit `35abbbd` — "docs(rse): handoff + journal for the PR #40 half-migration"**
-- Updated the 18-12 handoff; appended 3 journal entries; rebaked `docs/rse/board/readiness.html`.
+- Updated the 18-12 handoff; appended 3 journal entries; rebaked `docs/rse/control/board/readiness.html`.
 
 **Git repair (no commit):** the author's unpushed `4a00aa0` was rebased onto `origin/main` and replayed cleanly as **`681cfe2`** on `main`. Safety ref **`backup/main-pre-rebase-20260708` → `4a00aa0`** still exists.
 
@@ -213,7 +213,7 @@ conservative denominator strengthens the claim.
   working tree — a touched mtime is not a change.
 - **`lane-liveness` "live" is not always an agent.** It reported a live writer for
   hours; the cause was a hung `git difftool -y -x vimdiff HEAD` (pid 55399, 4h+) that
-  had spawned MacVim holding a swap on `docs/rse/board/.readiness.html.swp` — a
+  had spawned MacVim holding a swap on `docs/rse/control/board/.readiness.html.swp` — a
   *stale* buffer that would have clobbered the rebaked board on save. Killed both,
   removed `.readiness.html.swp` and `.REPRODUCE.md.swp`. Check `ps`/`lsof` before
   concluding another agent owns the lane.

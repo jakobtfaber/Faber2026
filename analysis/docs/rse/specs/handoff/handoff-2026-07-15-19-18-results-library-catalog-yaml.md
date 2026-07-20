@@ -35,7 +35,7 @@ This session focused on the **Faber2026 results library** (navigable inventory o
 - [plan-manuscript-science-gates-2026-07-15.md](../plan/plan-manuscript-science-gates-2026-07-15.md) — separate science-gate plan (untracked; not executed this session)
 
 **Pointers / inventory:**
-- [results-library-INDEX.md](../results/results-library-INDEX.md) — repo pointer to external library + refresh commands
+- [results-library-INDEX.md](../notes/results-library-INDEX.md) — repo pointer to external library + refresh commands
 - On disk: `~/Data/Faber2026/results-library/INDEX.md` + `_inventory/inventory.yaml` (generated; not in git)
 
 **Prior handoffs (related workspace, not results-library code):**
@@ -62,7 +62,7 @@ All **untracked** (no commits this session):
 | `scripts/build_results_library_inventory.py` | **Rewritten** — load catalog → validate trust ∈ legend → probe → optional link → write inventory/INDEX; root = parent of `scripts/` or `FABER2026_ROOT` / `--root`; `--dry-run`; **no** copy of builder into library |
 | `scripts/results_library.py` | Path helper; exports `DEFAULT_LIBRARY` (builder imports it) |
 | `docs/rse/specs/plan/plan-results-library-2026-07-15.md` | Honest Phase A partial; forbids pipeline-local duplicate helper |
-| `docs/rse/specs/results/results-library-INDEX.md` | Points at catalog path + dry-run/refresh |
+| `docs/rse/specs/notes/results-library-INDEX.md` | Points at catalog path + dry-run/refresh |
 | Library on disk | INDEX regenerated; stale `_inventory/build_inventory.py` **deleted** |
 
 ### Design decisions locked in review + rewrite
@@ -132,7 +132,7 @@ python3 scripts/build_results_library_inventory.py --link --force
    - `scripts/build_results_library_inventory.py`
    - `scripts/results_library.py`
    - `docs/rse/specs/plan/plan-results-library-2026-07-15.md`
-   - `docs/rse/specs/results/results-library-INDEX.md`
+   - `docs/rse/specs/notes/results-library-INDEX.md`
    - this handoff (optional but recommended)
 3. [ ] **Finish Phase A open items** (from plan): `RESULTS_LIBRARY.md` pointers; `DATA_LOCATIONS.md` section; first real importer of `results_slot(...)` if a producer is ready.
 4. [ ] **Optional hardening:** small unit tests for `load_catalog` / `link_dest` / unknown trust; do not add mypy to whole manuscript tree without scope.

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Rebake the owner view and journal panel into the readiness board HTML.
 
-Reads docs/rse/board/owner-view.json (owner-facing Now/Next/Needs-you +
-component rollup) and docs/rse/journal.jsonl (append-only) and rewrites
+Reads docs/rse/control/board/owner-view.json (owner-facing Now/Next/Needs-you +
+component rollup) and docs/rse/protocols/journal.jsonl (append-only) and rewrites
 the sections between the OWNER:BEGIN/END and JOURNAL:BEGIN/END markers in
-docs/rse/board/readiness.html. The board is a static artifact behind a
+docs/rse/control/board/readiness.html. The board is a static artifact behind a
 strict CSP (no runtime fetch), so both panels must be baked in and the
 artifact redeployed after rendering.
 """
@@ -16,9 +16,9 @@ import sys
 N = 20
 MAX_SLOT = 3  # owner-view columns are capped: glanceability over completeness
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-J = ROOT / "docs/rse/journal.jsonl"
-OWNER = ROOT / "docs/rse/board/owner-view.json"
-BOARD = ROOT / "docs/rse/board/readiness.html"
+J = ROOT / "docs/rse/protocols/journal.jsonl"
+OWNER = ROOT / "docs/rse/control/board/owner-view.json"
+BOARD = ROOT / "docs/rse/control/board/readiness.html"
 BEGIN, END = "<!-- JOURNAL:BEGIN -->", "<!-- JOURNAL:END -->"
 OBEGIN, OEND = "<!-- OWNER:BEGIN -->", "<!-- OWNER:END -->"
 
@@ -64,7 +64,7 @@ def render_owner():
     return (
         '<div class="own">\n'
         '<div class="own-head"><b>Owner view</b>'
-        '<span class="meta">updated {upd} · data: docs/rse/board/owner-view.json'
+        '<span class="meta">updated {upd} · data: docs/rse/control/board/owner-view.json'
         ' (agents keep this current)</span></div>\n'
         '<div class="own-cols">\n'
         '<div class="own-col oc-you"><h4>Needs you</h4><ul>\n{you}\n</ul></div>\n'

@@ -18,9 +18,9 @@ convention.**
 
 | Item | Status | Evidence |
 |------|--------|----------|
-| P6.1 anchor inventory | ✅ Complete | DSA DM origin (`bursts.yaml`, catalog, 0.1 placeholder err); CHIME origin (`chime_side_inputs.json`, arrival-time regression, 8/12 constrained); report reproduces at pin. In [v6-association-dm-report-2026-07-07.md](../v6/v6-association-dm-report-2026-07-07.md). |
+| P6.1 anchor inventory | ✅ Complete | DSA DM origin (`bursts.yaml`, catalog, 0.1 placeholder err); CHIME origin (`chime_side_inputs.json`, arrival-time regression, 8/12 constrained); report reproduces at pin. In [v6-association-dm-report-2026-07-07.md](../notes/v6-association-dm-report-2026-07-07.md). |
 | P6.2 DM provenance table | ✅ Complete | `crossmatching/dm_provenance.csv` — 12 rows, all method/source cells populated, **no UNDOCUMENTED**. `delta_dm_sigma` reconciled to `association.py` σ_eff floor (matches report `n_sigma`). |
-| P6.2 agreement figure | ✅ Complete | `crossmatching/dm_agreement.png` → copied to `docs/rse/decks/dm-campaign-2026-07/v6-dm-agreement.png`. |
+| P6.2 agreement figure | ✅ Complete | `crossmatching/dm_agreement.png` → copied to `docs/rse/decks/dm/dm-campaign-2026-07/v6-dm-agreement.png`. |
 | P6.2 failing test → green | ✅ Complete | `tests/test_dm_provenance.py` (plan spec verbatim); red without CSV, green with it. |
 | P6.3 baseline oracles | ✅ Complete | 20 passed at the pin. |
 | P6.3 re-derivation parity | ✅ Complete | Report re-derives value-identical; only `separation_deg` differed cross-machine at ≤4.65×10⁻¹⁶ (finding). |
@@ -137,6 +137,6 @@ the manuscript after this validation.
 ## References
 
 - [plan-trust-reset-revalidation.md](../plan/plan-trust-reset-revalidation.md) — Phase 6 spec (P6.1–P6.3).
-- [v6-association-dm-report-2026-07-07.md](../v6/v6-association-dm-report-2026-07-07.md) — the V6 deliverable report.
+- [v6-association-dm-report-2026-07-07.md](../notes/v6-association-dm-report-2026-07-07.md) — the V6 deliverable report.
 - [dm-provenance-audit-2026-07-07.md](../dm/dm-provenance-audit-2026-07-07.md) — sibling DM audit (codex).
 - `logs/codex-jointdm.json` — joint DM-fit feasibility reference (Codex, read-only).

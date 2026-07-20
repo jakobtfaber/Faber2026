@@ -3,7 +3,7 @@
 > **Implemented with a later DM revision.** The original stored-DM display rule
 > below is retained as design history. Manuscript Figure 1 now re-dedisperses
 > both native products to the adopted CHIME-primary value before averaging; see
-> [verified-dm-adoption-2026-07-13.md](../misc/verified-dm-adoption-2026-07-13.md).
+> [verified-dm-adoption-2026-07-13.md](../notes/verified-dm-adoption-2026-07-13.md).
 
 ---
 **Date:** 2026-07-09

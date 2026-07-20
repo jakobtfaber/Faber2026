@@ -37,7 +37,7 @@ tips. Before doing new figure work, verify `origin/main`, the recorded
 The consolidated CHIME inventory reports **zero qualified CHIME
 scintillation-bandwidth measurements**. It also reports no qualified Oran CHIME
 detection. See
-[`report-chime-scintillation-inventory-2026-07-14.md`](../report/report-chime-scintillation-inventory-2026-07-14.md)
+[`report-chime-scintillation-inventory-2026-07-14.md`](../notes/report-chime-scintillation-inventory-2026-07-14.md)
 for the evidence table and failure diagnostics.
 
 Oran's DSA qualification is a separate instrument-specific result. It must not

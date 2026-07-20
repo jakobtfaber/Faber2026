@@ -51,7 +51,7 @@ Read these three, in order, before touching anything:
   Correction subsection to §1; the open action item now names all four near-misses.
 - `docs/rse/specs/handoff/handoff-2026-07-08-08-55-open-author-decisions.md:141` — inline correction
   where the bad "rejected/no-baseband" phrasing originated.
-- `docs/rse/journal.jsonl` — append-only, so the erroneous `03:02:03` entry stands with a
+- `docs/rse/protocols/journal.jsonl` — append-only, so the erroneous `03:02:03` entry stands with a
   correction appended after it.
 
 **Open (dsa110-FLITS, both based on `fix/budget-table-data-post-igm-lognormal`, the pin's branch):**

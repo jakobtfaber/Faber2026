@@ -111,23 +111,23 @@ to 5 without touching `infra/owner-board` or the Overleaf lane.
 
 The canonical state file says GitHub state must be fetched live while scientific
 lane status remains in `program-state.toml`
-([program-state.toml:1-10](../program-state.toml)). The tracker has drifted from
+([program-state.toml:1-10](../../control/program-state.toml)). The tracker has drifted from
 that canonical state:
 
 - Close #54: `hybrid-control-system` is `done`, PR #59 is merged, and its next
-  action is `none` ([program-state.toml:22-33](../program-state.toml)).
+  action is `none` ([program-state.toml:22-33](../../control/program-state.toml)).
 - Close #68: P3 is `done` and terminal after merged FLITS PR #181
-  ([program-state.toml:50-61](../program-state.toml)).
+  ([program-state.toml:50-61](../../control/program-state.toml)).
 - Close #75: P4 is `done` with a terminal documented failure after merged FLITS
-  PR #182 ([program-state.toml:64-75](../program-state.toml)).
+  PR #182 ([program-state.toml:64-75](../../control/program-state.toml)).
 - Close #55 after recording that its Route B lane is terminal and both successor
   lanes P3/P4 are complete. The generated owner view already calls Route B a
-  documented failure ([ACTIVE_LANES.md:13-15](../ACTIVE_LANES.md)).
-- Keep #56 open: A5 remains `proposed` ([program-state.toml:78-83](../program-state.toml))
+  documented failure ([ACTIVE_LANES.md:13-15](../../control/ACTIVE_LANES.md)).
+- Keep #56 open: A5 remains `proposed` ([program-state.toml:78-83](../../control/program-state.toml))
   and active FLITS PR #193 is implementing evidence-selected component counts.
   The issue should be updated to link that PR rather than closed.
 - Keep #58 open: the canonical lane is still `proposed`
-  ([program-state.toml:106-111](../program-state.toml)). A fresh local review
+  ([program-state.toml:106-111](../../control/program-state.toml)). A fresh local review
   batch exists, but its manifest decisions are all `pending`; owner approval has
   not occurred.
 
@@ -255,8 +255,8 @@ and code-only where possible.
 - Code and policy: [`.gitmodules`](../../../.gitmodules),
   [`PIPELINE.md`](../../../PIPELINE.md), [`README.md`](../../../README.md),
   [`.gitignore`](../../../.gitignore),
-  [`docs/rse/program-state.toml`](../program-state.toml), and
-  [`docs/rse/ACTIVE_LANES.md`](../ACTIVE_LANES.md).
+  [`docs/rse/control/program-state.toml`](../../control/program-state.toml), and
+  [`docs/rse/control/ACTIVE_LANES.md`](../../control/ACTIVE_LANES.md).
 - Live GitHub: [Faber2026](https://github.com/jakobtfaber/Faber2026),
   [FLITS fork](https://github.com/jakobtfaber/dsa110-FLITS), and
   [FLITS upstream](https://github.com/dsa110/dsa110-FLITS), inspected

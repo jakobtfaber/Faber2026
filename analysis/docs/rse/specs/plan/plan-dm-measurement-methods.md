@@ -266,7 +266,7 @@ uniformly, injection-validated.
   `load_manifest_rows` (`dm_power_analysis.py:303`) — all 24 products × all
   adapters, one config file (`dm_campaign/configs/battery.yaml`), per-run
   4-panel diagnostics + per-method contact sheets to
-  `docs/rse/decks/dm-campaign-2026-07/dm-battery-<method>-contact-sheet.png` + memo.
+  `docs/rse/decks/dm/dm-campaign-2026-07/dm-battery-<method>-contact-sheet.png` + memo.
   *(Executed: 112/120 constrained. The 7 arrival_regression unconstrained
   runs — mahi/chime + 6 DSA — fail its 8-subband S/N≥4 gate while their
   coarse curves are clearly peaked: config sensitivity, the Phase-2 entry

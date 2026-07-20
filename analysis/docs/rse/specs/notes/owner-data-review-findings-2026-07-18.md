@@ -2,7 +2,7 @@
 
 ---
 **Reviewer:** Jakob Faber (owner), from the 36-panel input-waterfall review
-(`docs/rse/decks/waterfall-review-2026-07-18/`) — full-res CHIME, upchannelized
+(`docs/rse/decks/scintillation/waterfall-review-2026-07-18/`) — full-res CHIME, upchannelized
 CHIME, and DSA dynamic spectra for all twelve co-detections, rendered directly
 from the byte-level products (md5s on each panel).
 **Status:** ADJUDICATED — three defect classes; scintillation-campaign

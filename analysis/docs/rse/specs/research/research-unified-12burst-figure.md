@@ -3,7 +3,7 @@
 > **Historical design audit.** Its stored-product DM convention was superseded
 > for manuscript Figure 1 on 2026-07-13: both native waterfalls are now shifted
 > to the adopted CHIME-primary DM before display averaging. See
-> [verified-dm-adoption-2026-07-13.md](../misc/verified-dm-adoption-2026-07-13.md).
+> [verified-dm-adoption-2026-07-13.md](../notes/verified-dm-adoption-2026-07-13.md).
 
 **Date:** 2026-07-09
 **Scope:** internal codebase (data inventory, figure infrastructure, manuscript conventions); light prior-art note on FRB gallery conventions

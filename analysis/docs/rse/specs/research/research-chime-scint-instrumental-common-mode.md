@@ -6,7 +6,7 @@
 
 **Post-experiment correction:** checked 2026-07-15 against Faber2026 `b62282c` and pinned pipeline `1085de0`; P1 refuted the original second-stage-window attribution as described below
 **Related Documents:**
-[report-chime-scintillation-inventory-2026-07-14.md](../report/report-chime-scintillation-inventory-2026-07-14.md) ·
+[report-chime-scintillation-inventory-2026-07-14.md](../notes/report-chime-scintillation-inventory-2026-07-14.md) ·
 [research-chime-scint-measurement.md](../research/research-chime-scint-measurement.md) ·
 [plan-chime-scint-corrected-products-revival.md](../plan/plan-chime-scint-corrected-products-revival.md) ·
 [decision-2026-07-14-figure1-and-chime-c1.md](../decision/decision-2026-07-14-figure1-and-chime-c1.md) ·

@@ -32,7 +32,7 @@ interior: freya 4.357/3.697 (Kolmogorov 2.3σ), mahi 4.16/3.849, johndoeII 4.26/
 
 ## Critical References
 
-- `docs/rse/journal.jsonl` — the running lane log (grep `joint-tf-fits`); most compressed true history of this campaign.
+- `docs/rse/protocols/journal.jsonl` — the running lane log (grep `joint-tf-fits`); most compressed true history of this campaign.
 - Live deck: https://jakobtfaber.github.io/Faber2026/decks/jointtf-day2/ (15 slides, self-critique on 14) + validation page decks/plpbf-validation/ — built from scratchpad scripts (see Other Notes).
 - h17: `~/flits-runs/data/joint/*.json` (all fit posteriors incl. `plpbf_{casey,wilhelm}_joint_fit.json`, `ab_*_relaxalpha_*.json`, `_prerefit_snapshot_20260717-1715/`) and `~/worktrees/joint-tf-fits/analysis/scattering-refit-2026-06/` (fitters, provenance docs: `PLPBF_FITTER_PROVENANCE.md`, `COMPONENT_COUNT_LADDER_AUDIT.md`, `RFI_FIX_FLIP_RECORD.md`, `FFTFIX_DEPLOY_PROVENANCE.md`).
 
@@ -48,7 +48,7 @@ interior: freya 4.357/3.697 (Kolmogorov 2.3σ), mahi 4.16/3.849, johndoeII 4.26/
 
 - **PL-PBF verdict numbers above are read from the landed JSONs** but not yet postprocessed (no corners/residuals/triptychs for the PL-PBF fits yet); teammate owns that postprocess incl. explicit s_i-posterior reporting (upper rail = "EMG adequate" verdict, not failure).
 - **Neighbor-test count changes NOT yet adopted** — evidences are raw; the mode-trap caveat is unresolved; no production count has been changed anywhere.
-- **Uncommitted (separate lanes, preserve):** `docs/rse/board/readiness.html`, `docs/rse/journal.jsonl` (both dirty), several untracked `docs/rse/specs/*-2026-07-17.md` drafts + `handoff-2026-07-18-14-44-fig1-observed-peak-decision.md` (another session's lane).
+- **Uncommitted (separate lanes, preserve):** `docs/rse/control/board/readiness.html`, `docs/rse/protocols/journal.jsonl` (both dirty), several untracked `docs/rse/specs/*-2026-07-17.md` drafts + `handoff-2026-07-18-14-44-fig1-observed-peak-decision.md` (another session's lane).
 - **whitney β=3 rail classification (task #12)** untouched pending count verdicts.
 - **Deck/validation pages** were current through the harsh-tail verdict but do NOT yet show the PL-PBF real-data collapse result — first stale item to fix when publishing next.
 

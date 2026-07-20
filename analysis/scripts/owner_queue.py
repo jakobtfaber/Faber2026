@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TICKETS = ROOT / "docs/rse/wayfinder/tickets"
-BOARD = ROOT / "docs/rse/BOARD.md"
+BOARD = ROOT / "docs/rse/control/BOARD.md"
 FIGREV = ROOT / "figure_review"
 OUT = ROOT / "OWNER_QUEUE.md"
 
@@ -93,7 +93,7 @@ def board_items() -> list[dict]:
             items.append({
                 "kind": "board",
                 "title": re.sub(r"^\s*-\s*\[ \]\s*✋?\s*", "", line).strip()[:110],
-                "where": "docs/rse/BOARD.md",
+                "where": "docs/rse/control/BOARD.md",
                 "note": "owner-marked board task",
             })
     return items

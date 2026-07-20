@@ -82,7 +82,7 @@ Copy P2's record structure verbatim, with:
 - **Repo:** FLITS (`jakobtfaber/dsa110-FLITS`), branch `scint/p3-optimal-estimator` forked from main `1085de0`. Worktree: `git worktree add` from the clone at `~/Developer/scratch/worktrees/flits-p1-window-upchan` (do not work on that checkout itself). New module `scintillation/scint_analysis/optimal_dnu.py` + tests; experiment dir `analysis/chime-scintillation/experiments/p3-optimal-estimator/`.
 - **Data:** local pinned npy — `~/Data/Faber2026/dsa110/upchan_codetections/crossacf-2026-07-14/` (pol0/pol1/intensity, 57024×437; verify SHA-256 against `DATA_MANIFEST.yaml` before use). High band = 627–800 MHz, 23 064 channels @ 6.1036 kHz. On-pulse 250–350 (BLINDED), off-pulse 0–200 + post-350 remainder. h17 NOT needed.
 - **Runtime:** conda `py312`. G1″ ≈ 500 estimator runs on 23k channels — vectorize; expect minutes, not hours (delay-domain is FFT-cheap).
-- **Landing:** FLITS PR (pass `--repo jakobtfaber/dsa110-FLITS` explicitly — the `upstream` remote confuses `gh pr create`), review, merge, then Faber2026 pin-bump PR (pattern: PRs #45/#50/#65). Update `docs/rse/program-state.toml` lane + `python3 scripts/sync_state.py` (owner-view is generated now; never hand-edit `ACTIVE_LANES.md`/`owner-view.json` — CI fails on drift).
+- **Landing:** FLITS PR (pass `--repo jakobtfaber/dsa110-FLITS` explicitly — the `upstream` remote confuses `gh pr create`), review, merge, then Faber2026 pin-bump PR (pattern: PRs #45/#50/#65). Update `docs/rse/control/program-state.toml` lane + `python3 scripts/sync_state.py` (owner-view is generated now; never hand-edit `ACTIVE_LANES.md`/`owner-view.json` — CI fails on drift).
 
 ## Reproducibility & Data State
 

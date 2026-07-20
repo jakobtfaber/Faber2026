@@ -32,10 +32,10 @@ DM strips on request). Everything is on local disk; nothing needs h17.
 
 ## Critical References (read these first)
 
-1. `docs/rse/specs/misc/owner-data-review-findings-2026-07-18.md` — the defect adjudication, per-burst ΔDM table, remediation charter. Everything flows from this.
+1. `docs/rse/specs/notes/owner-data-review-findings-2026-07-18.md` — the defect adjudication, per-burst ΔDM table, remediation charter. Everything flows from this.
 2. **The four casey figures** (open them for the owner immediately on request):
-   - DURABLE copies: docs/rse/decks/casey-dm-calibration-2026-07-19/ — `casey_dm_strip_CORRECTED.png` (the current decision figure), `casey_dm_strip_annotated.png` + `casey_dm_strip.png` + `casey_compare.png` (SIGN-BUGGED labels — superseded, keep only to explain history)
-   - Durable copies of galleries: `docs/rse/decks/waterfall-review-2026-07-18/index.html` (36 input panels), `docs/rse/decks/acf-review-2026-07-18/index.html` (both-band ACFs), `docs/rse/decks/remediation-preview-2026-07-18/index.html` (attempt-1 before/after, rejected)
+   - DURABLE copies: docs/rse/decks/dm/casey-dm-calibration-2026-07-19/ — `casey_dm_strip_CORRECTED.png` (the current decision figure), `casey_dm_strip_annotated.png` + `casey_dm_strip.png` + `casey_compare.png` (SIGN-BUGGED labels — superseded, keep only to explain history)
+   - Durable copies of galleries: `docs/rse/decks/scintillation/waterfall-review-2026-07-18/index.html` (36 input panels), `docs/rse/decks/scintillation/acf-review-2026-07-18/index.html` (both-band ACFs), `docs/rse/decks/scintillation/remediation-preview-2026-07-18/index.html` (attempt-1 before/after, rejected)
 3. `~/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics/summary.csv` — the measured DM catalog (per-burst chime_dm/dsa_dm/joint_dm + σ + quality). Owner decision: **chime_dm was the chosen authority, but see Learnings — it over-dedisperses scattered bursts; structure-optimal DMs (below chime_dm) are where this is heading.**
 
 ## The state of the casey calibration (resume exactly here)
@@ -51,7 +51,7 @@ DM strips on request). Everything is on local disk; nothing needs h17.
 - **Sign bug (FIXED, but history poisoned):** this session's earlier casey diagnostics (`casey_dm_strip.png`, `casey_dm_strip_annotated.png`, `casey_compare.png`) have MIRRORED DM labels (transform lacked the leading minus). The "structure-opt 491.2378" claim from the first scan is actually 491.1778. Only `casey_dm_strip_CORRECTED.png` is truthful. The owner caught this ("left is a lower DM but clearly more dedispersed — should be the other way around").
 - **Attempt-1 products are rejected** but still on disk (`upchan_codetections_remediated_20260718/`); its `verification.md`/`prov/*.json` diagnostic scans used the CORRECT sign (its formula had the minus) — its "structure optima at/below catalog" finding is trustworthy and matches the owner's eye (casey δ*≈−0.025).
 - **Peak-S/N is a broken DM metric on scattered bursts** — biases high (scattering tail piles onto peak). Do not reuse.
-- **Uncommitted:** `docs/rse/decks/remediation-preview-2026-07-18/` (untracked), journal dirty, `.DS_Store` noise. Nothing science-critical uncommitted beyond the decks.
+- **Uncommitted:** `docs/rse/decks/scintillation/remediation-preview-2026-07-18/` (untracked), journal dirty, `.DS_Store` noise. Nothing science-critical uncommitted beyond the decks.
 - **PR #140 (pin bump + scint figures): DO-NOT-MERGE** stands (input defects). PR #142 (handoff-sync docs) state unknown at write time — check `gh pr view 142`.
 
 ## Learnings (hard-won this session — do not rediscover)
@@ -76,14 +76,14 @@ DM strips on request). Everything is on local disk; nothing needs h17.
 3. [ ] casey aggressive RFI pass (Learnings #4); show before/after; owner approves.
 4. [ ] Roll the blessed recipe to the remaining 11 bursts; one corrected strip + before/after per burst for owner spot-check; deliver to `~/Data/Faber2026/dsa110/upchan_codetections_remediated_v2_20260718/` with md5-chained provenance; never touch originals.
 5. [ ] Then: re-run the windowed-refit scint campaign on remediated inputs (same predeclared gates), rerun closure, and return to the wf-02 ratification (`docs/rse/wayfinder/tickets/02-ratify-chime-scintillation-method.md`, currently BLOCKED) with fresh galleries.
-6. [ ] Wider queue unchanged: fig1 `decide` pair, priors sign-off (wf-07), phineas prescription (wf-06), trust overhaul (wf-13) — see `docs/rse/BOARD.md`.
+6. [ ] Wider queue unchanged: fig1 `decide` pair, priors sign-off (wf-07), phineas prescription (wf-06), trust overhaul (wf-13) — see `docs/rse/control/BOARD.md`.
 
 **Recommended Next Skill:** `ai-research-workflows:running-experiments` for the casey calibration loop (it is an owner-in-the-loop experiment); `ai-research-workflows:implementing-plans` once the recipe is blessed and the 11-burst rollout begins.
 
 ## Other Notes
 
 - The owner communicates DM quality visually; every claim must come with a rendered figure, axes explicitly labeled, and the DM-lean convention stated on the figure (lower DM → burst drags right/late going down in frequency; higher → left/early). Never assert a lean direction without the numeric single-channel sign test behind it.
-- Wayfinder map: `docs/rse/wayfinder/map-apj-submission.md` (decisions) + `docs/rse/BOARD.md` (execution) are canonical; `results-registry.toml` is the claim-level trust inventory (scint rows currently pending/blocked).
+- Wayfinder map: `docs/rse/wayfinder/map-apj-submission.md` (decisions) + `docs/rse/control/BOARD.md` (execution) are canonical; `results-registry.toml` is the claim-level trust inventory (scint rows currently pending/blocked).
 - Standing push/PR authorization exists (CLAUDE.md); pipeline pin bumps are their own reviewed step; PR #140 stays unmerged until remediation completes.
 
 ---

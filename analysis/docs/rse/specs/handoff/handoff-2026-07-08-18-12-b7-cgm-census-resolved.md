@@ -243,7 +243,7 @@ the right *kind* of object. B3 remains deferred by author decision.
     `…22-49-flits-pipeline-commits…`), `data/`, `scripts/__pycache__/`.
 - **⚠ `lane-liveness .` still reports `live`, and it is NOT another agent.** The signal is a
   **hung `git difftool -y -x vimdiff HEAD` (pid 55399, running 4h+ since 18:37)** which spawned
-  **MacVim (pid 56031)** holding `docs/rse/board/.readiness.html.swp`. That Vim buffer is stale
+  **MacVim (pid 56031)** holding `docs/rse/control/board/.readiness.html.swp`. That Vim buffer is stale
   against disk (the board was rebaked at ~18:35); **saving it would clobber the board**.
   The stray `.REPRODUCE.md.swp` is from the same difftool session. Kill 55399 + 56031 and remove
   both `.swp` files before trusting `lane-liveness` or doing git surgery.

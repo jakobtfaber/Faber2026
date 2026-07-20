@@ -4,7 +4,7 @@
 **Date:** 2026-07-03
 **Author:** AI Assistant
 **Status:** Complete (merged 2026-07-03, squash `37d76a49`)
-**Plan Reference:** dsa110-FLITS issue #102 + its Agent Brief (the tracker issues are the plan); PRD "Route A completion" in [prd-freya-beta-comodel-real-data-fit.md](../prd/prd-freya-beta-comodel-real-data-fit.md).
+**Plan Reference:** dsa110-FLITS issue #102 + its Agent Brief (the tracker issues are the plan); PRD "Route A completion" in [prd-freya-beta-comodel-real-data-fit.md](../notes/prd-freya-beta-comodel-real-data-fit.md).
 
 ---
 

@@ -32,14 +32,14 @@ surface restoration.
 ## Workflow Artifacts
 
 - [plan-trust-reset-revalidation.md](../plan/plan-trust-reset-revalidation.md) — Phase 6 (P6.1–P6.3) spec.
-- [v6-association-dm-report-2026-07-07.md](../v6/v6-association-dm-report-2026-07-07.md) — **the V6 deliverable** (provenance table, agreement figure, re-derived association table, findings, dispersion-reference decision).
+- [v6-association-dm-report-2026-07-07.md](../notes/v6-association-dm-report-2026-07-07.md) — **the V6 deliverable** (provenance table, agreement figure, re-derived association table, findings, dispersion-reference decision).
 - [validation-trust-reset-revalidation-phase6.md](../validation/validation-trust-reset-revalidation-phase6.md) — validation report (PASS, fresh evidence).
 - [dm-provenance-audit-2026-07-07.md](../dm/dm-provenance-audit-2026-07-07.md) — sibling DM audit (codex).
 - [handoff-2026-07-07-09-25-toa-recalc-from-metadata.md](../handoff/handoff-2026-07-07-09-25-toa-recalc-from-metadata.md) — the prior handoff that scoped this work.
 
 ## Critical References (read first)
 
-- `docs/rse/specs/v6/v6-association-dm-report-2026-07-07.md` — everything V6, incl.
+- `docs/rse/specs/notes/v6-association-dm-report-2026-07-07.md` — everything V6, incl.
   the dispersion-reference decision (§4) and the named findings.
 - `~/Developer/scratch/worktrees/flits-v6-phase6/` — the **isolated FLITS worktree**
   where all pipeline changes live (branch `agent/v6-dm-provenance-toa`, from pin
@@ -58,13 +58,13 @@ surface restoration.
 - `crossmatching/dm_provenance.csv`, `crossmatching/dm_agreement.png` — **gitignored** (`*.csv`/`*.png`).
 
 **Faber2026** `main` (local V6 follow-up commit pending at handoff-update time):
-- `docs/rse/specs/v6/v6-association-dm-report-2026-07-07.md` (new)
+- `docs/rse/specs/notes/v6-association-dm-report-2026-07-07.md` (new)
 - `docs/rse/specs/validation/validation-trust-reset-revalidation-phase6.md` (new)
-- `docs/rse/decks/dm-campaign-2026-07/v6-dm-agreement.png` (new, trackable)
+- `docs/rse/decks/dm/dm-campaign-2026-07/v6-dm-agreement.png` (new, trackable)
 - `sample_table.tex`, `scripts/make_sample_table.py`, `sections/toa.tex`, and
   `CONTEXT.md` restore the V6 association diagnostics under shared DSA DM.
 - `pipeline` gitlink is bumped locally to FLITS `9175b92`.
-- `docs/rse/journal.jsonl` (appended)
+- `docs/rse/protocols/journal.jsonl` (appended)
 
 ## Reproducibility & Data State
 
@@ -139,7 +139,7 @@ FLITS push/merge and any broader owner-directed publication plumbing.
 - **Outward-facing boundary:** committing/pushing the FLITS branch and pushing
   Faber2026 `main` (Overleaf pulls it) are one-way doors — left to the owner.
 - Do not bump the `pipeline/` pin casually; only after the FLITS work merges upstream.
-- Journal (`docs/rse/journal.jsonl`) carries both the implement and validate entries.
+- Journal (`docs/rse/protocols/journal.jsonl`) carries both the implement and validate entries.
 
 ---
 

@@ -296,16 +296,16 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
   fresh isolated batch and hash-bound owner approval of the exact candidate
   are still required; the earlier rejected-candidate `fig1-gallery` stays
   `needs_revision` and must not be promoted.
-- **Figure wishlist** (`docs/rse/specs/misc/figure-wishlist.md`) lists other
+- **Figure wishlist** (`docs/rse/specs/notes/figure-wishlist.md`) lists other
   intended figures not yet (re)inserted; live draft `\fbox` floats with
   `\label{fig:…}` sit in `sections/observations.tex` and
   `sections/results.tex`. Do not `\includegraphics` revoked campaign PDFs
   until the listed gate clears; strip draft boxes before circulation
   (referee M9).
 - **Operational state** is generated, not hand-maintained: canonical source
-  is `docs/rse/program-state.toml` (its `[owner_view]` block is the board
-  summary), evidence tracked in `docs/rse/evidence-ledger.toml`;
-  `scripts/sync_state.py` regenerates `docs/rse/ACTIVE_LANES.md` and the
+  is `docs/rse/control/program-state.toml` (its `[owner_view]` block is the board
+  summary), evidence tracked in `docs/rse/control/evidence-ledger.toml`;
+  `scripts/sync_state.py` regenerates `docs/rse/control/ACTIVE_LANES.md` and the
   `owner-view.json` the readiness board renders. Design:
   `docs/rse/specs/plan/plan-hybrid-control-system.md` (landed PR #59).
 - **Geometry-adjudicated β** governs what `tab:beta` (**unified β roster**) may

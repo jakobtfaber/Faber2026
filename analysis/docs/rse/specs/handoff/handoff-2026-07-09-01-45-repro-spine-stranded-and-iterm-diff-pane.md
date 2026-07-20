@@ -94,11 +94,11 @@ Two threads. The first was a two-part landing of the table-emitter work (submodu
 
 - **Unpushed:** `681cfe2` on local `main` (`behind=0 ahead=1`). The checked-out branch `ms/appendix-c-sync-pr40` (PR #41, open) is based on `64158aa` and **does not contain it**. `origin/main:REPRODUCE.md` still has no `## Regenerating the tables` section — the spine update is not visible to anyone but this machine.
 - **Prior handoffs cite a dangling SHA.** The 18:42 and 22:49 handoffs both reference `4a00aa0` for this commit. That SHA was rebased away at 23:01 and is on **no live branch**; the live commit is `681cfe2`. `4a00aa0` survives only on `backup/main-pre-rebase-20260708`. Anyone following those handoffs will chase a commit that appears orphaned.
-- **iTerm fix is written but inert.** `Workgroups` and the profile trigger both read `custom.claudeCodeNoDiff` from the on-disk plist *and* from `cfprefsd`. But iTerm2 (PID `1368`) has never quit since the write and still serves `builtin.claudeCode` from memory. A fresh `claude` session at 01:43 spawned a new Diff pane (`11782`), now holding `docs/rse/board/readiness.html` via `Vim 14757`. **The "open a new tab to test it" advice given earlier in the session was wrong** — that test was run and it failed.
+- **iTerm fix is written but inert.** `Workgroups` and the profile trigger both read `custom.claudeCodeNoDiff` from the on-disk plist *and* from `cfprefsd`. But iTerm2 (PID `1368`) has never quit since the write and still serves `builtin.claudeCode` from memory. A fresh `claude` session at 01:43 spawned a new Diff pane (`11782`), now holding `docs/rse/control/board/readiness.html` via `Vim 14757`. **The "open a new tab to test it" advice given earlier in the session was wrong** — that test was run and it failed.
 - **The pref write is at risk.** iTerm caches `New Bookmarks` in memory and flushes on quit. Quitting it may write the cached `builtin.claudeCode` trigger back over the edit. Correct order is **quit iTerm first, then write, then relaunch** — see Action Items.
 - **Submodule is dirty** with a separate lane's work: `analysis/beta_campaign/*` (4 files), `analysis/scattering-refit-2026-06/plot_jointmodel_pair.py`, `analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py`, and many `scintillation/configs/bursts/*.yaml`. Super-repo shows `m pipeline` (lowercase — dirty content, gitlink unchanged at `f9e1c24`). A closeout packet classifying an earlier snapshot of these paths passed `agent-closeout-check`, but it lives in an **ephemeral scratchpad** and the dirty set has since changed.
 - **Untracked and unclassified:** `data/`, `scripts/__pycache__/`, and the two handoff docs above.
-- **Not journalled.** Per the repo's journal protocol (`docs/rse/journal-protocol.md`, `scripts/journal-append.sh`) active work should append to `docs/rse/journal.jsonl` every ≤10 minutes. This session did not. The board at `docs/rse/board/readiness.html` is correspondingly stale for this work.
+- **Not journalled.** Per the repo's journal protocol (`docs/rse/protocols/journal-protocol.md`, `scripts/journal-append.sh`) active work should append to `docs/rse/protocols/journal.jsonl` every ≤10 minutes. This session did not. The board at `docs/rse/control/board/readiness.html` is correspondingly stale for this work.
 
 ## Learnings
 
@@ -117,15 +117,15 @@ Two threads. The first was a two-part landing of the table-emitter work (submodu
 4. [ ] **Rescue the prefs backup if it still matters.** `com.googlecode.iterm2.plist.bak` (21,297 bytes) was written to this session's scratchpad, which is ephemeral. Copy it somewhere durable before relying on it, or regenerate with `defaults export com.googlecode.iterm2 <path>`.
 5. [ ] **Classify `data/`** — probably belongs under `~/Data/Faber2026/` with a symlink back, per the machine's data convention. Confirm ownership first; it appeared at 22:26 from a lane this session did not author.
 6. [ ] **Re-run the emitter tests** against the current submodule tree (`f9e1c24`) before trusting the 9-passed figure: `cd pipeline && uv run pytest galaxies/foreground/test_budget_table_emitter.py galaxies/foreground/test_foreground_table_emitter.py`.
-7. [ ] Backfill `docs/rse/journal.jsonl` for this session and rebake the readiness board.
+7. [ ] Backfill `docs/rse/protocols/journal.jsonl` for this session and rebake the readiness board.
 
 **Recommended Next Skill:** `ai-research-workflows:ensuring-reproducibility` — the open work is the reproducibility spine itself (`REPRODUCE.md`, `repro_manifest.csv`, the `data/` placement, and re-verifying the parity tests), which is exactly that skill's remit. Landing `681cfe2` is a prerequisite, not a separate design task.
 
 ## Other Notes
 
 - **Do not touch the `[entire]` git hook** in `dsa110-FLITS`. It prints `fatal: Could not read from remote repository` and tries to push to remotes named `0`, `1`, `preparing`, `prepared`, `committed` on every git command. It is non-fatal noise. Its real output is buried in the middle (`386e886..e0039c6`), so always confirm remote state with `git ls-remote`.
-- **`Vim 14757` currently holds `docs/rse/board/readiness.html`** read-only, with no swap. Harmless, but it will keep this repo reading as `live` to `lane-liveness` until it exits or iTerm restarts.
-- Several separate lanes were deliberately preserved untouched this session and remain so: the submodule's scintillation/beta-campaign work, the RSE bookkeeping files (`docs/rse/board/readiness.html`, `docs/rse/journal.jsonl`), and the 16 regenerated `figures/dsa_scint_acf/*.pdf` that a concurrent session wrote at 18:23 and has since landed.
+- **`Vim 14757` currently holds `docs/rse/control/board/readiness.html`** read-only, with no swap. Harmless, but it will keep this repo reading as `live` to `lane-liveness` until it exits or iTerm restarts.
+- Several separate lanes were deliberately preserved untouched this session and remain so: the submodule's scintillation/beta-campaign work, the RSE bookkeeping files (`docs/rse/control/board/readiness.html`, `docs/rse/protocols/journal.jsonl`), and the 16 regenerated `figures/dsa_scint_acf/*.pdf` that a concurrent session wrote at 18:23 and has since landed.
 
 ---
 

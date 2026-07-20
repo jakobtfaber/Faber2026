@@ -1,6 +1,6 @@
 # GENERATED-INPUT — canonical operational state (hand-editable source of truth).
 # Read with stdlib tomllib (Python >= 3.11). Consumed by scripts/sync_state.py,
-# which regenerates docs/rse/ACTIVE_LANES.md and docs/rse/board/owner-view.json.
+# which regenerates docs/rse/control/ACTIVE_LANES.md and docs/rse/control/board/owner-view.json.
 # Edit THIS file, then run: python3 scripts/sync_state.py
 # Design + rules: docs/rse/specs/plan/plan-hybrid-control-system.md
 #
@@ -118,7 +118,7 @@ needs_owner = false
 
 # ---------------------------------------------------------------------------
 # Owner-facing board summary. This is the canonical source for
-# docs/rse/board/owner-view.json; sync_state.py serializes it back to that
+# docs/rse/control/board/owner-view.json; sync_state.py serializes it back to that
 # JSON byte-for-byte, then scripts/render_journal_panel.py bakes readiness.html.
 # Headlines (h) <= 6 words; detail in d; who = assignee; components are
 # strand-keyed rollups. Bump owner_view.updated on every edit.

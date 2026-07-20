@@ -5,7 +5,7 @@
 **Author:** AI Assistant (Claude, session 54fbfb21)
 **Status:** Complete (manual verification pending: Overleaf pull)
 **Related Documents:**
-- [Assessment: ChatGPT scint de-combing review](../assessment/assessment-chatgpt-scint-decombing-review.md) *(untracked; committed by this plan)*
+- [Assessment: ChatGPT scint de-combing review](../notes/assessment-chatgpt-scint-decombing-review.md) *(untracked; committed by this plan)*
 - [Experiment: freya CHIME instrumental origin](../experiment/experiment-freya-chime-instrumental-origin.md)
 
 ---
@@ -70,11 +70,11 @@ reproducibility hazard before it bites a fresh clone; give Overleaf a clean
 
 **Faber2026 super-repo:**
 - `pipeline` gitlink dirty: `79eaf7e → 17ad490` (uncommitted).
-- `docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md` untracked
+- `docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md` untracked
   (content verified accurate against the session).
-- `docs/rse/journal.jsonl` +5 uncommitted append-only lines (4 from the
+- `docs/rse/protocols/journal.jsonl` +5 uncommitted append-only lines (4 from the
   completed `repro-spine` lane, 1 from this session's review). Journal
-  protocol (`docs/rse/journal-protocol.md`, "Commit policy") says the journal
+  protocol (`docs/rse/protocols/journal-protocol.md`, "Commit policy") says the journal
   rides along with any doc/code commit.
 - `REPRODUCE.md:27-34` is **stale** (confirmed): claims the pin sits "310
   commits along a divergent line, on the branch
@@ -183,7 +183,7 @@ docs, per `fd7a1ee` precedent.
 - Evidence-PR structure: Faber2026 PR #71 body (ancestry proof, scoped
   diffstat, parity byte-identity) — `gh pr view 71 --repo jakobtfaber/Faber2026`.
 - Repro-doc sync: commit `fd7a1ee` (REPRODUCE.md + repro_manifest.csv to pin).
-- Journal ride-along: `docs/rse/journal-protocol.md` "Commit policy".
+- Journal ride-along: `docs/rse/protocols/journal-protocol.md` "Commit policy".
 
 ## Implementation Phases
 
@@ -368,7 +368,7 @@ synced to `<PIN2>` (including the stale-paragraph fix).
   git switch -c agent/bump-pipeline-chime-guards origin/main
   # gitlink: the submodule checkout already sits at $PIN2 after Phase 2's amend
   git -C pipeline rev-parse HEAD   # expect $PIN2
-  git add pipeline docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/journal.jsonl
+  git add pipeline docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/protocols/journal.jsonl
   # NEVER: git add -A / git add . — the manuscript lane must not be swept in.
   git status --short   # expect exactly: M pipeline, A assessment doc, A this plan, M journal — plus the UNSTAGED manuscript lane
   ```
@@ -436,11 +436,11 @@ synced to `<PIN2>` (including the stale-paragraph fix).
   ```bash
   bash scripts/journal-append.sh claude-main scint-guards working \
     "Landing guard sync: FLITS #$FLITS_PR merged to fork main; pin/faber2026 published at ${PIN2:0:7}; opening Faber2026 pin-bump PR (gitlink 79eaf7e -> ${PIN2:0:7} + assessment doc + repro-doc sync)."
-  git add REPRODUCE.md repro_manifest.csv docs/rse/journal.jsonl
+  git add REPRODUCE.md repro_manifest.csv docs/rse/protocols/journal.jsonl
   git commit -m "Bump pipeline pin 79eaf7e -> ${PIN2:0:7} (CHIME artifact-control guards)" \
     -m "Promotes the 2026-07-09 guard work (FLITS #$FLITS_PR) onto the pin without switching lineage. Adds the session assessment doc, this plan, journal entries, and syncs REPRODUCE.md + repro_manifest.csv to the new pin (incl. correcting the stale divergent-branch paragraph; pin lineage now published on fork branch pin/faber2026)." \
     -m "Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>" \
-    -- pipeline docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/journal.jsonl REPRODUCE.md repro_manifest.csv
+    -- pipeline docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/protocols/journal.jsonl REPRODUCE.md repro_manifest.csv
   git push origin agent/bump-pipeline-chime-guards
   gh pr create --repo jakobtfaber/Faber2026 --base main \
     --title "Bump pipeline pin 79eaf7e -> ${PIN2:0:7} (CHIME artifact-control guards)" \
@@ -458,7 +458,7 @@ synced to `<PIN2>` (including the stale-paragraph fix).
 
 **Verification:**
 - [x] `git fetch origin main --quiet && git ls-tree origin/main pipeline` shows `$PIN2`.
-- [x] `git show origin/main:docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md | head -1` → `# Assessment: ChatGPT review of the scintillation "de-combing" code`.
+- [x] `git show origin/main:docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md | head -1` → `# Assessment: ChatGPT review of the scintillation "de-combing" code`.
 
 ### Phase 4: Post-merge verification, local reconciliation, Overleaf pull
 
@@ -611,7 +611,7 @@ remain resolvable exactly as before; `pin/faber2026` additionally makes
      `pin/faber2026` exists on the fork and that GitHub replicated it; re-run.
 3. **Case:** journal hook auto-appends during the plan (protocol's staleness
    hook).
-   - **Expected:** benign — journal is append-only; `git add docs/rse/journal.jsonl`
+   - **Expected:** benign — journal is append-only; `git add docs/rse/protocols/journal.jsonl`
      picks up whatever is there at commit time.
 
 ## Documentation Updates
@@ -619,9 +619,9 @@ remain resolvable exactly as before; `pin/faber2026` additionally makes
 - [ ] `REPRODUCE.md` — stale divergent-branch paragraph corrected; pin history
       extended; `pin/faber2026` convention documented (Phase 3).
 - [ ] `repro_manifest.csv` — 4 pin-referencing rows get UPDATE notes (Phase 3).
-- [ ] `docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md` — committed
+- [ ] `docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md` — committed
       as-is (Phase 3).
-- [ ] `docs/rse/journal.jsonl` — working + done entries (Phases 3–4).
+- [ ] `docs/rse/protocols/journal.jsonl` — working + done entries (Phases 3–4).
 - [ ] This plan file — committed in the Phase 3 PR.
 
 ## Timeline Estimate
@@ -639,9 +639,9 @@ remain resolvable exactly as before; `pin/faber2026` additionally makes
 ## References
 
 **Research/context documents:**
-- [assessment-chatgpt-scint-decombing-review.md](../assessment/assessment-chatgpt-scint-decombing-review.md)
+- [assessment-chatgpt-scint-decombing-review.md](../notes/assessment-chatgpt-scint-decombing-review.md)
 - [experiment-freya-chime-instrumental-origin.md](../experiment/experiment-freya-chime-instrumental-origin.md)
-- `../journal-protocol.md` (commit policy)
+- `../../protocols/journal-protocol.md` (commit policy)
 - `../../../REPRODUCE.md` (pin hazards; lines 25–36, 145–158)
 
 **Files analyzed:** `pipeline` @ `17ad490` (diffstat, ancestry, remote refs),
@@ -667,7 +667,7 @@ evidence pattern).
 **Author:** AI Assistant (Claude, session 54fbfb21)
 **Status:** Complete (manual verification pending: Overleaf pull)
 **Related Documents:**
-- [Assessment: ChatGPT scint de-combing review](../assessment/assessment-chatgpt-scint-decombing-review.md) *(untracked; committed by this plan)*
+- [Assessment: ChatGPT scint de-combing review](../notes/assessment-chatgpt-scint-decombing-review.md) *(untracked; committed by this plan)*
 - [Experiment: freya CHIME instrumental origin](../experiment/experiment-freya-chime-instrumental-origin.md)
 
 ---
@@ -732,11 +732,11 @@ reproducibility hazard before it bites a fresh clone; give Overleaf a clean
 
 **Faber2026 super-repo:**
 - `pipeline` gitlink dirty: `79eaf7e → 17ad490` (uncommitted).
-- `docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md` untracked
+- `docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md` untracked
   (content verified accurate against the session).
-- `docs/rse/journal.jsonl` +5 uncommitted append-only lines (4 from the
+- `docs/rse/protocols/journal.jsonl` +5 uncommitted append-only lines (4 from the
   completed `repro-spine` lane, 1 from this session's review). Journal
-  protocol (`docs/rse/journal-protocol.md`, "Commit policy") says the journal
+  protocol (`docs/rse/protocols/journal-protocol.md`, "Commit policy") says the journal
   rides along with any doc/code commit.
 - `REPRODUCE.md:27-34` is **stale** (confirmed): claims the pin sits "310
   commits along a divergent line, on the branch
@@ -845,7 +845,7 @@ docs, per `fd7a1ee` precedent.
 - Evidence-PR structure: Faber2026 PR #71 body (ancestry proof, scoped
   diffstat, parity byte-identity) — `gh pr view 71 --repo jakobtfaber/Faber2026`.
 - Repro-doc sync: commit `fd7a1ee` (REPRODUCE.md + repro_manifest.csv to pin).
-- Journal ride-along: `docs/rse/journal-protocol.md` "Commit policy".
+- Journal ride-along: `docs/rse/protocols/journal-protocol.md` "Commit policy".
 
 ## Implementation Phases
 
@@ -1030,7 +1030,7 @@ synced to `<PIN2>` (including the stale-paragraph fix).
   git switch -c agent/bump-pipeline-chime-guards origin/main
   # gitlink: the submodule checkout already sits at $PIN2 after Phase 2's amend
   git -C pipeline rev-parse HEAD   # expect $PIN2
-  git add pipeline docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/journal.jsonl
+  git add pipeline docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/protocols/journal.jsonl
   # NEVER: git add -A / git add . — the manuscript lane must not be swept in.
   git status --short   # expect exactly: M pipeline, A assessment doc, A this plan, M journal — plus the UNSTAGED manuscript lane
   ```
@@ -1098,11 +1098,11 @@ synced to `<PIN2>` (including the stale-paragraph fix).
   ```bash
   bash scripts/journal-append.sh claude-main scint-guards working \
     "Landing guard sync: FLITS #$FLITS_PR merged to fork main; pin/faber2026 published at ${PIN2:0:7}; opening Faber2026 pin-bump PR (gitlink 79eaf7e -> ${PIN2:0:7} + assessment doc + repro-doc sync)."
-  git add REPRODUCE.md repro_manifest.csv docs/rse/journal.jsonl
+  git add REPRODUCE.md repro_manifest.csv docs/rse/protocols/journal.jsonl
   git commit -m "Bump pipeline pin 79eaf7e -> ${PIN2:0:7} (CHIME artifact-control guards)" \
     -m "Promotes the 2026-07-09 guard work (FLITS #$FLITS_PR) onto the pin without switching lineage. Adds the session assessment doc, this plan, journal entries, and syncs REPRODUCE.md + repro_manifest.csv to the new pin (incl. correcting the stale divergent-branch paragraph; pin lineage now published on fork branch pin/faber2026)." \
     -m "Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>" \
-    -- pipeline docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/journal.jsonl REPRODUCE.md repro_manifest.csv
+    -- pipeline docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md docs/rse/specs/plan/plan-sync-chime-guards-to-origin-main.md docs/rse/protocols/journal.jsonl REPRODUCE.md repro_manifest.csv
   git push origin agent/bump-pipeline-chime-guards
   gh pr create --repo jakobtfaber/Faber2026 --base main \
     --title "Bump pipeline pin 79eaf7e -> ${PIN2:0:7} (CHIME artifact-control guards)" \
@@ -1120,7 +1120,7 @@ synced to `<PIN2>` (including the stale-paragraph fix).
 
 **Verification:**
 - [x] `git fetch origin main --quiet && git ls-tree origin/main pipeline` shows `$PIN2`.
-- [x] `git show origin/main:docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md | head -1` → `# Assessment: ChatGPT review of the scintillation "de-combing" code`.
+- [x] `git show origin/main:docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md | head -1` → `# Assessment: ChatGPT review of the scintillation "de-combing" code`.
 
 ### Phase 4: Post-merge verification, local reconciliation, Overleaf pull
 
@@ -1273,7 +1273,7 @@ remain resolvable exactly as before; `pin/faber2026` additionally makes
      `pin/faber2026` exists on the fork and that GitHub replicated it; re-run.
 3. **Case:** journal hook auto-appends during the plan (protocol's staleness
    hook).
-   - **Expected:** benign — journal is append-only; `git add docs/rse/journal.jsonl`
+   - **Expected:** benign — journal is append-only; `git add docs/rse/protocols/journal.jsonl`
      picks up whatever is there at commit time.
 
 ## Documentation Updates
@@ -1281,9 +1281,9 @@ remain resolvable exactly as before; `pin/faber2026` additionally makes
 - [ ] `REPRODUCE.md` — stale divergent-branch paragraph corrected; pin history
       extended; `pin/faber2026` convention documented (Phase 3).
 - [ ] `repro_manifest.csv` — 4 pin-referencing rows get UPDATE notes (Phase 3).
-- [ ] `docs/rse/specs/assessment/assessment-chatgpt-scint-decombing-review.md` — committed
+- [ ] `docs/rse/specs/notes/assessment-chatgpt-scint-decombing-review.md` — committed
       as-is (Phase 3).
-- [ ] `docs/rse/journal.jsonl` — working + done entries (Phases 3–4).
+- [ ] `docs/rse/protocols/journal.jsonl` — working + done entries (Phases 3–4).
 - [ ] This plan file — committed in the Phase 3 PR.
 
 ## Timeline Estimate
@@ -1301,9 +1301,9 @@ remain resolvable exactly as before; `pin/faber2026` additionally makes
 ## References
 
 **Research/context documents:**
-- [assessment-chatgpt-scint-decombing-review.md](../assessment/assessment-chatgpt-scint-decombing-review.md)
+- [assessment-chatgpt-scint-decombing-review.md](../notes/assessment-chatgpt-scint-decombing-review.md)
 - [experiment-freya-chime-instrumental-origin.md](../experiment/experiment-freya-chime-instrumental-origin.md)
-- `../journal-protocol.md` (commit policy)
+- `../../protocols/journal-protocol.md` (commit policy)
 - `../../../REPRODUCE.md` (pin hazards; lines 25–36, 145–158)
 
 **Files analyzed:** `pipeline` @ `17ad490` (diffstat, ancestry, remote refs),

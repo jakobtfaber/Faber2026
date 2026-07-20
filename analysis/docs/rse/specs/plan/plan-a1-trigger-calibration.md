@@ -20,7 +20,7 @@ conservative 1% false-escalation envelope is
 `Delta ln Z = 59699.69283336272`, and all eight two-component power cells have
 zero escalation probability. The implementation and calibration campaign are
 complete; owner sign-off on this trigger is not warranted. See
-[`report-chime-scintillation-inventory-2026-07-14.md`](../report/report-chime-scintillation-inventory-2026-07-14.md)
+[`report-chime-scintillation-inventory-2026-07-14.md`](../notes/report-chime-scintillation-inventory-2026-07-14.md)
 and the canonical pipeline inventory for the full qualification record.
 
 ## Owner direction on closure (2026-07-15, in-session; wording ratified by the owner same day)
@@ -742,7 +742,7 @@ staged for the owner.
 
 **Tasks:**
 - [ ] Copy the operating-point figure + threshold table into
-  `docs/rse/specs/report/report-a1-trigger-calibration.md` (Faber2026 repo) with:
+  `docs/rse/specs/notes/report-a1-trigger-calibration.md` (Faber2026 repo) with:
   recommended rate 1%, measured ΔlnZ threshold, power at f=10 / m₂²=m₁²,
   prior-sensitivity delta, freya-CHIME control result, casey validation
   result, and the exact reproduction command + git SHA.
@@ -891,7 +891,7 @@ existing API modified.
       `trigger_calibration.py` (convention + provenance citations as written
       in the phase tasks)
 - [ ] ADR-0008 calibration entry (Phase 5)
-- [ ] `docs/rse/specs/report/report-a1-trigger-calibration.md` (Phase 6)
+- [ ] `docs/rse/specs/notes/report-a1-trigger-calibration.md` (Phase 6)
 - [ ] Readiness board owner-view + journal (Phase 6)
 
 ## Timeline Estimate

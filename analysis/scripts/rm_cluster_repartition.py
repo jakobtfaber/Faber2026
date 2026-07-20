@@ -7,7 +7,7 @@ algebra, the literature comparison, and the conditional re-partition MC.
 
 Run:  uv run --project pipeline --frozen python scripts/rm_cluster_repartition.py
 Emits scripts/rm_cluster_repartition.json and
-docs/rse/decks/thread1-2026-07-17/rm_repartition_sensitivity.pdf.
+docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf.
 
 Physics: RM = 0.812 * B_par * DM_rest (rad m^-2, B in uG, DM in pc cm^-3;
 Han 2017 ARA&A convention, reciprocal of the companion's B = 1.232 RM/DM).
@@ -374,7 +374,7 @@ def main() -> int:
     }
     out = ROOT / "scripts" / "rm_cluster_repartition.json"
     out.write_text(json.dumps(artifact, indent=1, sort_keys=True) + "\n")
-    make_figure(mc, ROOT / "docs/rse/decks/thread1-2026-07-17/rm_repartition_sensitivity.pdf")
+    make_figure(mc, ROOT / "docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf")
 
     print(f"sigma_RM(obs) yardstick : {SIGMA_RM_OBS:.2f} rad/m^2")
     print(f"RM_lit (obs, diluted)   : {rm_lit:.2f} rad/m^2  -> classification: {verdict.upper()}")

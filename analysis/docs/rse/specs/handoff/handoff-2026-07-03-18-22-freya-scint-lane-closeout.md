@@ -31,7 +31,7 @@
 - [implement-freya-production-joint-fit.md](../implement/implement-freya-production-joint-fit.md) — #104 production numbers the manuscript will cite
 
 **Plan/PRD:**
-- [prd-freya-beta-comodel-real-data-fit.md](../prd/prd-freya-beta-comodel-real-data-fit.md) — the β co-model DAG PRD (all 8 nodes complete as of this session)
+- [prd-freya-beta-comodel-real-data-fit.md](../notes/prd-freya-beta-comodel-real-data-fit.md) — the β co-model DAG PRD (all 8 nodes complete as of this session)
 
 **External provenance:** dsa110-FLITS issues #117/#118, PRs #117/#119 (review verdicts as PR comments); Codex-session handoff (temp file, may be gone): `/var/folders/.../T/faber2026-freya-scintillation-handoff.md` — its durable content is captured in PR #117's description and this doc.
 

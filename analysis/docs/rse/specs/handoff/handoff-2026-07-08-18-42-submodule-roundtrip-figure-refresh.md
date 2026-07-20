@@ -98,9 +98,9 @@ The next session must reconcile before doing new work:
     on sync — not real edits.
   - `figures/dm_host_posteriors.{pdf,png}` are `M` and **DIFFER from `origin/main`** — these
     are genuinely new/regenerated and **not yet committed anywhere**. Decide whether to keep.
-  - `docs/rse/board/readiness.html`, `docs/rse/journal.jsonl` — RSE bookkeeping, modified.
+  - `docs/rse/control/board/readiness.html`, `docs/rse/protocols/journal.jsonl` — RSE bookkeeping, modified.
   - `pipeline` shows `M` (submodule pointer) — will clear once local main syncs to `700f231`.
-  - Untracked: `docs/rse/board/.readiness.html.swp` (a **live vim session** — someone has the
+  - Untracked: `docs/rse/control/board/.readiness.html.swp` (a **live vim session** — someone has the
     readiness board open in an editor; do not clobber), `scripts/__pycache__/`, and this handoff.
 - **Tests:** the submodule table-emitter unit tests passed off-sandbox (9 passed, reported by
   the Claude Code agent for `386e886`). Not re-run this session. No Faber2026-side tests.
@@ -162,7 +162,7 @@ data-staging campaign.
 ## Other Notes
 
 - Someone has the RSE readiness board open in vim (`.readiness.html.swp` present). Coordinate
-  before editing `docs/rse/board/readiness.html`.
+  before editing `docs/rse/control/board/readiness.html`.
 - Four PRs merged this session (#35, #37, #38, #39) plus #34 at the start — all via squash,
   all with both Socket Security checks green, all branches deleted after merge.
 - Submodule pointer chain on main: `92b4fdf → 386e886 (#35) → e223b90 (#37) → f9e1c24 (#39)`.

@@ -142,7 +142,7 @@ The rest of the #99–#106 DAG (this slice unblocks #101, #102):
 ## References
 
 **Plan:** https://github.com/jakobtfaber/dsa110-FLITS/issues/99 (agent brief comment)
-**PRD:** [prd-freya-beta-comodel-real-data-fit.md](../prd/prd-freya-beta-comodel-real-data-fit.md)
+**PRD:** [prd-freya-beta-comodel-real-data-fit.md](../notes/prd-freya-beta-comodel-real-data-fit.md)
 **Research:** [research-pipeline-2d-fit-scattering-index.md](../research/research-pipeline-2d-fit-scattering-index.md)
 **Handoff resumed:** [handoff-2026-07-02-20-06-freya-beta-fit-issues-triage.md](../handoff/handoff-2026-07-02-20-06-freya-beta-fit-issues-triage.md)
 **PR:** https://github.com/jakobtfaber/dsa110-FLITS/pull/107

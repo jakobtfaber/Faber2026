@@ -7,7 +7,7 @@
 **Status:** Draft — awaiting owner approval before implementation
 **Related documents:**
 - [Plan: loop orchestration](../plan/plan-loop-orchestration.md) — the architecture this implements mechanically
-- [Journal protocol](../journal-protocol.md) — the activity log this composes with (unchanged)
+- [Journal protocol](../../protocols/journal-protocol.md) — the activity log this composes with (unchanged)
 - [Decision: P1 scope fork](../decision/decision-2026-07-15-p1-scope-fork.md) — first entry the evidence ledger must carry
 ---
 
@@ -44,7 +44,7 @@ Both files are TOML, read with stdlib `tomllib` (Python ≥3.11) — resolves th
 dependency gap in the earlier draft (repo scripts are stdlib-only; PyYAML is
 not declared anywhere).
 
-### `docs/rse/program-state.toml` — operational state
+### `docs/rse/control/program-state.toml` — operational state
 
 ```toml
 [meta]
@@ -68,7 +68,7 @@ next_action = "land v1.2 revival-plan revision"
 needs_owner = false
 ```
 
-### `docs/rse/evidence-ledger.toml` — scientific evidence
+### `docs/rse/control/evidence-ledger.toml` — scientific evidence
 
 ```toml
 [[sightline]]
@@ -96,12 +96,12 @@ stale boards.
   skips live queries and validates structure only, for environments without a
   token).
 - **Outputs (each with a `GENERATED — do not hand-edit` banner):**
-  1. `docs/rse/ACTIVE_LANES.md` — lane table from `program-state.toml`, with
+  1. `docs/rse/control/ACTIVE_LANES.md` — lane table from `program-state.toml`, with
      live PR/issue/branch columns fetched at render time.
-  2. `docs/rse/board/owner-view.json` — Needs-you / Now / Next and strand
+  2. `docs/rse/control/board/owner-view.json` — Needs-you / Now / Next and strand
      component cards derived from lanes + ledger rollups; then the existing
      `scripts/render_journal_panel.py` bakes `readiness.html` unchanged.
-  3. `docs/rse/board/claims-audit.md` — the ledger's consumer: every claim
+  3. `docs/rse/control/board/claims-audit.md` — the ledger's consumer: every claim
      with its status, artifact, commit, and manuscript consumers, plus a
      cross-check against `main.tex` labels. A manuscript label consuming
      evidence whose status is not `trusted`/`upper_limit`/`documented_fail`

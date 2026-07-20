@@ -4,7 +4,7 @@
 **Date:** 2026-07-03
 **Author:** AI Assistant
 **Status:** Complete
-**Plan Reference:** dsa110-FLITS issue #100 + its Agent Brief (the tracker issues are the plan); PRD "deep module 3" in [prd-freya-beta-comodel-real-data-fit.md](../prd/prd-freya-beta-comodel-real-data-fit.md).
+**Plan Reference:** dsa110-FLITS issue #100 + its Agent Brief (the tracker issues are the plan); PRD "deep module 3" in [prd-freya-beta-comodel-real-data-fit.md](../notes/prd-freya-beta-comodel-real-data-fit.md).
 
 ---
 

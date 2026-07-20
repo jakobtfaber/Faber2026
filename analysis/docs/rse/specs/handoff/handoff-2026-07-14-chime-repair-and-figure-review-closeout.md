@@ -92,10 +92,10 @@ All paths below are relative to the Faber2026 root unless stated otherwise.
 ### Human and machine entry points
 
 - Human report:
-  `docs/rse/specs/report/report-chime-scintillation-inventory-2026-07-14.md`
+  `docs/rse/specs/notes/report-chime-scintillation-inventory-2026-07-14.md`
 - Durable figure-review contract:
   `docs/rse/specs/handoff/handoff-2026-07-14-figure-review-and-replacement.md`
-- Owner-facing lane control surface: `docs/rse/ACTIVE_LANES.md`
+- Owner-facing lane control surface: `docs/rse/control/ACTIVE_LANES.md`
 - FLITS inventory overview: `pipeline/analysis/chime-scintillation/README.md`
 - Machine-readable qualification inventory:
   `pipeline/analysis/chime-scintillation/INVENTORY.yaml`
@@ -350,7 +350,7 @@ repowire status
 Verify the scientific entry points:
 
 ```bash
-sed -n '1,220p' docs/rse/specs/report/report-chime-scintillation-inventory-2026-07-14.md
+sed -n '1,220p' docs/rse/specs/notes/report-chime-scintillation-inventory-2026-07-14.md
 sed -n '1,280p' docs/rse/specs/handoff/handoff-2026-07-14-figure-review-and-replacement.md
 sed -n '1,220p' pipeline/analysis/chime-scintillation/README.md
 ```

@@ -1,7 +1,6 @@
 """Layout guards for docs/rse/specs/.
 
-specs/ is markdown-only and filed under prefix subfolders. Collected by
-`make test-science` via `pytest tests`.
+Full docs/rse/ taxonomy guards live in tests/test_rse_layout.py.
 """
 from pathlib import Path
 
@@ -20,9 +19,7 @@ def test_specs_contains_only_markdown():
 
 
 def test_specs_root_has_no_loose_markdown():
-    """Workflow docs live in prefix subfolders, not at specs/ root."""
     loose = sorted(SPECS.glob("*.md"))
-    # Allow an optional specs/README.md later; none today.
     allowed = {SPECS / "README.md"}
     unexpected = [p for p in loose if p not in allowed]
     assert unexpected == [], (

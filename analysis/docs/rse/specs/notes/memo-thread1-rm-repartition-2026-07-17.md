@@ -7,7 +7,7 @@
 **Status:** For discussion. Nothing in either manuscript changes until both
 sides agree (the record's "both-owners gate"). Machine-readable backing:
 `scripts/rm_cluster_repartition.json` (seeded, reproducible); figure:
-`docs/rse/decks/thread1-2026-07-17/rm_repartition_sensitivity.pdf`.
+`docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf`.
 
 ---
 
