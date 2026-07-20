@@ -1,0 +1,65 @@
+[
+ {
+  "id": "9ed83115-de51-4bb0-a2c6-48d1675d54e3",
+  "filename": "undermind-mcp-fixlist.md",
+  "content_type": "text/markdown",
+  "size_bytes": 11515,
+  "checksum": "94f85dd61de0bfb4f535bab86e12e00d3a2c53a6b9ac689c6449b95cbacc839b",
+  "created_at": "2026-07-08T21:02:56.608Z",
+  "versions": 1
+ },
+ {
+  "id": "3ef96897-b4ee-4a6a-bcb4-31a531efb88c",
+  "filename": "undermind-mcp-capture-checklist.md",
+  "content_type": "text/markdown",
+  "size_bytes": 14764,
+  "checksum": "6e3c96f96cc1b91faa59af5998691ee73cd3e3a4ad3ef1c24159e939348aef6a",
+  "created_at": "2026-07-08T21:14:05.263Z",
+  "versions": 1
+ },
+ {
+  "id": "a3983d61-7c01-4497-b770-c167660a9dd5",
+  "filename": "undermind-mcp-autocapture-spec.md",
+  "content_type": "text/markdown",
+  "size_bytes": 15031,
+  "checksum": "aee01ae14271c45feac27368b21448053d0b4cad911eb9fe9f28a27bfe1a69f6",
+  "created_at": "2026-07-08T21:33:32.786Z",
+  "versions": 1
+ },
+ {
+  "id": "d5bf5873-8a5c-4df3-9cbe-ff046763d59e",
+  "filename": "undermind-mcp-p0-brief.md",
+  "content_type": "text/markdown",
+  "size_bytes": 5126,
+  "checksum": "61e3490e04d9ff74525ce978d8d62aeb8b9364c28e701ad6e80ee68ac319a6c9",
+  "created_at": "2026-07-08T21:33:32.793Z",
+  "versions": 1
+ },
+ {
+  "id": "b89f8265-9034-4e9e-9453-b88770776fe7",
+  "filename": "undermind-mcp-batch2-brief.md",
+  "content_type": "text/markdown",
+  "size_bytes": 10309,
+  "checksum": "e4a8975fe201929fdd62687f657e0df50e5a4322519c551d61c672cb64ec891f",
+  "created_at": "2026-07-08T23:03:33.463Z",
+  "versions": 1
+ },
+ {
+  "id": "01f4219d-b4b6-4083-bd4f-fa3cec3c9dd5",
+  "filename": "undermind-mcp-autocapture-brief.md",
+  "content_type": "text/markdown",
+  "size_bytes": 18667,
+  "checksum": "5ae25827ca8ef8aa9ce100c47bb35ad6967845a2c3f4b88b396a7dec51f53ed1",
+  "created_at": "2026-07-09T00:33:01.866Z",
+  "versions": 3
+ },
+ {
+  "id": "93bc4d90-80d3-4e67-b6b0-26a143950d47",
+  "filename": "undermind-mcp-gate-fix-note.md",
+  "content_type": "text/markdown",
+  "size_bytes": 5429,
+  "checksum": "68f90588b5a09b1089ef43fa357682e2042852dc5de645e8c8cd83cfa78dd7a4",
+  "created_at": "2026-07-09T01:16:46.121Z",
+  "versions": 1
+ }
+]

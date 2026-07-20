@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Publish docs/rse/control/board/readiness.html to the board/ path on GitHub Pages.
+# Publish docs/rse/board/readiness.html to the board/ path on GitHub Pages.
 # Usage: scripts/deploy-board.sh
 set -euo pipefail
 
 ROOT=$(git rev-parse --show-toplevel)
-BOARD="$ROOT/docs/rse/control/board/readiness.html"
+BOARD="$ROOT/docs/rse/board/readiness.html"
 REMOTE=origin
 BRANCH=gh-pages
 TMP=$(mktemp -d /tmp/faber2026-ghpages.XXXXXX)

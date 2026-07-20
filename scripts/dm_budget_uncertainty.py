@@ -560,7 +560,7 @@ CL_B_KPC = 603.6  # impact parameter (b/R500 = 0.83)
 # RASS non-detection mass cap (owner-adjudicated conservative endpoint,
 # ECF=1.2e-11): L_X(0.1-2.4 keV) < 9.1e43 erg/s at z=0.200 through the MCXC
 # L500-M500 relation. Truncates the richness-mass prior's upper tail.
-# docs/rse/specs/experiment/experiment-cluster-xray-sz-mass-bound-2026-07-17.md
+# docs/rse/specs/experiment-cluster-xray-sz-mass-bound-2026-07-17.md
 CL_M500_XRAY_UL = 1.67e14  # Msun
 
 

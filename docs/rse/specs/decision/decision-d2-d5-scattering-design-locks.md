@@ -5,9 +5,9 @@
 **Scope:** presentation contracts the per-sightline attribution ledger inherits  
 **Not in scope:** quoting any current fit numbers (trust-reset wave 1: scattering, sub-band EMG, scint ACF, energies remain **REVOKED** until V ladders clear). Accepting these locks does **not** make any fit citable.
 
-**Authoritative asks:** historical referee D2–D5 (root report deleted 2026-07-19; see `docs/rse/ops/review-status.md`)  
-**Tracking:** `docs/rse/ops/review-status.md` + wayfinder / BOARD  
-**In-force drafts:** `CONTEXT.md` (geometry-adjudicated β, Wilhelm/EMG guardrail, A1 scint→scattering); verification-protocol + wayfinder (circulation megaplan frozen)  
+**Authoritative asks:** `docs/referee_report_2026-07-07.md` § Design decisions D2–D5  
+**Tracking:** `docs/referee_response_status_2026-07-09.md`  
+**In-force drafts:** `CONTEXT.md` (geometry-adjudicated β, Wilhelm/EMG guardrail, A1 scint→scattering); `docs/rse/specs/plan/plan-circulation-readiness.md` A1–A3, F2  
 **Methods drafts already on tree (referee impl):** `sections/budget.tex` §β-scattering / sub-band / gain-marg; `sections/methods.tex` §energies — this memo locks vocabulary and Results rules so those drafts can be kept, tightened, or revised on sign-off
 
 ---
