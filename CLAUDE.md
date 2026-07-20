@@ -22,6 +22,23 @@ Refresh after changes with `make kb-index` (incremental, seconds when
 embeddings are current). See [`docs/rse/knowledge-base.md`](docs/rse/knowledge-base.md).
 Fall back to grep for exhaustive sweeps (every call site, every match).
 
+## Agent skills
+
+### Issue tracker
+
+Local Markdown maps and tickets live under `docs/rse/wayfinder/`. See
+`docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the default Matt Pocock skill labels. See
+`docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Use the manuscript context at `CONTEXT.md` and the fitting context at
+`pipeline/CONTEXT.md`. See `docs/agents/domain.md`.
+
 ## Owner queue walkthrough (manual trigger — never scheduled)
 
 When the owner says anything like **"walk me through my queue"**:
