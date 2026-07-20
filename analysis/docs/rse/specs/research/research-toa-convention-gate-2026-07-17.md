@@ -78,4 +78,4 @@ coupling and does not edit or regenerate Figure 1.
 - `pipeline/crossmatching/toa_crossmatch_results.json`
 - `pipeline/crossmatching/association.py`
 - `pipeline/crossmatching/notebook_reproduction_fixture.json`
-- `docs/superpowers/plans/2026-07-07-two-telescope-model-toas.md`
+- deleted `docs/superpowers/` ToA plan (git history; 2026-07-19 scrub)

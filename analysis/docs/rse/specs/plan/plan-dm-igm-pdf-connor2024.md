@@ -511,7 +511,7 @@ calls the live budget code, so Phase 2's swap must land first.
       parity (`:68-97`) is untouched (dm_host unchanged); byte parity
       (`:49-59`) passes against the regenerated export.
 - [ ] **Supersession note** (pipeline-side stale doc):
-      `docs/superpowers/plans/2026-06-19-sightline-budget-sensitivity.md:387`
+      deleted `docs/superpowers/` / pipeline twin (git history; 2026-07-19 scrub)
       — prepend `> Superseded 2026-07-09: the Macquart-based sensitivity
       construction below predates the TNG-median migration
       (Faber2026 docs/rse/specs/plan/plan-dm-igm-pdf-connor2024.md).`
@@ -519,7 +519,7 @@ calls the live budget code, so Phase 2's swap must land first.
       TNG-median dm_cos column + caption/header" --
       galaxies/foreground/budget_table_data.json
       galaxies/foreground/budget_table_emitter.py exports/budget_table.tex
-      docs/superpowers/plans/2026-06-19-sightline-budget-sensitivity.md
+      deleted docs/superpowers sightline-budget plan (git history)
       docs/entire-tracing-checkpoints.md` (ledger staged explicitly; if the
       post-commit hook dirties it again, one `--no-verify` tail commit); push
       `igm-tng-median`; `gh pr create --repo jakobtfaber/dsa110-FLITS --base
@@ -839,7 +839,7 @@ commands above — no data migration.
 
 - [ ] `REPRODUCE.md` budget-table section: one line noting the column is now
       the TNG median (regeneration commands unchanged).
-- [ ] Pipeline `docs/superpowers/plans/2026-06-19-...md:387` superseded note
+- [ ] Pipeline docs/superpowers sightline-budget plan deleted (2026-07-19)
       (Phase 4).
 - [ ] `docs/rse/specs/plan/plan-trust-reset-revalidation.md:1102` superseded note
       (Phase 6).

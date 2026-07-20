@@ -161,7 +161,7 @@ checks cross-references and layout.
 ## References
 
 - [Research: ToA convention and model-correction gate](../research/research-toa-convention-gate-2026-07-17.md)
-- `docs/superpowers/plans/2026-07-07-two-telescope-model-toas.md`
+- deleted `docs/superpowers/` ToA plan (git history; 2026-07-19 scrub)
 - `pipeline/crossmatching/toa_crossmatch.py`
 - `pipeline/crossmatching/toa_crossmatch_results.json`
 - `pipeline/crossmatching/association.py`
