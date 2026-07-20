@@ -86,7 +86,7 @@ sweep), so "replace Zhang" is moot.
    `pipeline/galaxies/foreground/budget_table_emitter.py` ("the Macquart mean
    at the host redshift"), `sections/intro.tex:8` (contextual citation);
    non-manuscript docs that reproduce the construction and would go stale:
-   `pipeline/docs/superpowers/plans/2026-06-19-sightline-budget-sensitivity.md:387-416`
+   deleted pipeline `docs/superpowers/` plan (git history; 2026-07-19 scrub)
    and the proposed independent Macquart oracle in
    `docs/rse/specs/plan/plan-trust-reset-revalidation.md:1102-1141`.
 

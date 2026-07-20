@@ -62,7 +62,7 @@ Flagged or scientifically unaccepted fits cannot be made acceptable by a
 dagger or caption disclaimer.
 
 This supersedes the earlier product choice in
-`docs/superpowers/specs/2026-07-11-codetection-triptych-fig1-design.md` while
+deleted `docs/superpowers/` fig1 design (git history; 2026-07-19 scrub) while
 retaining that document as historical design evidence.
 
 ## Decision 2: C1 cross-fitted all-pairs estimator
