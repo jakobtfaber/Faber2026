@@ -188,7 +188,7 @@ Read these first, in order:
   `main`. That push is the one-way door; leave it to the owner.
 - Do not bump the `pipeline/` pin casually; a pin bump is a deliberate `build:`
   commit after the corresponding pipeline work merges upstream (repo `CLAUDE.md`).
-- Journal cadence: append `docs/rse/journal.jsonl` via `scripts/journal-append.sh`
+- Journal cadence: append `docs/rse/protocols/journal.jsonl` via `scripts/journal-append.sh`
   every ≤10 min of active V6 work.
 
 ---

@@ -5,23 +5,23 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-mkdir -p "$TMP/scripts" "$TMP/docs/rse"
+mkdir -p "$TMP/scripts" "$TMP/docs/rse/protocols"
 cp "$ROOT/scripts/journal-append.sh" "$TMP/scripts/journal-append.sh"
-: > "$TMP/docs/rse/journal.jsonl"
+: > "$TMP/docs/rse/protocols/journal.jsonl"
 
 if bash "$TMP/scripts/journal-append.sh" "test-agent" "repo" "finish" "bad state" >/tmp/journal-invalid.out 2>/tmp/journal-invalid.err; then
   echo "expected invalid state to fail" >&2
   exit 1
 fi
 
-if [[ -s "$TMP/docs/rse/journal.jsonl" ]]; then
+if [[ -s "$TMP/docs/rse/protocols/journal.jsonl" ]]; then
   echo "invalid state should not append to journal" >&2
   exit 1
 fi
 
 bash "$TMP/scripts/journal-append.sh" "test-agent" "repo" "done" "valid state" >/tmp/journal-valid.out
 
-python3 - "$TMP/docs/rse/journal.jsonl" <<'PY'
+python3 - "$TMP/docs/rse/protocols/journal.jsonl" <<'PY'
 import json
 import sys
 

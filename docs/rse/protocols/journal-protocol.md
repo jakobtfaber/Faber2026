@@ -15,7 +15,7 @@ the readiness board renders it.
 
 ## The store
 
-`docs/rse/journal.jsonl` — append-only, tracked, one JSON object per line:
+`docs/rse/protocols/journal.jsonl` — append-only, tracked, one JSON object per line:
 
 ```json
 {"ts": "2026-07-06T21:02:24-0700", "agent": "claude-fable-5/session-9f491a6c",
@@ -54,10 +54,10 @@ the readiness board renders it.
    claude.ai artifact anymore.
 
    **Owner view (added 2026-07-12; generated since 2026-07-15).** The board's
-   top panel is baked from `docs/rse/board/owner-view.json` — the owner-facing
+   top panel is baked from `docs/rse/control/board/owner-view.json` — the owner-facing
    summary (Needs you / In flight / Up next, ≤3 items each, plus 7 component
    cards). **That JSON is now GENERATED, not hand-edited.** Its canonical
-   source is the `[owner_view]` block of `docs/rse/program-state.toml` (the
+   source is the `[owner_view]` block of `docs/rse/control/program-state.toml` (the
    hybrid control system, `docs/rse/specs/plan/plan-hybrid-control-system.md`). If
    your turn changed what is in flight, opened or resolved an owner decision,
    or moved a component's status, edit `program-state.toml` and regenerate:
@@ -87,7 +87,7 @@ the readiness board renders it.
    bump it every edit.
 
 3. **Commit policy:** the journal rides along with any doc/code commit
-   (pathspec-include `docs/rse/journal.jsonl`); it is never the sole
+   (pathspec-include `docs/rse/protocols/journal.jsonl`); it is never the sole
    reason to push.
 
 4. **Delegations:** any subagent or Codex `exec` dispatched to work in

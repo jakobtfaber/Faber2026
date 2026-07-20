@@ -30,10 +30,10 @@ main, validate rendering/deployment boundaries, then publish separately.
 Paths:
 
 - `.gitignore`
-- `docs/rse/board/readiness.html`
-- `docs/rse/board/owner-view.json`
-- `docs/rse/journal-protocol.md`
-- `docs/rse/journal.jsonl`
+- `docs/rse/control/board/readiness.html`
+- `docs/rse/control/board/owner-view.json`
+- `docs/rse/protocols/journal-protocol.md`
+- `docs/rse/protocols/journal.jsonl`
 - `scripts/render_journal_panel.py`
 - `scripts/deploy-board.sh`
 
@@ -61,11 +61,11 @@ Paths:
 
 - `docs/rse/specs/plan/plan-dm-measurement-methods.md`
 - `docs/rse/specs/research/research-dm-measurement-methods.md`
-- `docs/rse/decks/dm-campaign-2026-07/dm-battery-arrival_regression-contact-sheet.png`
-- `docs/rse/decks/dm-campaign-2026-07/dm-battery-dm_phase_published-contact-sheet.png`
-- `docs/rse/decks/dm-campaign-2026-07/dm-battery-dm_power_published-contact-sheet.png`
-- `docs/rse/decks/dm-campaign-2026-07/dm-battery-dmphase_variant_intree-contact-sheet.png`
-- `docs/rse/decks/dm-campaign-2026-07/dm-battery-dmpower_variant_intree-contact-sheet.png`
+- `docs/rse/decks/dm/dm-campaign-2026-07/dm-battery-arrival_regression-contact-sheet.png`
+- `docs/rse/decks/dm/dm-campaign-2026-07/dm-battery-dm_phase_published-contact-sheet.png`
+- `docs/rse/decks/dm/dm-campaign-2026-07/dm-battery-dm_power_published-contact-sheet.png`
+- `docs/rse/decks/dm/dm-campaign-2026-07/dm-battery-dmphase_variant_intree-contact-sheet.png`
+- `docs/rse/decks/dm/dm-campaign-2026-07/dm-battery-dmpower_variant_intree-contact-sheet.png`
 - `scripts/plot_codetection_gallery_arrivaldm.py`
 
 The `pipeline` gitlink is not unique lane work; it is already equal to

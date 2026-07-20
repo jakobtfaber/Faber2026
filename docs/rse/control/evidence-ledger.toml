@@ -1,6 +1,6 @@
 # GENERATED-INPUT — canonical scientific evidence ledger (hand-editable).
 # Read with stdlib tomllib (Python >= 3.11). Consumed by scripts/sync_state.py,
-# which regenerates docs/rse/board/claims-audit.md.
+# which regenerates docs/rse/control/board/claims-audit.md.
 # Edit THIS file, then run: python3 scripts/sync_state.py
 #
 # Twelve co-detection sightlines x eight evidence strands. Bootstrapped from

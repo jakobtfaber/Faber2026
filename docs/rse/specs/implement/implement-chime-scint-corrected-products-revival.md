@@ -62,7 +62,7 @@ manifest + review, INVENTORY.yaml entry, inventory README). Branch
 - `scintillation/configs/chime_products.yaml`, `scint_analysis/chime_artifact_guards.py`, `scint_analysis/pipeline.py`, tests × 2, `scripts/run_chime_scint_campaign.py`
 
 **Faber2026 (this repo):**
-- Plan v1.1 checkboxes (Phases 1–2), `experiment-chime-scint-c1-calibration.md` (new), `plan-chime-scint-gamma-campaign.md` (eligibility wording), `docs/rse/ACTIVE_LANES.md` C1 row
+- Plan v1.1 checkboxes (Phases 1–2), `experiment-chime-scint-c1-calibration.md` (new), `plan-chime-scint-gamma-campaign.md` (eligibility wording), `docs/rse/control/ACTIVE_LANES.md` C1 row
 
 No files deleted.
 

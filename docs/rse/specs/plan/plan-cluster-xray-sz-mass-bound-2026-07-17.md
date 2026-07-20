@@ -5,7 +5,7 @@
 **Author:** AI Assistant
 **Status:** Draft — predeclared experiment record, awaiting owner sanction (CONTEXT.md §V gate)
 **Related Documents:**
-- [Triage: Kulkarni-persona feedback (2026-07-17)](../triage/triage-kulkarni-feedback-2026-07-17.md) — S1 = referee §5 = discovery Thread 2
+- [Triage: Kulkarni-persona feedback (2026-07-17)](../notes/triage-kulkarni-feedback-2026-07-17.md) — S1 = referee §5 = discovery Thread 2
 - [Handoff: deflation + Kulkarni fold-in + attribution](../handoff/handoff-2026-07-17-11-28-deflation-kulkarni-and-attribution.md) — parent session; S1 is "recommended first"
 - `CONTEXT.md` (repo root) — trust-reset contract; the census (V4) and DM budget (V5) ladders are cleared, so the cluster mass and its DM column are live inputs this plan refines
 
@@ -395,7 +395,7 @@ or a recorded null.
       `SAMPLE_COUNT_EXPECTATIONS`/anchors as needed) and `latexmk -pdf`.
       **Do not open a PR until owner sanction is recorded.**
 - [ ] **Null branch:** append the null outcome to
-      `docs/rse/specs/triage/triage-kulkarni-feedback-2026-07-17.md` (S1 row) and to
+      `docs/rse/specs/notes/triage-kulkarni-feedback-2026-07-17.md` (S1 row) and to
       this plan's Review History; prose unchanged.
 - [ ] **Commit** (branch, not merged) and surface for owner sanction per the
       standing authorization + §V gate.
@@ -539,7 +539,7 @@ branch.)*
 ## References
 
 **Research / triage / handoff:**
-- [Triage: Kulkarni-persona feedback (2026-07-17)](../triage/triage-kulkarni-feedback-2026-07-17.md)
+- [Triage: Kulkarni-persona feedback (2026-07-17)](../notes/triage-kulkarni-feedback-2026-07-17.md)
 - [Handoff: deflation + Kulkarni + attribution (2026-07-17)](../handoff/handoff-2026-07-17-11-28-deflation-kulkarni-and-attribution.md)
 
 **Files Analyzed:**

@@ -52,7 +52,7 @@ ax.legend(fontsize=8)
 ax.set_xlim(DNU_KHZ[0], DNU_KHZ[-1])
 ax.set_ylim(0, None)
 fig.tight_layout()
-figpath = Path(__file__).resolve().parent.parent / "docs/rse/decks/gate0-detectability/gate0-detectability-curve.png"
+figpath = Path(__file__).resolve().parent.parent / "docs/rse/decks/scintillation/gate0-detectability/gate0-detectability-curve.png"
 fig.savefig(figpath)
 
 best_m = max(M_RANGE)

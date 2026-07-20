@@ -2,8 +2,8 @@
 
 **Status: DRAFT ONLY — not sent. Owner reviews, edits, and sends by hand.**
 Attachments to include when sending:
-`docs/rse/specs/memo/memo-thread1-rm-repartition-2026-07-17.md` (the full memo),
-`docs/rse/decks/thread1-2026-07-17/rm_repartition_sensitivity.pdf` (one-page
+`docs/rse/specs/notes/memo-thread1-rm-repartition-2026-07-17.md` (the full memo),
+`docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf` (one-page
 sensitivity figure), and optionally `scripts/rm_cluster_repartition.json`
 (seeded, reproducible backing numbers).
 

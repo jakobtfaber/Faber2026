@@ -28,11 +28,11 @@
 - `docs/rse/specs/research/research-pipeline-2d-fit-scattering-index.md` — how the pipeline fits 2D dynamic spectra; β co-model (ADR-0006); joint CHIME+DSA driver; priors/gates inventory; gaps (all `file:line` anchors valid at pin `6ce3e58`)
 
 **Plan Documents:**
-- `docs/rse/specs/prd/prd-freya-beta-comodel-real-data-fit.md` — the PRD this work executes. Status line lists the issue mapping. No separate `plan-*.md` exists: **the 8 tracker issues + their agent briefs are the plan.**
+- `docs/rse/specs/notes/prd-freya-beta-comodel-real-data-fit.md` — the PRD this work executes. Status line lists the issue mapping. No separate `plan-*.md` exists: **the 8 tracker issues + their agent briefs are the plan.**
 
 ## Critical References
 
-- `docs/rse/specs/prd/prd-freya-beta-comodel-real-data-fit.md` — scope, implementation decisions, testing decisions, out-of-scope. Read first.
+- `docs/rse/specs/notes/prd-freya-beta-comodel-real-data-fit.md` — scope, implementation decisions, testing decisions, out-of-scope. Read first.
 - Tracker: https://github.com/jakobtfaber/dsa110-FLITS/issues — open issues are exactly #99–#106. #99 and #100 carry authoritative **Agent Brief** comments (the contract for an implementing agent).
 - `pipeline/CLAUDE.md` — pinned-submodule non-negotiables, fit-validation contract, ponytail style, Stop-gates, protected-branch guard, worktree-per-agent rule. Binding for all pipeline work.
 
@@ -53,7 +53,7 @@ Blocked issues stay `needs-triage` by design (tracker vocabulary has no blocked 
 
 ## Recent Changes
 
-- Created `docs/rse/specs/prd/prd-freya-beta-comodel-real-data-fit.md` and `docs/rse/specs/research/research-pipeline-2d-fit-scattering-index.md` (both untracked).
+- Created `docs/rse/specs/notes/prd-freya-beta-comodel-real-data-fit.md` and `docs/rse/specs/research/research-pipeline-2d-fit-scattering-index.md` (both untracked).
 - PRD status line updated to reference issues #99–#106.
 - Tracker (`jakobtfaber/dsa110-FLITS`): created labels `needs-triage`, `ready-for-agent`; published #99–#106; posted 2 agent briefs + 6 blocked notes; labeled `bug` and closed #4 (resolved by `75a917ce` force_multi + PR #56 tests) and #5 (resolved by PR #11 per-band `dt_min`) as completed.
 - **No code was written or modified anywhere this session.**

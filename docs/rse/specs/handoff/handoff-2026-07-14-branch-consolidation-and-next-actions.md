@@ -93,7 +93,7 @@ means clean; it does not by itself authorize deletion.
 
 | Worktree / branch | Dirty paths | Classification | Action |
 |---|---:|---|---|
-| Root: `ms/validated-fit-figure-refresh-20260714` | 1 | Superseded branch; the sole dirt is `docs/rse/journal.jsonl`. The branch still has one unique commit relative to `origin/main`. | Preserve the journal line and this handoff. Do not switch/reset until both are carried to an intentional lane. Then retire the branch after confirming PR #34 contains the desired figure bytes. |
+| Root: `ms/validated-fit-figure-refresh-20260714` | 1 | Superseded branch; the sole dirt is `docs/rse/protocols/journal.jsonl`. The branch still has one unique commit relative to `origin/main`. | Preserve the journal line and this handoff. Do not switch/reset until both are carried to an intentional lane. Then retire the branch after confirming PR #34 contains the desired figure bytes. |
 | Missing `/private/tmp/faber2026-refresh/parent-merge`: `ms/validated-fit-figure-refresh-20260714-v2` | n/a | Prunable worktree metadata; branch is an ancestor of `origin/main`. | Safe to prune the stale worktree registration after no process references the path. Branch deletion is a separate cleanup step. |
 | `Faber2026-figure-approval` | 126 | High-risk mixed state: 94 modified, 22 deleted, 3 untracked, and 7 partially staged paths. Mostly figure assets, with source/test changes. | Quarantine. Inventory and compare against v2/v3; never delete or sweep into a commit. |
 | `Faber2026-figure-approval-v2` | 11 | Uncommitted approval framework: `Makefile`, seven TeX sections, `scripts/figure_review.py`, tests, and `figure_review/`. | Quarantine. Treat as a candidate implementation, not cleanup. |
@@ -105,7 +105,7 @@ means clean; it does not by itself authorize deletion.
 
 ### Dirty-state boundary
 
-The root `docs/rse/journal.jsonl` modification predates this handoff and was not
+The root `docs/rse/protocols/journal.jsonl` modification predates this handoff and was not
 edited. The three figure-approval worktrees are also pre-existing shared work.
 Their staged state is an ownership signal. Do not unstage, restore, regenerate,
 or delete their files as part of general branch maintenance.
@@ -270,7 +270,7 @@ for the above classification.
 
 Status: **pending.**
 
-Create or update `docs/rse/ACTIVE_LANES.md` with only these fields:
+Create or update `docs/rse/control/ACTIVE_LANES.md` with only these fields:
 
 | Field | Meaning |
 |---|---|
@@ -331,7 +331,7 @@ The consolidation is complete only when all of the following are true:
 - no dirty worktree is deleted or silently absorbed;
 - redundant clean worktrees are removed;
 - remote branches are deleted only with recorded proof;
-- `docs/rse/ACTIVE_LANES.md` is the owner-facing control surface;
+- `docs/rse/control/ACTIVE_LANES.md` is the owner-facing control surface;
 - the owner can answer “what is active?” without reading `git branch -a`.
 
 ## Verification commands for the next agent
@@ -375,7 +375,7 @@ was:
 - checked the public GitHub PR pages for Faber2026, the FLITS fork, and upstream;
 - confirmed parent `origin/main` pins `67bdd014`, while the current root checkout
   pins `05088fa`;
-- preserved the pre-existing `docs/rse/journal.jsonl` modification unchanged.
+- preserved the pre-existing `docs/rse/protocols/journal.jsonl` modification unchanged.
 
 No scientific code, figures, TeX, submodule pin, branch, worktree, PR, or remote
 branch was changed by creation of this handoff. Documentation-only verification

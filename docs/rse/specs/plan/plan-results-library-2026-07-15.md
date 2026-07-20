@@ -9,7 +9,7 @@
 - [x] Catalog data in `scripts/results_library_catalog.yaml`
 - [x] Builder `scripts/build_results_library_inventory.py` (load → validate → probe → optional link → emit)
 - [x] Path helper `scripts/results_library.py` (`DEFAULT_LIBRARY`, `results_slot`, `require_results_library`)
-- [x] Repo pointer `docs/rse/specs/results/results-library-INDEX.md`
+- [x] Repo pointer `docs/rse/specs/notes/results-library-INDEX.md`
 
 ## Done (Phase B — this worktree)
 

@@ -33,7 +33,7 @@ scope.
 - The compiled summary is DSA-only (`sections/results.tex:243-252`) even
   though the owner has now rejected that concept and requested a joint
   DSA+CHIME summary. The living inventory also describes the included figure
-  as DSA-only (`docs/rse/specs/misc/figure-wishlist.md:19-28`).
+  as DSA-only (`docs/rse/specs/notes/figure-wishlist.md:19-28`).
 - Exact-byte owner approval is mandatory. A new candidate cannot be promoted
   or included by an agent: `figure_review/README.md` requires a candidate PR,
   explicit owner decision, and a separate promotion PR. Therefore the current
@@ -59,7 +59,7 @@ owner review of those exact bytes.
 ## References / Sources
 
 - `sections/results.tex:175-334`
-- `docs/rse/specs/misc/figure-wishlist.md:19-43`
+- `docs/rse/specs/notes/figure-wishlist.md:19-43`
 - `figure_review/README.md:1-55`
 - `pipeline/analysis/window-tuning-campaign-2026-07-17/results/validation.json`
 - `pipeline/analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json`

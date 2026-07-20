@@ -30,7 +30,7 @@ test-science: check-state
 	python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh
 
-# Repo knowledge base (docs, tickets, git, code, refs). See docs/rse/knowledge-base.md.
+# Repo knowledge base (docs, tickets, git, code, refs). See docs/rse/ops/knowledge-base.md.
 .PHONY: kb-index kb-refs-sync
 kb-index:
 	python3 scripts/kb index

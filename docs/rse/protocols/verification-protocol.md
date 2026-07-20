@@ -56,7 +56,7 @@ hpcc-only checks record their output hash in the evidence ledger.
 
 Extends the existing table-parity gate to **all numeric claims in the tex**:
 every number in prose maps to a pinned pipeline artifact through the
-**results registry** (`docs/rse/results-registry.toml` — the canonical
+**results registry** (`docs/rse/control/results-registry.toml` — the canonical
 manuscript-facing inventory, BOARD.md §0), and CI recomputes/compares at PR
 time. An unmatched or
 drifted number **fails CI** (owner decision 2026-07-18: blocking, not

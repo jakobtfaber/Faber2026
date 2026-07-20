@@ -26,19 +26,19 @@
 
 - [plan-circulation-readiness.md](../plan/plan-circulation-readiness.md) — master plan; source of all task IDs the board renders
 - [plan-trust-reset-revalidation.md](../plan/plan-trust-reset-revalidation.md) — §V expansion (P0–P6 rungs on the board's trust ladder)
-- `docs/rse/journal-protocol.md` — board upkeep protocol (rebake + deploy flow)
+- `docs/rse/protocols/journal-protocol.md` — board upkeep protocol (rebake + deploy flow)
 
 ## Critical References
 
-- `docs/rse/board/readiness.html` — the entire board (inline CSS + static sections + two baked marker regions). Read its top comment blocks: they document the baker class contract and the update duty for the static strand/map/ladder sections.
-- `docs/rse/board/owner-view.json` — owner-strip data (needs_you / now / next / components). Components are now **strand-keyed** (Sample & association, Budget & census, Scattering, Scintillation, Energies, Synthesis, Mechanics).
+- `docs/rse/control/board/readiness.html` — the entire board (inline CSS + static sections + two baked marker regions). Read its top comment blocks: they document the baker class contract and the update duty for the static strand/map/ladder sections.
+- `docs/rse/control/board/owner-view.json` — owner-strip data (needs_you / now / next / components). Components are now **strand-keyed** (Sample & association, Budget & census, Scattering, Scintillation, Energies, Synthesis, Mechanics).
 - `scripts/render_journal_panel.py` — the baker. Rewrites `OWNER:BEGIN/END` and `JOURNAL:BEGIN/END` regions only; everything else in readiness.html is hand-maintained static markup.
 
 ## Recent Changes (this lane only)
 
-- `docs/rse/board/readiness.html` — full rewrite ×2. Final structure: header → baked owner view (needs-you banner via `.oc-you` CSS, full-width) → **strand swimlanes** (`.strands`, 7 rows, 5-stage steppers, `.feed` chips for cross-strand dependencies) → fold "Agent detail" (recovery-pipeline SVG map, P0–P6 trust-ladder stepper, V…G lane/task lists) → fold Journal (dot timeline, uses CSS `:has()`) → fold Reference (trust state now split restored-vs-still-revoked) → footer (documents the strand structure + sync duty).
-- `docs/rse/board/owner-view.json` — components re-keyed to strands; `next` hints updated; timestamp bumped.
-- `docs/rse/journal.jsonl` — three `board`-lane entries appended (23:09, ~23:15 by other lane, 23:30 strand restructure).
+- `docs/rse/control/board/readiness.html` — full rewrite ×2. Final structure: header → baked owner view (needs-you banner via `.oc-you` CSS, full-width) → **strand swimlanes** (`.strands`, 7 rows, 5-stage steppers, `.feed` chips for cross-strand dependencies) → fold "Agent detail" (recovery-pipeline SVG map, P0–P6 trust-ladder stepper, V…G lane/task lists) → fold Journal (dot timeline, uses CSS `:has()`) → fold Reference (trust state now split restored-vs-still-revoked) → footer (documents the strand structure + sync duty).
+- `docs/rse/control/board/owner-view.json` — components re-keyed to strands; `next` hints updated; timestamp bumped.
+- `docs/rse/protocols/journal.jsonl` — three `board`-lane entries appended (23:09, ~23:15 by other lane, 23:30 strand restructure).
 - gh-pages — deployed twice via `scripts/deploy-board.sh`; live at https://jakobtfaber.github.io/Faber2026/board/.
 
 Not this lane (concurrent, do not fold into board commits): association-cards/summary figures + `sections/*.tex` + `scripts/*association*` (staged, association-summary lane), `scripts/render_journal_panel.py` +80 lines (earlier owner-view lane, uncommitted), `pipeline` gitlink MM, `.gitignore`, scint-review outputs.
@@ -68,8 +68,8 @@ Not this lane (concurrent, do not fold into board commits): association-cards/su
 
 ## Action Items & Next Steps
 
-1. [ ] Commit `docs/rse/board/readiness.html` + `docs/rse/board/owner-view.json` (plus the earlier-lane `render_journal_panel.py` owner-view support, if its owner lane hasn't) to main via a focused `infra/board` branch — keep association-lane staged files out.
-2. [ ] Propagate the strand vocabulary to `docs/rse/journal-protocol.md` (it describes owner-view upkeep; add one line: components are strand-keyed, strand swimlane stages must be updated with lane state).
+1. [ ] Commit `docs/rse/control/board/readiness.html` + `docs/rse/control/board/owner-view.json` (plus the earlier-lane `render_journal_panel.py` owner-view support, if its owner lane hasn't) to main via a focused `infra/board` branch — keep association-lane staged files out.
+2. [ ] Propagate the strand vocabulary to `docs/rse/protocols/journal-protocol.md` (it describes owner-view upkeep; add one line: components are strand-keyed, strand swimlane stages must be updated with lane state).
 3. [ ] Optional next iteration (owner hasn't asked): data-drive the strand stages from JSON like owner-view, so agents update one file instead of three HTML sections.
 4. [ ] Ongoing owner decisions unchanged and still pending on the board: A1 trigger calibration; first trust-ladder rung (P0 recommended).
 

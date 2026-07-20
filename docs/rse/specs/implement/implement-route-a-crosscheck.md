@@ -4,7 +4,7 @@
 **Date:** 2026-07-03
 **Author:** AI Assistant
 **Status:** Complete (merged 2026-07-03, squash `b8c8ffe5`, owner-authorized)
-**Plan Reference:** dsa110-FLITS issue #105 Agent Brief (posted 2026-07-03) + PRD ([prd-freya-beta-comodel-real-data-fit.md](../prd/prd-freya-beta-comodel-real-data-fit.md)); blockers #100/#102/#104 all merged
+**Plan Reference:** dsa110-FLITS issue #105 Agent Brief (posted 2026-07-03) + PRD ([prd-freya-beta-comodel-real-data-fit.md](../notes/prd-freya-beta-comodel-real-data-fit.md)); blockers #100/#102/#104 all merged
 
 ---
 

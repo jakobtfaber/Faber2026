@@ -9,7 +9,7 @@
 - [Handoff: C1 estimator + first diagnostic (in-flight lane)](../../../../pipeline/docs/rse/specs/handoff-2026-07-14-22-09-c1-allpairs-crossgp.md)
 - [Research: CHIME scint measurement state](../research/research-chime-scint-measurement.md)
 - [Plan: lane-B γ campaign (terminal)](../plan/plan-chime-scint-gamma-campaign.md)
-- [Report: qualification inventory 2026-07-14](../report/report-chime-scintillation-inventory-2026-07-14.md)
+- [Report: qualification inventory 2026-07-14](../notes/report-chime-scintillation-inventory-2026-07-14.md)
 
 ---
 
@@ -787,7 +787,7 @@ caveat kwarg defaults to `None` (existing callers unaffected).
       answer".
 - [ ] `experiment-chime-scint-c1-calibration.md` (new, Phase 2; extended by
       Phase 3 if run).
-- [ ] `docs/rse/ACTIVE_LANES.md` — "CHIME C1 qualification" lane status as
+- [ ] `docs/rse/control/ACTIVE_LANES.md` — "CHIME C1 qualification" lane status as
       phases complete.
 - [ ] `plan-chime-scint-gamma-campaign.md` — eligibility correction
       (Phase 1).
@@ -820,7 +820,7 @@ repo's own routes, per the decision doc and `DATA_PROVENANCE.md`.)
 **Governing Decision & In-Flight Lane:**
 - [Decision: Figure 1 + CHIME C1 route](../decision/decision-2026-07-14-figure1-and-chime-c1.md)
 - [Handoff: C1 estimator + first diagnostic](../../../../pipeline/docs/rse/specs/handoff-2026-07-14-22-09-c1-allpairs-crossgp.md)
-- `docs/rse/ACTIVE_LANES.md` — "CHIME C1 qualification" lane
+- `docs/rse/control/ACTIVE_LANES.md` — "CHIME C1 qualification" lane
 
 **Files Analyzed:**
 - `pipeline/scintillation/scint_analysis/cross_acf.py:230,363` ·

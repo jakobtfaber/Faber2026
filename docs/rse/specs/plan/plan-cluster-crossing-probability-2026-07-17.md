@@ -5,7 +5,7 @@
 **Author:** AI Assistant
 **Status:** Draft — predeclared method record, awaiting owner sanction (CONTEXT.md §V gate)
 **Related Documents:**
-- [Triage: Kulkarni-persona feedback (2026-07-17)](../triage/triage-kulkarni-feedback-2026-07-17.md) — S2 = referee §6 ("expected crossings ~0.1"); *needs a predeclared method before the number is quotable*
+- [Triage: Kulkarni-persona feedback (2026-07-17)](../notes/triage-kulkarni-feedback-2026-07-17.md) — S2 = referee §6 ("expected crossings ~0.1"); *needs a predeclared method before the number is quotable*
 - [Plan: S1 mass bound](../plan/plan-cluster-xray-sz-mass-bound-2026-07-17.md) — predeclared-record precedent; S1's registry-vs-prose lesson applies here too
 - [Plan: Thread 1 RM re-partition](../plan/plan-rm-cluster-bfield-repartition-2026-07-17.md) — sibling lane chartered the same day; S2's output sharpens the same a-posteriori framing
 - [Handoff 2026-07-17 12:58](../handoff/handoff-2026-07-17-12-58-s1-landed-owner-decisions-closed.md) — action item 5
@@ -81,7 +81,7 @@ spread) and a frozen rule for the single sentence it may add to
   (quadrature, no MC), emitting `scripts/cluster_crossing_probability.csv`
   with per-sightline and total $N_{\rm exp}$ for every predeclared variant.
 - `tests/test_cluster_crossing_probability.py` — anchors below all green.
-- A record figure `docs/rse/decks/cluster-crossing-2026-07-17/crossing_probability.pdf`
+- A record figure `docs/rse/decks/budget/cluster-crossing-2026-07-17/crossing_probability.pdf`
   ($N_{\rm exp}(>M)$ vs. $M$ with the two thresholds marked and per-sightline
   stacking) — ships with the PR per the visibility preference.
 - A one-sentence gated prose candidate, entered only per the frozen quotability
@@ -385,7 +385,7 @@ primary+alternative spread rule.)*
 
 ## References
 
-- [Triage: Kulkarni feedback](../triage/triage-kulkarni-feedback-2026-07-17.md) · [S1 plan](../plan/plan-cluster-xray-sz-mass-bound-2026-07-17.md) · [Thread 1 plan](../plan/plan-rm-cluster-bfield-repartition-2026-07-17.md) · [Handoff 12:58](../handoff/handoff-2026-07-17-12-58-s1-landed-owner-decisions-closed.md)
+- [Triage: Kulkarni feedback](../notes/triage-kulkarni-feedback-2026-07-17.md) · [S1 plan](../plan/plan-cluster-xray-sz-mass-bound-2026-07-17.md) · [Thread 1 plan](../plan/plan-rm-cluster-bfield-repartition-2026-07-17.md) · [Handoff 12:58](../handoff/handoff-2026-07-17-12-58-s1-landed-owner-decisions-closed.md)
 - Files analyzed: `sections/results.tex:101-157`, `sections/appendix.tex:184-227` (both origin/main); `pipeline/galaxies/foreground/data/intervening_census_registry.csv:23`; `scripts/dm_budget_uncertainty.py` (cosmology block); `pipeline/pyproject.toml`
 - External: Tinker et al. 2008 (ApJ 688, 709 — mass function + Δ interpolation); Despali et al. 2016 (MNRAS 456, 2486) / Sheth–Tormen (alternative fit); Eisenstein & Hu 1998 (ApJ 496, 605 — transfer function); the referee note's ~0.1 estimate (triage S2 row)
 

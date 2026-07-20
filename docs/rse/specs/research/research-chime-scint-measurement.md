@@ -5,7 +5,7 @@
 **Codebase state:** Faber2026 `main` @ `3e59e9a`, pipeline submodule (`dsa110-FLITS` fork) pinned at `91a5120` (2026-07-14)
 **Related Documents:**
 [plan-chime-scint-gamma-campaign.md](../plan/plan-chime-scint-gamma-campaign.md) ·
-[report-chime-scintillation-inventory-2026-07-14.md](../report/report-chime-scintillation-inventory-2026-07-14.md) ·
+[report-chime-scintillation-inventory-2026-07-14.md](../notes/report-chime-scintillation-inventory-2026-07-14.md) ·
 [plan-chime-scint-recipe-parity.md](../plan/plan-chime-scint-recipe-parity.md) ·
 [implement-freya-scint-fit-quality.md](../implement/implement-freya-scint-fit-quality.md)
 
@@ -52,7 +52,7 @@ planning work).
   `pipeline/analysis/chime-scintillation/INVENTORY.yaml`
   (`qualified_chime_measurements: 0`); human entry point
   `pipeline/analysis/chime-scintillation/README.md`; narrative summary
-  [report-chime-scintillation-inventory-2026-07-14.md](../report/report-chime-scintillation-inventory-2026-07-14.md).
+  [report-chime-scintillation-inventory-2026-07-14.md](../notes/report-chime-scintillation-inventory-2026-07-14.md).
 
 ### 2. Estimation / fitting package
 
@@ -241,4 +241,4 @@ v1.1 (decision-aligned sequence).
 - Records: `pipeline/analysis/chime-scintillation/{README.md,INVENTORY.yaml,DATA_MANIFEST.yaml}` ·
   `pipeline/scintillation/DATA_PROVENANCE.md` ·
   [plan-chime-scint-gamma-campaign.md](../plan/plan-chime-scint-gamma-campaign.md) status log ·
-  [report-chime-scintillation-inventory-2026-07-14.md](../report/report-chime-scintillation-inventory-2026-07-14.md)
+  [report-chime-scintillation-inventory-2026-07-14.md](../notes/report-chime-scintillation-inventory-2026-07-14.md)

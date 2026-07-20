@@ -34,7 +34,7 @@ Trigger: FLITS finalization PR merged + Faber2026 pin bump to (or past) it.
    compiled "no CHIME-band decorrelation bandwidth survives / all twelve
    demoted" conclusion is contradicted by the validated rerun (detection triad
    zach / chromatica / freya; hamilton unphysical-suspect; whitney not clean).
-2. **Evidence ledger** — `docs/rse/evidence-ledger.toml`: all twelve
+2. **Evidence ledger** — `docs/rse/control/evidence-ledger.toml`: all twelve
    `scintillation_chime` strands currently record `unavailable` / "campaign
    OPEN per the 2026-07-15 owner amendment". Update zach/chromatica/freya to
    the earned status from the official rerun (with commit pin), annotate

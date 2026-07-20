@@ -33,14 +33,14 @@
 
 **Research Documents:**
 - [research-trust-reset-revalidation.md](../research/research-trust-reset-revalidation.md) — V1–V6 surfaces map (defects, gates, rail definitions)
-- [machine-inventory-verification-2026-07-06.md](../misc/machine-inventory-verification-2026-07-06.md) — **produced this session**; live-verified host table + closures appendix
+- [machine-inventory-verification-2026-07-06.md](../notes/machine-inventory-verification-2026-07-06.md) — **produced this session**; live-verified host table + closures appendix
 
 **Previous Handoffs (context chain):**
 - [handoff-2026-07-06-14-50-chime-sample-regeneration.md](../handoff/handoff-2026-07-06-14-50-chime-sample-regeneration.md) — the h17 upchan regeneration campaign (separate scint lineage)
 
 ## Critical References
 
-1. `docs/rse/specs/misc/machine-inventory-verification-2026-07-06.md` — verified host topology + what was closed and how; read first.
+1. `docs/rse/specs/notes/machine-inventory-verification-2026-07-06.md` — verified host topology + what was closed and how; read first.
 2. `docs/rse/specs/plan/plan-trust-reset-revalidation.md:158-891` — Phases 0–2; P0.2/P0.3/P0.4/P2.3/P2.4 are the specified next tasks.
 3. `~/Developer/scratch/worktrees/flits-provenance/scattering/scat_analysis/builders_arc/ORIGIN.md` — builder-hunt verdict and its consequences for trust rung (i).
 
@@ -66,7 +66,7 @@ Faber2026 `main` (this session's commits): `310c212` (verification doc), `092293
 
 - **Tests:** `tests/test_data_manifest.py` 3/3 pass in the worktree. Full pipeline suite NOT run this session.
 - **Unpushed:** BOTH repos. Pipeline branch `provenance/data-manifest` (4 commits) needs a PR to dsa110-FLITS; Faber2026 `main` is 10 ahead of origin (mix of this session's 2 + concurrent sessions' commits). Pushing = owner one-way door.
-- **Uncommitted (separate lanes — do NOT sweep):** `CLAUDE.md` (owner's open vim session, `.CLAUDE.md.swp` present) and one `docs/rse/journal.jsonl` line appended by the concurrent session `9f491a6c` after `0922930`.
+- **Uncommitted (separate lanes — do NOT sweep):** `CLAUDE.md` (owner's open vim session, `.CLAUDE.md.swp` present) and one `docs/rse/protocols/journal.jsonl` line appended by the concurrent session `9f491a6c` after `0922930`.
 - **Unverified:** gdrive↔iacobus full-tree parity (sampled only). `DATA_SOURCES.md:90-111` reconciliation failure (P2.4) untouched. Cube content integrity (wraps/centering, P2.3) untouched — byte-identity to arc ≠ defect-free.
 
 ## Learnings
@@ -76,7 +76,7 @@ Faber2026 `main` (this session's commits): `310c212` (verification doc), `092293
 - **Machine ground truth lives at `pipeline/machine_inventory.yaml`** (schema 3, query via `scripts/query_machine_inventory.py`) — don't re-derive host topology from `~/.ssh/config`, which carries many non-project hosts.
 - **Entire CLI keeps clobbering `~/.git-hooks-global/push-gate-dispatch`** (recurrence of the documented 2026-07-01 incident). Symptom: `[entire] Pushing entire/checkpoints/v1 to 0` on every commit (post-index-change passes `$1=0`). Fix: `chezmoi apply --force` on the file + `chflags uchg`. If spam recurs, check `stat -f %Sf` for the missing lock.
 - **`~/Data/Faber2026/dsa110/flits-runs/data/` symlink layer was dead** (pointed at pre-migration `~/Developer/dsa110-local-data`); real files live in `DSA_bursts/`. If a config references `flits-runs/data/*.npy`, it now needs the `DSA_bursts` path (or fresh symlinks).
-- Concurrent-writer reality: multiple live agents commit to Faber2026 `main`; use pathspec-only commits and journal every ≤10 min (`scripts/journal-append.sh`, protocol `docs/rse/journal-protocol.md`; board redeploy via Artifact url `fdc8d749-f3a6-4296-bbd2-9f1052fe57f6`).
+- Concurrent-writer reality: multiple live agents commit to Faber2026 `main`; use pathspec-only commits and journal every ≤10 min (`scripts/journal-append.sh`, protocol `docs/rse/protocols/journal-protocol.md`; board redeploy via Artifact url `fdc8d749-f3a6-4296-bbd2-9f1052fe57f6`).
 
 ## Action Items & Next Steps
 

@@ -114,7 +114,7 @@ python analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.
 
 5. **Uncommitted, not mine, in the pipeline worktree** *(observed, unverified)*: `run_dsa_lorentzian_fits.py`, +127/−4, adding `_harmonic_keep_mask()` — a de-comb for the CHIME upchannelization ripple (400 MHz / 1024 = 0.390625 MHz). It is **opt-in per config**: all 12 `*_chime.yaml` set `harmonic_mask`, **no** `*_dsa.yaml` does. So it does **not** invalidate the DSA figures in `1e2c507`. I did not run, test, or review it.
 
-6. **Uncommitted in `Faber2026`** *(mostly not mine)*: 14 modified figure PDFs/PNGs, `docs/rse/journal.jsonl`, `docs/rse/board/readiness.html`, ` M pipeline` (the stale gitlink), untracked `scripts/__pycache__/`, and the two untracked handoffs above. **This document is also untracked, by request.**
+6. **Uncommitted in `Faber2026`** *(mostly not mine)*: 14 modified figure PDFs/PNGs, `docs/rse/protocols/journal.jsonl`, `docs/rse/control/board/readiness.html`, ` M pipeline` (the stale gitlink), untracked `scripts/__pycache__/`, and the two untracked handoffs above. **This document is also untracked, by request.**
 
 7. **Unidentified provenance:** I never determined *which* session produced `e0039c6`, only that it was a real writer (author == committer, no auto-commit hook on the active `hooksPath`).
 

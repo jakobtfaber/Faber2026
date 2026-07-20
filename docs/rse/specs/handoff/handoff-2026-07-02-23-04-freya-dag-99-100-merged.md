@@ -29,7 +29,7 @@
 - [research-pipeline-2d-fit-scattering-index.md](../research/research-pipeline-2d-fit-scattering-index.md) — pipeline 2D-fit survey (anchors valid at pin `6ce3e58`)
 
 **Plan Documents:**
-- [prd-freya-beta-comodel-real-data-fit.md](../prd/prd-freya-beta-comodel-real-data-fit.md) — the PRD; **the tracker issues #101–#106 + their agent briefs are the plan** (no `plan-*.md`)
+- [prd-freya-beta-comodel-real-data-fit.md](../notes/prd-freya-beta-comodel-real-data-fit.md) — the PRD; **the tracker issues #101–#106 + their agent briefs are the plan** (no `plan-*.md`)
 
 **Implementation Summaries:**
 - [implement-freya-local-runs-configs.md](../implement/implement-freya-local-runs-configs.md) — #99: configs, smoke test, verification (env-scoped), deviations
@@ -40,7 +40,7 @@
 ## Critical References
 
 - Tracker: https://github.com/jakobtfaber/dsa110-FLITS/issues — open DAG is exactly #101–#106; **#101 and #102 carry authoritative Agent Brief comments** (the contract). Read the target issue's brief first.
-- `docs/rse/specs/prd/prd-freya-beta-comodel-real-data-fit.md` — scope + implementation/testing decisions (epistemically corrected 2026-07-02).
+- `docs/rse/specs/notes/prd-freya-beta-comodel-real-data-fit.md` — scope + implementation/testing decisions (epistemically corrected 2026-07-02).
 - `pipeline/CLAUDE.md` — binding: worktree-per-agent, protected-branch guard, Stop-gates, entire-ledger closeout, autoformatter import-strip trap, ponytail style.
 
 ## Recent Changes

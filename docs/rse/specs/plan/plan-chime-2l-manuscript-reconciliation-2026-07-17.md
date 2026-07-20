@@ -25,7 +25,7 @@ and no unapproved scintillation-summary figure in the compiled PDF.
 - `pipeline` pins `5fb387e`, immediately before PR #192.
 - `sections/results.tex:285-334` reports the superseded zero-measurement result.
 - `sections/results.tex:243-252` compiles the rejected DSA-only summary.
-- `docs/rse/evidence-ledger.toml` marks most CHIME products unavailable.
+- `docs/rse/control/evidence-ledger.toml` marks most CHIME products unavailable.
 
 ## Desired End State
 

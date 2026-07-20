@@ -4,7 +4,7 @@
 **Date:** 2026-07-10  
 **Status:** Scoped — not yet implemented  
 **Depends on:** V4 census (cleared); `scripts/dm_budget_uncertainty.py` host/cluster PDFs  
-**Wishlist:** O6 in `docs/rse/specs/misc/figure-wishlist.md`  
+**Wishlist:** O6 in `docs/rse/specs/notes/figure-wishlist.md`  
 **Companion figure (done):** `fig:dm_host_posteriors` now shows full host PDFs + cluster MC  
 ---
 

@@ -64,7 +64,7 @@ situation.*
 - `8cef432` (#42) — `scripts/dm_budget_uncertainty.py:105-160` guarded IGM calibration below `z=0.1`; `budget_table.tex`, `sections/appendix.tex` prose revert "generally exceed" → "exceed"; new `tests/test_dm_budget_uncertainty.py`.
 - `dbe8f29` (#43) — added the two 07-08 handoff docs; `.gitignore` gained `/data/`.
 - `66f2133` — merge commit on PR #43's branch resolving the `.gitignore` conflict (kept `/data/` + main's `__pycache__/`).
-- `bf0f902` — `docs/rse/journal.jsonl` +2 entries logging #42/#43.
+- `bf0f902` — `docs/rse/protocols/journal.jsonl` +2 entries logging #42/#43.
 
 ## Reproducibility & Data State
 
@@ -96,7 +96,7 @@ situation.*
 - **Concurrency, not parallelism, was the right call.** Fanning out `cc-dispatch`/`codex-dispatch` subagents into a repo being actively closed out would recreate the exact multi-writer tangle the last four handoffs existed to untangle — collisions on files edited that minute, no shared orchestrator. Serialization is worth it only when there is work *only you can do* and a writer is *blocking* it; neither held. The load-reducing move was to stop, not to add writers.
 - **Three of my own claims needed auditor correction** — a discipline note for the next session: (1) I first diffed the regenerated CSV with `head -11`, silently excluding the two cluster aggregate rows; full-file diff was required. (2) I stated the emitter "has a test" from its *docstring* alone — `tests/test_budget_table_emitter.py` is **not on disk** (tracked or present). (3) I glossed commit `52acde3` as "the REPRODUCE.md pin fix"; it is actually "record that `--check` is blind to cross-repo drift" — the pin fix was the separate `4a48a679`. **Verify before asserting; a docstring/summary is a claim, not evidence.**
 - **`git ls-remote` / GitHub API is the source of truth here, not local git.** Coarse protection mode blocks local `.git` writes and the local checkout lags origin by many commits; every state check in this session went through the API.
-- **Attribution cannot distinguish the two sessions** — both authenticate as `jakobtfaber` and commit as `Jakob Faber <jfaber@caltech.edu>`. The only reliable "who did what / is anyone still active" signal is commit/PR **timestamps** and the `docs/rse/journal.jsonl` agent tags. `main` has no branch protection (PR #63 is the proposed fix).
+- **Attribution cannot distinguish the two sessions** — both authenticate as `jakobtfaber` and commit as `Jakob Faber <jfaber@caltech.edu>`. The only reliable "who did what / is anyone still active" signal is commit/PR **timestamps** and the `docs/rse/protocols/journal.jsonl` agent tags. `main` has no branch protection (PR #63 is the proposed fix).
 
 ## Action Items & Next Steps (priority order)
 

@@ -19,7 +19,7 @@
 | Decided model-toa rejection record (`2026-07-17-fig1-model-toa`) | ✅ Complete | Tracked via PR #130 (`711672bd`) — the decision receipt both fig1 lanes executed |
 | Owner `decide` on the two staged fig1 candidates | 📋 Planned — **owner-gated** | Recommendation: approve `2026-07-17-fig1-observed-peak-audit` (uncorrected); mark `…-dmcorr` needs_revision citing the refutation |
 | Promotion PR after approval (bytes → `figures/codetection_data_grid.pdf`, caption check) | 📋 Planned | Blocked on the decide above |
-| Thread 1 Pandhi transmittal | 📋 Planned — owner-side | Draft final at `docs/rse/specs/draft/draft-message-thread1-pandhi-2026-07-17.md` (untracked in primary checkout) |
+| Thread 1 Pandhi transmittal | 📋 Planned — owner-side | Draft final at `docs/rse/specs/notes/draft-message-thread1-pandhi-2026-07-17.md` (untracked in primary checkout) |
 
 **Current Workflow Phase:** Validate (complete) → owner decision gate
 
@@ -27,7 +27,7 @@
 
 - `docs/rse/specs/validation/validation-fig1-observed-peak-audit.md` — the fig1 validation record, including two addenda: the auto-review disposition and the **marker-dependence refutation** of the dmcorr corrections
 - `docs/rse/specs/research/research-/plan-/implement-fig1-observed-peak-audit.md` — the concurrent lane's workflow docs (merged with #121)
-- `docs/rse/specs/draft/draft-message-thread1-pandhi-2026-07-17.md` — Pandhi transmittal draft (owner to send; untracked)
+- `docs/rse/specs/notes/draft-message-thread1-pandhi-2026-07-17.md` — Pandhi transmittal draft (owner to send; untracked)
 - `figure_review/batches/2026-07-17-fig1-observed-peak-audit/` — the promotable candidate packet
 - `figure_review/batches/2026-07-17-fig1-observed-peak-dmcorr/` — refuted candidate; `provenance/marker-dependence-refutation.json` is the kill record
 
@@ -56,7 +56,7 @@
 ## Verification State / Known-Broken
 
 - **Tests:** `make test-science` green at every merge (last: 146 passed, 1 documented xfail); figure approval gate ok
-- **Uncommitted (primary checkout):** shared journal/board files (`docs/rse/journal.jsonl`, `docs/rse/board/readiness.html`) plus six untracked spec docs (repository-cleanup lane × 5, Pandhi draft × 1). Primary checkout is on `ms/results-registry` — another active lane owns it; do not reset or switch it
+- **Uncommitted (primary checkout):** shared journal/board files (`docs/rse/protocols/journal.jsonl`, `docs/rse/control/board/readiness.html`) plus six untracked spec docs (repository-cleanup lane × 5, Pandhi draft × 1). Primary checkout is on `ms/results-registry` — another active lane owns it; do not reset or switch it
 - **Unverified:** none in this lane; the dmcorr refutation itself is triple-sourced (catalog σ=0.005, onset test, peak-scan gradient)
 
 ## Learnings
@@ -73,7 +73,7 @@
    `python scripts/figure_review.py decide 2026-07-17-fig1-observed-peak-audit fig1-gallery approved --reviewer "Jakob Faber" --note "…"` and
    `python scripts/figure_review.py decide 2026-07-17-fig1-observed-peak-dmcorr fig1-gallery needs_revision --reviewer "Jakob Faber" --note "refuted: marker-dependence (see provenance/marker-dependence-refutation.json)"`
 2. [ ] After approval: promotion PR — `python scripts/figure_review.py promote 2026-07-17-fig1-observed-peak-audit fig1-gallery`, verify caption in `sections/observations.tex:38-57` still matches (its "CHIME correction negligible" sentence is CORRECT — do not add stem-misstatement language, that claim is refuted), `make`, `make test-science`, PR
-3. [ ] **Owner:** send the Pandhi transmittal (`docs/rse/specs/draft/draft-message-thread1-pandhi-2026-07-17.md`); Thread 1 Phase 4 Options A/B decision
+3. [ ] **Owner:** send the Pandhi transmittal (`docs/rse/specs/notes/draft-message-thread1-pandhi-2026-07-17.md`); Thread 1 Phase 4 Options A/B decision
 4. [ ] Optional hygiene: decide whether the six untracked spec docs in the primary checkout should be committed by their owning lanes
 
 **Recommended Next Skill:** none required for step 1 (owner CLI decision); use `ai-research-workflows:validating-implementations` after the promotion PR if a formal validation record is wanted.

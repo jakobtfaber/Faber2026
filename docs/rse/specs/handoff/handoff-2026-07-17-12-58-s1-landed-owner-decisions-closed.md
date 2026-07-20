@@ -68,7 +68,7 @@ them end-to-end.
   1. **OPERON model-TOA/joint-tf lane (live):** `sections/toa.tex`, `scripts/plot_codetection_data_grid.py`, `pipeline` (submodule drift), untracked `figure_review/batches/`, `figures/toa_offset_decomposition.pdf`, and the repository-cleanup spec quartet + `research-flits-branch-audit-2026-07-17.md`. Mid-repair: its 11:42 journal entry diagnosed RFI-contaminated fit inputs (mask-unaware `downsample()`); refits of casey/chromatica/wilhelm pending.
   2. **Polarization-companion lane (new, separate-active):** `codetections_polarization/*` dirty + 2 untracked — refreshed 12:19 by session `kulkarni-explore` (lane `pol-companion-sync`) from an **owner-supplied zip**. Preserve.
   3. **This session's residue:** this handoff + `scripts/cluster_xray_sz/` (untracked, join the next docs PR).
-- Shared-append `docs/rse/journal.jsonl` + baked `docs/rse/board/readiness.html` dirty as always (multi-lane log; never sweep into a task commit).
+- Shared-append `docs/rse/protocols/journal.jsonl` + baked `docs/rse/control/board/readiness.html` dirty as always (multi-lane log; never sweep into a task commit).
 - **Unverified/deferred:** the S1 scripts are not yet tests in the pipeline (action item 2); the fig1 re-render has not been produced yet (OPERON side).
 
 ## Learnings

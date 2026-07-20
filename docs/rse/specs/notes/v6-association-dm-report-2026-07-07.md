@@ -83,7 +83,7 @@ direction of the offset.
 (DM in pc cm⁻³. DSA err = 0.1 placeholder for all rows; CHIME err is the
 regression statistical σ, 0.0005–0.11.)
 
-![CHIME−DSA DM agreement per burst](../v6/v6-dm-agreement.png)
+![CHIME−DSA DM agreement per burst](../notes/v6-dm-agreement.png)
 
 **Reading the figure:** every constrained burst sits well inside the ±1 pc cm⁻³
 agreement floor, so all eight agree. Two structural facts are visible:

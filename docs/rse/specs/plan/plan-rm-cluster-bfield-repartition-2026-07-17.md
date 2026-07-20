@@ -5,7 +5,7 @@
 **Author:** AI Assistant
 **Status:** Draft — predeclared cross-paper experiment record, awaiting owner sanction (CONTEXT.md §V gate; cross-paper coordination gate below)
 **Related Documents:**
-- [Triage: Kulkarni-persona feedback (2026-07-17)](../triage/triage-kulkarni-feedback-2026-07-17.md) — Thread 1 = "RM → intervening cluster/CGM B-field", verdict *Chase (strongest; cross-paper seam)*
+- [Triage: Kulkarni-persona feedback (2026-07-17)](../notes/triage-kulkarni-feedback-2026-07-17.md) — Thread 1 = "RM → intervening cluster/CGM B-field", verdict *Chase (strongest; cross-paper seam)*
 - [Experiment record: X-ray/SZ mass bound (Kulkarni S1)](../experiment/experiment-cluster-xray-sz-mass-bound-2026-07-17.md) — supplies the X-ray-capped cluster mass and the truncated-prior DM bracket this plan consumes
 - [Plan: S1 mass bound](../plan/plan-cluster-xray-sz-mass-bound-2026-07-17.md) — the predeclared-record precedent this plan mirrors
 - [Handoff 2026-07-17 12:58](../handoff/handoff-2026-07-17-12-58-s1-landed-owner-decisions-closed.md) — declares Thread 1 the hot lane
@@ -133,11 +133,11 @@ constraining-vs-null outcome is not steerable after the fact.
   papers, with file:line provenance), the negligibility-field algebra, the
   literature comparison set with citations, and the conditional re-partition
   table.
-- A record figure (`docs/rse/decks/thread1-2026-07-17/rm_repartition_sensitivity.pdf`,
+- A record figure (`docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf`,
   non-manuscript) showing $(\mathrm{RM}_{\rm host},
   \langle B_{\parallel,{\rm host}}\rangle)$ vs. assumed
   $\langle B_{\parallel,{\rm cl}}\rangle$ across the pinned DM bracket.
-- A coordination memo (`docs/rse/specs/memo/memo-thread1-rm-repartition-<date>.md`)
+- A coordination memo (`docs/rse/specs/notes/memo-thread1-rm-repartition-<date>.md`)
   the owner can hand to the companion authors, with proposed language options
   for both manuscripts.
 - A decision recorded against the frozen rule: **material** (seam enters
@@ -428,7 +428,7 @@ field, with DM uncertainties propagated.
 - [ ] **Run, watch pass** (or record the residual as the model-difference
       systematic if outside tolerance — do not tune to force agreement).
 - [ ] **Emit** the re-partition table into the JSON + the record figure
-      `docs/rse/decks/thread1-2026-07-17/rm_repartition_sensitivity.pdf`
+      `docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf`
       (three panels: RM$_{\rm host}$, $B_{\rm host}$, and implied
       RM$_{\rm cl}^{\rm obs}$ vs. $B_{\rm cl}$, with the [84, 328] DM band
       shaded) — per the visibility preference, this ships with the PR.
@@ -447,7 +447,7 @@ field, with DM uncertainties propagated.
 **Objective:** Package for the both-owners gate; no manuscript edits.
 
 **Tasks:**
-- [ ] **Draft** `docs/rse/specs/memo/memo-thread1-rm-repartition-2026-07-XX.md`:
+- [ ] **Draft** `docs/rse/specs/notes/memo-thread1-rm-repartition-2026-07-XX.md`:
       the seam in one paragraph; the negligibility table; the classification;
       the re-partition table + figure; two proposed language options for the
       companion (add an intervening term with the S1-capped column; or keep
@@ -586,7 +586,7 @@ marginal→owner-adjudication branch respectively.)*
 
 ## References
 
-- [Triage: Kulkarni feedback](../triage/triage-kulkarni-feedback-2026-07-17.md) · [S1 plan](../plan/plan-cluster-xray-sz-mass-bound-2026-07-17.md) · [S1 experiment record](../experiment/experiment-cluster-xray-sz-mass-bound-2026-07-17.md) · [Handoff 12:58](../handoff/handoff-2026-07-17-12-58-s1-landed-owner-decisions-closed.md)
+- [Triage: Kulkarni feedback](../notes/triage-kulkarni-feedback-2026-07-17.md) · [S1 plan](../plan/plan-cluster-xray-sz-mass-bound-2026-07-17.md) · [S1 experiment record](../experiment/experiment-cluster-xray-sz-mass-bound-2026-07-17.md) · [Handoff 12:58](../handoff/handoff-2026-07-17-12-58-s1-landed-owner-decisions-closed.md)
 - Files analyzed: `codetections_polarization/main.tex` (:131-146 budget, :165 phineas row, :230 σ_RM, :146 MC priors); `codetections_polarization/issues.md`; `pipeline/galaxies/foreground/data/intervening_census_registry.csv:23`; `scripts/dm_budget_uncertainty.py:556-620` (origin/main); `scripts/dm_budget_uncertainty.csv:7,12-13` (origin/main); `sections/results.tex:101-157` (origin/main)
 - External: Pandhi et al. 2025 (`2025ApJ...982..146P`, MC procedure); Hutschenreuter et al. 2022 (A&A 657, A43; Galactic RM map; bib key in `codetections_polarization/ref.bib`); Baptista et al. 2024 (DM_IGM); the Phase-1 candidate pool (Clarke 2001/2004; Bonafede 2010; Böhringer 2016; Govoni 2017; Stuardi 2021; Osinga 2022, 2025; Anderson 2021)
 

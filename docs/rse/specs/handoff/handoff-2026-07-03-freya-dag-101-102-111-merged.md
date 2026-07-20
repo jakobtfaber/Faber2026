@@ -24,7 +24,7 @@
 ## Workflow Artifacts
 
 **Plan Documents:**
-- [prd-freya-beta-comodel-real-data-fit.md](../prd/prd-freya-beta-comodel-real-data-fit.md) — the PRD; **the tracker issues #103–#106 + their agent briefs are the plan** (no `plan-*.md`)
+- [prd-freya-beta-comodel-real-data-fit.md](../notes/prd-freya-beta-comodel-real-data-fit.md) — the PRD; **the tracker issues #103–#106 + their agent briefs are the plan** (no `plan-*.md`)
 
 **Implementation Summaries (this session's slices):**
 - [implement-freya-tail-coverage-preflight.md](../implement/implement-freya-tail-coverage-preflight.md) — #101: closed-form tail-coverage math, the two science findings that gate #104

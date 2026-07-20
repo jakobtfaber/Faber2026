@@ -106,5 +106,5 @@ manuscript restructuring remain governed by the circulation-readiness plan.
 ## References
 
 - Plan: [plan-circulation-readiness.md](../plan/plan-circulation-readiness.md), F3.
-- Findings: [audit-f3-findings.md](../audit/audit-f3-findings.md).
+- Findings: [audit-f3-findings.md](../notes/audit-f3-findings.md).
 - Pull request: <https://github.com/jakobtfaber/Faber2026/pull/64>.

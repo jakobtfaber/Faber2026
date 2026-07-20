@@ -22,7 +22,7 @@ as a reusable skill.
 |------|--------|-------|
 | Deflation pass (trim wordiness, preserve meaning + gate semantics) | ✅ Complete | 7 hand-maintained `.tex` files, net −6 lines despite added content |
 | Fold Kulkarni **referee** prose items into manuscript | ✅ Complete | 5 accuracy fixes (see Recent Changes) |
-| Triage Kulkarni **discovery-scan** threads + referee science items | ✅ Complete | `docs/rse/specs/triage/triage-kulkarni-feedback-2026-07-17.md` (in-repo, on origin/main via PR #105) |
+| Triage Kulkarni **discovery-scan** threads + referee science items | ✅ Complete | `docs/rse/specs/notes/triage-kulkarni-feedback-2026-07-17.md` (in-repo, on origin/main via PR #105) |
 | PR #105 review + merge | ✅ Complete | Codex clean; adversarial subagent 2 minor findings fixed pre-merge; squash `3f27232c` |
 | Investigate new dirty figure-review lane | ✅ Complete | Owned by claude-science OPERON frame `329f945b`, not the mesh peer |
 | `attributing-agent-work` skill (my-skillset) | ✅ Complete | PR #128 merged; live via `~/.claude/my-skillset` symlink |
@@ -38,13 +38,13 @@ as a reusable skill.
 - `~/scratch/kulkarni-profile/Faber2026/kulkarni-referee-2026-07-17.md` and `kulkarni-discovery-scan-2026-07-17.md` — the simulated persona review + idea scan (private scratch, not in-repo).
 
 **Produced this session:**
-- [triage-kulkarni-feedback-2026-07-17.md](../triage/triage-kulkarni-feedback-2026-07-17.md) — prose items (implemented) vs science items (gated); discovery threads 1–6 dispositioned against CONTEXT.md.
+- [triage-kulkarni-feedback-2026-07-17.md](../notes/triage-kulkarni-feedback-2026-07-17.md) — prose items (implemented) vs science items (gated); discovery threads 1–6 dispositioned against CONTEXT.md.
 - This handoff.
 
 ## Critical References
 
 - `CONTEXT.md` (repo root) — the trust-reset contract. Every prose edit and every triage disposition was checked against it. Read before ANY further manuscript or science work.
-- `docs/rse/specs/triage/triage-kulkarni-feedback-2026-07-17.md` — the map of what was done vs what is deferred and why.
+- `docs/rse/specs/notes/triage-kulkarni-feedback-2026-07-17.md` — the map of what was done vs what is deferred and why.
 - `scripts/consistency_audit.py` — the prose contract (SAMPLE_COUNT_EXPECTATIONS anchors + RETIRED_PATTERNS); run standalone after any wording change (CI does not run the retired-language sweep).
 
 ## Recent Changes

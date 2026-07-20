@@ -21,13 +21,13 @@ branches self-cleaning without losing active or unclassified work.
 
 **Motivation:** Both personal repositories have `delete_branch_on_merge=false`,
 and tracker state has drifted from the canonical lane state in
-[`docs/rse/program-state.toml:22-111`](../program-state.toml).
+[`docs/rse/control/program-state.toml:22-111`](../../control/program-state.toml).
 
 ## Current State Analysis
 
-- [`docs/rse/program-state.toml:22-75`](../program-state.toml) marks issues #54,
+- [`docs/rse/control/program-state.toml:22-75`](../../control/program-state.toml) marks issues #54,
   #68, and #75 done/terminal and the #55 Route B chain terminal.
-- [`docs/rse/program-state.toml:78-111`](../program-state.toml) keeps #56 and #58
+- [`docs/rse/control/program-state.toml:78-111`](../../control/program-state.toml) keeps #56 and #58
   proposed.
 - [Repository cleanup research](../research/research-repository-cleanup-2026-07-17.md)
   records 45 Faber branches, the exact 36 merged-PR branch set, three additional
