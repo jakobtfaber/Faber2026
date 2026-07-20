@@ -30,10 +30,12 @@ sampler, and how to retain older figures without confusing their status.
 
 ## Synthesis
 
-Reconstruct the three candidate model dumps from the saved medians, render the
+Reconstruct the candidate model dumps from the saved medians, render the
 full triptychs with the existing renderer, mark their status and provenance in
 the roster, and move the older outputs into a count-labeled historical folder.
-Do not compile the candidates into the manuscript or claim owner adoption.
+The owner subsequently selected zach C2D4 job 180 for the active inspection
+figure; preserve C2D3 job 178 as a comparison. Do not compile the candidates
+into the manuscript or infer count adoption from the display choice.
 
 ## References / Sources
 
@@ -41,4 +43,3 @@ Do not compile the candidates into the manuscript or claim owner adoption.
 - `scripts/jointmodel_triptych_manifest.yaml`
 - `tests/test_codetection_triptych.py`
 - `docs/rse/specs/validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md`
-

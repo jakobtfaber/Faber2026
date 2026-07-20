@@ -9,6 +9,7 @@ production models.
 | oran | 171 | C1D1 | `b550ddf48d8d922751735fda8fdff0aa5dfd1287d67c8d4ac19ee7b76382ffa6` | `bdfbb3a49b2427db7fbdff20c67fe14c4d94396da503c06d5dda220a6e4cd609` |
 | johndoeII | 175 | C1D2 | `2095a1891531c14714d83334abee134c3ad54293c3385994296ff4c4c282dea6` | `c95a126664fc017a607f38dad13d32ca6961f859c3bed97e649119429941bf36` |
 | zach | 178 | C2D3 fine | `eda4e8f5d4d67f6dd96d307719bb292de9215e0fc0352ff7f5e94c7dc99eb408` | `a0a1adaa1918e6b58cd9e14ff832794e71f069cd5812dfb03389f646bab561dc` |
+| zach | 180 | C2D4 fine, active display | `8efa4f8dc6572cdd448dfcedebaf6c4e17a30da6f3bc8a37aba1cd5944836051` | `55bc7397ae1d100718bdb7b9cb9b2a7dd9c0ca70908c60ed684e8795e0e05590` |
 
 ## Reconstruction provenance
 
@@ -22,8 +23,12 @@ production models.
 
 The first two dumps use `dump_jointmodel.py <burst> <suffix>`. The zach dump
 imports the exact fine-window hook from `run_joint_fit_zachfine.py` and calls
-`joint_tf_prep.prepare_pair(..., common_window=False)`, matching job 178.
+`joint_tf_prep.prepare_pair(..., common_window=False)`, matching jobs 178 and 180.
 No sampler was rerun; model arrays were evaluated at saved posterior medians.
+
+The active zach display uses C2D4 job 180 at the owner's request. The C2D3 job
+178 dump and rendered triptych remain preserved as comparison evidence. This
+display choice does not by itself record component-count adoption.
 
 The source fit generation remains not exactly reproducible because it had no
 sampler seed and used modified/untracked code. The deterministic model
@@ -42,4 +47,3 @@ env -i HOME="$HOME" PATH="/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin" \
 
 The fixed epoch and renderer SVG hash salt make all nine PNG/PDF/SVG outputs
 byte-identical across repeated local renders in the same pinned environment.
-

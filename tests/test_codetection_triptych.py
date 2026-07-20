@@ -262,7 +262,7 @@ def test_jointtf_v2_candidate_rows_are_explicit():
     expected = {
         "oran": ("C1D1", 171, "oran_jointmodel_C1D1_s2-100.npz"),
         "johndoeii": ("C1D2", 175, "johndoeII_jointmodel_C1D2_s2-100.npz"),
-        "zach": ("C2D3", 178, "zach_jointmodel_C2D3_s2-100_fine.npz"),
+        "zach": ("C2D4", 180, "zach_jointmodel_C2D4_s2-100_fine.npz"),
     }
     for nick, (components, job, filename) in expected.items():
         row = rows[nick]
@@ -295,6 +295,18 @@ def test_jointtf_v2_provenance_hashes_match_active_figures():
             path = ROOT / "figures/codetection_triptych" / f"{nick}_triptych.{suffix}"
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
             assert digest == record[f"{suffix}_sha256"]
+
+
+def test_zach_c2d3_comparison_is_labeled_and_hash_verified():
+    root = ROOT / "figures/codetection_triptych"
+    provenance = json.loads((root / "jointtf-v2-provenance.json").read_text())
+    record = provenance["comparison_figures"]["zach_C2D3_job178"]
+    assert record["components"] == "C2D3"
+    assert record["job"] == 178
+    for suffix in ("pdf", "png", "svg"):
+        path = root / "comparisons" / f"zach_triptych_v2-C2D3-job178.{suffix}"
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        assert digest == record[f"{suffix}_sha256"]
 
 
 def test_manifest_fit_artifacts_use_the_adopted_dm_in_both_bands():

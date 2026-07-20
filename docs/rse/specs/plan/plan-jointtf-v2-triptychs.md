@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-20  
 **Author:** AI Assistant  
-**Status:** Complete  
+**Status:** Complete; revised for zach C2D4 display
 **Related Documents:**
 - [Research](../research/research-jointtf-v2-triptychs.md)
 - [Prior validation](../validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md)
@@ -11,7 +11,7 @@
 
 ## Overview
 
-Generate full candidate triptychs for oran C1D1, johndoeII C1D2, and zach C2D3
+Generate full candidate triptychs for oran C1D1, johndoeII C1D2, and zach C2D4
 from the `s2=100` v2 results. Archive the superseded triptychs under explicit
 count labels and preserve the owner-ratification gate.
 
@@ -23,7 +23,8 @@ count labels and preserve the owner-ratification gate.
 
 ## Desired End State
 
-- Active triptychs use jobs 171, 175, and 178.
+- Active triptychs use jobs 171, 175, and 180. Zach job 178 remains a labeled
+  C2D3 comparison.
 - Historical outputs are count-labeled and separated.
 - Every model and figure is hashed; repeated rendering is byte-stable.
 - Candidate status remains machine-readable and manuscript compilation remains blocked.
@@ -37,7 +38,7 @@ count labels and preserve the owner-ratification gate.
 ## Implementation Approach
 
 Use the existing median-model reconstruction on h17. Use the exact zach fine
-window hook for job 178. Copy paired NPZ/JSON artifacts, update only the three
+window hook for jobs 178 and 180. Copy paired NPZ/JSON artifacts, update only the three
 roster rows, archive old figure bytes, and make vector metadata deterministic.
 
 ## Implementation Phases
@@ -48,6 +49,8 @@ roster rows, archive old figure bytes, and make vector metadata deterministic.
   `dump_jointmodel.py johndoeII _C1D2_s2-100` in h17 `flits-a1-312`.
 - [x] Import `run_joint_fit_zachfine.py`, force `common_window=False`, and run
   `dump_jointmodel.py zach _C2D3_s2-100_fine`.
+- [x] After owner correction, run the same deterministic reconstruction for
+  `dump_jointmodel.py zach _C2D4_s2-100_fine` from job 180 and make it active.
 - [x] Assert expected counts, finite model arrays, and identical data/model shapes.
 
 ### Phase 2: Replace and archive figure products
@@ -57,6 +60,8 @@ roster rows, archive old figure bytes, and make vector metadata deterministic.
   counts, `s2`, job IDs, and new paths.
 - [x] Move nine older outputs into `figures/codetection_triptych/historical-pre-v2/`.
 - [x] Render three replacements with `scripts/plot_codetection_triptych.py:366-407`.
+- [x] Preserve the C2D3 job-178 triptych under
+  `figures/codetection_triptych/comparisons/`.
 
 ### Phase 3: Reproducibility and verification
 

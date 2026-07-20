@@ -10,7 +10,7 @@
 ## Outcome
 
 Generated full CHIME/FRB plus DSA-110 data/model/residual triptychs for candidate
-oran C1D1, johndoeII C1D2, and zach C2D3 using the `s2=100` v2 results. Moved
+oran C1D1, johndoeII C1D2, and zach C2D4 using the `s2=100` v2 results. Moved
 the older C2D1, C2D2, and C2D4 triptychs into a count-labeled historical folder.
 
 ## Verification
@@ -19,7 +19,7 @@ the older C2D1, C2D2, and C2D4 triptychs into a count-labeled historical folder.
 - Recovered reduced residual statistics:
   - oran: CHIME/FRB 1.162; DSA-110 0.939.
   - johndoeII: CHIME/FRB 1.058; DSA-110 1.153.
-  - zach: CHIME/FRB 2.025; DSA-110 1.213.
+  - zach C2D4 job 180: CHIME/FRB 2.025; DSA-110 1.130.
 - Repeated render: 9/9 PNG/PDF/SVG files byte-identical.
 - Targeted tests: 26 passed; two existing Python escape-sequence warnings.
 - Full root tests retain the two previously diagnosed pipeline campaign
@@ -31,7 +31,9 @@ the older C2D1, C2D2, and C2D4 triptychs into a count-labeled historical folder.
 
 ## Boundary
 
-The figures remain `candidate-v2-owner-pending`. The source fits still lack
+The active zach figure now shows C2D4 job 180; its C2D3 job-178 predecessor is
+retained as a labeled comparison. The figures remain
+`candidate-v2-owner-pending`. The source fits still lack
 exact fit-generation reproducibility because no sampler seeds were recorded and
 executed fitting code was modified/untracked. No manuscript promotion, count
 adoption, production-table rewrite, or rung-2 launch occurred.
