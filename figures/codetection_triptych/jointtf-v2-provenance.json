@@ -28,24 +28,25 @@
       "svg_sha256": "f4c295682ce8a391e37a5da237487968baf8066d7e282b7509a4e5b4534e5b9d"
     },
     "zach": {
-      "job": 180,
-      "components": "C2D4",
+      "job": 178,
+      "components": "C2D3",
       "gain_s2": 100,
       "fine_dsa_window": true,
-      "pdf_sha256": "735867c562f0fdef3e910ac1ac19df4c15ef09bab1a36b8388c107cbc44b387e",
-      "png_sha256": "3ce5fa84496ab1d28d8dab412a558e29030beea31835d5526fb03b32f62c645e",
-      "svg_sha256": "2764ef3fea0ce516a5dc1525750227917068104874777d2e810c6de042f51cbe"
-    }
-  },
-  "comparison_figures": {
-    "zach_C2D3_job178": {
-      "components": "C2D3",
-      "job": 178,
       "pdf_sha256": "53e1378e67d5fa573a8037629991eb7f941d2982956e13c56be532687ecf80ed",
       "png_sha256": "1346db39a82247b1f34f16bc2fd143091822ae922331e15593a6ab5e1ef4eb70",
       "svg_sha256": "d4c3d200776d51e9841e1ebe3605d327e05dd4ef4d3b98238ce41506a529ae89"
     }
   },
+  "comparison_figures": {
+    "zach_C2D4_job180": {
+      "components": "C2D4",
+      "job": 180,
+      "disposition": "non-latest diagnostic; owner rejected as active display",
+      "pdf_sha256": "735867c562f0fdef3e910ac1ac19df4c15ef09bab1a36b8388c107cbc44b387e",
+      "png_sha256": "3ce5fa84496ab1d28d8dab412a558e29030beea31835d5526fb03b32f62c645e",
+      "svg_sha256": "2764ef3fea0ce516a5dc1525750227917068104874777d2e810c6de042f51cbe"
+    }
+  },
   "byte_reproduction": "pass: 9/9 outputs identical across two consecutive renders",
-  "scientific_boundary": "candidate figures only; the owner selected C2D4 job 180 for the active zach display, but component-count ratification and manuscript promotion remain open"
+  "scientific_boundary": "candidate figures only; owner visual review rejected C2D4 job 180 as the active zach display; component-count ratification and manuscript promotion remain open"
 }

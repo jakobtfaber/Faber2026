@@ -1,0 +1,32 @@
+site_name: Faber2026 Figure Review
+site_description: Latest manuscript-bound figure candidates
+docs_dir: figures/codetection_triptych
+
+theme:
+  name: material
+  features:
+    - navigation.top
+
+plugins: []
+
+markdown_extensions:
+  - attr_list
+
+nav:
+  - Latest figures: index.md
+
+exclude_docs: |
+  comparisons/**
+  historical-pre-v2/**
+  *.pdf
+  *.svg
+  jointtf-v2-provenance.json
+  casey_triptych.png
+  chromatica_triptych.png
+  freya_triptych.png
+  hamilton_triptych.png
+  isha_triptych.png
+  mahi_triptych.png
+  phineas_triptych.png
+  whitney_triptych.png
+  wilhelm_triptych.png

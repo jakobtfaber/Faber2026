@@ -5,11 +5,13 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
 import numpy as np
 import pytest
+import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -262,7 +264,7 @@ def test_jointtf_v2_candidate_rows_are_explicit():
     expected = {
         "oran": ("C1D1", 171, "oran_jointmodel_C1D1_s2-100.npz"),
         "johndoeii": ("C1D2", 175, "johndoeII_jointmodel_C1D2_s2-100.npz"),
-        "zach": ("C2D4", 180, "zach_jointmodel_C2D4_s2-100_fine.npz"),
+        "zach": ("C2D3", 178, "zach_jointmodel_C2D3_s2-100_fine.npz"),
     }
     for nick, (components, job, filename) in expected.items():
         row = rows[nick]
@@ -297,16 +299,56 @@ def test_jointtf_v2_provenance_hashes_match_active_figures():
             assert digest == record[f"{suffix}_sha256"]
 
 
-def test_zach_c2d3_comparison_is_labeled_and_hash_verified():
+def test_zach_c2d4_comparison_is_labeled_and_hash_verified():
     root = ROOT / "figures/codetection_triptych"
     provenance = json.loads((root / "jointtf-v2-provenance.json").read_text())
-    record = provenance["comparison_figures"]["zach_C2D3_job178"]
-    assert record["components"] == "C2D3"
-    assert record["job"] == 178
+    record = provenance["comparison_figures"]["zach_C2D4_job180"]
+    assert record["components"] == "C2D4"
+    assert record["job"] == 180
     for suffix in ("pdf", "png", "svg"):
-        path = root / "comparisons" / f"zach_triptych_v2-C2D3-job178.{suffix}"
+        path = root / "comparisons" / f"zach_triptych_v2-C2D4-job180.{suffix}"
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         assert digest == record[f"{suffix}_sha256"]
+
+
+def test_zach_active_candidate_has_higher_evidence_than_nonlatest_comparison():
+    artifacts = ROOT / "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2"
+    c2d3 = json.loads((artifacts / "zach_joint_fit_C2D3_s2-100_fine.json").read_text())
+    c2d4 = json.loads((artifacts / "zach_joint_fit_C2D4_s2-100_fine.json").read_text())
+    assert c2d3["components_D"] == 3
+    assert c2d4["components_D"] == 4
+    assert c2d3["log_evidence"] - c2d4["log_evidence"] > 5.0
+
+
+def test_root_mkdocs_is_one_page_with_only_latest_triptychs():
+    config = yaml.safe_load((ROOT / "mkdocs.yml").read_text())
+    assert config["docs_dir"] == "figures/codetection_triptych"
+    assert config["nav"] == [{"Latest figures": "index.md"}]
+
+    page = (ROOT / "figures/codetection_triptych/index.md").read_text()
+    expected = {
+        "oran_triptych.png",
+        "johndoeii_triptych.png",
+        "zach_triptych.png",
+    }
+    assert set(re.findall(r"\(([a-z0-9_]+_triptych\.png)\)", page)) == expected
+    assert "job 178" in page
+    assert "job 180" not in page
+    excluded = config["exclude_docs"]
+    for name in (
+        "comparisons/**",
+        "historical-pre-v2/**",
+        "casey_triptych.png",
+        "chromatica_triptych.png",
+        "freya_triptych.png",
+        "hamilton_triptych.png",
+        "isha_triptych.png",
+        "mahi_triptych.png",
+        "phineas_triptych.png",
+        "whitney_triptych.png",
+        "wilhelm_triptych.png",
+    ):
+        assert name in excluded
 
 
 def test_manifest_fit_artifacts_use_the_adopted_dm_in_both_bands():

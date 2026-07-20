@@ -26,9 +26,11 @@ imports the exact fine-window hook from `run_joint_fit_zachfine.py` and calls
 `joint_tf_prep.prepare_pair(..., common_window=False)`, matching jobs 178 and 180.
 No sampler was rerun; model arrays were evaluated at saved posterior medians.
 
-The active zach display uses C2D4 job 180 at the owner's request. The C2D3 job
-178 dump and rendered triptych remain preserved as comparison evidence. This
-display choice does not by itself record component-count adoption.
+The active zach display uses C2D3 job 178. Owner full-size review rejected C2D4
+job 180 as the active display: its fourth DSA component is a broad, low-fluence
+pedestal and C2D3 is favored by 10.1 in log evidence. The job-180 dump and
+triptych remain preserved as non-latest diagnostic evidence. This display
+choice does not by itself record component-count adoption.
 
 The source fit generation remains not exactly reproducible because it had no
 sampler seed and used modified/untracked code. The deterministic model

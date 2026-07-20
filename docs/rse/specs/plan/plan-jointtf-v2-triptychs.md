@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-20  
 **Author:** AI Assistant  
-**Status:** Complete; revised for zach C2D4 display
+**Status:** Complete; revised after owner visual adjudication
 **Related Documents:**
 - [Research](../research/research-jointtf-v2-triptychs.md)
 - [Prior validation](../validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md)
@@ -11,7 +11,7 @@
 
 ## Overview
 
-Generate full candidate triptychs for oran C1D1, johndoeII C1D2, and zach C2D4
+Generate full candidate triptychs for oran C1D1, johndoeII C1D2, and zach C2D3
 from the `s2=100` v2 results. Archive the superseded triptychs under explicit
 count labels and preserve the owner-ratification gate.
 
@@ -23,8 +23,8 @@ count labels and preserve the owner-ratification gate.
 
 ## Desired End State
 
-- Active triptychs use jobs 171, 175, and 180. Zach job 178 remains a labeled
-  C2D3 comparison.
+- Active triptychs use jobs 171, 175, and 178. Zach job 180 remains a labeled
+  non-latest C2D4 diagnostic comparison.
 - Historical outputs are count-labeled and separated.
 - Every model and figure is hashed; repeated rendering is byte-stable.
 - Candidate status remains machine-readable and manuscript compilation remains blocked.
@@ -50,7 +50,7 @@ roster rows, archive old figure bytes, and make vector metadata deterministic.
 - [x] Import `run_joint_fit_zachfine.py`, force `common_window=False`, and run
   `dump_jointmodel.py zach _C2D3_s2-100_fine`.
 - [x] After owner correction, run the same deterministic reconstruction for
-  `dump_jointmodel.py zach _C2D4_s2-100_fine` from job 180 and make it active.
+  `dump_jointmodel.py zach _C2D4_s2-100_fine` from job 180 for comparison.
 - [x] Assert expected counts, finite model arrays, and identical data/model shapes.
 
 ### Phase 2: Replace and archive figure products
@@ -60,8 +60,18 @@ roster rows, archive old figure bytes, and make vector metadata deterministic.
   counts, `s2`, job IDs, and new paths.
 - [x] Move nine older outputs into `figures/codetection_triptych/historical-pre-v2/`.
 - [x] Render three replacements with `scripts/plot_codetection_triptych.py:366-407`.
-- [x] Preserve the C2D3 job-178 triptych under
-  `figures/codetection_triptych/comparisons/`.
+- [x] Preserve the non-active zach candidate under
+  `figures/codetection_triptych/comparisons/` with count and job labels.
+
+### Phase 4: Correct zach after owner visual adjudication
+
+- [x] Verify the served PNG against the active artifact hash.
+- [x] Confirm that job 180 is formally C2D4 but has only three summed-profile
+  maxima; its fourth DSA component has 3.1% fluence and a 350 ms width.
+- [x] Confirm C2D3 is favored over C2D4 by 10.1 in log evidence.
+- [x] Restore C2D3 job 178 as the active zach triptych and roster entry.
+- [x] Move C2D4 job 180 to the labeled non-latest comparison directory.
+- [x] Add a root MkDocs review surface with one concise, figure-only page.
 
 ### Phase 3: Reproducibility and verification
 
@@ -75,7 +85,7 @@ roster rows, archive old figure bytes, and make vector metadata deterministic.
 
 ### Automated Verification
 
-- [x] Three model NPZ files match expected counts and contain finite aligned arrays.
+- [x] Three active model NPZ files match expected counts and contain finite aligned arrays.
 - [x] Nine active and nine historical figure files exist.
 - [x] Two consecutive renders produce identical SHA-256 hashes for all active files.
 - [x] `pytest` target reports 26 passing tests.
@@ -84,7 +94,8 @@ roster rows, archive old figure bytes, and make vector metadata deterministic.
 
 ### Manual Verification
 
-- [ ] Owner reviews all three triptychs at full size.
+- [ ] Owner reviews oran and johndoeII at full size.
+- [x] Owner rejected C2D4 job 180 as the active zach display after full-size review.
 - [ ] Owner ratifies, rejects, or defers each candidate count separately.
 
 ## Testing Strategy

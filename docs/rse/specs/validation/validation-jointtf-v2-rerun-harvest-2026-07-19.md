@@ -22,7 +22,7 @@
 | Numerical harvest | Validated | Re-extracted from 14 JSON files; arithmetic below. |
 | Structural checks | Validated | All t₀ central intervals inside logged windows; ζ diagnostics extracted. |
 | Visual check | Validated, bounded | Both preserved PNGs reviewed; findings below. |
-| Candidate triptychs | Generated; owner review pending | Full data/model/residual figures for jobs 171, 175, and active zach display job 180; job 178 retained for comparison. |
+| Candidate triptychs | Generated; owner review pending | Full data/model/residual figures for jobs 171, 175, and active zach display job 178; job 180 retained as a non-latest diagnostic. |
 | Count dispositions | Decision pending | Evidence supports candidates; owner has not adopted them. |
 | Original-fit reproducibility | Incomplete | No seeds; executed code includes modified and untracked files. |
 | Rung-1 two-screen closure | Incomplete | Separate provenance remains local-only on h17. |
@@ -101,9 +101,12 @@ not a scientific acceptance rule by itself.
   unique physical component count.
 - Full candidate triptychs were subsequently generated for oran C1D1,
   johndoeII C1D2, and both zach C2D3/C2D4 from the `s2=100` posterior medians.
-  At owner request, C2D4 job 180 is the active zach inspection figure and C2D3
-  job 178 is retained as comparison evidence. This display choice does not
-  alter the count-adoption gate. All remain outside the compiled manuscript.
+  Owner full-size review rejected C2D4 job 180 as the active zach display: its
+  summed DSA model has only three maxima, its fourth component has 3.1% fluence
+  and a roughly 350 ms width, and C2D3 is favored by 10.1 in log evidence.
+  C2D3 job 178 is active; job 180 is retained as a labeled non-latest
+  diagnostic. This display choice does not alter the count-adoption gate. All
+  remain outside the compiled manuscript.
 
 ### Reproducibility gaps
 

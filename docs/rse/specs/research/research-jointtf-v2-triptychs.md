@@ -33,9 +33,14 @@ sampler, and how to retain older figures without confusing their status.
 Reconstruct the candidate model dumps from the saved medians, render the
 full triptychs with the existing renderer, mark their status and provenance in
 the roster, and move the older outputs into a count-labeled historical folder.
-The owner subsequently selected zach C2D4 job 180 for the active inspection
-figure; preserve C2D3 job 178 as a comparison. Do not compile the candidates
-into the manuscript or infer count adoption from the display choice.
+Owner full-size review subsequently found only three DSA maxima in the job-180
+C2D4 display. Independent inspection confirmed that its fourth DSA component
+has only 3.1% of recovered DSA fluence and a roughly 350 ms width, so it behaves
+as a broad pedestal rather than a resolved pulse. Job 180 also has lower log
+evidence than C2D3 job 178 by 10.1. Therefore C2D3 job 178 is the active zach
+candidate; retain C2D4 job 180 only as a labeled diagnostic comparison. Do not
+compile the candidates into the manuscript or infer count adoption from display
+status.
 
 ## References / Sources
 

@@ -1,14 +1,16 @@
 # JointTF v2 comparison figures
 
-`zach_triptych_v2-C2D3-job178.*` preserves the superseded active display from
-job 178. It is labeled by component count and job so it cannot be confused with
-the active C2D4 job-180 triptych.
+`zach_triptych_v2-C2D4-job180.*` preserves the owner-rejected active display
+from job 180. It is labeled by component count and job so it cannot be confused
+with the active C2D3 job-178 triptych.
 
 | File | SHA-256 |
 |---|---|
-| PDF | `53e1378e67d5fa573a8037629991eb7f941d2982956e13c56be532687ecf80ed` |
-| PNG | `1346db39a82247b1f34f16bc2fd143091822ae922331e15593a6ab5e1ef4eb70` |
-| SVG | `d4c3d200776d51e9841e1ebe3605d327e05dd4ef4d3b98238ce41506a529ae89` |
+| PDF | `735867c562f0fdef3e910ac1ac19df4c15ef09bab1a36b8388c107cbc44b387e` |
+| PNG | `3ce5fa84496ab1d28d8dab412a558e29030beea31835d5526fb03b32f62c645e` |
+| SVG | `2764ef3fea0ce516a5dc1525750227917068104874777d2e810c6de042f51cbe` |
 
-Comparison retention is provenance only. It does not adopt either component
-count for manuscript use.
+Job 180 is formally C2D4, but its summed DSA model has only three maxima. The
+fourth component has 3.1% of recovered DSA fluence and a roughly 350 ms width;
+C2D3 job 178 is favored by 10.1 in log evidence. Comparison retention is
+provenance only.

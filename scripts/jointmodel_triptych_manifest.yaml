@@ -7,12 +7,12 @@
 bursts:
   - nick: zach
     tns: "FRB 20220207C"
-    npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_jointmodel_C2D4_s2-100_fine.npz
-    flag: "candidate v2 C2D4 display; count ratification pending"
+    npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_jointmodel_C2D3_s2-100_fine.npz
+    flag: "candidate v2 C2D3; owner visual review rejected C2D4 job 180"
     status: candidate-v2-owner-pending
-    components: C2D4
+    components: C2D3
     gain_s2: 100
-    fit_job: 180
+    fit_job: 178
   - nick: whitney
     tns: "FRB 20220310F"
     npz: figures/jointmodel_pair/fit_artifacts/whitney_jointmodel_DMLOCK_C2D3.npz
