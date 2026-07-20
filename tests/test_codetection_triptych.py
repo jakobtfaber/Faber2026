@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -178,6 +179,18 @@ def test_render_disables_model_overlay(monkeypatch, tmp_path):
     assert calls[0]["show_model_on_data"] is False
 
 
+def test_render_metadata_uses_source_date_epoch(monkeypatch):
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1784505600")
+    pdf = triptych.render_metadata(".pdf")
+    svg = triptych.render_metadata(".svg")
+    assert pdf["CreationDate"] == pdf["ModDate"]
+    assert pdf["CreationDate"].tzinfo is not None
+    assert svg == {"Date": "2026-07-20T00:00:00+00:00"}
+    assert triptych.matplotlib.rcParams["svg.hashsalt"] == (
+        "Faber2026-codetection-triptych-v2"
+    )
+
+
 def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
     """DSA dominant-component t0 -> t=0; CHIME fitted arrival -> measured offset."""
     import json as _json
@@ -231,7 +244,57 @@ def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
 def test_manifest_yaml_parses_flags():
     rows = load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
     flagged = {r["nick"] for r in rows if r.get("flag") and r["nick"] != "chromatica"}
-    assert flagged == {"zach", "wilhelm", "hamilton", "casey"}
+    assert flagged == {
+        "zach",
+        "oran",
+        "johndoeii",
+        "wilhelm",
+        "hamilton",
+        "casey",
+    }
+
+
+def test_jointtf_v2_candidate_rows_are_explicit():
+    rows = {
+        row["nick"]: row
+        for row in load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
+    }
+    expected = {
+        "oran": ("C1D1", 171, "oran_jointmodel_C1D1_s2-100.npz"),
+        "johndoeii": ("C1D2", 175, "johndoeII_jointmodel_C1D2_s2-100.npz"),
+        "zach": ("C2D3", 178, "zach_jointmodel_C2D3_s2-100_fine.npz"),
+    }
+    for nick, (components, job, filename) in expected.items():
+        row = rows[nick]
+        assert row["status"] == "candidate-v2-owner-pending"
+        assert row["components"] == components
+        assert row["gain_s2"] == 100
+        assert row["fit_job"] == job
+        assert Path(row["npz"]).name == filename
+        assert (ROOT / row["npz"]).is_file()
+
+
+def test_outdated_jointtf_triptychs_are_count_labeled_and_archived():
+    archive = ROOT / "figures" / "codetection_triptych" / "historical-pre-v2"
+    for stem in (
+        "oran_triptych_pre-v2-C2D1",
+        "johndoeii_triptych_pre-v2-C2D2",
+        "zach_triptych_pre-v2-C2D4",
+    ):
+        for suffix in (".pdf", ".png", ".svg"):
+            assert (archive / f"{stem}{suffix}").is_file()
+
+
+def test_jointtf_v2_provenance_hashes_match_active_figures():
+    provenance = json.loads(
+        (ROOT / "figures/codetection_triptych/jointtf-v2-provenance.json").read_text()
+    )
+    assert provenance["status"] == "candidate-v2-owner-pending"
+    for nick, record in provenance["figures"].items():
+        for suffix in ("pdf", "png", "svg"):
+            path = ROOT / "figures/codetection_triptych" / f"{nick}_triptych.{suffix}"
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            assert digest == record[f"{suffix}_sha256"]
 
 
 def test_manifest_fit_artifacts_use_the_adopted_dm_in_both_bands():
@@ -249,6 +312,14 @@ def test_manifest_fit_artifacts_use_the_adopted_dm_in_both_bands():
         if not row["npz"]:
             continue
         fit = json.loads(triptych.fit_json_path(ROOT / row["npz"]).read_text())
+        if row.get("status") == "candidate-v2-owner-pending":
+            # These are explicit fit-audit candidates, not adopted-DM production
+            # products. Keep that boundary machine-readable instead of silently
+            # treating sampled-DM v2 fits as DMLOCK artifacts.
+            assert fit["fixed_parameters"] == {}
+            assert fit["gain_s2"] == pytest.approx(row["gain_s2"])
+            assert f"C{fit['components_C']}D{fit['components_D']}" == row["components"]
+            continue
         adopted = catalog[row["nick"].lower()]
         campaign_row = campaign[row["nick"].lower()]
         assert float(campaign_row["adopted_dm"]) == pytest.approx(adopted, abs=5e-7)

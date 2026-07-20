@@ -22,6 +22,7 @@
 | Numerical harvest | Validated | Re-extracted from 14 JSON files; arithmetic below. |
 | Structural checks | Validated | All t₀ central intervals inside logged windows; ζ diagnostics extracted. |
 | Visual check | Validated, bounded | Both preserved PNGs reviewed; findings below. |
+| Candidate triptychs | Generated; owner review pending | Full data/model/residual figures for jobs 171, 175, and 178; byte-stable local render. |
 | Count dispositions | Decision pending | Evidence supports candidates; owner has not adopted them. |
 | Original-fit reproducibility | Incomplete | No seeds; executed code includes modified and untracked files. |
 | Rung-1 two-screen closure | Incomplete | Separate provenance remains local-only on h17. |
@@ -98,6 +99,9 @@ not a scientific acceptance rule by itself.
   a clean, stable resolution; null-like components move between rungs.
 - The figures validate structural diagnostics only. They do not establish a
   unique physical component count.
+- Full candidate triptychs were subsequently generated for oran C1D1,
+  johndoeII C1D2, and zach C2D3 from the `s2=100` posterior medians. They are
+  dagger-marked fit-audit products and remain outside the compiled manuscript.
 
 ### Reproducibility gaps
 

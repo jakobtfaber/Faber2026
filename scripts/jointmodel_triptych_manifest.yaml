@@ -1,21 +1,30 @@
 # MJD-ordered roster shared by the Figure 1 data grid and fit-audit figures.
 # Paths are relative to the manuscript repo root unless absolute.
-# DMLOCK artifacts use the CHIME-primary DM fixed in both bands. A non-null
-# artifact can be retained for a transparent morphology audit even when its
-# residual structure excludes it from the physical/PBF roster.
+# Most artifacts use the CHIME-primary DM fixed in both bands. The three
+# candidate-v2-owner-pending rows are the independently re-harvested JointTF v2
+# count candidates on the mode-continuous s2=100 arm. They are fit-audit
+# products only until owner ratification; they are not manuscript-approved.
 bursts:
   - nick: zach
     tns: "FRB 20220207C"
-    npz: figures/jointmodel_pair/fit_artifacts/zach_jointmodel_DMLOCK_C2D4.npz
-    flag: "morphology audit only: structured DSA residual"
+    npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_jointmodel_C2D3_s2-100_fine.npz
+    flag: "candidate v2 C2D3; owner ratification pending"
+    status: candidate-v2-owner-pending
+    components: C2D3
+    gain_s2: 100
+    fit_job: 178
   - nick: whitney
     tns: "FRB 20220310F"
     npz: figures/jointmodel_pair/fit_artifacts/whitney_jointmodel_DMLOCK_C2D3.npz
     flag: null
   - nick: oran
     tns: "FRB 20220506D"
-    npz: figures/jointmodel_pair/fit_artifacts/oran_jointmodel_DMLOCK_C2D1.npz
-    flag: null
+    npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/oran_jointmodel_C1D1_s2-100.npz
+    flag: "candidate v2 C1D1; owner ratification pending"
+    status: candidate-v2-owner-pending
+    components: C1D1
+    gain_s2: 100
+    fit_job: 171
   - nick: isha
     tns: "FRB 20221113A"
     npz: figures/jointmodel_pair/fit_artifacts/isha_jointmodel_DMLOCK_C2D1.npz
@@ -34,8 +43,12 @@ bursts:
     flag: null
   - nick: johndoeii
     tns: "FRB 20230814B"
-    npz: figures/jointmodel_pair/fit_artifacts/johndoeII_jointmodel_DMLOCK_C2D2.npz
-    flag: null
+    npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/johndoeII_jointmodel_C1D2_s2-100.npz
+    flag: "candidate v2 C1D2; owner ratification pending"
+    status: candidate-v2-owner-pending
+    components: C1D2
+    gain_s2: 100
+    fit_job: 175
   - nick: hamilton
     tns: "FRB 20230913A"
     npz: figures/jointmodel_pair/fit_artifacts/hamilton_jointmodel_DMLOCK_C4D1.npz

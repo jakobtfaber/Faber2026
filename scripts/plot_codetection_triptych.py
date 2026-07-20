@@ -19,7 +19,9 @@ Run: conda run -n flits python scripts/plot_codetection_triptych.py
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import json
+import os
 import re
 import sys
 import warnings
@@ -28,6 +30,7 @@ from pathlib import Path
 import matplotlib
 
 matplotlib.use("Agg")
+matplotlib.rcParams["svg.hashsalt"] = "Faber2026-codetection-triptych-v2"
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
@@ -363,6 +366,19 @@ def panel_title(tns: str, flag: str | None) -> str:
     return tns
 
 
+def render_metadata(suffix: str) -> dict | None:
+    """Stable vector-file timestamps when SOURCE_DATE_EPOCH is supplied."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch is None:
+        return None
+    stamp = datetime.fromtimestamp(int(epoch), timezone.utc)
+    if suffix == ".pdf":
+        return {"CreationDate": stamp, "ModDate": stamp}
+    if suffix == ".svg":
+        return {"Date": stamp.isoformat()}
+    return None
+
+
 def render_row(
     row: dict,
     *,
@@ -400,9 +416,14 @@ def render_row(
     fig.suptitle(title, fontsize=10, y=1.02)
     out_dir.mkdir(parents=True, exist_ok=True)
     stem = out_dir / f"{nick}_triptych"
-    fig.savefig(stem.with_suffix(".png"), dpi=dpi, bbox_inches="tight")
-    fig.savefig(stem.with_suffix(".pdf"), bbox_inches="tight")
-    fig.savefig(stem.with_suffix(".svg"), bbox_inches="tight")
+    for suffix in (".png", ".pdf", ".svg"):
+        kwargs = {"bbox_inches": "tight"}
+        if suffix == ".png":
+            kwargs["dpi"] = dpi
+        metadata = render_metadata(suffix)
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        fig.savefig(stem.with_suffix(suffix), **kwargs)
     plt.close(fig)
     return stem.with_suffix(".pdf")
 

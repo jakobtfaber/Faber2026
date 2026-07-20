@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "candidate-v2-owner-pending",
+  "source_date_epoch": 1784505600,
+  "render_environment": {
+    "conda_environment": "flits",
+    "python": "3.12.13",
+    "numpy": "2.4.6",
+    "matplotlib": "3.10.8",
+    "pyyaml": "6.0.3",
+    "platform": "macOS-arm64"
+  },
+  "figures": {
+    "oran": {
+      "job": 171,
+      "components": "C1D1",
+      "gain_s2": 100,
+      "pdf_sha256": "490d297f3d0fee5d44d55cfd5d9f24f7bceafcb49b4c11d236b3b70b6e3febca",
+      "png_sha256": "85efc0c93d08fd27926ddb418a4f834b57a68175063334e14bce3b441d23b3f8",
+      "svg_sha256": "49f954c926e6e0ec7894c502f65a35de08629f3569272d67a85c795d691cb395"
+    },
+    "johndoeii": {
+      "job": 175,
+      "components": "C1D2",
+      "gain_s2": 100,
+      "pdf_sha256": "60ea8a16eb8963c318ab3f7bd81cb9bece7c9cbe47d4ff9a28972a68b6c2f601",
+      "png_sha256": "9dc8d750b1d2c9a5bbc1e529bad4a5db0846fdcb4dec0e8bb23d9487df1163b6",
+      "svg_sha256": "f4c295682ce8a391e37a5da237487968baf8066d7e282b7509a4e5b4534e5b9d"
+    },
+    "zach": {
+      "job": 178,
+      "components": "C2D3",
+      "gain_s2": 100,
+      "fine_dsa_window": true,
+      "pdf_sha256": "53e1378e67d5fa573a8037629991eb7f941d2982956e13c56be532687ecf80ed",
+      "png_sha256": "1346db39a82247b1f34f16bc2fd143091822ae922331e15593a6ab5e1ef4eb70",
+      "svg_sha256": "d4c3d200776d51e9841e1ebe3605d327e05dd4ef4d3b98238ce41506a529ae89"
+    }
+  },
+  "byte_reproduction": "pass: 9/9 outputs identical across two consecutive renders",
+  "scientific_boundary": "candidate figures only; owner count ratification and manuscript promotion remain open"
+}
+

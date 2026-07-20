@@ -55,12 +55,15 @@ def test_historical_sources_are_retained_for_provenance():
 
 def test_suppressed_families_are_unembedded_and_pin_the_blocker():
     rows = _manifest_rows()
-    for output in (
-        "figures/codetection_triptych/*_triptych.pdf",
-        "figures/jointmodel_pair/*_jointmodel_pair.pdf",
-    ):
-        row = rows[output]
-        assert row["embedded_in_manuscript"] == "no"
-        assert row["clone_verified"] == "superseded_pre_pl_pbf"
-        assert "17d9d266" in row["notes"]
-        assert "post-PL-PBF" in row["notes"]
+    triptych = rows["figures/codetection_triptych/*_triptych.pdf"]
+    assert triptych["embedded_in_manuscript"] == "no"
+    assert triptych["clone_verified"] == "candidate_v2_owner_pending"
+    assert "owner count ratification" in triptych["notes"]
+    assert "17d9d266" in triptych["notes"]
+    assert "post-PL-PBF" in triptych["notes"]
+
+    pairs = rows["figures/jointmodel_pair/*_jointmodel_pair.pdf"]
+    assert pairs["embedded_in_manuscript"] == "no"
+    assert pairs["clone_verified"] == "superseded_pre_pl_pbf"
+    assert "17d9d266" in pairs["notes"]
+    assert "post-PL-PBF" in pairs["notes"]
