@@ -43,7 +43,7 @@ branch = "scint/p2-routeb-voltage"
 worktree = ""
 pr = 180                          # FLITS PR (merged); pin bump Faber2026 #65
 gates = ["predeclared experiment record with frozen thresholds before burst data", "detection admissible only inside the Gate-0 window (dnu_d >= 77-127 kHz)"]
-next_action = "terminal; successor P3 (optimal quadratic estimator) planned in handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md, awaiting owner sanction"
+next_action = "terminal; successor P3 (optimal quadratic estimator) planned in historical P3 handoff (deleted), awaiting owner sanction"
 needs_owner = false
 
 [[lane]]

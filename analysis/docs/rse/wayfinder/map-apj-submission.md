@@ -22,7 +22,7 @@ existing lane system. The map does not carry the execution itself.
   driver: decisions are made on scientific need ("worry about what needs
   doing"), and the date is context, not a constraint that forces descoping.
 - **Planning-only map** (owner choice, 2026-07-18): tickets resolve decisions;
-  execution lives on the manuscript-aligned board, [`BOARD.md`](../BOARD.md)
+  execution lives on the manuscript-aligned board, [`BOARD.md`](../control/BOARD.md)
   (canonical as of 2026-07-18 — organized abstract→appendices with one
   cross-cutting campaigns lane). The map sits *above* the board.
   `plan-circulation-readiness.md` and the `program-state.toml` lane views are
@@ -33,29 +33,37 @@ existing lane system. The map does not carry the execution itself.
   legacy code for traceability, it gives the description first, code in
   parentheses.
 - **Standing context:** [`CONTEXT.md`](../../../CONTEXT.md) (trust-reset state,
-  language contracts), [`technical_review_triage_2026-07-15.md`](../../technical_review_triage_2026-07-15.md),
-  [`referee_response_status_2026-07-09.md`](../../referee_response_status_2026-07-09.md).
+  language contracts), [`ops/review-status.md`](../ops/review-status.md)
+  (open review items; root referee/triage docs deleted 2026-07-19).
   Skills: `/grilling`, `/domain-modeling` for HITL tickets.
 - **Both-band scintillation campaign stands as a circulation gate** (owner,
   reaffirmed 2026-07-18): methods now exist for CHIME and DSA bands; the
   qualifying CHIME route postdates the 2026-07-15 docs and must be named and
   ratified (see its ticket).
+- **Raw CHIME data (owner, 2026-07-19):** only the twelve singlebeam voltage
+  `.h5` files on h17
+  (`…/chime_singlebeam/singlebeam_<id>.h5`). Full stop. Full-resolution and
+  upchannelized `.npy` products are derived, not raw. Canonical note:
+  [`../specs/notes/definition-raw-chime-data-2026-07-19.md`](../specs/notes/definition-raw-chime-data-2026-07-19.md).
 
-## Resume pointer (2026-07-19 — STRATIFIED RESTRUCTURE)
+## Resume pointer (2026-07-19 — raw CHIME = voltages)
 
-**Owner decision 2026-07-19:** issues are restructured along the data DAG
-(verification-protocol Tier 0 — data-integrity strata). The route through
-the analyses is now the ticket chain, worked in order:
+**Ticket 17 reopened** under the corrected raw-data definition. Chain:
 
 1. [Certify the raw data layer](tickets/17-certify-raw-data-layer.md) ← **start here**
-2. [Redo the DM analysis on certified bytes](tickets/18-redo-dm-analysis-certified.md) (carries the casey calibration + its handoff)
+   — certify the twelve CHIME singlebeam `.h5` files on h17; do not call
+   intensity cubes “raw”
+2. [Redo the DM analysis on certified bytes](tickets/18-redo-dm-analysis-certified.md)
+   — show `docs/rse/decks/dm/casey-dm-calibration-2026-07-19/casey_dm_strip_CORRECTED.png`
+   full-size before asking; read handoff
+   `docs/rse/specs/handoff/handoff-2026-07-19-14-56-scint-input-remediation-casey-dm-calibration.md`
 3. [Redo the TOA analysis on certified DMs](tickets/19-redo-toa-analysis-certified.md)
 4. [Rebuild the upchannelized products + data cards](tickets/20-rebuild-upchannelized-products.md)
 5. [Redo the scattering analysis on certified inputs](tickets/21-redo-scattering-certified.md) (folds tickets 14/15)
 6. [Redo the scintillation campaign on certified inputs](tickets/22-redo-scintillation-certified.md) → [CHIME-method ratification](tickets/02-ratify-chime-scintillation-method.md)
 
 Master resume doc:
-`docs/rse/specs/handoff-2026-07-19-stratified-restart.md`. Strata tickets
+`docs/rse/specs/handoff/handoff-2026-07-19-stratified-restart.md`. Strata tickets
 may carry HITL execution where owner calibration is intrinsic (owner
 amendment to the planning-only rule). Downstream decision tickets
 (priors 07, phineas 06, census wording 08, trust overhaul 13, etc.) remain
@@ -71,7 +79,8 @@ superseded into 18.
   is not a sequencing driver; scope follows scientific need. Superseded as
   head of the map by
   [Overhaul the trust assessment](tickets/13-overhaul-trust-assessment.md).
-
+- [Certify the raw data layer](tickets/17-certify-raw-data-layer.md)
+  — certified true Stratum 0 raw CHIME layer (12 singlebeam HDF5 voltage files on h17 with CANFAR lineage; intensity cubes categorized as Stratum 1 derived inputs).
 ## Not yet specified
 
 Fog toward the destination — sharpens as the frontier advances:
