@@ -3,7 +3,7 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: —
-- Blocked by: [Define authority roles and their required proof](authority-01-define-authority-roles-and-proof.md), [Reconcile local data and results custody](authority-04-reconcile-local-data-and-results.md), [Restore CANFAR read-only verification access](authority-05-restore-canfar-read-access.md), [Reverify remote and institutional custody](authority-06-reverify-remote-custody.md)
+- Blocked by: [Define authority roles and their required proof](authority-01-define-authority-roles-and-proof.md), [Reconcile local data and results custody](authority-04-reconcile-local-data-and-results.md), [Restore CANFAR read-only verification access](authority-05-restore-canfar-read-access.md), [Reverify remote and institutional custody](authority-06-reverify-remote-custody.md), [Trace the missing h23 quarantine](authority-14-trace-missing-h23-quarantine.md), [Complete Drive-to-iacobus parity and duplicate adjudication](authority-15-complete-drive-iacobus-parity.md)
 - Map: [Project authority and custody](../map-project-authority-and-custody.md)
 - Triage: `ready-for-human`
 
