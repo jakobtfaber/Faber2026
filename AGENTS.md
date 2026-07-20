@@ -11,10 +11,21 @@ Agent brief for the **Faber2026** manuscript repo.
   Explain domain statistics (e.g. confidence bounds, order statistics) in
   plain English when they appear.
 
+## Orient with the knowledge base before grepping
+
+Before exploratory `grep`/`glob`/file-reading to reconstruct context, run
+`python3 scripts/kb search "<topic>"` — hybrid keyword+semantic search over
+manuscript docs, wayfinder tickets, git history (parent + `pipeline/`
+submodule), pipeline code, configs, and cited references, with ranked
+cross-source results. Filter with `--source tickets|docs|git|code|config|refs`.
+Refresh after changes with `make kb-index` (incremental, seconds when
+embeddings are current). See [`docs/rse/knowledge-base.md`](docs/rse/knowledge-base.md).
+Fall back to grep for exhaustive sweeps (every call site, every match).
+
 ## Owner queue walkthrough
 
 On "walk me through my queue": follow
-[`docs/rse/owner-queue-ritual.md`](docs/rse/owner-queue-ritual.md) —
+[`docs/rse/control/owner-queue-ritual.md`](docs/rse/control/owner-queue-ritual.md) —
 regenerate via `python3 scripts/owner_queue.py`, verify heuristics, present
 one item at a time with its evidence, record every decision at its source.
 Never scheduled; owner-triggered only. Science/domain context and the
@@ -55,12 +66,17 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - Manuscript figures should omit plot titles (captions carry the title) and match existing manuscript figure style (SciencePlots / shared formatting), not ad-hoc styling.
 - Prefer math notation on figure axes/labels, with prose explanation in the caption or body text rather than spelled-out descriptive axis text alone.
 - Keep claim wording tight on science readiness and open gates — do not overstate what is certified vs provisional.
+- When reporting science or manuscript status, answer whether work is science-ready and vetted and whether it is in the manuscript draft (plus a one-line section status); do not lead with campaign progress metrics.
+- Prefer plain verification vocabulary over L#/Tier codes: data chain = Raw Data → Input Data Products → Measurements and Fits → Analyses and Interpretations → In-Manuscript Claims; checks = Equation / Calculation / Model/Fit / Reference / No-Context Review.
+- Owner spot-check is required before closing raw-layer certification; agents must not mark that layer trusted without owner sign-off.
 - Prefer separating analysis results from fitting code across Faber2026 and `pipeline/`, funneling products into a clear navigable results inventory.
 - For heavy parallel work, orchestrate via headless Codex/Claude CLI so ChatGPT and Claude Max subscriptions are used, then guide and merge locally.
+- When scrubbing `docs/`, prioritize accuracy and concision over historical record; prefer deleting obsolete or misleading material over archiving it.
 
 ## Learned Workspace Facts
 
 - A separate Overleaf working copy lives at `~/Developer/overleaf/Faber2026` and can sync independently of this checkout — respect Overleaf/GitHub merge order so prose sync does not revert git-only edits.
 - Project data and provenance span jakob-mbp, iacobus, h17, CANFAR/arc, and Google Drive; treat machine inventory as part of provenance, not only “active data stores.”
-- Session handoffs, science-gate plans, and RSE specs live under `docs/rse/specs/`.
+- Session handoffs, science-gate plans, and RSE specs live under `docs/rse/specs/` as markdown-only workflow artifacts; PNGs and other binaries belong elsewhere (e.g. decks, figures, verify trees).
+- Raw CHIME data means only the twelve singlebeam voltage `.h5` files on h17; intensity and upchannelized `.npy` products are derived, not raw.
 - Dual-band codetection / dynamic-spectrum figures label the bands as CHIME/FRB and DSA-110; CHIME–DSA time alignment depends on measured ToA offsets (e.g. `geometric_delay_ms`), not arbitrary visual spacing.

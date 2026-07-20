@@ -11,6 +11,17 @@ Agent brief for the **Faber2026** manuscript repo.
   Explain domain statistics (e.g. confidence bounds, order statistics) in
   plain English when they appear.
 
+## Orient with the knowledge base before grepping
+
+Before exploratory `grep`/`glob`/file-reading to reconstruct context, run
+`python3 scripts/kb search "<topic>"` — hybrid keyword+semantic search over
+manuscript docs, wayfinder tickets, git history (parent + `pipeline/`
+submodule), pipeline code, configs, and cited references, with ranked
+cross-source results. Filter with `--source tickets|docs|git|code|config|refs`.
+Refresh after changes with `make kb-index` (incremental, seconds when
+embeddings are current). See [`docs/rse/knowledge-base.md`](docs/rse/knowledge-base.md).
+Fall back to grep for exhaustive sweeps (every call site, every match).
+
 ## Owner queue walkthrough (manual trigger — never scheduled)
 
 When the owner says anything like **"walk me through my queue"**:
