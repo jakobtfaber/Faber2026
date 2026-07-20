@@ -17,10 +17,10 @@
 | Two-screen decision → charter (owner chose A) | ✅ Complete | `charter-two-screen-forward-model-2026-07-18.md`; non-gating parallel lane; rung-1 = double-exp PBF, shared β, r=τ₂/τ₁, nested. |
 | Two-screen Stage-0 wedge-reproduction falsifier | ✅ Complete (verdict) / 🔄 write-up | **FAIL, wrong sign, 16/16 injection points positive**: r-grid (casey +0.17/+0.42/+0.56; wilhelm +0.90/+1.45/+1.68) + W/τ envelope sweep 0.1–10 (casey +0.25…+2.00 rail; wilhelm +1.42…+2.00 rail). Same-α mixing pushes apparent α ABOVE 4 — opposite the observed sub-4 wedges. No real-data two-screen fits ever run. Teammate owes: envelope numbers into `TWOSCREEN_FITTER_PROVENANCE.md` + two-screen lane PR (kernel currently local-only on h17). |
 | Rung-2 decision (independent β₂) | 📋 Owner decision PENDING | Only remaining mechanism that can flip the deformation sign. Charter §2 rung-2 clause; gate condition met. Owner has the framing in-chat; not yet answered. |
-| zach D3-vs-D4 (task #10) | 🔄 In progress | Fine pair (jobs 133/134) adjudicated **INVALID** — off-window ghost (+3550 was gain-marginal artifact). v2 re-run C2D3/C2D4/C2D5 × s2{10,100}: jobs 177–179 DONE RC=0 (unharvested), 180–182 RUNNING at handoff. |
+| zach D3-vs-D4 (task #10) | ✅ Harvested | Fine pair (133/134) INVALID (off-window). v2 ladder 177–182 all RC=0: s2=10 D3→D4 MODE-JUMP (+1425, β 3.18→3.98) invalid; s2=100 mode-continuous prefers **C2D3** (D4−D3 −10.1). Owner D=4 not supported under v2. |
 | t0-prior bug (root cause + fix) | ✅ Fix landed / 🔄 consequences | `build_priors` t0 half-width 2·max(τ,10) → ±20 ms priors campaign-wide. Fix = FLITS PR #205 (`_clamp_t0_priors_to_window`, all 5 spec variants, validated). Prior-spec v1/v2 split versioned in `COMPONENT_COUNT_LADDER_AUDIT.md`. |
 | Production off-window audit (12/12) | ✅ Complete | **2 production ghosts CONFIRMED by visual vet**: oran C2D1 (t0_C1=−5.2 ms, fluence ≈ real C2) and johndoeII C2D2 (t0_C1=−6.2 ms, fluence 26.2 vs real 8.4 — severe). 6 clean (casey, wilhelm, chromatica, freya, mahi, whitney_fine); isha edge-watch; phineas npz-unresolved; hamilton/zach TOA rows empty. TOA rows oran+johndoeII CHIME structure SUSPECT pending v2 re-runs. |
-| oran/johndoeII v2 audit re-runs | 🔄 Landed, unharvested | Jobs 169–176 all DONE RC=0. Count-drop verdicts (C2→C1 CHIME) NOT yet adjudicated — needs lnZ harvest + in-window check + visual vet. |
+| oran/johndoeII v2 audit re-runs | ✅ Harvested | Jobs 169–176 RC=0. **oran → C1D1** (ΔlnZ C2−C1 = −9.0 / +0.1; C2 ζ-null or runaway). **johndoeII → C1D2** (ΔlnZ −2.4 / −1.2; C2 ζ=90/757). Report: `validation-jointtf-v2-rerun-harvest-2026-07-19.md`. |
 | hamilton probes (task #12-adjacent) | 🔄 Diagnosed | C5D1 rejected (−41, same floor mode). C4D2 flips hamilton to healthy corner (β=3.978, τ 19×) = whitney-twin pattern, but cross-mode ΔlnZ invalid → profiled-gain fallback needed. |
 | phineas C4D4 | 🔄 Diagnosed | Mode-trapped (β=3.018 floor vs production 4.043 healthy) → invalid; whole phineas neighbor story suspect until re-run under v2. |
 | TOA table + triptychs (task #6) | 📋 Blocked | On count verdicts + owner ratifications. |
@@ -67,11 +67,11 @@
 
 ## Action Items & Next Steps
 
-1. [ ] Harvest + adjudicate jobs 169–182 (teammate owns; team-lead verifies): oran C1D1-vs-C2D1 and johndoeII C1D2-vs-C2D2 count-drops first (production TOA integrity), then zach C2D3/C2D4/C2D5 ladder (mode-check → in-window check → visual vet → ΔlnZ; both s2 arms).
-2. [ ] Verify teammate's two-screen lane PR when it lands (kernel + TWOSCREEN_FITTER_PROVENANCE.md with envelope table + v1-label clause) and the Stage-0 FAIL write-up; then update deck slide 6/15 with the envelope numbers.
-3. [ ] Put the rung-2 charter decision to the owner if unanswered (framing already delivered in-chat; charter §2 rung-2 clause = independent β₂, Stage-0-first, ~6 injection fits before any real-data commitment).
-4. [ ] After count verdicts: hamilton profiled-gain fallback + whitney rail classification (task #12), phineas re-run under v2, then task #6 TOA table (oran/johndoeII rows per v2 verdicts).
-5. [ ] Owner decision queue standing: ratify EMG-stays; count-audit remediation as method; zach TOA exception (if relevant post-v2); 2L table ratification; rung-2.
+1. [x] Harvest + adjudicate jobs 169–182 — done 2026-07-19 (this resume): oran C1D1, johndoeII C1D2, zach C2D3@s2=100; vets in `_v2_harvest_20260719/`; audit section appended on h17.
+2. [ ] Verify teammate's two-screen lane PR when it lands (kernel + TWOSCREEN_FITTER_PROVENANCE.md with envelope table + v1-label clause) and the Stage-0 FAIL write-up; then update deck slide 6/15 with the envelope numbers. (Still local-only on h17 at harvest.)
+3. [ ] Put the rung-2 charter decision to the owner if unanswered (charter §2 rung-2 = independent β₂, Stage-0-first, ~6 injection fits; Stage-0 FAIL gate met).
+4. [ ] After owner ratifies count drops: hamilton profiled-gain fallback + whitney rail (task #12), phineas re-run under v2, then task #6 TOA table (oran/johndoeII rows per v2).
+5. [ ] Owner decision queue standing: ratify EMG-stays; count-audit remediation as method; ratify oran/johndoeII drops + zach D3; 2L table ratification; **rung-2**.
 
 **Recommended Next Skill:** `ai-research-workflows:validating-implementations` (harvest/adjudication of the landed re-runs); `ai-research-workflows:running-experiments` if rung-2 is chartered.
 
