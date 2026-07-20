@@ -1,7 +1,7 @@
 Read-only audit complete. I did not modify files. The checkout was already dirty in root and in `pipeline/`; I treated that as pre-existing and only read files.
 
 **Bottom Line**
-`DM_obs` is not currently citable. The root `CONTEXT.md` explicitly revokes DM_obs for all 12 because current tables do not distinguish CHIME-side from DSA-side measurements, do not quantify agreement, and do not document how each was obtained (`CONTEXT.md:28-34`, `CONTEXT.md:48-54`). The revalidation plan says the desired end state is a per-burst, per-telescope DM_obs provenance table with value, error, method, producing artifact, and CHIME-DSA agreement (`docs/rse/specs/plan/plan-trust-reset-revalidation.md:103-106`).
+`DM_obs` is not currently citable. The root `CONTEXT.md` explicitly revokes DM_obs for all 12 because current tables do not distinguish CHIME-side from DSA-side measurements, do not quantify agreement, and do not document how each was obtained (`CONTEXT.md:28-34`, `CONTEXT.md:48-54`). The revalidation plan says the desired end state is a per-burst, per-telescope DM_obs provenance table with value, error, method, producing artifact, and CHIME-DSA agreement (`docs/rse/specs/plan-trust-reset-revalidation.md:103-106`).
 
 **Per-Burst DM Provenance**
 | Burst | CHIME DM value/error | CHIME method/status | DSA/reference DM value/error | DSA method/status | Sources |

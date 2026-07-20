@@ -9,7 +9,7 @@ top, and a time-integrated on-pulse spectrum marginal on the right. The time
 window is adaptive per burst (padded union of the two bands' on-pulse spans),
 so the burst fills the panel instead of sitting in ~50 ms of off-pulse noise.
 
-Data contract (docs/rse/specs/research/research-unified-12burst-figure.md):
+Data contract (docs/rse/specs/research-unified-12burst-figure.md):
   ~/Data/Faber2026/dsa110/DSA_bursts/{nick}_{tel}_I_{DMstem}_{N}b_cntr_bpc.npy
   DSA (6144, 2500) @ 32.768 us; CHIME (1024, 32000) @ 2.56 us; both are
   ~81.9 ms burst-centered windows, stored frequency-DESCENDING

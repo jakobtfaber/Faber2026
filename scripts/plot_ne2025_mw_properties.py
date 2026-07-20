@@ -105,7 +105,7 @@ if __name__ == '__main__':
     tau_map_us = tau_map * 1000.0
 
     # 2. Load bursts data
-    data_path = Path(__file__).resolve().parent.parent / "data/ne2025_mw_properties.csv"
+    data_path = Path(__file__).resolve().parent.parent / "docs/rse/specs/ne2025_mw_properties.csv"
     df = pd.read_csv(data_path)
 
     # Sort by absolute latitude for cleaner plotting/trends

@@ -1,10 +1,10 @@
 #!/bin/bash
-# Append an entry to the repo agent journal (docs/rse/protocols/journal-protocol.md).
+# Append an entry to the repo agent journal (docs/rse/journal-protocol.md).
 # Usage: scripts/journal-append.sh <agent> <lane> <state> <note...>
 #   state: working | done | blocked | info
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-J="$ROOT/docs/rse/protocols/journal.jsonl"
+J="$ROOT/docs/rse/journal.jsonl"
 agent="$1"; lane="$2"; state="$3"; shift 3; note="$*"
 case "$state" in
   working|done|blocked|info) ;;

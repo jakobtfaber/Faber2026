@@ -73,6 +73,6 @@ for name, b in bursts.items():
     rows.append(row)
 
 df = pd.DataFrame(rows)
-csv_out = Path(__file__).resolve().parent.parent / "data/ne2025_mw_properties.csv"
+csv_out = Path(__file__).resolve().parent.parent / "docs/rse/specs/ne2025_mw_properties.csv"
 df.to_csv(csv_out, index=False)
 print(f"Saved {len(df)} rows to {csv_out}")

@@ -1,6 +1,6 @@
 Read-only design pass. Do not edit files or run git writes.
 
 1. Read logs/merge-fig1-jointmodel-brief.md and follow it exactly.
-2. Inspect scripts/plot_codetection_gallery.py, pipeline/flits/batch/codetection_plots.py, sections/observations.tex, sections/jointmodel_pairs.tex, sections/results.tex (jointmodel refs), docs/rse/specs/plan/plan-unified-12burst-figure.md, docs/rse/specs/jointmodel/jointmodel-pair-fit-quality-flags.md, and trust-reset bits in CONTEXT.md.
+2. Inspect scripts/plot_codetection_gallery.py, pipeline/flits/batch/codetection_plots.py, sections/observations.tex, sections/jointmodel_pairs.tex, sections/results.tex (jointmodel refs), docs/rse/specs/plan-unified-12burst-figure.md, docs/rse/specs/jointmodel-pair-fit-quality-flags.md, and trust-reset bits in CONTEXT.md.
 3. Optionally view figures/codetection_gallery.png and one figures/jointmodel_pair/*_jointmodel_pair.png.
 4. Return ONLY the structured proposal (brief sections 1-8).
