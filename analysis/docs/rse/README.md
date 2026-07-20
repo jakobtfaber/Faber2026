@@ -15,7 +15,6 @@ under a role or science-strand folder below.
 | `specs/` | **Markdown only** — workflow docs under prefix folders (see below) |
 | `decks/` | Review/evidence binaries, nested by science strand |
 | `patches/` | Diff patches kept for provenance |
-| `claude-science/` | Session frame archive (do not regroup) |
 
 Runnable helpers live under repo-root `scripts/` (including `scripts/verify/`);
 shared CSV inputs under repo-root `data/`.
