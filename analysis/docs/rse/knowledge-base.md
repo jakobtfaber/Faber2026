@@ -28,10 +28,11 @@ only, so CI needs no ML dependencies.
 
 | source     | what                                                            | ref format        |
 | ---------- | --------------------------------------------------------------- | ----------------- |
-| `docs`     | root/docs/pipeline markdown, `sections/*.tex`, `main.tex`       | repo-relative path |
+| `docs`     | root/docs/pipeline markdown, `sections/*.tex`, `main.tex`, `pipeline/exports/*.tex`, vendored READMEs | repo-relative path |
 | `tickets`  | `docs/rse/wayfinder/tickets/*.md` (+Status/Assignee/Blocked-by) | repo-relative path |
-| `git`      | commit messages (parent repo); PRs via `gh` when installed      | sha / `PR#n`      |
-| `code`     | function/class-level chunks, path-allowlisted (`kb/config.py`)  | repo-relative path |
+| `git`      | commits: parent repo **and** `pipeline/` (FLITS) submodule; PRs via `gh` when installed | sha / `pipeline@sha` / `PR#n` |
+| `code`     | function/class-level chunks, path-allowlisted (`kb/config.py`); incl. `pipeline/{notebooks,external}`, `.ipynb` at cell level (outputs skipped) | repo-relative path |
+| `config`   | pipeline YAML (telescopes, sampler, bursts, manifests, envs)    | repo-relative path |
 | `refs`     | `bib/refs.bib` + Zotero-enriched `bib/references_library.json`  | citekey           |
 | `obsidian` | personal vault — off until `OBSIDIAN_VAULT` set in `kb/config.py` | vault-relative path |
 
