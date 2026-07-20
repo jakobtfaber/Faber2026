@@ -1,0 +1,182 @@
+{
+  "coarse_spacing_mhz": 0.390625,
+  "note": "central_hwhm = HWHM of lag-0 ACF lobe = frequency correlation length; comb-on (pre-decomb) ACFs; only 4 of 12 bursts dumped (casey,zach,hamilton,freya)",
+  "rows": [
+    {
+      "burst": "casey",
+      "sb": 0,
+      "cf_mhz": 447.8,
+      "fine_ch_khz": 29.78,
+      "U": 13,
+      "central_hwhm_khz": 29.8,
+      "subband_bw_mhz": 9.89,
+      "hwhm_over_subbw": 0.003,
+      "hwhm_over_coarse": 0.076
+    },
+    {
+      "burst": "casey",
+      "sb": 1,
+      "cf_mhz": 522.6,
+      "fine_ch_khz": 27.45,
+      "U": 14,
+      "central_hwhm_khz": 27.4,
+      "subband_bw_mhz": 9.94,
+      "hwhm_over_subbw": 0.003,
+      "hwhm_over_coarse": 0.07
+    },
+    {
+      "burst": "casey",
+      "sb": 2,
+      "cf_mhz": 598.5,
+      "fine_ch_khz": 35.82,
+      "U": 11,
+      "central_hwhm_khz": 35.8,
+      "subband_bw_mhz": 9.89,
+      "hwhm_over_subbw": 0.004,
+      "hwhm_over_coarse": 0.092
+    },
+    {
+      "burst": "casey",
+      "sb": 3,
+      "cf_mhz": 721.5,
+      "fine_ch_khz": 34.4,
+      "U": 11,
+      "central_hwhm_khz": 172.0,
+      "subband_bw_mhz": 9.91,
+      "hwhm_over_subbw": 0.017,
+      "hwhm_over_coarse": 0.44
+    },
+    {
+      "burst": "zach",
+      "sb": 0,
+      "cf_mhz": 461.0,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 183.1,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.018,
+      "hwhm_over_coarse": 0.469
+    },
+    {
+      "burst": "zach",
+      "sb": 1,
+      "cf_mhz": 625.2,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 958.3,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.096,
+      "hwhm_over_coarse": 2.453
+    },
+    {
+      "burst": "zach",
+      "sb": 2,
+      "cf_mhz": 751.0,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 85.5,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.009,
+      "hwhm_over_coarse": 0.219
+    },
+    {
+      "burst": "zach",
+      "sb": 3,
+      "cf_mhz": 786.4,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 36.6,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.004,
+      "hwhm_over_coarse": 0.094
+    },
+    {
+      "burst": "hamilton",
+      "sb": 0,
+      "cf_mhz": 442.9,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 116.0,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.012,
+      "hwhm_over_coarse": 0.297
+    },
+    {
+      "burst": "hamilton",
+      "sb": 1,
+      "cf_mhz": 502.9,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 122.1,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.012,
+      "hwhm_over_coarse": 0.313
+    },
+    {
+      "burst": "hamilton",
+      "sb": 2,
+      "cf_mhz": 537.0,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 585.9,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.059,
+      "hwhm_over_coarse": 1.5
+    },
+    {
+      "burst": "hamilton",
+      "sb": 3,
+      "cf_mhz": 676.6,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 4473.9,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.448,
+      "hwhm_over_coarse": 11.453
+    },
+    {
+      "burst": "freya",
+      "sb": 0,
+      "cf_mhz": 447.5,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 2533.0,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.254,
+      "hwhm_over_coarse": 6.484
+    },
+    {
+      "burst": "freya",
+      "sb": 1,
+      "cf_mhz": 519.8,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 2923.6,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.293,
+      "hwhm_over_coarse": 7.484
+    },
+    {
+      "burst": "freya",
+      "sb": 2,
+      "cf_mhz": 656.1,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 4992.8,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.5,
+      "hwhm_over_coarse": 12.781
+    },
+    {
+      "burst": "freya",
+      "sb": 3,
+      "cf_mhz": 783.7,
+      "fine_ch_khz": 6.1,
+      "U": 64,
+      "central_hwhm_khz": 85.5,
+      "subband_bw_mhz": 9.99,
+      "hwhm_over_subbw": 0.009,
+      "hwhm_over_coarse": 0.219
+    }
+  ]
+}

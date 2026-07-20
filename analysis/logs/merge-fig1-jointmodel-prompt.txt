@@ -6,8 +6,8 @@ Read these files as needed (do not edit anything):
 - pipeline/flits/batch/codetection_plots.py (especially plot_codetection)
 - sections/observations.tex (fig:codetection-gallery)
 - sections/jointmodel_pairs.tex and the jointmodel refs in sections/results.tex
-- docs/rse/specs/plan/plan-unified-12burst-figure.md
-- docs/rse/specs/jointmodel/jointmodel-pair-fit-quality-flags.md
+- docs/rse/specs/plan-unified-12burst-figure.md
+- docs/rse/specs/jointmodel-pair-fit-quality-flags.md
 - CONTEXT.md (trust-reset relevant bits)
 - Optionally inspect figures/codetection_gallery.png and one figures/jointmodel_pair/*_jointmodel_pair.png
 

@@ -1,0 +1,70 @@
+{
+  "version": 3,
+  "created_at": "2026-07-08T22:48:34.635Z",
+  "task_summary": "Dual-band CHIME+DSA scintillation: fit scaling index α per burst, regenerate figures and section",
+  "agents": [],
+  "phases": [
+    {
+      "name": "Plan",
+      "delegations": [
+        {
+          "steps": [
+            {
+              "title": "Stage all 24 npz on h17",
+              "description": "On h17 (SLURM target), stage the pipeline-ready dynamic-spectrum npz for all 12 bursts × both bands per HANDOFF_SCINT_DATA_PRODUCTS.md §3–4: pull the 11 missing DSA npz from CANFAR ($ARC/FLITS/scintillation/data/{nick}.npz) and package the 6 missing CHIME npz from the h17 upchan products using build_npz_aligned_generic_20260706.py. Validate each against the known-good references (freya.npz for DSA; casey_chime.npz for CHIME — same keys, freq axis, resolution). Produce a staging manifest (path, size, key/shape check per file) written to a workspace JSON. If CANFAR access needs credentials or the baseband container, surface that to the user before proceeding rather than guessing."
+            },
+            {
+              "title": "Verify configs resolve to staged data",
+              "description": "For all 24 configs/bursts/{nick}_{dsa,chime}.yaml, confirm input_data_path resolves to the staged npz (set FLITS_ROOT appropriately on h17). Do NOT clobber stored_fits in freya/wilhelm DSA configs. Record reference_frequency_mhz per band and confirm the telescope field. Emit a config-resolution report (burst × band → resolved path, exists, stored_fits present) as a workspace table."
+            },
+            {
+              "title": "Run ACF + Lorentzian pipeline both bands",
+              "description": "Run the shared scint_analysis pipeline (run_analysis.py / analyze_scintillation) for all 24 burst×band configs on h17, producing per-sub-band decorrelation bandwidths Δν_d(ν) with the BIC + nested-F component selection and quality flags — the same trusted selector used for the DSA-only products. Harvest per-burst JSON results back to the workspace. Log any burst×band that yields zero clean components. Checkpoint the harvested results JSON as an artifact."
+            },
+            {
+              "title": "Assemble dual-band measurement table",
+              "description": "Merge the CHIME and DSA clean components into one per-burst measurement set: (ν_center, Δν_d, error, band, quality_flags). Save as dsa_chime_scint_components.csv. Produce a diagnostic scatter (Δν_d vs ν across 0.4–1.5 GHz, colored by band) per burst and a sample overview, so the frequency coverage and which bursts have genuine dual-band leverage are visible before fitting."
+            },
+            {
+              "title": "Fit scaling index α per burst",
+              "description": "Use the pipeline's power-law / 2D fitter (γ(ν)=γ₀·(ν/ν_ref)^α, vary_alpha=True) to fit α across the combined dual-band clean measurements per burst. Record α, α_err, γ₀ at a common ν_ref, reduced-χ², and n_points/n_bands used. Flag bursts with insufficient leverage (single band or <2 distinct freqs) as α-unconstrained rather than forcing a fit. Run band_consistency where τ products exist but do not fabricate τ inputs. Save alpha_fits.json + a summary table."
+            },
+            {
+              "title": "Regenerate dual-band summary figure",
+              "description": "Rewrite the summary-figure function to span CHIME+DSA (log-log Δν_d vs ν, both bands' points with 1σ errors, distinct markers per band) and overlay the FITTED α line with its uncertainty band for bursts where α is constrained — replacing the fixed γ∝ν⁴ guide. Annotate each panel with fitted α±err. Emit PNG+SVG+PDF via the driver; enforce mathtext.fontset=stix + pdf.fonttype=42. Save dsa_chime_lorentzian_summary.{png,pdf}."
+            },
+            {
+              "title": "Regenerate per-burst appendix figures",
+              "description": "Update the per-burst ACF/diagnostic figures to include both bands' sub-band ACFs and the fitted α overlay in the bandwidth panel. Emit PNG+SVG+PDF with the clean text-layer rcParams. Save into the results figures dir and copy into figures/dsa_scint_acf/ (manuscript)."
+            },
+            {
+              "title": "Verify figure text layers (QA skill)",
+              "description": "Run the figure-pdf-text-qa procedure on every regenerated PDF: check the embedded text layer extracts γ/ν/χ/α/− correctly with no corrupted glyphs, AND a numeric raster comparison against the PNG ground truth for ALL figures (not a sample). Report the metric per figure."
+            },
+            {
+              "title": "Rewrite the scintillation section",
+              "description": "Rewrite sections/results.tex \\subsection{Scintillation and screen attribution} to report the dual-band measurements and the FITTED scaling index α per burst (with the band-consistency framing), citing the new summary figure. Keep the honest caveat that the low CHIME band is diagnostic-only (Galactic floor unresolved ≤~500 MHz) so per-burst α precision tracks clean-CHIME coverage. Update the appendix macro/caption for dual-band content. Re-run the full-document ref/label lint."
+            },
+            {
+              "title": "Validate and summarize",
+              "description": "Re-run the pipeline's relevant pytest suite + ruff + py_compile after driver edits (flits-dev env). Produce a final change manifest across both repos (task-scoped pathspecs only, no unrelated lanes) and note the git-commit constraint (COARSE protection blocks submodule .git writes). Summarize deliverables with artifact links."
+            }
+          ]
+        }
+      ],
+      "id": "phase-0"
+    }
+  ],
+  "desired_outputs": [
+    "Per-burst dual-band decorrelation-bandwidth measurements (CHIME + DSA) as a table/CSV",
+    "Fitted scaling index α per burst with uncertainties (JSON + summary table)",
+    "Regenerated summary figure spanning CHIME+DSA with the fitted α line (replacing the fixed γ∝ν⁴ guide), clean PDF text layer",
+    "Regenerated per-burst appendix figures spanning both bands",
+    "Rewritten results.tex scintillation section reporting fitted α and band consistency",
+    "Validation: pipeline tests pass, figure text-layer QA passes"
+  ],
+  "feasibility": {
+    "rationale": "The pipeline already implements the fit you want — γ(ν)=γ₀·(ν/ν_ref)^α with vary_alpha=True plus a band_consistency module — so the analysis is well-founded. Medium confidence: the required npz are not local and must be staged on h17 (DSA via CANFAR vcp, 6 CHIME to be packaged per HANDOFF_SCINT_DATA_PRODUCTS.md), which has moving parts (CANFAR/CADC access, baseband container). The CHIME configs themselves flag the low band (≤~500 MHz) as diagnostic-only (Galactic floor unresolved), so the dual-band lever arm is anchored mainly by upper-CHIME + DSA — the α fit is meaningful but its per-burst precision will vary with how many clean CHIME sub-bands each sightline yields.",
+    "confidence": "medium"
+  }
+}

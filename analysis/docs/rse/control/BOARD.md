@@ -1,7 +1,7 @@
 # Manuscript board — CHIME/FRB–DSA-110 co-detections (canonical task list)
 
 **Canonical as of 2026-07-18** (owner decision). Supersedes
-`specs/plan/plan-circulation-readiness.md` and the `program-state.toml` lane views,
+`specs/plan-circulation-readiness.md` and the `program-state.toml` lane views,
 which are frozen as history (banners in place; the CI `check-state` gate still
 reads the frozen toml — retiring that machinery is a separate mechanical
 change). Decisions are made on the wayfinder map
@@ -40,7 +40,7 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 ### Both-band scintillation campaign
 
 **⛔ INPUT REMEDIATION FIRST (owner adjudication 2026-07-18,
-[findings](specs/notes/owner-data-review-findings-2026-07-18.md)):**
+[findings](specs/owner-data-review-findings-2026-07-18.md)):**
 
 - [ ] RFI excision pass: all CHIME upchannelized products + DSA
   central-channel RFI; per-burst masks documented
@@ -98,26 +98,33 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   (`2026-07-17-fig1-observed-peak-audit`); dmcorr variant refuted
   (marker-dependence); owner runs the two `figure_review.py decide` commands
   (handoff-2026-07-18-14-44), then any session runs the promotion PR
-- [ ] Wishlist figures: (re)insert per `specs/notes/figure-wishlist.md` as their
+- [ ] Wishlist figures: (re)insert per `specs/figure-wishlist.md` as their
   gates clear; strip draft `\fbox` placeholders before circulation
 
 ### Verification & rigor
 
-Protocol: [`verification-protocol.md`](../protocols/verification-protocol.md)
-(adopted 2026-07-18; plain names 2026-07-20). Data chain first; then checks by
-claim class — a section task is not done until its inherited checks are green.
-Approved tooling: WolframScript + MATLAB (hpcc), SymPy, astropy.units,
-Undermind, Perplexity, ADS, Retraction Watch/Crossref, Semantic Scholar,
-hypothesis, SBC. (Excluded by owner: scite.ai, Elicit, Consensus.)
+Protocol: [`verification-protocol.md`](verification-protocol.md) (adopted
+2026-07-18). Five tiers by claim class; a section task is not done until its
+inherited tiers are green. Approved tooling: WolframScript + MATLAB (hpcc),
+SymPy, astropy.units, Undermind, Perplexity, ADS, Retraction Watch/Crossref,
+Semantic Scholar, hypothesis, SBC. (Excluded by owner: scite.ai, Elicit,
+Consensus.)
 
-- [ ] **Calculation Check** — prose/table numbers ↔ registry; **blocking**;
-  `\draftnum{}` empty at circulation freeze
-- [ ] **Equation Check** — dual CAS + `astropy.units` on budget/delay arithmetic
-- [ ] **Model/Fit Check** — SBC harness for dynesty; at each campaign closeout
-- [ ] **Reference Check** — ADS + Retraction Watch + Semantic Scholar on
-  `refs.bib`; prior-art sweep per headline claim → evidence ledger
-- [ ] **No-Context Review** — ≥2 independent cold reads per round; convergence
-  = no new valid P0/P1 (pre-circulation + pre-submission)
+- [ ] Prose-number parity gate — extend table-parity CI to all numeric
+  claims in prose; **blocking**; `\draftnum{}` escape hatch, zero-tolerance
+  at circulation freeze (tier 2)
+- [ ] Dual-CAS derivation checks (WolframScript + SymPy; MATLAB tiebreak)
+  for all displayed equations; `astropy.units` dimensional audit of budget
+  and delay arithmetic (tier 1)
+- [ ] Simulation-based-calibration harness for the dynesty fit pipelines;
+  runs at each campaign closeout (tier 3; rides the re-fit campaign)
+- [ ] Reference sweep script: ADS metadata + Retraction Watch via Crossref +
+  Semantic Scholar version check for every `refs.bib` entry (tier 4)
+- [ ] Prior-work coverage search per headline results claim (Undermind;
+  Perplexity for point facts), findings into the evidence ledger (tier 4)
+- [ ] Multi-model adversarial referee protocol: ≥2 independent cold reads
+  per round, dispositions doc per round, convergence = no new valid P0/P1
+  (tier 5; pre-circulation + pre-submission)
 
 ### Board hygiene
 - [ ] Descriptive-names glossary for the frozen letter+number docs
@@ -128,27 +135,22 @@ hypothesis, SBC. (Excluded by owner: scite.ai, Elicit, Consensus.)
 
 ## §0 — Results provenance & organization (pre-manuscript)
 
-**DATA CHAIN (owner, 2026-07-19; names 2026-07-20):** work proceeds bottom-up
-per [`verification-protocol.md`](../protocols/verification-protocol.md) —
-**Raw Data** → **Input Data Products** (per-burst **data cards**, hash-bound
-owner approval) → **Measurements and Fits** → **Analyses and Interpretations**
-→ **In-Manuscript Claims**. **Raw Data** (CHIME) = the twelve singlebeam
-voltage `.h5` files on h17 only
-([`specs/notes/definition-raw-chime-data-2026-07-19.md`](../specs/notes/definition-raw-chime-data-2026-07-19.md));
-intensity / upchannelized `.npy` products are Input Data Products, not Raw
-Data. The route is wayfinder tickets **17 → 18 → 19 → 20 → 21 → 22 → 02**
-(certify raw voltages → DM redo → TOA redo → upchan rebuild → scattering
-re-anchor → scint campaign → ratification); master resume
-`specs/handoff/handoff-2026-07-19-stratified-restart.md`. Scint-remediation
-tasks previously under the campaigns lane are absorbed by tickets 18/20/22.
-No later link opens before its upstream certificates exist. Ticket 17 is
-**open** under the corrected Raw Data definition.
+**STRATIFIED RESTRUCTURE (owner, 2026-07-19):** work proceeds bottom-up along
+the data DAG per verification-protocol **Tier 0** — L0 bytes → L1 derived
+inputs (per-burst **data cards**, hash-bound owner approval) → L2
+measurements → L3 composites → L4 claims. The route is wayfinder tickets
+**17 → 18 → 19 → 20 → 21 → 22 → 02** (certify bytes → DM redo → TOA redo →
+upchan rebuild → scattering re-anchor → scint campaign → ratification);
+master resume doc `specs/handoff-2026-07-19-stratified-restart.md`. The
+scint-remediation tasks previously listed under the campaigns lane are
+absorbed by tickets 18/20/22. No Ln issue opens before its L(n−1)
+certificates exist.
 
 Owner directive 2026-07-18: before section work, establish one reliable view
 of what results exist, where they originated (scripts, pipeline pin, external
 survey/catalog queries), and what is trusted — the repo + auxiliary worktrees
 are currently too dispersed to know what is current. Canonical artifact:
-[`results-registry.toml`](../notes/results-registry.toml) (skeleton landed) →
+[`results-registry.toml`](results-registry.toml) (skeleton landed) →
 generated `RESULTS.md` view. **This inventory is phase 1 of the trust-ledger
 overhaul** ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)):
 populate first, adjudicate row-by-row on top.
