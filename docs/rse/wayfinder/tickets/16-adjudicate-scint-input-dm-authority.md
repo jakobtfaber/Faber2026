@@ -4,14 +4,14 @@
 - Status: **closed 2026-07-19 — SUPERSEDED by the stratified restructure.**
   Its content (casey calibration, DM-authority adjudication) is carried by
   [ticket 18](18-redo-dm-analysis-certified.md) within the data-integrity
-  strata (verification-protocol Tier 0). No decision was reached here.
+  data chain (verification-protocol). No decision was reached here.
 - Assignee: —
 - Blocked by: —
 - Blocks: remediation rollout to 11 bursts → scint campaign re-run → [02](02-ratify-chime-scintillation-method.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - **Resume context (read FIRST):**
-  `docs/rse/specs/handoff-2026-07-19-14-56-scint-input-remediation-casey-dm-calibration.md`
-- **Decision figure:** `docs/rse/decks/casey-dm-calibration-2026-07-19/casey_dm_strip_CORRECTED.png`
+  `docs/rse/specs/handoff/handoff-2026-07-19-14-56-scint-input-remediation-casey-dm-calibration.md`
+- **Decision figure:** `docs/rse/decks/dm/casey-dm-calibration-2026-07-19/casey_dm_strip_CORRECTED.png`
   (the SUPERSEDED-signbug-* files beside it have mirrored labels — history only)
 
 ## Question

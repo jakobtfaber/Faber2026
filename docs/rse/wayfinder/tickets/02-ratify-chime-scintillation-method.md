@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:grilling` (HITL)
 - Status: open — **BLOCKED 2026-07-18 by owner data review** (input defects;
-  see `docs/rse/specs/owner-data-review-findings-2026-07-18.md`): RFI
+  see `docs/rse/specs/notes/owner-data-review-findings-2026-07-18.md`): RFI
   unexcised in CHIME upchan + DSA central channel; over-dedispersion in ≥9
   upchan products; per-burst DM inconsistency between CHIME products
   (up to ±0.13 pc cm⁻³ ≈ 2.6 ms sweep). Ratification resumes only after

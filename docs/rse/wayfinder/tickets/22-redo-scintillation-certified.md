@@ -1,4 +1,4 @@
-# Stratum 6 — Redo the scintillation campaign on certified inputs (L2) → ratification
+# Redo scintillation campaign → method ratification
 
 - Type: `wayfinder:task` (AFK campaign) → then grilling via [02](02-ratify-chime-scintillation-method.md)
 - Status: open
@@ -10,7 +10,7 @@
 ## Question
 
 Re-run the windowed-refit two-band campaign end-to-end on the certified,
-card-approved L1 products (same predeclared gates: core-boxcar window,
+card-approved Input Data Products (same predeclared gates: core-boxcar window,
 pre-burst off-window, 2L/1L ΔBIC, mechanical status rules); rerun closure/
 finalization (validation.json regenerated — the stale-closure and α-error-
 convention defects die here); fresh ACF gallery both bands. Then the

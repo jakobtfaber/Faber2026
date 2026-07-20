@@ -11,7 +11,7 @@ remains is the open review surface that still affects submission work.
 | Theme | Status | Where it lives now |
 |-------|--------|--------------------|
 | Co-author / review dispositions | Open | Wayfinder ticket 10 (and related HITL tickets) |
-| Trust re-validation of revoked products | Open | `protocols/verification-protocol.md` + BOARD + wayfinder tickets 18–22 |
+| Trust re-validation of revoked products | Open | data chain + checks in `protocols/verification-protocol.md`; BOARD; tickets 18–22 |
 | Scintillation / both-band campaign | Circulation gate | Map note + ticket 02 |
 | Figure promotions (exact-byte) | Pending owner | BOARD figure lanes; do not promote without hash-bound approval |
 | Submission-time (Zenodo DOI, abstract slots) | Author action at submit | Not an RSE execution blocker |

@@ -1,4 +1,4 @@
-# Stratum 4 — Rebuild the upchannelized products (L1 + data cards)
+# Rebuild upchannelized products (Input Data Products + data cards)
 
 - Type: `wayfinder:task` (AFK build + HITL card approval)
 - Status: open
@@ -15,6 +15,6 @@ RFI recipe (owner spec: spectral kurtosis + MAD z + time-domain spikiness +
 iteration; visual bar = no visible streaks; renderer views its own output);
 fix the DSA central-channel RFI (live in isha/phineas/zach). Never touch
 originals; new directory with md5-chained provenance. Deliverable: **12
-hash-bound data cards** for owner approval — the L1 certificates that gate
+hash-bound data cards** for owner approval — the Input Data Product certificates that gate
 the scintillation stratum. Failed prior attempts (weak masks, catalog-DM
 alignment, sign bug) are documented in the ticket-18 handoff; do not repeat.

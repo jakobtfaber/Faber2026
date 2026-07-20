@@ -52,5 +52,5 @@ dispersion measure and build provenance; they must not be called “raw.”
 
 Stratum-0 / “raw-layer” certification for CHIME means certifying the twelve
 `.h5` voltage files (bytes, lineage, host path). Certifying `.npy` products is
-a derived-input (stratum-1) concern, including which dispersion measure was
+an Input Data Product concern, including which dispersion measure was
 applied when they were built.

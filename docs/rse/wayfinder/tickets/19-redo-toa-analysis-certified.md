@@ -1,4 +1,4 @@
-# Stratum 3 — Redo the TOA analysis on certified DMs (L2)
+# Redo TOA analysis (Measurements and Fits on certified DMs)
 
 - Type: `wayfinder:grilling` (HITL)
 - Status: open

@@ -80,7 +80,9 @@ superseded into 18.
   head of the map by
   [Overhaul the trust assessment](tickets/13-overhaul-trust-assessment.md).
 - [Certify the raw data layer](tickets/17-certify-raw-data-layer.md)
-  — certified true Stratum 0 raw CHIME layer (12 singlebeam HDF5 voltage files on h17 with CANFAR lineage; intensity cubes categorized as Stratum 1 derived inputs).
+  — Raw Data (12 singlebeam HDF5 voltage files on h17 with CANFAR lineage)
+  certified; intensity cubes are Input Data Products, not Raw Data.
+  (Ticket reopened under that definition — see resume pointer.)
 ## Not yet specified
 
 Fog toward the destination — sharpens as the frontier advances:
