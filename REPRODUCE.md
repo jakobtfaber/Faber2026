@@ -468,7 +468,17 @@ earned their keep once: they are what caught the drift described in hazard 1.
   `v2_0 → foreground` rename; confirmed still absent at `0e0f58b` — the
   `except ImportError` branch at line 65 imports only `MASS_PRIORITY`). (6) is a data-deposition decision,
   not a code fix.
-- Once producers are confirmed, this manifest can back a top-level `Makefile`
-  target (`make figures`) that regenerates the embedded set end-to-end. The
-  `clone_verified = reproduced*` rows are exactly the set that target can cover
-  today.
+- **`make figures` is live.** It runs
+  `python3 scripts/figure_flow.py regen --manuscript --clone-ok` against
+  [`figures/catalog.yaml`](figures/catalog.yaml) — the declarative regen graph
+  for science-ready manuscript figures (topo-sorted deps, input checks, SHA
+  receipts under `figures/.receipts/`). The clone-safe set matches the
+  `clone_verified = reproduced*` figure rows that do not need `~/Data` or
+  external flits-runs trees. Fig. 1 (`fig1_gallery`) is data-bound
+  (`clone_ok: false`); regenerate with
+  `python3 scripts/figure_flow.py regen --id fig1_gallery` (writes staging
+  under `figure_review/staging/`, then `figure_review.py new-batch` — never
+  silent promote). The Oran DSA qualification PNG is **not** a manuscript
+  figure (`manuscript: false` / `embedded_in_manuscript=no`). Agent runbook:
+  [`figures/ax/SKILL.md`](figures/ax/SKILL.md). Broader inventory:
+  [`repro_manifest.csv`](repro_manifest.csv).

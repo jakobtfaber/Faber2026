@@ -2,7 +2,7 @@
 MAIN := main
 UV ?= uv
 
-.PHONY: all clean watch test-science check-state
+.PHONY: all clean watch test-science check-state figures
 
 all: $(MAIN).pdf
 
@@ -29,6 +29,13 @@ test-science: check-state
 		--strict-config --strict-markers tests
 	python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh
+
+# Clone-safe embedded manuscript figures (figures/catalog.yaml).
+# Needs flits conda env + pipeline uv lock. Skips fig1 / external-data nodes.
+# Full manuscript set (incl. data-bound): python3 scripts/figure_flow.py regen --manuscript
+# Agent runbook: figures/ax/SKILL.md
+figures:
+	python3 scripts/figure_flow.py regen --manuscript --clone-ok
 
 # Repo knowledge base (docs, tickets, git, code, refs). See docs/rse/ops/knowledge-base.md.
 .PHONY: kb-index kb-refs-sync
