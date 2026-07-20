@@ -15,13 +15,16 @@ import os
 import subprocess
 import sys
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 
 import yaml
 
-from results_library import DEFAULT_LIBRARY
+try:  # Package import in tests; direct import when invoked as a script.
+    from scripts.results_library import DEFAULT_LIBRARY
+except ModuleNotFoundError:  # pragma: no cover - exercised by CLI invocation
+    from results_library import DEFAULT_LIBRARY
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
@@ -38,15 +41,18 @@ class ExternalPathSpec:
     env: str | None = None
     default: str | None = None
     path: str | None = None
+    suffix: str | None = None
 
     def resolve(self) -> Path:
         if self.env is not None:
             raw = os.environ.get(self.env) or self.default or ""
             if not raw:
                 raise ValueError(f"external path env {self.env!r} empty and no default")
-            return Path(raw).expanduser()
+            base = Path(raw).expanduser()
+            return base / self.suffix if self.suffix else base
         if self.path is not None:
-            return Path(self.path).expanduser()
+            base = Path(self.path).expanduser()
+            return base / self.suffix if self.suffix else base
         raise ValueError("external path needs env or path")
 
 
@@ -107,8 +113,7 @@ def load_catalog(path: Path = CATALOG_PATH) -> Catalog:
         trust = str(item["trust"])
         if trust not in allowed:
             raise SystemExit(
-                f"entry {eid!r}: trust {trust!r} not in trust_legend "
-                f"({sorted(allowed)})"
+                f"entry {eid!r}: trust {trust!r} not in trust_legend ({sorted(allowed)})"
             )
         repo = str(item["repo"])
         if repo not in ("pipeline", "parent", "external"):
@@ -122,19 +127,24 @@ def load_catalog(path: Path = CATALOG_PATH) -> Catalog:
                 raise SystemExit(f"entry {eid!r} external_paths[{j}] must be a mapping")
             if "env" in ext:
                 ext_specs.append(
-                    ExternalPathSpec(env=str(ext["env"]), default=ext.get("default"))
+                    ExternalPathSpec(
+                        env=str(ext["env"]),
+                        default=ext.get("default"),
+                        suffix=str(ext["suffix"]) if ext.get("suffix") else None,
+                    )
                 )
             elif "path" in ext:
-                ext_specs.append(ExternalPathSpec(path=str(ext["path"])))
-            else:
-                raise SystemExit(
-                    f"entry {eid!r} external_paths[{j}] needs env or path"
+                ext_specs.append(
+                    ExternalPathSpec(
+                        path=str(ext["path"]),
+                        suffix=str(ext["suffix"]) if ext.get("suffix") else None,
+                    )
                 )
+            else:
+                raise SystemExit(f"entry {eid!r} external_paths[{j}] needs env or path")
         mode_raw = str(item.get("mode", "link_only"))
         if mode_raw not in ("link_only", "materialize"):
-            raise SystemExit(
-                f"entry {eid!r}: mode must be link_only|materialize, got {mode_raw!r}"
-            )
+            raise SystemExit(f"entry {eid!r}: mode must be link_only|materialize, got {mode_raw!r}")
         entries.append(
             CatalogEntry(
                 id=eid,
@@ -245,9 +255,7 @@ def ensure_link(
     back into the library — leave that alone.
     """
     # Already materialized: repo path points at library real dir
-    if dest.exists() and not dest.is_symlink() and src.is_symlink() and _resolves_equal(
-        src, dest
-    ):
+    if dest.exists() and not dest.is_symlink() and src.is_symlink() and _resolves_equal(src, dest):
         return "materialized-ok"
 
     # Real library content (do not replace with symlink back to repo)
@@ -306,7 +314,7 @@ def build(
     dry_run: bool,
 ) -> dict[str, Any]:
     pipeline = root / "pipeline"
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    now = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     records: list[dict[str, Any]] = []
 
     for entry in catalog.entries:
@@ -348,9 +356,7 @@ def build(
                 meta["link_status"] = "absent"
             elif link or dry_run:
                 dest = library / link_dest(entry, None, external_name=p.name)
-                meta["link_status"] = ensure_link(
-                    p, dest, force=force, dry_run=dry_run
-                )
+                meta["link_status"] = ensure_link(p, dest, force=force, dry_run=dry_run)
             sources_meta.append(meta)
 
         records.append(
@@ -418,9 +424,7 @@ def write_index(library: Path, inventory: dict[str, Any], catalog: Catalog) -> N
         lines.append("| Slot | Trust | Size | Git | Notes |")
         lines.append("|------|-------|------|-----|-------|")
         for e in by_domain[domain]:
-            sizes = ", ".join(
-                f"`{s.get('size')}`" for s in e["sources"] if s.get("size")
-            ) or "—"
+            sizes = ", ".join(f"`{s.get('size')}`" for s in e["sources"] if s.get("size")) or "—"
             gits = ", ".join(sorted({s.get("git", "?") for s in e["sources"]}))
             notes = e["notes"].replace("|", "/")
             lines.append(
@@ -434,7 +438,7 @@ def write_index(library: Path, inventory: dict[str, Any], catalog: Catalog) -> N
             "",
             "```bash",
             f"export FABER2026_RESULTS_LIBRARY={inventory['library_root']}",
-            "ls \"$FABER2026_RESULTS_LIBRARY\"/scattering",
+            'ls "$FABER2026_RESULTS_LIBRARY"/scattering',
             f"python3 {SCRIPT_DIR / 'build_results_library_inventory.py'} --link",
             "```",
             "",
@@ -457,7 +461,9 @@ def write_index(library: Path, inventory: dict[str, Any], catalog: Catalog) -> N
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--library", type=Path, default=DEFAULT_LIBRARY)
-    ap.add_argument("--root", type=Path, default=None, help="Faber2026 checkout (default: parent of scripts/)")
+    ap.add_argument(
+        "--root", type=Path, default=None, help="Faber2026 checkout (default: parent of scripts/)"
+    )
     ap.add_argument("--catalog", type=Path, default=CATALOG_PATH)
     ap.add_argument("--link", action="store_true", help="create/update symlinks")
     ap.add_argument("--force", action="store_true", help="replace existing symlinks")

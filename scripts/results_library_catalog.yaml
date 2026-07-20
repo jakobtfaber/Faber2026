@@ -21,6 +21,19 @@ trust_legend:
 
 entries:
   # --- scattering ---
+  - id: scattering.jointmodel-latest
+    domain: scattering
+    slot: scattering/jointmodel
+    trust: mixed
+    repo: external
+    mode: link_only
+    sources: []
+    external_paths:
+      - env: FABER2026_RESULTS_LIBRARY
+        default: ~/Data/Faber2026/results-library
+        suffix: scattering/jointmodel
+    notes: Per-burst latest roster. Recency is independent of fit quality, figure review, and owner adoption; replaced slots move to timestamped history.
+
   - id: scattering.dm-locked-2026-07-14
     domain: scattering
     slot: scattering/2026-07-14_dm-locked

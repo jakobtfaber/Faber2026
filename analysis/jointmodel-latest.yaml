@@ -1,0 +1,112 @@
+schema: faber2026-latest-analysis/v1
+analysis: jointmodel
+domain: scattering
+expected_bursts: 12
+source_commit: c3e9870b26849663a9e46b1b328dbe6e50115f0d
+policy:
+  latest_means: newest promoted artifact, not scientific acceptance
+  supersession: archive the displaced per-burst slot before replacement
+  raw_products: posterior samples and experiment ladders remain outside latest
+bursts:
+  - nick: zach
+    tns: FRB 20220207C
+    promotion_status: artifact-present
+    components: C2D3
+    gain_s2: 100
+    fit_job: 178
+    fit_quality_status: not-classified-under-authoritative-contract
+    figure_review_status: structural-vet-reviewed-full-fit-gate-incomplete
+    adoption_status: owner-pending
+    validation_reference: docs/rse/specs/validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md
+    artifacts:
+      fit_json: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_joint_fit_C2D3_s2-100_fine.json
+      jointmodel_npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_jointmodel_C2D3_s2-100_fine.npz
+  - nick: whitney
+    tns: FRB 20220310F
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
+  - nick: oran
+    tns: FRB 20220506D
+    promotion_status: artifact-present
+    components: C1D1
+    gain_s2: 100
+    fit_job: 171
+    fit_quality_status: not-classified-under-authoritative-contract
+    figure_review_status: structural-vet-reviewed-full-fit-gate-incomplete
+    adoption_status: owner-pending
+    validation_reference: docs/rse/specs/validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md
+    artifacts:
+      fit_json: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/oran_joint_fit_C1D1_s2-100.json
+      jointmodel_npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/oran_jointmodel_C1D1_s2-100.npz
+  - nick: isha
+    tns: FRB 20221113A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
+  - nick: wilhelm
+    tns: FRB 20221203A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
+  - nick: phineas
+    tns: FRB 20230307A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
+  - nick: freya
+    tns: FRB 20230325A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
+  - nick: johndoeii
+    tns: FRB 20230814B
+    promotion_status: artifact-present
+    components: C1D2
+    gain_s2: 100
+    fit_job: 175
+    fit_quality_status: not-classified-under-authoritative-contract
+    figure_review_status: structural-vet-reviewed-full-fit-gate-incomplete
+    adoption_status: owner-pending
+    validation_reference: docs/rse/specs/validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md
+    artifacts:
+      fit_json: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/johndoeII_joint_fit_C1D2_s2-100.json
+      jointmodel_npz: figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/johndoeII_jointmodel_C1D2_s2-100.npz
+  - nick: hamilton
+    tns: FRB 20230913A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
+  - nick: mahi
+    tns: FRB 20240122A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
+  - nick: chromatica
+    tns: FRB 20240203A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no accepted current JointModel fit exists
+  - nick: casey
+    tns: FRB 20240229A
+    promotion_status: not-yet-promoted
+    fit_quality_status: unavailable
+    figure_review_status: unavailable
+    adoption_status: not-applicable
+    reason: no current post-PL-PBF JointModel artifact has been promoted
