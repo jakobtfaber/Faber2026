@@ -59,3 +59,7 @@ graphify-out/
 
 # Knowledge-base SQLite index (rebuild with: make kb-index)
 /.kb/
+
+# Figure-flow regen receipts (scripts/figure_flow.py)
+/figures/.receipts/
+/figure_review/staging/
