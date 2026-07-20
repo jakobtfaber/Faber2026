@@ -47,8 +47,6 @@ graphify-out/
 !/.github/workflows/
 /.remember/
 /.superpowers/
-/AGENTS.md
-/GEMINI.md
 
 # agent scratch worktrees (never commit)
 /.worktrees/
