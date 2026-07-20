@@ -106,6 +106,11 @@ def render_active_lanes(state: dict) -> str:
         "state is verified by `scripts/sync_state.py --check` (advisory), not "
         "baked into this table.\n")
     out.append(
+        "> **Frozen / not the frontier.** Decision and execution frontier is "
+        "`docs/rse/control/BOARD.md` + `docs/rse/wayfinder/` tickets. This table "
+        "and `program-state.toml` are retained for the CI `check-state` gate "
+        "only; do not treat lane rows here as current work ordering.\n")
+    out.append(
         "**Updated:** {u} · **WIP limit:** {w} · "
         "**In flight:** {n}/{w}\n".format(u=updated, w=wip_limit, n=in_flight))
 

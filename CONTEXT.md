@@ -81,8 +81,10 @@ excess, the FRB 20230913A intervening attribution (both of its supporting
 diagnostics sit on revoked scint strands), `tab:beta`, `tab:burst-energies`,
 and any association or DM_obs value not tied to the V6 artifacts and
 shared-DSA-DM convention. Trust is restored only through the
-re-validation ladders of `docs/rse/specs/plan/plan-circulation-readiness.md` §V
-(V1 fits, V3 energies, V4 census, V5 DM budget, V6 association + DM_obs).
+re-validation contracts in `docs/rse/protocols/verification-protocol.md`
+and the wayfinder redo tickets (`docs/rse/wayfinder/map-apj-submission.md`;
+legacy §V letter codes are frozen vocabulary — see stub
+`docs/rse/specs/plan/plan-circulation-readiness.md`).
 _Avoid_: citing any fit-, census-, budget-, association-, or DM-derived
 number from the current tables in new prose unless its lane has passed the
 corresponding V ladder and the table/prose states the relevant convention;
@@ -170,7 +172,7 @@ distribution, not a point screen distance; scint geometry sets **prior
 odds** on the PBF kernel family (thin vs extended) with final selection by
 evidence/model-comparison; a joint burst-shape+ACF likelihood is deferred
 unless modular products conflict on a high-S/N sightline. Full decision
-text: plan-circulation-readiness A1/A5.
+text: verification-protocol + wayfinder (legacy A1/A5 codes frozen).
 _Avoid_: presenting scintillation and scattering as independent result
 silos; treating a scint verdict as a hard geometry cut rather than prior
 odds; quoting the retired τ_near/τ_dom thresholds as the current escalation
@@ -235,7 +237,7 @@ amendment). That scope decision is now satisfied by the closed objective-window
 campaign rather than by the previously proposed successor routes. Historical
 routes included P3
 (delay-domain optimal quadratic estimator,
-`handoff-2026-07-15-04-00-p3-optimal-estimator-dev.md`, Gate 0b forecast
+historical P3 handoff, Gate 0b forecast
 first) awaiting owner sanction; external instrumental characterization
 (steady calibrator through the identical baseband + upchannelization path);
 voltage-domain cross-statistics (separating the multiplicative common
@@ -266,10 +268,11 @@ fig:jointmodel_montage and fig:scint_screens are built on revoked fits;
 wave 2: the budget section (§3 — census verdicts, dominant-systems and
 cluster analyses, scint excess, τ·Δν_d test), results §4.1, and conclusions
 items 1–3/5–6 carry census/budget claims now unsupported. Reconciliation is
-scheduled per plan F1 (see `docs/rse/specs/plan/plan-circulation-readiness.md`).
+scheduled on the manuscript board (`docs/rse/control/BOARD.md`) and wayfinder
+tickets, not the frozen circulation megaplan.
 The measured-versus-predicted budget overlay exists in the draft, but both
 sides are now revoked (measured diamonds = wave-1 τ fits; predicted bars =
-wave-2 census/budget products) — re-derived after C + V4/V5 (plan D1).
+wave-2 census/budget products) — re-derived after certified census/budget redo.
 
 **Pass 2 closeout (2026-06-27)**:
 Pipeline PR #74 merged @ `c0696a6`; Faber2026 stacked PR pins submodule and
@@ -306,8 +309,10 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
   is `docs/rse/control/program-state.toml` (its `[owner_view]` block is the board
   summary), evidence tracked in `docs/rse/control/evidence-ledger.toml`;
   `scripts/sync_state.py` regenerates `docs/rse/control/ACTIVE_LANES.md` and the
-  `owner-view.json` the readiness board renders. Design:
-  `docs/rse/specs/plan/plan-hybrid-control-system.md` (landed PR #59).
+  `owner-view.json` the readiness board renders. **ACTIVE_LANES / program-state
+  lane views are frozen history — not the decision frontier** (frontier =
+  BOARD + wayfinder tickets). Design: `docs/rse/specs/plan/plan-hybrid-control-system.md`
+  (landed PR #59).
 - **Geometry-adjudicated β** governs what `tab:beta` (**unified β roster**) may
   quote, while **explicit pending** governs population prose;
   **scint→scattering coupling** sequences the re-fit that will repopulate it.

@@ -5,6 +5,8 @@
 
 Operational control surface for Faber2026, generated from `docs/rse/control/program-state.toml`. One row per lane. Live PR/issue/branch state is verified by `scripts/sync_state.py --check` (advisory), not baked into this table.
 
+> **Frozen / not the frontier.** Decision and execution frontier is `docs/rse/control/BOARD.md` + `docs/rse/wayfinder/` tickets. This table and `program-state.toml` are retained for the CI `check-state` gate only; do not treat lane rows here as current work ordering.
+
 **Updated:** 2026-07-15 · **WIP limit:** 3 · **In flight:** 0/3
 
 | Lane | Title | Strand | Status | Owner | Issue | Branch | PR | Needs owner | Next action |

@@ -18,7 +18,11 @@ ALLOWED_ROOT_DIRS = {
     "specs",
     "decks",
     "patches",
-    "claude-science",
+}
+
+FORBIDDEN_TREES = {
+    ROOT / "docs" / "superpowers",
+    RSE / "claude-science",
 }
 
 ALLOWED_SPECS_DIRS = {
@@ -89,3 +93,25 @@ def test_decks_nested_under_strands():
         + "\n".join(unexpected)
     )
     assert files == [], f"unexpected files at decks/ root: {files}"
+
+
+def test_forbidden_docs_trees_absent():
+    present = sorted(str(p.relative_to(ROOT)) for p in FORBIDDEN_TREES if p.exists())
+    assert present == [], "deleted non-authority trees must stay gone:\n" + "\n".join(present)
+
+
+def test_docs_root_only_rse():
+    """Under docs/, only docs/rse/ is allowed (no loose referee markdown)."""
+    docs = ROOT / "docs"
+    if not docs.is_dir():
+        return
+    loose_md = sorted(p.name for p in docs.glob("*.md"))
+    assert loose_md == [], (
+        "loose markdown at docs/ root (fold into docs/rse/ops/):\n"
+        + "\n".join(loose_md)
+    )
+    dirs = {p.name for p in docs.iterdir() if p.is_dir() and p.name != ".DS_Store"}
+    unexpected = sorted(dirs - {"rse"})
+    assert unexpected == [], (
+        "unexpected dirs under docs/ (only rse/ allowed):\n" + "\n".join(unexpected)
+    )
