@@ -45,3 +45,12 @@ kb-index:
 kb-refs-sync:
 	python3 scripts/kb_refs_sync.py
 	python3 scripts/kb index --source refs
+
+# ADHD Running Notes → headless Claude Code CLI (see docs/rse/ops/running-notes/).
+.PHONY: notes-serve notes
+notes-serve:
+	python3 scripts/running_notes.py serve
+
+notes:
+	@test -n "$(MSG)" || (echo 'Usage: make notes MSG="your running note"' >&2; exit 1)
+	python3 scripts/running_notes.py submit "$(MSG)"
