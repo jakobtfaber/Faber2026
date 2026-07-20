@@ -23,6 +23,8 @@ DOCS_GLOBS = [
     "main.tex",
     "pipeline/*.md",       # submodule top-level docs
     "pipeline/docs/**/*.md",
+    "pipeline/external/**/*.md",   # vendored-tool READMEs
+    "pipeline/exports/*.tex",      # generated manuscript tables
 ]
 # Paths never indexed by the docs adapter (tickets have their own adapter).
 DOCS_EXCLUDE_PARTS = {
@@ -46,13 +48,25 @@ CODE_DIRS = [
     "pipeline/crossmatching",
     "pipeline/scripts",
     "pipeline/tests",
+    "pipeline/notebooks",   # .py and .ipynb (cell-level chunks)
+    "pipeline/external",    # vendored DM-power / DM_phase
 ]
 CODE_MAX_FILE_BYTES = 200_000
+NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are skipped
 
 # ---------------------------------------------------------------------------
-# git: commit history (parent repo). PRs are folded in via `gh` when present.
+# config: pipeline YAML (telescopes, samplers, bursts, manifests, envs)
+# ---------------------------------------------------------------------------
+CONFIG_GLOBS = [
+    "pipeline/**/*.yaml",
+    "pipeline/**/*.yml",
+]
+
+# ---------------------------------------------------------------------------
+# git: commit history (parent repo + pipeline/ submodule). PRs via `gh`.
 # ---------------------------------------------------------------------------
 GIT_MAX_COMMITS = 2000
+GIT_SUBMODULES = ["pipeline"]   # refs become "pipeline@<sha>"
 
 # ---------------------------------------------------------------------------
 # refs: cited-references library

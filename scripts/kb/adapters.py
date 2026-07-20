@@ -82,11 +82,11 @@ def iter_tickets() -> Iterator[Doc]:
 # git (commits; PR titles/bodies folded in via `gh` when available)
 # ---------------------------------------------------------------------------
 
-def iter_git() -> Iterator[Doc]:
+def _iter_log(cwd: Path, ref_prefix: str = "") -> Iterator[Doc]:
     out = subprocess.run(
         ["git", "log", f"-{config.GIT_MAX_COMMITS}", "--date=short",
          "--pretty=format:%H%x1f%ad%x1f%an%x1f%s%x1f%b%x1e"],
-        cwd=config.REPO_ROOT, capture_output=True, text=True, check=True,
+        cwd=cwd, capture_output=True, text=True, check=True,
     ).stdout
     for record in out.split("\x1e"):
         record = record.strip("\n")
@@ -94,8 +94,16 @@ def iter_git() -> Iterator[Doc]:
             continue
         sha, date, author, subject, body = (record.split("\x1f") + [""] * 5)[:5]
         text = subject + ("\n\n" + body.strip() if body.strip() else "")
-        yield ("git", sha, subject[:120], date,
+        yield ("git", ref_prefix + sha, subject[:120], date,
                [(None, text)], {"author": author})
+
+
+def iter_git() -> Iterator[Doc]:
+    yield from _iter_log(config.REPO_ROOT)
+    for sub in config.GIT_SUBMODULES:
+        subdir = config.REPO_ROOT / sub
+        if (subdir / ".git").exists():
+            yield from _iter_log(subdir, ref_prefix=f"{sub}@")
 
     if shutil.which("gh"):
         try:
@@ -120,6 +128,20 @@ def iter_git() -> Iterator[Doc]:
 # code
 # ---------------------------------------------------------------------------
 
+def _chunk_notebook(path: Path) -> list:
+    """Cell-level chunks from .ipynb: markdown + code sources, outputs skipped."""
+    try:
+        cells = json.loads(path.read_text(errors="replace")).get("cells", [])
+    except (json.JSONDecodeError, AttributeError):
+        return []
+    chunks = []
+    for i, cell in enumerate(cells):
+        src = "".join(cell.get("source", [])).strip()
+        if src:
+            chunks.append((f"cell {i} ({cell.get('cell_type', '?')})", src))
+    return chunks
+
+
 def iter_code() -> Iterator[Doc]:
     for dir_ in config.CODE_DIRS:
         base = config.REPO_ROOT / dir_
@@ -133,6 +155,35 @@ def iter_code() -> Iterator[Doc]:
                 continue
             yield ("code", _rel(path), path.name, _mtime(path),
                    chunk_python(text), None)
+        for path in sorted(base.rglob("*.ipynb")):
+            if (_excluded(path) or "checkpoint" in path.name
+                    or path.stat().st_size > config.NOTEBOOK_MAX_FILE_BYTES):
+                continue
+            chunks = _chunk_notebook(path)
+            if chunks:
+                yield ("code", _rel(path), path.name, _mtime(path), chunks, None)
+
+
+# ---------------------------------------------------------------------------
+# config (pipeline YAML)
+# ---------------------------------------------------------------------------
+
+def iter_config() -> Iterator[Doc]:
+    seen: set[Path] = set()
+    for pattern in config.CONFIG_GLOBS:
+        for path in sorted(config.REPO_ROOT.glob(pattern)):
+            if path in seen or _excluded(path) or not path.is_file():
+                continue
+            if "checkpoint" in path.name or path.stat().st_size > 100_000:
+                continue
+            seen.add(path)
+            text = path.read_text(errors="replace")
+            if not text.strip():
+                continue
+            # Plain-text packing; top-level keys are usually self-describing.
+            from .chunkers import _pack
+            yield ("config", _rel(path), path.name, _mtime(path),
+                   _pack([(None, text)]), None)
 
 
 # ---------------------------------------------------------------------------
@@ -237,6 +288,7 @@ ADAPTERS = {
     "tickets": iter_tickets,
     "git": iter_git,
     "code": iter_code,
+    "config": iter_config,
     "refs": iter_refs,
     "obsidian": iter_obsidian,
 }
