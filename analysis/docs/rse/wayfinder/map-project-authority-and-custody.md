@@ -35,8 +35,9 @@ can proceed without losing science, provenance, or concurrent work.
   as claim-level and the library as byte-level only after live reconciliation.
 - h17 has grown and drifted; h23's recorded quarantine is unexpectedly missing;
   CANFAR is presently unverifiable because its certificate expired.
-- Jupyter and MkDocs are stopped. Port 8000 is closed. Their code, services,
-  and future restart state are in scope for ownership; restarting them is not.
+- Jupyter and MkDocs are stopped and port 8000 is closed. Running Notes is a
+  separate launchd service and remains live on loopback port 18765; its public
+  edge is unverified. Ownership is in scope; runtime changes are not.
 - The only stated immediate-removal candidates are empty `faber_build`
   directories. They still require fresh emptiness, process, and reference proof.
 
@@ -44,16 +45,37 @@ can proceed without losing science, provenance, or concurrent work.
 
 <!-- one linked gist per resolved ticket; decision detail stays in the ticket -->
 
+- [Reconcile local data and results custody](tickets/authority-04-reconcile-local-data-and-results.md)
+  — local instrument custody is split correctly, but the registry/library
+  relationship is unreconciled; eight stale worktree links and current CHIME
+  path authorities require a gated repair rather than data recovery.
+- [Classify worktrees, scratch clones, and preservation packets](tickets/authority-03-classify-worktrees-and-preservation-packets.md)
+  — the estate mixes registered worktrees, bare rewrite repositories,
+  preservation packets, and ordinary directories; most carry unique or
+  unverified material, and none is deletion-approved.
+- [Reconcile the code and manuscript truth surfaces](tickets/authority-02-reconcile-code-and-manuscript-surfaces.md)
+  — GitHub commit and manuscript pin authority were precise at observation,
+  but distributed dirt/commits remain; Overleaf is a clean, history-orphaned
+  content source with 89 changed common paths, not a behind replica.
+- [Reverify remote and institutional custody](tickets/authority-06-reverify-remote-custody.md)
+  — Drive and the dated iacobus recovery quarantine agree in size/count and a
+  sentinel but lack current full parity; h17 growth is compute drift, HPCC is
+  intact, h23's recorded quarantine is missing, and CANFAR is unverified.
+- [Inventory operational and publication surfaces](tickets/authority-07-inventory-operational-surfaces.md)
+  — Jupyter and MkDocs are stopped and lack pinned/reproducible runtime
+  ownership; Running Notes remains live on port 18765 under its tracked launch
+  agent, while the public Cloudflare edge remains unverified.
+- [Trace the missing h23 quarantine](tickets/authority-14-trace-missing-h23-quarantine.md)
+  — last verified July 6, then absent without a move/deletion receipt; migrated
+  classes largely survive downstream, but exact-byte custody of the vanished
+  137 GB tree remains unproved.
+
 ## Not yet specified
 
 - Exact source-to-destination moves, reference rewrites, and checksum receipts
   for each approved preservation class.
-- Exact repair batches for the eight broken results-library links and obsolete
-  CHIME paths, after their intended authorities are chosen.
 - Publication path for the dirty JointTF fitting code and evidence on h17,
   after local/remote ownership and landed-commit equivalence are established.
-- Final disposition of the missing h23 quarantine and the completeness claim
-  for Google Drive versus iacobus, after live custody research.
 - Per-worktree merge, archive, or removal actions after every unique change and
   concurrent owner has been identified.
 
