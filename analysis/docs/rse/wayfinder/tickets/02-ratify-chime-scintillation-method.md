@@ -16,7 +16,7 @@
 - Blocked by: [22](22-redo-scintillation-certified.md)
 - Scope expanded 2026-07-18: also covers the **2L scint table ratification**
   (owner-decision item from handoff-2026-07-18-14-51) — same conversation.
-- Blocked by: —
+- Blocked by: [22](22-redo-scintillation-certified.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 
 ## Question
