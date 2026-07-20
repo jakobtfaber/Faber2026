@@ -29,3 +29,12 @@ test-science: check-state
 		--strict-config --strict-markers tests
 	python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh
+
+# Repo knowledge base (docs, tickets, git, code, refs). See docs/rse/knowledge-base.md.
+.PHONY: kb-index kb-refs-sync
+kb-index:
+	python3 scripts/kb index
+
+kb-refs-sync:
+	python3 scripts/kb_refs_sync.py
+	python3 scripts/kb index --source refs
