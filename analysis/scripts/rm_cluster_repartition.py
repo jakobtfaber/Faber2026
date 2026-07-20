@@ -1,13 +1,13 @@
 """Kulkarni Thread 1: RM re-partition and intracluster B-field bound (FRB 20230307A).
 
-Predeclared record: docs/rse/specs/plan/plan-rm-cluster-bfield-repartition-2026-07-17.md
+Predeclared record: docs/rse/specs/plan-rm-cluster-bfield-repartition-2026-07-17.md
 (frozen materiality rule, literature selection criteria, both-owners gate).
 This module implements Phases 0-2: pin verification, the negligibility-field
 algebra, the literature comparison, and the conditional re-partition MC.
 
 Run:  uv run --project pipeline --frozen python scripts/rm_cluster_repartition.py
 Emits scripts/rm_cluster_repartition.json and
-docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf.
+docs/rse/specs/thread1-figures/rm_repartition_sensitivity.pdf.
 
 Physics: RM = 0.812 * B_par * DM_rest (rad m^-2, B in uG, DM in pc cm^-3;
 Han 2017 ARA&A convention, reciprocal of the companion's B = 1.232 RM/DM).
@@ -356,7 +356,7 @@ def main() -> int:
     mc = repartition_mc()
 
     artifact = {
-        "plan": "docs/rse/specs/plan/plan-rm-cluster-bfield-repartition-2026-07-17.md",
+        "plan": "docs/rse/specs/plan-rm-cluster-bfield-repartition-2026-07-17.md",
         "pinned": {k: v for k, v in PINNED.items()},
         "sigma_rm_obs": round(SIGMA_RM_OBS, 3),
         "thresholds_obs": {"material_ge": round(2 * SIGMA_RM_OBS, 2), "null_lt": round(SIGMA_RM_OBS, 2)},
@@ -374,7 +374,7 @@ def main() -> int:
     }
     out = ROOT / "scripts" / "rm_cluster_repartition.json"
     out.write_text(json.dumps(artifact, indent=1, sort_keys=True) + "\n")
-    make_figure(mc, ROOT / "docs/rse/decks/budget/thread1-2026-07-17/rm_repartition_sensitivity.pdf")
+    make_figure(mc, ROOT / "docs/rse/specs/thread1-figures/rm_repartition_sensitivity.pdf")
 
     print(f"sigma_RM(obs) yardstick : {SIGMA_RM_OBS:.2f} rad/m^2")
     print(f"RM_lit (obs, diluted)   : {rm_lit:.2f} rad/m^2  -> classification: {verdict.upper()}")

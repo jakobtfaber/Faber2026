@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-11  
 **Status:** approved (owner 2026-07-11)  
-**Related:** `logs/merge-fig1-triptych-design.md`, prior gallery plan `docs/rse/specs/plan/plan-unified-12burst-figure.md`, jointmodel-pair design `docs/superpowers/specs/2026-07-07-jointmodel-pair-design.md`
+**Related:** `logs/merge-fig1-triptych-design.md`, prior gallery plan `docs/rse/specs/plan-unified-12burst-figure.md`, jointmodel-pair design `docs/superpowers/specs/2026-07-07-jointmodel-pair-design.md`
 
 ## Goal
 
