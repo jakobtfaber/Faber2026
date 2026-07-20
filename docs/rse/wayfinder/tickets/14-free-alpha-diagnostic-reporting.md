@@ -3,7 +3,7 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: —
-- Blocked by: [21](21-redo-scattering-certified.md) (stratified restructure 2026-07-19) + the leakage-injection verdict (jointtf lane, handoff-2026-07-18-14-51)
+- Blocked by: multi-component leakage-injection verdict (execution, jointtf lane — see handoff-2026-07-18-14-51)
 - Map: [ApJ submission](../map-apj-submission.md)
 
 ## Question

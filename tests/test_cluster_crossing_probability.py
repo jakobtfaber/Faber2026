@@ -2,7 +2,7 @@
 
 Run: pytest tests/test_cluster_crossing_probability.py
 
-Predeclared record: docs/rse/specs/plan/plan-cluster-crossing-probability-2026-07-17.md.
+Predeclared record: docs/rse/specs/plan-cluster-crossing-probability-2026-07-17.md.
 Every expected value is an independent reference, not a pin on the script's own
 output:
 
