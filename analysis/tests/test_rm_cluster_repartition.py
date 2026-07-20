@@ -2,7 +2,7 @@
 
 Run: pytest tests/test_rm_cluster_repartition.py
 
-Predeclared record: docs/rse/specs/plan-rm-cluster-bfield-repartition-2026-07-17.md.
+Predeclared record: docs/rse/specs/plan/plan-rm-cluster-bfield-repartition-2026-07-17.md.
 Nothing here is a regression pin on the script's own output; every expected value
 is an independent reference:
 

@@ -180,7 +180,7 @@ Each item maps to one `\fixme{...}` in the draft. Resolve by editing `main.tex` 
   predeclared record; ±0.5 μG shifts RM_host by ~7σ of its quoted error, and
   the DM-side correction alone moves ⟨B∥,host⟩ from −2.0 to ≈ −4.5 μG).
   Full memo with two language options:
-  `docs/rse/specs/memo-thread1-rm-repartition-2026-07-17.md` (paper I repo).
+  `docs/rse/specs/memo/memo-thread1-rm-repartition-2026-07-17.md` (paper I repo).
 - **Amendment (2026-07-17, post literature sweep):** a systematic Undermind
   sweep expanded the record's literature set to six studies / five systems
   (Fornax counted once, adjudicated). Classification remains **MATERIAL**

@@ -81,7 +81,7 @@ excess, the FRB 20230913A intervening attribution (both of its supporting
 diagnostics sit on revoked scint strands), `tab:beta`, `tab:burst-energies`,
 and any association or DM_obs value not tied to the V6 artifacts and
 shared-DSA-DM convention. Trust is restored only through the
-re-validation ladders of `docs/rse/specs/plan-circulation-readiness.md` §V
+re-validation ladders of `docs/rse/specs/plan/plan-circulation-readiness.md` §V
 (V1 fits, V3 energies, V4 census, V5 DM budget, V6 association + DM_obs).
 _Avoid_: citing any fit-, census-, budget-, association-, or DM-derived
 number from the current tables in new prose unless its lane has passed the
@@ -92,7 +92,7 @@ single undifferentiated DM_obs as if CHIME and DSA agree.
 **Geometry-adjudicated β** (supersedes "rail-aware citable", owner decision
 2026-07-06; quoting provisions suspended by the fit-trust reset above):
 **D2–D5 design locks** (owner accepted 2026-07-10; memo
-`docs/rse/specs/decision-d2-d5-scattering-design-locks.md`): `tab:beta` carries
+`docs/rse/specs/decision/decision-d2-d5-scattering-design-locks.md`): `tab:beta` carries
 `closure_regime ∈ {inertial, endpoint-degenerate}` (no β/α turbulence quote on
 endpoint rows; geometry is a separate A3 field); sub-band EMG slopes are
 diagnostic only; scintillation products come from a separate ACF path (A1);
@@ -266,7 +266,7 @@ fig:jointmodel_montage and fig:scint_screens are built on revoked fits;
 wave 2: the budget section (§3 — census verdicts, dominant-systems and
 cluster analyses, scint excess, τ·Δν_d test), results §4.1, and conclusions
 items 1–3/5–6 carry census/budget claims now unsupported. Reconciliation is
-scheduled per plan F1 (see `docs/rse/specs/plan-circulation-readiness.md`).
+scheduled per plan F1 (see `docs/rse/specs/plan/plan-circulation-readiness.md`).
 The measured-versus-predicted budget overlay exists in the draft, but both
 sides are now revoked (measured diamonds = wave-1 τ fits; predicted bars =
 wave-2 census/budget products) — re-derived after C + V4/V5 (plan D1).
@@ -296,7 +296,7 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
   fresh isolated batch and hash-bound owner approval of the exact candidate
   are still required; the earlier rejected-candidate `fig1-gallery` stays
   `needs_revision` and must not be promoted.
-- **Figure wishlist** (`docs/rse/specs/figure-wishlist.md`) lists other
+- **Figure wishlist** (`docs/rse/specs/misc/figure-wishlist.md`) lists other
   intended figures not yet (re)inserted; live draft `\fbox` floats with
   `\label{fig:…}` sit in `sections/observations.tex` and
   `sections/results.tex`. Do not `\includegraphics` revoked campaign PDFs
@@ -307,7 +307,7 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
   summary), evidence tracked in `docs/rse/evidence-ledger.toml`;
   `scripts/sync_state.py` regenerates `docs/rse/ACTIVE_LANES.md` and the
   `owner-view.json` the readiness board renders. Design:
-  `docs/rse/specs/plan-hybrid-control-system.md` (landed PR #59).
+  `docs/rse/specs/plan/plan-hybrid-control-system.md` (landed PR #59).
 - **Geometry-adjudicated β** governs what `tab:beta` (**unified β roster**) may
   quote, while **explicit pending** governs population prose;
   **scint→scattering coupling** sequences the re-fit that will repopulate it.

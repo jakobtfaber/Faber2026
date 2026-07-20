@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Gate 0: Route-B ceiling detectability for the freya CHIME Dnu_d measurement.
 
-Predeclaration and pinned inputs: docs/rse/specs/experiment-chime-scint-gate0-detectability.md.
+Predeclaration and pinned inputs: docs/rse/specs/experiment/experiment-chime-scint-gate0-detectability.md.
 Fisher/optimal-quadratic-estimator bound with the instrumental common mode
 assumed PERFECTLY removed (the Route-B best case). All inputs are published
 summary statistics of the retained product; no burst data is read.
@@ -52,7 +52,7 @@ ax.legend(fontsize=8)
 ax.set_xlim(DNU_KHZ[0], DNU_KHZ[-1])
 ax.set_ylim(0, None)
 fig.tight_layout()
-figpath = Path(__file__).resolve().parent.parent / "docs/rse/specs/gate0-detectability-curve.png"
+figpath = Path(__file__).resolve().parent.parent / "docs/rse/decks/gate0-detectability/gate0-detectability-curve.png"
 fig.savefig(figpath)
 
 best_m = max(M_RANGE)

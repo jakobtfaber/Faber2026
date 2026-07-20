@@ -14,7 +14,7 @@ primary DMs because the CHIME curves are consistently narrower and the
 400--800 MHz band has about 34 times the cold-plasma DM leverage of the
 1311--1499 MHz DSA band. The authoritative adopted-value surface is
 [`manuscript_dm_catalog.csv`](manuscript_dm_catalog.csv); the full reasoning is
-recorded in `docs/rse/specs/verified-dm-adoption-2026-07-13.md`.
+recorded in `docs/rse/specs/misc/verified-dm-adoption-2026-07-13.md`.
 
 Do not use the earlier adaptive-arrival or DM-phase v1 `UNCONSTRAINED` statuses
 as measurement-quality evidence. Those statuses came from an incorrect
