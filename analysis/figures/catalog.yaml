@@ -1,0 +1,301 @@
+# Manuscript figure regeneration catalog.
+# Source of truth for `scripts/figure_flow.py` / `make figures`.
+# Cross-check: repro_manifest.csv rows (repro_output) and figure_review/slots.json.
+schema_version: 1
+
+figures:
+  - id: dm_host_posteriors
+    tex: fig:dm_host_posteriors
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/dm_host_posteriors.pdf
+    producer:
+      argv:
+        - conda
+        - run
+        - -n
+        - flits
+        - --no-capture-output
+        - python
+        - scripts/dm_budget_uncertainty.py
+      cwd: .
+    inputs:
+      - pipeline/galaxies/foreground/budget_table_data.json
+      - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
+      - scripts/dm_budget_intervening_systems.csv
+    outputs:
+      - figures/dm_host_posteriors.pdf
+    depends_on: []
+    approval_slot: null
+
+  - id: ne2025_mw
+    tex: fig:ne2025_mw
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/ne2025_mw_characterization_nside32.pdf
+    producer:
+      argv:
+        - conda
+        - run
+        - -n
+        - flits
+        - --no-capture-output
+        - python
+        - scripts/plot_ne2025_mw_properties.py
+        - --nside
+        - "32"
+      cwd: .
+    inputs:
+      - scripts/ne2025_allsky_cache_nside32.npz
+    outputs:
+      - figures/ne2025_mw_characterization_nside32.pdf
+    depends_on: []
+    approval_slot: null
+
+  - id: sightline_halo_grid
+    tex: fig:sightline_halo_grid
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/sightline_halo_grid.pdf
+    producer:
+      argv:
+        - uv
+        - run
+        - python
+        - galaxies/v2_0/sightline_halo_grid.py
+        - --out-dir
+        - ../figures
+      cwd: pipeline
+    inputs: []
+    outputs:
+      - figures/sightline_halo_grid.pdf
+    depends_on: []
+    approval_slot: null
+
+  - id: sightline_budget
+    tex: null
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/sightline_dm_scattering_budget.pdf
+    notes: >-
+      Intermediate node. systems_figures.py reads
+      pipeline/results/sightline_dm_scattering_budget.csv written by this module.
+    producer:
+      argv:
+        - uv
+        - run
+        - python
+        - -m
+        - galaxies.foreground.sightline_budget
+      cwd: pipeline
+    inputs: []
+    outputs:
+      - pipeline/results/sightline_dm_scattering_budget.csv
+    depends_on: []
+    approval_slot: null
+
+  - id: clusters_icm
+    tex: fig:clusters_icm
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/clusters_icm.pdf
+    producer:
+      argv:
+        - uv
+        - run
+        - python
+        - galaxies/v2_0/systems_figures.py
+        - --out-dir
+        - ../figures
+      cwd: pipeline
+    inputs:
+      - pipeline/results/sightline_dm_scattering_budget.csv
+    outputs:
+      - figures/clusters_icm.pdf
+    depends_on:
+      - sightline_budget
+    approval_slot: null
+
+  - id: assoc_cards_grid
+    tex: fig:assoc-cards-grid
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/association_cards/association_card_*.pdf
+    producer:
+      argv:
+        - uv
+        - run
+        - python
+        - crossmatching/plot_association_cards.py
+      cwd: pipeline
+    inputs: []
+    outputs:
+      - figures/association_cards/association_card_*.pdf
+    depends_on: []
+    approval_slot: null
+
+  - id: toa_offset_decomposition
+    tex: fig:toa-offset-decomposition
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/toa_offset_decomposition.pdf
+    producer:
+      argv:
+        - conda
+        - run
+        - -n
+        - flits
+        - --no-capture-output
+        - python
+        - scripts/plot_toa_offset_decomposition.py
+      cwd: .
+    inputs:
+      - pipeline/crossmatching/toa_crossmatch_results.json
+    outputs:
+      - figures/toa_offset_decomposition.pdf
+    depends_on: []
+    approval_slot: null
+
+  - id: fig1_gallery
+    tex: fig:codetection-data-grid
+    manuscript: true
+    clone_ok: false
+    repro_output: figures/codetection_data_grid.pdf
+    notes: >-
+      Needs ~/Data/Faber2026/dsa110/DSA_bursts waterfalls. Writes staging tree
+      only; promote via figure_review (never silent overwrite of manuscript PDF).
+    producer:
+      argv:
+        - conda
+        - run
+        - -n
+        - flits
+        - --no-capture-output
+        - python
+        - scripts/plot_codetection_data_grid.py
+        - --out
+        - figure_review/staging/fig1_gallery/figures/codetection_data_grid
+      cwd: .
+    inputs:
+      - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
+      - scripts/jointmodel_triptych_manifest.yaml
+      - ~/Data/Faber2026/dsa110/DSA_bursts
+    outputs:
+      - figure_review/staging/fig1_gallery/figures/codetection_data_grid.pdf
+    manuscript_target: figures/codetection_data_grid.pdf
+    candidate_root: figure_review/staging/fig1_gallery
+    depends_on: []
+    approval_slot: fig1-gallery
+
+  - id: oran_qualified_scint
+    tex: null
+    manuscript: false
+    clone_ok: false
+    repro_output: >-
+      pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png
+    notes: >-
+      Pipeline qualification product only — not a dedicated manuscript figure.
+      Certified DSA bandwidth evidence lives under oran_qualified/; do not
+      treat as an embedded TeX panel.
+    producer:
+      argv:
+        - uv
+        - run
+        - --frozen
+        - python
+        - analysis/scintillation-dsa-lorentzian-2026-07-07/run_oran_dsa_measurement.py
+      cwd: pipeline
+    inputs: []
+    outputs:
+      - pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png
+    depends_on: []
+    approval_slot: oran-qualified-scintillation
+
+  # --- manuscript: false (discoverable; do not regen into compiled manuscript) ---
+
+  - id: association_summary
+    tex: fig:association-summary
+    manuscript: false
+    clone_ok: true
+    repro_output: figures/association_summary.pdf
+    notes: Placeholder / pending owner figure_review slot fig5-association.
+    producer:
+      argv:
+        - conda
+        - run
+        - -n
+        - flits
+        - --no-capture-output
+        - python
+        - scripts/plot_association_summary.py
+      cwd: .
+    inputs:
+      - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
+    outputs:
+      - figures/association_summary.pdf
+    depends_on: []
+    approval_slot: fig5-association
+
+  - id: dsa_lorentzian_summary
+    tex: fig:scint-qualified-summary
+    manuscript: false
+    clone_ok: false
+    repro_output: figures/dsa_lorentzian_summary.pdf
+    notes: Removed from compiled manuscript 2026-07-17; DSA-only summary rejected.
+    producer:
+      argv:
+        - uv
+        - run
+        - --frozen
+        - python
+        - analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py
+      cwd: pipeline
+    inputs: []
+    outputs:
+      - figures/dsa_lorentzian_summary.pdf
+    depends_on: []
+    approval_slot: fig6-scint-summary
+
+  - id: jointmodel_pair_family
+    tex: null
+    manuscript: false
+    clone_ok: false
+    repro_output: figures/jointmodel_pair/*_jointmodel_pair.pdf
+    notes: SUPPRESSED pre-PL-PBF; do not promote into manuscript.
+    producer:
+      argv:
+        - conda
+        - run
+        - -n
+        - flits
+        - --no-capture-output
+        - python
+        - analysis/scattering-refit-2026-06/plot_jointmodel_pair.py
+        - --out-dir
+        - ../figures/jointmodel_pair
+      cwd: pipeline
+    inputs: []
+    outputs:
+      - figures/jointmodel_pair/*_jointmodel_pair.pdf
+    depends_on: []
+    approval_slot: null
+
+  - id: dsa_acf_family
+    tex: null
+    manuscript: false
+    clone_ok: false
+    repro_output: figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf
+    notes: Removed from compilation 2026-07-17; superseded DSA-only panels.
+    producer:
+      argv:
+        - uv
+        - run
+        - --frozen
+        - python
+        - analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py
+      cwd: pipeline
+    inputs: []
+    outputs:
+      - figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf
+    depends_on: []
+    approval_slot: null
