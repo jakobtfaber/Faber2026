@@ -13,8 +13,8 @@ Owner intent: **the first central figure should include the burst models**. Show
 - Current gallery already adapts window from on-pulse spans + pad, clamps to ±25 ms, and block-averages (~33 µs, 512 ch/band). Revisit whether that matches the CHIME-width padding rule and whether full-res means native or display-averaged.
 
 ## Context / tension
-- Original plan `docs/rse/specs/plan-unified-12burst-figure.md` explicitly forbade fit/model overlays under CONTEXT.md fit-trust reset.
-- Owner now wants models in the central first figure — design must say how this interacts with trust reset (e.g. only PASS fits, caption caveats, keep residuals in appendix, chromatica gap 11-vs-12, flagged fits in `docs/rse/specs/jointmodel-pair-fit-quality-flags.md`).
+- Original plan `docs/rse/specs/plan/plan-unified-12burst-figure.md` explicitly forbade fit/model overlays under CONTEXT.md fit-trust reset.
+- Owner now wants models in the central first figure — design must say how this interacts with trust reset (e.g. only PASS fits, caption caveats, keep residuals in appendix, chromatica gap 11-vs-12, flagged fits in `docs/rse/specs/jointmodel/jointmodel-pair-fit-quality-flags.md`).
 - Whitney is the results-section exemplar (`fig:jointmodel-pair-whitney`); full set in appendix.
 - Gallery includes **chromatica**; jointmodel pair set currently **11 bursts** (no chromatica panel).
 

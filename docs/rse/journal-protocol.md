@@ -58,7 +58,7 @@ the readiness board renders it.
    summary (Needs you / In flight / Up next, ≤3 items each, plus 7 component
    cards). **That JSON is now GENERATED, not hand-edited.** Its canonical
    source is the `[owner_view]` block of `docs/rse/program-state.toml` (the
-   hybrid control system, `docs/rse/specs/plan-hybrid-control-system.md`). If
+   hybrid control system, `docs/rse/specs/plan/plan-hybrid-control-system.md`). If
    your turn changed what is in flight, opened or resolved an owner decision,
    or moved a component's status, edit `program-state.toml` and regenerate:
 

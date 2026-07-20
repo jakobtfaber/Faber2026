@@ -20,7 +20,7 @@
   - Responsibility: append-only work attribution through `scripts/journal-append.sh`; never edit by hand.
 - No change: `pipeline/`
   - Responsibility: pinned submodule worktree. Inspect only in this plan; do not checkout branches or update the parent gitlink.
-- No change: untracked `docs/rse/specs/dm-power-*` and `docs/rse/specs/v6-*` artifacts
+- No change: untracked `docs/rse/specs/dm/dm-power-*` and `docs/rse/specs/v6/v6-*` artifacts
   - Responsibility: pre-existing V6/spec lane artifacts. Leave untouched unless the owner assigns that lane.
 
 ### Task 1: Reconfirm Live Manuscript Surfaces
@@ -30,7 +30,7 @@
 - Inspect: `sections/observations.tex`
 - Inspect: `sections/toa.tex`
 - Inspect: `CONTEXT.md`
-- Inspect: `docs/rse/specs/plan-circulation-readiness.md`
+- Inspect: `docs/rse/specs/plan/plan-circulation-readiness.md`
 
 - [ ] **Step 1: Journal the start**
 
@@ -57,7 +57,7 @@ Expected: `main.tex` includes `sections/observations.tex`; `sections/observation
 Run:
 
 ```bash
-rtk rg -n "Avoid|withheld|re-validation|DM-derived|fit-|foreground|citable|trust" CONTEXT.md docs/rse/specs/plan-circulation-readiness.md
+rtk rg -n "Avoid|withheld|re-validation|DM-derived|fit-|foreground|citable|trust" CONTEXT.md docs/rse/specs/plan/plan-circulation-readiness.md
 ```
 
 Expected: the output identifies the current rules for withholding fit-derived, census-derived, budget-derived, association-derived, DM-derived, scintillation, and energy products until their validation gates pass.

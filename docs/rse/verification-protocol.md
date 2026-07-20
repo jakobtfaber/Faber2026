@@ -42,7 +42,7 @@ no scite.ai, Elicit, or Consensus.
 
 Every displayed equation and every derivation step the text relies on is
 checked by **two independent CAS engines**: WolframScript (hpcc; precedent
-`specs/emg_alpha4_verify.wls`) and SymPy (pinned pipeline env). MATLAB (hpcc)
+`scripts/verify/emg_alpha4_verify.wls`) and SymPy (pinned pipeline env). MATLAB (hpcc)
 serves as the numerical tiebreaker where symbolic forms diverge. A
 disagreement between engines is a **blocker** until resolved. All budget and
 delay arithmetic additionally passes an `astropy.units` dimensional audit —

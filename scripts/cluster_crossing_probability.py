@@ -1,11 +1,11 @@
 """Kulkarni S2: a-priori cluster-crossing probability for the codetected sample.
 
-Predeclared record: docs/rse/specs/plan-cluster-crossing-probability-2026-07-17.md
+Predeclared record: docs/rse/specs/plan/plan-cluster-crossing-probability-2026-07-17.md
 (pinned thresholds, z-vectors, quotability rule). Implements Phases 0-2.
 
 Run:  uv run --project pipeline --frozen python scripts/cluster_crossing_probability.py
 Emits scripts/cluster_crossing_probability.csv and
-docs/rse/specs/s2-figures/crossing_probability.pdf.
+docs/rse/decks/cluster-crossing-2026-07-17/crossing_probability.pdf.
 
 N_exp = sum_i int_0^{z_i} dz (c/H) n_com(>M, z) * pi R500_proper(M,z)^2 * (1+z)^2
 (the (1+z)^2 promotes the proper cross-section to comoving, matching the
@@ -333,7 +333,7 @@ def main() -> int:
     ax2.set_ylabel(r"per-sightline $N_{\rm exp}$ ($\geq1.48\times10^{14}$)")
     ax2.grid(alpha=0.2, axis="y")
     ax2.set_title(f"total = {total_p:.3f} ({verdict})")
-    fig_path = ROOT / "docs/rse/specs/s2-figures/crossing_probability.pdf"
+    fig_path = ROOT / "docs/rse/decks/cluster-crossing-2026-07-17/crossing_probability.pdf"
     fig_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(fig_path)
     plt.close(fig)

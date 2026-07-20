@@ -2,7 +2,7 @@
 # Read with stdlib tomllib (Python >= 3.11). Consumed by scripts/sync_state.py,
 # which regenerates docs/rse/ACTIVE_LANES.md and docs/rse/board/owner-view.json.
 # Edit THIS file, then run: python3 scripts/sync_state.py
-# Design + rules: docs/rse/specs/plan-hybrid-control-system.md
+# Design + rules: docs/rse/specs/plan/plan-hybrid-control-system.md
 #
 # Split of concerns (plan-hybrid-control-system.md): what GitHub can know
 # (PR/issue/branch/CI state) is fetched live and never stored; what GitHub

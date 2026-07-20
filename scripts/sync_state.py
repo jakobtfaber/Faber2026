@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Hybrid control-system generator: canonical state -> derived views + drift gate.
 
-Design: docs/rse/specs/plan-hybrid-control-system.md.
+Design: docs/rse/specs/plan/plan-hybrid-control-system.md.
 
 State is split by who can know it:
 

@@ -14,7 +14,7 @@
       ],
       "preExistingUnrelated": [
         "pipeline",
-        "docs/rse/specs/dm-provenance-audit-2026-07-07.md",
+        "docs/rse/specs/dm/dm-provenance-audit-2026-07-07.md",
         "logs",
         "logs/"
       ],
@@ -35,7 +35,7 @@
         },
         {
           "paths": [
-            "docs/rse/specs/dm-provenance-audit-2026-07-07.md"
+            "docs/rse/specs/dm/dm-provenance-audit-2026-07-07.md"
           ],
           "action": "leave-uncommitted",
           "rationale": "Pre-existing DM provenance audit artifact belongs to V6/revalidation documentation, not the circulation-prose patch.",
