@@ -48,24 +48,23 @@ under `specs/` or `control/`.
 
 Campaign folder names are unchanged; they nest under a strand:
 
-| Strand | Campaigns |
-|--------|-----------|
-| `decks/dm/` | `dm-campaign-2026-07/`, `casey-dm-calibration-2026-07-19/` |
-| `decks/scintillation/` | `acf-review-*`, `waterfall-review-*`, `scint-validation-*`, `remediation-preview-*`, `gate0-detectability/` |
-| `decks/budget/` | `cluster-crossing-*`, `thread1-*` |
-| `decks/closeouts/` | JSON/HTML closeout packages |
+| Strand | Live campaigns |
+|--------|----------------|
+| `decks/dm/` | `casey-dm-calibration-2026-07-19/` (decision figure) |
+| `decks/scintillation/` | `acf-review-*`, `waterfall-review-*`, `scint-validation-*`, `remediation-preview-*` |
+| `decks/budget/`, `decks/closeouts/` | reserved strands (empty unless a live review lands) |
 
 ## `specs/` prefix folders
 
-New workflow docs: `docs/rse/specs/<prefix>/<prefix>-….md`.
+**Thin live surface only.** Files present under `specs/` are either (a) live
+handoffs / definitions / decisions / wishlist, or (b) short stubs for paths
+still named by scripts/`CONTEXT.md`. Do not resurrect deleted campaign plans —
+frontier is wayfinder + BOARD.
 
-**First-class prefixes:** `research/`, `plan/`, `experiment/`, `implement/`,
-`validation/`, `handoff/`, `decision/`, `runbook/`, `dm/`.
+New workflow docs (if needed): `docs/rse/specs/<prefix>/<prefix>-….md`.
 
-**`specs/notes/`** holds thinner genres (filenames unchanged): `assessment-*`,
-`audit-*`, `charter-*`, `checklist-*`, `definition-*`, `draft-*`, `memo-*`,
-`prd-*`, `triage-*`, `v6-*`, `jointmodel-*`, `report-*`, `results-*`, plus
-irregular names formerly under `misc/` (`owner-*`, `figure-*`, `ne2025_*`, …).
+**Allowed prefixes:** `research/`, `plan/`, `experiment/`, `implement/`,
+`validation/`, `handoff/`, `decision/`, `runbook/`, `dm/`, `notes/`.
 
 **Override vs rse-plugins:** upstream skills may still mention flat
 `docs/rse/specs/handoff-….md`. In this repo, always use the prefix (or
