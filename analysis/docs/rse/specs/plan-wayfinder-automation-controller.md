@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-20
 **Author:** Codex
-**Status:** Approved — In Progress
+**Status:** Complete
 **Related Documents:**
 - [Standing delegation](../wayfinder/standing-delegation-2026-07-20.md)
 - [Issue-tracker rules](../../agents/issue-tracker.md)
@@ -88,11 +88,11 @@ timeout 14400 codex exec -m gpt-5.5 \
 
 ### Phase 3: Publish and launch first wave
 
-- [ ] Run `make test-science`, `git diff --check`, and `agent-closeout-check`.
-- [ ] Commit, push, open a focused PR, wait for all checks, and merge.
-- [ ] Verify Codex subscription auth with a live closed-stdin canary.
-- [ ] Launch `python3 scripts/wayfinder_controller.py launch --wave first`.
-- [ ] Verify a live supervisor PID, task worktrees, state JSON, and logs.
+- [x] Run `make test-science`, `git diff --check`, and `agent-closeout-check`.
+- [x] Commit, push, open a focused PR, wait for all checks, and merge.
+- [x] Verify Codex subscription auth with a live closed-stdin canary.
+- [x] Launch `python3 scripts/wayfinder_controller.py launch --wave first`.
+- [x] Verify a live supervisor PID, task worktrees, state JSON, and logs.
 
 ## Success Criteria
 
@@ -135,3 +135,8 @@ their individual worker PRs.
 
 ### Version 1.0 — 2026-07-20
 - Approved architecture from the owner conversation; explicit manual gates kept.
+
+### Version 1.1 — 2026-07-20
+- First launch exposed concurrent Git metadata mutation; repository setup is now
+  serialized. Supervisor recovery adopted live workers and re-queued the failed
+  task without discarding work.
