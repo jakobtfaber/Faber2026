@@ -60,6 +60,10 @@ graphify-out/
 # Knowledge-base SQLite index (rebuild with: make kb-index)
 /.kb/
 
+# Running Notes: raw inbox + live status (dispositions may be committed)
+/docs/rse/ops/running-notes/inbox/
+/docs/rse/ops/running-notes/status.json
+
 # Figure-flow regen receipts (scripts/figure_flow.py)
 /figures/.receipts/
 /figure_review/staging/

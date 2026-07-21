@@ -27,7 +27,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 750
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
           "product_sha256": "bf317648879936ce4d019f116c17e0c33a22042610e37bddceef0ba48fe40deb",
           "product_shape": [
             1024,
@@ -94,7 +94,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 694
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/whitney_chime_I_462_1891_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/whitney_chime_I_462_1891_32000b_cntr_bpc.npy",
           "product_sha256": "fb1e5c93291cf35d0b269ebfa6a63409954b4da0aac097b404b926c380f24959",
           "product_shape": [
             1024,
@@ -161,7 +161,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 729
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
           "product_sha256": "73ca14a4d467e7a612cb5c8a9df5d1b17e4dba448e23710663dd1195b0f12092",
           "product_shape": [
             1024,
@@ -228,7 +228,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 729
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/isha_chime_I_411_4359_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/isha_chime_I_411_4359_32000b_cntr_bpc.npy",
           "product_sha256": "c372d6cb2ef62c1ceca28fb6f130cc6fac253bcf97087c3f0555c3f4580b9c2c",
           "product_shape": [
             1024,
@@ -295,7 +295,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 382
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/wilhelm_chime_I_602_3809_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/wilhelm_chime_I_602_3809_32000b_cntr_bpc.npy",
           "product_sha256": "fe64e87f4a0e33b73572ea498a1b6ba2405d38a979a15dc858647b33357e7c65",
           "product_shape": [
             1024,
@@ -362,7 +362,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 739
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
           "product_sha256": "6f2e3f4c09c131af98dc061e3788fae6817406f4239e77e91dbe209631ebccd7",
           "product_shape": [
             1024,
@@ -429,7 +429,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 717
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/freya_chime_I_912_4067_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/freya_chime_I_912_4067_32000b_cntr_bpc.npy",
           "product_sha256": "55561c3d9daad2023f876d62e7579ecea987b214022882a6930fe8c242d59f80",
           "product_shape": [
             1024,
@@ -496,7 +496,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 683
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy",
           "product_sha256": "d5f35c8b94de82dbc080938bf8e2ce4b725d189d8e5c66ef83b3ca6c84edede6",
           "product_shape": [
             1024,
@@ -563,7 +563,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 668
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/hamilton_chime_I_518_8007_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/hamilton_chime_I_518_8007_32000b_cntr_bpc.npy",
           "product_sha256": "86be9081500950735bd3f5d5cdd3370f101c260501f56001bb9cc9ce439652cb",
           "product_shape": [
             1024,
@@ -630,7 +630,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 670
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
           "product_sha256": "be722c48157beb989c53b209f0842e5445f08d7695cba49f23593c6b5d06d61f",
           "product_shape": [
             1024,
@@ -697,7 +697,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 564
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/chromatica_chime_I_272_6382_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/chromatica_chime_I_272_6382_32000b_cntr_bpc.npy",
           "product_sha256": "609a8751415323f3191ea2f45b07d6598c5336247f523eda887668f26b29b2b5",
           "product_shape": [
             1024,
@@ -764,7 +764,7 @@
             "n_time_samples": 32000,
             "n_valid_channels": 720
           },
-          "product_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+          "product_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
           "product_sha256": "79e9cba92716263d7644cafafe4d35a3ea646f18509be094033b67c6fc4440c4",
           "product_shape": [
             1024,

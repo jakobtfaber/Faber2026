@@ -12,7 +12,7 @@ nlive_walks: 15
 nproc: 8
 outer_trim: 0.15
 onpulse_pad_factor: 0.5
-path: /sessions/youthful-amazing-pasteur/mnt/Data--Faber2026/dsa110/DSA_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy
+path: /sessions/youthful-amazing-pasteur/mnt/Data--Faber2026/chimefrb/CHIME_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy
 plot: true
 sampcfg_path: /sessions/youthful-amazing-pasteur/mnt/Faber2026/pipeline/scattering/configs/sampler.yaml
 steps: 10000
