@@ -86,6 +86,23 @@ A scoped action whose authority, recovery, ownership, references, active use,
 target list, rollback, and post-action checks are all cleared. Ambiguity or an
 unresolved science gate makes the action unsafe.
 
+**Preservation gate**:
+The proof that an exact source state has an independently readable,
+integrity-checked recovery copy and tested restoration path. It authorizes no
+source mutation.
+
+**Consolidation gate**:
+The owner-ratified, action-specific proof that an exact mutation is safe,
+recoverable, exclusive, reference-complete, and ready for post-action checks.
+
+**Scope lock**:
+The exclusive right for one writer to change one exact ref, directory tree,
+result scope, reconciliation surface, or service state during an action.
+
+**Phase barrier**:
+The rule that all manifests, checks, receipts, and exceptions for one
+consolidation stage must close before the next stage begins.
+
 **Manuscript authority**:
 The manuscript, bibliography, generated tables, figure catalog, and approved
 tracked figure outputs committed on Faber2026 GitHub `main`. Overleaf and Mac
