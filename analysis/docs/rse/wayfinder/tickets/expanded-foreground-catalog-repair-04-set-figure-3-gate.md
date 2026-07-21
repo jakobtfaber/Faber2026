@@ -3,7 +3,7 @@
 - Type: `wayfinder:task` (AFK)
 - Status: open
 - Assignee: Codex
-- Blocked by: [Set the stellar-mass, halo-mass, and radius authority](expanded-foreground-catalog-repair-03-set-physics-authority.md), [Independently verify redshifts and verdicts](expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
+- Blocked by: [Set the stellar-mass, halo-mass, and radius authority](expanded-foreground-catalog-repair-03-set-physics-authority.md), [Repeat source-level redshift verification](expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Triage: `ready-for-agent`
 
