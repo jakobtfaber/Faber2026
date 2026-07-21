@@ -5,6 +5,7 @@
 - Assignee: Codex
 - Blocked by: [Set the stellar-mass, halo-mass, and radius authority](expanded-foreground-catalog-repair-03-set-physics-authority.md), [Repeat source-level redshift verification](expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `ready-for-agent`
 
 ## Question

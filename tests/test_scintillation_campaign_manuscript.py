@@ -2,23 +2,18 @@
 
 from __future__ import annotations
 
-import subprocess
 import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_PIPELINE = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import build_scintillation_campaign_summary as campaign_builder  # noqa: E402
 
 
 def test_pipeline_pin_contains_merged_window_campaign() -> None:
-    pinned = subprocess.check_output(
-        ["git", "rev-parse", ":pipeline"], cwd=ROOT, text=True
-    ).strip()
-    assert pinned == EXPECTED_PIPELINE
+    assert campaign_builder.pipeline_contains_reviewed_campaign()
 
 
 def test_results_report_single_qualified_chime_sightline() -> None:

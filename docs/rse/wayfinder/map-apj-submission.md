@@ -17,6 +17,11 @@ existing lane system. The map does not carry the execution itself.
 
 ## Notes
 
+- **Standing delegation (owner, 2026-07-20):** [delegated decision authority](standing-delegation-2026-07-20.md)
+  covers only tickets recorded open at `main` commit `33e9e1ce3570`; it permits
+  evidence-backed recommendations without per-ticket approval but does not
+  close tickets or waive its explicit scientific, visual-review, or one-way
+  action gates.
 - **Target: submit by 2026-07-31** — owner judges it more than achievable
   with the resources at hand (2026-07-18). Timing is **not** a sequencing
   driver: decisions are made on scientific need ("worry about what needs

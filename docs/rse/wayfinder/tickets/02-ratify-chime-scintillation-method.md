@@ -14,6 +14,7 @@
   (owner-decision item from handoff-2026-07-18-14-51) — same conversation.
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 
 ## Question
 

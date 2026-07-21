@@ -14,6 +14,11 @@ independent numerical, provenance, and owner visual checks.
 
 ## Notes
 
+- **Standing delegation (owner, 2026-07-20):** [delegated decision authority](standing-delegation-2026-07-20.md)
+  covers only tickets recorded open at `main` commit `33e9e1ce3570`; it permits
+  evidence-backed recommendations without per-ticket approval but does not
+  close tickets or waive independent validation, owner visual review, Figure 3
+  promotion, trust-promotion, or redshift/budget re-adjudication gates.
 - `intervening_census_registry.csv` remains the classification and budget
   authority. Crossmatches may flag conflicts; they may not silently change a
   verdict.
