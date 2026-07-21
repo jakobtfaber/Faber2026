@@ -87,6 +87,9 @@ manuscript artifact. Parent and pipeline commits are recorded together.
 ## What We're NOT Doing
 
 - [ ] Reclassifying candidates from GSC morphology alone.
+- [ ] Changing a foreground redshift or budget flag without a separate,
+      evidence-backed adjudication record. Independent verification remains in
+      scope and blocks Figure 3.
 - [ ] Replacing owner-adjudicated masses with fresh WISE estimates.
 - [ ] Converting cluster `M500/R500` to `M200c/R200c` without a separately named
       and validated cluster profile model.
@@ -318,6 +321,18 @@ result functions or trusting its prose.
   read snapshots, census inputs, and paper constants; it must not import
   `expanded_catalog.py`, the old builder, or generated result columns as expected
   values.
+- [ ] Build
+  `docs/rse/specs/validation-expanded-foreground-redshifts.csv` independently
+  from the registry. For every row record host and candidate source/release,
+  identifier, spectroscopic or photometric kind, redshift, uncertainty, retrieval
+  date, recomputed verdict, stored verdict, budget eligibility, and disposition.
+  Do not treat the registry value itself as verification evidence.
+- [ ] Recompute each verdict using the documented census rule: secure redshift
+  below the host is foreground; secure redshift above the host is refuted;
+  overlapping photometric uncertainty or missing host evidence is inconclusive.
+  Verify duplicate removal and the separate budget gate. Any unexplained mismatch
+  exits nonzero and blocks Figure 3; any correction requires a dedicated
+  adjudication record and manuscript-owner approval.
 - [ ] Add failing tamper tests in
   `tests/test_validate_expanded_foreground_catalog_independent.py` for wrong match
   identifier, swapped W1 error, linear/log Moster error, wrong `R200c`, invalid
@@ -353,6 +368,8 @@ Moster values; all catalog selections reproduce from normalized snapshots.
 - [ ] Offline rebuild produces identical CSV and manifest hashes.
 - [ ] The figure catalog reports no missing input for `sightline_halo_grid`.
 - [ ] Independent validation exits zero and records both Git commits.
+- [ ] All 52 redshift/verdict rows have independent source evidence or an explicit
+      blocking disposition; no registry value self-validates.
 - [ ] `python3 scripts/figure_review.py verify` passes after owner approval.
 - [ ] Manuscript build passes and embeds the promoted hash.
 
