@@ -46,4 +46,12 @@ Implementation and live h17 execution are complete. See
 - Science fit/claim: not run.
 
 Status remains open pending owner review of the diagnostic figure and acceptance
-of the no-go/current-next-method decision. Ticket 02 remains blocked.
+of the no-go/current-next-method decision. The resulting validation route is:
+
+1. [Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md);
+2. [Build the frozen CHIME RFI-validation benchmark](rfi-validation-02-build-frozen-benchmark.md);
+3. [Compare and choose the CHIME RFI cleaner](rfi-validation-03-compare-and-choose-cleaner.md);
+4. [Blind-validate the selected CHIME RFI cleaner](rfi-validation-04-blind-validate-cleaner.md); and
+5. [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md).
+
+Ticket 02 remains blocked.

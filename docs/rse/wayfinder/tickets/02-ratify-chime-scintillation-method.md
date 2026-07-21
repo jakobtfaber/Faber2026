@@ -12,7 +12,7 @@
 - Assignee: claude (cowork session, with owner)
 - Scope expanded 2026-07-18: also covers the **2L scint table ratification**
   (owner-decision item from handoff-2026-07-18-14-51) — same conversation.
-- Blocked by: [Build the verified Zach CHIME preprocessing baseline](16-build-verified-zach-chime-preprocessing-baseline.md)
+- Blocked by: [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 
