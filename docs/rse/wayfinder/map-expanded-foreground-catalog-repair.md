@@ -25,14 +25,15 @@ independent numerical, provenance, and owner visual checks.
 - Catalog states are `matched`, `unmatched`, `ambiguous`, or `query_error`.
   Missing data and failed queries are different states.
 - Cluver et al. (2014) coefficients `-2.54, -0.17` are the resolved-source
-  relation, Equation 1, for rest-frame color. No colorless fallback is allowed.
+  relation, Equation 2, for rest-frame color. No colorless fallback is allowed.
 - Moster et al. (2013) uses redshift-dependent Table 1 parameters and accepts
   stellar mass in solar masses. Every interface names linear versus logarithmic
   units.
 - The reported halo radius is `R200c`: mean enclosed density 200 times the
   critical density. Concentration is not needed to compute it.
-- Dutton and Macciò (2014) concentration uses its published redshift evolution
-  and mass in units of `10^12 h^-1 M_sun` when a scale radius is requested.
+- Dutton and Macciò (2014) concentration uses its published redshift evolution,
+  calibration value `h=0.671`, and mass in units of `10^12 h^-1 M_sun` when a
+  scale radius is requested.
 - Stern et al. (2012) yields a luminous active-galaxy selection only within
   `W2 <= 15.05` Vega. A blue color does not prove starlight dominance.
 - Cluster rows do not pass through a galaxy stellar-mass relation.
@@ -43,6 +44,13 @@ independent numerical, provenance, and owner visual checks.
   — the superseded validation is explicitly failed, its defects are
   machine-readable, and the gate exits nonzero until a rebuilt catalog and
   independent report pass.
+- [Set the catalog crossmatch and quality contract](tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md)
+  — implemented and independently reproduced at pipeline merge
+  `3e466c1a180fb169ad09845312348cf539b82632`; 208 responses produced zero
+  identifier, separation, ambiguity, or count differences.
+- [Set the stellar-mass, halo-mass, and radius authority](tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md)
+  — implemented and independently reproduced for all 25 finite halos; Moster,
+  `R200c`, and Dutton–Macciò checks pass their recorded tolerances.
 - [Independently verify foreground redshifts and verdicts](tickets/expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
   — all stored verdict and budget arithmetic reproduces, but 0/52 rows has a
   complete host-plus-candidate source chain; retain the legacy adjudications and
