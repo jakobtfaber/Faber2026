@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:grilling` (HITL)
 - Status: resolved
-- Assignee: Codex
+- Assignee: —
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
@@ -23,7 +23,8 @@ quotes. (Legacy code: referee item B7 / handoff item 2.)
 
 ## Resolution
 
-Resolved 2026-07-21 under the standing delegated decision authority.
+Resolved 2026-07-21 under the standing delegated decision authority in
+[PR #170](https://github.com/jakobtfaber/Faber2026/pull/170).
 
 Decision: describe the frozen manuscript census as built. Do not rerun the
 census, do not adopt the current live-search `100 kpc` replay default, and do

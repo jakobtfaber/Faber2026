@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: resolved
-- Assignee: Codex
+- Assignee: —
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
@@ -24,8 +24,8 @@ committed + CONTEXT.md reads descriptively.
 
 ## Resolution
 
-Resolved by Codex under the standing delegated decision authority
-(2026-07-20). Added
+Resolved 2026-07-21 under the standing delegated decision authority in
+[PR #171](https://github.com/jakobtfaber/Faber2026/pull/171). Added
 [`legacy-code-glossary.md`](../../specs/legacy-code-glossary.md), covering the
 retired re-validation, methodology, scintillation, scattering, late-lane,
 technical-review, and CHIME scintillation recovery-route codes. Rewrote
