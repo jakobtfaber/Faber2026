@@ -4,6 +4,8 @@ import importlib.util
 import fcntl
 import json
 import sys
+import threading
+import time
 from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
@@ -238,6 +240,25 @@ def test_task_lock_prevents_duplicate_worker(tmp_path):
         fcntl.flock(held, fcntl.LOCK_EX | fcntl.LOCK_NB)
         with pytest.raises(RuntimeError, match="live runner"):
             wc.run_task(manifest, task, "1" * 32)
+
+
+def test_repository_lock_serializes_parallel_worktree_setup(tmp_path):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+    manifest = replace(manifest, state_dir=tmp_path)
+    entered = threading.Event()
+
+    def wait_for_lock():
+        with wc.repository_mutation_lock(manifest):
+            entered.set()
+
+    with wc.repository_mutation_lock(manifest):
+        contender = threading.Thread(target=wait_for_lock)
+        contender.start()
+        time.sleep(0.05)
+        assert not entered.is_set()
+    contender.join(timeout=1)
+    assert entered.is_set()
 
 
 def test_launch_rejects_supervisor_that_exits_immediately(monkeypatch, tmp_path):
