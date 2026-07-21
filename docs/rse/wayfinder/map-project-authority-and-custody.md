@@ -34,7 +34,7 @@ can proceed without losing science, provenance, or concurrent work.
 - Local `results-library` currently has eight broken links. Treat the registry
   as claim-level and the library as byte-level only after live reconciliation.
 - h17 has grown and drifted; h23's recorded quarantine is unexpectedly missing;
-  CANFAR is presently unverifiable because its certificate expired.
+  CANFAR read-only VOSpace access is live and verified through 2026-08-20.
 - Jupyter and MkDocs are stopped and port 8000 is closed. Running Notes is a
   separate launchd service and remains live on loopback port 18765; its public
   edge is unverified. Ownership is in scope; runtime changes are not.
@@ -57,6 +57,9 @@ can proceed without losing science, provenance, or concurrent work.
   — Jupyter remains unclassified, MkDocs source is repository-owned but its
   environment is not, and persistent Running Notes has separate source,
   mutable-state, submission, and public-edge gates with explicit receipts.
+- [Restore CANFAR read-only verification access](tickets/authority-05-restore-canfar-read-access.md)
+  — a renewed CADC certificate passed a live, authenticated, non-recursive
+  listing of the project VOSpace root and remains valid through 2026-08-20.
 - [Reconcile local data and results custody](tickets/authority-04-reconcile-local-data-and-results.md)
   — local instrument custody is split correctly, but the registry/library
   relationship is unreconciled; eight stale worktree links and current CHIME
