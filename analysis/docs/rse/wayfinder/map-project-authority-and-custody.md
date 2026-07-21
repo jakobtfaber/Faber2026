@@ -96,6 +96,10 @@ can proceed without losing science, provenance, or concurrent work.
   — Git governs claims, Drive governs receipted bulk bytes, CANFAR governs the
   24 fit-input cubes, and local/h17 surfaces remain replicas, working copies,
   staging, or unclassified until explicit promotion gates pass.
+- [Ratify preservation gates and the consolidation sequence](tickets/authority-11-ratify-preservation-and-consolidation-gates.md)
+  — every action requires an exact packet, recovery and rollback proof, an
+  exclusive scope lock, and a verified phase barrier; preserve at-risk states
+  before merging, relinking, retiring, or separately approved removal.
 
 ## Not yet specified
 
