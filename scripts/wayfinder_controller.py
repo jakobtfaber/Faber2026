@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import fcntl
 import json
 import os
@@ -405,39 +406,64 @@ def codex_command(
     ]
 
 
+@contextmanager
+def repository_mutation_lock(manifest: Manifest):
+    """Serialize Git operations that mutate the repository's shared metadata."""
+    manifest.state_dir.mkdir(parents=True, exist_ok=True)
+    lock_path = manifest.state_dir / "repository.lock"
+    with lock_path.open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        yield
+
+
 def prepare_worktree(manifest: Manifest, task: Task, repo: Path = ROOT) -> Path:
     path = manifest.worktree_root / task.id
     manifest.worktree_root.mkdir(parents=True, exist_ok=True)
-    _git(repo, "fetch", "origin", manifest.base_branch)
-    if path.exists():
-        status = _git(path, "status", "--short").stdout.strip()
-        branch = _git(path, "branch", "--show-current").stdout.strip()
-        if status:
-            raise RuntimeError(f"existing task worktree is dirty: {path}")
-        if branch != task.branch:
-            raise RuntimeError(f"existing task worktree has branch {branch}, expected {task.branch}")
-    else:
-        local_branch = _git(
-            repo, "show-ref", "--verify", f"refs/heads/{task.branch}", check=False
-        ).returncode == 0
-        remote_branch = _git(
-            repo, "show-ref", "--verify", f"refs/remotes/origin/{task.branch}", check=False
-        ).returncode == 0
-        if local_branch:
-            _git(repo, "worktree", "add", str(path), task.branch)
-        elif remote_branch:
-            _git(repo, "worktree", "add", "-b", task.branch, str(path), f"origin/{task.branch}")
+    with repository_mutation_lock(manifest):
+        _git(repo, "fetch", "origin", manifest.base_branch)
+        if path.exists():
+            status = _git(path, "status", "--short").stdout.strip()
+            branch = _git(path, "branch", "--show-current").stdout.strip()
+            if status:
+                raise RuntimeError(f"existing task worktree is dirty: {path}")
+            if branch != task.branch:
+                raise RuntimeError(
+                    f"existing task worktree has branch {branch}, expected {task.branch}"
+                )
         else:
-            _git(
+            local_branch = _git(
+                repo, "show-ref", "--verify", f"refs/heads/{task.branch}", check=False
+            ).returncode == 0
+            remote_branch = _git(
                 repo,
-                "worktree",
-                "add",
-                "-b",
-                task.branch,
-                str(path),
-                f"origin/{manifest.base_branch}",
-            )
-    _git(path, "submodule", "update", "--init", "--recursive")
+                "show-ref",
+                "--verify",
+                f"refs/remotes/origin/{task.branch}",
+                check=False,
+            ).returncode == 0
+            if local_branch:
+                _git(repo, "worktree", "add", str(path), task.branch)
+            elif remote_branch:
+                _git(
+                    repo,
+                    "worktree",
+                    "add",
+                    "-b",
+                    task.branch,
+                    str(path),
+                    f"origin/{task.branch}",
+                )
+            else:
+                _git(
+                    repo,
+                    "worktree",
+                    "add",
+                    "-b",
+                    task.branch,
+                    str(path),
+                    f"origin/{manifest.base_branch}",
+                )
+        _git(path, "submodule", "update", "--init", "--recursive")
     return path
 
 
