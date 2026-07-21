@@ -772,9 +772,11 @@ scattering cubes; the DATA_SOURCES.md reconciliation failure closed.
    ssh h17 'rg -n "coherent_dedisp|time_shift|np.roll" <each hit>'
    ```
 
-   Starting points recorded in `scintillation/DATA_PROVENANCE.md:167,176`
-   (`/data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam/`,
-   `/data/jfaber/arc_archive_2026-06/`, `/data/jfaber/upchan_codetections/`).
+   Current source starting point:
+   `/data/Faber2026/data/chime-frb/<project-id>/`. The older location recorded
+   in `scintillation/DATA_PROVENANCE.md:167,176` is historical run provenance.
+   Other starting points remain `/data/jfaber/arc_archive_2026-06/` and
+   `/data/jfaber/upchan_codetections/`.
 3. Capture each builder file verbatim into the FLITS tree under
    `scattering/scat_analysis/builders_h17/` (with an `ORIGIN.md` noting
    host, path, mtime, sha256) — closing the "no in-repo builder" gap.

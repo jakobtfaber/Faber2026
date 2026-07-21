@@ -1,0 +1,70 @@
+{
+  "schema": "faber2026-source-metadata-readability-v1",
+  "captured_at": "2026-07-21T09:51:12Z",
+  "host": "h17",
+  "status": "metadata_readable_science_interpretation_pending",
+  "dsa-110": {
+    "path": "/data/Faber2026/data/dsa-110/zach/220207aabh_dev_polcal_I.fil",
+    "reader": "scripts/audit_fig1_frequency_axes.py:read_remote_sigproc_header",
+    "header": {
+      "data_type": 1,
+      "fch1_mhz": 1498.75,
+      "foff_mhz": -0.03051757812,
+      "machine_id": 99,
+      "nbeams": 136,
+      "nbits": 32,
+      "nchans": 6144,
+      "nifs": 1,
+      "source_name": "source",
+      "telescope_id": 66,
+      "tsamp_s": 0.000032768,
+      "tstart_mjd": 59617.808504
+    },
+    "refdm_header_field": "absent",
+    "interpretation": "Header read only. Applied incoherent-dedispersion measure and time-axis semantics remain unverified."
+  },
+  "chime-frb": {
+    "path": "/data/Faber2026/data/chime-frb/zach/singlebeam_210456524.h5",
+    "reader": "h5py 3.11.0 metadata traversal; no array payload read",
+    "root_attributes": {
+      "archive_version": "NT_3.1.0",
+      "baseband-analysis_git_sha": "0ec3f4c38b56389b2e4193dcc23877e9593818d",
+      "delta_time_s": 0.00000256,
+      "event_date": "2022-02-07T 19:24:21.046182",
+      "event_id": "210456524"
+    },
+    "datasets": {
+      "index_map/freq": {
+        "shape": [871],
+        "dtype": "[('centre', '<f8'), ('id', '<u4')]"
+      },
+      "index_map/time": {
+        "shape": [55949],
+        "dtype": "[('offset_fpga', '<u8'), ('offset_s', '<f8')]"
+      },
+      "tiedbeam_baseband": {
+        "shape": [871, 2, 55949],
+        "dtype": "complex64",
+        "axis": ["freq", "beam", "time"]
+      },
+      "tiedbeam_power": {
+        "shape": [871, 2, 55949],
+        "dtype": "float32",
+        "axis": ["freq", "beam", "time"],
+        "DM_coherent_header_attribute": 262.4359033801,
+        "time_downsample_factor": 1
+      },
+      "time0": {
+        "shape": [871],
+        "dtype": "[('fpga_count', '<u8'), ('ctime', '<f8'), ('ctime_offset', '<f8')]"
+      }
+    },
+    "interpretation": "The coherent-DM value is observed only on tiedbeam_power. Voltage dedispersion history and exact time-axis semantics remain unverified pending producer audit."
+  },
+  "filesystem": {
+    "mount": "/data",
+    "fstype": "fuseblk",
+    "reported_owner_mode": "root:root 0777",
+    "note": "The mount fixes displayed ownership and mode; requested per-directory ubuntu:ubuntu 2775 is not representable through this mount."
+  }
+}
