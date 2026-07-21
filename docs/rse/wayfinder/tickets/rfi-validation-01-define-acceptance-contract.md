@@ -41,3 +41,9 @@ explicit masks for missing or rejected samples, and forbid calling a product
   interference-heavy and relatively quiet conditions. Science admissibility
   attaches only to the exact processing configuration and tested data scope.
   Full-sample execution remains a later campaign.
+- **Data sealing accepted 2026-07-21:** use contiguous time blocks separated
+  by a guard interval longer than the measured time correlation; hash and
+  publish all splits before cleaner comparison. Freeze method, ordering, and
+  thresholds before viewing test outputs. Only predeclared per-file estimates
+  from designated off-pulse data are allowed. A failed blind test consumes the
+  test data; another attempt requires new untouched test data.
