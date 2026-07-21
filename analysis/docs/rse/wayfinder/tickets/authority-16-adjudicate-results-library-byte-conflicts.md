@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:research` (AFK)
 - Status: open
-- Assignee: —
+- Assignee: Codex
 - Blocked by: [Choose the results-library and CHIME-path repair batch](authority-13-choose-link-and-chime-path-repair.md)
 - Map: [Project authority and custody](../map-project-authority-and-custody.md)
 - Triage: `ready-for-agent`
