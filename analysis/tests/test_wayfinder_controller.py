@@ -108,8 +108,13 @@ def test_receipt_policy_distinguishes_resolution_from_review(tmp_path):
         wc.validate_receipt(resolved, "review")
 
 
-def test_codex_command_closes_stdin_and_uses_schema(tmp_path):
+def test_codex_command_closes_stdin_and_uses_schema(monkeypatch, tmp_path):
     wc = load_controller()
+    monkeypatch.setattr(
+        wc.shutil,
+        "which",
+        lambda name: f"/usr/bin/{name}" if name in {"timeout", "codex"} else None,
+    )
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     task = manifest.tasks[0]
     command = wc.codex_command(
