@@ -45,6 +45,10 @@ can proceed without losing science, provenance, or concurrent work.
 
 <!-- one linked gist per resolved ticket; decision detail stays in the ticket -->
 
+- [Define authority roles and their required proof](tickets/authority-01-define-authority-roles-and-proof.md)
+  — roles attach singly to exact scoped surfaces; authority requires an
+  owner-ratified immutable identity, all uncertainty fails closed, and
+  verification, preservation, and consolidation safety have distinct proofs.
 - [Reconcile local data and results custody](tickets/authority-04-reconcile-local-data-and-results.md)
   — local instrument custody is split correctly, but the registry/library
   relationship is unreconciled; eight stale worktree links and current CHIME

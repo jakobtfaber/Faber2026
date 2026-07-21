@@ -7,6 +7,61 @@ scattering-budget paper. Numbers and figures are produced by **dsa110-FLITS**
 
 ## Language
 
+**Scoped surface**:
+A project artifact or state slice identified by content class, location, and
+observed revision or time. Authority roles attach to this scope, never to a
+mixed directory wholesale. One checkout may therefore have different roles
+for manuscript content, Git history, and figure bytes.
+
+**Custody role**:
+Exactly one of authority, replica, working copy, staging area, quarantine,
+preservation packet, retired source, or unclassified, assigned to a scoped
+surface at an observation time. `Unclassified` is the fail-closed default and
+implies neither authority nor permission to remove the surface.
+
+**Authority**:
+The sole scoped surface allowed to settle content conflicts for its content
+class. An authority without an independent recoverable copy is `at risk`, but
+does not thereby lose its role.
+
+**Replica**:
+A verified content-equivalent copy of an authority. It supplies recovery or
+access but never settles conflicts.
+
+**Working copy**:
+A mutable descendant of an identified authority or base state, assigned for
+active editing. Local changes and cleanliness do not grant authority.
+
+**Staging area**:
+A temporary, bounded transfer or assembly surface awaiting verification,
+promotion, or rejection. Partial transfers remain staging areas.
+
+**Quarantine**:
+An isolated surface whose trust, provenance, safety, or disposition remains
+unresolved. Quarantine prevents consumption; it never authorizes removal.
+
+**Preservation packet**:
+An immutable, self-describing recovery artifact for an exact source state,
+including its content manifest, provenance, and recovery instructions.
+
+**Retired source**:
+A deliberately retained surface that is no longer an active authority or
+input. Retirement requires an explicit successor or no-successor decision.
+
+**Verified**:
+A specific claim checked against named live evidence at a recorded time.
+Verification is claim-limited and expires when the relevant state changes.
+
+**Preserved**:
+A scoped state with an independently readable, integrity-checked recovery copy
+and a tested recovery path. Preservation alone never authorizes consolidation
+or removal.
+
+**Safe to consolidate**:
+A scoped action whose authority, recovery, ownership, references, active use,
+target list, rollback, and post-action checks are all cleared. Ambiguity or an
+unresolved science gate makes the action unsafe.
+
 **Co-detection sample**:
 The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
