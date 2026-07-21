@@ -49,6 +49,10 @@ can proceed without losing science, provenance, or concurrent work.
   — roles attach singly to exact scoped surfaces; authority requires an
   owner-ratified immutable identity, all uncertainty fails closed, and
   verification, preservation, and consolidation safety have distinct proofs.
+- [Choose the code and manuscript authority policy](tickets/authority-08-choose-code-manuscript-authority.md)
+  — GitHub `main` governs manuscript history and the reproducibility pin,
+  FLITS fork `main` governs fitting code, and every working-copy return requires
+  a scoped reviewed receipt; Overleaf and dirty fitting lanes remain fail-closed.
 - [Reconcile local data and results custody](tickets/authority-04-reconcile-local-data-and-results.md)
   — local instrument custody is split correctly, but the registry/library
   relationship is unreconciled; eight stale worktree links and current CHIME

@@ -62,6 +62,20 @@ A scoped action whose authority, recovery, ownership, references, active use,
 target list, rollback, and post-action checks are all cleared. Ambiguity or an
 unresolved science gate makes the action unsafe.
 
+**Manuscript authority**:
+The manuscript, bibliography, generated tables, figure catalog, and approved
+tracked figure outputs committed on Faber2026 GitHub `main`. Overleaf and Mac
+checkouts are working copies, not competing authorities.
+
+**Fitting-code authority**:
+The accepted code history on the `jakobtfaber/dsa110-FLITS` fork's `main`
+branch. The organization repository is upstream, not this project's authority.
+
+**Manuscript pipeline pin**:
+The `pipeline` gitlink committed on Faber2026 GitHub `main`, identifying the
+exact FLITS state used by the manuscript. Fork advancement never changes this
+pin implicitly.
+
 **Co-detection sample**:
 The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
