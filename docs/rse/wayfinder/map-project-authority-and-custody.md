@@ -105,6 +105,11 @@ can proceed without losing science, provenance, or concurrent work.
   — every action requires an exact packet, recovery and rollback proof, an
   exclusive scope lock, and a verified phase barrier; preserve at-risk states
   before merging, relinking, retiring, or separately approved removal.
+- [Choose the results-library and CHIME-path repair batch](tickets/authority-13-choose-link-and-chime-path-repair.md)
+  — use one phased, exact-target repair: separate CHIME and DSA current path
+  authorities, repair ten catalog links and three verified materialized-source
+  links, assign receipted input IDs now, and exclude both-real conflicts,
+  historical records, JointTF bytes, movement, deletion, and trust promotion.
 
 ## Not yet specified
 
