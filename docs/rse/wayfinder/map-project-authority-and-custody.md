@@ -118,6 +118,11 @@ can proceed without losing science, provenance, or concurrent work.
   — all 13 approved links now resolve from the canonical checkout, the
   inventory contains 18 catalog entries, current code uses separate CHIME/FRB
   and DSA-110 roots, and excluded bytes/conflicts remain fail-closed.
+- [Adjudicate the results-library real-byte conflicts](tickets/authority-16-adjudicate-results-library-byte-conflicts.md)
+  — both library trees are exact `af78543` historical replicas, while the
+  canonical source trees contain later unreceipted working outputs; preserve
+  all four and replace broad materialization with non-mutating snapshot
+  semantics only in a separately validated implementation.
 
 ## Not yet specified
 
