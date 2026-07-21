@@ -256,7 +256,7 @@ computed enclosed-mass invariant, not values produced by the same helper.
   `cd pipeline && uv run python galaxies/foreground/build_expanded_catalog.py --offline && uv run pytest galaxies/foreground/test_expanded_catalog.py -q`.
 - [x] Verify deterministic bytes:
   `shasum -a 256 galaxies/foreground/data/expanded_catalog_cross_references.csv > /tmp/expanded.before && uv run python galaxies/foreground/build_expanded_catalog.py --offline && shasum -a 256 -c /tmp/expanded.before`.
-- [ ] Commit pipeline code, fixtures, and outputs; then make a separate parent
+- [x] Commit pipeline code, fixtures, and outputs; then make a separate parent
   commit for the deliberate submodule pin and regenerated documentation.
 
 **Verification:** An integration test asserts 52 registry rows, unique composite
