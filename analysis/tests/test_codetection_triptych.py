@@ -171,7 +171,8 @@ def test_render_disables_model_overlay(monkeypatch, tmp_path):
     triptych.render_row(
         {"nick": "zach", "tns": "FRB 20220207C", "npz": "fit.npz"},
         root=tmp_path,
-        data_root=tmp_path,
+        chime_full_root=tmp_path / "chime",
+        dsa_full_root=tmp_path / "dsa",
         out_dir=tmp_path,
         dpi=72,
     )

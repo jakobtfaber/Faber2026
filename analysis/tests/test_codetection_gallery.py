@@ -79,18 +79,28 @@ def test_onpulse_span_noise_only_stays_tight():
 
 
 def test_discover_products_parses_dm_stems(tmp_path):
-    (tmp_path / "zach_dsa_I_262_368_2500b_cntr_bpc.npy").touch()
-    (tmp_path / "zach_chime_I_262_3621_32000b_cntr_bpc.npy").touch()
-    prods = discover_products(tmp_path, "zach")
+    chime_root = tmp_path / "chime"
+    dsa_root = tmp_path / "dsa"
+    chime_root.mkdir()
+    dsa_root.mkdir()
+    (dsa_root / "zach_dsa_I_262_368_2500b_cntr_bpc.npy").touch()
+    (chime_root / "zach_chime_I_262_3621_32000b_cntr_bpc.npy").touch()
+    prods = discover_products(chime_root, dsa_root, "zach")
     assert prods["dsa"].dm == 262.368 and prods["chime"].dm == 262.3621
 
 
 def test_discover_products_raises_on_missing(tmp_path):
-    (tmp_path / "zach_dsa_I_262_368_2500b_cntr_bpc.npy").touch()
+    chime_root = tmp_path / "chime"
+    dsa_root = tmp_path / "dsa"
+    chime_root.mkdir()
+    dsa_root.mkdir()
+    (dsa_root / "zach_dsa_I_262_368_2500b_cntr_bpc.npy").touch()
+    (dsa_root / "zach_chime_I_262_3621_32000b_cntr_bpc.npy").touch()
     try:
-        discover_products(tmp_path, "zach")
+        discover_products(chime_root, dsa_root, "zach")
     except FileNotFoundError as e:
         assert "chime" in str(e)
+        assert str(chime_root) in str(e)
     else:
         raise AssertionError("expected FileNotFoundError")
 

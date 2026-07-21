@@ -10,7 +10,8 @@ window is adaptive per burst (padded union of the two bands' on-pulse spans),
 so the burst fills the panel instead of sitting in ~50 ms of off-pulse noise.
 
 Data contract (docs/rse/specs/research-unified-12burst-figure.md):
-  ~/Data/Faber2026/dsa110/DSA_bursts/{nick}_{tel}_I_{DMstem}_{N}b_cntr_bpc.npy
+  ~/Data/Faber2026/chimefrb/CHIME_bursts/{nick}_chime_I_{DMstem}_{N}b_cntr_bpc.npy
+  ~/Data/Faber2026/dsa110/DSA_bursts/{nick}_dsa_I_{DMstem}_{N}b_cntr_bpc.npy
   DSA (6144, 2500) @ 32.768 us; CHIME (1024, 32000) @ 2.56 us; both are
   ~81.9 ms burst-centered windows, stored frequency-DESCENDING
   (pipeline/scattering/configs/telescopes.yaml) and flipped to ascending here.
@@ -41,7 +42,8 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.append(str(ROOT / "pipeline"))
 
-DATA_ROOT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
+CHIME_FULL_ROOT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
+DSA_FULL_ROOT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 OUT_DIR = ROOT / "figures"
 
 # Parity-tested against pipeline/scattering/scat_analysis/burst_metadata.py
@@ -160,15 +162,21 @@ def onpulse_span(
     return lo, hi, pk
 
 
-def discover_products(data_root: Path, nick: str) -> dict[str, Product]:
+def discover_products(
+    chime_full_root: Path,
+    dsa_full_root: Path,
+    nick: str,
+) -> dict[str, Product]:
     """Locate the per-telescope _cntr_bpc products and parse their DM stems."""
     out = {}
+    roots = {"chime": Path(chime_full_root), "dsa": Path(dsa_full_root)}
     for tel in ("dsa", "chime"):
-        hits = sorted(Path(data_root).glob(f"{nick}_{tel}_I_*_cntr_bpc.npy"))
+        root = roots[tel]
+        hits = sorted(root.glob(f"{nick}_{tel}_I_*_cntr_bpc.npy"))
         if len(hits) != 1:
             raise FileNotFoundError(
                 f"{nick}/{tel}: expected exactly 1 product, found {len(hits)} "
-                f"in {data_root}"
+                f"in {root}"
             )
         m = re.match(rf"{re.escape(nick)}_{tel}_I_(\d+)_(\d+)_\d+b", hits[0].name)
         if m is None:
@@ -248,7 +256,12 @@ def load_band(
     return ds, profile
 
 
-def render(data_root: Path, out_dir: Path, window_ms: float) -> list[str]:
+def render(
+    chime_full_root: Path,
+    dsa_full_root: Path,
+    out_dir: Path,
+    window_ms: float,
+) -> list[str]:
     import matplotlib.pyplot as plt
     from matplotlib import colormaps
 
@@ -295,7 +308,7 @@ def render(data_root: Path, out_dir: Path, window_ms: float) -> list[str]:
     rendered = []
     for idx, nick in enumerate(order):
         fnick = FILE_NICK.get(nick, nick)
-        prods = discover_products(data_root, fnick)
+        prods = discover_products(chime_full_root, dsa_full_root, fnick)
         cell = outer[idx // 4, idx % 4].subgridspec(
             2, 2, width_ratios=[3.4, 1.0], height_ratios=[1.0, 3.6],
             wspace=0.07, hspace=0.09,
@@ -409,11 +422,18 @@ def render(data_root: Path, out_dir: Path, window_ms: float) -> list[str]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--data-root", type=Path, default=DATA_ROOT)
+    path_arg = lambda value: Path(value).expanduser()  # noqa: E731
+    ap.add_argument("--chime-full-root", type=path_arg, default=CHIME_FULL_ROOT)
+    ap.add_argument("--dsa-full-root", type=path_arg, default=DSA_FULL_ROOT)
     ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
     ap.add_argument("--window-ms", type=float, default=WINDOW_MS_DEFAULT)
     args = ap.parse_args()
-    rendered = render(args.data_root, args.out_dir, args.window_ms)
+    rendered = render(
+        args.chime_full_root,
+        args.dsa_full_root,
+        args.out_dir,
+        args.window_ms,
+    )
     print(f"rendered {len(rendered)} bursts (MJD order): {' '.join(rendered)}")
     if len(rendered) != 12:
         sys.exit("expected 12 bursts")

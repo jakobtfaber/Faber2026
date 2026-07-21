@@ -36,6 +36,7 @@ from build_results_library_inventory import (  # noqa: E402
     base_for,
     link_dest,
     load_catalog,
+    select_entries,
     _repo_root,
 )
 from results_library import DEFAULT_LIBRARY  # noqa: E402
@@ -129,13 +130,10 @@ def main() -> None:
     args = ap.parse_args()
     root = _repo_root(args.root)
     library = args.library.expanduser().resolve()
-    catalog = load_catalog()
-    only = set(args.only) if args.only else None
+    catalog = select_entries(load_catalog(), list(args.only))
 
     actions: list[tuple[str, str, str]] = []
     for entry in catalog.entries:
-        if only is not None and entry.id not in only:
-            continue
         if entry.mode != "materialize":
             actions.append((entry.id, "(all)", f"skip-mode={entry.mode}"))
             continue
