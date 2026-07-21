@@ -29,7 +29,7 @@ VOLTAGE_FILES = [
     ("casey", "362593221"),
 ]
 
-H17_BASE = "/data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam"
+H17_BASE = "/data/Faber2026/data/chime-frb"
 CANFAR_BASE = "arc:projects/chime_frb/data/chime/baseband/processed"
 
 def build_voltage_certificates() -> list[dict]:
@@ -43,7 +43,7 @@ def build_voltage_certificates() -> list[dict]:
             "format": "HDF5_voltage",
             "file": filename,
             "host": "h17",
-            "host_path": f"{H17_BASE}/{filename}",
+            "host_path": f"{H17_BASE}/{nick.lower()}/{filename}",
             "upstream_archive": f"{CANFAR_BASE}/<date>/astro_{event_id}/{filename}",
             "stratum": "L0",
             "is_raw": True,
