@@ -2,7 +2,7 @@
 MAIN := main
 UV ?= uv
 
-.PHONY: all clean watch test-science check-state figures
+.PHONY: all clean watch test-science check-state figures wayfinder-plan wayfinder-status wayfinder-launch
 
 all: $(MAIN).pdf
 
@@ -54,3 +54,14 @@ notes-serve:
 notes:
 	@test -n "$(MSG)" || (echo 'Usage: make notes MSG="your running note"' >&2; exit 1)
 	python3 scripts/running_notes.py submit "$(MSG)"
+
+# Reviewed, fail-closed Wayfinder task automation. Launch requires WAVE.
+wayfinder-plan:
+	python3 scripts/wayfinder_controller.py plan --wave "$(or $(WAVE),first)"
+
+wayfinder-status:
+	python3 scripts/wayfinder_controller.py status
+
+wayfinder-launch:
+	@test -n "$(WAVE)" || (echo 'Usage: make wayfinder-launch WAVE=first' >&2; exit 1)
+	python3 scripts/wayfinder_controller.py launch --wave "$(WAVE)"
