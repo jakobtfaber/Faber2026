@@ -127,8 +127,9 @@ Consensus.)
   (tier 5; pre-circulation + pre-submission)
 
 ### Board hygiene
-- [ ] Descriptive-names glossary for the frozen letter+number docs
-  ([wf-12](wayfinder/tickets/12-retire-letter-number-stage-names.md), scope
+- [x] Descriptive-names glossary for the frozen letter+number docs
+  ([glossary](../specs/legacy-code-glossary.md);
+  [wf-12](../wayfinder/tickets/12-retire-letter-number-stage-names.md), scope
   reduced: this board already reads descriptively)
 
 ---

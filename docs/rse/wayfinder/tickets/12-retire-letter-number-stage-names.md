@@ -1,8 +1,8 @@
 # Replace letter+number stage names with descriptive names in the planning docs
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
-- Assignee: —
+- Status: resolved
+- Assignee: Codex
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
@@ -21,3 +21,16 @@ wording", P3 → "delay-domain optimal estimator") so the frozen docs and
 handoffs stay resolvable; (b) descriptive-first phrasing in `CONTEXT.md`'s
 pending list. Do not rewrite closed handoffs/history. Resolution = glossary
 committed + CONTEXT.md reads descriptively.
+
+## Resolution
+
+Resolved by Codex under the standing delegated decision authority
+(2026-07-20). Added
+[`legacy-code-glossary.md`](../../specs/legacy-code-glossary.md), covering the
+retired re-validation, methodology, scintillation, scattering, late-lane,
+technical-review, and CHIME scintillation recovery-route codes. Rewrote
+`CONTEXT.md`'s active pending list to use descriptive names first and legacy
+codes only as parenthetical traceability. Closed handoffs and the archived
+circulation plan were not rewritten.
+
+Validation: `python3 scripts/validate_legacy_code_glossary.py`.
