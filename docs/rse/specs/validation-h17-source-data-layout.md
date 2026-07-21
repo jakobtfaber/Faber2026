@@ -12,7 +12,8 @@
 - Automated checks: 10 passing, 0 failing.
 - Manual testing: 1 owner science-trust review remains.
 - Critical issues: 0.
-- Important issues: 1 future-reuse guardrail.
+- Important issues: 0 open in the migration tool; the historical move still
+  truthfully lacks a separately persisted pre-rename artifact.
 
 ## Implementation Status
 
@@ -90,18 +91,19 @@ No automated verification check failed.
 1. The `fuseblk` mount reports fixed `root:root 0777`; requested
    `ubuntu:ubuntu 2775` metadata is not representable. Acceptable for this move;
    documented in the implementation and metadata receipt.
-2. Pre-move hashes were held in memory and embedded in the final verified
+2. For the completed move, pre-move hashes were held in memory and embedded in the final verified
    receipt, not persisted as a separate file before rename. Custody is closed
-   by repeated post-move verification, but this is a future-reuse weakness.
+   by repeated post-move verification. A later patch fixed this for future
+   attempts with matching atomic local/remote preflight artifacts and a
+   rename-before-persistence regression test; it does not rewrite history.
 3. The broad search found nineteen additional promoted workers after the first
    pipeline PR. A second focused PR updated and tested all of them. Acceptable;
    the desired final state is met.
 
 ### Potential issues
 
-- `scripts/h17_source_data_layout.py`: a future migration run should persist
-  its preflight hash payload before the first rename. Do not reuse the mutation
-  path until that guardrail is added.
+- None. `scripts/h17_source_data_layout.py` now persists and verifies the
+  preflight hash payload before the first rename for every future attempt.
 
 ## Manual Testing Required
 
@@ -120,8 +122,8 @@ No automated verification check failed.
 
 ### Important
 
-- Before any future data move with this tool, persist the preflight hashes to a
-  durable local and remote manifest before mutation.
+- Preserve the attempt-specific preflight and journal beside every future
+  migration receipt; do not relabel the 2026-07-21 receipt as pre-persisted.
 
 ### Nice to have
 

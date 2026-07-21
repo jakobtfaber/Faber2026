@@ -71,12 +71,15 @@ excludes a checkout-local data tree.
    sampling, and `DM_coherent=262.4359033801` on `tiedbeam_power`. That
    attribute alone does not establish the voltage dataset's full dedispersion
    history or validate the time axis.
-4. Pre-move hashes were held in process memory and embedded as `before` records
+4. For the completed move, pre-move hashes were held in process memory and embedded as `before` records
    in the verified final receipt, but were not persisted as a separate file
    before the rename. This differs from the plan's durable pre-move-manifest
    wording. The independently repeated final verification closes custody for
-   this move; a future reuse should persist the preflight payload before any
-   mutation.
+   this move. On 2026-07-21 the tool was hardened for future reuse: each new
+   attempt now atomically writes the complete 51-path preflight packet locally
+   and remotely, verifies identical SHA-256 hashes, binds that reference into
+   the attempt-specific journal, and re-checks source identities before any
+   rename. This does not retroactively create evidence for the completed move.
 
 ## Remaining owner gate
 

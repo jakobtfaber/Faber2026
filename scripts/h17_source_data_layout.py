@@ -6,17 +6,21 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+import hashlib
 import json
+import os
 from pathlib import Path, PurePosixPath
 import shlex
 import subprocess
 import sys
+import tempfile
 from typing import Callable, Iterable
+import uuid
 
 
 OLD_ROOT = "/data/research/astrophysics/frbs/chime-dsa-codetections"
 NEW_ROOT = "/data/Faber2026/data"
-REMOTE_RECEIPT = "/data/Faber2026/provenance/h17-source-data-migration-20260721.json"
+REMOTE_PROVENANCE_ROOT = "/data/Faber2026/provenance"
 
 
 @dataclass(frozen=True)
@@ -150,13 +154,82 @@ print(json.dumps({"path": path, "sha256": value.hexdigest()}))
 '''
 
 
+REMOTE_PERSIST_PREFLIGHT = r'''
+import hashlib, json, os, pathlib, sys, tempfile
+
+request = json.load(sys.stdin)
+target = pathlib.Path(request["path"])
+content = request["content"].encode("utf-8")
+expected = request["sha256"]
+actual = hashlib.sha256(content).hexdigest()
+if actual != expected:
+    raise RuntimeError(f"preflight payload digest mismatch before write: {actual} != {expected}")
+target.parent.mkdir(parents=True, exist_ok=True)
+if target.exists():
+    raise FileExistsError(f"preflight evidence already exists: {target}")
+fd, temporary = tempfile.mkstemp(prefix=target.name + ".", dir=target.parent)
+try:
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(content)
+        stream.flush()
+        os.fsync(stream.fileno())
+    os.chmod(temporary, 0o444)
+    os.link(temporary, target)
+    directory_fd = os.open(target.parent, os.O_RDONLY)
+    try:
+        os.fsync(directory_fd)
+    finally:
+        os.close(directory_fd)
+finally:
+    if os.path.exists(temporary):
+        os.unlink(temporary)
+with target.open("rb") as stream:
+    persisted = hashlib.sha256(stream.read()).hexdigest()
+if persisted != expected:
+    raise RuntimeError(f"persisted preflight digest mismatch: {persisted} != {expected}")
+print(json.dumps({"path": str(target), "sha256": persisted}, sort_keys=True))
+'''
+
+
 REMOTE_MIGRATE = r'''
-import json, os, pathlib, socket, subprocess, sys, tempfile
+import hashlib, json, os, pathlib, socket, subprocess, sys, tempfile
 
 request = json.load(sys.stdin)
 moves = request["moves"]
 receipt_path = request["remote_receipt"]
+preflight_ref = request["preflight"]
 completed = []
+
+preflight_path = pathlib.Path(preflight_ref["remote_path"])
+with preflight_path.open("rb") as stream:
+    preflight_bytes = stream.read()
+actual_digest = hashlib.sha256(preflight_bytes).hexdigest()
+if actual_digest != preflight_ref["sha256"]:
+    raise RuntimeError(
+        f"persisted preflight digest mismatch before migration: "
+        f"{actual_digest} != {preflight_ref['sha256']}"
+    )
+preflight = json.loads(preflight_bytes)
+if preflight["attempt_id"] != preflight_ref["attempt_id"]:
+    raise RuntimeError("preflight attempt identifier mismatch")
+if preflight["moves"] != moves:
+    raise RuntimeError("preflight move mapping mismatch")
+entries = preflight["probe"]["entries"]
+for item in moves:
+    old = item["old_path"]
+    new = item["new_path"]
+    stat = os.stat(old)
+    expected = entries[old]
+    for key, actual in (
+        ("size", stat.st_size),
+        ("device", stat.st_dev),
+        ("inode", stat.st_ino),
+        ("mtime_ns", stat.st_mtime_ns),
+    ):
+        if actual != expected[key]:
+            raise RuntimeError(f"source changed since preflight ({key}): {old}")
+    if os.path.exists(new):
+        raise RuntimeError(f"target appeared since preflight: {new}")
 
 def write_state(state, error=None):
     target = pathlib.Path(receipt_path)
@@ -166,6 +239,7 @@ def write_state(state, error=None):
         "host": socket.gethostname(),
         "state": state,
         "error": error,
+        "preflight": preflight_ref,
         "moves": moves,
         "completed": completed,
     }
@@ -317,13 +391,114 @@ def _entry_identity(entry: dict) -> dict:
     return {key: entry[key] for key in ("size", "sha256", "device", "inode", "mtime_ns")}
 
 
+def _canonical_json_bytes(payload: dict) -> bytes:
+    return (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def _sha256_bytes(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _atomic_write_new(path: Path, payload: bytes) -> None:
+    """Durably publish bytes without ever replacing an existing artifact."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        raise FileExistsError(f"evidence already exists: {path}")
+    fd, temporary = tempfile.mkstemp(prefix=path.name + ".", dir=path.parent)
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.chmod(temporary, 0o444)
+        os.link(temporary, path)
+        directory_fd = os.open(path.parent, os.O_RDONLY)
+        try:
+            os.fsync(directory_fd)
+        finally:
+            os.close(directory_fd)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def build_preflight_manifest(before: dict, records: list[dict], attempt_id: str) -> dict:
+    """Bind the complete 51-path probe to one immutable migration attempt."""
+    expected_paths = (
+        canonical_paths(old_paths)
+        + canonical_paths(new_paths)
+        + list(EXCLUDED_PATHS)
+    )
+    if set(before["entries"]) != set(expected_paths):
+        raise RuntimeError("preflight probe does not contain the exact 51-path allowlist")
+    return {
+        "schema": "faber2026-h17-source-data-preflight-v1",
+        "attempt_id": attempt_id,
+        "host": before["host"],
+        "captured_at": before["captured_at"],
+        "data_device": before["data_device"],
+        "moves": records,
+        "excluded_paths": list(EXCLUDED_PATHS),
+        "probe": before,
+    }
+
+
+def _persist_preflight(
+    host: str,
+    receipt_path: Path,
+    before: dict,
+    records: list[dict],
+    attempt_id: str,
+) -> dict:
+    manifest = build_preflight_manifest(before, records, attempt_id)
+    payload = _canonical_json_bytes(manifest)
+    digest = _sha256_bytes(payload)
+    filename = f"h17-source-data-preflight-{attempt_id}.json"
+    local_path = receipt_path.parent / filename
+    remote_path = f"{REMOTE_PROVENANCE_ROOT}/{filename}"
+    _atomic_write_new(local_path, payload)
+    result = _remote_python(
+        host,
+        REMOTE_PERSIST_PREFLIGHT,
+        {
+            "path": remote_path,
+            "content": payload.decode("utf-8"),
+            "sha256": digest,
+        },
+    )
+    if result != {"path": remote_path, "sha256": digest}:
+        raise RuntimeError(f"remote preflight persistence mismatch: {result}")
+    if _sha256_bytes(local_path.read_bytes()) != digest:
+        raise RuntimeError("local preflight digest changed after persistence")
+    return {
+        "attempt_id": attempt_id,
+        "local_path": str(local_path),
+        "remote_path": remote_path,
+        "sha256": digest,
+    }
+
+
 def migrate(host: str, receipt_path: Path) -> dict:
     records = move_records()
     before = preflight(host, hash_existing=True)
+    attempt_id = uuid.uuid4().hex
+    preflight_ref = _persist_preflight(
+        host, receipt_path, before, records, attempt_id
+    )
+    remote_journal = (
+        f"{REMOTE_PROVENANCE_ROOT}/h17-source-data-migration-{attempt_id}.journal.json"
+    )
+    remote_receipt = (
+        f"{REMOTE_PROVENANCE_ROOT}/h17-source-data-migration-{attempt_id}.json"
+    )
     _remote_python(
         host,
         REMOTE_MIGRATE,
-        {"moves": records, "remote_receipt": REMOTE_RECEIPT},
+        {
+            "moves": records,
+            "remote_receipt": remote_journal,
+            "preflight": preflight_ref,
+        },
     )
 
     old = canonical_paths(old_paths)
@@ -360,19 +535,22 @@ def migrate(host: str, receipt_path: Path) -> dict:
 
     receipt = {
         "schema": "faber2026-h17-source-data-migration-v1",
+        "attempt_id": attempt_id,
         "status": "verified" if not errors else "failed_verification",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "host_alias": host,
         "hostname": after["host"],
         "data_device": after["data_device"],
         "new_root": NEW_ROOT,
+        "preflight": preflight_ref,
+        "remote_journal": remote_journal,
+        "remote_receipt": remote_receipt,
         "records": verified_records,
         "exclusions": exclusions,
         "errors": errors,
     }
-    receipt_path.parent.mkdir(parents=True, exist_ok=True)
-    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
-    _remote_python(host, REMOTE_FINALIZE, {"path": REMOTE_RECEIPT, "receipt": receipt})
+    _atomic_write_new(receipt_path, _canonical_json_bytes(receipt))
+    _remote_python(host, REMOTE_FINALIZE, {"path": remote_receipt, "receipt": receipt})
     if errors:
         raise RuntimeError("post-move verification failed:\n" + "\n".join(errors))
     return receipt
