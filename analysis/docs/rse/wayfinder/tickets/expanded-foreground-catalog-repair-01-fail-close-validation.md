@@ -1,7 +1,7 @@
 # Fail-close the invalid expanded-catalog validation
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
+- Status: resolved
 - Assignee: Codex
 - Blocked by: none
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
@@ -21,3 +21,28 @@ condition, incomplete and non-deterministic matches, invalid Stern interpretatio
 wrong morphology summary, absent pinned CSV, and unversioned Figure 3 input.
 Any validator must exit nonzero until the rebuilt catalog and independent report
 both pass.
+
+## Resolution
+
+Resolved 2026-07-20 under the standing delegated decision authority. The
+invalid report now says `FAILED — superseded; do not use`, the accepted-status
+string is absent from the Markdown validation, and
+`docs/rse/specs/validation-expanded-foreground-catalog.json` records the
+machine-readable failed gate.
+
+Acceptance evidence:
+
+- Required defects recorded:
+  `moster-input-units`, `cluver-equation-and-rest-frame`,
+  `incomplete-crossmatches`, `non-deterministic-match-selection`,
+  `stern-selection-interpretation`, `morphology-summary`,
+  `missing-pinned-expanded-csv`, and `unversioned-figure-3-input`.
+- `scripts/validate_expanded_foreground_catalog_gate.py` exits nonzero while
+  `status != passed` or any defect has non-pass status.
+- `uv run rtk pytest tests/test_expanded_catalog_validation.py -q` passed.
+- `! rtk rg -n "Ready / Verified|52 / 52.*matched"
+  docs/rse/specs/validation-expanded-foreground-photometry-and-morphology-catalog.md`
+  passed.
+- `rtk make test-science` passed.
+- `agent-closeout-check` passed with a dirty-state packet classifying all
+  changed paths as task-scoped.
