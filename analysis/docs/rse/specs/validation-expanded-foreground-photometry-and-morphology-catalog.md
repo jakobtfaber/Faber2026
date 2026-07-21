@@ -24,8 +24,8 @@ Gate file:
 |---|---|
 | Status | `failed` |
 | Disposition | `superseded_do_not_use` |
-| Parent commit checked | `f706feab928ec1b72ae9371ac50618c1d7a07ab6` |
-| Pipeline commit checked | `c6111390ce9c159483a844417f5fd9d187e13f5b` |
+| Parent commit checked | `9090d74c9cae0510d5b64c2fb1424dd658c08c9e` |
+| Pipeline commit checked | `ded8d195701c4abf5df31e6ad94f1750172d718e` |
 | Required next state | Rebuilt catalog passes and independent report passes |
 | Validator behavior | Nonzero exit while any defect below has non-pass status |
 
