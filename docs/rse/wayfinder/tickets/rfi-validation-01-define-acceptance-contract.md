@@ -35,3 +35,9 @@ explicit masks for missing or rejected samples, and forbid calling a product
   `RFI-masked`, `RFI-validated`, and `science-admissible preprocessing` are
   distinct states. Unqualified `clean` is forbidden. Definitions are recorded
   in [`CONTEXT.md`](../../../CONTEXT.md).
+- **Validation scope accepted 2026-07-21:** tune only on Zach training and
+  validation intervals; blind-test the frozen method on Zach's sealed test
+  interval and two preselected untouched raw CHIME files representing
+  interference-heavy and relatively quiet conditions. Science admissibility
+  attaches only to the exact processing configuration and tested data scope.
+  Full-sample execution remains a later campaign.
