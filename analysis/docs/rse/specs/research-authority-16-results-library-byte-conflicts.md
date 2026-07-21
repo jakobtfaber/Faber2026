@@ -4,11 +4,17 @@
 **Scope:** Read-only adjudication for
 [`Adjudicate the results-library real-byte conflicts`](../wayfinder/tickets/authority-16-adjudicate-results-library-byte-conflicts.md).  
 **Parent authority:** `origin/main` at
-`8513220b844befe9e4a24c7c385d67676c3b0d53`.  
+`ef32cbb0113a50aa77f1c1fcf4c9b1f1f5ede82b`.
 **Pipeline authority pin:**
-`ded8d195701c4abf5df31e6ad94f1750172d718e`.  
+`7d26b1f7d3747afebb0ed7064d3058d25fb33396`.
 **Library root:** `/Users/jakobfaber/Data/Faber2026/results-library`.  
 **Mutation:** none. No bytes were moved, linked, replaced, deleted, or trusted.
+
+Concurrent Wayfinder work advanced `origin/main` after the first observation.
+The result was rechecked after the adjudication merge at parent
+`ef32cbb0113a50aa77f1c1fcf4c9b1f1f5ede82b`, which pins pipeline
+`7d26b1f7d3747afebb0ed7064d3058d25fb33396`. The relevant tracked trees and
+their clean manifests are unchanged from `ded8d195`.
 
 ## Verdict
 
@@ -96,8 +102,8 @@ canonical working outputs that make replacement unsafe.
 ### Scintillation
 
 - Four `oran_qualified/` files occur on both sides and are byte-identical.
-- The canonical source alone has 13 ignored PDFs: one summary and twelve
-  per-burst Lorentzian-fit figures.
+- The canonical source alone has 13 ignored PDFs totaling 806,953 bytes: one
+  summary and twelve per-burst Lorentzian-fit figures.
 - The library alone has 41 files: `DSA_LORENTZIAN_FITS.md`, aggregate and
   per-burst JSON, the component CSV, and PNG/SVG campaign figures.
 - No common file differs.
@@ -114,9 +120,9 @@ byte copy was found. They are preserved working outputs, not a replica.
   `cb3fbc4182d662e7c8b572a0ce2eb67301ff122472d8ce286fa1f956df292f46`;
   the library holds the 2,656-byte pre-relocation summary with SHA-256
   `41122c7b56b13a1535b47daf2f537515472f3c65d8c0de0fa0a9f2986ce034e5`.
-- The canonical source alone has 289 ignored files: DM campaign panels,
-  injection diagnostics, smoke/full-run products, DM-power figures, dynamic
-  spectra, and host-DM posterior products.
+- The canonical source alone has 289 ignored files totaling 115,969,664 bytes:
+  DM campaign panels, injection diagnostics, smoke/full-run products,
+  DM-power figures, dynamic spectra, and host-DM posterior products.
 - The library alone has 73 pre-relocation files: DM-phase products and metrics,
   sightline/galaxy outputs, budget artifacts, and review manifests.
 
@@ -147,7 +153,13 @@ diff -qr <archive>/results \
 Both comparisons are empty. Git history, including the GitHub remote, is an
 independent exact recovery source for both library snapshots.
 
-The current tracked leftovers are recoverable from pipeline commit `ded8d195`.
+The `Faber2026-science-gates` preservation worktree supplies another local
+copy: its 45-file scintillation tree has the same canonical hash, and its
+dispersion tree contains the same 75-file snapshot plus one pointer document.
+Git remains the stronger immutable recovery identity.
+
+The current tracked leftovers are recoverable from pipeline commit `7d26b1f7`
+(and identically from `ded8d195`).
 The current ignored canonical outputs are not Git objects and cannot be
 assigned a producing commit merely because their generating code is pinned.
 Their complete recovery remains unproved.
@@ -199,10 +211,15 @@ identity proves recoverability, not scientific validity.
    with a non-mutating snapshot/inventory representation tied to commit,
    relative path, and tree hash. No existing library path is renamed or
    overwritten.
-5. Give any later working-result publication a new identifier and an absent,
+5. Before any relink or replacement could hide the canonical sources, preserve
+   the 13 and 289 ignored files in a non-overwriting, receipt-bound hold and
+   verify an independent copy. This adjudication does not authorize that copy.
+6. Retire broad `pipeline/results` materialization; any later entry must name
+   one coherent campaign or snapshot.
+7. Give any later working-result publication a new identifier and an absent,
    versioned destination. Before copying it, require a complete manifest,
    producing-code/run receipt, independent recovery copy, and trust label.
-6. Keep materialization fail-closed until that catalog change is implemented
+8. Keep materialization fail-closed until that catalog change is implemented
    and tested. Do not add compatibility links.
 
 This is a custody decision only. It does not authorize copying, movement,
@@ -215,8 +232,8 @@ mutation. Any later implementation must freeze this preimage and stop on any
 drift:
 
 ```yaml
-parent_commit: 8513220b844befe9e4a24c7c385d67676c3b0d53
-pipeline_commit: ded8d195701c4abf5df31e6ad94f1750172d718e
+parent_commit: ef32cbb0113a50aa77f1c1fcf4c9b1f1f5ede82b
+pipeline_commit: 7d26b1f7d3747afebb0ed7064d3058d25fb33396
 historical_recovery_commit: af78543d4747d339b9f13283b4b8528c91a71cb3
 slots:
   scintillation.dsa-lorentzian-2026-07-07:
@@ -238,3 +255,42 @@ forbidden:
 For a future repository-only catalog change, rollback is a scoped Git revert;
 the four data-tree hashes must remain unchanged before and after. Any future
 copy requires its own non-overwriting destination and receipt-driven rollback.
+
+## Reproducibility
+
+The minimal clean reproduction used the isolated Wayfinder worktree after
+merging the adjudication into parent `ef32cbb0`, with its clean detached
+pipeline submodule at `7d26b1f7`, macOS 27.0, and Python 3.12.13 from the
+`py312` Conda environment.
+No random process, accelerator, or numerical tolerance is involved.
+
+Commands reproduced from that clean checkout:
+
+```bash
+/Users/jakobfaber/.conda/envs/py312/bin/python \
+  scripts/materialize_results_library.py --dry-run \
+  --only scintillation.dsa-lorentzian-2026-07-07 \
+  --only dispersion.pipeline-results-root
+
+/Users/jakobfaber/.conda/envs/py312/bin/python -m pytest -q \
+  tests/test_results_library_repair.py
+
+git -C pipeline ls-tree -r af78543d4747d339b9f13283b4b8528c91a71cb3 \
+  analysis/scintillation-dsa-lorentzian-2026-07-07/results results
+```
+
+Results:
+
+- focused dry-run: expected exit 1 with exactly the two
+  `would-conflict-both-real` rows;
+- focused tests: 6 passed;
+- clean Git-blob comparison: all 45 scintillation and 75 dispersion library
+  files exactly match `af78543` by path and blob identity;
+- live canonical manifest reproduction: all four hashes match the frozen
+  repair action packet;
+- full science tests: 209 passed, 1 expected failure;
+- `git diff --check`: passed.
+
+The clean checkout intentionally reproduces the 4-file and 2-file tracked
+baselines. The 17-file and 291-file manifests are live-state evidence from the
+canonical working checkout, not claims that ignored files appear in a clone.
