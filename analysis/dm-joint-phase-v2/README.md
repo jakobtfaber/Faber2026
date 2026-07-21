@@ -41,7 +41,7 @@ The analysis was developed and executed in `dsa110-FLITS` commit
 campaign implementation. The FLITS branch remains the executable upstream
 source; this directory makes the full evidence durable beside the manuscript.
 
-## Re-run from this repository
+## Reproduce the historical snapshot
 
 The snapshot uses the scientific support modules and vendored released
 `DM_phase` implementation in the `pipeline/` submodule. From the top-level
@@ -74,6 +74,21 @@ pytest -q \
 The raw `.npy` products are intentionally not copied into the manuscript repo.
 Their absolute paths, shapes, sizes, exact filename DMs, modification times, and
 SHA-256 fingerprints are recorded in `results/run_provenance.json`.
+
+## Run the current split-root producer
+
+The historical command above remains pinned to its recorded source. Current
+runs must name the CHIME/FRB and DSA-110 product roots separately:
+
+```bash
+export PYTHONPATH="$PWD/pipeline"
+
+python scripts/run_joint_dm_phase.py \
+  --manifest pipeline/data-manifest.csv \
+  --chime-full-root ~/Data/Faber2026/chimefrb/CHIME_bursts \
+  --dsa-full-root ~/Data/Faber2026/dsa110/DSA_bursts \
+  --output analysis/dm-joint-phase-v2/results/fits.json
+```
 
 ## Validated outcome
 

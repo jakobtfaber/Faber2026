@@ -27,9 +27,13 @@ entries:
     trust: provisional
     repo: pipeline
     mode: materialize
+    result_ids: []
     sources:
       - analysis/scattering-dm-locked-2026-07-14/results/fit_summaries
       - analysis/scattering-dm-locked-2026-07-14/results/ppc
+    destinations:
+      analysis/scattering-dm-locked-2026-07-14/results/fit_summaries: fit_summaries
+      analysis/scattering-dm-locked-2026-07-14/results/ppc: ppc
     notes: Bulk fit_summaries/ppc in library; fit_adjudication.csv stays git-tracked for CI.
 
   - id: scattering.refit-2026-06
@@ -38,6 +42,7 @@ entries:
     trust: revoked-2026-07-06
     repo: pipeline
     mode: link_only
+    result_ids: []
     sources:
       - analysis/scattering-refit-2026-06/_a1_fits
       - analysis/scattering-refit-2026-06/joint_json
@@ -49,6 +54,7 @@ entries:
     trust: revoked-2026-07-06
     repo: pipeline
     mode: link_only
+    result_ids: []
     sources:
       - analysis/beta_campaign/fits
       - analysis/beta_campaign/beta_campaign_verdicts.json
@@ -61,6 +67,7 @@ entries:
     trust: provisional
     repo: pipeline
     mode: materialize
+    result_ids: []
     sources:
       - analysis/scintillation-dsa-lorentzian-2026-07-07/results
     notes: Library holds full results/; oran_qualified/ stays git-tracked for figure approval CI.
@@ -71,6 +78,7 @@ entries:
     trust: diagnostic_only
     repo: pipeline
     mode: link_only
+    result_ids: []
     sources:
       - analysis/chime-scintillation
     notes: Archival mixed experiments/docs predating the finalized objective-window campaign.
@@ -81,6 +89,7 @@ entries:
     trust: mixed
     repo: pipeline
     mode: link_only
+    result_ids: []
     sources:
       - analysis/window-tuning-campaign-2026-07-17/results
     notes: "PR #192 closed the 24-product campaign; chromatica_hi is a measurement and the other 23 records remain diagnostic only. The compact result tree is git-tracked."
@@ -92,6 +101,7 @@ entries:
     trust: mixed
     repo: pipeline
     mode: materialize
+    result_ids: []
     sources:
       - results
     notes: Bulk dm_phase/etc in library; joint_fit_summary.md stays git-tracked for CI.
@@ -102,8 +112,11 @@ entries:
     trust: provisional
     repo: parent
     mode: materialize
+    result_ids: []
     sources:
       - analysis/dm-joint-phase-v2/results/diagnostics
+    destinations:
+      analysis/dm-joint-phase-v2/results/diagnostics: diagnostics
     notes: Bulk diagnostics in library; fits.json + validation stay git-tracked for CI.
 
   - id: dispersion.chime-dm
@@ -112,6 +125,7 @@ entries:
     trust: mixed
     repo: pipeline
     mode: link_only
+    result_ids: []
     sources:
       - analysis/chime_dm
     notes: Mixed plot script + products; link-only for now.
@@ -123,6 +137,7 @@ entries:
     trust: pending-refits
     repo: pipeline
     mode: link_only
+    result_ids: []
     sources:
       - galaxies/foreground/data/tau_consistency_catalog.csv
     notes: Keep tracked in FLITS (small; code-coupled). Library links for navigation.
@@ -133,6 +148,7 @@ entries:
     trust: manuscript-live
     repo: pipeline
     mode: link_only
+    result_ids: []
     sources:
       - exports
     notes: Generated TeX for manuscript — stay in FLITS git.
@@ -143,6 +159,7 @@ entries:
     trust: pending-refits
     repo: parent
     mode: link_only
+    result_ids: []
     sources:
       - analysis/provisional_propagation
     notes: Active ledger is screen-readiness only and fails closed pending fixed-index refits.
@@ -153,6 +170,7 @@ entries:
     trust: archive
     repo: parent
     mode: link_only
+    result_ids: []
     sources:
       - quarantine/2026-07-17-outdated-science
     notes: Exact obsolete science bytes retained for re-examination; never a current claim source.
@@ -163,6 +181,7 @@ entries:
     trust: partial
     repo: parent
     mode: link_only
+    result_ids: []
     sources:
       - analysis/v3_energetics
     notes: Driver script + small outputs stay in parent git (not bulk results).
@@ -174,6 +193,8 @@ entries:
     trust: owner-approved-bytes
     repo: parent
     mode: link_only
+    result_ids:
+      - sample.gallery_fig1
     sources:
       - figures
     notes: Final embedded figures. Stay in parent repo for Overleaf.
@@ -184,6 +205,7 @@ entries:
     trust: live
     repo: parent
     mode: link_only
+    result_ids: []
     sources:
       - repro_manifest.csv
     notes: Producer→artifact ledger.
@@ -195,6 +217,7 @@ entries:
     trust: live
     repo: parent
     mode: link_only
+    result_ids: []
     sources:
       - figure_review
     notes: Approval receipts + slots.
@@ -206,6 +229,7 @@ entries:
     trust: external
     repo: external
     mode: link_only
+    result_ids: []
     sources: []
     external_paths:
       - env: FLITS_RUNS

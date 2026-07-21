@@ -1,0 +1,110 @@
+{
+  "entries": [
+    {
+      "id": "scattering.dm-locked-2026-07-14",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321971274,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/fit_summaries",
+            "size": 416,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/scattering-dm-locked-2026-07-14/results/fit_summaries",
+          "source": {
+            "inode": 327361314,
+            "manifest": {
+              "bytes": 37953,
+              "files": 11,
+              "sha256": "30317829e7e7a9c69b4b18796e6c7163ee28720aaf3f336189ff1d45f5f6a10a"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries",
+            "raw_link_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/fit_summaries",
+            "resolved_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/fit_summaries",
+            "resolves": true,
+            "size": 94,
+            "type": "symlink",
+            "uid": 501
+          }
+        },
+        {
+          "destination": {
+            "inode": 321971286,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/ppc",
+            "size": 416,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/scattering-dm-locked-2026-07-14/results/ppc",
+          "source": {
+            "inode": 327361315,
+            "manifest": {
+              "bytes": 2727,
+              "files": 11,
+              "sha256": "f3e1fe757582377f027349fb0a95af0f26b97366574ba7e67a71e5ce1fde8e0f"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-dm-locked-2026-07-14/results/ppc",
+            "raw_link_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/ppc",
+            "resolved_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/ppc",
+            "resolves": true,
+            "size": 84,
+            "type": "symlink",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "dispersion.dm-joint-phase-v2-parent",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321968661,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics",
+            "size": 608,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/dm-joint-phase-v2/results/diagnostics",
+          "source": {
+            "inode": 327361316,
+            "manifest": {
+              "bytes": 47373807,
+              "files": 17,
+              "sha256": "d11d843f4fdcebd4227fea741d23222cd5c0045a73be3003d36c139f39eb1e8e"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/dm-joint-phase-v2/results/diagnostics",
+            "raw_link_target": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics",
+            "resolved_target": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics",
+            "resolves": true,
+            "size": 89,
+            "type": "symlink",
+            "uid": 501
+          }
+        }
+      ]
+    }
+  ],
+  "faber2026_root": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
+  "git": {
+    "parent_commit": "74b7dd6db85c0867eb702f02c430ab29551ad504",
+    "pipeline_commit": "f1d56c3aa5ec1ff098e8485293bf967d8b5a3ac1"
+  },
+  "library_root": "/Users/jakobfaber/Data/Faber2026/results-library",
+  "observed_at": "2026-07-21T06:09:06Z",
+  "schema": "faber2026-results-library-repair-receipt/v1",
+  "selected_ids": [
+    "scattering.dm-locked-2026-07-14",
+    "dispersion.dm-joint-phase-v2-parent"
+  ]
+}

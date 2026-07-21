@@ -1,0 +1,185 @@
+{
+  "schema": "faber2026-results-library-repair-action/v1",
+  "observed_at": "2026-07-21T05:21:42Z",
+  "authorization": {
+    "decision": "docs/rse/wayfinder/tickets/authority-13-choose-link-and-chime-path-repair.md",
+    "task": "docs/rse/wayfinder/tickets/authority-17-implement-results-library-chime-path-repair.md",
+    "bounded_scope_correction_approved": true,
+    "approved_at": "2026-07-20 America/Los_Angeles"
+  },
+  "git": {
+    "parent_root": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
+    "parent_commit": "74b7dd6db85c0867eb702f02c430ab29551ad504",
+    "parent_branch": "codex/record-wayfinder-delegation",
+    "parent_preexisting_task_dirt": [
+      "docs/rse/specs/research-results-library-chime-path-repair.md",
+      "docs/rse/wayfinder/tickets/authority-17-implement-results-library-chime-path-repair.md"
+    ],
+    "pipeline_root": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline",
+    "pipeline_commit": "c6111390ce9c159483a844417f5fd9d187e13f5b",
+    "parent_gitlink": "c6111390ce9c159483a844417f5fd9d187e13f5b",
+    "pipeline_clean": true,
+    "pipeline_initial_state": "detached"
+  },
+  "environment": {
+    "runner": "env -i HOME=/Users/jakobfaber PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin /opt/anaconda3/bin/conda run -n py312 python",
+    "python": "/Users/jakobfaber/.conda/envs/py312/bin/python",
+    "pyyaml": "6.0.3",
+    "ambient_python_failure": "ModuleNotFoundError: No module named 'yaml'",
+    "scoped_open_files": false,
+    "scoped_running_producers": false
+  },
+  "preimage_hashes": {
+    "scripts/results_library_catalog.yaml": "71b33a0603c5c7b507ece852f126a4b6911fcea1a5257e3c296894b597cd0744",
+    "scripts/build_results_library_inventory.py": "f9499e069dbdfe68291743f6c20ab3fabc1d0d30383eba78c22fcd81fa08d013",
+    "scripts/materialize_results_library.py": "790df1ac2eee66a0649aad71bbcd516b4a58f59349e8bf01e78e93c88552a3ec",
+    "docs/rse/control/results-registry.toml": "41d1adebe8d49f92487b4dcccd4c6f69f8e0ee16dc7284b912558afa41c2d833",
+    "external_inventory": "9e56dd5e4bb0dd92732907aee10311deb3e5b7dd3662edcbfb778439ad21a0ef",
+    "external_index": "bbd4319f6a4277aa2aaa16606e2317c3925d593c37c83482af1e2459a8295712"
+  },
+  "external_inventory_preimages": {
+    "inventory": {
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/_inventory/inventory.yaml",
+      "inode": 321929783,
+      "size": 11300,
+      "encoded_copy": "docs/rse/certificates/results-library-repair-2026-07-20/preimage-inventory.yaml.base64"
+    },
+    "index": {
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/INDEX.md",
+      "inode": 321929784,
+      "size": 6549,
+      "encoded_copy": "docs/rse/certificates/results-library-repair-2026-07-20/preimage-INDEX.md.base64"
+    }
+  },
+  "link_actions": [
+    {
+      "class": "replace_broken_library_link",
+      "id": "scintillation.chime",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/scintillation/chime-diagnostic",
+      "preimage_inode": 321974721,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/pipeline/analysis/chime-scintillation",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime-scintillation"
+    },
+    {
+      "class": "replace_broken_library_link",
+      "id": "dispersion.chime-dm",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/chime-dm",
+      "preimage_inode": 321974724,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/pipeline/analysis/chime_dm",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime_dm"
+    },
+    {
+      "class": "replace_broken_library_link",
+      "id": "foreground.tau-consistency-catalog",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/foreground/tau_consistency_catalog.csv",
+      "preimage_inode": 321974725,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/pipeline/galaxies/foreground/data/tau_consistency_catalog.csv",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/galaxies/foreground/data/tau_consistency_catalog.csv"
+    },
+    {
+      "class": "replace_broken_library_link",
+      "id": "foreground.budget-exports",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/foreground/tex-exports",
+      "preimage_inode": 321974726,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/pipeline/exports",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/exports"
+    },
+    {
+      "class": "replace_broken_library_link",
+      "id": "foreground.v3-energetics",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/foreground/v3-energetics",
+      "preimage_inode": 321974743,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/analysis/v3_energetics",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/v3_energetics"
+    },
+    {
+      "class": "replace_broken_library_link",
+      "id": "manuscript.figures",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/manuscript/figures",
+      "preimage_inode": 321974760,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/figures",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figures"
+    },
+    {
+      "class": "replace_broken_library_link",
+      "id": "manuscript.repro-manifest",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/manuscript/repro_manifest.csv",
+      "preimage_inode": 321974769,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/repro_manifest.csv",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/repro_manifest.csv"
+    },
+    {
+      "class": "replace_broken_library_link",
+      "id": "review.figure-review",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/review-ledger/figure_review",
+      "preimage_inode": 321974776,
+      "preimage_payload": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-results-library-b/figure_review",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figure_review"
+    },
+    {
+      "class": "create_missing_library_link",
+      "id": "scintillation.chime-window-2026-07-17",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/scintillation/2026-07-17_window-tuning",
+      "preimage": "absent",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/window-tuning-campaign-2026-07-17/results",
+      "manifest": {"files": 30, "bytes": 421996, "sha256": "47432abdc45caba779a552c31beb04592985a3a2acd0c85fc5d520b7599974bc"}
+    },
+    {
+      "class": "create_missing_library_link",
+      "id": "archive.outdated-science-2026-07-17",
+      "path": "/Users/jakobfaber/Data/Faber2026/results-library/archive/2026-07-17-outdated-science",
+      "preimage": "absent",
+      "target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/quarantine/2026-07-17-outdated-science",
+      "manifest": {"files": 5, "bytes": 16516, "sha256": "e8f5fdef092a12d7fd6c17a8b674aa4b2ca7ecb2dfd419972095e622100a8504"}
+    },
+    {
+      "class": "restore_repository_link",
+      "id": "scattering.dm-locked-2026-07-14",
+      "source": "fit_summaries",
+      "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries",
+      "preimage": "absent",
+      "target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/fit_summaries",
+      "manifest": {"files": 11, "bytes": 37953, "sha256": "30317829e7e7a9c69b4b18796e6c7163ee28720aaf3f336189ff1d45f5f6a10a"}
+    },
+    {
+      "class": "restore_repository_link",
+      "id": "scattering.dm-locked-2026-07-14",
+      "source": "ppc",
+      "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-dm-locked-2026-07-14/results/ppc",
+      "preimage": "absent",
+      "target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/ppc",
+      "manifest": {"files": 11, "bytes": 2727, "sha256": "f3e1fe757582377f027349fb0a95af0f26b97366574ba7e67a71e5ce1fde8e0f"}
+    },
+    {
+      "class": "restore_repository_link",
+      "id": "dispersion.dm-joint-phase-v2-parent",
+      "source": "diagnostics",
+      "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/dm-joint-phase-v2/results/diagnostics",
+      "preimage": "absent",
+      "target": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics",
+      "manifest": {"files": 17, "bytes": 47373807, "sha256": "d11d843f4fdcebd4227fea741d23222cd5c0045a73be3003d36c139f39eb1e8e"}
+    }
+  ],
+  "excluded_invariants": [
+    {"path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results", "files": 17, "bytes": 1686569, "sha256": "721e5942f358086cc55b8f8d53eaf8c838a8870214455a75afdbef5f62e5d006"},
+    {"path": "/Users/jakobfaber/Data/Faber2026/results-library/scintillation/2026-07-07_dsa-lorentzian", "files": 45, "bytes": 12791899, "sha256": "16823666dcc5f1e2e700e3c62026ab01b28e6487d1a50db884375cacdb9e86fb"},
+    {"path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/results", "files": 291, "bytes": 115972920, "sha256": "1f2b75ece0c028c5c208104e150a6294ca93231484178b99168c40cc0f113d06"},
+    {"path": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/pipeline-results-root", "files": 75, "bytes": 27177361, "sha256": "09867d25a1047d97fc540db22446e75d16eaa103593ca75d52550c1e3d9a5c5e"},
+    {"path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/jointmodel", "files": 32, "bytes": 531188, "sha256": "89dda92213099a68427700e0a03bbb8bf41f4be47832971c9d5abd3abea03250"},
+    {"path": "/Users/jakobfaber/Data/Faber2026/results-library/historical/2026-07-20-pipeline-diagnostics", "files": 60, "bytes": 13029521, "sha256": "40c1171fc8672c5d97064396cbc8e36a856950226285fd4d4504c1b2457fe058"}
+  ],
+  "input_lineage_exceptions": {
+    "remediation_packets": 12,
+    "reason": "MD5 only; no producing Git identity or SHA-256 manifest",
+    "package_manifests": 3,
+    "package_reason": "SHA-256 present; producing Git identity and separate provenance receipt absent",
+    "action": "record exceptions; create no fabricated input IDs"
+  },
+  "rollback": {
+    "replace_broken_library_link": "restore each exact preimage_payload after validating path and current receipt",
+    "create_missing_library_link": "unlink only the two receipt-created symlinks",
+    "restore_repository_link": "unlink only the three receipt-created repository symlinks",
+    "external_inventory": "decode the tracked base64 preimages and verify the recorded SHA-256 before replacement",
+    "real_bytes": "never moved or deleted"
+  }
+}

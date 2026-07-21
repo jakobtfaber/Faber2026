@@ -28,7 +28,8 @@ from dispersion.dm_power_analysis import (  # noqa: E402
     shift_waterfall_residual_dm,
 )
 
-DATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
+CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
+DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 CATALOG_DEFAULT = ROOT / "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
 ROSTER_DEFAULT = ROOT / "scripts/jointmodel_triptych_manifest.yaml"
 
@@ -60,11 +61,18 @@ def zero_consistency(measurement: dict, *, max_sigma: float = 2.0) -> str:
     return "consistent_zero" if abs(residual) <= max_sigma * sigma else "nonzero"
 
 
-def products(data_root: Path, nick: str) -> dict[str, Path]:
+def products(
+    chime_full_root: Path,
+    dsa_full_root: Path,
+    nick: str,
+) -> dict[str, Path]:
     file_nick = "johndoeII" if nick == "johndoeii" else nick
     result = {}
+    roots = {"chime": Path(chime_full_root), "dsa": Path(dsa_full_root)}
     for telescope in ("chime", "dsa"):
-        matches = list(data_root.glob(f"{file_nick}_{telescope}_I_*_cntr_bpc.npy"))
+        matches = list(
+            roots[telescope].glob(f"{file_nick}_{telescope}_I_*_cntr_bpc.npy")
+        )
         if len(matches) != 1:
             raise RuntimeError(f"{nick}/{telescope}: expected one product, found {matches}")
         result[telescope] = matches[0]
@@ -135,7 +143,12 @@ def emg_slope(path: Path, telescope: str, target_dm: float) -> dict:
     }
 
 
-def audit(data_root: Path, catalog: Path, roster_manifest: Path = ROSTER_DEFAULT) -> dict:
+def audit(
+    chime_full_root: Path,
+    dsa_full_root: Path,
+    catalog: Path,
+    roster_manifest: Path = ROSTER_DEFAULT,
+) -> dict:
     measurements = []
     with catalog.open(newline="") as stream:
         rows = list(csv.DictReader(stream))
@@ -149,7 +162,7 @@ def audit(data_root: Path, catalog: Path, roster_manifest: Path = ROSTER_DEFAULT
     for row in rows:
         nick = row["nick"].lower()
         target_dm = float(row["adopted_dm"])
-        for telescope, path in products(data_root, nick).items():
+        for telescope, path in products(chime_full_root, dsa_full_root, nick).items():
             peak = peak_slope(path, telescope, target_dm)
             emg = emg_slope(path, telescope, target_dm)
             peak["zero_consistency"] = zero_consistency(peak)
@@ -184,13 +197,24 @@ def audit(data_root: Path, catalog: Path, roster_manifest: Path = ROSTER_DEFAULT
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-root", type=Path, default=DATA_DEFAULT)
+    path_arg = lambda value: Path(value).expanduser()  # noqa: E731
+    parser.add_argument(
+        "--chime-full-root", type=path_arg, default=CHIME_FULL_ROOT_DEFAULT
+    )
+    parser.add_argument("--dsa-full-root", type=path_arg, default=DSA_FULL_ROOT_DEFAULT)
     parser.add_argument("--catalog", type=Path, default=CATALOG_DEFAULT)
     parser.add_argument("--roster-manifest", type=Path, default=ROSTER_DEFAULT)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     payload = json.dumps(
-        audit(args.data_root, args.catalog, args.roster_manifest), indent=2, sort_keys=True
+        audit(
+            args.chime_full_root,
+            args.dsa_full_root,
+            args.catalog,
+            args.roster_manifest,
+        ),
+        indent=2,
+        sort_keys=True,
     ) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
