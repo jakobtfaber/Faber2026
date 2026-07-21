@@ -49,6 +49,12 @@ within Overleaf's file limits.
 
 <!-- one linked gist per resolved ticket; decision detail stays in the ticket -->
 
+- [Establish the native Overleaf Git contract](tickets/overleaf-bridge-01-research-native-git-contract.md)
+  — native Git exposes one token-authenticated `master` history and supported
+  History recovery, but concurrent-push atomicity and metadata preservation are
+  not guaranteed; the bridge must add its own expected-tip and write-window
+  gates.
+
 ## Not yet specified
 
 - The exact explicit exceptions to the compile-derived projection; these
