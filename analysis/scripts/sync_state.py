@@ -9,19 +9,19 @@ State is split by who can know it:
   in `--check` (drop `--offline`) to flag stored<->live contradictions. It is
   never baked into the generated files, so the outputs stay byte-deterministic
   and CI's `--check --offline` is a true drift gate.
-* Stored canonically -- docs/rse/program-state.toml (lanes + owner-view) and
-  docs/rse/evidence-ledger.toml (12 sightlines x 8 strands). GitHub cannot know
+* Stored canonically -- docs/rse/control/program-state.toml (lanes + owner-view)
+  and docs/rse/control/evidence-ledger.toml (12 sightlines x 8 strands). GitHub cannot know
   scientific trust status, gates, next actions, or the lane->issue association.
 
 Outputs (regenerated from the two TOML files alone):
 
-1. docs/rse/ACTIVE_LANES.md        -- lane table (GENERATED banner).
-2. docs/rse/board/owner-view.json  -- byte-identical to the owner_view block;
+1. docs/rse/control/ACTIVE_LANES.md        -- lane table (GENERATED banner).
+2. docs/rse/control/board/owner-view.json  -- byte-identical to the owner_view block;
                                       JSON carries no comment, so no banner line
                                       (its provenance lives in program-state.toml).
                                       scripts/render_journal_panel.py bakes it
                                       into readiness.html unchanged.
-3. docs/rse/board/claims-audit.md  -- the ledger's consumer (GENERATED banner),
+3. docs/rse/control/board/claims-audit.md  -- the ledger's consumer (GENERATED banner),
                                       cross-checked against manuscript labels.
 
 Usage:
@@ -40,11 +40,11 @@ import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PROGRAM_STATE = ROOT / "docs/rse/program-state.toml"
-EVIDENCE_LEDGER = ROOT / "docs/rse/evidence-ledger.toml"
-ACTIVE_LANES = ROOT / "docs/rse/ACTIVE_LANES.md"
-OWNER_VIEW = ROOT / "docs/rse/board/owner-view.json"
-CLAIMS_AUDIT = ROOT / "docs/rse/board/claims-audit.md"
+PROGRAM_STATE = ROOT / "docs/rse/control/program-state.toml"
+EVIDENCE_LEDGER = ROOT / "docs/rse/control/evidence-ledger.toml"
+ACTIVE_LANES = ROOT / "docs/rse/control/ACTIVE_LANES.md"
+OWNER_VIEW = ROOT / "docs/rse/control/board/owner-view.json"
+CLAIMS_AUDIT = ROOT / "docs/rse/control/board/claims-audit.md"
 
 REPO = "jakobtfaber/Faber2026"
 ISSUE_URL = "https://github.com/" + REPO + "/issues/{n}"
@@ -98,11 +98,11 @@ def render_active_lanes(state: dict) -> str:
     wip_limit = meta.get("wip_limit", 0)
     in_flight = sum(1 for ln in lanes if ln.get("status") == "in_progress")
 
-    out = [BANNER.format(src="docs/rse/program-state.toml")]
+    out = [BANNER.format(src="docs/rse/control/program-state.toml")]
     out.append("# Active lanes\n")
     out.append(
         "Operational control surface for Faber2026, generated from "
-        "`docs/rse/program-state.toml`. One row per lane. Live PR/issue/branch "
+        "`docs/rse/control/program-state.toml`. One row per lane. Live PR/issue/branch "
         "state is verified by `scripts/sync_state.py --check` (advisory), not "
         "baked into this table.\n")
     out.append(
@@ -208,10 +208,10 @@ def render_claims_audit(ledger: dict, labels: set[str]) -> str:
         status_counts[ev.get("status", "?")] = \
             status_counts.get(ev.get("status", "?"), 0) + 1
 
-    out = [BANNER.format(src="docs/rse/evidence-ledger.toml")]
+    out = [BANNER.format(src="docs/rse/control/evidence-ledger.toml")]
     out.append("# Claims audit\n")
     out.append(
-        "Generated from `docs/rse/evidence-ledger.toml`, cross-checked against "
+        "Generated from `docs/rse/control/evidence-ledger.toml`, cross-checked against "
         "`\\label{}`s in `main.tex` and `sections/*.tex`. A manuscript label may "
         "consume only `trusted`, `upper_limit`, or `documented_fail` evidence; "
         "anything else is an error.\n")

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Build the manuscript CHIME scintillation gate table from pinned FLITS JSON.
+"""Build the manuscript CHIME scintillation gate table from reviewed FLITS JSON.
 
 The builder is deliberately fail closed: it accepts only the reviewed PR #192
-campaign shape and status contract.  A changed campaign must be adjudicated
-explicitly rather than silently changing manuscript claims.
+campaign snapshot and status contract.  The pipeline pin may advance, but it
+must contain that reviewed commit.  Later files at the same paths cannot
+silently change manuscript claims.
 """
 
 from __future__ import annotations
@@ -21,15 +22,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PIPELINE = ROOT / "pipeline"
-CAMPAIGN = PIPELINE / "analysis/window-tuning-campaign-2026-07-17/results"
+CAMPAIGN_RELATIVE = Path("analysis/window-tuning-campaign-2026-07-17/results")
+CAMPAIGN = PIPELINE / CAMPAIGN_RELATIVE
 TABLE_PATH = ROOT / "chime_scintillation_campaign_table.tex"
 PROVENANCE_PATH = ROOT / "analysis/scintillation-summary/campaign_provenance.json"
 FIGURE_PROVENANCE_PATH = ROOT / "analysis/scintillation-summary/joint_figure_provenance.json"
-DSA_VALIDATION = (
-    PIPELINE
-    / "analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json"
+DSA_VALIDATION_RELATIVE = Path(
+    "analysis/scintillation-dsa-lorentzian-2026-07-07/results/"
+    "oran_qualified/validation.json"
 )
-EXPECTED_PIPELINE = "17d9d26675702e9f8917da655621bef3231f0ddb"
+DSA_VALIDATION = PIPELINE / DSA_VALIDATION_RELATIVE
+REVIEWED_PIPELINE = "17d9d26675702e9f8917da655621bef3231f0ddb"
 EXPECTED_MEASUREMENT = "chromatica_hi"
 
 BURSTS = (
@@ -76,17 +79,49 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def sha256_bytes(content: bytes) -> str:
+    return hashlib.sha256(content).hexdigest()
+
+
 def pipeline_revision() -> str:
     return subprocess.check_output(
         ["git", "-C", str(PIPELINE), "rev-parse", "HEAD"], text=True
     ).strip()
 
 
-def load_campaign(campaign_dir: Path = CAMPAIGN) -> Campaign:
-    validation = json.loads((campaign_dir / "validation.json").read_text())
+def pipeline_contains_reviewed_campaign() -> bool:
+    return subprocess.run(
+        [
+            "git",
+            "-C",
+            str(PIPELINE),
+            "merge-base",
+            "--is-ancestor",
+            REVIEWED_PIPELINE,
+            "HEAD",
+        ],
+        check=False,
+    ).returncode == 0
+
+
+def reviewed_blob(path: Path) -> bytes:
+    return subprocess.check_output(
+        ["git", "-C", str(PIPELINE), "show", f"{REVIEWED_PIPELINE}:{path.as_posix()}"]
+    )
+
+
+def load_campaign(campaign_dir: Path | None = None) -> Campaign:
+    if campaign_dir is None:
+        validation_text = reviewed_blob(CAMPAIGN_RELATIVE / "validation.json").decode()
+        records_text = reviewed_blob(CAMPAIGN_RELATIVE / "campaign_results.jsonl").decode()
+    else:
+        validation_text = (campaign_dir / "validation.json").read_text()
+        records_text = (campaign_dir / "campaign_results.jsonl").read_text()
+
+    validation = json.loads(validation_text)
     records = {
         record["name"]: record
-        for line in (campaign_dir / "campaign_results.jsonl").read_text().splitlines()
+        for line in records_text.splitlines()
         if line.strip()
         for record in (json.loads(line),)
     }
@@ -119,8 +154,11 @@ def load_campaign(campaign_dir: Path = CAMPAIGN) -> Campaign:
     return Campaign(validation=validation, records=records)
 
 
-def load_dsa_measurement(path: Path = DSA_VALIDATION) -> dict:
-    record = json.loads(path.read_text())
+def load_dsa_measurement(path: Path | None = None) -> dict:
+    if path is None:
+        record = json.loads(reviewed_blob(DSA_VALIDATION_RELATIVE))
+    else:
+        record = json.loads(path.read_text())
     gates = record.get("gates", {})
     required = (
         "calibrated_interval",
@@ -202,10 +240,10 @@ def table_text(campaign: Campaign) -> str:
 
 def provenance(table: str) -> dict:
     inputs = (
-        CAMPAIGN / "validation.json",
-        CAMPAIGN / "campaign_results.jsonl",
-        CAMPAIGN / "injection_recovery.json",
-        CAMPAIGN / "figures.review.json",
+        CAMPAIGN_RELATIVE / "validation.json",
+        CAMPAIGN_RELATIVE / "campaign_results.jsonl",
+        CAMPAIGN_RELATIVE / "injection_recovery.json",
+        CAMPAIGN_RELATIVE / "figures.review.json",
     )
     return {
         "campaign": "CHIME objective-window scintillation campaign",
@@ -219,7 +257,11 @@ def provenance(table: str) -> dict:
         "expected_measurement": EXPECTED_MEASUREMENT,
         "generator_sha256": sha256(Path(__file__)),
         "inputs": [
-            {"path": str(path.relative_to(ROOT)), "sha256": sha256(path)} for path in inputs
+            {
+                "path": str(Path("pipeline") / path),
+                "sha256": sha256_bytes(reviewed_blob(path)),
+            }
+            for path in inputs
         ],
         "output": {
             "path": str(TABLE_PATH.relative_to(ROOT)),
@@ -229,6 +271,7 @@ def provenance(table: str) -> dict:
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
         ).strip(),
         "pipeline_revision": pipeline_revision(),
+        "source_revision": REVIEWED_PIPELINE,
         "python": sys.version.split()[0],
         "recorded_date": "2026-07-17",
     }
@@ -246,8 +289,8 @@ def render_joint_figure(candidate_root: Path) -> Path:
     import matplotlib.pyplot as plt
     import numpy as np
 
-    if pipeline_revision() != EXPECTED_PIPELINE:
-        raise ValueError("joint figure requires the reviewed PR #192 pipeline pin")
+    if not pipeline_contains_reviewed_campaign():
+        raise ValueError("pipeline pin does not contain the reviewed PR #192 campaign")
     campaign = load_campaign()
     dsa = load_dsa_measurement()
     chime = campaign.records[EXPECTED_MEASUREMENT]
@@ -325,7 +368,9 @@ def render_joint_figure(candidate_root: Path) -> Path:
         "campaign_measurement": EXPECTED_MEASUREMENT,
         "chime_input": {
             "path": str((CAMPAIGN / "chromatica_hi_campaign.json").relative_to(ROOT)),
-            "sha256": sha256(CAMPAIGN / "chromatica_hi_campaign.json"),
+            "sha256": sha256_bytes(
+                reviewed_blob(CAMPAIGN_RELATIVE / "chromatica_hi_campaign.json")
+            ),
             "status": chime["science_status"],
         },
         "command": (
@@ -337,12 +382,13 @@ def render_joint_figure(candidate_root: Path) -> Path:
         ),
         "dsa_input": {
             "path": str(DSA_VALIDATION.relative_to(ROOT)),
-            "sha256": sha256(DSA_VALIDATION),
+            "sha256": sha256_bytes(reviewed_blob(DSA_VALIDATION_RELATIVE)),
             "status": "qualified",
         },
         "generator_sha256": sha256(Path(__file__)),
         "output": "figures/dsa_lorentzian_summary.pdf",
         "pipeline_revision": pipeline_revision(),
+        "source_revision": REVIEWED_PIPELINE,
         "policy": "different bursts; separate panels; no cross-burst scaling or shared-screen inference",
         "python": sys.version.split()[0],
         "recorded_date": "2026-07-17",
@@ -354,7 +400,7 @@ def render_joint_figure(candidate_root: Path) -> Path:
 
 
 def stage_chime_acf_candidates(candidate_root: Path, source_dir: Path) -> list[dict]:
-    review = json.loads((CAMPAIGN / "figures.review.json").read_text())
+    review = json.loads(reviewed_blob(CAMPAIGN_RELATIVE / "figures.review.json"))
     verdicts = {
         item["path"]: item
         for item in review.get("verdicts", [])
@@ -401,8 +447,10 @@ def stage_chime_acf_candidates(candidate_root: Path, source_dir: Path) -> list[d
 
 def write_outputs(check: bool = False) -> None:
     revision = pipeline_revision()
-    if revision != EXPECTED_PIPELINE:
-        raise ValueError(f"pipeline pin {revision} != reviewed {EXPECTED_PIPELINE}")
+    if not pipeline_contains_reviewed_campaign():
+        raise ValueError(
+            f"pipeline pin {revision} does not contain reviewed {REVIEWED_PIPELINE}"
+        )
     campaign = load_campaign()
     table = table_text(campaign)
     record = json.dumps(provenance(table), indent=2, sort_keys=True) + "\n"

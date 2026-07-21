@@ -15,6 +15,11 @@ can proceed without losing science, provenance, or concurrent work.
 
 ## Notes
 
+- **Standing delegation (owner, 2026-07-20):** [delegated decision authority](standing-delegation-2026-07-20.md)
+  covers only tickets recorded open at `main` commit `33e9e1ce3570`; it permits
+  evidence-backed recommendations without per-ticket approval but does not
+  close tickets or waive its explicit evidence, exact-target, or one-way action
+  gates.
 - Use `/wayfinder`, `/grilling`, and `/domain-modeling`; refer to every ticket
   by its linked name.
 - Evidence first. Live state outranks inherited inventories. Record timestamps,
@@ -100,6 +105,15 @@ can proceed without losing science, provenance, or concurrent work.
   — every action requires an exact packet, recovery and rollback proof, an
   exclusive scope lock, and a verified phase barrier; preserve at-risk states
   before merging, relinking, retiring, or separately approved removal.
+- [Choose the results-library and CHIME-path repair batch](tickets/authority-13-choose-link-and-chime-path-repair.md)
+  — use one phased, exact-target repair: separate CHIME and DSA current path
+  authorities, repair ten catalog links and three verified materialized-source
+  links, assign receipted input IDs now, and exclude both-real conflicts,
+  historical records, JointTF bytes, movement, deletion, and trust promotion.
+- [Authorize the first bounded preservation and consolidation wave](tickets/authority-12-authorize-first-bounded-wave.md)
+  — the first wave is reconciled as the completed, owner-approved,
+  non-recursive removal of one verified-empty rebuildable directory; every
+  other path and the later results repair remain separately gated.
 
 ## Not yet specified
 

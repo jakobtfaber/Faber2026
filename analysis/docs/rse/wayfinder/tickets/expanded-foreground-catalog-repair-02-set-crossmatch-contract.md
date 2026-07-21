@@ -5,6 +5,7 @@
 - Assignee: Codex
 - Blocked by: [Fail-close the invalid validation](expanded-foreground-catalog-repair-01-fail-close-validation.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `ready-for-agent`
 
 ## Question

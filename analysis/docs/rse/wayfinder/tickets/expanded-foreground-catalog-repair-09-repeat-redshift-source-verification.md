@@ -5,6 +5,7 @@
 - Assignee: unassigned
 - Blocked by: [Freeze authoritative host-redshift evidence](expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md), [Freeze candidate-redshift source evidence](expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `blocked`
 
 ## Question

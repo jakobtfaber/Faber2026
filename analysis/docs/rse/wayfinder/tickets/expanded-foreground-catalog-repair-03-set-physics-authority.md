@@ -5,6 +5,7 @@
 - Assignee: Codex
 - Blocked by: [Set the catalog crossmatch and quality contract](expanded-foreground-catalog-repair-02-set-crossmatch-contract.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `ready-for-agent`
 
 ## Question
