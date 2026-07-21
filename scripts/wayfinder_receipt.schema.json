@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["attempt_id", "outcome", "summary", "branch", "commit", "pr_url", "checks", "blocker"],
+  "properties": {
+    "attempt_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+    "outcome": {"enum": ["resolved", "review_ready", "blocked", "failed"]},
+    "summary": {"type": "string", "minLength": 1},
+    "branch": {"type": "string", "minLength": 1},
+    "commit": {"type": "string"},
+    "pr_url": {"type": "string"},
+    "checks": {"type": "array", "items": {"type": "string"}},
+    "blocker": {"type": "string"}
+  }
+}
