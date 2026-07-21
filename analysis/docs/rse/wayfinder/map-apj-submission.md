@@ -55,6 +55,12 @@ existing lane system. The map does not carry the execution itself.
   is not a sequencing driver; scope follows scientific need. Superseded as
   head of the map by
   [Overhaul the trust assessment](tickets/13-overhaul-trust-assessment.md).
+- [Correct the census-aperture description to match the pipeline](tickets/08-correct-census-aperture-description.md)
+  — describe the frozen census as built: eligible rows span 101.7–242.7 kpc,
+  the retained envelope reaches 281.4 kpc, and eligibility is provenance-based.
+- [Replace letter+number stage names with descriptive names in the planning docs](tickets/12-retire-letter-number-stage-names.md)
+  — active planning now uses descriptive names; a validated glossary preserves
+  historical-code traceability without rewriting closed records.
 
 ## Not yet specified
 

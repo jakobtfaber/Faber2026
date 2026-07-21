@@ -39,6 +39,10 @@ independent numerical, provenance, and owner visual checks.
 
 ## Decisions so far
 
+- [Fail-close the invalid expanded-catalog validation](tickets/expanded-foreground-catalog-repair-01-fail-close-validation.md)
+  — the superseded validation is explicitly failed, its defects are
+  machine-readable, and the gate exits nonzero until a rebuilt catalog and
+  independent report pass.
 - [Independently verify foreground redshifts and verdicts](tickets/expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
   — all stored verdict and budget arithmetic reproduces, but 0/52 rows has a
   complete host-plus-candidate source chain; retain the legacy adjudications and
