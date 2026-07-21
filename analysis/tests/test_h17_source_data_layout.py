@@ -1,7 +1,11 @@
 import importlib.util
+import hashlib
+import json
 from pathlib import Path
 from pathlib import PurePosixPath
 import sys
+
+import pytest
 
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "h17_source_data_layout.py"
@@ -62,6 +66,125 @@ def test_three_exclusions_are_outside_the_allowlist():
 
 def test_remote_finalize_returns_json_for_the_ssh_wrapper():
     assert 'print(json.dumps({"receipt": str(target)}, sort_keys=True))' in layout.REMOTE_FINALIZE
+
+
+def _complete_probe():
+    paths = (
+        layout.canonical_paths(layout.old_paths)
+        + layout.canonical_paths(layout.new_paths)
+        + list(layout.EXCLUDED_PATHS)
+    )
+    entries = {}
+    for index, path in enumerate(paths):
+        is_source = path in layout.canonical_paths(layout.old_paths)
+        is_exclusion = path in layout.EXCLUDED_PATHS
+        entries[path] = (
+            {
+                "exists": True,
+                "is_file": True,
+                "size": index + 1,
+                "device": 7,
+                "inode": 1000 + index,
+                "mode": "0o644",
+                "uid": 1,
+                "gid": 2,
+                "mtime_ns": 2000 + index,
+                "open_handles": [],
+                "sha256": f"{index:064x}",
+            }
+            if is_source or is_exclusion
+            else {"exists": False, "open_handles": []}
+        )
+    return {
+        "host": "lxd110h17",
+        "captured_at": "2026-07-21T00:00:00+00:00",
+        "data_device": 7,
+        "entries": entries,
+    }
+
+
+def test_preflight_manifest_contains_exact_complete_probe():
+    probe = _complete_probe()
+    manifest = layout.build_preflight_manifest(probe, layout.move_records(), "attempt-1")
+
+    assert manifest["attempt_id"] == "attempt-1"
+    assert manifest["probe"] == probe
+    assert len(manifest["probe"]["entries"]) == 51
+    assert len(manifest["moves"]) == 24
+    assert len(manifest["excluded_paths"]) == 3
+
+
+def test_persist_preflight_writes_local_before_remote_and_matches_digest(
+    tmp_path, monkeypatch
+):
+    attempt_id = "attempt-2"
+    expected_local = tmp_path / f"h17-source-data-preflight-{attempt_id}.json"
+    observed = []
+
+    def fake_remote(host, program, payload, timeout=900):
+        assert host == "h17"
+        assert program == layout.REMOTE_PERSIST_PREFLIGHT
+        assert expected_local.exists()
+        local_bytes = expected_local.read_bytes()
+        assert hashlib.sha256(local_bytes).hexdigest() == payload["sha256"]
+        assert json.loads(local_bytes) == json.loads(payload["content"])
+        observed.append("remote")
+        return {"path": payload["path"], "sha256": payload["sha256"]}
+
+    monkeypatch.setattr(layout, "_remote_python", fake_remote)
+    reference = layout._persist_preflight(
+        "h17",
+        tmp_path / "receipt.json",
+        _complete_probe(),
+        layout.move_records(),
+        attempt_id,
+    )
+
+    assert observed == ["remote"]
+    assert reference["local_path"] == str(expected_local)
+    assert reference["sha256"] == hashlib.sha256(expected_local.read_bytes()).hexdigest()
+
+
+def test_persist_preflight_refuses_remote_digest_mismatch(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        layout,
+        "_remote_python",
+        lambda *args, **kwargs: {"path": "wrong", "sha256": "0" * 64},
+    )
+
+    with pytest.raises(RuntimeError, match="remote preflight persistence mismatch"):
+        layout._persist_preflight(
+            "h17",
+            tmp_path / "receipt.json",
+            _complete_probe(),
+            layout.move_records(),
+            "attempt-3",
+        )
+
+
+def test_persistence_failure_prevents_remote_migration(tmp_path, monkeypatch):
+    remote_programs = []
+    monkeypatch.setattr(layout, "preflight", lambda *args, **kwargs: _complete_probe())
+    monkeypatch.setattr(
+        layout,
+        "_persist_preflight",
+        lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("persist failed")),
+    )
+    monkeypatch.setattr(
+        layout,
+        "_remote_python",
+        lambda host, program, payload, timeout=900: remote_programs.append(program),
+    )
+
+    with pytest.raises(RuntimeError, match="persist failed"):
+        layout.migrate("h17", tmp_path / "receipt.json")
+    assert layout.REMOTE_MIGRATE not in remote_programs
+
+
+def test_remote_journal_is_bound_to_verified_preflight():
+    assert 'preflight_ref = request["preflight"]' in layout.REMOTE_MIGRATE
+    assert 'if preflight["moves"] != moves' in layout.REMOTE_MIGRATE
+    assert '"preflight": preflight_ref' in layout.REMOTE_MIGRATE
 
 
 def test_paired_manifest_is_custody_only_and_has_twelve_pairs():
