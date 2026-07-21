@@ -5,7 +5,9 @@
   "disposition": "blocked_host_redshift_provenance",
   "summary": "Numerical and artifact checks pass; scientific promotion remains fail-closed pending source-bearing host redshifts and owner Figure 3 review.",
   "parent_input_commit": "49a4658a302776c31ba92b49ecbd65ccf37780fa",
-  "pipeline_commit": "db73ac7045f4d9341778eb7e826ffc81d089169d",
+  "pipeline_commit": "3e466c1a180fb169ad09845312348cf539b82632",
+  "independently_checked_pipeline_commit": "db73ac7045f4d9341778eb7e826ffc81d089169d",
+  "pipeline_tree": "0683c2ce79ca0ae0cfb5dfd730cc8ca333556b75",
   "artifact_sha256": {
     "expanded_catalog": "17ef142bc5d57f0f1f42d11a397c084de2b9763fbb7543ce82e90e1a6d6ef727",
     "figure_3_input": "63e2c980399810a027d6877cf5de118350e8d82a995cb03621d5daa3315259f8",

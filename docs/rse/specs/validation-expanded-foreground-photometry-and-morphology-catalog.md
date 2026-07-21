@@ -10,7 +10,8 @@ Figure 3 also still requires manuscript-owner visual approval.
 | Boundary | Revision or hash |
 |---|---|
 | Parent input | `49a4658a302776c31ba92b49ecbd65ccf37780fa` |
-| Pipeline | `db73ac7045f4d9341778eb7e826ffc81d089169d` |
+| Pipeline merge | `3e466c1a180fb169ad09845312348cf539b82632` |
+| Independently checked feature revision | `db73ac7045f4d9341778eb7e826ffc81d089169d` (identical tree `0683c2ce79ca0ae0cfb5dfd730cc8ca333556b75`) |
 | Expanded catalog | `17ef142bc5d57f0f1f42d11a397c084de2b9763fbb7543ce82e90e1a6d6ef727` |
 | Figure 3 input | `63e2c980399810a027d6877cf5de118350e8d82a995cb03621d5daa3315259f8` |
 | Staged Figure 3 PDF | `0940b333993e540c2caf622a46ebef7a47ef0c1a68b6d3204d988aca651f486f` |
