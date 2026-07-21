@@ -110,6 +110,10 @@ can proceed without losing science, provenance, or concurrent work.
   authorities, repair ten catalog links and three verified materialized-source
   links, assign receipted input IDs now, and exclude both-real conflicts,
   historical records, JointTF bytes, movement, deletion, and trust promotion.
+- [Authorize the first bounded preservation and consolidation wave](tickets/authority-12-authorize-first-bounded-wave.md)
+  — the first wave is reconciled as the completed, owner-approved,
+  non-recursive removal of one verified-empty rebuildable directory; every
+  other path and the later results repair remain separately gated.
 
 ## Not yet specified
 
