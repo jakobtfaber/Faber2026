@@ -114,6 +114,10 @@ can proceed without losing science, provenance, or concurrent work.
   — the first wave is reconciled as the completed, owner-approved,
   non-recursive removal of one verified-empty rebuildable directory; every
   other path and the later results repair remain separately gated.
+- [Implement the results-library and CHIME-path repair batch](tickets/authority-17-implement-results-library-chime-path-repair.md)
+  — all 13 approved links now resolve from the canonical checkout, the
+  inventory contains 18 catalog entries, current code uses separate CHIME/FRB
+  and DSA-110 roots, and excluded bytes/conflicts remain fail-closed.
 
 ## Not yet specified
 

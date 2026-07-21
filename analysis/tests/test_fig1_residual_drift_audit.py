@@ -41,7 +41,7 @@ def test_gate_rejects_partial_catalog(tmp_path):
     partial = tmp_path / "catalog.csv"
     partial.write_text("nick,adopted_dm\nzach,262.361665\n")
     try:
-        audit(tmp_path, partial)
+        audit(tmp_path / "chime", tmp_path / "dsa", partial)
     except ValueError as exc:
         assert "roster" in str(exc)
     else:

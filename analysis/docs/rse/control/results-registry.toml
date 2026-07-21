@@ -35,10 +35,119 @@
 schema_version = 1
 updated = "2026-07-19"  # pass 2: md5s/dirhashes, inferred pins, census query windows
 
+# Incomplete derived-input lineages. These are exceptions, not stable input IDs.
+# Promotion requires the proof named in each reason.
+
+[[input_exception]]
+name = "remediation.casey"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/casey.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.chromatica"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/chromatica.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.freya"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/freya.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.hamilton"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/hamilton.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.isha"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/isha.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.johndoeII"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/johndoeII.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.mahi"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/mahi.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.oran"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/oran.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.phineas"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/phineas.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.whitney"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/whitney.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.wilhelm"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/wilhelm.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "remediation.zach"
+class = "remediation_packet"
+path = "~/Data/Faber2026/dsa110/upchan_codetections_remediated_20260718/prov/zach.json"
+status = "incomplete_lineage"
+reason = "MD5 only; producing Git identity and SHA-256 manifest absent"
+
+[[input_exception]]
+name = "freya-package.coarse-rank1-v1"
+class = "freya_package_manifest"
+path = "~/Data/Faber2026/dsa110/scintillation-data/freya_chime_coarse_rank1_v1_manifest.json"
+status = "incomplete_lineage"
+reason = "SHA-256 present; producing Git identity and separate provenance receipt absent"
+
+[[input_exception]]
+name = "freya-package.coarse-rank2-v1"
+class = "freya_package_manifest"
+path = "~/Data/Faber2026/dsa110/scintillation-data/freya_chime_coarse_rank2_v1_manifest.json"
+status = "incomplete_lineage"
+reason = "SHA-256 present; producing Git identity and separate provenance receipt absent"
+
+[[input_exception]]
+name = "freya-package.rank1-v1"
+class = "freya_package_manifest"
+path = "~/Data/Faber2026/dsa110/scintillation-data/freya_chime_rank1_v1_manifest.json"
+status = "incomplete_lineage"
+reason = "SHA-256 present; producing Git identity and separate provenance receipt absent"
+
 # ── Association & sample (re-validated 2026-07-07, legacy V6) ─────────────
 
 [[result]]
 id = "association.sample_roster"
+library_slots = []
 section = "S4.1"
 kind = "verdict"
 description = "Twelve-burst co-detection sample membership (association verdicts, all pairs)"
@@ -57,6 +166,7 @@ notes = "VERIFY: producing script + V6 artifact paths"
 
 [[result]]
 id = "association.sample_table"
+library_slots = []
 section = "S2"
 kind = "table"
 description = "Sample table: positions, timing residuals with per-burst 1-sigma budget (tab:sample)"
@@ -75,6 +185,7 @@ notes = "VERIFY: generator script"
 
 [[result]]
 id = "association.pcc_sum"
+library_slots = []
 section = "S3.1"
 kind = "number"
 description = "Summed chance-coincidence expectation over the 64-trigger DSA-110 trial set"
@@ -93,6 +204,7 @@ notes = "exact trial denominator still order-of-magnitude in prose — wf-09"
 
 [[result]]
 id = "association.cards_figures"
+library_slots = []
 section = "App.A"
 kind = "figure_set"
 description = "Per-burst association cards + summary (fig:assoc-cards-grid, fig:association-summary, fig:toa-offset-decomposition)"
@@ -111,6 +223,7 @@ notes = "VERIFY: generator + artifact hashes vs V6 report"
 
 [[result]]
 id = "association.dm_measurements_table"
+library_slots = []
 section = "S2.2"
 kind = "table"
 description = "Per-burst per-telescope DM measurements + provenance (tab:dm-measurements)"
@@ -131,6 +244,7 @@ notes = "VERIFY: generator; ties to v6-association-dm-report-2026-07-07"
 
 [[result]]
 id = "sample.gallery_fig1"
+library_slots = ["manuscript.figures"]
 section = "S2"
 kind = "figure"
 description = "Twelve-burst data-only 4x3 dynamic-spectra gallery (fig:codetection-data-grid)"
@@ -151,6 +265,7 @@ notes = "contract locked 2026-07-14 (data-only 4x3); UPDATE 2026-07-18: observed
 
 [[result]]
 id = "mw.foreground_characterization"
+library_slots = []
 section = "S2.4"
 kind = "figure"
 description = "NE2025 MW disk characterization map (fig:ne2025_mw)"
@@ -169,6 +284,7 @@ notes = "NE2025 publication status = submission-time watch (referee MW4)"
 
 [[result]]
 id = "mw.disk_halo_values"
+library_slots = []
 section = "S2.4"
 kind = "number"
 description = "Per-sightline MW disk DM + 40 pc/cm3 halo term (text-table reconciled, +40 offset explicit)"
@@ -189,6 +305,7 @@ notes = "halo prior width is a fiducial awaiting sign-off (wf-07)"
 
 [[result]]
 id = "census.foreground_table"
+library_slots = []
 section = "S2.5"
 kind = "table"
 description = "Foreground census: candidates, verdicts, impact parameters (tab:foreground)"
@@ -213,6 +330,7 @@ notes = "35 catalog rows dedupe to 28 physical systems; per-sightline no-candida
 
 [[result]]
 id = "census.counts"
+library_slots = []
 section = "S2.5"
 kind = "number"
 description = "Census headline counts: 28 physical systems; confirmed = 9 halos + 1 cluster; 7/9 confirmed halos pierce R_vir"
@@ -231,6 +349,7 @@ notes = ""
 
 [[result]]
 id = "census.halo_grid_figure"
+library_slots = []
 section = "S2.5"
 kind = "figure"
 description = "Sightline-halo grid (fig:sightline_halo_grid)"
@@ -249,6 +368,7 @@ notes = "caption must state panel count/omissions (referee M15, open)"
 
 [[result]]
 id = "census.clusters_icm_figure"
+library_slots = []
 section = "App.B"
 kind = "figure"
 description = "Foreground clusters ICM figure (fig:clusters_icm)"
@@ -269,6 +389,7 @@ notes = ""
 
 [[result]]
 id = "budget.budget_table"
+library_slots = []
 section = "S4.2"
 kind = "table"
 description = "Per-sightline DM budget decomposition (tab:budget)"
@@ -287,6 +408,7 @@ notes = "phineas DM_int (243 in CONTEXT.md; 241 vs ~218 prescription conflict) a
 
 [[result]]
 id = "budget.dm_int_nonzero"
+library_slots = []
 section = "S4.2"
 kind = "number"
 description = "Nonzero intervening DM sightlines after remediation"
@@ -305,6 +427,7 @@ notes = "phineas value conditional on wf-06 (prescription conflict, 241/243 vs ~
 
 [[result]]
 id = "budget.cluster_column"
+library_slots = []
 section = "S4.2"
 kind = "number"
 description = "FRB 20230307A intracluster DM column (beta-model)"
@@ -323,6 +446,7 @@ notes = "cluster b=603.6 kpc carried with documented ±3% geometry systematic (2
 
 [[result]]
 id = "budget.host_dm_posteriors"
+library_slots = []
 section = "App.C"
 kind = "table"
 description = "Forward-modeled host DM posteriors (tab:host-forward-model + fig:dm_host_posteriors)"
@@ -343,6 +467,7 @@ notes = "machinery V5-cleared; PENDING = fiducial priors + right-skew headline a
 
 [[result]]
 id = "scattering.beta_table"
+library_slots = []
 section = "S4.4"
 kind = "table"
 description = "Per-sightline turbulence spectral-index roster (tab:beta)"
@@ -361,6 +486,7 @@ notes = "wave-1 fit-trust revocation; legacy interior rows NOT quotable. UPDATE 
 
 [[result]]
 id = "scattering.jointmodel_figures"
+library_slots = []
 section = "App.E"
 kind = "figure_set"
 description = "Per-burst joint-model pairs (12 panels, jointmodel_pair/)"
@@ -379,6 +505,7 @@ notes = "wave-1 revocation (fig:jointmodel_montage lineage)"
 
 [[result]]
 id = "scattering.multiplicity_demo"
+library_slots = []
 section = "S4.4"
 kind = "figure"
 description = "Whitney multiplicity-bias demonstration triptych (fig:codetection-triptych-whitney)"
@@ -399,6 +526,7 @@ notes = "wave-1; profile-bias demonstrator claim withheld (ADR-0003)"
 
 [[result]]
 id = "scint.dsa_acf_figures"
+library_slots = []
 section = "App.D"
 kind = "figure_set"
 description = "Per-burst DSA-band ACF Lorentzian fits (12 panels, dsa_scint_acf/)"
@@ -417,6 +545,7 @@ notes = "wave-1 (ACF fits / decorrelation bandwidths revoked); re-run under rati
 
 [[result]]
 id = "scint.chime_gate_table"
+library_slots = []
 section = "S4.3"
 kind = "table"
 description = "CHIME scintillation qualification/gate matrix (tab:chime_scint_gates)"
@@ -435,6 +564,7 @@ notes = "campaign-QA product, not a sky claim; modulation-gate vs sqrt(3) incons
 
 [[result]]
 id = "scint.twoscreen_table"
+library_slots = []
 section = "S5"
 kind = "table"
 description = "Two-screen tau*dnu_d provisional table (tab:twoscreen-provisional)"
@@ -455,6 +585,7 @@ notes = "rests on revoked DSA-band ACF + tau fits; rebuild on joint CHIME+DSA pr
 
 [[result]]
 id = "energies.burst_energies_table"
+library_slots = []
 section = "S4.5"
 kind = "table"
 description = "Band-restricted burst energies, 8-row roster (tab:burst-energies)"
@@ -475,6 +606,7 @@ notes = "wave-1; refill via energies re-validation (gamma_D pile-up at ~-5 + sel
 
 [[result]]
 id = "attribution.frb20230913a_intervening"
+library_slots = []
 section = "S5"
 kind = "verdict"
 description = "FRB 20230913A intervening-system scattering attribution"
@@ -493,6 +625,7 @@ notes = "both supporting diagnostics (scint excess, tau*dnu_d) sit on revoked st
 
 [[result]]
 id = "scint.two_band_campaign"
+library_slots = []
 section = "S4.3"
 kind = "figure_set"
 description = "R5/R6 two-band scintillation campaign: per-burst ACF ladders (chromatica, zach, hamilton, freya) + two-band summary"
@@ -510,18 +643,17 @@ current = true
 notes = "BLOCKED 2026-07-18 by owner data review (owner-data-review-findings-2026-07-18.md): inputs carry unexcised RFI, over-dedispersion, and per-burst DM inconsistency (up to ±0.13 pc/cm3); detections/scalings suspect until campaign re-runs on remediated inputs; PR #140 must not merge"
 
 # ── Derived intensity-product inventory (MISLABELED as L0 — 2026-07-19) ─
-# Owner decision 2026-07-19: raw CHIME data are ONLY the twelve singlebeam
-# voltage .h5 files on h17 (see specs/notes/definition-raw-chime-data-2026-07-19.md).
-# These 36 rows inventory derived .npy products (full-resolution /
-# upchannelized / DSA-110). Keep as a working inventory; do NOT treat as
-# stratum-0 / raw certification. trust values below are not raw-layer clearance.
-# Frequency order was measured: CHIME full-resolution via cellular-band
+# These 36 rows inventory derived products; they are not raw CHIME data
+# and byte/axis checks do not grant scientific trust.
+# (12 bursts × {CHIME full-resolution, CHIME upchannelized, DSA-110}).
+# Frequency order is measured: CHIME full-resolution via cellular-band
 # (729–756 MHz) mask occupancy; DSA-110 via leave-one-out flagged-row
 # profiles + telescopes.yaml descending convention; upchannelized via
 # companion *_chime_freq.npy.
 
 [[result]]
 id = "l0.casey.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: casey chime_full (casey_chime_I_491_2085_32000b_cntr_bpc.npy)"
@@ -540,6 +672,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.casey.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: casey dsa (casey_dsa_I_491_211_2500b_cntr_bpc.npy)"
@@ -558,6 +691,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.casey.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: casey chime_upchan (casey_chime_upchan.npy)"
@@ -576,6 +710,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.chromatica.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: chromatica chime_full (chromatica_chime_I_272_6382_32000b_cntr_bpc.npy)"
@@ -594,6 +729,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.chromatica.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: chromatica dsa (chromatica_dsa_I_272_368_2500b_cntr_bpc.npy)"
@@ -612,6 +748,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.chromatica.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: chromatica chime_upchan (chromatica_chime_upchan.npy)"
@@ -630,6 +767,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.freya.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: freya chime_full (freya_chime_I_912_4067_32000b_cntr_bpc.npy)"
@@ -648,6 +786,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.freya.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: freya dsa (freya_dsa_I_912_4_2500b_cntr_bpc.npy)"
@@ -666,6 +805,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.freya.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: freya chime_upchan (freya_chime_upchan.npy)"
@@ -684,6 +824,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.hamilton.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: hamilton chime_full (hamilton_chime_I_518_8007_32000b_cntr_bpc.npy)"
@@ -702,6 +843,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.hamilton.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: hamilton dsa (hamilton_dsa_I_518_799_2500b_cntr_bpc.npy)"
@@ -720,6 +862,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.hamilton.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: hamilton chime_upchan (hamilton_chime_upchan.npy)"
@@ -738,6 +881,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.isha.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: isha chime_full (isha_chime_I_411_4359_32000b_cntr_bpc.npy)"
@@ -756,6 +900,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.isha.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: isha dsa (isha_dsa_I_411_568_2500b_cntr_bpc.npy)"
@@ -774,6 +919,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.isha.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: isha chime_upchan (isha_chime_upchan.npy)"
@@ -792,6 +938,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.johndoeII.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: johndoeII chime_full (johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy)"
@@ -810,6 +957,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.johndoeII.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: johndoeII dsa (johndoeII_dsa_I_696_506_2500b_cntr_bpc.npy)"
@@ -828,6 +976,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.johndoeII.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: johndoeII chime_upchan (johndoeII_chime_upchan.npy)"
@@ -846,6 +995,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.mahi.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: mahi chime_full (mahi_chime_I_960_1316_32000b_cntr_bpc.npy)"
@@ -864,6 +1014,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.mahi.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: mahi dsa (mahi_dsa_I_960_128_2500b_cntr_bpc.npy)"
@@ -882,6 +1033,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.mahi.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: mahi chime_upchan (mahi_chime_upchan.npy)"
@@ -900,6 +1052,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.oran.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: oran chime_full (oran_chime_I_397_0153_32000b_cntr_bpc.npy)"
@@ -918,6 +1071,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.oran.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: oran dsa (oran_dsa_I_396_882_2500b_cntr_bpc.npy)"
@@ -936,6 +1090,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.oran.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: oran chime_upchan (oran_chime_upchan.npy)"
@@ -954,6 +1109,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.phineas.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: phineas chime_full (phineas_chime_I_610_2894_32000b_cntr_bpc.npy)"
@@ -972,6 +1128,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.phineas.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: phineas dsa (phineas_dsa_I_610_274_2500b_cntr_bpc.npy)"
@@ -990,6 +1147,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.phineas.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: phineas chime_upchan (phineas_chime_upchan.npy)"
@@ -1008,6 +1166,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.whitney.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: whitney chime_full (whitney_chime_I_462_1891_32000b_cntr_bpc.npy)"
@@ -1026,6 +1185,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.whitney.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: whitney dsa (whitney_dsa_I_462_174_2500b_cntr_bpc.npy)"
@@ -1044,6 +1204,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.whitney.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: whitney chime_upchan (whitney_chime_upchan.npy)"
@@ -1062,6 +1223,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.wilhelm.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: wilhelm chime_full (wilhelm_chime_I_602_3809_32000b_cntr_bpc.npy)"
@@ -1080,6 +1242,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.wilhelm.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: wilhelm dsa (wilhelm_dsa_I_602_346_2500b_cntr_bpc.npy)"
@@ -1098,6 +1261,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.wilhelm.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: wilhelm chime_upchan (wilhelm_chime_upchan.npy)"
@@ -1116,6 +1280,7 @@ notes = "generation=gen-2+; builder=upchannelize_chime.py --no-time-shift + buil
 
 [[result]]
 id = "l0.zach.chime_full"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: zach chime_full (zach_chime_I_262_3621_32000b_cntr_bpc.npy)"
@@ -1134,6 +1299,7 @@ notes = "generation=gen-2+_dmphase_archival; builder=builder identity not yet ve
 
 [[result]]
 id = "l0.zach.dsa"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: zach dsa (zach_dsa_I_262_368_2500b_cntr_bpc.npy)"
@@ -1152,6 +1318,7 @@ notes = "generation=archival_dsa_I; builder=builder identity not yet verified; b
 
 [[result]]
 id = "l0.zach.chime_upchan"
+library_slots = []
 section = "§0"
 kind = "input_certificate"
 description = "L0 certificate: zach chime_upchan (zach_chime_upchan.npy)"

@@ -52,7 +52,8 @@ from plot_codetection_gallery import (  # noqa: E402
 
 MANIFEST_DEFAULT = ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"
 OUT_DEFAULT = ROOT / "figures" / "codetection_triptych"
-DATA_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
+CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
+DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 PAD_FLOOR_MS = 1.5
 TOA_RESULTS = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
 TOA_FIXTURE = ROOT / "pipeline" / "crossmatching" / "notebook_reproduction_fixture.json"
@@ -282,7 +283,8 @@ def _sigma_from_offpulse(ds: np.ndarray) -> np.ndarray:
 
 
 def bands_archival(
-    data_root: Path,
+    chime_full_root: Path,
+    dsa_full_root: Path,
     nick: str,
     factors: dict[str, tuple[int, int]] | None = None,
     pad_scale: float = 1.0,
@@ -308,7 +310,7 @@ def bands_archival(
     DM (scripts/audit_fig1_axes.py; the chromatica precedent).
     """
     file_nick = FILE_NICK.get(nick, nick)
-    products = discover_products(data_root, file_nick)
+    products = discover_products(chime_full_root, dsa_full_root, file_nick)
     out: list[BandSpectrum] = []
     for tel in ("chime", "dsa"):
         band = dict(BANDS[tel])
@@ -352,9 +354,13 @@ def bands_archival(
     )
 
 
-def bands_data_only(data_root: Path, nick: str) -> list[BandSpectrum]:
+def bands_data_only(
+    chime_full_root: Path,
+    dsa_full_root: Path,
+    nick: str,
+) -> list[BandSpectrum]:
     """Chromatica: archival products at gallery display resolution (no model)."""
-    return bands_archival(data_root, nick)
+    return bands_archival(chime_full_root, dsa_full_root, nick)
 
 
 def panel_title(tns: str, flag: str | None) -> str:
@@ -367,7 +373,8 @@ def render_row(
     row: dict,
     *,
     root: Path,
-    data_root: Path,
+    chime_full_root: Path,
+    dsa_full_root: Path,
     out_dir: Path,
     dpi: int,
 ) -> Path:
@@ -380,7 +387,7 @@ def render_row(
         columns = ("data", "model", "resid")
         title = panel_title(tns, flag)
     else:
-        bands = bands_data_only(data_root, nick)
+        bands = bands_data_only(chime_full_root, dsa_full_root, nick)
         columns = ("data",)
         title = f"{tns} (no accepted joint fit)"
 
@@ -411,7 +418,11 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT)
     ap.add_argument("--out-dir", type=Path, default=OUT_DEFAULT)
-    ap.add_argument("--data-root", type=Path, default=DATA_ROOT_DEFAULT)
+    path_arg = lambda value: Path(value).expanduser()  # noqa: E731
+    ap.add_argument(
+        "--chime-full-root", type=path_arg, default=CHIME_FULL_ROOT_DEFAULT
+    )
+    ap.add_argument("--dsa-full-root", type=path_arg, default=DSA_FULL_ROOT_DEFAULT)
     ap.add_argument("--dpi", type=int, default=300)
     ap.add_argument("--burst", action="append", help="optional nick filter")
     args = ap.parse_args()
@@ -421,7 +432,14 @@ def main() -> int:
         want = set(args.burst)
         rows = [r for r in rows if r["nick"] in want]
     written = [
-        render_row(r, root=ROOT, data_root=args.data_root, out_dir=args.out_dir, dpi=args.dpi)
+        render_row(
+            r,
+            root=ROOT,
+            chime_full_root=args.chime_full_root,
+            dsa_full_root=args.dsa_full_root,
+            out_dir=args.out_dir,
+            dpi=args.dpi,
+        )
         for r in rows
     ]
     print(f"rendered {len(written)} triptych(s) → {args.out_dir}")

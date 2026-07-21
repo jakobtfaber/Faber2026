@@ -25,7 +25,8 @@ from l0_conventions import (  # noqa: E402
     sha256_file,
 )
 
-DATA = Path.home() / "Data/Faber2026/dsa110"
+CHIME_FULL_ROOT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
+DSA_FULL_ROOT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 CERTS = ROOT / "docs/rse/certificates/l0-certificates.json"
 REGISTRY = ROOT / "docs/rse/control/results-registry.toml"
 
@@ -70,6 +71,7 @@ def test_registry_has_thirty_six_derived_intensity_rows():
     assert "NOT treat as" in text or "not raw" in text.lower()
     n = text.count('kind = "input_certificate"')
     assert n == 36
+    assert text.count("library_slots = ") == text.count("\n[[result]]")
 
 
 def test_certificate_json_schema_and_orders():
@@ -83,9 +85,23 @@ def test_certificate_json_schema_and_orders():
         assert r["md5_ok"] is True
         assert len(r["sha256"]) == 64
         assert len(r["deck_md5"]) == 8
+        assert r["trust"] == "pending"
+        assert r["cleared_by"] == ""
+        assert "NOT raw CHIME data" in r["notes_scope"]
+        if r["product"] == "chime_full":
+            assert r["local_path"].startswith(
+                "~/Data/Faber2026/chimefrb/CHIME_bursts/"
+            )
+        elif r["product"] == "dsa":
+            assert r["local_path"].startswith(
+                "~/Data/Faber2026/dsa110/DSA_bursts/"
+            )
 
 
-@pytest.mark.skipif(not DATA.is_dir(), reason="local Faber2026 data tree absent")
+@pytest.mark.skipif(
+    not CHIME_FULL_ROOT.is_dir() or not DSA_FULL_ROOT.is_dir(),
+    reason="local full-resolution roots absent",
+)
 def test_local_bytes_match_certificates():
     rows = json.loads(CERTS.read_text())
     for r in rows:
@@ -100,7 +116,10 @@ def test_local_bytes_match_certificates():
             assert sha256_file(freq_path) == r["freq_sha256"]
 
 
-@pytest.mark.skipif(not DATA.is_dir(), reason="local Faber2026 data tree absent")
+@pytest.mark.skipif(
+    not CHIME_FULL_ROOT.is_dir() or not DSA_FULL_ROOT.is_dir(),
+    reason="local full-resolution roots absent",
+)
 def test_local_chime_cellular_band_still_descending():
     """Spot-check: casey full-resolution cellular-band method still returns descending."""
     sys.path.insert(0, str(ROOT / "scripts"))
