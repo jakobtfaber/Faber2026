@@ -1,0 +1,4 @@
+/opt/pysetup/.venv/lib/python3.11/site-packages/chime_frb_api/__init__.py:6: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  from pkg_resources import get_distribution as _get_distribution
+262.368 262.368 0
+[zach] U=64 shape=(65536, 437) df=6.104 kHz dt=0.3277 ms finite=78.4% -> zach_chime_upchan.npy
