@@ -1,280 +1,240 @@
-# Research: authority-16 results-library byte conflicts
+# Research: results-library real-byte conflicts
 
-**Date:** 2026-07-21  
-**Scope:** Read-only review artifact for
-[`authority-16`](../wayfinder/tickets/authority-16-adjudicate-results-library-byte-conflicts.md).
-No bytes moved, linked, replaced, deleted, or trusted.  
-**Parent state:** `33cf9fe1c10acccaa44c59a59e645c06776ebf3d`
-(`origin/main`, clean).  
-**Pipeline state:** `c6111390ce9c159483a844417f5fd9d187e13f5b`
-(`pipeline` gitlink, clean detached submodule).  
-**Observed library root:** `/Users/jakobfaber/Data/Faber2026/results-library`.
+**Observed:** 2026-07-20 PDT / 2026-07-21 UTC  
+**Scope:** Read-only adjudication for
+[`Adjudicate the results-library real-byte conflicts`](../wayfinder/tickets/authority-16-adjudicate-results-library-byte-conflicts.md).  
+**Parent authority:** `origin/main` at
+`8513220b844befe9e4a24c7c385d67676c3b0d53`.  
+**Pipeline authority pin:**
+`ded8d195701c4abf5df31e6ad94f1750172d718e`.  
+**Library root:** `/Users/jakobfaber/Data/Faber2026/results-library`.  
+**Mutation:** none. No bytes were moved, linked, replaced, deleted, or trusted.
 
-## Question
+## Verdict
 
-For `scintillation.dsa-lorentzian-2026-07-07` and
-`dispersion.pipeline-results-root`, both catalog source and library destination
-are real directories. Establish exact manifests, byte differences, producing
-commits, consumers, trust states, recovery evidence, and a non-overwriting
-disposition with rollback packet.
+Neither collision is a same-result overwrite problem.
 
-## Method
+- Both library directories are exact byte replicas of the two pre-relocation
+  Git trees at pipeline commit
+  `af78543d4747d339b9f13283b4b8528c91a71cb3`.
+- The corresponding clean-checkout source directories contain only the
+  post-relocation tracked control files.
+- The canonical Mac checkout also contains later ignored working outputs:
+  13 PDFs in the scintillation source and 289 files in `pipeline/results`.
+  Those ignored trees have no complete independent byte replica or run receipt.
+- Therefore the library trees are **historical snapshot replicas**; the
+  canonical source trees are **mixed working/control surfaces**. Neither is a
+  result authority. Scientific trust remains `provisional` and `mixed`.
 
-Read-only commands only:
+Keep all four directories unchanged. The broad `materialize` instructions are
+semantically wrong for these composite sources and must remain fail-closed.
 
-```bash
-python3 scripts/kb search "results-library byte conflicts scintillation dsa lorentzian dispersion pipeline results root authority"
-python3 scripts/materialize_results_library.py --dry-run \
-  --only scintillation.dsa-lorentzian-2026-07-07 \
-  --only dispersion.pipeline-results-root
-find <tree> -type f -print0 | sort -z | while ... shasum -a 256 ...
-git -C pipeline log --name-status -- <source>
-git -C pipeline archive 221f26a^ ... | tar -x -C "$tmp"
-diff -qr "$tmp/<historical-source>" "<library-slot>"
-```
+## Reproduced gate
 
-The knowledge-base command returned no ranked hit for this exact conflict.
-
-## Gate Reproduction
-
-`materialize_results_library.py --dry-run --only ...` returned:
+The focused dry-run still returns exactly two conflicts:
 
 ```text
-scintillation.dsa-lorentzian-2026-07-07  analysis/scintillation-dsa-lorentzian-2026-07-07/results  ->  would-conflict-both-real
-dispersion.pipeline-results-root         results  ->  would-conflict-both-real
+scintillation.dsa-lorentzian-2026-07-07  -> would-conflict-both-real
+dispersion.pipeline-results-root         -> would-conflict-both-real
 2 conflict(s); resolve manually
 ```
 
-This independently reproduces the ticket's fail-closed gate. No write command
-was run.
+Command:
 
-## Exact Tree Manifests
-
-The exact per-file manifest format was:
-
-```text
-<sha256>  <size_bytes>  <relative_path>
+```bash
+python3 scripts/materialize_results_library.py --dry-run \
+  --only scintillation.dsa-lorentzian-2026-07-07 \
+  --only dispersion.pipeline-results-root
 ```
 
-Aggregate fingerprints below are SHA-256 hashes of the sorted manifest text,
-not data-file hashes.
+The guard is implemented in
+[`materialize_results_library.py`](../../scripts/materialize_results_library.py)
+and regression-tested in
+[`test_results_library_repair.py`](../../tests/test_results_library_repair.py).
 
-| Slot | Tree | Files | Disk | Manifest hash |
-|---|---:|---:|---:|---|
-| `scintillation.dsa-lorentzian-2026-07-07` | `pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results` | 4 | 868 KiB | `026a5d1f5a1c3c7fe329ea1736f94468fc51ac91060c6af9fc1f3a2ddbce9e08` |
-| `scintillation.dsa-lorentzian-2026-07-07` | `/Users/jakobfaber/Data/Faber2026/results-library/scintillation/2026-07-07_dsa-lorentzian` | 45 | 12,584 KiB | `684c7d5294f4a09b47585446188ebd570026e4145ac8f62fc61bc8595644a360` |
-| `dispersion.pipeline-results-root` | `pipeline/results` | 2 | 8 KiB | `0d3578df5f4d6720bcf6fc6c1bb255021a41a01bb220c71060f2e5d0859196b6` |
-| `dispersion.pipeline-results-root` | `/Users/jakobfaber/Data/Faber2026/results-library/dispersion/pipeline-results-root` | 75 | 26,708 KiB | `f0ab01b2f79498fd917ca3a5c087854b904c5c9ec8d69f0c522a94e774bd8719` |
+## Exact identities and manifests
+
+The authoritative aggregate algorithm is `tree_manifest()` in
+[`build_results_library_inventory.py`](../../scripts/build_results_library_inventory.py).
+It hashes each regular file's relative path, size, and SHA-256 in deterministic
+relative-path order. The four canonical live hashes were frozen before the
+repair in
+[`action-packet.json`](../certificates/results-library-repair-2026-07-20/action-packet.json)
+and reproduced after the repair.
+
+| Surface | Files | Bytes | Tree SHA-256 |
+|---|---:|---:|---|
+| canonical scintillation source | 17 | 1,686,569 | `721e5942f358086cc55b8f8d53eaf8c838a8870214455a75afdbef5f62e5d006` |
+| scintillation library destination | 45 | 12,791,899 | `16823666dcc5f1e2e700e3c62026ab01b28e6487d1a50db884375cacdb9e86fb` |
+| canonical dispersion source | 291 | 115,972,920 | `1f2b75ece0c028c5c208104e150a6294ca93231484178b99168c40cc0f113d06` |
+| dispersion library destination | 75 | 27,177,361 | `09867d25a1047d97fc540db22446e75d16eaa103593ca75d52550c1e3d9a5c5e` |
 
 Directory identity at observation:
 
-| Tree | Type/mode | Inode | Directory mtime |
-|---|---|---:|---|
-| repo scintillation source | `Directory drwxr-xr-x` | `327357401` | `2026-07-20T23:06:08-0700` |
-| library scintillation slot | `Directory drwxr-xr-x` | `321971526` | `2026-07-15T19:23:20-0700` |
-| repo dispersion source | `Directory drwxr-xr-x` | `327357798` | `2026-07-20T23:06:08-0700` |
-| library dispersion slot | `Directory drwxr-xr-x` | `321971932` | `2026-07-15T19:23:21-0700` |
+| Surface | Inode | Mode | Directory mtime |
+|---|---:|---|---|
+| canonical scintillation source | `311786997` | `drwxr-xr-x` | `2026-07-17T00:53:51-0700` |
+| scintillation library destination | `321971526` | `drwxr-xr-x` | `2026-07-15T19:23:20-0700` |
+| canonical dispersion source | `310224232` | `drwxr-xr-x` | `2026-07-20T13:27:20-0700` |
+| dispersion library destination | `321971932` | `drwxr-xr-x` | `2026-07-15T19:23:21-0700` |
 
-### Current Scintillation Source Manifest
+### Clean-checkout baseline
 
-```text
-3ef5465827a59c1f97cf001cb99bd92e7b846b45234be59b1630bf9172b6a4e1  747  oran_qualified/figures.review.json
-efaae17332939497198b83b07674aaa766d0619d2936c4436a42c693fd83fdd6  110140  oran_qualified/figures/oran_dsa_calibrated_measurement.png
-b1a95b8eddbf9ab4137d054efa688d60a959b373730903699e4398b29f5bbe0b  2063  oran_qualified/MEASUREMENT.md
-e0c455e1c73e1a9bd24bbc833029cd5506d1d710fe18585251094b48d11e89f9  766666  oran_qualified/validation.json
-```
+An isolated clean checkout at the same pipeline pin has no ignored working
+outputs. Its source manifests are:
 
-### Current Dispersion Source Manifest
+| Clean source | Files | Bytes | Tree SHA-256 |
+|---|---:|---:|---|
+| scintillation | 4 | 879,616 | `116e3bbc18b037c4e11f54187f006598b4f1e1d30f1e901e65b78e05c7bc0e14` |
+| dispersion | 2 | 3,256 | `7ed404992f01a4454f71a44d4a147bc91178dbc0883fe0f022a1369a8ecc9abe` |
 
-```text
-cb3fbc4182d662e7c8b572a0ce2eb67301ff122472d8ce286fa1f956df292f46  399  joint_fit_summary.md
-1daea1a0ef1d4e7487c9ca16daa58a5ffc70c5633065bdb110348abf30d48448  2857  README.md
-```
+This distinction matters: a clean-clone manifest alone would omit the live
+canonical working outputs that make replacement unsafe.
 
-### Library-only Payloads
+## Exact byte differences
 
-The scintillation library slot has 41 files not present in the current source:
-the campaign catalog files, `DSA_LORENTZIAN_FITS.md`,
-`dsa_lorentzian_components.csv`, `dsa_lorentzian_fits.json`, per-burst
-`*_dsa_lorentzian_fits.json`, and 24 PNG/SVG figure files under `figures/`.
-The current source has no repo-only file; all 4 repo-side files are also in the
-library with identical hashes.
+### Scintillation
 
-The dispersion library slot has 73 files not present in the current source:
-DM phase products, smoke metrics, per-burst galaxy CSVs, mass-profile PNGs,
-sightline PNGs, figure manifests/reviews, budget files, and survey coverage.
-`README.md` is identical on both sides. `joint_fit_summary.md` exists on both
-sides but differs:
+- Four `oran_qualified/` files occur on both sides and are byte-identical.
+- The canonical source alone has 13 ignored PDFs: one summary and twelve
+  per-burst Lorentzian-fit figures.
+- The library alone has 41 files: `DSA_LORENTZIAN_FITS.md`, aggregate and
+  per-burst JSON, the component CSV, and PNG/SVG campaign figures.
+- No common file differs.
 
-| Path | Repo hash/size | Library hash/size | Meaning |
-|---|---|---|---|
-| `joint_fit_summary.md` | `cb3fbc4182d662e7c8b572a0ce2eb67301ff122472d8ce286fa1f956df292f46` / 399 bytes | `41122c7b56b13a1535b47daf2f537515472f3c65d8c0de0fa0a9f2986ce034e5` / 2,656 bytes | Current repo file is a quarantine tombstone; library file is the pre-relocation bulk summary. |
+The 13 source-only PDFs are not byte-identical to the similarly named tracked
+parent-manuscript PDFs; one has no parent counterpart. No complete independent
+byte copy was found. They are preserved working outputs, not a replica.
 
-## Producing Commits
+### Dispersion
 
-`pipeline` commit
-`221f26a2aca10ad264b081acf3501ec6f85977cf` (`2026-07-15T20:10:31-07:00`,
-`chore(results): relocate campaign products to results library (#189)`) deleted
-the bulk files from both source trees.
+- `README.md` is byte-identical.
+- `joint_fit_summary.md` differs: the canonical source is a 399-byte quarantine
+  tombstone with SHA-256
+  `cb3fbc4182d662e7c8b572a0ce2eb67301ff122472d8ce286fa1f956df292f46`;
+  the library holds the 2,656-byte pre-relocation summary with SHA-256
+  `41122c7b56b13a1535b47daf2f537515472f3c65d8c0de0fa0a9f2986ce034e5`.
+- The canonical source alone has 289 ignored files: DM campaign panels,
+  injection diagnostics, smoke/full-run products, DM-power figures, dynamic
+  spectra, and host-DM posterior products.
+- The library alone has 73 pre-relocation files: DM-phase products and metrics,
+  sightline/galaxy outputs, budget artifacts, and review manifests.
 
-The immediate parent
-`af78543d4747d339b9f13283b4b8528c91a71cb3` (`2026-07-15T13:23:36-07:00`,
-merge of pull request #188) contains the full pre-relocation source trees:
-120 files across the two paths.
+No complete independent byte copy or unified production receipt was found for
+the 289 source-only files. They remain an at-risk working tree.
 
-The current `pipeline` pin
-`c6111390ce9c159483a844417f5fd9d187e13f5b` retains only the repo-side leftovers:
+## Production and recovery proof
 
-- `analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/*`
-  from `cc447f7` / `e462478`;
-- `results/README.md`;
-- `results/joint_fit_summary.md`, later changed by
-  `23fbd295a25aaa80e352ecf0c08287ba4f60a885`
-  (`chore(science): quarantine superseded result products (#202)`).
+Pipeline commit
+`221f26a2aca10ad264b081acf3501ec6f85977cf` (`chore(results): relocate
+campaign products to results library (#189)`) deleted the bulk tracked files
+from both repository paths. Its immediate parent
+`af78543d4747d339b9f13283b4b8528c91a71cb3` contains 45 scintillation files
+and 75 dispersion files at those paths.
 
-## Independent Recovery Evidence
+For every destination file, the on-disk Git blob identifier equals the blob
+identifier in `af78543` and the relative-path sets are identical. Equivalently:
 
-The strongest recovery copy is `pipeline` git history, not the stale inventory:
-
-```text
-git -C pipeline archive 221f26a^ analysis/scintillation-dsa-lorentzian-2026-07-07/results results
+```bash
+git -C pipeline archive af78543d4747d339b9f13283b4b8528c91a71cb3 \
+  analysis/scintillation-dsa-lorentzian-2026-07-07/results results
 diff -qr <archive>/analysis/scintillation-dsa-lorentzian-2026-07-07/results \
   /Users/jakobfaber/Data/Faber2026/results-library/scintillation/2026-07-07_dsa-lorentzian
 diff -qr <archive>/results \
   /Users/jakobfaber/Data/Faber2026/results-library/dispersion/pipeline-results-root
 ```
 
-Both `diff -qr` commands produced no output. Therefore the current library slots
-are exact byte replicas of the pre-relocation source trees at `221f26a^`.
+Both comparisons are empty. Git history, including the GitHub remote, is an
+independent exact recovery source for both library snapshots.
 
-The stale external inventory is weaker evidence: it was generated
-`2026-07-20T14:09:06Z` from deleted worktree
-`/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-jointtf-grok-revalidation`,
-but still records these two slots as tracked materializations with sizes
-`868K` and `8.0K`.
-
-Additional local scratch worktrees contain current `pipeline/results` checkouts,
-but those are not independent bulk recovery copies; they mirror the post-
-relocation repo leftovers.
+The current tracked leftovers are recoverable from pipeline commit `ded8d195`.
+The current ignored canonical outputs are not Git objects and cannot be
+assigned a producing commit merely because their generating code is pinned.
+Their complete recovery remains unproved.
 
 ## Consumers
 
-### Scintillation Slot
+The two catalog rows in
+[`results_library_catalog.yaml`](../../scripts/results_library_catalog.yaml)
+currently label the sources `materialize`, with trust `provisional` and
+`mixed`. Their notes already distinguish bulk library products from CI-tracked
+files, but the broad source paths erase that distinction.
 
-Current consumers of repo-side or cataloged scintillation products:
+Known consumers include:
 
-- Catalog entry:
-  `scripts/results_library_catalog.yaml:58-66` says mode `materialize`, trust
-  `provisional`, source
-  `analysis/scintillation-dsa-lorentzian-2026-07-07/results`, and notes that
-  `oran_qualified/` stays git-tracked for figure approval.
-- Results-library pointer:
-  `pipeline/analysis/RESULTS_LIBRARY.md:3-13` says campaign result trees are
-  materialized under `$FABER2026_RESULTS_LIBRARY` and maps this campaign to
-  `scintillation/2026-07-07_dsa-lorentzian`.
-- Parent figure catalog:
-  `figures/catalog.yaml:190-212` consumes
-  `oran_qualified/figures/oran_dsa_calibrated_measurement.png` as a pipeline
-  qualification product, not a manuscript figure.
-- Parent figure catalog:
-  `figures/catalog.yaml:239-257` keeps `dsa_lorentzian_summary` discoverable but
-  `manuscript: false`, `clone_ok: false`, and notes it was removed from the
-  compiled manuscript on 2026-07-17.
-- Provisional table builder:
-  `scripts/build_provisional_propagation_tables.py:13-15,117-120` reads
-  `dsa_lorentzian_components.csv` from the repo source path; this currently
-  fails unless a later repair restores a link or adjusts the source.
-- Figure-review provenance:
-  `scripts/figure_review.py:168-170` names the component catalog, fit catalog,
-  and Oran qualification files as evidence inputs.
+- `pipeline/analysis/RESULTS_LIBRARY.md` and `pipeline/RESULTS_LIBRARY.md`,
+  which describe the relocation;
+- `scripts/build_provisional_propagation_tables.py`, which expects the
+  scintillation component CSV through the repository path;
+- `scripts/figure_review.py` and `figures/catalog.yaml`, which consume the
+  Oran qualification and DSA summary evidence;
+- dispersion figure/budget declarations under `figures/catalog.yaml`;
+- pipeline tests that validate the quarantined historical joint summary rather
+  than adopting the library summary.
 
-### Dispersion Slot
+These consumers need explicit snapshot or working-source selection. A broad
+directory overlay would silently mix generations.
 
-Current consumers of repo-side or cataloged dispersion products:
+## Custody and trust classification
 
-- Catalog entry:
-  `scripts/results_library_catalog.yaml:89-97` says mode `materialize`, trust
-  `mixed`, source `results`, and notes bulk `dm_phase` content should live in
-  the library while `joint_fit_summary.md` stays git-tracked.
-- Results-library pointer:
-  `pipeline/RESULTS_LIBRARY.md:1-18` says bulk products for `pipeline/results`
-  live under `$FABER2026_RESULTS_LIBRARY/dispersion/pipeline-results-root/`.
-- Parent figure catalog:
-  `figures/catalog.yaml:75-114` expects
-  `pipeline/results/sightline_dm_scattering_budget.csv` as an intermediate for
-  budget figures; that file exists only in the library slot at this observation.
-- Pipeline tests:
-  `pipeline/tests/test_joint_summary_reproducible.py:1-25` now validates the
-  quarantined legacy summary under `quarantine/2026-07-17-outdated-science/`,
-  not the library summary.
-- Pipeline README:
-  `pipeline/results/README.md:1-18` still describes historical `results/bursts`
-  layout and is not a current bulk manifest.
+| Surface | Custody role | Scientific state |
+|---|---|---|
+| scintillation library directory | exact local replica of `af78543` historical snapshot | provisional; not manuscript-adopted by this decision |
+| canonical scintillation source | mixed tracked control files plus unreceipted ignored working figures | unclassified working output; Oran sub-tree retains its separate qualification evidence |
+| dispersion library directory | exact local replica of `af78543` historical snapshot | mixed; no claim promotion |
+| canonical dispersion source | tracked README/tombstone plus unreceipted ignored working products | unclassified working output; not an authority or coherent replica |
 
-## Trust States
+Per the ratified data/results policy, Git governs claims and Drive governs
+receipted bulk bytes. The local results library is a navigation replica. Byte
+identity proves recoverability, not scientific validity.
 
-| Slot | Catalog trust | Evidence trust | Disposition trust |
-|---|---|---|---|
-| `scintillation.dsa-lorentzian-2026-07-07` | `provisional` | Byte identity to `221f26a^` proven; scientific adoption not proven. DSA-only summary is not a manuscript figure. | `replica of pre-relocation bulk result plus current repo-side qualification leftovers`; not authority; unresolved repair target. |
-| `dispersion.pipeline-results-root` | `mixed` | Byte identity to `221f26a^` proven for library; current repo summary tombstone conflicts with the library summary. | `replica of pre-relocation bulk result plus current repo-side tombstone`; not authority; unresolved repair target. |
+## Non-overwriting disposition
 
-No owner gate, manuscript claim, Figure 3 state, redshift/budget choice, or
-scientific trust state changes here.
+1. Keep all four current directories unchanged.
+2. Record both existing library slots as immutable historical snapshots of
+   pipeline commit `af78543`, with their expected tree hashes above.
+3. Do not treat either live repository directory as the materialization source
+   for those historical slots.
+4. In a later implementation, replace these two broad `materialize` semantics
+   with a non-mutating snapshot/inventory representation tied to commit,
+   relative path, and tree hash. No existing library path is renamed or
+   overwritten.
+5. Give any later working-result publication a new identifier and an absent,
+   versioned destination. Before copying it, require a complete manifest,
+   producing-code/run receipt, independent recovery copy, and trust label.
+6. Keep materialization fail-closed until that catalog change is implemented
+   and tested. Do not add compatibility links.
 
-## Disposition
+This is a custody decision only. It does not authorize copying, movement,
+relinking, deletion, trust promotion, or manuscript changes.
 
-Recommended non-overwriting disposition:
+## Rollback and drift packet
 
-1. Keep both current source directories exactly as they are.
-2. Keep both library directories exactly as they are.
-3. Classify the library directories as recovered exact replicas of the
-   `221f26a^` pre-relocation bulk source trees.
-4. Classify the current repo directories as post-relocation control-plane
-   leftovers:
-   `oran_qualified/` for scintillation and a quarantine tombstone plus README
-   for dispersion.
-5. Do not re-run materialization for these slots until the later repair wave has
-   an exact action packet that either uses a non-overwriting archive directory
-   or turns the repo-side source into a symlink only after exact rollback proof.
-6. Leave trust fail-closed: `provisional` and `mixed` are catalog labels, not
-   claim-level acceptance.
-
-## Rollback Packet For Later Repair
-
-Before any future repair touches these paths, record this packet and stop on
+No data rollback is needed for this adjudication because it performs no data
+mutation. Any later implementation must freeze this preimage and stop on any
 drift:
 
 ```yaml
-parent_commit: 33cf9fe1c10acccaa44c59a59e645c06776ebf3d
-pipeline_commit: c6111390ce9c159483a844417f5fd9d187e13f5b
+parent_commit: 8513220b844befe9e4a24c7c385d67676c3b0d53
+pipeline_commit: ded8d195701c4abf5df31e6ad94f1750172d718e
 historical_recovery_commit: af78543d4747d339b9f13283b4b8528c91a71cb3
-library_root: /Users/jakobfaber/Data/Faber2026/results-library
 slots:
   scintillation.dsa-lorentzian-2026-07-07:
-    source: pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results
-    destination: /Users/jakobfaber/Data/Faber2026/results-library/scintillation/2026-07-07_dsa-lorentzian
-    source_manifest_hash: 026a5d1f5a1c3c7fe329ea1736f94468fc51ac91060c6af9fc1f3a2ddbce9e08
-    destination_manifest_hash: 684c7d5294f4a09b47585446188ebd570026e4145ac8f62fc61bc8595644a360
-    recovery: git archive 221f26a^ source equals destination by diff -qr
-    rollback_rule: restore exact pre-action directory from non-overwriting archive or git archive; never overwrite without hash match
+    canonical_source: {files: 17, bytes: 1686569, sha256: 721e5942f358086cc55b8f8d53eaf8c838a8870214455a75afdbef5f62e5d006}
+    clean_source: {files: 4, bytes: 879616, sha256: 116e3bbc18b037c4e11f54187f006598b4f1e1d30f1e901e65b78e05c7bc0e14}
+    library: {files: 45, bytes: 12791899, sha256: 16823666dcc5f1e2e700e3c62026ab01b28e6487d1a50db884375cacdb9e86fb}
   dispersion.pipeline-results-root:
-    source: pipeline/results
-    destination: /Users/jakobfaber/Data/Faber2026/results-library/dispersion/pipeline-results-root
-    source_manifest_hash: 0d3578df5f4d6720bcf6fc6c1bb255021a41a01bb220c71060f2e5d0859196b6
-    destination_manifest_hash: f0ab01b2f79498fd917ca3a5c087854b904c5c9ec8d69f0c522a94e774bd8719
-    recovery: git archive 221f26a^ source equals destination by diff -qr
-    rollback_rule: restore exact pre-action directory from non-overwriting archive or git archive; never overwrite without hash match
+    canonical_source: {files: 291, bytes: 115972920, sha256: 1f2b75ece0c028c5c208104e150a6294ca93231484178b99168c40cc0f113d06}
+    clean_source: {files: 2, bytes: 3256, sha256: 7ed404992f01a4454f71a44d4a147bc91178dbc0883fe0f022a1369a8ecc9abe}
+    library: {files: 75, bytes: 27177361, sha256: 09867d25a1047d97fc540db22446e75d16eaa103593ca75d52550c1e3d9a5c5e}
 forbidden:
-  - delete bytes
-  - replace directories in place
-  - promote trust
+  - overwrite or merge either real directory
+  - replace a real directory with a symlink
+  - delete or move bytes
+  - infer trust from byte identity
   - change manuscript claims
-  - change pipeline gitlink as a side effect
 ```
 
-## Synthesis
-
-The two conflicts are not evidence of lost bytes. They are expected collisions
-between a post-relocation repo checkout and an external library that still holds
-the exact pre-relocation bulk result trees. The correct near-term state is
-`unresolved conflict, recovery proven, no mutation authorized`.
+For a future repository-only catalog change, rollback is a scoped Git revert;
+the four data-tree hashes must remain unchanged before and after. Any future
+copy requires its own non-overwriting destination and receipt-driven rollback.
