@@ -2,11 +2,11 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: resolved
-- Assignee: Codex
+- Assignee: —
 - Blocked by: none
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
-- Triage: `ready-for-agent`
+- Triage: `resolved`
 
 ## Question
 
@@ -24,7 +24,9 @@ both pass.
 
 ## Resolution
 
-Resolved 2026-07-20 under the standing delegated decision authority. The
+Resolved 2026-07-20 under the standing delegated decision authority in
+[PR #166](https://github.com/jakobtfaber/Faber2026/pull/166), with provenance
+follow-up [PR #167](https://github.com/jakobtfaber/Faber2026/pull/167). The
 invalid report now says `FAILED — superseded; do not use`, the accepted-status
 string is absent from the Markdown validation, and
 `docs/rse/specs/validation-expanded-foreground-catalog.json` records the

@@ -2,11 +2,11 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: resolved
-- Assignee: Codex
+- Assignee: —
 - Blocked by: [Independently verify foreground redshifts and verdicts](expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
-- Triage: `ready-for-agent`
+- Triage: `resolved`
 
 ## Question
 
@@ -16,8 +16,9 @@ response with release, retrieval date, value, uncertainty, and measurement kind?
 
 ## Resolution
 
-Resolved 2026-07-21 by pipeline commit
-`7d26b1f7d3747afebb0ed7064d3058d25fb33396`.
+Resolved 2026-07-21 by
+[PR #168](https://github.com/jakobtfaber/Faber2026/pull/168), which pins
+pipeline commit `7d26b1f7d3747afebb0ed7064d3058d25fb33396`.
 
 The answer is **yes for every adopted candidate redshift currently in the
 registry**. The freeze ledger is
