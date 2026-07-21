@@ -46,6 +46,11 @@ independent numerical, provenance, and owner visual checks.
 - [Restore the repository knowledge-base launcher](tickets/expanded-foreground-catalog-repair-10-restore-knowledge-base-launcher.md)
   — restored the package and tests deleted by an Overleaf sync; indexing and
   live full-text retrieval work again without changing source or ranking rules.
+- [Freeze candidate-redshift source evidence](tickets/expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md)
+  — froze a 52-row candidate provenance ledger with stable source identifiers
+  and SHA-256 hashes for all 46 adopted candidate redshifts; verdicts and budget
+  flags are preserved, and Figure 3 remains governed by the later independent
+  replay and owner-review gates.
 
 ## Not yet specified
 
