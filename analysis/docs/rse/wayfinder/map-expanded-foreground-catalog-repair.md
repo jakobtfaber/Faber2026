@@ -55,6 +55,10 @@ independent numerical, provenance, and owner visual checks.
   and SHA-256 hashes for all 46 adopted candidate redshifts; verdicts and budget
   flags are preserved, and Figure 3 remains governed by the later independent
   replay and owner-review gates.
+- [Resolve Zach's inter-catalog redshift discrepancy](tickets/expanded-foreground-catalog-repair-11-resolve-zach-intercatalog-redshift.md)
+  — public spectroscopic and classification searches are nondetections; retain
+  both attributable STRM values pending authenticated MAST row recovery and,
+  if authorized, UNIONS/CFIS photometry.
 
 ## Not yet specified
 
