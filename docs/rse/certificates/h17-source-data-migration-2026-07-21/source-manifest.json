@@ -1,0 +1,320 @@
+{
+  "bursts": [
+    {
+      "chime_event_id": "210456524",
+      "dsa_observation_id": "220207aabh",
+      "project_id": "zach",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/zach/singlebeam_210456524.h5",
+          "sha256": "215079a689c18b50a4b2cd8003529e34d531a326be677a86187be02e47d0f1a9",
+          "size": 1171470638
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/zach/220207aabh_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "074cf21a9b8c712056f274d96dd77d4d40f1ead75d1e5240fe093fc99edbac79",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20220207C"
+    },
+    {
+      "chime_event_id": "215063905",
+      "dsa_observation_id": "220310aaam",
+      "project_id": "whitney",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/whitney/singlebeam_215063905.h5",
+          "sha256": "e76950cc2e825169cb7c912f05fe996f8918bb3eb12f730d313eed779e6b559f",
+          "size": 1160748918
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/whitney/220310aaam_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "e72aef49b31aa463f307eeacf67863396761db4215952a1184a219b357c133c2",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20220310F"
+    },
+    {
+      "chime_event_id": "224263996",
+      "dsa_observation_id": "220506aabd",
+      "project_id": "oran",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/oran/singlebeam_224263996.h5",
+          "sha256": "89ab4a255783b1a8cf26488032f3f8aad4e58779514d9c01c2ad16df5a470af3",
+          "size": 1490075166
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/oran/220506aabd_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "c22a72dd96b639d0732385a57acd35d6942adadeb3a3aee0283da82dcbc983b9",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20220506D"
+    },
+    {
+      "chime_event_id": "252069198",
+      "dsa_observation_id": "221113aaao",
+      "project_id": "isha",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/isha/singlebeam_252069198.h5",
+          "sha256": "0dc5ec9802d2b700988f1b6cf1a0b21a6fce4a9f1f8565ae27ffae57e70e392e",
+          "size": 1107114294
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/isha/221113aaao_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "6b70d1cf3341c1002df4b8d9f89065f30b03b11ff179b48ad303bd3a3d5b589d",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20221113A"
+    },
+    {
+      "chime_event_id": "253635173",
+      "dsa_observation_id": "221203aaaa",
+      "project_id": "wilhelm",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/wilhelm/singlebeam_253635173.h5",
+          "sha256": "7f86a38d823e2a86dc2033f82e7e23fb0e476870a6032e560dd71863b3dccc42",
+          "size": 1090998918
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/wilhelm/221203aaaa_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "7120d95d4acc8ebced390d938a52af60344d6c2a284bfe32812ed9589a7cdd58",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20221203A"
+    },
+    {
+      "chime_event_id": "274819243",
+      "dsa_observation_id": "230307aaao",
+      "project_id": "phineas",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/phineas/singlebeam_274819243.h5",
+          "sha256": "3ce7ab34cd00fa2eb2cf68189dc40618371dbd8a0f6387cb443bd3970e88eff6",
+          "size": 1588145054
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/phineas/230307aaao_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "8724d346f89722e24c4517d754af18dc569fab554ad9c318e4afcc2fb8285859",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20230307A"
+    },
+    {
+      "chime_event_id": "278720455",
+      "dsa_observation_id": "230325aaag",
+      "project_id": "freya",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/freya/singlebeam_278720455.h5",
+          "sha256": "676a9033c10926c213603939bee78c44d6d1a011c01e4279b41bccc97127df52",
+          "size": 1198412798
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/freya/230325aaag_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "c813f6aa741eb37c46574f0a8b665f3b0d797d77d8ff4166b52f27cddae2ca8f",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20230325A"
+    },
+    {
+      "chime_event_id": "311723353",
+      "dsa_observation_id": "230814aaas",
+      "project_id": "johndoeii",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/johndoeii/singlebeam_311723353.h5",
+          "sha256": "6e254dc1d024999a2ae60956dcb5433780da702b9346432ede6837833488bb2a",
+          "size": 1342789614
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/johndoeii/230814aaas_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "8246bbc96d5348b63db6e6df67ee82677a769e48a6d2191c53c6884b1fd9bdcc",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20230814B"
+    },
+    {
+      "chime_event_id": "318353610",
+      "dsa_observation_id": "230913aaao",
+      "project_id": "hamilton",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/hamilton/singlebeam_318353610.h5",
+          "sha256": "d90ae601c450e3585333831ee0511a509e3aa9fce073f7dc3ca6df56e4f487a7",
+          "size": 1074883734
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/hamilton/230913aaao_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "88a7b71f595f93f3c55ce299f9bdd46f0af49bfc798d0c73818133ab4e502ba8",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20230913A"
+    },
+    {
+      "chime_event_id": "354049284",
+      "dsa_observation_id": "240122aaag",
+      "project_id": "mahi",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/mahi/singlebeam_354049284.h5",
+          "sha256": "bcf3b157436c3282f38b1f4a479694839fc0933507e88b66b5c0ddb98d9b88bc",
+          "size": 1016991810
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/mahi/240122aaag_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "316718f6de89d55750a3fbed5de5ecf6c69aa2f056b8b79811547757f32ea36f",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20240122A"
+    },
+    {
+      "chime_event_id": "356959136",
+      "dsa_observation_id": "240203aacl",
+      "project_id": "chromatica",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/chromatica/singlebeam_356959136.h5",
+          "sha256": "2b97829b5a9636f4f502b388abff2a57cb660a8ed59ebb881176c26cd6765211",
+          "size": 1031538710
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/chromatica/240203aacl_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "0e8959debce82776250ed7dcbf01b9d90e0bd85a7ce63f300cda89e55aae420f",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20240203A"
+    },
+    {
+      "chime_event_id": "362593221",
+      "dsa_observation_id": "240229aaad",
+      "project_id": "casey",
+      "source_products": {
+        "chime-frb": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "dedispersion_state": "unverified_pending_header_and_producer_audit",
+          "format": "HDF5_voltage",
+          "path": "/data/Faber2026/data/chime-frb/casey/singlebeam_362593221.h5",
+          "sha256": "ea15c60b2bc770b30ab24d2d21e8e3fac8f5f3fe02238019ef258679770ebc0c",
+          "size": 1037114494
+        },
+        "dsa-110": {
+          "applied_dm": "unverified_pending_header_and_producer_audit",
+          "coherent_dedispersion_possible": false,
+          "format": "SIGPROC_filterbank",
+          "known_processing": "incoherently_dedispersed",
+          "path": "/data/Faber2026/data/dsa-110/casey/240229aaad_dev_polcal_I.fil",
+          "processing_basis": "owner_statement_2026-07-21",
+          "sha256": "8eb60706543875363f20f21ab1473d439f356120b8f8852cedaa9e567b938bd1",
+          "size": 503316768
+        }
+      },
+      "tns_name": "FRB 20240229A"
+    }
+  ],
+  "host_alias": "h17",
+  "migration_receipt_created_at": "2026-07-21T09:42:20.477332+00:00",
+  "schema": "faber2026-paired-preliminary-source-manifest-v1",
+  "status": "custody_verified_science_metadata_unverified"
+}
