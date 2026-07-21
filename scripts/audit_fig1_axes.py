@@ -61,7 +61,8 @@ import yaml
 from plot_codetection_data_grid import DM_CATALOG_DEFAULT, load_adopted_dms
 from plot_codetection_gallery import BANDS, discover_products, load_band
 from plot_codetection_triptych import (
-    DATA_ROOT_DEFAULT,
+    CHIME_FULL_ROOT_DEFAULT,
+    DSA_FULL_ROOT_DEFAULT,
     FILE_NICK,
     MANIFEST_DEFAULT,
     ROOT,
@@ -297,7 +298,11 @@ def _sharpness_scan_ddm(
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--data-root", type=Path, default=DATA_ROOT_DEFAULT)
+    path_arg = lambda value: Path(value).expanduser()  # noqa: E731
+    ap.add_argument(
+        "--chime-full-root", type=path_arg, default=CHIME_FULL_ROOT_DEFAULT
+    )
+    ap.add_argument("--dsa-full-root", type=path_arg, default=DSA_FULL_ROOT_DEFAULT)
     ap.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT)
     ap.add_argument("--dm-catalog", type=Path, default=DM_CATALOG_DEFAULT)
     ap.add_argument("--out", type=Path, default=ROOT / "figure_review" / "axes_audit.json")
@@ -312,7 +317,11 @@ def main() -> int:
     chime_paths: dict[str, Path] = {}
     for row in rows:
         nick = row["nick"]
-        prods = discover_products(args.data_root, FILE_NICK.get(nick, nick))
+        prods = discover_products(
+            args.chime_full_root,
+            args.dsa_full_root,
+            FILE_NICK.get(nick, nick),
+        )
         dsa_paths[nick] = prods["dsa"].path
         chime_paths[nick] = prods["chime"].path
         panel: dict = {}

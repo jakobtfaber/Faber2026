@@ -37,7 +37,8 @@ from matplotlib.patches import Rectangle
 
 from plot_codetection_gallery import _apply_style, onpulse_span
 from plot_codetection_triptych import (
-    DATA_ROOT_DEFAULT,
+    CHIME_FULL_ROOT_DEFAULT,
+    DSA_FULL_ROOT_DEFAULT,
     MANIFEST_DEFAULT,
     ROOT,
     bands_archival,
@@ -105,7 +106,8 @@ def load_row_bands(
     row: dict,
     *,
     root: Path,
-    data_root: Path,
+    chime_full_root: Path,
+    dsa_full_root: Path,
     target_dm: float,
     dm_corrections: dict[str, dict[str, float]] | None = None,
 ):
@@ -119,7 +121,8 @@ def load_row_bands(
     """
     extra = (dm_corrections or {}).get(row["nick"].lower())
     return bands_archival(
-        data_root,
+        chime_full_root,
+        dsa_full_root,
         row["nick"],
         factors=DISPLAY_FACTORS,
         pad_scale=DISPLAY_PAD_SCALE,
@@ -272,7 +275,8 @@ def render_grid(
     rows: list[dict],
     *,
     root: Path,
-    data_root: Path,
+    chime_full_root: Path,
+    dsa_full_root: Path,
     out: Path,
     dpi: int,
     dm_catalog: Path = DM_CATALOG_DEFAULT,
@@ -304,7 +308,8 @@ def render_grid(
         bands = load_row_bands(
             row,
             root=root,
-            data_root=data_root,
+            chime_full_root=chime_full_root,
+            dsa_full_root=dsa_full_root,
             target_dm=adopted_dms[row["nick"].lower()],
             dm_corrections=dm_corrections,
         )
@@ -346,7 +351,11 @@ def render_grid(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT)
-    parser.add_argument("--data-root", type=Path, default=DATA_ROOT_DEFAULT)
+    path_arg = lambda value: Path(value).expanduser()  # noqa: E731
+    parser.add_argument(
+        "--chime-full-root", type=path_arg, default=CHIME_FULL_ROOT_DEFAULT
+    )
+    parser.add_argument("--dsa-full-root", type=path_arg, default=DSA_FULL_ROOT_DEFAULT)
     parser.add_argument("--out", type=Path, default=OUT_DEFAULT)
     parser.add_argument("--dm-catalog", type=Path, default=DM_CATALOG_DEFAULT)
     parser.add_argument("--dpi", type=int, default=600)
@@ -368,7 +377,8 @@ def main() -> int:
     render_grid(
         rows,
         root=ROOT,
-        data_root=args.data_root,
+        chime_full_root=args.chime_full_root,
+        dsa_full_root=args.dsa_full_root,
         out=args.out,
         dpi=args.dpi,
         dm_catalog=args.dm_catalog,
