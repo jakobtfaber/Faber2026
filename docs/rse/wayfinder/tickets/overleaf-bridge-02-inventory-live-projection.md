@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: open
-- Assignee: —
+- Assignee: Codex
 - Blocked by: —
 - Map: [Manuscript-only Overleaf bridge](../map-overleaf-manuscript-bridge.md)
 - Triage: `ready-for-agent`
