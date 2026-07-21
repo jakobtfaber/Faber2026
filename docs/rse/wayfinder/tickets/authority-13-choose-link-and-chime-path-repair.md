@@ -5,6 +5,7 @@
 - Assignee: —
 - Blocked by: [Choose the data and results authority policy](authority-09-choose-data-results-authority.md)
 - Map: [Project authority and custody](../map-project-authority-and-custody.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `ready-for-human`
 
 ## Question

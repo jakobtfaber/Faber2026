@@ -5,6 +5,7 @@
 - Assignee: —
 - Blocked by: [Ratify preservation gates and the consolidation sequence](authority-11-ratify-preservation-and-consolidation-gates.md), [Choose the results-library and CHIME-path repair batch](authority-13-choose-link-and-chime-path-repair.md)
 - Map: [Project authority and custody](../map-project-authority-and-custody.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `ready-for-human`
 
 ## Question
