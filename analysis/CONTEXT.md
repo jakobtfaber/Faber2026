@@ -208,7 +208,8 @@ shared-DSA-DM convention. Trust is restored only through the
 re-validation contracts in `docs/rse/protocols/verification-protocol.md`
 and the wayfinder redo tickets (`docs/rse/wayfinder/map-apj-submission.md`;
 legacy §V letter codes are frozen vocabulary — see stub
-`docs/rse/specs/plan/plan-circulation-readiness.md`).
+`docs/rse/specs/plan-circulation-readiness.md`; glossary:
+`docs/rse/specs/legacy-code-glossary.md`).
 _Avoid_: citing any fit-, census-, budget-, association-, or DM-derived
 number from the current tables in new prose unless its lane has passed the
 corresponding V ladder and the table/prose states the relevant convention;
@@ -330,66 +331,71 @@ Every analysis subset states its own burst list and exclusion reasons in text or
 caption; the twelve-burst co-detection set is never assumed as the denominator.
 
 **Explicit pending**:
-(0) Re-validation framework (plan §V) — the trust reset makes this the first
-gate: no fit-, census-, budget-, association-, or DM-derived quantity is
-citable until its producing analysis passes the corresponding re-trust
-ladder (V1 fits, V3 energies, V4 census, V5 DM budget, V6 association +
-DM_obs); includes verifying whether the scattering-fit CHIME
-inputs share the gen-1 de-chirp defect lineage found in the scintillation
-products. (1) Geometry-selection campaign (extended-medium kernel + per-sightline model
-selection, scint-informed) — supersedes the narrower "ADR-0007 re-analysis of
-the nine railed rows"; blocks any α quoting for the nine ex-railed rows and
-the restructured abstract/co-model-methods/results language. (2) CHIME-band scintillation campaign — status 2026-07-17: the objective-window campaign is
-closed at dsa110-FLITS PR #192 / pin `17d9d266...`. Exactly one of 24 products,
-the high-resolution FRB 20240203A record (`chromatica_hi`), is a qualified
-measurement; its four resolved sub-bands support a descriptive within-band
-slope. The other 23 products remain diagnostic only. The certified DSA point
-is FRB 20220506D, so these measurements do not establish a cross-band scaling
-law or a common screen. Historical route status: three
-freya-qualification routes closed `DOCUMENTED-FAIL` in sequence — C1
-(cross-fitted all-pairs estimator: 0/8 required low-modulation calibration
-cells passed, nulls failed the family-wise gate, FLITS #176); P1 (windowed
-fine-channelization regeneration from the coherently dedispersed baseband:
-none of five predeclared window variants passed the frozen 10x common-mode
-suppression screen, and windowing left the common-mode amplitude unchanged,
-0.586 → 0.62–0.68, placing the structure upstream in the baseband within
-each 390.625 kHz coarse channel — FLITS #179, pin #50); P2/Route B (ratio
-statistic: G2 common-mode cancellation PASS, ~100x, but G1 sensitivity fail
-— FLITS PR #180, pin #65). The owner declined to ratify narrowing the paper
-to DSA-only scintillation (`decision-2026-07-15-p1-scope-fork.md`, owner
-amendment). That scope decision is now satisfied by the closed objective-window
-campaign rather than by the previously proposed successor routes. Historical
-routes included P3
-(delay-domain optimal quadratic estimator,
-historical P3 handoff, Gate 0b forecast
-first) awaiting owner sanction; external instrumental characterization
-(steady calibrator through the identical baseband + upchannelization path);
-voltage-domain cross-statistics (separating the multiplicative common
+(0) Re-validation framework — the trust reset makes this the first gate: no
+fit-, census-, budget-, association-, or DM-derived quantity is citable until
+its producing analysis passes the corresponding re-trust ladder: fit
+re-validation contract (legacy V1), energies pipeline re-validation (legacy
+V3), foreground-census re-validation (legacy V4), dispersion-budget
+re-validation (legacy V5), and association plus observed-DM re-validation
+(legacy V6). This also includes the CHIME scattering-input lineage check
+(legacy V2): whether the scattering-fit dynamic spectra share the gen-1
+de-chirp defect lineage found in the scintillation products.
+(1) Geometry-selection campaign — extended-medium kernel plus per-sightline,
+scint-informed model selection (legacy A2/A3). This supersedes the narrower
+"ADR-0007 re-analysis of the nine railed rows"; blocks any α quoting for the
+nine ex-railed rows and the restructured abstract/co-model-methods/results
+language.
+(2) CHIME-band scintillation campaign — status 2026-07-17: the
+objective-window campaign is closed at dsa110-FLITS PR #192 / pin
+`17d9d266...`. Exactly one of 24 products, the high-resolution FRB 20240203A
+record (`chromatica_hi`), is a qualified measurement; its four resolved
+sub-bands support a descriptive within-band slope. The other 23 products
+remain diagnostic only. The certified DSA point is FRB 20220506D, so these
+measurements do not establish a cross-band scaling law or a common screen.
+Historical route status: three freya-qualification routes closed
+`DOCUMENTED-FAIL` in sequence — cross-fitted all-pairs estimator (legacy C1:
+0/8 required low-modulation calibration cells passed, nulls failed the
+family-wise gate, FLITS #176); windowed fine-channelization regeneration from
+the coherently dedispersed baseband (legacy P1: none of five predeclared
+window variants passed the frozen 10x common-mode suppression screen, and
+windowing left the common-mode amplitude unchanged, 0.586 → 0.62–0.68,
+placing the structure upstream in the baseband within each 390.625 kHz coarse
+channel — FLITS #179, pin #50); and the Route B ratio statistic (legacy P2:
+G2 common-mode cancellation PASS, ~100x, but G1 sensitivity fail — FLITS PR
+#180, pin #65). The owner declined to ratify narrowing the paper to DSA-only
+scintillation (`decision-2026-07-15-p1-scope-fork.md`, owner amendment). That
+scope decision is now satisfied by the closed objective-window campaign
+rather than by the previously proposed successor routes. Historical routes
+included the delay-domain optimal quadratic estimator (legacy P3, historical
+handoff, Gate 0b forecast first), external instrumental characterization
+(steady calibrator through the identical baseband + upchannelization path),
+and voltage-domain cross-statistics (separating the multiplicative common
 bandpass from source-flux modulation before detection) — each requires its
 own predeclared experiment record with frozen gates before burst data is
 inspected. Those routes are no longer prerequisites for reporting the reviewed
 PR #192 outcome, but they do not convert any of the 23 diagnostic records into
-measurements. Earlier full-sample work (burst configs for
-whitney/phineas/mahi/isha; U sizing + regeneration for the six
-never-generated co-detections; ACF/Δν_d across the sample) was blocked
-behind a qualifying route on freya (the existing DSA-band Δν_d fits and
-two-screen table are themselves revoked pending §V; the campaign
-re-establishes both bands).
-(3) Per-band systematics pass on the sightlines the fresh campaign flags
-with elevated per-band χ² (the revoked campaign's trio — wilhelm, hamilton,
-zach — is the starting hypothesis, re-derived by plan C1). (4) Two-screen
-treatment decision — **working draft adopted 2026-07-06** (modular
-constraint layer with prior-odds geometry and a posterior escalation
+measurements. Earlier full-sample work — burst configs for
+whitney/phineas/mahi/isha (legacy B1), CHIME regeneration for the six
+never-generated co-detections (legacy B2), and ACF/Δν_d across the sample
+(legacy B4) — was blocked behind a qualifying route on freya. The existing
+DSA-band Δν_d fits and two-screen table are themselves revoked pending the
+re-validation framework; the campaign re-establishes both bands.
+(3) Per-band systematics pass — rerun on the sightlines the fresh
+from-scratch twelve-burst scattering re-fit (legacy C1) flags with elevated
+per-band χ²; the revoked campaign's trio — wilhelm, hamilton, zach — is only
+the starting hypothesis.
+(4) Two-screen treatment decision — **working draft adopted 2026-07-06**
+(modular constraint layer with prior-odds geometry and a posterior escalation
 trigger; see "Scint→scattering coupling" above), **design open**: owner
-re-opened all locked decisions the same night; thresholds, trigger form,
-and interface contract remain under discussion. (5) **Manuscript not yet
-reconciled to this contract** — wave 1: abstract, observations (§2), the
-co-model methods (sec:jointfit / sec:beta-scattering-methods), results,
-discussion, conclusions, and `tab:beta` still carry rail-class language
-and/or α = 4 limits, and the multiplicity-bias demonstration
-(the abstract's closing claim, conclusions item 7) plus
-fig:jointmodel_montage and fig:scint_screens are built on revoked fits;
-wave 2: the budget section (§3 — census verdicts, dominant-systems and
+re-opened all locked decisions the same night; thresholds, trigger form, and
+interface contract remain under discussion.
+(5) **Manuscript not yet reconciled to this contract** — wave 1: abstract,
+observations (§2), the co-model methods (sec:jointfit /
+sec:beta-scattering-methods), results, discussion, conclusions, and
+`tab:beta` still carry rail-class language and/or α = 4 limits, and the
+multiplicity-bias demonstration (the abstract's closing claim, conclusions
+item 7) plus fig:jointmodel_montage and fig:scint_screens are built on revoked
+fits; wave 2: the budget section (§3 — census verdicts, dominant-systems and
 cluster analyses, scint excess, τ·Δν_d test), results §4.1, and conclusions
 items 1–3/5–6 carry census/budget claims now unsupported. Reconciliation is
 scheduled on the manuscript board (`docs/rse/control/BOARD.md`) and wayfinder
