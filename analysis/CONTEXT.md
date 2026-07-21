@@ -76,6 +76,20 @@ The `pipeline` gitlink committed on Faber2026 GitHub `main`, identifying the
 exact FLITS state used by the manuscript. Fork advancement never changes this
 pin implicitly.
 
+**Operational source authority**:
+The reviewed repository code, configuration template, authored content, and
+state policy that define a service. A running process or installed copy is
+operational state or a replica, never source authority.
+
+**Operational state**:
+A time-bounded observation of processes, listeners, launch agents, mutable
+files, and external dependencies. Stopped means paused, not abandoned.
+
+**Restart receipt**:
+The source, configuration, environment, preserved mutable state, authorization,
+pre/post runtime evidence, health checks, rollback, and observation time for a
+service change. Public-edge and submission checks are separate when applicable.
+
 **Co-detection sample**:
 The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.

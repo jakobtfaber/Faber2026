@@ -53,6 +53,10 @@ can proceed without losing science, provenance, or concurrent work.
   — GitHub `main` governs manuscript history and the reproducibility pin,
   FLITS fork `main` governs fitting code, and every working-copy return requires
   a scoped reviewed receipt; Overleaf and dirty fitting lanes remain fail-closed.
+- [Choose operational ownership for paused services](tickets/authority-10-choose-operational-ownership.md)
+  — Jupyter remains unclassified, MkDocs source is repository-owned but its
+  environment is not, and persistent Running Notes has separate source,
+  mutable-state, submission, and public-edge gates with explicit receipts.
 - [Reconcile local data and results custody](tickets/authority-04-reconcile-local-data-and-results.md)
   — local instrument custody is split correctly, but the registry/library
   relationship is unreconciled; eight stale worktree links and current CHIME
