@@ -24,6 +24,30 @@ The sole scoped surface allowed to settle content conflicts for its content
 class. An authority without an independent recoverable copy is `at risk`, but
 does not thereby lose its role.
 
+**Claim registry**:
+The GitHub-main ledger that settles which manuscript-facing result is current,
+trusted, and consumed. It governs claims, not bulk result bytes.
+
+**Result object authority**:
+The exact receipted Google Drive scope that settles byte conflicts for accepted
+bulk result artifacts. Byte authority does not grant scientific trust.
+
+**Results view**:
+The local materialized `results-library` that combines verified byte replicas
+with navigation links to Git-governed sources. Links never prove custody.
+
+**Fit-input authority**:
+The checksum-manifested 24 derived CHIME/FRB and DSA-110 intensity cubes in
+CANFAR VOSpace. Instrument-specific Mac copies are replicas.
+
+**Byte promotion**:
+The receipted change from working or staging bytes to an authoritative object
+identity. It records provenance and integrity but does not clear a science claim.
+
+**Claim promotion**:
+The separate scientific decision that marks a registry result trusted and
+current for manuscript consumption.
+
 **Replica**:
 A verified content-equivalent copy of an authority. It supplies recovery or
 access but never settles conflicts.

@@ -32,8 +32,11 @@ can proceed without losing science, provenance, or concurrent work.
   recovery copy. Full MD5 comparison passes for all 5,437 project-data paths.
   Strict object parity still fails because Drive has one identical same-name
   duplicate and iacobus has one local recovery receipt.
-- Local `results-library` currently has eight broken links. Treat the registry
-  as claim-level and the library as byte-level only after live reconciliation.
+- CANFAR is authority for the 24 derived fit-input cubes. The twelve raw CHIME
+  HDF5 files on h17 remain unclassified pending a checksum-manifested archive.
+- GitHub `main` governs result claims; Drive governs receipted bulk result
+  bytes. The local `results-library` becomes their replica/navigation view only
+  after its eight broken links and other inventory conflicts are repaired.
 - h17 has grown and drifted; h23's recorded quarantine is unexpectedly missing;
   CANFAR read-only VOSpace access is live and verified through 2026-08-20.
 - Jupyter and MkDocs are stopped and port 8000 is closed. Running Notes is a
@@ -89,6 +92,10 @@ can proceed without losing science, provenance, or concurrent work.
   — all 5,437 project-data paths match by MD5; the local recovery receipt and
   byte-identical duplicate Drive object explain why content parity passes while
   strict one-to-one object parity fails.
+- [Choose the data and results authority policy](tickets/authority-09-choose-data-results-authority.md)
+  — Git governs claims, Drive governs receipted bulk bytes, CANFAR governs the
+  24 fit-input cubes, and local/h17 surfaces remain replicas, working copies,
+  staging, or unclassified until explicit promotion gates pass.
 
 ## Not yet specified
 
