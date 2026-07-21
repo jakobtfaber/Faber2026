@@ -15,6 +15,11 @@ can proceed without losing science, provenance, or concurrent work.
 
 ## Notes
 
+- **Standing delegation (owner, 2026-07-20):** [delegated decision authority](standing-delegation-2026-07-20.md)
+  covers only tickets recorded open at `main` commit `33e9e1ce3570`; it permits
+  evidence-backed recommendations without per-ticket approval but does not
+  close tickets or waive its explicit evidence, exact-target, or one-way action
+  gates.
 - Use `/wayfinder`, `/grilling`, and `/domain-modeling`; refer to every ticket
   by its linked name.
 - Evidence first. Live state outranks inherited inventories. Record timestamps,

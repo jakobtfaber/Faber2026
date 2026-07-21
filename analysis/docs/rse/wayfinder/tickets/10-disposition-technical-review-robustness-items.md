@@ -5,6 +5,7 @@
 - Assignee: —
 - Blocked by: — (formerly the deadline-reconciliation ticket, closed 2026-07-18: dispositions are decided on scientific need, not schedule)
 - Map: [ApJ submission](../map-apj-submission.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 
 ## Question
 

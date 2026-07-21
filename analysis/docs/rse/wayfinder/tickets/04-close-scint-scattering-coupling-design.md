@@ -5,6 +5,7 @@
 - Assignee: —
 - Blocked by: [02](02-ratify-chime-scintillation-method.md)
 - Map: [ApJ submission](../map-apj-submission.md)
+- Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 
 ## Question
 
