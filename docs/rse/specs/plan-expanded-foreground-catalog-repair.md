@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-20
 **Author:** Codex
-**Status:** Draft
+**Status:** In progress — blocked by authoritative host-redshift evidence
 **Related Documents:**
 - [Wayfinder map](../wayfinder/map-expanded-foreground-catalog-repair.md)
 - [Invalid validation](validation-expanded-foreground-photometry-and-morphology-catalog.md)
@@ -111,10 +111,9 @@ independent truth surface.
    undoing redshift adjudication.
 2. **Use `R200c`, not “virial radius.”** Compute it directly from
    `M200c = (4π/3) 200 ρcrit(z) R200c^3`. Concentration only supplies `r_s`.
-3. **Cluver is conditional.** Implement Equation 1 (`-2.54`, `-0.17`) with an
+3. **Cluver is conditional.** Implement Equation 2 (`-2.54`, `-0.17`) with an
    explicit rest-frame-color flag. Do not compute it from invalid/upper-limit
-   photometry or use a colorless fallback. Label Equation 2 (`-1.96`, `-0.03`)
-   separately if implemented.
+   photometry or use a colorless fallback.
 4. **Stern is a selection, not a decomposition.** Emit
    `selected_by_stern12`, `not_selected_within_depth`,
    `outside_validated_depth`, or `insufficient_color`.
@@ -137,7 +136,7 @@ repair work starts.
 
 **Tasks:**
 
-- [ ] Add `tests/test_expanded_catalog_validation.py` first:
+- [x] Add `tests/test_expanded_catalog_validation.py` first:
 
   ```python
   def test_expanded_catalog_validation_is_fail_closed():
@@ -146,16 +145,16 @@ repair work starts.
       assert "Ready / Verified" not in text
   ```
 
-- [ ] Run and observe failure:
+- [x] Run and observe failure:
   `uv run pytest tests/test_expanded_catalog_validation.py -q`.
-- [ ] Rewrite the validation header and verdict. Add a defect table with affected
+- [x] Rewrite the validation header and verdict. Add a defect table with affected
   formula, rows/count, scientific effect, and required repair. Add
   `docs/rse/specs/validation-expanded-foreground-catalog.json` with
   `status: failed`, parent commit, pipeline commit, and defect identifiers.
-- [ ] Add a validator assertion that any non-pass defect makes the command exit 1.
-- [ ] Run and observe pass:
+- [x] Add a validator assertion that any non-pass defect makes the command exit 1.
+- [x] Run and observe pass:
   `uv run pytest tests/test_expanded_catalog_validation.py -q`.
-- [ ] Commit only the fail-close files:
+- [x] Commit only the fail-close files:
   `git commit --only tests/test_expanded_catalog_validation.py docs/rse/specs/validation-expanded-foreground-photometry-and-morphology-catalog.md docs/rse/specs/validation-expanded-foreground-catalog.json -m "docs: fail-close expanded foreground validation"`.
 
 **Verification:** `! rg -n "Ready / Verified|52 / 52.*matched" docs/rse/specs/validation-expanded-foreground-photometry-and-morphology-catalog.md`.
@@ -166,7 +165,7 @@ repair work starts.
 
 **Tasks:**
 
-- [ ] Add `pipeline/galaxies/foreground/test_expanded_catalog.py` with failing
+- [x] Add `pipeline/galaxies/foreground/test_expanded_catalog.py` with failing
   tests for nearest-row order independence, unmatched versus query error,
   ambiguity, quality retention, Cluver applicability, Stern depth, Moster units,
   `R200c`, and Dutton-Macciò concentration:
@@ -191,9 +190,9 @@ repair work starts.
       assert stern12_status(0.7, w2=14.0) == "not_selected_within_depth"
   ```
 
-- [ ] Run and observe failure:
+- [x] Run and observe failure:
   `cd pipeline && uv run pytest galaxies/foreground/test_expanded_catalog.py -q`.
-- [ ] Add `pipeline/galaxies/foreground/expanded_catalog.py` with typed match
+- [x] Add `pipeline/galaxies/foreground/expanded_catalog.py` with typed match
   records and these exact public interfaces:
 
   ```python
@@ -208,12 +207,12 @@ repair work starts.
   `b=-0.101+0.026z` and
   `a=0.520+(0.905-0.520) exp(-0.617 z^1.21)`, with
   `log10(c200)=a+b log10(M200 h / 10^12 M_sun)`.
-- [ ] Reuse `vo.halos.mstar_to_mhalo(mstar, z)`; remove the exponentiation plus
+- [x] Reuse `vo.halos.mstar_to_mhalo(mstar, z)`; remove the exponentiation plus
   logarithmic-helper path from the expanded builder. Deprecate the approximate
   helper for catalog use; do not rewrite unrelated plot products in this phase.
-- [ ] Run and observe pass:
+- [x] Run and observe pass:
   `cd pipeline && uv run pytest galaxies/foreground/test_expanded_catalog.py galaxies/foreground/test_census_registry.py -q -k 'not scratch_codetection_exists'`.
-- [ ] Commit in `pipeline/`:
+- [x] Commit in `pipeline/`:
   `git commit --only galaxies/foreground/expanded_catalog.py galaxies/foreground/test_expanded_catalog.py galaxies/foreground/vo/halos.py -m "fix: correct foreground matching and halo physics"`.
 
 **Verification:** Tests must compare published coefficients and an independently
@@ -225,37 +224,37 @@ computed enclosed-mass invariant, not values produced by the same helper.
 
 **Tasks:**
 
-- [ ] Extend the failing tests with a schema fixture. Required per-catalog fields:
+- [x] Extend the failing tests with a schema fixture. Required per-catalog fields:
   `status`, `id`, `separation_arcsec`, `candidate_count`,
   `second_separation_arcsec`, `release`, `retrieved_at_utc`, `snapshot_sha256`.
   Require GSC class; ALLWISE W1/W2 values, errors, `qph`, `ccf`, `ex`; CatWISE
   profile magnitudes/errors, `pmQual`, `abf`, `ccf`; unWISE flux/errors,
   `q_W1`, `q_W2`, `fFW1`, `fFW2`. Require every derived field's value, error,
   method, units, authority, and status.
-- [ ] Run and observe schema failure:
+- [x] Run and observe schema failure:
   `cd pipeline && uv run pytest galaxies/foreground/test_expanded_catalog.py -q -k schema`.
-- [ ] Add normalized fixtures under
+- [x] Add normalized fixtures under
   `pipeline/galaxies/foreground/data/catalog_crossmatch_snapshots/` and a refresh
   CLI `pipeline/galaxies/foreground/refresh_expanded_catalog.py`. Use a 3-arcsecond
   cone, exact spherical separation, stable sorting by separation then identifier,
   and one recorded response per catalog/candidate. A failed catalog query exits
   nonzero unless `--allow-partial-refresh` is explicit; it never overwrites the
   last complete snapshot.
-- [ ] Add offline builder
+- [x] Add offline builder
   `pipeline/galaxies/foreground/build_expanded_catalog.py`. Join census keys as
   strings, assert exactly 52 unique registry rows, copy verdict fields unchanged,
   apply overrides before Moster, recompute `M200c/R200c`, leave inadmissible
   Cluver and unknown errors null with a status, and preserve cluster `M500/R500`.
-- [ ] Write outputs atomically:
+- [x] Write outputs atomically:
   `pipeline/galaxies/foreground/data/expanded_catalog_cross_references.csv` and
   `pipeline/galaxies/foreground/data/expanded_catalog_build.json`.
-- [ ] Replace `scripts/build_expanded_foreground_provenance.py` with a parent-side
+- [x] Replace `scripts/build_expanded_foreground_provenance.py` with a parent-side
   renderer that reads the pinned CSV and build manifest but never writes into the
   submodule. Regenerate
   `docs/rse/specs/expanded_foreground_photometry_and_morphology_catalog.md`.
-- [ ] Run and observe pass:
+- [x] Run and observe pass:
   `cd pipeline && uv run python galaxies/foreground/build_expanded_catalog.py --offline && uv run pytest galaxies/foreground/test_expanded_catalog.py -q`.
-- [ ] Verify deterministic bytes:
+- [x] Verify deterministic bytes:
   `shasum -a 256 galaxies/foreground/data/expanded_catalog_cross_references.csv > /tmp/expanded.before && uv run python galaxies/foreground/build_expanded_catalog.py --offline && shasum -a 256 -c /tmp/expanded.before`.
 - [ ] Commit pipeline code, fixtures, and outputs; then make a separate parent
   commit for the deliberate submodule pin and regenerated documentation.
@@ -271,19 +270,19 @@ overwriting the manuscript artifact before approval.
 
 **Tasks:**
 
-- [ ] Add failing pipeline tests for a new
+- [x] Add failing pipeline tests for a new
   `pipeline/galaxies/foreground/data/sightline_halo_grid.csv`: only confirmed,
   deduplicated systems may be drawn; `budget_eligible` controls the contributor
   overlay rather than admission to the environment plot; each halo uses corrected
   `M200c/R200c`; each cluster uses explicitly sourced cluster geometry; the host
   roster includes empty sightlines.
-- [ ] Add a generator `pipeline/galaxies/foreground/build_sightline_halo_grid_input.py`
+- [x] Add a generator `pipeline/galaxies/foreground/build_sightline_halo_grid_input.py`
   and change `pipeline/galaxies/v2_0/sightline_halo_grid.py` to require
   `--halo-csv`. Remove `DEFAULT_HALO_CSV` and rename plot labels/fields to
   `M200c` and `R200c`.
-- [ ] Run pipeline tests:
+- [x] Run pipeline tests:
   `cd pipeline && uv run pytest galaxies/foreground/test_expanded_catalog.py galaxies/v2_0/test_sightline_halo_grid.py -q`.
-- [ ] Add `fig3-halo-grid` with family `foreground-halo-grid` to
+- [x] Add `fig3-halo-grid` with family `foreground-halo-grid` to
   `figure_review/slots.json`. Extend `scripts/figure_review.py` so that family
   requires and copies the expanded-catalog build manifest, independent validation
   JSON, and Figure 3 input hash. Change
@@ -292,9 +291,9 @@ overwriting the manuscript artifact before approval.
   `figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf`, its
   `candidate_root` is `figure_review/staging/fig3_halo_grid`, and its
   `approval_slot` is `fig3-halo-grid`.
-- [ ] Test the workflow first:
+- [x] Test the workflow first (approval test intentionally remains closed pending receipt):
   `uv run pytest tests/test_figure_flow.py tests/test_figure_review_cli.py tests/test_figure_approval.py -q`.
-- [ ] Dry-run, then render staging bytes:
+- [x] Dry-run, then render staging bytes:
   `python3 scripts/figure_flow.py regen --id sightline_halo_grid --dry-run` and
   `python3 scripts/figure_flow.py regen --id sightline_halo_grid`.
 - [ ] Create and render a review batch only after Phase 5 passes:

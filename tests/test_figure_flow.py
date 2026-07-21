@@ -214,6 +214,17 @@ def test_fig1_has_approval_slot():
     assert "fig1-gallery" in hint
 
 
+def test_figure3_is_staged_from_versioned_catalog_input():
+    figures = figure_flow.by_id(figure_flow.load_catalog(CATALOG))
+    figure = figures["sightline_halo_grid"]
+    assert figure["approval_slot"] == "fig3-halo-grid"
+    assert figure["inputs"] == ["pipeline/galaxies/foreground/data/sightline_halo_grid.csv"]
+    assert figure["outputs"] == [
+        "figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
+    ]
+    assert figure["manuscript_target"] == "figures/sightline_halo_grid.pdf"
+
+
 def test_skill_file_exists():
     skill = ROOT / "figures" / "ax" / "SKILL.md"
     text = skill.read_text(encoding="utf-8")

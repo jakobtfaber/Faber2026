@@ -30,6 +30,19 @@
       ]
     },
     {
+      "id": "fig3-halo-grid",
+      "title": "Figure 3: foreground halo sightlines",
+      "family": "foreground-halo-grid",
+      "target": "figures/sightline_halo_grid.pdf",
+      "generator": "pipeline/galaxies/v2_0/sightline_halo_grid.py --halo-csv pipeline/galaxies/foreground/data/sightline_halo_grid.csv",
+      "required_provenance": [
+        "expanded-catalog build manifest and SHA-256",
+        "independent validation JSON and SHA-256",
+        "versioned Figure 3 input and SHA-256",
+        "manuscript-owner visual approval"
+      ]
+    },
+    {
       "id": "fig6-scint-summary",
       "title": "Joint qualified DSA-110 and CHIME/FRB scintillation summary",
       "family": "scintillation-summary",

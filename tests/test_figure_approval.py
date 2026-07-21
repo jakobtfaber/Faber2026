@@ -39,6 +39,7 @@ def test_review_slots_are_unique_and_cover_requested_families() -> None:
         "joint-model",
         "codetection-triptych",
         "scintillation-qualification",
+        "foreground-halo-grid",
     }
 
 

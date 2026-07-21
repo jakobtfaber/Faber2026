@@ -151,6 +151,11 @@ def command_new_batch(args: argparse.Namespace) -> None:
             "joint-scint-figure-provenance",
         ],
         "scintillation-qualification": ["oran-qualification"],
+        "foreground-halo-grid": [
+            "expanded-catalog-build",
+            "expanded-catalog-validation",
+            "figure3-input",
+        ],
     }
     required_evidence = {
         evidence_id
@@ -173,6 +178,9 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ("chromatica-hi-campaign", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json"),
         ("chime-campaign-figure-review", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json"),
         ("joint-scint-figure-provenance", "parent", "analysis/scintillation-summary/joint_figure_provenance.json"),
+        ("expanded-catalog-build", "pipeline", "galaxies/foreground/data/expanded_catalog_build.json"),
+        ("expanded-catalog-validation", "parent", "docs/rse/specs/validation-expanded-foreground-catalog.json"),
+        ("figure3-input", "pipeline", "galaxies/foreground/data/sightline_halo_grid.csv"),
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:

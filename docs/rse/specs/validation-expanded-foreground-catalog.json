@@ -1,88 +1,48 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "artifact": "expanded_foreground_photometry_and_morphology_catalog",
   "status": "failed",
-  "disposition": "superseded_do_not_use",
-  "summary": "FAILED - superseded; do not use",
-  "parent_commit": "9090d74c9cae0510d5b64c2fb1424dd658c08c9e",
-  "pipeline_commit": "ded8d195701c4abf5df31e6ad94f1750172d718e",
-  "supersedes": {
-    "report": "docs/rse/specs/validation-expanded-foreground-photometry-and-morphology-catalog.md",
-    "claimed_status": "Ready / Verified",
-    "claimed_parent_commit": "93b75419",
-    "date": "2026-07-20"
+  "disposition": "blocked_host_redshift_provenance",
+  "summary": "Numerical and artifact checks pass; scientific promotion remains fail-closed pending source-bearing host redshifts and owner Figure 3 review.",
+  "parent_input_commit": "49a4658a302776c31ba92b49ecbd65ccf37780fa",
+  "pipeline_commit": "db73ac7045f4d9341778eb7e826ffc81d089169d",
+  "artifact_sha256": {
+    "expanded_catalog": "17ef142bc5d57f0f1f42d11a397c084de2b9763fbb7543ce82e90e1a6d6ef727",
+    "figure_3_input": "63e2c980399810a027d6877cf5de118350e8d82a995cb03621d5daa3315259f8",
+    "staged_figure_3_pdf": "0940b333993e540c2caf622a46ebef7a47ef0c1a68b6d3204d988aca651f486f"
   },
-  "gate": {
-    "required_for_pass": [
-      "rebuilt catalog passes",
-      "independent validation report passes"
-    ],
-    "validator_exit": "nonzero while status is not passed or any defect is not passed"
+  "calculation_validation": {
+    "status": "passed",
+    "independent_path": true,
+    "imports_builder_or_result_helpers": false,
+    "catalog_rows": 52,
+    "unique_rows": 52,
+    "snapshot_queries": 208,
+    "finite_halos": 25,
+    "figure_input_rows": 37,
+    "mismatches": 0,
+    "max_spherical_separation_error_arcsec": 4.342742832e-11,
+    "max_moster_error_dex": 1.74669168e-11,
+    "max_r200c_enclosed_mass_relative_error": 1.2624975e-15,
+    "max_dutton_maccio_relative_error": 0.0
   },
   "defects": [
     {
-      "id": "moster-input-units",
-      "status": "failed",
-      "affected_formula_or_artifact": "Moster et al. (2013) stellar-mass-to-halo-mass interface",
-      "rows_or_count": "expanded CSV halo rows using derived stellar mass",
-      "scientific_effect": "Linear stellar mass was routed through a logarithmic helper path, producing radii of roughly 2.5-3.0 Mpc.",
-      "required_repair": "Use the redshift-dependent linear-stellar-mass interface and recompute M200c/R200c."
+      "id": "matching-physics-quality-figure-input",
+      "status": "passed",
+      "evidence": "All numerical, structural, manifest, and Figure 3 input checks reproduced with zero mismatches."
     },
     {
-      "id": "cluver-equation-and-rest-frame",
+      "id": "host-redshift-source-evidence",
       "status": "failed",
-      "affected_formula_or_artifact": "Cluver et al. (2014) stellar-mass relation",
-      "rows_or_count": "all rows with WISE-derived stellar masses",
-      "scientific_effect": "Equation label and rest-frame applicability were wrong; colorless fallback was treated as valid.",
-      "required_repair": "Use the correct equation label and rest-frame color gate; null invalid values."
+      "evidence": "Zero of 12 host entries has a complete source-bearing evidence chain; three hosts have no redshift.",
+      "required_repair": "Freeze the authoritative Verdi table or a source-bearing extract, then repeat source-level validation."
     },
     {
-      "id": "incomplete-crossmatches",
+      "id": "figure-3-owner-approval",
       "status": "failed",
-      "affected_formula_or_artifact": "Expanded crossmatch coverage summary",
-      "rows_or_count": "GSC 48/52, ALLWISE 47/52, CatWISE 49/52, unWISE 48/52; all four present for 46/52",
-      "scientific_effect": "The old report claimed complete cross-catalog coverage and hid missing matches.",
-      "required_repair": "Record per-catalog match status, query status, and missing data explicitly."
-    },
-    {
-      "id": "non-deterministic-match-selection",
-      "status": "failed",
-      "affected_formula_or_artifact": "Catalog row selection",
-      "rows_or_count": "nearest-match audit disagreed for 10 GSC, 4 CatWISE, and 10 unWISE rows",
-      "scientific_effect": "Row-zero selection can pick a different source than the nearest source; four GSC differences change morphology code.",
-      "required_repair": "Sort candidates deterministically by separation and identifier; preserve candidate count and second separation."
-    },
-    {
-      "id": "stern-selection-interpretation",
-      "status": "failed",
-      "affected_formula_or_artifact": "Stern et al. (2012) mid-infrared color selection",
-      "rows_or_count": "only 21/47 ALLWISE matches satisfy W2 <= 15.05",
-      "scientific_effect": "Blue color was described as starlight proof, and sources outside the validated depth were treated as passed.",
-      "required_repair": "Emit Stern selection status only within the published depth and color-validity conditions."
-    },
-    {
-      "id": "morphology-summary",
-      "status": "failed",
-      "affected_formula_or_artifact": "GSC morphology summary and contaminant wording",
-      "rows_or_count": "summary counts and named starlike/unclassified contaminants",
-      "scientific_effect": "Morphology evidence was overstated as verdict support and did not reflect nearest-match changes.",
-      "required_repair": "Report GSC class as catalog evidence only; do not alter census verdicts without adjudication."
-    },
-    {
-      "id": "missing-pinned-expanded-csv",
-      "status": "failed",
-      "affected_formula_or_artifact": "Expanded catalog CSV provenance",
-      "rows_or_count": "catalog artifact absent or not pinned at validation boundary",
-      "scientific_effect": "The validation could not be replayed from a checked-in, versioned expanded CSV.",
-      "required_repair": "Check in the rebuilt CSV with manifest hashes and deterministic offline rebuild command."
-    },
-    {
-      "id": "unversioned-figure-3-input",
-      "status": "failed",
-      "affected_formula_or_artifact": "Figure 3 foreground-halo-grid input",
-      "rows_or_count": "figure input referenced an external unversioned CSV",
-      "scientific_effect": "Figure 3 could be regenerated from a drifting input and must not be promoted from this validation.",
-      "required_repair": "Generate and check in the versioned Figure 3 input; block promotion until independent validation and owner visual approval."
+      "evidence": "A staged corrected figure exists, but no owner visual-review receipt exists.",
+      "required_repair": "Complete source-level validation, create a review batch, obtain owner approval, then promote."
     }
   ]
 }

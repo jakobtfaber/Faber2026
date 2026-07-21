@@ -55,7 +55,7 @@ figures:
   - id: sightline_halo_grid
     tex: fig:sightline_halo_grid
     manuscript: true
-    clone_ok: true
+    clone_ok: false
     repro_output: figures/sightline_halo_grid.pdf
     producer:
       argv:
@@ -63,14 +63,19 @@ figures:
         - run
         - python
         - galaxies/v2_0/sightline_halo_grid.py
+        - --halo-csv
+        - galaxies/foreground/data/sightline_halo_grid.csv
         - --out-dir
-        - ../figures
+        - ../figure_review/staging/fig3_halo_grid/figures
       cwd: pipeline
-    inputs: []
+    inputs:
+      - pipeline/galaxies/foreground/data/sightline_halo_grid.csv
     outputs:
-      - figures/sightline_halo_grid.pdf
+      - figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf
+    manuscript_target: figures/sightline_halo_grid.pdf
+    candidate_root: figure_review/staging/fig3_halo_grid
     depends_on: []
-    approval_slot: null
+    approval_slot: fig3-halo-grid
 
   - id: sightline_budget
     tex: null

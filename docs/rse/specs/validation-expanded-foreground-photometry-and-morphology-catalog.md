@@ -1,51 +1,62 @@
-# Validation Failed: Expanded Foreground Photometry and Morphology Catalog
+# Independent validation: expanded foreground catalog
 
-> Supersedes the 2026-07-20 report that marked
-> `docs/rse/specs/expanded_foreground_photometry_and_morphology_catalog.md`,
-> `pipeline/galaxies/foreground/data/expanded_catalog_cross_references.csv`, and
-> `scripts/build_expanded_foreground_provenance.py` as accepted at parent commit
-> `93b75419`.
+## Overall status: FAILED — host-redshift provenance incomplete
 
-## Overall Status: FAILED — superseded; do not use
+The rebuilt catalog, physics, catalog matching, and Figure 3 input pass an
+independent calculation path. Scientific promotion remains fail-closed because
+the frozen 12-host roster does not carry source-bearing redshift evidence.
+Figure 3 also still requires manuscript-owner visual approval.
 
-Machine-readable status: **FAILED - superseded; do not use**.
-
-The previous validation is invalid as acceptance evidence. It may be cited only
-as superseded evidence explaining why the expanded catalog repair is required.
-The present gate must remain failed until the rebuilt catalog and independent
-validation report both pass.
-
-Gate file:
-`docs/rse/specs/validation-expanded-foreground-catalog.json`.
-
-## Failed Gate
-
-| Field | Value |
+| Boundary | Revision or hash |
 |---|---|
-| Status | `failed` |
-| Disposition | `superseded_do_not_use` |
-| Parent commit checked | `9090d74c9cae0510d5b64c2fb1424dd658c08c9e` |
-| Pipeline commit checked | `ded8d195701c4abf5df31e6ad94f1750172d718e` |
-| Required next state | Rebuilt catalog passes and independent report passes |
-| Validator behavior | Nonzero exit while any defect below has non-pass status |
+| Parent input | `49a4658a302776c31ba92b49ecbd65ccf37780fa` |
+| Pipeline | `db73ac7045f4d9341778eb7e826ffc81d089169d` |
+| Expanded catalog | `17ef142bc5d57f0f1f42d11a397c084de2b9763fbb7543ce82e90e1a6d6ef727` |
+| Figure 3 input | `63e2c980399810a027d6877cf5de118350e8d82a995cb03621d5daa3315259f8` |
+| Staged Figure 3 PDF | `0940b333993e540c2caf622a46ebef7a47ef0c1a68b6d3204d988aca651f486f` |
 
-## Defects Preserved As Superseded Evidence
+## Passing independent checks
 
-| Defect identifier | Affected formula or artifact | Rows or count | Scientific effect | Required repair |
-|---|---|---:|---|---|
-| `moster-input-units` | Moster et al. (2013) stellar-mass-to-halo-mass interface | expanded CSV halo rows using derived stellar mass | Stored radii are roughly 2.5-3.0 Mpc because linear stellar mass was passed through a logarithmic helper path. | Use the redshift-dependent Moster interface with explicit linear stellar-mass units; recompute `M200c` and `R200c`. |
-| `cluver-equation-and-rest-frame` | Cluver et al. (2014) stellar-mass relation | all rows with WISE-derived stellar masses | Report labels the relation incorrectly and omits the rest-frame color condition; a colorless fallback was treated as valid. | Implement the correct equation label and rest-frame applicability gate; null invalid or inapplicable derived values. |
-| `incomplete-crossmatches` | Expanded crossmatch coverage summary | GSC 48/52, ALLWISE 47/52, CatWISE 49/52, unWISE 48/52; all four present for 46/52 | The old report claimed complete cross-catalog coverage and hid missing matches. | Record per-catalog match status, query status, and missing data explicitly. |
-| `non-deterministic-match-selection` | Catalog row selection | nearest-match audit disagreed for 10 GSC, 4 CatWISE, and 10 unWISE rows | Row-zero selection can pick a different source than the nearest source; four GSC differences change morphology code. | Sort candidates deterministically by separation and identifier; preserve candidate count and second separation. |
-| `stern-selection-interpretation` | Stern et al. (2012) mid-infrared color selection | only 21/47 ALLWISE matches satisfy `W2 <= 15.05` depth condition | Blue color was described as starlight proof, and sources outside the validated depth were treated as passed. | Emit Stern selection status only within the published depth and color-validity conditions. |
-| `morphology-summary` | GSC morphology summary and contaminant wording | summary counts and named starlike/unclassified contaminants | Morphology evidence was overstated as verdict support and did not reflect nearest-match changes. | Report GSC class as catalog evidence only; do not alter census verdicts without adjudication. |
-| `missing-pinned-expanded-csv` | Expanded catalog CSV provenance | catalog artifact absent or not pinned at validation boundary | The validation could not be replayed from a checked-in, versioned expanded CSV. | Check in the rebuilt CSV with manifest hashes and deterministic offline rebuild command. |
-| `unversioned-figure-3-input` | Figure 3 foreground-halo-grid input | figure input referenced an external unversioned CSV | Figure 3 could be regenerated from a drifting input and must not be promoted from this validation. | Generate and check in the versioned Figure 3 input; block promotion until independent validation and owner visual approval. |
+The validator did not import the catalog builder or its physics helpers.
 
-## Supersession Rule
+| Check | Result |
+|---|---|
+| Catalog identity | 52 rows; 52 unique keys; zero verdict or budget differences |
+| Catalog queries | 208 responses; zero identifier, nearest-neighbor, ambiguity, count, or second-separation differences |
+| Spherical separation | maximum difference `4.34e-11` arcsec; tolerance `2e-8` arcsec |
+| Moster et al. (2013) | 25 finite halos; maximum inversion difference `1.75e-11` dex; tolerance `1e-6` dex |
+| `R200c` | maximum enclosed-mass relative error `1.26e-15`; tolerance `1e-10` |
+| Dutton–Macciò (2014) | published Planck calibration `h=0.671`; maximum concentration relative difference `0` |
+| Cluver et al. (2014) | Equation 2 label on 52/52; all values correctly null as `not_rest_frame` |
+| Stern et al. (2012) | zero color, propagated-error, or category differences |
+| Figure 3 input | 37 rows: 12 hosts plus 25 deduplicated confirmed systems; zero field or geometry differences |
+| Manifests | catalog and snapshot hashes reproduce |
 
-Do not cite the superseded accepted-result label as accepted validation.
-The findings above are retained only as repair evidence. The expanded catalog,
-derived halo quantities, morphology summary, Stern status, and Figure 3 input
-remain not accepted until a later validation changes the JSON gate to `passed`
-with zero non-pass defects.
+Moster's halo mass is validly mapped to `M200c`: the paper defines its main-halo
+mass using 200 times critical density. `R200c` uses Planck18 critical density;
+the separately calibrated Dutton–Macciò concentration uses its published
+`h=0.671`.
+
+## Blocking source-evidence gate
+
+The frozen host table supplies redshift values, not provenance. It lacks host
+identifier, uncertainty, measurement kind, citation, upstream row identifier,
+release or retrieval date, and source-content hash. Consequently none of the 12
+host entries has a complete independent evidence chain. `freya`, `johndoeII`,
+and `mahi` also have no host redshift. The candidate ledger is complete: 46
+adopted redshifts and six explicit no-redshift dispositions.
+
+Required next artifact: the authoritative Verdi host-redshift table, or a
+minimal source-bearing extract satisfying
+`expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md`.
+After it is frozen, repeat source-level validation. Only a zero-difference pass
+may change the machine gate to `passed`. Owner visual approval is separately
+required before Figure 3 promotion.
+
+## Verdict
+
+Calculation and artifact validation: **passed**.
+
+Scientific release validation: **failed closed**.
+
+Installed manuscript Figure 3: **unchanged**.

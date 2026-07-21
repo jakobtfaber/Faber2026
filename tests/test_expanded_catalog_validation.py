@@ -12,21 +12,17 @@ VALIDATION_MD = Path(
 VALIDATION_JSON = Path("docs/rse/specs/validation-expanded-foreground-catalog.json")
 
 REQUIRED_DEFECTS = {
-    "moster-input-units",
-    "cluver-equation-and-rest-frame",
-    "incomplete-crossmatches",
-    "non-deterministic-match-selection",
-    "stern-selection-interpretation",
-    "morphology-summary",
-    "missing-pinned-expanded-csv",
-    "unversioned-figure-3-input",
+    "matching-physics-quality-figure-input",
+    "host-redshift-source-evidence",
+    "figure-3-owner-approval",
 }
 
 
 def test_expanded_catalog_validation_is_fail_closed():
     text = VALIDATION_MD.read_text(encoding="utf-8")
-    assert "FAILED - superseded; do not use" in text
-    assert "FAILED — superseded; do not use" in text
+    assert "FAILED — host-redshift provenance incomplete" in text
+    assert "Calculation and artifact validation: **passed**" in text
+    assert "Scientific release validation: **failed closed**" in text
     assert "Ready / Verified" not in text
     assert "52 / 52" not in text
 
@@ -34,18 +30,18 @@ def test_expanded_catalog_validation_is_fail_closed():
 def test_expanded_catalog_validation_records_required_defects():
     gate = json.loads(VALIDATION_JSON.read_text(encoding="utf-8"))
     assert gate["status"] == "failed"
-    assert gate["disposition"] == "superseded_do_not_use"
-    assert len(gate["parent_commit"]) == 40
+    assert gate["disposition"] == "blocked_host_redshift_provenance"
+    assert gate["calculation_validation"]["status"] == "passed"
+    assert gate["calculation_validation"]["mismatches"] == 0
+    assert len(gate["parent_input_commit"]) == 40
     assert len(gate["pipeline_commit"]) == 40
 
     defects = gate["defects"]
     assert {defect["id"] for defect in defects} == REQUIRED_DEFECTS
-    for defect in defects:
-        assert defect["status"] == "failed"
-        assert defect["affected_formula_or_artifact"]
-        assert defect["rows_or_count"]
-        assert defect["scientific_effect"]
-        assert defect["required_repair"]
+    statuses = {defect["id"]: defect["status"] for defect in defects}
+    assert statuses["matching-physics-quality-figure-input"] == "passed"
+    assert statuses["host-redshift-source-evidence"] == "failed"
+    assert statuses["figure-3-owner-approval"] == "failed"
 
 
 def test_expanded_catalog_validator_exits_nonzero_until_rebuilt():
