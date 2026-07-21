@@ -30,6 +30,12 @@ def test_committed_toa_convention_respects_model_correction_gate():
     assert findings == []
 
 
+def test_committed_foreground_census_wording_matches_frozen_registry():
+    findings = []
+    audit.check_foreground_census_wording(findings)
+    assert findings == []
+
+
 def test_unvalidated_toa_cannot_replace_peak_offset(monkeypatch):
     original_read_text = audit.read_text
 
