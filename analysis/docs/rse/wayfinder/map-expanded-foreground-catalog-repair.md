@@ -38,6 +38,9 @@ independent numerical, provenance, and owner visual checks.
   — all stored verdict and budget arithmetic reproduces, but 0/52 rows has a
   complete host-plus-candidate source chain; retain the legacy adjudications and
   keep Figure 3 blocked pending frozen provenance and independent replay.
+- [Restore the repository knowledge-base launcher](tickets/expanded-foreground-catalog-repair-10-restore-knowledge-base-launcher.md)
+  — restored the package and tests deleted by an Overleaf sync; indexing and
+  live full-text retrieval work again without changing source or ranking rules.
 
 ## Not yet specified
 
