@@ -192,6 +192,55 @@ def check_toa_correction_gate(findings: list[str]) -> None:
                 )
 
 
+def check_foreground_census_wording(findings: list[str]) -> None:
+    """Keep the observations prose aligned to the frozen census registry."""
+    registry_path = ROOT / "pipeline/galaxies/foreground/data/intervening_census_registry.csv"
+    try:
+        with registry_path.open(newline="", encoding="utf-8") as fh:
+            rows = list(csv.DictReader(fh))
+    except OSError as exc:
+        findings.append(
+            f"{registry_path.relative_to(ROOT)}: cannot audit foreground census wording: {exc}"
+        )
+        return
+
+    halo_rows = [row for row in rows if row.get("type") == "halo"]
+    eligible = [
+        float(row["impact_kpc"])
+        for row in halo_rows
+        if row.get("budget_eligible") == "True" and row.get("impact_kpc")
+    ]
+    retained = [
+        float(row["impact_kpc"])
+        for row in halo_rows
+        if row.get("impact_kpc")
+    ]
+    if not eligible or not retained:
+        findings.append(
+            f"{registry_path.relative_to(ROOT)}: missing halo impact envelope for wording audit"
+        )
+        return
+
+    text = strip_comments(read_text(ROOT / "sections/observations.tex"))
+    required_patterns = (
+        (
+            rf"frozen census.*as built.*{min(eligible):.1f}.*{max(eligible):.1f}",
+            "missing frozen budget-eligible halo envelope",
+        ),
+        (
+            rf"retained halo envelope.*{max(retained):.1f}",
+            "missing retained halo envelope",
+        ),
+        (
+            r"confirmation and provenance\s+fields.*not a.*impact-parameter\s+cut",
+            "missing provenance-not-100-kpc eligibility wording",
+        ),
+    )
+    for pattern, reason in required_patterns:
+        if not re.search(pattern, text, re.IGNORECASE | re.DOTALL):
+            findings.append(f"sections/observations.tex: {reason}")
+
+
 def tex_files() -> list[Path]:
     r"""Return all .tex files reachable from main.tex via \input{} commands."""
     seen: set[Path] = set()
@@ -442,6 +491,7 @@ def main(argv: list[str] | None = None) -> int:
 
     check_sample_counts(files, findings)
     check_toa_correction_gate(findings)
+    check_foreground_census_wording(findings)
     check_retired_language(files, findings)
     check_cross_refs(files, findings)
     check_inputs_and_provenance(files, findings)
