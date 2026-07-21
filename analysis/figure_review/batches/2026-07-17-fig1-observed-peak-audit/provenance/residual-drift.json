@@ -10,7 +10,7 @@
         "sigma": 0.007213424339532387,
         "zero_consistency": "nonzero"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
       "nick": "zach",
       "product_dm": 262.3621,
       "profile_peak_estimator": {
@@ -50,7 +50,7 @@
         "sigma": null,
         "zero_consistency": "unconstrained"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/whitney_chime_I_462_1891_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/whitney_chime_I_462_1891_32000b_cntr_bpc.npy",
       "nick": "whitney",
       "product_dm": 462.1891,
       "profile_peak_estimator": {
@@ -90,7 +90,7 @@
         "sigma": null,
         "zero_consistency": "unconstrained"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
       "nick": "oran",
       "product_dm": 397.0153,
       "profile_peak_estimator": {
@@ -130,7 +130,7 @@
         "sigma": null,
         "zero_consistency": "unconstrained"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/isha_chime_I_411_4359_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/isha_chime_I_411_4359_32000b_cntr_bpc.npy",
       "nick": "isha",
       "product_dm": 411.4359,
       "profile_peak_estimator": {
@@ -170,7 +170,7 @@
         "sigma": null,
         "zero_consistency": "unconstrained"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/wilhelm_chime_I_602_3809_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/wilhelm_chime_I_602_3809_32000b_cntr_bpc.npy",
       "nick": "wilhelm",
       "product_dm": 602.3809,
       "profile_peak_estimator": {
@@ -210,7 +210,7 @@
         "sigma": null,
         "zero_consistency": "unconstrained"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
       "nick": "phineas",
       "product_dm": 610.2894,
       "profile_peak_estimator": {
@@ -250,7 +250,7 @@
         "sigma": 0.005048157374698092,
         "zero_consistency": "consistent_zero"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/freya_chime_I_912_4067_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/freya_chime_I_912_4067_32000b_cntr_bpc.npy",
       "nick": "freya",
       "product_dm": 912.4067,
       "profile_peak_estimator": {
@@ -290,7 +290,7 @@
         "sigma": null,
         "zero_consistency": "unconstrained"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy",
       "nick": "johndoeii",
       "product_dm": 696.5184,
       "profile_peak_estimator": {
@@ -330,7 +330,7 @@
         "sigma": 0.0005340055477589693,
         "zero_consistency": "consistent_zero"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/hamilton_chime_I_518_8007_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/hamilton_chime_I_518_8007_32000b_cntr_bpc.npy",
       "nick": "hamilton",
       "product_dm": 518.8007,
       "profile_peak_estimator": {
@@ -370,7 +370,7 @@
         "sigma": null,
         "zero_consistency": "unconstrained"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
       "nick": "mahi",
       "product_dm": 960.1316,
       "profile_peak_estimator": {
@@ -410,7 +410,7 @@
         "sigma": 0.0025394873399633253,
         "zero_consistency": "nonzero"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/chromatica_chime_I_272_6382_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/chromatica_chime_I_272_6382_32000b_cntr_bpc.npy",
       "nick": "chromatica",
       "product_dm": 272.6382,
       "profile_peak_estimator": {
@@ -450,7 +450,7 @@
         "sigma": 0.0005483115292794953,
         "zero_consistency": "consistent_zero"
       },
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
       "nick": "casey",
       "product_dm": 491.2085,
       "profile_peak_estimator": {

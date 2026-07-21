@@ -12,7 +12,7 @@ nlive_walks: 15
 nproc: 8
 outer_trim: 0.15
 onpulse_pad_factor: 0.5
-path: /Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy
+path: /Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy
 plot: true
 sampcfg_path: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/scattering/configs/sampler.yaml
 steps: 10000
