@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-21
 **Author:** AI Assistant
-**Status:** Approved
+**Status:** Implemented; owner science-trust gate pending
 **Related Documents:**
 - [Research: h17 preliminary source-data layout](research-h17-source-data-layout.md)
 ---
@@ -149,7 +149,7 @@ active code/config finds no old flat source root.
       incremental pass: 48/48 changed chunks embedded).
 - [x] Run `agent-closeout-check` for both repositories with every touched
       runtime/config path.
-- [ ] Commit task-scoped changes; follow the configured publish policy.
+- [x] Commit task-scoped changes; implementation commit `7d2528d`.
 
 **Verification:** all automated checks below pass. Owner manual review remains
 required before calling the source layer scientifically trusted.
