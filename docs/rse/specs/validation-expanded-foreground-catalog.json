@@ -4,8 +4,8 @@
   "status": "failed",
   "disposition": "superseded_do_not_use",
   "summary": "FAILED - superseded; do not use",
-  "parent_commit": "f706feab928ec1b72ae9371ac50618c1d7a07ab6",
-  "pipeline_commit": "c6111390ce9c159483a844417f5fd9d187e13f5b",
+  "parent_commit": "9090d74c9cae0510d5b64c2fb1424dd658c08c9e",
+  "pipeline_commit": "ded8d195701c4abf5df31e6ad94f1750172d718e",
   "supersedes": {
     "report": "docs/rse/specs/validation-expanded-foreground-photometry-and-morphology-catalog.md",
     "claimed_status": "Ready / Verified",
