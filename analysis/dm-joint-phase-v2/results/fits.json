@@ -4,7 +4,7 @@
     "chime": {
       "burst": "casey",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
       "product_dm": 491.2085,
       "raw_shape": [
         1024,
@@ -4054,7 +4054,7 @@
     "chime": {
       "burst": "chromatica",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/chromatica_chime_I_272_6382_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/chromatica_chime_I_272_6382_32000b_cntr_bpc.npy",
       "product_dm": 272.6382,
       "raw_shape": [
         1024,
@@ -8264,7 +8264,7 @@
     "chime": {
       "burst": "freya",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/freya_chime_I_912_4067_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/freya_chime_I_912_4067_32000b_cntr_bpc.npy",
       "product_dm": 912.4067,
       "raw_shape": [
         1024,
@@ -12314,7 +12314,7 @@
     "chime": {
       "burst": "hamilton",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/hamilton_chime_I_518_8007_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/hamilton_chime_I_518_8007_32000b_cntr_bpc.npy",
       "product_dm": 518.8007,
       "raw_shape": [
         1024,
@@ -16378,7 +16378,7 @@
     "chime": {
       "burst": "isha",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/isha_chime_I_411_4359_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/isha_chime_I_411_4359_32000b_cntr_bpc.npy",
       "product_dm": 411.4359,
       "raw_shape": [
         1024,
@@ -20490,7 +20490,7 @@
     "chime": {
       "burst": "johndoeII",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy",
       "product_dm": 696.5184,
       "raw_shape": [
         1024,
@@ -24636,7 +24636,7 @@
     "chime": {
       "burst": "mahi",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
       "product_dm": 960.1316,
       "raw_shape": [
         1024,
@@ -28830,7 +28830,7 @@
     "chime": {
       "burst": "oran",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
       "product_dm": 397.0153,
       "raw_shape": [
         1024,
@@ -33004,7 +33004,7 @@
     "chime": {
       "burst": "phineas",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
       "product_dm": 610.2894,
       "raw_shape": [
         1024,
@@ -37054,7 +37054,7 @@
     "chime": {
       "burst": "whitney",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/whitney_chime_I_462_1891_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/whitney_chime_I_462_1891_32000b_cntr_bpc.npy",
       "product_dm": 462.1891,
       "raw_shape": [
         1024,
@@ -41104,7 +41104,7 @@
     "chime": {
       "burst": "wilhelm",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/wilhelm_chime_I_602_3809_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/wilhelm_chime_I_602_3809_32000b_cntr_bpc.npy",
       "product_dm": 602.3809,
       "raw_shape": [
         1024,
@@ -45154,7 +45154,7 @@
     "chime": {
       "burst": "zach",
       "telescope": "chime",
-      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
       "product_dm": 262.3621,
       "raw_shape": [
         1024,

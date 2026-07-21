@@ -55,7 +55,7 @@ All upstream code changes are merged; no open branches. On dsa110-FLITS main:
 
 - **Environment:** conda env `flits` (Python 3.12). ⚠ editable-installs the **canonical clone** (`~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/`, now at `424d724c`), not the pinned submodule — run from inside `pipeline/` to exercise pinned code (`module.__file__` when in doubt).
 - **Pins:** `pipeline/` at `6ce3e58` (intentional; **pin bump target now ≥ `424d724c`**, only after more DAG code merges — deliberate `build:` commit in Faber2026).
-- **Data:** freya real `.npy` via data symlinks in **both** checkouts (`data/{chime,dsa}/freya_*` → `~/Data/Faber2026/dsa110/DSA_bursts/`). The #99 configs point at the **pinned** checkout's symlinks by design.
+- **Data:** freya real `.npy` via data symlinks in **both** checkouts (`data/dsa/freya_*` → `~/Data/Faber2026/dsa110/DSA_bursts/`; `data/chime/freya_*` → `~/Data/Faber2026/chimefrb/CHIME_bursts/`). The #99 configs point at the **pinned** checkout's symlinks by design.
 - **Seeds / partial results:** no fits run; no seeds in play (comparator + smoke test are deterministic). POC artifact `pipeline/analysis/beta_poc/freya/freya_beta_poc_fit.json` remains API-stale synthetic provenance (#102's job).
 - **In-flight jobs:** none.
 

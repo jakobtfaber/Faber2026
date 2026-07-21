@@ -29,7 +29,7 @@ refit computes ACFs on a truncated, chromatically-biased slice.
 
 The upchan builder (`build_npz_aligned_generic_20260706.py` TARGETS, from
 h17 `upchannelize_chime.py`) applied per-burst DMs that do not match the
-full-resolution product DMs (filename-encoded, `DSA_bursts/*_chime_I_*`):
+full-resolution product DMs (filename-encoded, `chimefrb/CHIME_bursts/*_chime_I_*`):
 
 | burst | upchan DM | full-res DM | ΔDM (pc cm⁻³) | residual sweep 400–800 MHz |
 |---|---|---|---|---|
