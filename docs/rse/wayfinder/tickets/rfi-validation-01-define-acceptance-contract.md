@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
-- Assignee: —
+- Assignee: Codex
 - Blocked by: [Build the verified Zach CHIME preprocessing baseline](16-build-verified-zach-chime-preprocessing-baseline.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner request, 2026-07-21

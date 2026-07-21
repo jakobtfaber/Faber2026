@@ -61,6 +61,9 @@ existing lane system. The map does not carry the execution itself.
 - [Replace letter+number stage names with descriptive names in the planning docs](tickets/12-retire-letter-number-stage-names.md)
   — active planning now uses descriptive names; a validated glossary preserves
   historical-code traceability without rewriting closed records.
+- [Build the verified Zach CHIME preprocessing baseline](tickets/16-build-verified-zach-chime-preprocessing-baseline.md)
+  — explicit-mask channel restoration and migration preflight pass; current
+  RFI cleaning is rejected, and science remains fail-closed pending validation.
 
 ## Not yet specified
 

@@ -1,7 +1,7 @@
 # Build the verified Zach CHIME preprocessing baseline
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
+- Status: closed — accepted 2026-07-21
 - Assignee: Codex
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -55,3 +55,12 @@ of the no-go/current-next-method decision. The resulting validation route is:
 5. [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md).
 
 Ticket 02 remains blocked.
+
+## Resolution — 2026-07-21
+
+The owner accepted the fail-closed baseline by directing the follow-on RFI
+validation tickets and invoking
+[Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md).
+The explicit-mask grid and migration preflight changes pass. Bandpass
+correction is required but not yet stable. The current package RFI cleaner is
+rejected, and no science fit or claim is admitted.
