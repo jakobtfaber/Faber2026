@@ -8,9 +8,9 @@ authorize scientific adoption or Figure 3 promotion.
 
 The expanded catalog is a reproducible audit product: deterministic catalog
 matches, explicit quality and error fields, correct mass and radius conventions,
-and unchanged census verdict authority. Figure 3 consumes a versioned derivative
-of that authority and reaches the manuscript only after independent numerical,
-provenance, and owner visual checks.
+and independently checked census redshifts and verdicts. Figure 3 consumes a
+versioned derivative of that authority and reaches the manuscript only after
+independent numerical, provenance, and owner visual checks.
 
 ## Route
 
@@ -20,13 +20,16 @@ provenance, and owner visual checks.
 2. [Set the crossmatch and quality contract](tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md)
    — require nearest-match selection, ambiguity accounting, catalog-native flags,
    and query-error visibility.
-3. [Set the mass and radius authority](tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md)
+3. [Independently verify redshifts and verdicts](tickets/expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
+   — check each adopted host/candidate redshift, uncertainty, classification,
+   verdict, and budget flag against its cited evidence and the census rules.
+4. [Set the mass and radius authority](tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md)
    — separate descriptive photometry from adopted stellar masses, halo masses,
    cluster masses, and the critical-density radius convention.
-4. [Set the Figure 3 regeneration gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md)
+5. [Set the Figure 3 regeneration gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md)
    — replace the external input with a versioned derivative and stage, review,
    then promote exact bytes.
-5. [Set the independent release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md)
+6. [Set the independent release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md)
    — require a second implementation path and evidence that does not reuse the
    builder's result columns.
 
@@ -52,7 +55,8 @@ provenance, and owner visual checks.
 
 ## Out of scope
 
-- Re-adjudicating foreground redshifts or budget eligibility.
+- Changing foreground redshifts or budget eligibility without a separate,
+  evidence-backed adjudication record. Independent verification is required here.
 - Treating GSC `Class 3` (non-star) as a secure galaxy classification.
 - Replacing adjudicated stellar masses solely because new WISE photometry exists.
 - Promoting Figure 3 without manuscript-owner approval.
