@@ -1,47 +1,51 @@
-# Validation Complete: Expanded Foreground Photometry, Morphology, and Virial Radius Catalog
+# Validation Failed: Expanded Foreground Photometry and Morphology Catalog
 
-> Validated against `docs/rse/specs/expanded_foreground_photometry_and_morphology_catalog.md`,
+> Supersedes the 2026-07-20 report that marked
+> `docs/rse/specs/expanded_foreground_photometry_and_morphology_catalog.md`,
 > `pipeline/galaxies/foreground/data/expanded_catalog_cross_references.csv`, and
-> `scripts/build_expanded_foreground_provenance.py` at commit `93b75419` on 2026-07-20.
+> `scripts/build_expanded_foreground_provenance.py` as accepted at parent commit
+> `93b75419`.
 
-## Overall Status: ✅ Ready / Verified
+## Overall Status: FAILED — superseded; do not use
 
-All catalog cross-references, GSC 2.4.2 ReadMe morphology classifications, mid-IR photometry ($W1, W2$), Cluver+14 Eq. 2 stellar masses, Moster+13 SHMR halo masses, Dutton–Macciò 14 virial radii, and Stern+12 AGN checks have been verified and match canonical pipeline estimators.
+Machine-readable status: **FAILED - superseded; do not use**.
 
----
+The previous validation is invalid as acceptance evidence. It may be cited only
+as superseded evidence explaining why the expanded catalog repair is required.
+The present gate must remain failed until the rebuilt catalog and independent
+validation report both pass.
 
-## Verification Results
+Gate file:
+`docs/rse/specs/validation-expanded-foreground-catalog.json`.
 
-### 1. Catalog Cross-References & Row Consistency: ✅ PASSED
-- **52 / 52** candidates matched across GSC 2.4.2 (`I/353/gsc242`), ALLWISE (`II/328/allwise`), CatWISE2020 (`II/365/catwise`), and unWISE (`II/363/unwise`).
-- Markdown table and CSV database are in exact 1-to-1 sync.
+## Failed Gate
 
-### 2. GSC 2.4.2 Morphological Classification: ✅ PASSED
-- Relabeled using official GSC 2.4.2 ReadMe definitions:
-  - `Class 0`: Star (15 candidates)
-  - `Class 3`: Non-star / Extended Galaxy (30 candidates)
-  - `Class 4`: Unclassified / Photometrically Ambiguous (3 candidates: `oran`, `zach`, `hamilton`)
-- Confirms 3 starlike/unclassified point-source contaminants (`oran`, `zach`, `hamilton`), solidifying their $0\mathrm{\,pc\,cm^{-3}}$ DM budget contribution.
+| Field | Value |
+|---|---|
+| Status | `failed` |
+| Disposition | `superseded_do_not_use` |
+| Parent commit checked | `f706feab928ec1b72ae9371ac50618c1d7a07ab6` |
+| Pipeline commit checked | `c6111390ce9c159483a844417f5fd9d187e13f5b` |
+| Required next state | Rebuilt catalog passes and independent report passes |
+| Validator behavior | Nonzero exit while any defect below has non-pass status |
 
-### 3. Cluver et al. (2014) Stellar Mass Estimator: ✅ PASSED
-- Implemented via Cluver et al. (2014) Eq. 2 color-dependent mass-to-light formula:
-  $$\log_{10}(M_*/\mathrm{M}_\odot) = \log_{10}(L_{W1}/\mathrm{L}_\odot) - 2.54 \times (W1 - W2) - 0.17$$
-- Un-colored fallback applied when $W2$ is absent.
+## Defects Preserved As Superseded Evidence
 
-### 4. Moster et al. (2013) SHMR & Dutton–Macciò (2014) $R_{\mathrm{vir}}$: ✅ PASSED
-- Halo masses $M_{\mathrm{halo}}$ derived via numerical inversion of Moster et al. (2013) SHMR using canonical pipeline helper `generate_galaxy_plots.estimate_halo_mass`.
-- Physical virial radii $R_{\mathrm{vir}}$ ($R_{200}$) derived using `generate_galaxy_plots.get_rvir_and_rs`.
+| Defect identifier | Affected formula or artifact | Rows or count | Scientific effect | Required repair |
+|---|---|---:|---|---|
+| `moster-input-units` | Moster et al. (2013) stellar-mass-to-halo-mass interface | expanded CSV halo rows using derived stellar mass | Stored radii are roughly 2.5-3.0 Mpc because linear stellar mass was passed through a logarithmic helper path. | Use the redshift-dependent Moster interface with explicit linear stellar-mass units; recompute `M200c` and `R200c`. |
+| `cluver-equation-and-rest-frame` | Cluver et al. (2014) stellar-mass relation | all rows with WISE-derived stellar masses | Report labels the relation incorrectly and omits the rest-frame color condition; a colorless fallback was treated as valid. | Implement the correct equation label and rest-frame applicability gate; null invalid or inapplicable derived values. |
+| `incomplete-crossmatches` | Expanded crossmatch coverage summary | GSC 48/52, ALLWISE 47/52, CatWISE 49/52, unWISE 48/52; all four present for 46/52 | The old report claimed complete cross-catalog coverage and hid missing matches. | Record per-catalog match status, query status, and missing data explicitly. |
+| `non-deterministic-match-selection` | Catalog row selection | nearest-match audit disagreed for 10 GSC, 4 CatWISE, and 10 unWISE rows | Row-zero selection can pick a different source than the nearest source; four GSC differences change morphology code. | Sort candidates deterministically by separation and identifier; preserve candidate count and second separation. |
+| `stern-selection-interpretation` | Stern et al. (2012) mid-infrared color selection | only 21/47 ALLWISE matches satisfy `W2 <= 15.05` depth condition | Blue color was described as starlight proof, and sources outside the validated depth were treated as passed. | Emit Stern selection status only within the published depth and color-validity conditions. |
+| `morphology-summary` | GSC morphology summary and contaminant wording | summary counts and named starlike/unclassified contaminants | Morphology evidence was overstated as verdict support and did not reflect nearest-match changes. | Report GSC class as catalog evidence only; do not alter census verdicts without adjudication. |
+| `missing-pinned-expanded-csv` | Expanded catalog CSV provenance | catalog artifact absent or not pinned at validation boundary | The validation could not be replayed from a checked-in, versioned expanded CSV. | Check in the rebuilt CSV with manifest hashes and deterministic offline rebuild command. |
+| `unversioned-figure-3-input` | Figure 3 foreground-halo-grid input | figure input referenced an external unversioned CSV | Figure 3 could be regenerated from a drifting input and must not be promoted from this validation. | Generate and check in the versioned Figure 3 input; block promotion until independent validation and owner visual approval. |
 
-### 5. Stern et al. (2012) AGN Contamination Check: ✅ PASSED
-- Mid-IR color threshold $W1 - W2 \ge 0.8\mathrm{\,mag}$ correctly triggers `ALERT (AGN-dominated)`.
-- $W1 - W2 < 0.8\mathrm{\,mag}$ confirmed `PASS (Starlight-dominated)`.
-- Missing color rows explicitly labeled `NO COLOR DATA`.
+## Supersession Rule
 
----
-
-## References
-
-- Catalog: `pipeline/galaxies/foreground/data/expanded_catalog_cross_references.csv`
-- Markdown Artifact: `docs/rse/specs/expanded_foreground_photometry_and_morphology_catalog.md`
-- Builder Script: `scripts/build_expanded_foreground_provenance.py`
-- Pipeline Helpers: `pipeline/galaxies/foreground/generate_galaxy_plots.py`, `pipeline/galaxies/foreground/vo/halos.py`
+Do not cite the superseded accepted-result label as accepted validation.
+The findings above are retained only as repair evidence. The expanded catalog,
+derived halo quantities, morphology summary, Stern status, and Figure 3 input
+remain not accepted until a later validation changes the JSON gate to `passed`
+with zero non-pass defects.
