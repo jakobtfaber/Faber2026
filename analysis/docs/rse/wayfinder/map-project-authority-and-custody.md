@@ -28,13 +28,17 @@ can proceed without losing science, provenance, or concurrent work.
   directly relevant to the fitting audit and remain fail-closed.
 - GitHub, the canonical Mac checkout, `pipeline/`, and the independent Overleaf
   checkout are separate truth surfaces until their relationship is ratified.
-- Google Drive is the recorded processed-data authority; iacobus currently
-  holds a verified 244 GB quarantine/staging copy after transfer. Reverify
-  before changing either role.
-- Local `results-library` currently has eight broken links. Treat the registry
-  as claim-level and the library as byte-level only after live reconciliation.
+- Google Drive is the recorded processed-data authority; iacobus holds a dated
+  recovery copy. Full MD5 comparison passes for all 5,437 project-data paths.
+  Strict object parity still fails because Drive has one identical same-name
+  duplicate and iacobus has one local recovery receipt.
+- CANFAR is authority for the 24 derived fit-input cubes. The twelve raw CHIME
+  HDF5 files on h17 remain unclassified pending a checksum-manifested archive.
+- GitHub `main` governs result claims; Drive governs receipted bulk result
+  bytes. The local `results-library` becomes their replica/navigation view only
+  after its eight broken links and other inventory conflicts are repaired.
 - h17 has grown and drifted; h23's recorded quarantine is unexpectedly missing;
-  CANFAR is presently unverifiable because its certificate expired.
+  CANFAR read-only VOSpace access is live and verified through 2026-08-20.
 - Jupyter and MkDocs are stopped and port 8000 is closed. Running Notes is a
   separate launchd service and remains live on loopback port 18765; its public
   edge is unverified. Ownership is in scope; runtime changes are not.
@@ -45,6 +49,21 @@ can proceed without losing science, provenance, or concurrent work.
 
 <!-- one linked gist per resolved ticket; decision detail stays in the ticket -->
 
+- [Define authority roles and their required proof](tickets/authority-01-define-authority-roles-and-proof.md)
+  — roles attach singly to exact scoped surfaces; authority requires an
+  owner-ratified immutable identity, all uncertainty fails closed, and
+  verification, preservation, and consolidation safety have distinct proofs.
+- [Choose the code and manuscript authority policy](tickets/authority-08-choose-code-manuscript-authority.md)
+  — GitHub `main` governs manuscript history and the reproducibility pin,
+  FLITS fork `main` governs fitting code, and every working-copy return requires
+  a scoped reviewed receipt; Overleaf and dirty fitting lanes remain fail-closed.
+- [Choose operational ownership for paused services](tickets/authority-10-choose-operational-ownership.md)
+  — Jupyter remains unclassified, MkDocs source is repository-owned but its
+  environment is not, and persistent Running Notes has separate source,
+  mutable-state, submission, and public-edge gates with explicit receipts.
+- [Restore CANFAR read-only verification access](tickets/authority-05-restore-canfar-read-access.md)
+  — a renewed CADC certificate passed a live, authenticated, non-recursive
+  listing of the project VOSpace root and remains valid through 2026-08-20.
 - [Reconcile local data and results custody](tickets/authority-04-reconcile-local-data-and-results.md)
   — local instrument custody is split correctly, but the registry/library
   relationship is unreconciled; eight stale worktree links and current CHIME
@@ -69,6 +88,18 @@ can proceed without losing science, provenance, or concurrent work.
   — last verified July 6, then absent without a move/deletion receipt; migrated
   classes largely survive downstream, but exact-byte custody of the vanished
   137 GB tree remains unproved.
+- [Complete Drive-to-iacobus parity and duplicate adjudication](tickets/authority-15-complete-drive-iacobus-parity.md)
+  — all 5,437 project-data paths match by MD5; the local recovery receipt and
+  byte-identical duplicate Drive object explain why content parity passes while
+  strict one-to-one object parity fails.
+- [Choose the data and results authority policy](tickets/authority-09-choose-data-results-authority.md)
+  — Git governs claims, Drive governs receipted bulk bytes, CANFAR governs the
+  24 fit-input cubes, and local/h17 surfaces remain replicas, working copies,
+  staging, or unclassified until explicit promotion gates pass.
+- [Ratify preservation gates and the consolidation sequence](tickets/authority-11-ratify-preservation-and-consolidation-gates.md)
+  — every action requires an exact packet, recovery and rollback proof, an
+  exclusive scope lock, and a verified phase barrier; preserve at-risk states
+  before merging, relinking, retiring, or separately approved removal.
 
 ## Not yet specified
 

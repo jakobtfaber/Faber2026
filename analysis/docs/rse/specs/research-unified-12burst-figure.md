@@ -52,7 +52,7 @@ All physical data under `~/Data/Faber2026/dsa110/` (symlinked into
   shape (6144, 2500) — 6144 chans × 2500 × 32.768 µs ≈ 81.9 ms window,
   burst-centered. Present for all 12.
 - **CHIME** dedispersed ("dmphase") bandpass-corrected Stokes-I waterfall:
-  `~/Data/Faber2026/dsa110/DSA_bursts/{nick}_chime_I_{DM}_{tag}_32000b_cntr_bpc.npy`,
+  `~/Data/Faber2026/chimefrb/CHIME_bursts/{nick}_chime_I_{DM}_{tag}_32000b_cntr_bpc.npy`,
   shape (1024, 32000) — 32000 × 2.56 µs ≈ 81.9 ms window. Present for all 12.
 - Per-burst run configs (DM, f/t decimation, data path):
   `pipeline/scattering/configs/bursts/{dsa,chime}/{nick}_{tel}.yaml` — DSA

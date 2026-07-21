@@ -7,6 +7,130 @@ scattering-budget paper. Numbers and figures are produced by **dsa110-FLITS**
 
 ## Language
 
+**Scoped surface**:
+A project artifact or state slice identified by content class, location, and
+observed revision or time. Authority roles attach to this scope, never to a
+mixed directory wholesale. One checkout may therefore have different roles
+for manuscript content, Git history, and figure bytes.
+
+**Custody role**:
+Exactly one of authority, replica, working copy, staging area, quarantine,
+preservation packet, retired source, or unclassified, assigned to a scoped
+surface at an observation time. `Unclassified` is the fail-closed default and
+implies neither authority nor permission to remove the surface.
+
+**Authority**:
+The sole scoped surface allowed to settle content conflicts for its content
+class. An authority without an independent recoverable copy is `at risk`, but
+does not thereby lose its role.
+
+**Claim registry**:
+The GitHub-main ledger that settles which manuscript-facing result is current,
+trusted, and consumed. It governs claims, not bulk result bytes.
+
+**Result object authority**:
+The exact receipted Google Drive scope that settles byte conflicts for accepted
+bulk result artifacts. Byte authority does not grant scientific trust.
+
+**Results view**:
+The local materialized `results-library` that combines verified byte replicas
+with navigation links to Git-governed sources. Links never prove custody.
+
+**Fit-input authority**:
+The checksum-manifested 24 derived CHIME/FRB and DSA-110 intensity cubes in
+CANFAR VOSpace. Instrument-specific Mac copies are replicas.
+
+**Byte promotion**:
+The receipted change from working or staging bytes to an authoritative object
+identity. It records provenance and integrity but does not clear a science claim.
+
+**Claim promotion**:
+The separate scientific decision that marks a registry result trusted and
+current for manuscript consumption.
+
+**Replica**:
+A verified content-equivalent copy of an authority. It supplies recovery or
+access but never settles conflicts.
+
+**Working copy**:
+A mutable descendant of an identified authority or base state, assigned for
+active editing. Local changes and cleanliness do not grant authority.
+
+**Staging area**:
+A temporary, bounded transfer or assembly surface awaiting verification,
+promotion, or rejection. Partial transfers remain staging areas.
+
+**Quarantine**:
+An isolated surface whose trust, provenance, safety, or disposition remains
+unresolved. Quarantine prevents consumption; it never authorizes removal.
+
+**Preservation packet**:
+An immutable, self-describing recovery artifact for an exact source state,
+including its content manifest, provenance, and recovery instructions.
+
+**Retired source**:
+A deliberately retained surface that is no longer an active authority or
+input. Retirement requires an explicit successor or no-successor decision.
+
+**Verified**:
+A specific claim checked against named live evidence at a recorded time.
+Verification is claim-limited and expires when the relevant state changes.
+
+**Preserved**:
+A scoped state with an independently readable, integrity-checked recovery copy
+and a tested recovery path. Preservation alone never authorizes consolidation
+or removal.
+
+**Safe to consolidate**:
+A scoped action whose authority, recovery, ownership, references, active use,
+target list, rollback, and post-action checks are all cleared. Ambiguity or an
+unresolved science gate makes the action unsafe.
+
+**Preservation gate**:
+The proof that an exact source state has an independently readable,
+integrity-checked recovery copy and tested restoration path. It authorizes no
+source mutation.
+
+**Consolidation gate**:
+The owner-ratified, action-specific proof that an exact mutation is safe,
+recoverable, exclusive, reference-complete, and ready for post-action checks.
+
+**Scope lock**:
+The exclusive right for one writer to change one exact ref, directory tree,
+result scope, reconciliation surface, or service state during an action.
+
+**Phase barrier**:
+The rule that all manifests, checks, receipts, and exceptions for one
+consolidation stage must close before the next stage begins.
+
+**Manuscript authority**:
+The manuscript, bibliography, generated tables, figure catalog, and approved
+tracked figure outputs committed on Faber2026 GitHub `main`. Overleaf and Mac
+checkouts are working copies, not competing authorities.
+
+**Fitting-code authority**:
+The accepted code history on the `jakobtfaber/dsa110-FLITS` fork's `main`
+branch. The organization repository is upstream, not this project's authority.
+
+**Manuscript pipeline pin**:
+The `pipeline` gitlink committed on Faber2026 GitHub `main`, identifying the
+exact FLITS state used by the manuscript. Fork advancement never changes this
+pin implicitly.
+
+**Operational source authority**:
+The reviewed repository code, configuration template, authored content, and
+state policy that define a service. A running process or installed copy is
+operational state or a replica, never source authority.
+
+**Operational state**:
+A time-bounded observation of processes, listeners, launch agents, mutable
+files, and external dependencies. Stopped means paused, not abandoned.
+
+**Restart receipt**:
+The source, configuration, environment, preserved mutable state, authorization,
+pre/post runtime evidence, health checks, rollback, and observation time for a
+service change. Public-edge and submission checks are separate when applicable.
+
 **Co-detection sample**:
 The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
