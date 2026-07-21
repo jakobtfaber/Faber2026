@@ -28,9 +28,10 @@ can proceed without losing science, provenance, or concurrent work.
   directly relevant to the fitting audit and remain fail-closed.
 - GitHub, the canonical Mac checkout, `pipeline/`, and the independent Overleaf
   checkout are separate truth surfaces until their relationship is ratified.
-- Google Drive is the recorded processed-data authority; iacobus currently
-  holds a verified 244 GB quarantine/staging copy after transfer. Reverify
-  before changing either role.
+- Google Drive is the recorded processed-data authority; iacobus holds a dated
+  recovery copy. Full MD5 comparison passes for all 5,437 project-data paths.
+  Strict object parity still fails because Drive has one identical same-name
+  duplicate and iacobus has one local recovery receipt.
 - Local `results-library` currently has eight broken links. Treat the registry
   as claim-level and the library as byte-level only after live reconciliation.
 - h17 has grown and drifted; h23's recorded quarantine is unexpectedly missing;
@@ -84,6 +85,10 @@ can proceed without losing science, provenance, or concurrent work.
   — last verified July 6, then absent without a move/deletion receipt; migrated
   classes largely survive downstream, but exact-byte custody of the vanished
   137 GB tree remains unproved.
+- [Complete Drive-to-iacobus parity and duplicate adjudication](tickets/authority-15-complete-drive-iacobus-parity.md)
+  — all 5,437 project-data paths match by MD5; the local recovery receipt and
+  byte-identical duplicate Drive object explain why content parity passes while
+  strict one-to-one object parity fails.
 
 ## Not yet specified
 
