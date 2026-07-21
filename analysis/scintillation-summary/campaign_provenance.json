@@ -3,7 +3,7 @@
   "campaign_status": "closed",
   "command": "env -i HOME=/Users/jakobfaber PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin /opt/anaconda3/bin/conda run -n py312 python scripts/build_scintillation_campaign_summary.py",
   "expected_measurement": "chromatica_hi",
-  "generator_sha256": "444a33c814932844e9fbd403aa88a1c8733cf429a2ba670b53ad916aead9a298",
+  "generator_sha256": "644ffb597f0d5b2836375c7453925dcf78ff567cb3d5a140e13e772f3eb34252",
   "inputs": [
     {
       "path": "pipeline/analysis/window-tuning-campaign-2026-07-17/results/validation.json",
@@ -26,8 +26,9 @@
     "path": "chime_scintillation_campaign_table.tex",
     "sha256": "2855314386422e1e31154e558cf4a73fac9b68a4e0d5d8804752743b35a1d520"
   },
-  "parent_base_revision": "a5447b6720948e4430c9a51df92daab125302717",
-  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+  "parent_base_revision": "74b7dd6db85c0867eb702f02c430ab29551ad504",
+  "pipeline_revision": "c6111390ce9c159483a844417f5fd9d187e13f5b",
   "python": "3.12.13",
-  "recorded_date": "2026-07-17"
+  "recorded_date": "2026-07-17",
+  "source_revision": "17d9d26675702e9f8917da655621bef3231f0ddb"
 }
