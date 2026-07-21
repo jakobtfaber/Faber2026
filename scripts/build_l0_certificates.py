@@ -2,7 +2,7 @@
 """Build raw-layer (stratum-0) input certificates for the 36 archival products.
 
 Wayfinder ticket 17. Reads waterfall-review deck meta + pipeline data
-manifest + local ~/Data/Faber2026/dsa110 products; writes
+manifest + local instrument-specific products; writes
 docs/rse/certificates/l0-certificates.json. Optionally refreshes the raw-layer section of
 docs/rse/control/results-registry.toml.
 
@@ -33,20 +33,28 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from audit_fig1_axes import audit_chime_ordering, audit_dsa_ordering, _flagged_rows_raw  # noqa: E402
 from l0_conventions import freq_order_from_axis, md5_prefix, sha256_file  # noqa: E402
 
-DATA = Path.home() / "Data/Faber2026/dsa110"
-DSA = DATA / "DSA_bursts"
-UPCHAN = DATA / "upchan_codetections"
+CHIME_FULL_ROOT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
+DSA_FULL_ROOT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
+UPCHAN_ROOT = Path.home() / "Data/Faber2026/dsa110/upchan_codetections"
 DECK = ROOT / "docs/rse/decks/scintillation/waterfall-review-2026-07-18"
 MANIFEST = ROOT / "pipeline/data-manifest.csv"
 OUT_JSON = ROOT / "docs/rse/certificates/l0-certificates.json"
 REGISTRY = ROOT / "docs/rse/control/results-registry.toml"
 
-L0_MARKER = "# ── L0 input certificates"
+L0_MARKER = "# ── Derived intensity-product inventory"
 CLEARED_BY = (
     "wayfinder ticket 17 raw-layer spot-check 2026-07-19 "
     "(36/36 checksums; cellular-band / leave-one-out / frequency-file orders; "
     "casey, freya, and zach review-deck panels)"
 )
+CERTIFICATE_STATE = {
+    "trust": "pending",
+    "cleared_by": "",
+    "notes_scope": (
+        "derived intensity product — NOT raw CHIME data; see "
+        "docs/rse/specs/notes/definition-raw-chime-data-2026-07-19.md"
+    ),
+}
 
 
 def _load_meta() -> dict:
@@ -89,20 +97,39 @@ def _chime_loo_verdicts(chime_paths: dict[str, Path], n_rows: int = 1024) -> dic
     return out
 
 
-def build_certificates() -> list[dict]:
-    if not DSA.is_dir() or not UPCHAN.is_dir():
-        raise SystemExit(f"local data missing under {DATA}")
+def _display_path(path: Path) -> str:
+    try:
+        return f"~/{path.relative_to(Path.home())}"
+    except ValueError:
+        return str(path)
+
+
+def build_certificates(
+    chime_full_root: Path = CHIME_FULL_ROOT,
+    dsa_full_root: Path = DSA_FULL_ROOT,
+    upchan_root: Path = UPCHAN_ROOT,
+) -> list[dict]:
+    roots = {
+        "CHIME/FRB full-resolution": Path(chime_full_root),
+        "DSA-110 full-resolution": Path(dsa_full_root),
+        "CHIME/FRB upchannelized": Path(upchan_root),
+    }
+    missing = [label for label, path in roots.items() if not path.is_dir()]
+    if missing:
+        raise SystemExit(f"local data roots missing: {missing}")
     meta = _load_meta()
     man = _load_manifest()
     nicks = sorted(meta.keys())
     if len(nicks) != 12:
         raise SystemExit(f"expected 12 bursts in deck meta, got {len(nicks)}")
 
-    dsa_paths = {n: DSA / meta[n]["dsa"]["file"] for n in nicks}
+    dsa_paths = {n: dsa_full_root / meta[n]["dsa"]["file"] for n in nicks}
     dsa_audit = audit_dsa_ordering(dsa_paths, n_rows=6144)
     dsa_all_ok = all(dsa_audit[n]["consistent_with_shared_convention"] for n in nicks)
 
-    chime_paths = {n: DSA / meta[n]["chime_full"]["file"] for n in nicks}
+    chime_paths = {
+        n: chime_full_root / meta[n]["chime_full"]["file"] for n in nicks
+    }
     chime_loo = _chime_loo_verdicts(chime_paths)
 
     rows: list[dict] = []
@@ -110,7 +137,7 @@ def build_certificates() -> list[dict]:
         m = meta[nick]
 
         cf = m["chime_full"]
-        path = DSA / cf["file"]
+        path = chime_full_root / cf["file"]
         cellular = audit_chime_ordering(path, n_rows=int(cf["shape"][0]))
         method = "chime_cellular_band_mask_occupancy_729_756_MHz"
         order = cellular["verdict"]
@@ -147,7 +174,7 @@ def build_certificates() -> list[dict]:
                 "nick": nick,
                 "product": "chime_full",
                 "file": cf["file"],
-                "local_path": f"~/Data/Faber2026/dsa110/DSA_bursts/{cf['file']}",
+                "local_path": _display_path(path),
                 "sha256": mrow["sha256"],
                 "bytes": int(mrow["bytes"]),
                 "deck_md5": cf["md5"],
@@ -165,11 +192,12 @@ def build_certificates() -> list[dict]:
                     "CANFAR archive CHIME_bursts/dmphase; "
                     "local bytes match archive"
                 ),
+                **CERTIFICATE_STATE,
             }
         )
 
         ds = m["dsa"]
-        path = DSA / ds["file"]
+        path = dsa_full_root / ds["file"]
         mrow = man[(nick, "dsa")]
         file_md5 = md5_prefix(path)
         da = dsa_audit[nick]
@@ -183,7 +211,7 @@ def build_certificates() -> list[dict]:
                 "nick": nick,
                 "product": "dsa",
                 "file": ds["file"],
-                "local_path": f"~/Data/Faber2026/dsa110/DSA_bursts/{ds['file']}",
+                "local_path": _display_path(path),
                 "sha256": mrow["sha256"],
                 "bytes": int(mrow["bytes"]),
                 "deck_md5": ds["md5"],
@@ -208,12 +236,13 @@ def build_certificates() -> list[dict]:
                     "CANFAR archive DSA_bursts; local bytes match archive; "
                     "frequency descending per telescopes.yaml"
                 ),
+                **CERTIFICATE_STATE,
             }
         )
 
         cu = m["chime_upchan"]
-        path = UPCHAN / cu["file"]
-        freq_path = UPCHAN / f"{nick}_chime_freq.npy"
+        path = upchan_root / cu["file"]
+        freq_path = upchan_root / f"{nick}_chime_freq.npy"
         freq = np.load(freq_path)
         order = freq_order_from_axis(freq)
         file_md5 = md5_prefix(path)
@@ -222,7 +251,7 @@ def build_certificates() -> list[dict]:
                 "nick": nick,
                 "product": "chime_upchan",
                 "file": cu["file"],
-                "local_path": f"~/Data/Faber2026/dsa110/upchan_codetections/{cu['file']}",
+                "local_path": _display_path(path),
                 "sha256": sha256_file(path),
                 "bytes": path.stat().st_size,
                 "deck_md5": cu["md5"],
@@ -235,9 +264,7 @@ def build_certificates() -> list[dict]:
                     "fmax": float(freq.max()),
                     "nchan": int(freq.size),
                 },
-                "freq_path": (
-                    f"~/Data/Faber2026/dsa110/upchan_codetections/{nick}_chime_freq.npy"
-                ),
+                "freq_path": _display_path(freq_path),
                 "freq_sha256": sha256_file(freq_path),
                 "shape": cu["shape"],
                 "arc_path": f"h17:$COD/upchan_codetections/{cu['file']}",
@@ -251,6 +278,7 @@ def build_certificates() -> list[dict]:
                     "h17 upchan_codetections; PROVENANCE.md; "
                     "companion frequency file"
                 ),
+                **CERTIFICATE_STATE,
             }
         )
     return rows
@@ -263,8 +291,9 @@ def _toml_escape(s: str) -> str:
 def render_registry_fragment(rows: list[dict]) -> str:
     lines = [
         "",
-        L0_MARKER + " (wayfinder ticket 17, 2026-07-19) ─────────",
-        "# Byte + axis-convention certification for the 36 archival products",
+        L0_MARKER + " (MISLABELED as L0 — 2026-07-19) ─",
+        "# These 36 rows inventory derived products; they are not raw CHIME data",
+        "# and byte/axis checks do not grant scientific trust.",
         "# (12 bursts × {CHIME full-resolution, CHIME upchannelized, DSA-110}).",
         "# Frequency order is measured: CHIME full-resolution via cellular-band",
         "# (729–756 MHz) mask occupancy; DSA-110 via leave-one-out flagged-row",
@@ -303,6 +332,7 @@ def render_registry_fragment(rows: list[dict]) -> str:
             [
                 "[[result]]",
                 f'id = "{pid}"',
+                "library_slots = []",
                 'section = "§0"',
                 'kind = "input_certificate"',
                 f'description = "L0 certificate: {r["nick"]} {r["product"]} ({r["file"]})"',
@@ -321,7 +351,7 @@ def render_registry_fragment(rows: list[dict]) -> str:
                 "",
             ]
         )
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def update_registry(rows: list[dict]) -> None:
@@ -349,13 +379,21 @@ def update_registry(rows: list[dict]) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
+    path_arg = lambda value: Path(value).expanduser()  # noqa: E731
+    ap.add_argument("--chime-full-root", type=path_arg, default=CHIME_FULL_ROOT)
+    ap.add_argument("--dsa-full-root", type=path_arg, default=DSA_FULL_ROOT)
+    ap.add_argument("--upchan-root", type=path_arg, default=UPCHAN_ROOT)
     ap.add_argument(
         "--update-registry",
         action="store_true",
         help="rewrite the L0 section of docs/rse/control/results-registry.toml",
     )
     args = ap.parse_args()
-    rows = build_certificates()
+    rows = build_certificates(
+        chime_full_root=args.chime_full_root,
+        dsa_full_root=args.dsa_full_root,
+        upchan_root=args.upchan_root,
+    )
     for r in rows:
         if not r["md5_ok"]:
             raise SystemExit(

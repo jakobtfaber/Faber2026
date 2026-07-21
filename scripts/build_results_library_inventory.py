@@ -11,7 +11,10 @@ Always invoke from the git checkout (this script), not a library copy.
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import os
+import stat
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -61,6 +64,8 @@ class CatalogEntry:
     notes: str
     mode: LinkMode = "link_only"
     external_paths: tuple[ExternalPathSpec, ...] = ()
+    destinations: dict[str, str] | None = None
+    result_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -116,6 +121,27 @@ def load_catalog(path: Path = CATALOG_PATH) -> Catalog:
         sources = item.get("sources") or []
         if not isinstance(sources, list):
             raise SystemExit(f"entry {eid!r}: sources must be a list")
+        result_ids = item.get("result_ids")
+        if not isinstance(result_ids, list):
+            raise SystemExit(f"entry {eid!r}: result_ids must be a list")
+        destinations = item.get("destinations") or {}
+        if not isinstance(destinations, dict):
+            raise SystemExit(f"entry {eid!r}: destinations must be a mapping")
+        unknown_destinations = sorted(set(destinations) - {str(s) for s in sources})
+        if unknown_destinations:
+            raise SystemExit(
+                f"entry {eid!r}: destinations name unknown sources: "
+                f"{unknown_destinations}"
+            )
+        normalized_destinations: dict[str, str] = {}
+        for source, destination in destinations.items():
+            rel_dest = Path(str(destination))
+            if rel_dest.is_absolute() or ".." in rel_dest.parts:
+                raise SystemExit(
+                    f"entry {eid!r}: destination must stay inside slot: "
+                    f"{destination!r}"
+                )
+            normalized_destinations[str(source)] = str(rel_dest)
         ext_specs: list[ExternalPathSpec] = []
         for j, ext in enumerate(item.get("external_paths") or []):
             if not isinstance(ext, dict):
@@ -146,6 +172,8 @@ def load_catalog(path: Path = CATALOG_PATH) -> Catalog:
                 notes=str(item["notes"]),
                 mode=mode_raw,  # type: ignore[arg-type]
                 external_paths=tuple(ext_specs),
+                destinations=normalized_destinations,
+                result_ids=tuple(str(result_id) for result_id in result_ids),
             )
         )
     return Catalog(trust_legend={str(k): str(v) for k, v in legend.items()}, entries=tuple(entries))
@@ -215,6 +243,9 @@ def link_dest(entry: CatalogEntry, rel: str | None, *, external_name: str | None
     n_src = len(entry.sources)
     n_ext = len(entry.external_paths)
     if rel is not None:
+        explicit = (entry.destinations or {}).get(rel)
+        if explicit is not None:
+            return slot / Path(explicit)
         if n_src == 1 and n_ext == 0:
             return slot
         return slot / Path(rel).name
@@ -222,6 +253,143 @@ def link_dest(entry: CatalogEntry, rel: str | None, *, external_name: str | None
     if n_ext == 1 and n_src == 0:
         return slot
     return slot / external_name
+
+
+def select_entries(catalog: Catalog, only: list[str] | tuple[str, ...]) -> Catalog:
+    """Return an exact ordered catalog subset; reject ambiguous selection."""
+    requested = list(only)
+    if not requested:
+        return catalog
+    duplicates = sorted({entry_id for entry_id in requested if requested.count(entry_id) > 1})
+    if duplicates:
+        raise SystemExit(f"duplicate --only catalog entry: {duplicates}")
+    by_id = {entry.id: entry for entry in catalog.entries}
+    unknown = [entry_id for entry_id in requested if entry_id not in by_id]
+    if unknown:
+        raise SystemExit(f"unknown catalog entry: {unknown}")
+    return Catalog(
+        trust_legend=catalog.trust_legend,
+        entries=tuple(by_id[entry_id] for entry_id in requested),
+    )
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def tree_manifest(path: Path) -> dict[str, Any]:
+    """Deterministic regular-file manifest for a file or directory."""
+    target = path.resolve() if path.is_symlink() else path
+    if target.is_file():
+        return {"files": 1, "bytes": target.stat().st_size, "sha256": _sha256_file(target)}
+    files = sorted(
+        (
+            candidate
+            for candidate in target.rglob("*")
+            if candidate.is_file() and not candidate.is_symlink()
+        ),
+        key=lambda candidate: candidate.relative_to(target).as_posix(),
+    )
+    digest = hashlib.sha256()
+    total_bytes = 0
+    for candidate in files:
+        rel = candidate.relative_to(target).as_posix()
+        size = candidate.stat().st_size
+        total_bytes += size
+        digest.update(rel.encode())
+        digest.update(b"\0")
+        digest.update(str(size).encode())
+        digest.update(b"\0")
+        digest.update(_sha256_file(candidate).encode())
+        digest.update(b"\n")
+    return {"files": len(files), "bytes": total_bytes, "sha256": digest.hexdigest()}
+
+
+def snapshot_path(path: Path, *, manifest: bool) -> dict[str, Any]:
+    """Capture lstat-aware path state without mistaking broken links for absence."""
+    if path.is_symlink():
+        info = path.lstat()
+        resolved = path.resolve(strict=False)
+        result: dict[str, Any] = {
+            "path": str(path),
+            "type": "symlink",
+            "inode": info.st_ino,
+            "mode": oct(stat.S_IMODE(info.st_mode)),
+            "uid": info.st_uid,
+            "size": info.st_size,
+            "raw_link_target": os.readlink(path),
+            "resolved_target": str(resolved),
+            "resolves": path.exists(),
+        }
+        if manifest and path.exists():
+            result["manifest"] = tree_manifest(path)
+        return result
+    if not path.exists():
+        return {"path": str(path), "type": "absent"}
+    info = path.stat()
+    kind = "directory" if path.is_dir() else "file"
+    result = {
+        "path": str(path),
+        "type": kind,
+        "inode": info.st_ino,
+        "mode": oct(stat.S_IMODE(info.st_mode)),
+        "uid": info.st_uid,
+        "size": info.st_size,
+    }
+    if manifest:
+        result["manifest"] = tree_manifest(path)
+    return result
+
+
+def build_receipt(
+    inventory: dict[str, Any],
+    *,
+    selected_ids: list[str],
+    parent_commit: str,
+    pipeline_commit: str,
+) -> dict[str, Any]:
+    """Build a machine-readable post-action receipt from inventory metadata."""
+    entries: list[dict[str, Any]] = []
+    for entry in inventory["entries"]:
+        sources: list[dict[str, Any]] = []
+        for source in entry["sources"]:
+            source_path = source.get("abs")
+            destination_path = source.get("dest")
+            sources.append(
+                {
+                    "rel": source.get("rel"),
+                    "link_status": source.get("link_status"),
+                    "source": snapshot_path(Path(source_path), manifest=True)
+                    if source_path
+                    else None,
+                    "destination": snapshot_path(Path(destination_path), manifest=False)
+                    if destination_path
+                    else None,
+                }
+            )
+        entries.append({"id": entry["id"], "sources": sources})
+    return {
+        "schema": "faber2026-results-library-repair-receipt/v1",
+        "observed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "selected_ids": selected_ids,
+        "library_root": inventory["library_root"],
+        "faber2026_root": inventory["faber2026_root"],
+        "git": {
+            "parent_commit": parent_commit,
+            "pipeline_commit": pipeline_commit,
+        },
+        "entries": entries,
+    }
+
+
+def _git_head(root: Path) -> str:
+    return subprocess.check_output(
+        ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
+    ).strip()
 
 
 def _resolves_equal(a: Path, b: Path) -> bool:
@@ -318,8 +486,9 @@ def build(
                 raise SystemExit(f"{entry.id}: sources require non-external repo")
             src = base / rel
             meta = probe_path(src, repo=base, rel=rel)
+            dest = library / link_dest(entry, rel, external_name=None)
+            meta["dest"] = str(dest)
             if link or dry_run:
-                dest = library / link_dest(entry, rel, external_name=None)
                 meta["link_status"] = ensure_link(
                     src, dest, force=force, dry_run=dry_run, mode=entry.mode
                 )
@@ -343,11 +512,12 @@ def build(
                 )
                 continue
             meta = probe_path(p, repo=None, rel=None)
+            dest = library / link_dest(entry, None, external_name=p.name)
+            meta["dest"] = str(dest)
             if not p.exists():
                 meta["size"] = "absent"
                 meta["link_status"] = "absent"
             elif link or dry_run:
-                dest = library / link_dest(entry, None, external_name=p.name)
                 meta["link_status"] = ensure_link(
                     p, dest, force=force, dry_run=dry_run
                 )
@@ -361,6 +531,7 @@ def build(
                 "trust": entry.trust,
                 "repo": entry.repo,
                 "mode": entry.mode,
+                "result_ids": list(entry.result_ids),
                 "notes": entry.notes,
                 "sources": sources_meta,
             }
@@ -462,13 +633,31 @@ def main(argv: list[str] | None = None) -> None:
     ap.add_argument("--link", action="store_true", help="create/update symlinks")
     ap.add_argument("--force", action="store_true", help="replace existing symlinks")
     ap.add_argument(
+        "--only",
+        action="append",
+        default=[],
+        help="Limit to exact catalog entry id(s); repeatable",
+    )
+    ap.add_argument(
+        "--receipt",
+        type=Path,
+        default=None,
+        help="Write a machine-readable post-action receipt",
+    )
+    ap.add_argument(
         "--dry-run",
         action="store_true",
         help="probe + report link actions without writing library files or links",
     )
     args = ap.parse_args(argv)
 
-    catalog = load_catalog(Path(args.catalog).expanduser().resolve())
+    if args.dry_run and args.receipt is not None:
+        ap.error("--receipt cannot be combined with --dry-run")
+
+    catalog = select_entries(
+        load_catalog(Path(args.catalog).expanduser().resolve()),
+        list(args.only),
+    )
     root = _repo_root(args.root)
     library = args.library.expanduser().resolve()
 
@@ -496,6 +685,18 @@ def main(argv: list[str] | None = None) -> None:
     print(f"Wrote {yaml_path}")
     print(f"Wrote {library / 'INDEX.md'}")
     print(f"entries={len(inventory['entries'])} link={args.link}")
+
+    if args.receipt is not None:
+        receipt_path = args.receipt.expanduser().resolve()
+        receipt_path.parent.mkdir(parents=True, exist_ok=True)
+        receipt = build_receipt(
+            inventory,
+            selected_ids=[entry.id for entry in catalog.entries],
+            parent_commit=_git_head(root),
+            pipeline_commit=_git_head(root / "pipeline"),
+        )
+        receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n")
+        print(f"Wrote {receipt_path}")
 
 
 if __name__ == "__main__":

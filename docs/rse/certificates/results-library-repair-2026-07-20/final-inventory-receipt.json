@@ -1,0 +1,701 @@
+{
+  "entries": [
+    {
+      "id": "scattering.dm-locked-2026-07-14",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321971274,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/fit_summaries",
+            "size": 416,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/scattering-dm-locked-2026-07-14/results/fit_summaries",
+          "source": {
+            "inode": 327361314,
+            "manifest": {
+              "bytes": 37953,
+              "files": 11,
+              "sha256": "30317829e7e7a9c69b4b18796e6c7163ee28720aaf3f336189ff1d45f5f6a10a"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_summaries",
+            "raw_link_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/fit_summaries",
+            "resolved_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/fit_summaries",
+            "resolves": true,
+            "size": 94,
+            "type": "symlink",
+            "uid": 501
+          }
+        },
+        {
+          "destination": {
+            "inode": 321971286,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/ppc",
+            "size": 416,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/scattering-dm-locked-2026-07-14/results/ppc",
+          "source": {
+            "inode": 327361315,
+            "manifest": {
+              "bytes": 2727,
+              "files": 11,
+              "sha256": "f3e1fe757582377f027349fb0a95af0f26b97366574ba7e67a71e5ce1fde8e0f"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-dm-locked-2026-07-14/results/ppc",
+            "raw_link_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/ppc",
+            "resolved_target": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07-14_dm-locked/ppc",
+            "resolves": true,
+            "size": 84,
+            "type": "symlink",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "scattering.refit-2026-06",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321971306,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-06_refit/_a1_fits",
+            "size": 768,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/scattering-refit-2026-06/_a1_fits",
+          "source": {
+            "inode": 310223753,
+            "manifest": {
+              "bytes": 31783,
+              "files": 22,
+              "sha256": "175f3e0f792c929bc714bd1de2bc9f17b36471a717f12b98f7d35f4864435e2e"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-refit-2026-06/_a1_fits",
+            "size": 768,
+            "type": "directory",
+            "uid": 501
+          }
+        },
+        {
+          "destination": {
+            "inode": 321971393,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-06_refit/joint_json",
+            "size": 960,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/scattering-refit-2026-06/joint_json",
+          "source": {
+            "inode": 310223836,
+            "manifest": {
+              "bytes": 37005,
+              "files": 28,
+              "sha256": "1399df0c098f31fff151e8804f1cad6b4f329af28c8a711c1d994ae4ff676c74"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scattering-refit-2026-06/joint_json",
+            "size": 960,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "scattering.beta-campaign-2026-07",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321970877,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07_beta-campaign/fits",
+            "size": 736,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/beta_campaign/fits",
+          "source": {
+            "inode": 310223660,
+            "manifest": {
+              "bytes": 36600,
+              "files": 21,
+              "sha256": "61dbd36babc524faa11025fecd8c8a78f9226af2d4a1a8f8f462dd3c0ef186aa"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/beta_campaign/fits",
+            "size": 736,
+            "type": "directory",
+            "uid": 501
+          }
+        },
+        {
+          "destination": {
+            "inode": 321970873,
+            "mode": "0o644",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scattering/2026-07_beta-campaign/beta_campaign_verdicts.json",
+            "size": 11445,
+            "type": "file",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/beta_campaign/beta_campaign_verdicts.json",
+          "source": {
+            "inode": 313573199,
+            "manifest": {
+              "bytes": 11445,
+              "files": 1,
+              "sha256": "c8cee6e0968eacfa04f97c367a6ec5d24b08b205b9f2f9c992f86a1c0a14f7a5"
+            },
+            "mode": "0o644",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/beta_campaign/beta_campaign_verdicts.json",
+            "size": 11445,
+            "type": "file",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "scintillation.dsa-lorentzian-2026-07-07",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321971526,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scintillation/2026-07-07_dsa-lorentzian",
+            "size": 608,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/scintillation-dsa-lorentzian-2026-07-07/results",
+          "source": {
+            "inode": 311786997,
+            "manifest": {
+              "bytes": 1686569,
+              "files": 17,
+              "sha256": "721e5942f358086cc55b8f8d53eaf8c838a8870214455a75afdbef5f62e5d006"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results",
+            "size": 128,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "scintillation.chime",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361275,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scintillation/chime-diagnostic",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime-scintillation",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime-scintillation",
+            "resolves": true,
+            "size": 104,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/chime-scintillation",
+          "source": {
+            "inode": 319665746,
+            "manifest": {
+              "bytes": 20824565,
+              "files": 183,
+              "sha256": "516ce109543d35baba8b74eddd77cc72f3010a335b3be10c1e37de26ae7040ad"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime-scintillation",
+            "size": 160,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "scintillation.chime-window-2026-07-17",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361283,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/scintillation/2026-07-17_window-tuning",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/window-tuning-campaign-2026-07-17/results",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/window-tuning-campaign-2026-07-17/results",
+            "resolves": true,
+            "size": 126,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/window-tuning-campaign-2026-07-17/results",
+          "source": {
+            "inode": 324888099,
+            "manifest": {
+              "bytes": 421996,
+              "files": 30,
+              "sha256": "47432abdc45caba779a552c31beb04592985a3a2acd0c85fc5d520b7599974bc"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/window-tuning-campaign-2026-07-17/results",
+            "size": 1024,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "dispersion.pipeline-results-root",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321971932,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/pipeline-results-root",
+            "size": 1568,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "results",
+          "source": {
+            "inode": 310224232,
+            "manifest": {
+              "bytes": 115972920,
+              "files": 291,
+              "sha256": "1f2b75ece0c028c5c208104e150a6294ca93231484178b99168c40cc0f113d06"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/results",
+            "size": 448,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "dispersion.dm-joint-phase-v2-parent",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321968661,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics",
+            "size": 608,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/dm-joint-phase-v2/results/diagnostics",
+          "source": {
+            "inode": 327361316,
+            "manifest": {
+              "bytes": 47373807,
+              "files": 17,
+              "sha256": "d11d843f4fdcebd4227fea741d23222cd5c0045a73be3003d36c139f39eb1e8e"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/dm-joint-phase-v2/results/diagnostics",
+            "raw_link_target": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics",
+            "resolved_target": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics",
+            "resolves": true,
+            "size": 89,
+            "type": "symlink",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "dispersion.chime-dm",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361276,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/dispersion/chime-dm",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime_dm",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime_dm",
+            "resolves": true,
+            "size": 93,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/chime_dm",
+          "source": {
+            "inode": 310223738,
+            "manifest": {
+              "bytes": 2079262,
+              "files": 5,
+              "sha256": "c494f4981030bcd27c78ff2a42f48c9bad4b2da4f1faf7fa9301c3503b2cd999"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/analysis/chime_dm",
+            "size": 224,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "foreground.tau-consistency-catalog",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361277,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/foreground/tau_consistency_catalog.csv",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/galaxies/foreground/data/tau_consistency_catalog.csv",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/galaxies/foreground/data/tau_consistency_catalog.csv",
+            "resolves": true,
+            "size": 128,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "galaxies/foreground/data/tau_consistency_catalog.csv",
+          "source": {
+            "inode": 310224130,
+            "manifest": {
+              "bytes": 3092,
+              "files": 1,
+              "sha256": "1df14886479bff1942a5b7c3aa3b3fae51452ae3a567f322007c97b740eafa6b"
+            },
+            "mode": "0o644",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/galaxies/foreground/data/tau_consistency_catalog.csv",
+            "size": 3092,
+            "type": "file",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "foreground.budget-exports",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361278,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/foreground/tex-exports",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/exports",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/exports",
+            "resolves": true,
+            "size": 83,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "exports",
+          "source": {
+            "inode": 312845407,
+            "manifest": {
+              "bytes": 11816,
+              "files": 2,
+              "sha256": "4877a657ff239312b072b50a4e836a45a37b205eedc5b30a9a789b4c4d75933c"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline/exports",
+            "size": 128,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "foreground.provisional-propagation",
+      "sources": [
+        {
+          "destination": {
+            "inode": 321968686,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/foreground/provisional-propagation",
+            "size": 96,
+            "type": "directory",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/provisional_propagation",
+          "source": {
+            "inode": 321789822,
+            "manifest": {
+              "bytes": 2314,
+              "files": 1,
+              "sha256": "c45374340e8d484acac705e50f4c79d788b9c69823c838bb0a011fb3bc613c59"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/provisional_propagation",
+            "size": 96,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "archive.outdated-science-2026-07-17",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361284,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/archive/2026-07-17-outdated-science",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/quarantine/2026-07-17-outdated-science",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/quarantine/2026-07-17-outdated-science",
+            "resolves": true,
+            "size": 105,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "quarantine/2026-07-17-outdated-science",
+          "source": {
+            "inode": 324887045,
+            "manifest": {
+              "bytes": 16516,
+              "files": 5,
+              "sha256": "e8f5fdef092a12d7fd6c17a8b674aa4b2ca7ecb2dfd419972095e622100a8504"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/quarantine/2026-07-17-outdated-science",
+            "size": 224,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "foreground.v3-energetics",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361279,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/foreground/v3-energetics",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/v3_energetics",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/v3_energetics",
+            "resolves": true,
+            "size": 89,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "analysis/v3_energetics",
+          "source": {
+            "inode": 321464552,
+            "manifest": {
+              "bytes": 17778,
+              "files": 2,
+              "sha256": "5005a1e50a6e0de033079f2f1b82d7a74335561d13813fa466630f68f0733c59"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/v3_energetics",
+            "size": 128,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "manuscript.figures",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361280,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/manuscript/figures",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figures",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figures",
+            "resolves": true,
+            "size": 74,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "figures",
+          "source": {
+            "inode": 308400306,
+            "manifest": {
+              "bytes": 100283030,
+              "files": 255,
+              "sha256": "759aad65c705d7c104f9e143b303c0a8fd94084ae84a1c2e3534329c13fbf94d"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figures",
+            "size": 2016,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "manuscript.repro-manifest",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361281,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/manuscript/repro_manifest.csv",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/repro_manifest.csv",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/repro_manifest.csv",
+            "resolves": true,
+            "size": 85,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "repro_manifest.csv",
+          "source": {
+            "inode": 326429892,
+            "manifest": {
+              "bytes": 32789,
+              "files": 1,
+              "sha256": "6c994313833748b08afca4a7da4fd3c2d7dfccdf82eb9f88e0b6eb39ff9138be"
+            },
+            "mode": "0o644",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/repro_manifest.csv",
+            "size": 32789,
+            "type": "file",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "review.figure-review",
+      "sources": [
+        {
+          "destination": {
+            "inode": 327361282,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/review-ledger/figure_review",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figure_review",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figure_review",
+            "resolves": true,
+            "size": 80,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": "figure_review",
+          "source": {
+            "inode": 321585091,
+            "manifest": {
+              "bytes": 46980485,
+              "files": 197,
+              "sha256": "66e16ec2ec9cb0aaedd89fb1ebfb019ee1b4fb62b0fb18fa59e2e59925fe6ae6"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/figure_review",
+            "size": 192,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    },
+    {
+      "id": "compute.flits-runs-default",
+      "sources": [
+        {
+          "destination": {
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/compute-scratch/FLITS_RUNS/flits-runs",
+            "type": "absent"
+          },
+          "link_status": "absent",
+          "rel": null,
+          "source": {
+            "path": "/central/scratch/jfaber/flits-runs",
+            "type": "absent"
+          }
+        },
+        {
+          "destination": {
+            "inode": 321974777,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/compute-scratch/FLITS_RUNS/flits-local-runs",
+            "raw_link_target": "/Users/jakobfaber/Developer/scratch/flits-local-runs",
+            "resolved_target": "/Users/jakobfaber/Developer/scratch/flits-local-runs",
+            "resolves": true,
+            "size": 52,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": null,
+          "rel": null,
+          "source": {
+            "inode": 295276690,
+            "manifest": {
+              "bytes": 67174646,
+              "files": 309,
+              "sha256": "163335dca70e7bc11a0e964a1b53b10d7a24f010e12835e4c751330828682c17"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/scratch/flits-local-runs",
+            "size": 416,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    }
+  ],
+  "faber2026_root": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
+  "git": {
+    "parent_commit": "74b7dd6db85c0867eb702f02c430ab29551ad504",
+    "pipeline_commit": "f1d56c3aa5ec1ff098e8485293bf967d8b5a3ac1"
+  },
+  "library_root": "/Users/jakobfaber/Data/Faber2026/results-library",
+  "observed_at": "2026-07-21T06:09:12Z",
+  "schema": "faber2026-results-library-repair-receipt/v1",
+  "selected_ids": [
+    "scattering.dm-locked-2026-07-14",
+    "scattering.refit-2026-06",
+    "scattering.beta-campaign-2026-07",
+    "scintillation.dsa-lorentzian-2026-07-07",
+    "scintillation.chime",
+    "scintillation.chime-window-2026-07-17",
+    "dispersion.pipeline-results-root",
+    "dispersion.dm-joint-phase-v2-parent",
+    "dispersion.chime-dm",
+    "foreground.tau-consistency-catalog",
+    "foreground.budget-exports",
+    "foreground.provisional-propagation",
+    "archive.outdated-science-2026-07-17",
+    "foreground.v3-energetics",
+    "manuscript.figures",
+    "manuscript.repro-manifest",
+    "review.figure-review",
+    "compute.flits-runs-default"
+  ]
+}
