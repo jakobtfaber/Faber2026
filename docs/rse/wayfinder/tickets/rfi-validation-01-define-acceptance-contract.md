@@ -28,3 +28,10 @@ Set the fail-closed contract before testing replacements. At minimum, decide:
 The contract must distinguish bandpass flattening from RFI removal, require
 explicit masks for missing or rejected samples, and forbid calling a product
 "clean" merely because its collapsed spectrum is smoother.
+
+## Decisions — in progress
+
+- **Vocabulary accepted 2026-07-21:** `padded`, `bandpass-corrected`,
+  `RFI-masked`, `RFI-validated`, and `science-admissible preprocessing` are
+  distinct states. Unqualified `clean` is forbidden. Definitions are recorded
+  in [`CONTEXT.md`](../../../CONTEXT.md).
