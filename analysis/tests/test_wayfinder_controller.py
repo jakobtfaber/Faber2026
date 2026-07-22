@@ -43,7 +43,7 @@ def test_manifest_has_analysis_specific_controller_roots():
         ).expanduser()
     )
     assert manifest.max_parallel == 4
-    assert len(wc.tasks_for_wave(manifest, "first")) == 9
+    assert len(wc.tasks_for_wave(manifest, "first")) == 7
 
 
 def test_manifest_represents_expanded_foreground_active_graph_and_history():
@@ -55,14 +55,12 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
     assert {Path(task.ticket).name for task in manifest.tasks} == {
         f"expanded-foreground-catalog-repair-{number:02d}-{slug}.md"
         for number, slug in [
-            (3, "set-physics-authority"),
             (4, "set-figure-3-gate"),
             (5, "set-independent-validation-gate"),
             (9, "repeat-redshift-source-verification"),
             (14, "freeze-anonymous-nine-sightline-query-corpus"),
             (15, "freeze-protected-nine-sightline-query-evidence"),
             (16, "independently-replay-nine-sightline-query-corpus"),
-            (18, "source-zach-whitney-host-redshifts"),
             (19, "adjudicate-host-redshift-differences"),
         ]
     }
@@ -71,6 +69,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
         for number, slug in [
             (1, "fail-close-validation"),
             (2, "set-crossmatch-contract"),
+            (3, "set-physics-authority"),
             (6, "verify-redshift-verdicts"),
             (7, "freeze-host-redshift-provenance"),
             (8, "freeze-candidate-redshift-provenance"),
@@ -79,6 +78,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (12, "expand-nine-sightline-catalogs"),
             (13, "set-nine-sightline-search-contract"),
             (17, "obtain-authoritative-host-redshift-ledger"),
+            (18, "source-zach-whitney-host-redshifts"),
         ]
     }
     wc.validate_manifest_ticket_graph(manifest, ROOT)
@@ -94,7 +94,7 @@ def test_manifest_graph_rejects_coverage_dependency_and_execution_drift():
         )
 
     task = next(
-        item for item in manifest.tasks if item.id == "set-expanded-physics-authority"
+        item for item in manifest.tasks if item.id == "set-expanded-figure3-gate"
     )
     drifted = replace(task, depends_on=())
     tasks = tuple(drifted if item.id == task.id else item for item in manifest.tasks)
@@ -179,14 +179,9 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     state = wc.empty_state(manifest)
     ready = {task.id for task in wc.ready_tasks(manifest, state, "first")}
-    assert ready == {
-        "set-expanded-physics-authority",
-        "freeze-anonymous-query-corpus",
-        "source-zach-whitney-host-redshifts",
-    }
+    assert ready == {"freeze-anonymous-query-corpus"}
     assert "freeze-protected-query-evidence" not in ready
     assert "replay-nine-sightline-query-corpus" not in ready
-    assert "set-expanded-physics-authority" in ready
 
 
 def test_pass_only_ticket_cannot_resolve_as_no_go():

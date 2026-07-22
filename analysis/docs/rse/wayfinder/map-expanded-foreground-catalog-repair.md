@@ -91,6 +91,11 @@ independent numerical, provenance, and owner visual checks.
   — the manuscript owner approves the current `verdi2025.tex` table entries as
   authoritative; the older `test.tex` is superseded, blank cells remain blank,
   and absent Zach and Whitney rows continue through a separate source ticket.
+- [Source the Zach and Whitney host redshifts](tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md)
+  — Law et al. (2024) Table 2 identifies the two hosts and Table 3 gives
+  spectroscopic redshifts `0.043040` and `0.477958`; exact source extracts and
+  hashes are frozen, with row-level uncertainty explicitly unavailable. Census
+  adoption remains with the later adjudication ticket.
 
 ## Open route
 
@@ -101,13 +106,11 @@ dependency order:
    and [freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
 2. After both corpus tickets resolve,
    [independently replay the completed corpus](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
-3. In parallel with the corpus work,
-   [source the Zach and Whitney host redshifts](tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md), without re-adjudicating either value.
-4. After both independent replay and the two missing host sources resolve,
+3. After independent replay and the now-resolved host-source ticket,
    [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
-5. After ticket 09 and the now-resolved physics-authority ticket,
+4. After ticket 09 and the now-resolved physics-authority ticket,
    [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
-6. Only after the Figure 3 gate resolves,
+5. Only after the Figure 3 gate resolves,
    [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
 
 ## Out of scope

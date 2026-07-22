@@ -10,17 +10,6 @@ max_parallel = 4
 timeout_seconds = 14400
 
 [[task]]
-id = "set-expanded-physics-authority"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md"
-branch = "codex/auto-set-expanded-physics-authority"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["set-expanded-crossmatch-contract"]
-instructions = "Implement the ticket's stellar-mass, halo-mass, and radius authority after the crossmatch contract resolves. Keep classification and budget authority unchanged."
-
-[[task]]
 id = "set-expanded-figure3-gate"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md"
@@ -87,17 +76,6 @@ depends_on = ["freeze-anonymous-query-corpus", "freeze-protected-query-evidence"
 instructions = "Independently replay the complete anonymous and protected nine-sightline corpus. Stop on missing evidence or disagreement."
 
 [[task]]
-id = "source-zach-whitney-host-redshifts"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md"
-branch = "codex/auto-host-redshifts"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = []
-instructions = "Source and freeze Zach and Whitney host-redshift evidence without re-adjudicating either value."
-
-[[task]]
 id = "adjudicate-host-redshift-differences"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md"
@@ -118,6 +96,13 @@ status = "resolved"
 [[history]]
 id = "set-expanded-crossmatch-contract"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "set-expanded-physics-authority"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md"
 execution = "afk"
 depends_on = []
 status = "resolved"
@@ -175,5 +160,12 @@ status = "resolved"
 id = "obtain-authoritative-host-redshift-ledger"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-17-obtain-authoritative-host-redshift-ledger.md"
 execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "source-zach-whitney-host-redshifts"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md"
+execution = "afk"
 depends_on = []
 status = "resolved"
