@@ -214,7 +214,16 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
     }
     phineas = next(row for row in sightlines if row.name == "FRB 20230307A")
     assert phineas.dm_obs == pytest.approx(610.289070)
-    assert len(phineas.intervening_systems) == 4
+    assert len(phineas.intervening_systems) == 5
+    probabilistic = [
+        system
+        for system in phineas.intervening_systems
+        if system.model == "probabilistic_crossing"
+    ]
+    assert {system.object for system in probabilistic} == {
+        "194021777634832653",
+        "983",
+    }
     assert sum(s.dm_point for s in phineas.intervening_systems) == pytest.approx(
         phineas.dm_int, abs=0.5
     )

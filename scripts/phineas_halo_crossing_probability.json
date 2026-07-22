@@ -1,0 +1,143 @@
+{
+  "halos": {
+    "194021777634832653": {
+      "b_over_mnfw_rvir": {
+        "p16": 0.6508645659655322,
+        "p50": 0.7411305378576936,
+        "p84": 0.8314626745782211
+      },
+      "b_over_r200c": {
+        "p16": 0.7771043586757834,
+        "p50": 0.8828961343199688,
+        "p84": 0.9875787034609896
+      },
+      "central_log_mstar": 10.210534146391637,
+      "dm_given_crossing": {
+        "mean": 13.184149078136693,
+        "p16": 6.187165345069524,
+        "p50": 10.982513438774028,
+        "p84": 19.4995695722018
+      },
+      "dm_mixture": {
+        "mean": 13.109764936265952,
+        "p16": 6.113340212538407,
+        "p50": 10.939036902956875,
+        "p84": 19.452506506052085
+      },
+      "legacy_obj": "832",
+      "n_draws": 262144,
+      "object": "194021777634832653",
+      "p_crossing": 0.9943580627441406,
+      "p_crossing_given_foreground": 0.9972034767173178,
+      "p_foreground": 0.9971466064453125,
+      "p_model_domain": 1.0,
+      "p_r200c_crossing": 0.8640556335449219
+    },
+    "983": {
+      "b_over_mnfw_rvir": {
+        "p16": 0.7692912771683668,
+        "p50": 0.9850428272069744,
+        "p84": 1.1632477447566407
+      },
+      "b_over_r200c": {
+        "p16": 0.9333504353292995,
+        "p50": 1.1795471403089035,
+        "p84": 1.3792206589409333
+      },
+      "central_log_mstar": 8.94412504704216,
+      "dm_given_crossing": {
+        "mean": 4.652799227358527,
+        "p16": 1.6983920097354654,
+        "p50": 3.7664449292105195,
+        "p84": 7.501920819680166
+      },
+      "dm_mixture": {
+        "mean": 2.3749786827606854,
+        "p16": 0.0,
+        "p50": 0.5626548206412763,
+        "p84": 5.310246571812873
+      },
+      "legacy_obj": null,
+      "n_draws": 262144,
+      "object": "983",
+      "p_crossing": 0.5104408264160156,
+      "p_crossing_given_foreground": 0.530205411059864,
+      "p_foreground": 0.9627227783203125,
+      "p_model_domain": 0.9971046447753906,
+      "p_r200c_crossing": 0.217041015625
+    }
+  },
+  "input_csv": "scripts/phineas_halo_crossing_inputs.csv",
+  "input_sha256": "2657115881a91261b547c1c1233508e8c03b2758d2aa365b30f89f944b507891",
+  "inputs": {
+    "194021777634832653": {
+      "g_kron_err": 0.0789,
+      "g_kron_mag": 20.9862,
+      "i_kron_err": 0.035,
+      "i_kron_mag": 19.6395,
+      "legacy_obj": "832",
+      "match_sep_arcsec": 0.0153,
+      "object": "194021777634832653",
+      "photometry_dec_deg": 71.6848682,
+      "photometry_objid": "194021777634832653",
+      "photometry_ra_deg": 177.76356877,
+      "ps1_g_flags": 115000,
+      "ps1_i_flags": 16892216,
+      "ps1_quality": 53,
+      "ps1_query_sha256": "6a60c4183c104d395341a128f8ed9a8b1c67b5353dcd7dbd978fab4f9783eac3",
+      "ps1_row_sha256": "010c188614d445ddee31dc900b92ed6945defce339414a07dbbf847ad6ce0206",
+      "registry_dec_deg": 71.68486803,
+      "registry_ra_deg": 177.7635678,
+      "z_mean": 0.1925,
+      "z_query_sha256": "5b03e4cfa1f8e0fffa6b6ec9313f6b90bdca922bc3f30a238e828069077ac4fc",
+      "z_sigma": 0.0284,
+      "z_source_id": "ls_id:9907741567091313",
+      "z_verification_sha256": "6cbf70424419cf1c5bec3b7822d885bfbe908fdb6b260700f8be2e01e165ef68"
+    },
+    "983": {
+      "g_kron_err": 0.1272,
+      "g_kron_mag": 20.9495,
+      "i_kron_err": 0.0823,
+      "i_kron_mag": 20.6323,
+      "legacy_obj": "",
+      "match_sep_arcsec": 0.1511,
+      "object": "983",
+      "photometry_dec_deg": 71.69505217,
+      "photometry_objid": "194031778161224842",
+      "photometry_ra_deg": 177.81629018,
+      "ps1_g_flags": 16892216,
+      "ps1_i_flags": 16892216,
+      "ps1_quality": 53,
+      "ps1_query_sha256": "6a60c4183c104d395341a128f8ed9a8b1c67b5353dcd7dbd978fab4f9783eac3",
+      "ps1_row_sha256": "93505b32678f422f9d328e22925624e148e3ce218aeaf66e2a03f52261267a45",
+      "registry_dec_deg": 71.69501131,
+      "registry_ra_deg": 177.8163208,
+      "z_mean": 0.1649,
+      "z_query_sha256": "54db3a08646aeca5d591adb0c65069dba87bbcda299eb33ecd1634a98a838d34",
+      "z_sigma": 0.0585,
+      "z_source_id": "ls_id:9907741567091553",
+      "z_verification_sha256": "164a8391315be5fbc9a58bc317f3f375f70f01249c587d50ae3c65c15c5804e7"
+    }
+  },
+  "limitations": [
+    "Legacy photo-z and Pan-STARRS magnitude errors are treated as independent because their covariance is unavailable.",
+    "Taylor calibration scatter covers the empirical mass calibration; no object-specific spectral-energy-distribution k-correction is available.",
+    "Moster fit-parameter covariance is not published in a directly usable matrix; intrinsic relation scatter is propagated instead."
+  ],
+  "model": {
+    "cgm_profile_sigma_ln": 0.4,
+    "crossing_definition": "foreground z < host z and b <= the Bryan-Norman virial truncation radius used by the modified-NFW gas model",
+    "dm_definition": "zero outside crossing; modified-NFW hot plus cool prior inside",
+    "draws_per_object": 262144,
+    "halo_mass": "redshift-dependent Moster et al. 2013 Table 1",
+    "host_z": 0.271,
+    "moster_intrinsic_sigma_dex_in_log_mstar": 0.15,
+    "power": 18,
+    "r200c_definition": "reported as a census-geometry sensitivity, not used to truncate the gas column",
+    "sampler": "deterministic scrambled Sobol",
+    "seed": 20260722,
+    "stellar_mass": "Taylor et al. 2011 Eq. 8 from Pan-STARRS Kron g/i",
+    "stellar_mass_calibration_sigma_dex": 0.1
+  },
+  "status": "probabilistic_crossing_model"
+}
