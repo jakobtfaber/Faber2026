@@ -32,9 +32,10 @@ None — can start immediately.
 ## Resolution — 2026-07-22
 
 The [artifact audit](../../../../figure_review/audits/2026-07-22-deprecated-zach-c2d4/audit.json)
-and [scientific interpretation](../../specs/research-deprecated-zach-c2d4-failure-2026-07-22.md)
+and [scientific interpretation](../../../analysis/scattering/deprecated-zach-c2d4-failure-2026-07-22.md)
 resolve the ticket. Job 180's fourth DSA-110 component is 59.38 fitted-window
 widths wide and carries 3.0818% of modeled band fluence. It is a pedestal, not
-the owner-identified fourth pulse. The same-arm comparison favors C2D3 by
-10.102 log-evidence units, but does not adjudicate the owner C2D4 morphology.
-Job 180 remains hidden and cannot seed the replacement run.
+the owner-identified fourth pulse. CHIME/FRB component 2 also collapses to
+0.001256% of modeled band fluence. The raw C2D4-minus-C2D3 evidence difference
+is diagnostic-only because likelihood-source and posterior-mode identity are
+unproven. Job 180 remains hidden and cannot seed the replacement run.

@@ -39,3 +39,4 @@ nav:
       - Window sweep (manual envelopes): dm/window-sweep.md
   - Scattering:
       - Current joint-fit candidates: scattering/joint-fit-candidates.md
+      - Deprecated Zach C2D4 audit: scattering/deprecated-zach-c2d4-failure-2026-07-22.md
