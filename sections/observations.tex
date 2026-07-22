@@ -225,18 +225,21 @@ through its DESI members, a spectroscopic redshift---together with the all-sky
 Planck Sunyaev--Zel'dovich (PSZ2) and X-ray (MCXC, MCXC-II) catalogs; at the
 sample's declination every matched cluster comes from the optical catalog.
 
-The wide discovery cone sets only the search completeness; galaxy retention is
-then physical, keyed to each candidate's own circumgalactic scale rather than to
-a single fixed impact parameter. For every galaxy candidate we estimate a
-stellar mass---from Pan-STARRS1 $g-i$ color \citep[the][relation]{Taylor2011}
-where a clean optical detection exists, and otherwise from the WISE $W1$
-luminosity \citep{Cluver2014}---convert it to a halo mass through the
-stellar-to-halo-mass relation of \citet{Moster2013}, and assign a virial radius
-$R_{\rm vir}=R_{200c}$ with the concentration--mass relation of
-\citet{DuttonMaccio2014}. A galaxy is
-retained as a circumgalactic intersector when the sightline passes within that
-virial radius, $b \le R_{\rm vir}$. Because $R_{\rm vir}$ grows with halo mass,
-this criterion admits genuine circumgalactic sightlines well beyond any fixed
+The wide discovery cone sets only the search completeness. The frozen census is
+therefore described as built, not as a replay with the current live-search
+$100\,\mathrm{kpc}$ default: its budget-eligible halo rows span
+$b=101.7$--$242.7\,\mathrm{kpc}$, while the retained halo envelope reaches
+$b=281.4\,\mathrm{kpc}$. Eligibility follows the confirmation and provenance
+fields recorded during validation, not a $100\,\mathrm{kpc}$ impact-parameter
+cut. For every galaxy candidate we estimate a stellar mass---from Pan-STARRS1
+$g-i$ color \citep[the][relation]{Taylor2011} where a clean optical detection
+exists, and otherwise from the WISE $W1$ luminosity \citep{Cluver2014}---convert
+it to a halo mass through the stellar-to-halo-mass relation of
+\citet{Moster2013}, and assign a virial radius $R_{\rm vir}=R_{200c}$ with the
+concentration--mass relation of \citet{DuttonMaccio2014}. A galaxy is retained
+as a circumgalactic intersector when the sightline passes within that virial
+radius, $b \le R_{\rm vir}$. Because $R_{\rm vir}$ grows with halo mass, this
+criterion admits genuine circumgalactic sightlines beyond any fixed
 circumgalactic radius. Because the discovery stage draws on overlapping
 catalogs, candidates recovered under two identifiers at sub-arcsecond
 coincidence and identical redshift are deduplicated to a single physical
@@ -248,11 +251,11 @@ burst position, the object coordinates, and the adopted redshift.
 Among the nine physical confirmed foreground galaxy halos
 the recovered $R_{\rm vir}$ span $\sim\!90$--$380\,\mathrm{kpc}$, and seven
 are pierced within $R_{\rm vir}$ (impact parameters
-$b\approx101$--$270\,\mathrm{kpc}$, $b/R_{\rm vir}\approx0.46$--$0.96$); the two
+$b\approx102$--$243\,\mathrm{kpc}$, $b/R_{\rm vir}\approx0.46$--$0.96$); the two
 exceptions---both toward FRB~20230307A---graze just outside their virial radii
 ($b\approx116$--$194\,\mathrm{kpc}$, $b/R_{\rm vir}\approx1.3$--$1.4$) and are
 flagged accordingly. The full
-non-refuted galaxy census reaches $b\approx60$--$280\,\mathrm{kpc}$.
+non-refuted galaxy census reaches $b\approx60$--$281\,\mathrm{kpc}$.
 
 Cluster retention, by contrast, uses a fixed aperture. Cluster cones are far
 wider ($\sim\!5\,\mathrm{Mpc}$), and a cluster is kept when the sightline passes
