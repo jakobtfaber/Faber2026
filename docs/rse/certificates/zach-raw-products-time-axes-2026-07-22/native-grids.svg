@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">Zach native DSA-110 and CHIME/FRB coordinate grids</title>
+  <desc id="desc">Review diagram comparing native time and frequency grids and explicitly unresolved metadata.</desc>
+  <rect width="1200" height="650" fill="#ffffff"/>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #18202a; }
+    .h { font-size: 25px; font-weight: 650; }
+    .k { font-size: 18px; font-weight: 600; }
+    .b { font-size: 16px; }
+    .s { font-size: 14px; fill: #46515e; }
+    .warn { fill: #8a3b12; }
+  </style>
+  <text x="70" y="50" class="h">DSA-110</text>
+  <text x="630" y="50" class="h">CHIME/FRB</text>
+
+  <text x="70" y="92" class="k">Frequency</text>
+  <defs>
+    <linearGradient id="dsa" x1="0" x2="1"><stop stop-color="#345995"/><stop offset="1" stop-color="#7aa6d8"/></linearGradient>
+    <pattern id="chime" width="12" height="20" patternUnits="userSpaceOnUse"><rect width="8" height="20" fill="#3f8f72"/><rect x="8" width="4" height="20" fill="#e7ece9"/></pattern>
+  </defs>
+  <rect x="70" y="110" width="480" height="35" rx="4" fill="url(#dsa)"/>
+  <text x="70" y="169" class="b">1498.750 → 1311.281 MHz</text>
+  <text x="70" y="193" class="s">6,144 contiguous channel centres · 30.51757812 kHz</text>
+
+  <text x="630" y="92" class="k">Frequency</text>
+  <rect x="630" y="110" width="480" height="35" rx="4" fill="url(#chime)"/>
+  <text x="630" y="169" class="b">799.219 → 400.391 MHz</text>
+  <text x="630" y="193" class="s">871 retained IDs of 1,024 · 390.625 kHz · gaps explicit</text>
+
+  <text x="70" y="252" class="k">Time</text>
+  <line x1="70" y1="285" x2="550" y2="285" stroke="#345995" stroke-width="7"/>
+  <circle cx="70" cy="285" r="7" fill="#345995"/><circle cx="550" cy="285" r="7" fill="#345995"/>
+  <text x="70" y="321" class="b">20,480 samples · 32.768 μs · 0.67108864 s</text>
+  <text x="70" y="345" class="s">tstart = 59617.808504 MJD (recorded precision)</text>
+
+  <text x="630" y="252" class="k">Time</text>
+  <line x1="630" y1="285" x2="1110" y2="285" stroke="#3f8f72" stroke-width="7"/>
+  <circle cx="630" cy="285" r="7" fill="#3f8f72"/><circle cx="1110" cy="285" r="7" fill="#3f8f72"/>
+  <text x="630" y="321" class="b">55,949 samples · 2.56 μs · offsets 0…0.14322688 s</text>
+  <text x="630" y="345" class="s">871 channel-specific time0 rows → one common FPGA epoch</text>
+
+  <rect x="55" y="390" width="1090" height="205" rx="10" fill="#fff4e8" stroke="#d97732"/>
+  <text x="80" y="430" class="k warn">Must remain explicit before dispersion-measure fitting</text>
+  <text x="80" y="468" class="b">• DSA: optimized/applied DM 262.3 at 1530 MHz; trigger DM 263.0 is separate.</text>
+  <text x="80" y="502" class="b">• DSA sample reference and time scale are not encoded; filaxes.json covers only 5,120 of 20,480 samples.</text>
+  <text x="80" y="536" class="b">• CHIME voltage history records no DM; power records coherent DM 262.4359033801; approved run used no time shift.</text>
+  <text x="80" y="570" class="b">• CHIME functions: coherent shift ref 400 MHz; incoherent ref min(f), 400.390625 MHz on Zach's native grid.</text>
+  <text x="70" y="628" class="s">Review artifact only · no fitted DM, burst model, autocorrelation function, or science claim</text>
+</svg>

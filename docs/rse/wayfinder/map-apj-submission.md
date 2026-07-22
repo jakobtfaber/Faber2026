@@ -70,6 +70,10 @@ existing lane system. The map does not carry the execution itself.
 - [Define the CHIME RFI-cleaning acceptance contract](tickets/rfi-validation-01-define-acceptance-contract.md)
   — manual maps remain channel-row authority; Zach returns to original-product,
   time-axis, dispersion-measure, and burst-model gates before any ACF work.
+- [Establish Zach's original products, metadata, and time axes](tickets/zach-analysis-01-establish-raw-products-time-axes.md)
+  — owner accepted the checksummed raw-product packet: DSA-110 starts from its
+  recorded 262.3 pc cm⁻³ incoherent dedispersion at 1530 MHz; CHIME/FRB
+  retains its per-channel native timing and explicit no-time-shift history.
 
 ## Not yet specified
 

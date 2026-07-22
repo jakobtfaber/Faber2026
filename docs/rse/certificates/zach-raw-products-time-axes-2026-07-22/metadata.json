@@ -1,0 +1,207 @@
+{
+  "schema": "faber2026-zach-raw-products-time-axes-v1",
+  "captured_at": "2026-07-22T11:53:59Z",
+  "status": "owner_review_pending",
+  "event": {
+    "project_id": "zach",
+    "tns_name": "FRB 20220207C",
+    "dsa_observation_id": "220207aabh",
+    "chime_event_id": 210456524
+  },
+  "dsa-110": {
+    "host": "dsastorage",
+    "path": "/mnt/data/dsa110/candidates/candidates/220207aabh/Level3/220207aabh_dev_polcal_I.fil",
+    "size_bytes": 503316768,
+    "sha256": "074cf21a9b8c712056f274d96dd77d4d40f1ead75d1e5240fe093fc99edbac79",
+    "format": "SIGPROC filterbank, Stokes I, float32",
+    "header_bytes": 288,
+    "shape": [20480, 1, 6144],
+    "header": {
+      "source_name": "source",
+      "machine_id": 99,
+      "telescope_id": 66,
+      "data_type": 1,
+      "nbeams": 136,
+      "nifs": 1,
+      "nbits": 32,
+      "nchans": 6144,
+      "fch1_mhz": 1498.75,
+      "foff_mhz": -0.03051757812,
+      "tsamp_s": 0.000032768,
+      "tstart_mjd_utc_as_recorded": 59617.808504
+    },
+    "frequency_axis": {
+      "order": "descending",
+      "sample_reference": "channel centre by SIGPROC fch1/foff convention",
+      "centre_first_mhz": 1498.75,
+      "centre_last_mhz": 1311.28051760884,
+      "channel_width_mhz": 0.03051757812,
+      "n_channels": 6144,
+      "missing_channels_recorded_in_header": false,
+      "total_channel_width_mhz": 187.49999996928
+    },
+    "time_axis": {
+      "order": "increasing sample index",
+      "cadence_s": 0.000032768,
+      "n_samples": 20480,
+      "duration_s": 0.67108864,
+      "last_sample_offset_s": 0.671055872,
+      "epoch_mjd_as_recorded": 59617.808504,
+      "epoch_utc_rendering": "2022-02-07T19:24:14.746",
+      "time_scale": "not encoded beyond SIGPROC tstart convention",
+      "sample_reference": "not encoded; do not assume centre versus leading edge",
+      "channel_dependent_offsets": "not encoded",
+      "gaps": "none representable in the regular SIGPROC header; payload not independently gap-audited"
+    },
+    "dedispersion": {
+      "coherent": false,
+      "coherent_basis": "not possible for detected-power filterbank; owner statement 2026-07-21",
+      "incoherent": true,
+      "incoherent_basis": "owner statement 2026-07-21",
+      "applied_dm_pc_cm3": 262.3,
+      "reference_frequency_mhz": 1530.0,
+      "reference_frequency_basis": "The Level-3 PARSEC workflow passes DM0 to dsa110-bbproc/toolkit. toolkit.cu computes delays relative to 1.53 GHz and the deployed binary contains the matching 'adding delay to 1530MHz' diagnostic.",
+      "reference_frequency_producer": {
+        "host": "h24",
+        "repository": "/home/ubuntu/proj/dsa110-shell/dsa110-bbproc",
+        "git_commit": "1346d53bef9224dce07e024c5f7afc06a335beac",
+        "source_path": "/home/ubuntu/proj/dsa110-shell/dsa110-bbproc/toolkit.cu",
+        "source_sha256": "6bbe433317be7e30d7fd5ec8c0be013707438be4e2d904b7754fabff7582159e",
+        "source_lines": "734, 762-768",
+        "binary_path": "/home/ubuntu/proj/dsa110-shell/dsa110-bbproc/toolkit",
+        "binary_sha256": "7c7268eb19878e09174f5c8997fe2d8b153cd5e14f009b663d56a93017f21e12",
+        "delay_formula": "round(4.15 * DM * (f_GHz^-2 - 1.53^-2) / 0.065536)"
+      },
+      "header_dm_field": "absent",
+      "recorded_optimized_dm_label": "DM (opt)",
+      "recorded_optimized_dm_source": "/mnt/data/dsa110/gechen/software/DSA110-FRBs_231121.csv",
+      "recorded_optimized_dm_source_sha256": "d1220609b8a24cf1e79c528e6f9ade3855d42dafb74fe45910f1aeb572a6fe13",
+      "recorded_optimized_dm_source_row": "Candname=220207aabh",
+      "recorded_optimized_dm_source_mtime": "2023-11-27 17:42:51.854178887 -0800",
+      "trigger_dm_pc_cm3": 263.0,
+      "trigger_dm_label": "DM (Heimdall)",
+      "adjudication": "Use the DSA-recorded optimized/applied value 262.3 pc cm^-3 referenced to 1530 MHz. Do not substitute the Heimdall trigger value 263.0 pc cm^-3. The value and reference are proven through the Level-3 producer path but are not embedded in the final filterbank header or filaxes.json."
+    },
+    "preserved_duplicates": [
+      {
+        "host": "h17",
+        "path": "/data/Faber2026/data/dsa-110/zach/220207aabh_dev_polcal_I.fil",
+        "size_bytes": 503316768,
+        "sha256": "074cf21a9b8c712056f274d96dd77d4d40f1ead75d1e5240fe093fc99edbac79",
+        "byte_identity": "confirmed"
+      },
+      {
+        "host": "h17",
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/dsa_filterbanks/220207aabh/Level3/220207aabh_dev_polcal_I.fil",
+        "size_bytes": 503316768,
+        "sha256": "074cf21a9b8c712056f274d96dd77d4d40f1ead75d1e5240fe093fc99edbac79",
+        "byte_identity": "confirmed"
+      }
+    ],
+    "partial_sidecar": {
+      "host": "dsastorage",
+      "path": "/mnt/data/dsa110/candidates/candidates/220207aabh/Level3/220207aabh_filaxes.json",
+      "size_bytes": 258484,
+      "sha256": "cd2f7b1ffff1fd9656b8aca2c2023e5228ee3af34f1916a02ef4c8b1c9e7e6f2",
+      "mtime": "2024-08-23 19:31:49.973453756 -0700",
+      "fields": ["chanmask", "channel_indices", "channel_freqs_MHz", "times_seconds"],
+      "reason_not_full_coordinate_authority": "time-axis length and final channel-centre mismatch",
+      "sidecar_time_samples": 5120,
+      "filterbank_time_samples": 20480,
+      "sidecar_frequency_samples": 6144,
+      "sidecar_first_frequency_mhz": 1498.75,
+      "sidecar_last_frequency_mhz": 1311.25000003072,
+      "filterbank_last_channel_centre_mhz": 1311.28051760884,
+      "adjudication": "Retain its channel mask and package identity as partial metadata. Do not use its arrays as the complete native coordinate grid for the checksummed filterbank."
+    }
+  },
+  "chime-frb": {
+    "host": "h17",
+    "path": "/data/Faber2026/data/chime-frb/zach/singlebeam_210456524.h5",
+    "size_bytes": 1171470638,
+    "sha256": "215079a689c18b50a4b2cd8003529e34d531a326be677a86187be02e47d0f1a9",
+    "format": "CHIME/FRB BBData HDF5",
+    "producer": {
+      "archive_version": "NT_3.1.0",
+      "git_version_tag": "2021.11",
+      "baseband_analysis_git_sha_recorded": "0ec3f4c38b56389b2e4193dcc23877e9593818d",
+      "collection_server": "cfdn9",
+      "event_date_recorded": "2022-02-07T 19:24:21.046182",
+      "event_id": 210456524,
+      "calibrator": "gain_20220208T054825.134277Z_taua_ref_cyga_timing.h5"
+    },
+    "datasets": {
+      "tiedbeam_baseband": {
+        "shape": [871, 2, 55949],
+        "dtype": "complex64",
+        "axis": ["freq", "beam", "time"],
+        "dm_attribute": "absent"
+      },
+      "tiedbeam_power": {
+        "shape": [871, 2, 55949],
+        "dtype": "float32",
+        "axis": ["freq", "beam", "time"],
+        "DM_coherent_pc_cm3": 262.4359033801,
+        "time_downsample_factor": 1
+      }
+    },
+    "frequency_axis": {
+      "order": "descending",
+      "sample_reference": "channel centre from index_map/freq.centre",
+      "nominal_channel_width_mhz": 0.390625,
+      "n_nominal_channels": 1024,
+      "n_present_channels": 871,
+      "n_missing_channels": 153,
+      "present_id_min": 2,
+      "present_id_max": 1023,
+      "centre_first_mhz": 799.21875,
+      "centre_last_mhz": 400.390625,
+      "retained_channel_width_sum_mhz": 340.234375,
+      "missing_id_ranges": "0-1, 23, 95, 113-115, 117-129, 131-138, 141-153, 155, 157-158, 161-178, 180, 198, 268, 313, 321, 334, 361, 406, 417, 438, 444-449, 451-457, 459-465, 467, 506, 538, 552, 555-559, 562-568, 572, 575, 583-584, 587, 589-591, 594-595, 598-599, 626, 638-639, 643-645, 660, 678, 684, 690-691, 743, 754, 756, 764, 766-767, 772, 782, 788-789, 791, 798-799, 802, 808, 834, 842, 848, 882, 938, 946, 999"
+    },
+    "time_axis": {
+      "delta_time_s": 0.00000256,
+      "n_samples": 55949,
+      "offset_fpga_first": 0,
+      "offset_fpga_last": 55948,
+      "offset_s_first": 0.0,
+      "offset_s_last": 0.14322688,
+      "offset_step_fpga": 1,
+      "offset_step_s": 0.00000256,
+      "time0_rows": 871,
+      "time0_fpga_count_min": 371851122697,
+      "time0_fpga_count_max": 371853116004,
+      "time0_dump_ctime_min_unix_s": 1644261855.8741043,
+      "time0_dump_ctime_max_unix_s": 1644261860.9769702,
+      "fpga_epoch_formula": "Time(time0.ctime + time0.ctime_offset, unix) - 2.56 us * time0.fpga_count",
+      "common_fpga_epoch_unix_s": 1643309917.0,
+      "common_fpga_epoch_utc": "2022-01-27T18:58:36.999999960",
+      "fpga_epoch_cross_channel_spread_ns": 0.0,
+      "channel_dependent_offsets": "encoded by per-channel time0 fpga_count and ctime fields",
+      "sample_reference": "not explicitly documented in the HDF5 metadata; preserve offset index without adding a half-sample shift",
+      "gaps": "time index is contiguous; frequency omissions are explicit channel-ID gaps"
+    },
+    "dedispersion": {
+      "tiedbeam_baseband_coherent": "not recorded; do not claim",
+      "tiedbeam_baseband_incoherent": "not recorded; do not claim",
+      "tiedbeam_power_coherent": true,
+      "tiedbeam_power_coherent_dm_pc_cm3": 262.4359033801,
+      "tiedbeam_power_incoherent": "not recorded; do not claim",
+      "coherent_time_shift_default_reference_frequency_mhz": 400.0,
+      "coherent_time_shift_reference_basis": "baseband_analysis.core.dedispersion.coherent_dedisp f_ref default; used only when time_shift=True",
+      "incoherent_default_reference_frequency_rule": "min(f)",
+      "native_coarse_incoherent_default_reference_frequency_mhz": 400.390625,
+      "function_source_sha256": "0e0d8713b2f3ac2b0e4082db9f878ae8e5c22d2bf9d1052928cc503e1765ca97",
+      "approved_preprocessing_time_shift": false,
+      "approved_preprocessing_incoherent_step": false,
+      "approved_preprocessing_adjudication": "Coherent de-smearing was applied without a whole-channel time shift. No separate incoherent alignment was applied. Later padded alignment must use time0 metadata and declare its reference frequency."
+    }
+  },
+  "open_ambiguities": [
+    "The DSA-110 optimized/applied DM 262.3 pc cm^-3 and 1530 MHz reference are proven through the producer path, but neither is embedded in the final filterbank header or filaxes.json.",
+    "The DSA-110 tstart time scale and sample edge-versus-centre reference are not encoded.",
+    "The DSA filaxes sidecar contains a useful channel mask but its time array does not match the current filterbank dimension, so it is only partial provenance.",
+    "The CHIME voltage dataset has no dedispersion attribute; only tiedbeam_power records coherent DM.",
+    "The CHIME sample edge-versus-centre convention is not recorded in the file metadata. Function defaults are known, but the raw H5 does not record its producer's time_shift or non-default reference-frequency arguments."
+  ]
+}

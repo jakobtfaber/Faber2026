@@ -1,8 +1,8 @@
 # Establish Zach's original products, metadata, and time axes
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
-- Assignee: —
+- Status: resolved
+- Assignee: Codex
 - Blocked by: [Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner direction, 2026-07-22
@@ -40,3 +40,34 @@ ACF, or science claim may be produced here.
 On pass, unblock
 [Fit and adopt Zach's dual-band dispersion measures](zach-analysis-02-fit-dual-band-dm.md).
 
+## Resolution
+
+Owner accepted the packet on 2026-07-22.
+
+The accepted starting state is:
+
+- DSA-110's original Level-3 filterbank is incoherently dedispersed at the
+  optimized/applied value `262.3 pc cm^-3`, referenced to `1530 MHz`; the
+  Heimdall trigger value `263.0 pc cm^-3` is separate.
+- CHIME/FRB's raw voltage product does not record a dispersion measure. Its
+  associated power product records coherent `DM=262.4359033801 pc cm^-3`, but
+  that value is not transferred to the voltage history.
+- CHIME's producer functions use `400 MHz` for optional coherent whole-channel
+  time shifting and `min(f)` for incoherent alignment. Zach's retained native
+  coarse-grid minimum is `400.390625 MHz`.
+- The approved Zach preprocessing coherently de-smeared within channels but
+  disabled the whole-channel time shift and applied no separate incoherent
+  alignment. Later arrival-time work must therefore start from the recorded
+  per-channel `time0` metadata.
+- Native sample indices are preserved without assuming an unrecorded
+  edge-versus-centre half-sample shift.
+
+This acceptance establishes source identity, prior processing, and coordinate
+conventions. It does not adopt a newly fitted dispersion measure.
+
+## Evidence
+
+- [Concise audit and extraction commands](../../certificates/zach-raw-products-time-axes-2026-07-22/README.md)
+- [Machine-readable metadata packet](../../certificates/zach-raw-products-time-axes-2026-07-22/metadata.json)
+- [Native-grid review figure](../../certificates/zach-raw-products-time-axes-2026-07-22/native-grids.svg)
+- [Artifact checksums](../../certificates/zach-raw-products-time-axes-2026-07-22/SHA256SUMS)
