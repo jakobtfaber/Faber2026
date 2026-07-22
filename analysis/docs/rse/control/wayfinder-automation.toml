@@ -43,17 +43,6 @@ depends_on = ["source-zach-whitney-host-redshifts", "replay-nine-sightline-query
 instructions = "Repeat source-level redshift verification after the host sources and independent query replay resolve. Preserve existing verdicts until separately adjudicated."
 
 [[task]]
-id = "freeze-anonymous-query-corpus"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
-branch = "codex/auto-freeze-anonymous-query-corpus"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["set-nine-sightline-search-contract"]
-instructions = "Freeze the anonymous nine-sightline query corpus under the resolved search contract. Preserve raw evidence and fail closed on missing coverage."
-
-[[task]]
 id = "freeze-protected-query-evidence"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md"
@@ -154,6 +143,13 @@ id = "set-nine-sightline-search-contract"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md"
 execution = "hitl"
 depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-anonymous-query-corpus"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
+execution = "afk"
+depends_on = ["set-nine-sightline-search-contract"]
 status = "resolved"
 
 [[history]]

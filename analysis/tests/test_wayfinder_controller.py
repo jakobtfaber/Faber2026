@@ -43,7 +43,7 @@ def test_manifest_has_analysis_specific_controller_roots():
         ).expanduser()
     )
     assert manifest.max_parallel == 4
-    assert len(wc.tasks_for_wave(manifest, "first")) == 7
+    assert len(wc.tasks_for_wave(manifest, "first")) == 6
 
 
 def test_manifest_represents_expanded_foreground_active_graph_and_history():
@@ -58,7 +58,6 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (4, "set-figure-3-gate"),
             (5, "set-independent-validation-gate"),
             (9, "repeat-redshift-source-verification"),
-            (14, "freeze-anonymous-nine-sightline-query-corpus"),
             (15, "freeze-protected-nine-sightline-query-evidence"),
             (16, "independently-replay-nine-sightline-query-corpus"),
             (19, "adjudicate-host-redshift-differences"),
@@ -77,6 +76,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (11, "resolve-zach-intercatalog-redshift"),
             (12, "expand-nine-sightline-catalogs"),
             (13, "set-nine-sightline-search-contract"),
+            (14, "freeze-anonymous-nine-sightline-query-corpus"),
             (17, "obtain-authoritative-host-redshift-ledger"),
             (18, "source-zach-whitney-host-redshifts"),
         ]
@@ -179,7 +179,7 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     state = wc.empty_state(manifest)
     ready = {task.id for task in wc.ready_tasks(manifest, state, "first")}
-    assert ready == {"freeze-anonymous-query-corpus"}
+    assert ready == set()
     assert "freeze-protected-query-evidence" not in ready
     assert "replay-nine-sightline-query-corpus" not in ready
 
@@ -576,6 +576,7 @@ def test_supervisor_does_not_signal_running_before_first_spawn(monkeypatch, tmp_
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     manifest = replace(manifest, state_dir=tmp_path)
     state = wc.empty_state(manifest)
+    state["tasks"]["freeze-protected-query-evidence"]["status"] = "resolved"
     state["supervisor"] = {
         "pid": wc.os.getpid(),
         "wave": "first",
