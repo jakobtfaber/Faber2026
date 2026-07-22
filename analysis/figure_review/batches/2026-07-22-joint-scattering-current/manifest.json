@@ -1,0 +1,500 @@
+{
+  "batch_id": "2026-07-22-joint-scattering-current",
+  "candidates": [
+    {
+      "artifact": "candidates/triptych-zach.pdf",
+      "artifact_sha256": "53e1378e67d5fa573a8037629991eb7f941d2982956e13c56be532687ecf80ed",
+      "claim": "Morphology candidates only; fitted values remain trust-pending",
+      "decision": {
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "262.361665",
+        "adopted_sigma": "0.010372",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.023274",
+        "chime_dm": "262.361665",
+        "chime_minus_dsa": "0.045268",
+        "chime_sigma": "0.010372",
+        "dsa_dm": "262.316397",
+        "dsa_sigma": "0.029297",
+        "gaussian_joint_dm": "262.347322",
+        "gaussian_joint_sigma": "0.021060",
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-latest-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-zach",
+      "manuscript_section": "Joint scattering fit audit; not compiled",
+      "preview": "previews/triptych-zach.png",
+      "priority": 10,
+      "reproduction": {
+        "candidate_id": "triptych-zach",
+        "clean_worktree": true,
+        "command": [
+          "env",
+          "-i",
+          "HOME=/Users/jakobfaber",
+          "PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin",
+          "FABER2026_ROOT=/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-joint-scattering-repro",
+          "FABER2026_RESULTS_LIBRARY=/Users/jakobfaber/Data/Faber2026/results-library",
+          "SOURCE_DATE_EPOCH=1784505600",
+          "/opt/anaconda3/bin/conda",
+          "run",
+          "-n",
+          "flits",
+          "python",
+          "analysis/scripts/plot_codetection_triptych.py",
+          "--burst",
+          "oran",
+          "--burst",
+          "johndoeii",
+          "--burst",
+          "zach",
+          "--out-dir",
+          "/tmp/faber2026-jointtf-repro.1TKALS/certified3/figures/codetection_triptych"
+        ],
+        "cwd": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-joint-scattering-repro",
+        "environment": {
+          "identity": "conda flits explicit package set; Python 3.12.13; macOS arm64",
+          "runner": "/opt/anaconda3/bin/conda run -n flits",
+          "sha256": "d2fe00a94447c47f67288aac8d71268209072c2f247118407b48593577d34569"
+        },
+        "inputs": [
+          {
+            "path": "analysis/scripts/plot_codetection_triptych.py",
+            "sha256": "9999e5983d5380ad8b78cc509cc452368068a205e488887f084d47100278ca67"
+          },
+          {
+            "path": "analysis/scripts/jointmodel_triptych_manifest.yaml",
+            "sha256": "806a14c9a8b76b6788e502ded5267b8ea546f19839513dabb768a441e50c8c31"
+          },
+          {
+            "path": "analysis/scripts/results_library.py",
+            "sha256": "13a910c67daebbf54be0916d2a4485782f68522b2fb86c2fb220b29723d2fbc9"
+          },
+          {
+            "path": "analysis/scripts/workspace.py",
+            "sha256": "79b9a3c04a8b5d56e241d69187f85a219d6157412cd954a61d6435bd44cefd85"
+          },
+          {
+            "path": "scripts/plot_codetection_gallery.py",
+            "sha256": "4f624ad9917e8ed2e5841b5d947f6a8b6bd315fbcf3eec1f45646545bf114f91"
+          },
+          {
+            "path": "pipeline/flits/batch/codetection_data.py",
+            "sha256": "4e7d1b8ab232fe5ae8dc0a584734093b155b0e4e2f9287f07db92f37be143ff1"
+          },
+          {
+            "path": "pipeline/flits/batch/codetection_plots.py",
+            "sha256": "d11dcaff601c5b359b896ab3c9d5ea475b32b9316da74f93c2cb13f1bc9ea5da"
+          },
+          {
+            "path": "pipeline/crossmatching/toa_crossmatch_results.json",
+            "sha256": "3743073c9feb8e5f8ad54f10ebe015b712e8ef908adc6be3f8892ae20f558c8c"
+          },
+          {
+            "path": "pipeline/crossmatching/notebook_reproduction_fixture.json",
+            "sha256": "6df8813410d375c12542011430817912fcffa3f93bdb654ba20e10a9a3f8e13b"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/manifest.json",
+            "sha256": "dcacdba56ebeb4b123a362fb31eeff23ba220196fe0cc7774b8288a66fdbc52a"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/zach/fit.json",
+            "sha256": "a0a1adaa1918e6b58cd9e14ff832794e71f069cd5812dfb03389f646bab561dc"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/zach/jointmodel.npz",
+            "sha256": "eda4e8f5d4d67f6dd96d307719bb292de9215e0fc0352ff7f5e94c7dc99eb408"
+          }
+        ],
+        "output_sha256": "53e1378e67d5fa573a8037629991eb7f941d2982956e13c56be532687ecf80ed",
+        "pipeline_revision": "b69dea16636fc9944c0083040c09b5a57d66db34",
+        "source_revision": "6012637ceb5a273d249fe3a30bf56dc9d83c44bd",
+        "status": "verified",
+        "verified_at": "2026-07-22T18:33:27+00:00",
+        "verifier": "Codex GPT-5"
+      },
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "exact fit summary and configuration SHA-256",
+        "component counts, priors, and fit-generation reproducibility status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "per-band residual diagnostics and morphology verdict",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "review_question": "Do the data-model residuals support or immediately flag this candidate fit?",
+      "subject": {
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "target": "figures/codetection_triptych/zach_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20220207C"
+    },
+    {
+      "artifact": "candidates/triptych-oran.pdf",
+      "artifact_sha256": "490d297f3d0fee5d44d55cfd5d9f24f7bceafcb49b4c11d236b3b70b6e3febca",
+      "claim": "Morphology candidates only; fitted values remain trust-pending",
+      "decision": {
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "397.015535",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "397.015535",
+        "chime_minus_dsa": "0.074489",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "396.941046",
+        "dsa_sigma": "0.082506",
+        "gaussian_joint_dm": "397.015263",
+        "gaussian_joint_sigma": "0.004991",
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-latest-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-oran",
+      "manuscript_section": "Joint scattering fit audit; not compiled",
+      "preview": "previews/triptych-oran.png",
+      "priority": 10,
+      "reproduction": {
+        "candidate_id": "triptych-oran",
+        "clean_worktree": true,
+        "command": [
+          "env",
+          "-i",
+          "HOME=/Users/jakobfaber",
+          "PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin",
+          "FABER2026_ROOT=/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-joint-scattering-repro",
+          "FABER2026_RESULTS_LIBRARY=/Users/jakobfaber/Data/Faber2026/results-library",
+          "SOURCE_DATE_EPOCH=1784505600",
+          "/opt/anaconda3/bin/conda",
+          "run",
+          "-n",
+          "flits",
+          "python",
+          "analysis/scripts/plot_codetection_triptych.py",
+          "--burst",
+          "oran",
+          "--burst",
+          "johndoeii",
+          "--burst",
+          "zach",
+          "--out-dir",
+          "/tmp/faber2026-jointtf-repro.1TKALS/certified3/figures/codetection_triptych"
+        ],
+        "cwd": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-joint-scattering-repro",
+        "environment": {
+          "identity": "conda flits explicit package set; Python 3.12.13; macOS arm64",
+          "runner": "/opt/anaconda3/bin/conda run -n flits",
+          "sha256": "d2fe00a94447c47f67288aac8d71268209072c2f247118407b48593577d34569"
+        },
+        "inputs": [
+          {
+            "path": "analysis/scripts/plot_codetection_triptych.py",
+            "sha256": "9999e5983d5380ad8b78cc509cc452368068a205e488887f084d47100278ca67"
+          },
+          {
+            "path": "analysis/scripts/jointmodel_triptych_manifest.yaml",
+            "sha256": "806a14c9a8b76b6788e502ded5267b8ea546f19839513dabb768a441e50c8c31"
+          },
+          {
+            "path": "analysis/scripts/results_library.py",
+            "sha256": "13a910c67daebbf54be0916d2a4485782f68522b2fb86c2fb220b29723d2fbc9"
+          },
+          {
+            "path": "analysis/scripts/workspace.py",
+            "sha256": "79b9a3c04a8b5d56e241d69187f85a219d6157412cd954a61d6435bd44cefd85"
+          },
+          {
+            "path": "scripts/plot_codetection_gallery.py",
+            "sha256": "4f624ad9917e8ed2e5841b5d947f6a8b6bd315fbcf3eec1f45646545bf114f91"
+          },
+          {
+            "path": "pipeline/flits/batch/codetection_data.py",
+            "sha256": "4e7d1b8ab232fe5ae8dc0a584734093b155b0e4e2f9287f07db92f37be143ff1"
+          },
+          {
+            "path": "pipeline/flits/batch/codetection_plots.py",
+            "sha256": "d11dcaff601c5b359b896ab3c9d5ea475b32b9316da74f93c2cb13f1bc9ea5da"
+          },
+          {
+            "path": "pipeline/crossmatching/toa_crossmatch_results.json",
+            "sha256": "3743073c9feb8e5f8ad54f10ebe015b712e8ef908adc6be3f8892ae20f558c8c"
+          },
+          {
+            "path": "pipeline/crossmatching/notebook_reproduction_fixture.json",
+            "sha256": "6df8813410d375c12542011430817912fcffa3f93bdb654ba20e10a9a3f8e13b"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/manifest.json",
+            "sha256": "dcacdba56ebeb4b123a362fb31eeff23ba220196fe0cc7774b8288a66fdbc52a"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/oran/fit.json",
+            "sha256": "bdfbb3a49b2427db7fbdff20c67fe14c4d94396da503c06d5dda220a6e4cd609"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/oran/jointmodel.npz",
+            "sha256": "b550ddf48d8d922751735fda8fdff0aa5dfd1287d67c8d4ac19ee7b76382ffa6"
+          }
+        ],
+        "output_sha256": "490d297f3d0fee5d44d55cfd5d9f24f7bceafcb49b4c11d236b3b70b6e3febca",
+        "pipeline_revision": "b69dea16636fc9944c0083040c09b5a57d66db34",
+        "source_revision": "6012637ceb5a273d249fe3a30bf56dc9d83c44bd",
+        "status": "verified",
+        "verified_at": "2026-07-22T18:33:27+00:00",
+        "verifier": "Codex GPT-5"
+      },
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "exact fit summary and configuration SHA-256",
+        "component counts, priors, and fit-generation reproducibility status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "per-band residual diagnostics and morphology verdict",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "review_question": "Do the data-model residuals support or immediately flag this candidate fit?",
+      "subject": {
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "target": "figures/codetection_triptych/oran_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20220506D"
+    },
+    {
+      "artifact": "candidates/triptych-johndoeii.pdf",
+      "artifact_sha256": "60ea8a16eb8963c318ab3f7bd81cb9bece7c9cbe47d4ff9a28972a68b6c2f601",
+      "claim": "Morphology candidates only; fitted values remain trust-pending",
+      "decision": {
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "dm_measurement": {
+        "adopted_dm": "696.518001",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "696.518001",
+        "chime_minus_dsa": "0.052497",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "696.465504",
+        "dsa_sigma": "0.068454",
+        "gaussian_joint_dm": "696.517722",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-latest-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-johndoeii",
+      "manuscript_section": "Joint scattering fit audit; not compiled",
+      "preview": "previews/triptych-johndoeii.png",
+      "priority": 10,
+      "reproduction": {
+        "candidate_id": "triptych-johndoeii",
+        "clean_worktree": true,
+        "command": [
+          "env",
+          "-i",
+          "HOME=/Users/jakobfaber",
+          "PATH=/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin",
+          "FABER2026_ROOT=/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-joint-scattering-repro",
+          "FABER2026_RESULTS_LIBRARY=/Users/jakobfaber/Data/Faber2026/results-library",
+          "SOURCE_DATE_EPOCH=1784505600",
+          "/opt/anaconda3/bin/conda",
+          "run",
+          "-n",
+          "flits",
+          "python",
+          "analysis/scripts/plot_codetection_triptych.py",
+          "--burst",
+          "oran",
+          "--burst",
+          "johndoeii",
+          "--burst",
+          "zach",
+          "--out-dir",
+          "/tmp/faber2026-jointtf-repro.1TKALS/certified3/figures/codetection_triptych"
+        ],
+        "cwd": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-joint-scattering-repro",
+        "environment": {
+          "identity": "conda flits explicit package set; Python 3.12.13; macOS arm64",
+          "runner": "/opt/anaconda3/bin/conda run -n flits",
+          "sha256": "d2fe00a94447c47f67288aac8d71268209072c2f247118407b48593577d34569"
+        },
+        "inputs": [
+          {
+            "path": "analysis/scripts/plot_codetection_triptych.py",
+            "sha256": "9999e5983d5380ad8b78cc509cc452368068a205e488887f084d47100278ca67"
+          },
+          {
+            "path": "analysis/scripts/jointmodel_triptych_manifest.yaml",
+            "sha256": "806a14c9a8b76b6788e502ded5267b8ea546f19839513dabb768a441e50c8c31"
+          },
+          {
+            "path": "analysis/scripts/results_library.py",
+            "sha256": "13a910c67daebbf54be0916d2a4485782f68522b2fb86c2fb220b29723d2fbc9"
+          },
+          {
+            "path": "analysis/scripts/workspace.py",
+            "sha256": "79b9a3c04a8b5d56e241d69187f85a219d6157412cd954a61d6435bd44cefd85"
+          },
+          {
+            "path": "scripts/plot_codetection_gallery.py",
+            "sha256": "4f624ad9917e8ed2e5841b5d947f6a8b6bd315fbcf3eec1f45646545bf114f91"
+          },
+          {
+            "path": "pipeline/flits/batch/codetection_data.py",
+            "sha256": "4e7d1b8ab232fe5ae8dc0a584734093b155b0e4e2f9287f07db92f37be143ff1"
+          },
+          {
+            "path": "pipeline/flits/batch/codetection_plots.py",
+            "sha256": "d11dcaff601c5b359b896ab3c9d5ea475b32b9316da74f93c2cb13f1bc9ea5da"
+          },
+          {
+            "path": "pipeline/crossmatching/toa_crossmatch_results.json",
+            "sha256": "3743073c9feb8e5f8ad54f10ebe015b712e8ef908adc6be3f8892ae20f558c8c"
+          },
+          {
+            "path": "pipeline/crossmatching/notebook_reproduction_fixture.json",
+            "sha256": "6df8813410d375c12542011430817912fcffa3f93bdb654ba20e10a9a3f8e13b"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/manifest.json",
+            "sha256": "dcacdba56ebeb4b123a362fb31eeff23ba220196fe0cc7774b8288a66fdbc52a"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/johndoeii/fit.json",
+            "sha256": "c95a126664fc017a607f38dad13d32ca6961f859c3bed97e649119429941bf36"
+          },
+          {
+            "path": "results-library:scattering/jointmodel/latest/johndoeii/jointmodel.npz",
+            "sha256": "2095a1891531c14714d83334abee134c3ad54293c3385994296ff4c4c282dea6"
+          }
+        ],
+        "output_sha256": "60ea8a16eb8963c318ab3f7bd81cb9bece7c9cbe47d4ff9a28972a68b6c2f601",
+        "pipeline_revision": "b69dea16636fc9944c0083040c09b5a57d66db34",
+        "source_revision": "6012637ceb5a273d249fe3a30bf56dc9d83c44bd",
+        "status": "verified",
+        "verified_at": "2026-07-22T18:33:27+00:00",
+        "verifier": "Codex GPT-5"
+      },
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "exact fit summary and configuration SHA-256",
+        "component counts, priors, and fit-generation reproducibility status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "per-band residual diagnostics and morphology verdict",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "review_question": "Do the data-model residuals support or immediately flag this candidate fit?",
+      "subject": {
+        "nick": "johndoeii",
+        "tns": "FRB 20230814B"
+      },
+      "target": "figures/codetection_triptych/johndoeii_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20230814B"
+    }
+  ],
+  "created_at": "2026-07-22T18:33:13+00:00",
+  "dm_catalog": {
+    "path": "dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8"
+  },
+  "evidence": [
+    {
+      "id": "dm-catalog",
+      "repository": "analysis",
+      "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8",
+      "source_path": "dm-joint-phase-v2/manuscript_dm_catalog.csv",
+      "source_revision": "6012637ceb5a273d249fe3a30bf56dc9d83c44bd",
+      "stored_path": "provenance/dm-catalog.csv"
+    },
+    {
+      "id": "joint-render-manifest",
+      "repository": "analysis",
+      "sha256": "806a14c9a8b76b6788e502ded5267b8ea546f19839513dabb768a441e50c8c31",
+      "source_path": "scripts/jointmodel_triptych_manifest.yaml",
+      "source_revision": "6012637ceb5a273d249fe3a30bf56dc9d83c44bd",
+      "stored_path": "provenance/joint-render-manifest.yaml"
+    },
+    {
+      "id": "joint-latest-manifest",
+      "repository": "results-library",
+      "sha256": "dcacdba56ebeb4b123a362fb31eeff23ba220196fe0cc7774b8288a66fdbc52a",
+      "source_path": "scattering/jointmodel/latest/manifest.json",
+      "source_revision": "dcacdba56ebeb4b123a362fb31eeff23ba220196fe0cc7774b8288a66fdbc52a",
+      "stored_path": "provenance/joint-latest-manifest.json"
+    },
+    {
+      "id": "joint-fit-roster",
+      "repository": "pipeline",
+      "sha256": "101fa5389692beadd9cf5ce06f0593dea0c43889a0ae0784eadbd7008ad20e40",
+      "source_path": "analysis/scattering-dm-locked-2026-07-14/fit_roster.csv",
+      "source_revision": "b69dea16636fc9944c0083040c09b5a57d66db34",
+      "stored_path": "provenance/joint-fit-roster.csv"
+    },
+    {
+      "id": "joint-fit-adjudication",
+      "repository": "pipeline",
+      "sha256": "7ed91f3eab8f09f9f414254b138ae2baceecb7d92c0f89437760a366eb97877d",
+      "source_path": "analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv",
+      "source_revision": "b69dea16636fc9944c0083040c09b5a57d66db34",
+      "stored_path": "provenance/joint-fit-adjudication.csv"
+    }
+  ],
+  "pipeline_revision": "b69dea16636fc9944c0083040c09b5a57d66db34",
+  "policy": {
+    "agent_visual_review_is_not_author_approval": true,
+    "approval_is_per_candidate": true,
+    "owner_preview_requires_verified_reproduction": true,
+    "promotion_requires_exact_hash_match": true
+  },
+  "schema_version": 1,
+  "source_revision": "6012637ceb5a273d249fe3a30bf56dc9d83c44bd",
+  "title": "Current joint-scattering morphology candidates"
+}

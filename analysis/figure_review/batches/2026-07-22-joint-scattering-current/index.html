@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Current joint-scattering morphology candidates</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1500px;margin:auto;padding:2rem;background:#f5f6f8;color:#17202a}
+.summary,.card{background:white;border:1px solid #ccd2d8;border-radius:10px;padding:1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:1rem}
+.card{margin:0;border-left:8px solid #c17d00} .status-approved{border-left-color:#16803c} .status-needs_revision{border-left-color:#b42318}
+.withheld{padding:3rem 1rem;text-align:center;background:#fff4e5;border:1px solid #c17d00;border-radius:6px}
+img{width:100%;max-height:680px;object-fit:contain;background:white} code{word-break:break-all} dt{font-weight:700;margin-top:.5rem}
+</style></head><body>
+<h1>Current joint-scattering morphology candidates</h1>
+<section class="summary"><p><strong>Batch:</strong> <code>2026-07-22-joint-scattering-current</code><br>
+<strong>Source revision:</strong> <code>6012637ceb5a273d249fe3a30bf56dc9d83c44bd</code><br>
+<strong>Pipeline revision:</strong> <code>b69dea16636fc9944c0083040c09b5a57d66db34</code><br>
+<strong>DM catalog:</strong> <code>86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8</code></p>
+<p>Approval is per candidate. Reply with the stable candidate ID and either <em>approve</em> or <em>needs revision</em>, plus notes. Promotion is impossible unless the approved candidate bytes still match this packet.</p>
+<p>Figures remain hidden until exact inputs, code revisions, command, environment, and regenerated output have passed the reproduction gate.</p>
+<h3>Packet validation</h3><ul><li>None</li></ul></section>
+<main class="grid">
+<article id="triptych-zach" class="card status-pending">
+  <h2>triptych-zach: Data/model/residual triptych: FRB 20220207C</h2>
+  <p><strong>Status:</strong> pending</p>
+  <p>zach &middot; FRB 20220207C</p>
+  <a href="candidates/triptych-zach.pdf"><img src="previews/triptych-zach.png" alt="Data/model/residual triptych: FRB 20220207C"></a>
+  <dl>
+    <dt>Reproduction gate</dt><dd>Verified</dd>
+    <dt>Manuscript section</dt><dd>Joint scattering fit audit; not compiled</dd>
+    <dt>Claim</dt><dd>Morphology candidates only; fitted values remain trust-pending</dd>
+    <dt>Owner review question</dt><dd>Do the data-model residuals support or immediately flag this candidate fit?</dd>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/zach_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>53e1378e67d5fa573a8037629991eb7f941d2982956e13c56be532687ecf80ed</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; exact fit summary and configuration SHA-256; component counts, priors, and fit-generation reproducibility status; display window, resolution, and masks; residual normalization and color scale; per-band residual diagnostics and morphology verdict; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-latest-manifest.json">joint-latest-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;262.361665&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.010372&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.023274&quot;,
+  &quot;chime_dm&quot;: &quot;262.361665&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.045268&quot;,
+  &quot;chime_sigma&quot;: &quot;0.010372&quot;,
+  &quot;dsa_dm&quot;: &quot;262.316397&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.029297&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;262.347322&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.021060&quot;,
+  &quot;nick&quot;: &quot;zach&quot;,
+  &quot;tns&quot;: &quot;FRB 20220207C&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>None yet</dd>
+  </dl>
+</article>
+<article id="triptych-oran" class="card status-pending">
+  <h2>triptych-oran: Data/model/residual triptych: FRB 20220506D</h2>
+  <p><strong>Status:</strong> pending</p>
+  <p>oran &middot; FRB 20220506D</p>
+  <a href="candidates/triptych-oran.pdf"><img src="previews/triptych-oran.png" alt="Data/model/residual triptych: FRB 20220506D"></a>
+  <dl>
+    <dt>Reproduction gate</dt><dd>Verified</dd>
+    <dt>Manuscript section</dt><dd>Joint scattering fit audit; not compiled</dd>
+    <dt>Claim</dt><dd>Morphology candidates only; fitted values remain trust-pending</dd>
+    <dt>Owner review question</dt><dd>Do the data-model residuals support or immediately flag this candidate fit?</dd>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/oran_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>490d297f3d0fee5d44d55cfd5d9f24f7bceafcb49b4c11d236b3b70b6e3febca</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; exact fit summary and configuration SHA-256; component counts, priors, and fit-generation reproducibility status; display window, resolution, and masks; residual normalization and color scale; per-band residual diagnostics and morphology verdict; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-latest-manifest.json">joint-latest-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;397.015535&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;397.015535&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.074489&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;396.941046&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.082506&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;397.015263&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004991&quot;,
+  &quot;nick&quot;: &quot;oran&quot;,
+  &quot;tns&quot;: &quot;FRB 20220506D&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>None yet</dd>
+  </dl>
+</article>
+<article id="triptych-johndoeii" class="card status-pending">
+  <h2>triptych-johndoeii: Data/model/residual triptych: FRB 20230814B</h2>
+  <p><strong>Status:</strong> pending</p>
+  <p>johndoeii &middot; FRB 20230814B</p>
+  <a href="candidates/triptych-johndoeii.pdf"><img src="previews/triptych-johndoeii.png" alt="Data/model/residual triptych: FRB 20230814B"></a>
+  <dl>
+    <dt>Reproduction gate</dt><dd>Verified</dd>
+    <dt>Manuscript section</dt><dd>Joint scattering fit audit; not compiled</dd>
+    <dt>Claim</dt><dd>Morphology candidates only; fitted values remain trust-pending</dd>
+    <dt>Owner review question</dt><dd>Do the data-model residuals support or immediately flag this candidate fit?</dd>
+    <dt>Manuscript target</dt><dd><code>figures/codetection_triptych/johndoeii_triptych.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>60ea8a16eb8963c318ab3f7bd81cb9bece7c9cbe47d4ff9a28972a68b6c2f601</code></dd>
+    <dt>Generator</dt><dd><code>scripts/plot_codetection_triptych.py</code></dd>
+    <dt>Required provenance</dt><dd>adopted DM and input-product DM for both telescopes; exact joint-model artifact SHA-256 or explicit data-only status; exact fit summary and configuration SHA-256; component counts, priors, and fit-generation reproducibility status; display window, resolution, and masks; residual normalization and color scale; per-band residual diagnostics and morphology verdict; relationship to the approved Figure 1 layout</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/dm-catalog.csv">dm-catalog</a>, <a href="provenance/joint-render-manifest.yaml">joint-render-manifest</a>, <a href="provenance/joint-latest-manifest.json">joint-latest-manifest</a>, <a href="provenance/joint-fit-roster.csv">joint-fit-roster</a>, <a href="provenance/joint-fit-adjudication.csv">joint-fit-adjudication</a></dd>
+    <dt>DM record</dt><dd><pre>{
+  &quot;adopted_dm&quot;: &quot;696.518001&quot;,
+  &quot;adopted_sigma&quot;: &quot;0.005000&quot;,
+  &quot;adoption&quot;: &quot;chime_primary&quot;,
+  &quot;between_band_sigma&quot;: &quot;0.000000&quot;,
+  &quot;chime_dm&quot;: &quot;696.518001&quot;,
+  &quot;chime_minus_dsa&quot;: &quot;0.052497&quot;,
+  &quot;chime_sigma&quot;: &quot;0.005000&quot;,
+  &quot;dsa_dm&quot;: &quot;696.465504&quot;,
+  &quot;dsa_sigma&quot;: &quot;0.068454&quot;,
+  &quot;gaussian_joint_dm&quot;: &quot;696.517722&quot;,
+  &quot;gaussian_joint_sigma&quot;: &quot;0.004987&quot;,
+  &quot;nick&quot;: &quot;johndoeII&quot;,
+  &quot;tns&quot;: &quot;FRB 20230814B&quot;
+}</pre></dd>
+    <dt>Reviewer notes</dt><dd>None yet</dd>
+  </dl>
+</article></main></body></html>
