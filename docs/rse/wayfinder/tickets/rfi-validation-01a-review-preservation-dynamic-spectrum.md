@@ -66,4 +66,16 @@ support removal. Because the observed event has no known truth, this supplement
 does not establish whether the removed rows are interference or signal and does
 not validate the cleaner. Absolute arrival time remains uncertified.
 
-Owner review remains required before this ticket can close.
+### Owner review outcome — 2026-07-21
+
+Rejected for revision. The owner identified obvious residual RFI between
+700–750 MHz. The strongest retained on-pulse spectral row is 738.876 MHz with a
+time-integrated value of 206.22, 18.39 times the retained-band median-based
+spread above its median. Twenty retained rows exceed 100 and lie between
+737.405–739.200 MHz.
+
+The current candidate is therefore insufficient. Do not tune a frequency cut or
+threshold on Zach: the next method must be specified independently and tested
+against known truth before returning to this observed-event review.
+
+This ticket remains open for a revised candidate and repeat owner review.

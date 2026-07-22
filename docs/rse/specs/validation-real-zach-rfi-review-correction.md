@@ -4,11 +4,11 @@
 > `implement-real-zach-rfi-review-correction.md` at commit `f7b4cd4` on
 > 2026-07-21.
 
-## Overall Status: Awaiting owner figure review
+## Overall Status: Diagnostic valid; cleaner rejected
 
 - Phases: 2 of 2 implemented
 - Automated checks: 5 passing, 0 failing
-- Manual checks: 2 require owner judgment
+- Manual checks: 1 completed with rejection; 1 remains open
 - Critical issues: 0
 - Important issues: 0
 
@@ -69,8 +69,8 @@ open because the observed event has no known RFI truth.
 ## Manual Testing Required
 
 1. Confirm the complete burst and sufficient off-pulse context are visible.
-2. Judge whether the 1D spectrum exposes the narrow-band contamination needed
-   for the preservation-limit decision.
+2. Completed: the owner identified residual RFI at 700–750 MHz and rejected the
+   current candidate.
 
 ## Recommendations
 
@@ -80,7 +80,8 @@ None.
 
 ### Important
 
-None.
+- Replace the training-only whole-row candidate with an independently specified
+  time-frequency method; validate it on known truth before another Zach review.
 
 ### Follow-Up
 

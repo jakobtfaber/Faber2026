@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-21
 **Author:** Codex
-**Status:** Implementation complete; owner review pending
+**Status:** Diagnostic complete; cleaner rejected by owner
 **Plan:** [plan-real-zach-rfi-review-correction.md](plan-real-zach-rfi-review-correction.md)
 
 ## Overview
@@ -61,8 +61,8 @@ No files were deleted. Git history retains the superseded artifact.
 
 ## Remaining Work
 
-- Owner judges the burst/window presentation and visible narrow-band
-  contamination.
+- Owner found residual RFI between 700 and 750 MHz; revise the candidate under a
+  separate, independently specified plan.
 - The RFI cleaner remains unvalidated until a known-truth test supports it.
 - Absolute arrival time remains uncertified.
 

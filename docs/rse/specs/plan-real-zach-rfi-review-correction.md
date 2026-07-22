@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-21
 **Author:** Codex
-**Status:** Implemented; awaiting owner figure review
+**Status:** Implemented; owner rejected cleaner for residual RFI
 **Related Documents:**
 - [Research](research-real-zach-rfi-review-correction.md)
 ---
@@ -93,8 +93,9 @@ on-pulse envelope.
 ### Manual Verification
 
 - [ ] Owner confirms the complete burst and off-pulse padding are visible.
-- [ ] Owner can judge narrow-band contamination from the one-dimensional
-  spectrum.
+- [x] Owner can judge narrow-band contamination from the one-dimensional
+  spectrum. Outcome: current candidate rejected for residual RFI at
+  700–750 MHz.
 
 ### Reproducibility & Correctness
 
