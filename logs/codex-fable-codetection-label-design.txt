@@ -1,0 +1,80 @@
+# Band-label design consultation — Faber2026 codetection figures
+
+**Requested:** Claude Fable 5 design review (2026-07-07)  
+**Fable 5:** quota exhausted (`/usage-credits` or `/model` to continue)  
+**Fallback:** Claude Opus 4.8 xhigh (plan mode) — full notes in  
+`~/.claude/plans/design-consultation-fable-5-linear-russell.md`
+
+---
+
+## 1. Diagnosis (what feels wrong now)
+
+- **Crowding:** Vertical labels sit in a left data-coordinate strip between y-tick numerals and the waterfall. They read as axis furniture, not band identity.
+- **Font coupling:** `label_fs = min(...)` across bands lets the thin DSA strip (~190 MHz vs ~400 MHz CHIME) shrink *both* labels — CHIME/FRB ends up unnecessarily small.
+- **Width tax:** Strip + tick reserve extend `xlim` left by ~10–13% of the time axis — costly in AASTeX single-column, and the gutter often shows hatched no-data (johndoeII, mahi) so labels float over “missing” texture.
+- **Rotation:** +90° names fight the natural left-to-right reading direction and don’t align with how astronomers label multi-panel frequency stacks elsewhere (brackets, side labels, or legend).
+
+---
+
+## 2. Three placement alternatives
+
+### Alt A — In-band horizontal tags (right edge of each band)
+
+Place **horizontal** “CHIME/FRB” / “DSA-110” inside each band, **right-aligned** near `data_t1` (or centered on the band’s finite-data span), semi-opaque white backing or bold outline for contrast on magma.
+
+| Pros | Cons |
+|------|------|
+| No extra margin width | Overlays data; worst on short DSA slivers (mahi, oran) |
+| Obvious which strip is which | Can collide with bright burst structure (whitney double peak) |
+| Per-band fontsize natural | Less “publication formal” than outboard labels |
+
+**Worst bursts:** mahi (DSA too narrow), whitney (busy DSA), any with burst at right edge.
+
+### Alt B — Outboard bracketed labels (recommended)
+
+Move names **outside** the axes: horizontal text in the left margin, vertically centered on each band, with a short **vertical bracket** spanning `[f_lo, f_hi]`. Use `blended_transform_factory(ax.transAxes, ax.transData)`; `clip_on=False`.
+
+| Pros | Cons |
+|------|------|
+| Zero data-width cost (drop strip from xlim) | Needs slightly wider `GridSpec` left margin (~0.13) |
+| No collision with ticks, hatch, or burst | “Frequency (MHz)” ylabel must move or drop |
+| Uniform across all 12 bursts | Brackets add a bit of visual noise |
+| Decouple fontsize — one size for both bands | |
+
+**Worst bursts:** None structurally — designed for varied DSA timing. Still check casey (wide DSA), mahi (thin band height).
+
+### Alt C — Top-marginal legend keyed to profile colors
+
+Remove in-panel band names; add a compact legend on the **time-profile** axis: e.g. black = CHIME/FRB, red = DSA-110 (match `_BAND_LINE_COLORS`).
+
+| Pros | Cons |
+|------|------|
+| Clean waterfall | Reader must link legend to frequency stack (extra cognitive step) |
+| Standard matplotlib pattern | Gap hatch has no label unless gap is annotated separately |
+| Works when profile panel present | Weak if you ever hide marginals |
+
+**Worst bursts:** Any figure exported without the top panel; grayscale print if colors aren’t distinguishable.
+
+---
+
+## 3. Recommendation
+
+**Alt B (outboard bracketed labels)** for the manuscript: preserves the connected CHIME | gap | DSA layout, costs no horizontal data space, and stays legible at print size without per-burst tuning.
+
+Optional polish (defer): append band range — “CHIME/FRB · 0.4–0.8 GHz”, “DSA-110 · 1.3–1.5 GHz”.
+
+---
+
+## 4. Implementation notes (`codetection_plots.py`)
+
+- Remove `_LABEL_STRIP_FRAC` / tick-reserve from xlim; set `t0, t1 = axis_t0, data_t1` with `axis_t0 = data_t0`.
+- Replace `_band_waterfall_labels` with bracket + horizontal `ax.text(..., transform=blended, ha='right', va='center', rotation=0, clip_on=False)`.
+- Bump `outer` GridSpec `left` (~0.08 → ~0.13); keep `bbox_inches='tight'` on export.
+- Delete cross-band `min()` fontsize cap; use fixed ~`axes.labelsize`.
+- Edit in **canonical** `dsa110-FLITS` clone; pin bump after upstream merge (submodule rule).
+
+---
+
+## 5. Verification checklist
+
+Regenerate 12 PNGs; spot-check johndoeII (left hatch), mahi (thin DSA), whitney (double DSA), casey (benchmark): names horizontal, outboard, no tick overlap, CHIME label not shrunk by DSA band height.

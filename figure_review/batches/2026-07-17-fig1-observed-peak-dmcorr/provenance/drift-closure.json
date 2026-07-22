@@ -1,0 +1,17 @@
+{
+  "closure": {
+    "isha/chime": {
+      "consistent_with_zero_2sigma": true,
+      "correction_pc_cm3": 0.234,
+      "residual_after_correction_pc_cm3": 0.0427,
+      "residual_sigma": 0.1132
+    },
+    "phineas/chime": {
+      "consistent_with_zero_2sigma": true,
+      "correction_pc_cm3": 0.3,
+      "residual_after_correction_pc_cm3": -0.0006,
+      "residual_sigma": 0.0556
+    }
+  },
+  "method": "sharpness-scan drift re-measured after applying the audit-derived extra dedispersion (equivalent to loading at adopted_dm + correction)"
+}

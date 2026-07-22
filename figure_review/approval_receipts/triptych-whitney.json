@@ -1,0 +1,22 @@
+{
+  "batch_id": "2026-07-15-provisional-propagation-approved",
+  "candidate_id": "triptych-whitney",
+  "candidate_sha256": "d6e51e80682efc7d86c364d85af2f74c24d0970b9c3c6bc594b5678696453c95",
+  "decision": {
+    "notes": "Approved in chat after review of the exact rebuilt manuscript pages on 2026-07-15.",
+    "reviewed_at": "2026-07-15T19:51:48+00:00",
+    "reviewer": "Jakob Faber",
+    "reviewer_role": "manuscript_owner",
+    "status": "approved"
+  },
+  "dm_catalog": {
+    "path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8"
+  },
+  "pipeline_revision": "a70b9c54817a94d2739eaa95860333e6e3f03c0a",
+  "promoted_at": "2026-07-15T19:52:05+00:00",
+  "promoted_sha256": "d6e51e80682efc7d86c364d85af2f74c24d0970b9c3c6bc594b5678696453c95",
+  "promoted_target": "figures/codetection_triptych/whitney_triptych.pdf",
+  "schema_version": 1,
+  "source_revision": "e90d4aa27a83ce4adfaa61e162d52e0ab7e9b294"
+}

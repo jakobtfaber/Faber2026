@@ -1,0 +1,22 @@
+{
+  "batch_id": "2026-07-15-fig1-adopted-dm",
+  "candidate_id": "fig1-gallery",
+  "candidate_sha256": "ba56453f63fee66580bfafd50f9b4829b39901b773d3de4bd464ced0ff697d8a",
+  "decision": {
+    "notes": "Twelve-burst gallery dedispersed to adopted CHIME phase-coherence DMs; all 24 products re-dedispersed (CHIME residual <=0.004, DSA residuals carry the CHIME-DSA offset). DMs, panels, and labels accepted.",
+    "reviewed_at": "2026-07-15T18:10:51+00:00",
+    "reviewer": "Jakob Faber <jfaber@caltech.edu>",
+    "reviewer_role": "manuscript_owner",
+    "status": "approved"
+  },
+  "dm_catalog": {
+    "path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8"
+  },
+  "pipeline_revision": "4e951c8acd6f0e221058d86ed97bb52b9d8c8597",
+  "promoted_at": "2026-07-15T18:10:51+00:00",
+  "promoted_sha256": "ba56453f63fee66580bfafd50f9b4829b39901b773d3de4bd464ced0ff697d8a",
+  "promoted_target": "figures/codetection_data_grid.pdf",
+  "schema_version": 1,
+  "source_revision": "49861d12ecdd95ac252bfc95f9a9ebfc4a892a3a"
+}
