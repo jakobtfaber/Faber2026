@@ -56,9 +56,9 @@ independent numerical, provenance, and owner visual checks.
   flags are preserved, and Figure 3 remains governed by the later independent
   replay and owner-review gates.
 - [Resolve Zach's inter-catalog redshift discrepancy](tickets/expanded-foreground-catalog-repair-11-resolve-zach-intercatalog-redshift.md)
-  — public spectroscopic and classification searches are nondetections; retain
-  both attributable STRM values pending authenticated MAST row recovery and,
-  if authorized, UNIONS/CFIS photometry.
+  — the authenticated row confirms the low value is extrapolated `z_phot0`
+  from a PS1 object sharing its WISE source with a closer QSO-classified PS1
+  neighbor; retain both STRM estimates pending separate adjudication.
 
 ## Not yet specified
 

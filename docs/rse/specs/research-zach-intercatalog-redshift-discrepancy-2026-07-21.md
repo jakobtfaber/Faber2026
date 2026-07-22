@@ -6,8 +6,8 @@ Search radius unless stated otherwise: `5 arcsec`
 
 ## Question and boundary
 
-The legacy spreadsheet attributes `z_phot = 0.012668989` to the combined
-WISE--Pan-STARRS--STRM catalog. The frozen optical-only PS1--STRM row for PS1
+The legacy spreadsheet labels `0.012668989` as a photometric redshift from the
+combined WISE--Pan-STARRS--STRM catalog. The frozen optical-only PS1--STRM row for PS1
 `objID=195373100910393540` gives `z_phot = 0.4693608582 +/- 0.047097985` and
 `extrapolation_Photoz=1`. Can official source-row evidence, public spectra,
 independent northern photometry, or classification catalogs distinguish them?
@@ -17,13 +17,14 @@ eligibility.
 
 ## Result
 
-**Not yet.** Every public spectroscopic and classification query below was a
-non-detection. The two decisive source-level checks are access-blocked:
-
-1. MAST CasJobs authentication is required to extract the exact combined
-   WISE--PS1--STRM row.
-2. The UNIONS/CFIS catalog requires a CADC account authorized for the
-   `CFIS-read` group.
+**Not yet.** The supplied MAST extraction identifies the exact combined
+WISE--PS1--STRM row, but does not make either redshift trustworthy. It instead
+shows that the same WISE source was associated with two PS1 objects separated
+by about 1 arcsec. Both classifications, and the target row's photometric
+redshift, are extrapolations far outside their training-map thresholds. Every
+public spectroscopic and classification query below was a non-detection.
+UNIONS/CFIS remains access-blocked pending a CADC account authorized for the
+`CFIS-read` group.
 
 The discrepancy must remain explicit. Do not average the two redshifts or
 select one because it is closer to the host redshift.
@@ -40,32 +41,68 @@ context `HLSP_WISE_PS1_STRM`. Row extraction must use
 - published SHA-256:
   `0a65f94dd79d0427332c3dbc0950d040f11910ed5eb40c1e8d0e03acef4ec3ca`
 
-The full compressed strip was deliberately not downloaded. Anonymous MAST
-CasJobs does not permit row extraction and no CasJobs credentials were present
-in the execution environment.
+The full compressed strip was deliberately not downloaded. The owner-supplied
+CasJobs [export](research/evidence/zach-intercatalog-redshift-2026-07-21/zach_foreground_jfaber.csv)
+contains two rows and 5,230 bytes;
+its SHA-256 is
+`d2fcc7fb2db3f1a627b1716ec7cf70d87456eacc57d1ef27d22c7f9bee6105f1`.
+The local filesystem records creation and modification at
+`2026-07-21T18:24:26-0700`; that timestamp is not a substitute for a recorded
+CasJobs retrieval time. The query text and CasJobs job identifier were not
+embedded in the file and should still be frozen with it for complete
+provenance.
 
-### Owner acquisition step
+### Supplied-row audit
 
-Create or sign into a free [MAST CasJobs](http://mastweb.stsci.edu/mcasjobs/)
-account, select context `HLSP_WISE_PS1_STRM`, and run:
+The [official MAST field definitions](https://archive.stsci.edu/hlsp/wise-ps1-strm)
+define `distance_Deg` as the PS1--WISE angular separation, `BayesFactor` as the
+cross-match likelihood ratio, and `cntr` as the unique WISE catalog-source
+identifier. They also warn that PS1 `objID` is not unique, so coordinates must
+remain part of the identity check.
 
-```sql
-SELECT TOP 20 *
-FROM catalogRecordRowStore
-WHERE objID = 195373100910393540
-  AND ABS(raMean - 310.0912903) < 0.001
-  AND ABS(decMean - 72.81041703) < 0.001
-```
+| field | target PS1 row | second PS1 row |
+|---|---:|---:|
+| `objID` | `195373100910393540` | `195373100922233363` |
+| PS1 position | `310.09129027`, `+72.81041703` deg | `310.09219124`, `+72.81049238` deg |
+| WISE `cntr` | `3113172601241027886` | `3113172601241027886` |
+| PS1--WISE separation | `0.856754` arcsec | `0.186042` arcsec |
+| `BayesFactor` | `1.93041481238421e10` | `6.41894631707602e11` |
+| class | `GALAXY` | `QSO` |
+| galaxy / star / quasar output | `0.774156 / 0.214111 / 0.011734` | `0.154233 / 0.107350 / 0.738417` |
+| class extrapolation; distance; cell | `1`; `14.0726`; `750` | `1`; `16.3601`; `460` |
+| `z_phot` | `0.01229792` | missing (`-999`) |
+| `z_photErr` | `0.06530163` | missing (`-999`) |
+| `z_phot0` | `0.012668989` | missing (`-999`) |
+| photo-z extrapolation; distance; cell | `1`; `12.2521`; `146` | missing (`-999`) |
 
-Export the result as CSV without opening it in spreadsheet software. Freeze
-the original bytes, retrieval UTC time, query text, and SHA-256. At minimum,
-retain `objID`, `raMean`, `decMean`, `distance_Deg`, `sqrErr_Arcsec`,
-`BayesFactor`, WISE `cntr`, WISE coordinates and photometric flags, `class`,
-the three class probabilities, both classification coverage fields,
-`z_phot`, `z_photErr`, `z_phot0`, `extrapolation_Photoz`,
-`cellDistance_Photoz`, and `cellID_Photoz`.
+The first row is the requested PS1 object: its identifier matches exactly and
+its position agrees with the recorded candidate to about `0.00003` arcsec.
+The second row is a distinct PS1 object `0.9962` arcsec away. It is not another
+row for `objID=195373100910393540`. Both rows nevertheless contain the same
+WISE identifier, coordinates, and photometry. The WISE association is therefore
+not unique at PS1 resolution. The second row is closer to the WISE position and
+has a `33.2516` times larger match likelihood ratio, but the published field
+definition does not make that ratio a rule for assigning the WISE flux uniquely
+between nearby PS1 objects. Shared or blended infrared information remains a
+material concern.
 
-This needs a MAST account, not Caltech journal access.
+The [official catalog definitions](https://archive.stsci.edu/hlsp/wise-ps1-strm)
+set the classification extrapolation boundary at `cellDistance_Class > 4.233`.
+Both values are more than three times that boundary, so neither class label is
+an in-domain classification. They set the photometric-redshift extrapolation
+boundary at `cellDistance_Photoz > 3.702`; the target's value `12.2521` is also
+far outside the modeled region. Its calibrated error `0.06530` exceeds either
+low-redshift point estimate. The legacy spreadsheet value `0.012668989` is an
+exact match to the base estimate `z_phot0`, not the catalog's Monte Carlo
+estimate `z_phot=0.01229792`. MAST describes `z_phot0` as slightly more accurate,
+but that does not override the row's explicit extrapolation flag.
+
+The second row has no redshift estimate because it is classified as a quasar;
+the catalog estimates photometric redshifts for galaxy-classified sources.
+Its `-999` entries therefore do not provide a third redshift. The supplied rows
+prove the low value's exact catalog provenance while weakening its scientific
+weight: it is an extrapolated estimate using WISE measurements also assigned
+to a separate, closer PS1 source.
 
 ## 2. Spectroscopic searches
 
@@ -168,12 +205,17 @@ DR10 morphology or photometric-redshift row to use at this position.
 
 ## Disposition
 
-- Same-object association remains strongly supported by the sub-milliarcsecond
-  agreement of the recorded PS1 coordinates, but the combined official row is
-  not yet frozen.
+- The combined row is now identified exactly as PS1
+  `objID=195373100910393540`; the legacy `0.012668989` value is its `z_phot0`.
+- The shared WISE `cntr` across two PS1 objects, separated by `0.9962` arcsec,
+  prevents treating the infrared association as uniquely resolved.
+- Both supplied classifications and the target row's redshift are explicit
+  extrapolations. The low-redshift value is attributable and source-row
+  verified, but not scientifically validated.
 - Public DESI, SDSS, LAMOST, Gaia, and Legacy Surveys searches add only
   documented non-detections.
-- The first required owner action is a MAST CasJobs export. CADC/CFIS access is
-  useful second, if `CFIS-read` can be obtained.
-- Until those artifacts are checked, retain both redshifts as attributable but
-  mutually inconsistent. No scientific re-adjudication is authorized here.
+- Freeze the CasJobs query, job identifier, and retrieval time beside the
+  supplied bytes. CADC/CFIS access remains useful if `CFIS-read` can be
+  obtained.
+- Until independent data adjudicate them, retain both redshifts as attributable
+  but mutually inconsistent. No scientific re-adjudication is authorized here.
