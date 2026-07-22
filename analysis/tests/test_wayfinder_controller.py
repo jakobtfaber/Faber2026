@@ -43,7 +43,7 @@ def test_manifest_has_analysis_specific_controller_roots():
         ).expanduser()
     )
     assert manifest.max_parallel == 4
-    assert len(wc.tasks_for_wave(manifest, "first")) == 7
+    assert len(wc.tasks_for_wave(manifest, "first")) == 6
 
 
 def test_manifest_represents_expanded_foreground_active_graph_and_history():
@@ -59,7 +59,6 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (5, "set-independent-validation-gate"),
             (9, "repeat-redshift-source-verification"),
             (14, "freeze-anonymous-nine-sightline-query-corpus"),
-            (15, "freeze-protected-nine-sightline-query-evidence"),
             (16, "independently-replay-nine-sightline-query-corpus"),
             (19, "adjudicate-host-redshift-differences"),
         ]
@@ -77,6 +76,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (11, "resolve-zach-intercatalog-redshift"),
             (12, "expand-nine-sightline-catalogs"),
             (13, "set-nine-sightline-search-contract"),
+            (15, "freeze-protected-nine-sightline-query-evidence"),
             (17, "obtain-authoritative-host-redshift-ledger"),
             (18, "source-zach-whitney-host-redshifts"),
         ]
@@ -131,7 +131,7 @@ def test_plan_labels_hitl_as_owner_facing(capsys):
 
     assert wc.print_plan(manifest, "first") == 0
     output = capsys.readouterr().out
-    assert "freeze-protected-query-evidence: queued" in output
+    assert "adjudicate-host-redshift-differences: queued" in output
     assert "execution=hitl" in output
 
 

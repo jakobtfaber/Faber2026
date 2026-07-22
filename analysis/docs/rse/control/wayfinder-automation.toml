@@ -54,17 +54,6 @@ depends_on = ["set-nine-sightline-search-contract"]
 instructions = "Freeze the anonymous nine-sightline query corpus under the resolved search contract. Preserve raw evidence and fail closed on missing coverage."
 
 [[task]]
-id = "freeze-protected-query-evidence"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md"
-branch = "codex/auto-freeze-protected-query-evidence"
-mode = "resolve"
-execution = "hitl"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["set-nine-sightline-search-contract"]
-instructions = "Owner-facing protected-query evidence gate. The controller records it but never spawns it."
-
-[[task]]
 id = "replay-nine-sightline-query-corpus"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md"
@@ -152,6 +141,13 @@ status = "resolved"
 [[history]]
 id = "set-nine-sightline-search-contract"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-protected-query-evidence"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md"
 execution = "hitl"
 depends_on = []
 status = "resolved"
