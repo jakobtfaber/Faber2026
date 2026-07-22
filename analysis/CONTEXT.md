@@ -76,6 +76,27 @@ input. Retirement requires an explicit successor or no-successor decision.
 A specific claim checked against named live evidence at a recorded time.
 Verification is claim-limited and expires when the relevant state changes.
 
+**Padded**:
+Placed on the nominal frequency grid while unavailable channels remain
+explicitly marked as missing.
+
+**Bandpass-corrected**:
+Adjusted for the instrument's frequency-dependent response, without claiming
+that radio-frequency interference was removed.
+
+**RFI-masked**:
+Processed by a radio-frequency-interference masking method, without implying
+that the method is effective or validated.
+
+**RFI-validated**:
+A frozen masking method that passes predeclared removal and signal-preservation
+limits on held-out data.
+_Avoid_: clean, cleaned
+
+**Science-admissible preprocessing**:
+RFI-validated processing approved for explicitly named data products and
+downstream measurements; approval never extends beyond that scope.
+
 **Preserved**:
 A scoped state with an independently readable, integrity-checked recovery copy
 and a tested recovery path. Preservation alone never authorizes consolidation

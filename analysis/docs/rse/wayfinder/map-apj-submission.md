@@ -27,7 +27,7 @@ existing lane system. The map does not carry the execution itself.
   driver: decisions are made on scientific need ("worry about what needs
   doing"), and the date is context, not a constraint that forces descoping.
 - **Planning-only map** (owner choice, 2026-07-18): tickets resolve decisions;
-  execution lives on the manuscript-aligned board, [`BOARD.md`](../BOARD.md)
+  execution lives on the manuscript-aligned board, [`BOARD.md`](../control/BOARD.md)
   (canonical as of 2026-07-18 — organized abstract→appendices with one
   cross-cutting campaigns lane). The map sits *above* the board.
   `plan-circulation-readiness.md` and the `program-state.toml` lane views are
@@ -39,7 +39,7 @@ existing lane system. The map does not carry the execution itself.
   parentheses.
 - **Standing context:** [`CONTEXT.md`](../../../CONTEXT.md) (trust-reset state,
   language contracts), [`technical_review_triage_2026-07-15.md`](../../technical_review_triage_2026-07-15.md),
-  [`referee_response_status_2026-07-09.md`](../../referee_response_status_2026-07-09.md).
+  [`referee_response_status_2026-07-09.md`](../claude-science/frames/resolve-dsa-110-trial-count-denominator-27fa6148/artifacts/referee_response_status_2026-07-09.md).
   Skills: `/grilling`, `/domain-modeling` for HITL tickets.
 - **Both-band scintillation campaign stands as a circulation gate** (owner,
   reaffirmed 2026-07-18): methods now exist for CHIME and DSA bands; the
@@ -61,6 +61,10 @@ existing lane system. The map does not carry the execution itself.
 - [Replace letter+number stage names with descriptive names in the planning docs](tickets/12-retire-letter-number-stage-names.md)
   — active planning now uses descriptive names; a validated glossary preserves
   historical-code traceability without rewriting closed records.
+- [Build the verified Zach CHIME preprocessing baseline](tickets/16-build-verified-zach-chime-preprocessing-baseline.md)
+  — explicit-mask channel restoration and migration preflight pass; current
+  radio-frequency-interference cleaning is rejected, and science remains
+  fail-closed pending the linked validation and input-remediation route.
 
 ## Not yet specified
 
