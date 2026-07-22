@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-15T12:35-0700",
+  "updated": "2026-07-22T15:44-0700",
   "needs_you": [],
   "now": [
     {
@@ -10,12 +10,16 @@
   ],
   "next": [
     {
-      "h": "A5: N-component profile-fit statistic",
-      "d": "calibrated N-vs-1 profile model comparison (owner charter at A1 closure); design after control system lands"
+      "h": "Zach component-count adjudication",
+      "d": "after the clean C2D4 rerun, execute the bounded-window C2D3/C2D4/C2D5 comparison under GitHub issue #205"
     },
     {
       "h": "Figure 1 data-only gallery",
-      "d": "per the 2026-07-14 decision route; independent of the CHIME question"
+      "d": "exact candidate bytes remain at the hash-bound manuscript-owner approval gate; independent of Zach model acceptance"
+    },
+    {
+      "h": "Foreground catalog and Figure 3",
+      "d": "adjudicate host-redshift differences under GitHub issue #206, then advance the Figure 3 and release gates"
     }
   ],
   "components": [

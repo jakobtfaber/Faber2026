@@ -66,6 +66,13 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   h17-side tooling (legacy B6)
 
 ### Scattering re-fit campaign
+- [x] Audit the deprecated Zach C2D4 failure; old panel remains hidden
+  ([audit ticket](../wayfinder/tickets/joint-scattering-controlled-rerun-01-audit-deprecated-zach-c2d4.md))
+- [x] Land the clean, seeded, provenance-complete joint-fit runner
+  ([runner ticket](../wayfinder/tickets/joint-scattering-controlled-rerun-02-build-seeded-runner.md))
+- [ ] Independently reproduce Oran C1D1, JohnDoeII C2D2, and Zach C2D4;
+  withhold every panel until its reproduction gate passes
+  ([controlled-rerun plan](../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md))
 - [ ] ✋ Scintillation-to-scattering coupling design closure (legacy A1)
   ([wf-04](wayfinder/tickets/04-close-scint-scattering-coupling-design.md))
 - [x] Profile-component-count statistic: deferred for this submission (legacy A5)
@@ -84,6 +91,10 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   count adoption
   ([wf-15](wayfinder/tickets/15-count-audit-remediation-standing-method.md)),
   validation + ratification before manuscript use
+- [ ] Zach bounded-window C2D3/C2D4/C2D5 adjudication after the clean C2D4
+  rerun
+  ([ticket](wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md),
+  [GitHub #205](https://github.com/jakobtfaber/Faber2026/issues/205))
 - [ ] Per-band systematics pass on flagged sightlines (legacy C2)
 - [ ] Pipeline pin bump + table/figure regeneration from the campaign (legacy C3)
 
@@ -101,6 +112,10 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   (`2026-07-17-fig1-observed-peak-audit`); dmcorr variant refuted
   (marker-dependence); owner runs the two `figure_review.py decide` commands
   (handoff-2026-07-18-14-44), then any session runs the promotion PR
+- [ ] Expanded foreground catalog repair and staged Figure 3
+  ([map](wayfinder/map-expanded-foreground-catalog-repair.md),
+  [GitHub #206](https://github.com/jakobtfaber/Faber2026/issues/206)); current
+  frontier: host-redshift adjudication, then Figure 3 and release gates
 - [ ] Wishlist figures: (re)insert per `specs/figure-wishlist.md` as their
   gates clear; strip draft `\fbox` placeholders before circulation
 

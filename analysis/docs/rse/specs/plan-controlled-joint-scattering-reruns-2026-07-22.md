@@ -6,6 +6,12 @@
 **Fit re-trust contract:** [Wayfinder ticket 03](../wayfinder/tickets/03-ratify-fit-retrust-contract.md)  
 **Temporary component-count guards:** [Wayfinder ticket 15](../wayfinder/tickets/15-count-audit-remediation-standing-method.md)
 
+**Owner amendment, 2026-07-22:**
+[GitHub issue #205](https://github.com/jakobtfaber/Faber2026/issues/205)
+adds a seventh, post-rerun Zach C2D3/C2D4/C2D5 adjudication ticket. It does not
+delay visual review admission, recover job 180, or replace the non-blocking
+injection-calibrated statistic chartered in Wayfinder ticket 20.
+
 ## Objective
 
 Replace the three diagnostic-only joint-scattering candidates with clean,
@@ -115,14 +121,18 @@ seeded reproducible runner
   Oran  JohnDoeII  Zach
      \     |      /
  new-panel review admission
+                    \
+                     bounded Zach C2D3/C2D4/C2D5 adjudication
 ```
 
 Tickets 3–5 may execute concurrently only in separate worktrees and output
 roots. Ticket 6 is the sole writer to the shared review-admission surfaces.
+Ticket 7 starts only after the clean Zach C2D4 rerun and writes no review
+decision or promotion surface.
 
 ## Completion
 
-This plan is complete when all six tickets resolve, the newly generated panels
+This plan is complete when all seven tickets resolve, the newly generated panels
 are either admitted or explicitly withheld by the reproduction gate, and an
 independent code-and-spec review passes. Completion does not imply that any fit
 value is citable.

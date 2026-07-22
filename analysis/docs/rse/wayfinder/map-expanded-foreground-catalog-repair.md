@@ -120,6 +120,9 @@ independent numerical, provenance, and owner visual checks.
 
 The map remains open. Remaining strict dependency order:
 
+GitHub execution umbrella:
+[issue #206](https://github.com/jakobtfaber/Faber2026/issues/206).
+
 Tickets 09, 14, 15, and 16 are resolved. The independent replays reproduced both
 corrected corpus layers, all 52 registry-to-provenance keys, all 49
 finite-host verdicts and budget flags, and all seven duplicate separations.
