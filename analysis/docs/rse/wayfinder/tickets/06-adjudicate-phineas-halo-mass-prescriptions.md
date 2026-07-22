@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
-- Assignee: —
+- Assignee: Codex
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
@@ -23,3 +23,20 @@ DM_int in the forward model, which prevents borderline zeros/values reading
 as measurements)? The answer fixes the budget table, the phineas host-DM
 posterior, and whether the probabilistic machinery must be built before
 submission.
+
+## Independent validation — 2026-07-22
+
+Clean-room replay: [Phineas owner-adjudication validation](../../specs/reproducibility-phineas-owner-adjudication.md).
+
+- The approved point calculation is understood and independently reproduces:
+  `243.2445 -> 243 pc cm^-3`.
+- The scientific binary crossing verdict is not independently valid: source
+  photometry is absent, the calculation uses redshift-zero Moster parameters,
+  and mass plus photometric-redshift uncertainty was not propagated.
+- Object 983 changes from non-crossing to crossing at its reported
+  one-standard-deviation lower photometric redshift under the published
+  redshift-dependent relation. The canonical 832 object has only `0.056 dex`
+  halo-mass margin above the boundary.
+- Provisional answer: build the probabilistic route before freezing the
+  Phineas foreground and host-dispersion headline. Ticket remains open for
+  owner adjudication.
