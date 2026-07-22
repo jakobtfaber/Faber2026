@@ -4,9 +4,9 @@ Date: 2026-07-22
 
 Disposition: **fail closed**
 
-Pinned analysis commit: `14ed87998646d80f48c8dc0713302383e4d332e8`
+Pinned analysis commit: `fe73689cad723db5d68427c61e301157a39cc101`
 
-Pinned pipeline commit: `f3c8d22a9088914e0179cfecf1ee4086777dc927`
+Pinned pipeline commit: `6057501da2db1eba09d002dd7846ffca7ded250c`
 
 ## Result
 
@@ -29,7 +29,7 @@ the selected source row and `adopted_z_err`, so their separate
 `source_reported_z_err` field must stay blank. NED must keep that field blank
 and explicitly report that no uncertainty was supplied.
 
-- 52/52 rows replayed; 34 are fully source-verified under the current identity
+- 52/52 rows replayed; 46 are fully source-verified under the current identity
   and value contract.
 - 52/52 stored verdicts and 52/52 budget flags reproduce.
 - Substituting available authoritative host values changes 0 verdicts.
@@ -37,7 +37,7 @@ and explicitly report that no uncertainty was supplied.
   reproduce.
 - 46/46 adopted candidate redshifts match frozen source identities, positions,
   values, uncertainties where reported, measurement kinds, and payload hashes.
-- 18 rows remain fail-closed for at least one source discrepancy.
+- 6 rows remain fail-closed for at least one source discrepancy.
 
 The complete row-level result and input hashes are frozen in
 [`replay.json`](evidence/foreground-source-verification-2026-07-22/replay.json).
@@ -46,14 +46,11 @@ The complete row-level result and input hashes are frozen in
 
 ### Host sources
 
-- Seven Whitney rows use registry host redshift `0.479`. Law et al. (2024)
-  reports `0.477958`, which rounds to `0.478`, not `0.479`. No stored verdict or
-  budget flag changes, but adoption requires owner adjudication.
-- Seven rows use local FRB identifiers not yet adjudicated against the
-  owner-approved Verdi identifiers: two Freya rows (`20230325A` versus
-  `20230325C`), two Hamilton rows (`20230913A` versus `20230913G`), and three
-  Chromatica rows (`20240203A` versus `20240203D`). Their coordinates and
-  redshifts agree; identity authority does not.
+- Whitney's seven rows retain registry host redshift `0.479`, matching the
+  spectroscopic value in Connor et al. (2025)'s author-released sample table.
+  Law et al. (2024)'s `0.477958` remains preserved but is not adopted.
+- The seven Freya, Hamilton, and Chromatica rows now use the owner-approved
+  Verdi source-event identifiers `20230325C`, `20230913G`, and `20240203D`.
 - Zach's registry `0.043` is a valid three-decimal rounding of Law's
   `0.043040`; this is not a numerical discrepancy.
 - Current production correctly leaves Wilhelm's host redshift blank, matching
@@ -74,19 +71,19 @@ The complete row-level result and input hashes are frozen in
 
 ## Decision
 
-Ticket 09's answer is **no**. Arithmetic is internally consistent, but all 52
-rows do not pass source-level verification. Do not change registry authority,
+Host-source adjudication is complete and arithmetic remains internally
+consistent. All 52 rows still do not pass source-level verification because six
+candidate identity chains remain incomplete. Do not change registry authority,
 verdicts, budgets, trust state, or Figure 3 here.
 
-Route the Whitney value and Verdi identifier differences to ticket 19. Repair
-the six candidate identity chains in a separate evidence-freeze change, then
-repeat this verifier. Figure 3 remains blocked.
+Repair the six candidate identity chains in a separate evidence-freeze change,
+then repeat this verifier. Figure 3 remains blocked.
 
 ## Reproduction
 
 ```bash
 python3 scripts/verify_foreground_registry_sources.py \
-  --pipeline-dir /path/to/pipeline-at-f3c8d22 \
+  --pipeline-dir /path/to/pipeline-at-6057501 \
   --output docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json
 pytest -q tests/test_verify_foreground_registry_sources.py  # 14 tests
 ```

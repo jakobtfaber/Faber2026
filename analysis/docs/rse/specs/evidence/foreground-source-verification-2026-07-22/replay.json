@@ -1,5 +1,5 @@
 {
-  "analysis_base_commit": "14ed87998646d80f48c8dc0713302383e4d332e8",
+  "analysis_base_commit": "fe73689",
   "authoritative_host_verdict_changes": [],
   "budget_mismatches": [],
   "candidate_status_counts": {
@@ -62,33 +62,33 @@
   "errors": [],
   "gate_pass": false,
   "host_status_counts": {
-    "host_identifier_alias_requires_adjudication": 7,
-    "host_redshift_mismatch": 7,
-    "verified": 37,
+    "verified": 51,
     "verified_rounded_to_registry_precision": 1
   },
   "independence": "standard-library offline replay; no pipeline producer or adjudicator imported",
   "input_blobs": {
+    "connor": "c3c0e33b041e967bd247d5f1103a94d2c0aa121e",
     "duplicates": "6f51e95a33995eeb2dcb2e57326381e748d0baf1",
     "extensions": "165e530ae11a51c4e264925e04cda621a5f6ba48",
     "law": "216d3ee46ff57a070f1dd71284770f4a399c1985",
     "payloads": "016565a0f78bc0ae6e323657176a93356df69a0c",
     "provenance": "c47f3d54bfd26d5cb28f8eb930ddfb4214e6c727",
-    "registry": "033ad3ce058cba54da0c95ee75d4bca0ff430ca1",
+    "registry": "43877ac264d3b4800723c0bf3fc18bd9c2621e1d",
     "strm": "c3d2c613bdbb41b270c5ab68b81d432db9af5ec7",
     "verdi": "50bfea1d567c273aee41ea3203c49cd103824ddf"
   },
   "input_sha256": {
+    "connor": "80be7caa8fa322c7b39107f90dffe5939c0d73dc6794433742c110d8211a940e",
     "duplicates": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
     "extensions": "c3284c954040cfa0d9363944336118b30f33249ab30e81eeac010d7d7e3817ed",
     "law": "4b21e87b31dbd5aec7b709d757e829bca9b346d2ae7c8502d04a61b63b9d1bbb",
     "payloads": "f1c21a95f174bd1ec0bbbf4bb4e82e15a0cac2442d3a529000eeb26787e75dd7",
     "provenance": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
-    "registry": "f35dd8beb733b08dbb38894e5df6fc04af13fc731fd57c3f61dfc8441afd6fbc",
+    "registry": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
     "strm": "42e576a234ac9ab471b695e89b6f25c3ad6875e1914c8ccb3ee518739fd04870",
     "verdi": "c4cb63e385837d547f03d6c398c3bb7b371e91f5673e5754af09bc10cf6161f7"
   },
-  "pipeline_commit": "f3c8d22a9088914e0179cfecf1ee4086777dc927",
+  "pipeline_commit": "6057501da2db1eba09d002dd7846ffca7ded250c",
   "row_results": [
     {
       "authoritative_host_replayed_verdict": "inconclusive",
@@ -109,16 +109,14 @@
       "authoritative_host_replayed_verdict": "refuted",
       "candidate_coordinate_separation_arcsec": 0.006816288415628056,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "host redshift differs from Law source at registry precision"
-      ],
-      "host_source": "Law et al. 2024",
-      "host_source_redshift": "0.477958",
-      "host_status": "host_redshift_mismatch",
+      "discrepancies": [],
+      "host_source": "Connor et al. 2025",
+      "host_source_redshift": "0.479",
+      "host_status": "verified",
       "key": "whitney/halo/1472",
       "replayed_budget_eligible": false,
       "replayed_verdict": "refuted",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "refuted"
     },
@@ -126,16 +124,14 @@
       "authoritative_host_replayed_verdict": "confirmed",
       "candidate_coordinate_separation_arcsec": 0.011960076622430775,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "host redshift differs from Law source at registry precision"
-      ],
-      "host_source": "Law et al. 2024",
-      "host_source_redshift": "0.477958",
-      "host_status": "host_redshift_mismatch",
+      "discrepancies": [],
+      "host_source": "Connor et al. 2025",
+      "host_source_redshift": "0.479",
+      "host_status": "verified",
       "key": "whitney/halo/1473",
       "replayed_budget_eligible": true,
       "replayed_verdict": "confirmed",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": true,
       "stored_verdict": "confirmed"
     },
@@ -143,16 +139,14 @@
       "authoritative_host_replayed_verdict": "inconclusive",
       "candidate_coordinate_separation_arcsec": 0.04294482927640071,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "host redshift differs from Law source at registry precision"
-      ],
-      "host_source": "Law et al. 2024",
-      "host_source_redshift": "0.477958",
-      "host_status": "host_redshift_mismatch",
+      "discrepancies": [],
+      "host_source": "Connor et al. 2025",
+      "host_source_redshift": "0.479",
+      "host_status": "verified",
       "key": "whitney/halo/1582",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -160,16 +154,14 @@
       "authoritative_host_replayed_verdict": "refuted",
       "candidate_coordinate_separation_arcsec": 0.1279187646295658,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "host redshift differs from Law source at registry precision"
-      ],
-      "host_source": "Law et al. 2024",
-      "host_source_redshift": "0.477958",
-      "host_status": "host_redshift_mismatch",
+      "discrepancies": [],
+      "host_source": "Connor et al. 2025",
+      "host_source_redshift": "0.479",
+      "host_status": "verified",
       "key": "whitney/halo/196191347354360083",
       "replayed_budget_eligible": false,
       "replayed_verdict": "refuted",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "refuted"
     },
@@ -177,16 +169,14 @@
       "authoritative_host_replayed_verdict": "confirmed",
       "candidate_coordinate_separation_arcsec": 5.73476334147312,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "host redshift differs from Law source at registry precision"
-      ],
-      "host_source": "Law et al. 2024",
-      "host_source_redshift": "0.477958",
-      "host_status": "host_redshift_mismatch",
+      "discrepancies": [],
+      "host_source": "Connor et al. 2025",
+      "host_source_redshift": "0.479",
+      "host_status": "verified",
       "key": "whitney/cluster/J085546.0+732230, 1160094",
       "replayed_budget_eligible": false,
       "replayed_verdict": "confirmed",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "confirmed"
     },
@@ -194,16 +184,14 @@
       "authoritative_host_replayed_verdict": "confirmed",
       "candidate_coordinate_separation_arcsec": 73.22000698514151,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "host redshift differs from Law source at registry precision"
-      ],
-      "host_source": "Law et al. 2024",
-      "host_source_redshift": "0.477958",
-      "host_status": "host_redshift_mismatch",
+      "discrepancies": [],
+      "host_source": "Connor et al. 2025",
+      "host_source_redshift": "0.479",
+      "host_status": "verified",
       "key": "whitney/cluster/J085531.9+732432, 1159975",
       "replayed_budget_eligible": false,
       "replayed_verdict": "confirmed",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "confirmed"
     },
@@ -211,16 +199,14 @@
       "authoritative_host_replayed_verdict": "confirmed",
       "candidate_coordinate_separation_arcsec": 37.54156151645133,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "host redshift differs from Law source at registry precision"
-      ],
-      "host_source": "Law et al. 2024",
-      "host_source_redshift": "0.477958",
-      "host_status": "host_redshift_mismatch",
+      "discrepancies": [],
+      "host_source": "Connor et al. 2025",
+      "host_source_redshift": "0.479",
+      "host_status": "verified",
       "key": "whitney/cluster/J085808.2+731234, 1161367",
       "replayed_budget_eligible": false,
       "replayed_verdict": "confirmed",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "confirmed"
     },
@@ -547,16 +533,14 @@
       "authoritative_host_replayed_verdict": null,
       "candidate_coordinate_separation_arcsec": 0.10703109367368092,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "local and Verdi FRB identifiers are not adjudicated"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "",
-      "host_status": "host_identifier_alias_requires_adjudication",
+      "host_status": "verified",
       "key": "freya/halo/197030881733398302",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -564,16 +548,14 @@
       "authoritative_host_replayed_verdict": null,
       "candidate_coordinate_separation_arcsec": 0.12797665305660033,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "local and Verdi FRB identifiers are not adjudicated"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "",
-      "host_status": "host_identifier_alias_requires_adjudication",
+      "host_status": "verified",
       "key": "freya/halo/197040882212782495",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -582,12 +564,11 @@
       "candidate_coordinate_separation_arcsec": 0.04983368337277263,
       "candidate_source_status": "verified_from_strm_row_but_ledger_identity_missing",
       "discrepancies": [
-        "candidate provenance ledger omits the PS1-STRM source identity",
-        "local and Verdi FRB identifiers are not adjudicated"
+        "candidate provenance ledger omits the PS1-STRM source identity"
       ],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.3024",
-      "host_status": "host_identifier_alias_requires_adjudication",
+      "host_status": "verified",
       "key": "hamilton/halo/192943050854547067",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
@@ -599,16 +580,14 @@
       "authoritative_host_replayed_verdict": "inconclusive",
       "candidate_coordinate_separation_arcsec": 0.05419108299010139,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "local and Verdi FRB identifiers are not adjudicated"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.3024",
-      "host_status": "host_identifier_alias_requires_adjudication",
+      "host_status": "verified",
       "key": "hamilton/halo/192963050359413614",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -617,12 +596,11 @@
       "candidate_coordinate_separation_arcsec": 0.09547640918088406,
       "candidate_source_status": "verified_from_strm_row_but_ledger_identity_missing",
       "discrepancies": [
-        "candidate provenance ledger omits the PS1-STRM source identity",
-        "local and Verdi FRB identifiers are not adjudicated"
+        "candidate provenance ledger omits the PS1-STRM source identity"
       ],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.0740",
-      "host_status": "host_identifier_alias_requires_adjudication",
+      "host_status": "verified",
       "key": "chromatica/halo/196673126794497004",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
@@ -634,16 +612,14 @@
       "authoritative_host_replayed_verdict": "inconclusive",
       "candidate_coordinate_separation_arcsec": 3.985105025499236e-05,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "local and Verdi FRB identifiers are not adjudicated"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.0740",
-      "host_status": "host_identifier_alias_requires_adjudication",
+      "host_status": "verified",
       "key": "chromatica/halo/196723126173351736",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -651,16 +627,14 @@
       "authoritative_host_replayed_verdict": "inconclusive",
       "candidate_coordinate_separation_arcsec": 0.042110301478838305,
       "candidate_source_status": "verified",
-      "discrepancies": [
-        "local and Verdi FRB identifiers are not adjudicated"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.0740",
-      "host_status": "host_identifier_alias_requires_adjudication",
+      "host_status": "verified",
       "key": "chromatica/halo/196733128040225775",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -910,8 +884,8 @@
     }
   ],
   "rows": 52,
-  "rows_with_discrepancies": 18,
+  "rows_with_discrepancies": 6,
   "schema_version": 1,
-  "source_verified_rows": 34,
+  "source_verified_rows": 46,
   "verdict_mismatches": []
 }

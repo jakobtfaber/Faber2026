@@ -111,6 +111,10 @@ independent numerical, provenance, and owner visual checks.
   Whitney's host value, seven Verdi identifier aliases, four omitted PS1-STRM
   identities, and two manual extension identities keep the result fail-closed.
   No registry authority or Figure 3 artifact changed.
+- [Adjudicate census host redshifts against the approved Verdi table](tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md)
+  — retained Whitney at spectroscopic redshift `0.479` using Connor et al.
+  (2025), and adopted Verdi source-event identifiers for Freya, Hamilton, and
+  Chromatica without changing verdicts, budgets, or Figure 3.
 
 ## Open route
 
@@ -124,13 +128,11 @@ corrected corpus layers, all 52 registry-to-provenance keys, all 49
 finite-host verdicts and budget flags, and all seven duplicate separations.
 Next:
 
-1. [Adjudicate census host redshifts against the approved Verdi table](tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md),
-   including Whitney's Law et al. value and the three unresolved Verdi aliases.
-2. Separately freeze source identities for the four redshiftless PS1-STRM rows
+1. Separately freeze source identities for the four redshiftless PS1-STRM rows
    and two manual extension rows, then rerun ticket 09's verifier.
-3. After those source repairs and the now-resolved physics-authority ticket,
+2. After those source repairs and the now-resolved physics-authority ticket,
    [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
-4. Only after the Figure 3 gate resolves,
+3. Only after the Figure 3 gate resolves,
    [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
 
 ## Out of scope

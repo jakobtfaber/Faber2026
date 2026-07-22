@@ -28,14 +28,14 @@ def _module():
 
 def test_frozen_replay_is_row_complete_and_fail_closed():
     result = json.loads(REPLAY.read_text())
-    assert result["pipeline_commit"] == "f3c8d22a9088914e0179cfecf1ee4086777dc927"
+    assert result["pipeline_commit"] == "6057501da2db1eba09d002dd7846ffca7ded250c"
     assert result["rows"] == 52
     assert len(result["row_results"]) == 52
     assert len({row["key"] for row in result["row_results"]}) == 52
     assert result["disposition"] == "fail_closed"
     assert result["gate_pass"] is False
-    assert result["source_verified_rows"] == 34
-    assert result["rows_with_discrepancies"] == 18
+    assert result["source_verified_rows"] == 46
+    assert result["rows_with_discrepancies"] == 6
     assert result["verdict_mismatches"] == []
     assert result["budget_mismatches"] == []
     assert result["errors"] == []
@@ -45,9 +45,7 @@ def test_frozen_replay_is_row_complete_and_fail_closed():
 def test_replay_names_every_source_discrepancy_class():
     result = json.loads(REPLAY.read_text())
     assert result["host_status_counts"] == {
-        "host_identifier_alias_requires_adjudication": 7,
-        "host_redshift_mismatch": 7,
-        "verified": 37,
+        "verified": 51,
         "verified_rounded_to_registry_precision": 1,
     }
     assert result["candidate_status_counts"] == {
@@ -80,6 +78,7 @@ PIPELINE_PATHS = [
 ANALYSIS_PATHS = [
     "docs/rse/specs/evidence/verdi-host-redshifts-2026-07-22/verdi_host_redshift_comparison.csv",
     "docs/rse/specs/evidence/law2024-zach-whitney-host-redshifts-2026-07-22/host_redshift_rows.csv",
+    "docs/rse/specs/evidence/connor2025-whitney-host-redshift-2026-07-22/host_redshift_row.csv",
 ]
 
 
@@ -105,8 +104,10 @@ def _make_repo(path, source, commit, files):
 def mutable_repos(tmp_path):
     analysis = tmp_path / "analysis"
     pipeline = tmp_path / "pipeline"
-    analysis_commit = _make_repo(analysis, ROOT, "14ed879", ANALYSIS_PATHS)
-    pipeline_commit = _make_repo(pipeline, PIPELINE_SOURCE, "f3c8d22", PIPELINE_PATHS)
+    analysis_commit = _make_repo(
+        analysis, ROOT, "fe73689cad723db5d68427c61e301157a39cc101", ANALYSIS_PATHS
+    )
+    pipeline_commit = _make_repo(pipeline, PIPELINE_SOURCE, "6057501", PIPELINE_PATHS)
     return analysis, pipeline, analysis_commit, pipeline_commit
 
 
