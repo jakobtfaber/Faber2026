@@ -1,4 +1,4 @@
-"""Tests for the 12-panel observed-peak Figure 1 producer."""
+"""Tests for the observed-peak Figure 1 and morphology-review producer."""
 
 from __future__ import annotations
 
@@ -40,51 +40,122 @@ def test_manifest_defines_twelve_grid_panels_in_epoch_order():
     assert rows[-1]["nick"] == "casey"
 
 
+def test_select_rows_builds_nine_burst_owner_morphology_roster():
+    rows = grid.load_manifest(grid.MANIFEST_DEFAULT)
+    selected = grid.select_rows(
+        rows,
+        [
+            "whitney",
+            "isha",
+            "wilhelm",
+            "phineas",
+            "freya",
+            "hamilton",
+            "mahi",
+            "chromatica",
+            "casey",
+        ],
+    )
+    assert [row["nick"] for row in selected] == [
+        "whitney",
+        "isha",
+        "wilhelm",
+        "phineas",
+        "freya",
+        "hamilton",
+        "mahi",
+        "chromatica",
+        "casey",
+    ]
+    assert grid.grid_shape(selected) == (3, 3)
+
+
+def test_select_rows_rejects_unknown_or_duplicate_bursts():
+    rows = grid.load_manifest(grid.MANIFEST_DEFAULT)
+    for requested, message in [
+        (["not-a-burst"], "unknown"),
+        (["zach", "zach"], "duplicate"),
+    ]:
+        try:
+            grid.select_rows(rows, requested)
+        except ValueError as exc:
+            assert message in str(exc)
+        else:
+            raise AssertionError(f"expected {message} burst selection to fail")
+
+
 def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_path):
     calls = []
     monkeypatch.setattr(
         grid,
         "bands_archival",
-        lambda chime_full_root, dsa_full_root, nick, factors=None,
-        pad_scale=1.0, pad_cap_ms=None,
-        target_dm=None, extra_shift_ms=None, extra_dedisp_pc=None: calls.append(
+        lambda chime_full_root,
+        dsa_full_root,
+        nick,
+        factors=None,
+        pad_scale=1.0,
+        pad_cap_ms=None,
+        target_dm=None,
+        extra_shift_ms=None,
+        extra_dedisp_pc=None: calls.append(
             (
-                chime_full_root, dsa_full_root, nick, factors, pad_scale, pad_cap_ms,
-                target_dm, extra_shift_ms, extra_dedisp_pc,
+                chime_full_root,
+                dsa_full_root,
+                nick,
+                factors,
+                pad_scale,
+                pad_cap_ms,
+                target_dm,
+                extra_shift_ms,
+                extra_dedisp_pc,
             )
         )
         or [],
     )
     grid.load_row_bands(
-        {"nick": "zach", "npz": "fits/zach.npz"}, root=tmp_path,
-        chime_full_root=tmp_path / "chime", dsa_full_root=tmp_path / "dsa",
+        {"nick": "zach", "npz": "fits/zach.npz"},
+        root=tmp_path,
+        chime_full_root=tmp_path / "chime",
+        dsa_full_root=tmp_path / "dsa",
         target_dm=262.361665,
     )
     grid.load_row_bands(
-        {"nick": "chromatica", "npz": None}, root=tmp_path,
-        chime_full_root=tmp_path / "chime", dsa_full_root=tmp_path / "dsa",
+        {"nick": "chromatica", "npz": None},
+        root=tmp_path,
+        chime_full_root=tmp_path / "chime",
+        dsa_full_root=tmp_path / "dsa",
         target_dm=272.638699,
     )
     # audit-established stem-misstatement correction: applied only to the named
     # burst, passed straight through as extra dedispersion
     grid.load_row_bands(
-        {"nick": "isha", "npz": None}, root=tmp_path,
-        chime_full_root=tmp_path / "chime", dsa_full_root=tmp_path / "dsa",
+        {"nick": "isha", "npz": None},
+        root=tmp_path,
+        chime_full_root=tmp_path / "chime",
+        dsa_full_root=tmp_path / "dsa",
         target_dm=411.435717,
         dm_corrections={"isha": {"chime": 0.234}},
     )
     grid.load_row_bands(
-        {"nick": "zach", "npz": None}, root=tmp_path,
-        chime_full_root=tmp_path / "chime", dsa_full_root=tmp_path / "dsa",
+        {"nick": "zach", "npz": None},
+        root=tmp_path,
+        chime_full_root=tmp_path / "chime",
+        dsa_full_root=tmp_path / "dsa",
         target_dm=262.361665,
         dm_corrections={"isha": {"chime": 0.234}},
     )
 
     assert calls == [
         (
-            tmp_path / "chime", tmp_path / "dsa", "zach",
-            grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
-            grid.DISPLAY_PAD_CAP_MS, 262.361665, None, None,
+            tmp_path / "chime",
+            tmp_path / "dsa",
+            "zach",
+            grid.DISPLAY_FACTORS,
+            grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS,
+            262.361665,
+            None,
+            None,
         ),
         (
             tmp_path / "chime",
@@ -98,14 +169,26 @@ def test_load_row_bands_uses_archival_products_for_every_row(monkeypatch, tmp_pa
             None,
         ),
         (
-            tmp_path / "chime", tmp_path / "dsa", "isha",
-            grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
-            grid.DISPLAY_PAD_CAP_MS, 411.435717, None, {"chime": 0.234},
+            tmp_path / "chime",
+            tmp_path / "dsa",
+            "isha",
+            grid.DISPLAY_FACTORS,
+            grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS,
+            411.435717,
+            None,
+            {"chime": 0.234},
         ),
         (
-            tmp_path / "chime", tmp_path / "dsa", "zach",
-            grid.DISPLAY_FACTORS, grid.DISPLAY_PAD_SCALE,
-            grid.DISPLAY_PAD_CAP_MS, 262.361665, None, None,
+            tmp_path / "chime",
+            tmp_path / "dsa",
+            "zach",
+            grid.DISPLAY_FACTORS,
+            grid.DISPLAY_PAD_SCALE,
+            grid.DISPLAY_PAD_CAP_MS,
+            262.361665,
+            None,
+            None,
         ),
     ]
 
@@ -148,7 +231,9 @@ def test_pad_cap_bounds_window_for_scattered_bursts():
         from flits.batch.codetection_plots import BandSpectrum
 
         return BandSpectrum(
-            freq_mhz=np.linspace(400.0, 800.0, 8) if "CHIME" in label else np.linspace(1310.0, 1500.0, 8),
+            freq_mhz=np.linspace(400.0, 800.0, 8)
+            if "CHIME" in label
+            else np.linspace(1310.0, 1500.0, 8),
             time_ms=time,
             data=data,
             model=np.zeros_like(data),

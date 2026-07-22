@@ -1,4 +1,4 @@
-"""Render Figure 1: a 12-panel grid of the joint CHIME/DSA observations.
+"""Render Figure 1 or a review subset of the joint CHIME/DSA observations.
 
 Every panel is drawn from the archival `_cntr_bpc.npy` products at near-native
 display resolution (1024 channels per band; DSA-110 native 32.768 us time
@@ -18,6 +18,9 @@ The time axes retain the measured-profile convention supplied by
 ``bands_archival``: DSA-110's observed peak is at zero and CHIME/FRB is placed
 with the recorded measured peak offset. No scattering-model correction or
 joint-fit artifact participates in Figure 1.
+
+The default remains the manuscript's 12-panel grid. Repeating ``--burst``
+creates a manifest-ordered data-only subset for owner morphology review.
 """
 
 from __future__ import annotations
@@ -25,6 +28,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import warnings
 from pathlib import Path
 
@@ -74,6 +78,28 @@ MASKED_GRAY = "0.85"
 CHIME_COLOR = "#b73779"
 DSA_COLOR = "black"
 CLIP_LO, CLIP_HI = 1.0, 99.5
+
+
+def select_rows(rows: list[dict], requested: list[str] | None) -> list[dict]:
+    """Select a manifest-ordered burst subset, rejecting ambiguous requests."""
+    if not requested:
+        return rows
+    normalized = [nick.lower() for nick in requested]
+    if len(set(normalized)) != len(normalized):
+        raise ValueError("duplicate burst selection")
+    available = {row["nick"].lower() for row in rows}
+    unknown = sorted(set(normalized) - available)
+    if unknown:
+        raise ValueError(f"unknown burst selection: {', '.join(unknown)}")
+    wanted = set(normalized)
+    return [row for row in rows if row["nick"].lower() in wanted]
+
+
+def grid_shape(rows: list[dict], ncols: int = 3) -> tuple[int, int]:
+    """Return the smallest fixed-column grid that contains every row."""
+    if not rows:
+        raise ValueError("data grid requires at least one burst")
+    return math.ceil(len(rows) / ncols), min(ncols, len(rows))
 
 
 def _finite_percentile(values: np.ndarray, percentile: float, default: float) -> float:
@@ -255,9 +281,13 @@ def draw_spectrum_marginal(ax, bands, gap, *, fmap=None) -> None:
         )
     if gap is not None:
         ax.axhspan(
-            float(fmap(gap[0])), float(fmap(gap[1])),
-            facecolor="white", edgecolor="0.55", hatch="///",
-            lw=0, zorder=0.5,
+            float(fmap(gap[0])),
+            float(fmap(gap[1])),
+            facecolor="white",
+            edgecolor="0.55",
+            hatch="///",
+            lw=0,
+            zorder=0.5,
         )
     ax.set_xlim(-0.08, 1.15)
     ax.set_xticks([])
@@ -285,8 +315,11 @@ def render_grid(
 ) -> None:
     adopted_dms = load_adopted_dms(dm_catalog)
     roster = {row["nick"].lower() for row in rows}
-    if roster != set(adopted_dms):
-        raise ValueError("manifest and adopted-DM catalog rosters differ")
+    if len(roster) != len(rows):
+        raise ValueError("manifest contains duplicate burst rows")
+    if not roster.issubset(adopted_dms):
+        raise ValueError("manifest contains a burst absent from the adopted-DM catalog")
+    nrows, ncols = grid_shape(rows)
     _apply_style()
     plt.rcParams.update(
         {
@@ -301,9 +334,16 @@ def render_grid(
     )
     # At \textwidth the typeset height plus the combined adopted-DM/fitted-TOA
     # caption must fit on one AASTeX float page.
-    fig = plt.figure(figsize=(7.3, 7.62))
+    fig = plt.figure(figsize=(7.3, 7.62 * nrows / 4))
     outer = fig.add_gridspec(
-        4, 3, hspace=0.2, wspace=0.14, left=0.065, right=0.995, top=0.978, bottom=0.042
+        nrows,
+        ncols,
+        hspace=0.2,
+        wspace=0.14,
+        left=0.065,
+        right=0.995,
+        top=0.978,
+        bottom=0.042,
     )
     for index, row in enumerate(rows):
         bands = load_row_bands(
@@ -315,9 +355,13 @@ def render_grid(
             dm_corrections=dm_corrections,
         )
         fmap = _gap_display_map(bands)
-        cell = outer[index // 3, index % 3].subgridspec(
-            2, 2, width_ratios=[3.4, 1.0], height_ratios=[1.0, 4.1],
-            wspace=0.07, hspace=0.09,
+        cell = outer[index // ncols, index % ncols].subgridspec(
+            2,
+            2,
+            width_ratios=[3.4, 1.0],
+            height_ratios=[1.0, 4.1],
+            wspace=0.07,
+            hspace=0.09,
         )
         ax_prof = fig.add_subplot(cell[0, 0])
         ax_wf = fig.add_subplot(cell[1, 0])
@@ -331,16 +375,20 @@ def render_grid(
         yticks = [500, 700, 1400]
         ax_wf.set_yticks([float(fmap(v)) for v in yticks])
         ax_wf.set_yticklabels([str(v) for v in yticks])
-        if index % 3 == 0:
+        if index % ncols == 0:
             ax_wf.set_ylabel("Frequency (MHz)", fontsize=7)
         else:
             ax_wf.tick_params(labelleft=False)
-        if index // 3 == 3:
+        if index // ncols == nrows - 1:
             ax_wf.set_xlabel("Time (ms)", fontsize=7)
         if index == 0:
             ax_prof.legend(
-                fontsize=5, frameon=False, loc="upper right", handlelength=1.0,
-                borderaxespad=0.1, labelspacing=0.2,
+                fontsize=5,
+                frameon=False,
+                loc="upper right",
+                handlelength=1.0,
+                borderaxespad=0.1,
+                labelspacing=0.2,
             )
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out.with_suffix(".png"), dpi=dpi)
@@ -361,13 +409,18 @@ def main() -> int:
     parser.add_argument("--dm-catalog", type=Path, default=DM_CATALOG_DEFAULT)
     parser.add_argument("--dpi", type=int, default=600)
     parser.add_argument(
+        "--burst",
+        action="append",
+        help="render only this burst; repeat for a manifest-ordered subset",
+    )
+    parser.add_argument(
         "--dm-correction-json",
         type=Path,
         help="JSON {nick: {telescope: extra pc cm^-3}} of audit-established "
         "stem-DM misstatement corrections applied before display averaging",
     )
     args = parser.parse_args()
-    rows = load_manifest(args.manifest)
+    rows = select_rows(load_manifest(args.manifest), args.burst)
     dm_corrections = None
     if args.dm_correction_json:
         raw = json.loads(args.dm_correction_json.read_text())
