@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://faber2026.jakobtfaber.com/schemas/checkout-inventory-v2.schema.json",
+  "title": "Faber2026 checkout inventory payload",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "schema_uri",
+    "tool_version",
+    "scan_roots",
+    "warnings",
+    "scan_problems",
+    "workspace_bundles",
+    "checkout_triage",
+    "branch_divergence_groups",
+    "dirty_checkout_details",
+    "missing_registration_details",
+    "method"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "schema_uri": {
+      "const": "https://faber2026.jakobtfaber.com/schemas/checkout-inventory-v2.schema.json"
+    },
+    "tool_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scan_roots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scan_problems": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/scan_problem"
+      }
+    },
+    "workspace_bundles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/workspace_bundle"
+      }
+    },
+    "checkout_triage": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/checkout_triage_entry"
+      }
+    },
+    "branch_divergence_groups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/branch_divergence_group"
+      }
+    },
+    "dirty_checkout_details": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/dirty_checkout_detail"
+      }
+    },
+    "missing_registration_details": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/missing_registration_detail"
+      }
+    },
+    "method": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "scan_problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "classification", "detail"],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "classification": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "workspace_bundle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_id",
+        "parent_checkout",
+        "analysis_checkout",
+        "pipeline_checkout",
+        "parent_recorded_analysis_pin",
+        "parent_recorded_pipeline_pin",
+        "actual_analysis_head",
+        "actual_pipeline_head",
+        "pin_match_status",
+        "aggregate_dirty_status",
+        "warnings"
+      ],
+      "properties": {
+        "workspace_id": {
+          "type": "string"
+        },
+        "parent_checkout": {
+          "type": ["string", "null"]
+        },
+        "analysis_checkout": {
+          "type": ["string", "null"]
+        },
+        "pipeline_checkout": {
+          "type": ["string", "null"]
+        },
+        "parent_recorded_analysis_pin": {
+          "type": ["string", "null"]
+        },
+        "parent_recorded_pipeline_pin": {
+          "type": ["string", "null"]
+        },
+        "actual_analysis_head": {
+          "type": ["string", "null"]
+        },
+        "actual_pipeline_head": {
+          "type": ["string", "null"]
+        },
+        "pin_match_status": {
+          "enum": [
+            "matching",
+            "mismatching",
+            "missing_checkout",
+            "missing_pin",
+            "unavailable"
+          ]
+        },
+        "aggregate_dirty_status": {
+          "type": "string"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "checkout_triage_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkout_path",
+        "facts",
+        "proposed_classification",
+        "classification_confidence",
+        "classification_evidence",
+        "unresolved_questions",
+        "preservation_priority"
+      ],
+      "properties": {
+        "checkout_path": {
+          "type": "string"
+        },
+        "facts": {
+          "type": "object"
+        },
+        "proposed_classification": {
+          "type": "string"
+        },
+        "classification_confidence": {
+          "type": "string"
+        },
+        "classification_evidence": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "unresolved_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "preservation_priority": {
+          "type": "string"
+        }
+      }
+    },
+    "branch_divergence_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "branch",
+        "checkout_paths",
+        "distinct_full_head_commits",
+        "locally_computable_reachability_relationships"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "checkout_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "distinct_full_head_commits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "locally_computable_reachability_relationships": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "dirty_checkout_detail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkout_path",
+        "staged_file_paths",
+        "unstaged_file_paths",
+        "untracked_file_paths",
+        "submodule_dirtiness"
+      ],
+      "properties": {
+        "checkout_path": {
+          "type": "string"
+        },
+        "staged_file_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unstaged_file_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "untracked_file_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "submodule_dirtiness": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "missing_registration_detail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registered_path",
+        "branch_or_ref",
+        "pointed_to_commit",
+        "source_git_common_dir",
+        "local_reachability_information",
+        "missing_path_statement"
+      ],
+      "properties": {
+        "registered_path": {
+          "type": "string"
+        },
+        "branch_or_ref": {
+          "type": ["string", "null"]
+        },
+        "pointed_to_commit": {
+          "type": ["string", "null"]
+        },
+        "source_git_common_dir": {
+          "type": "string"
+        },
+        "local_reachability_information": {
+          "type": "object"
+        },
+        "missing_path_statement": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
