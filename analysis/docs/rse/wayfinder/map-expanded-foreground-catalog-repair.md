@@ -66,9 +66,12 @@ independent numerical, provenance, and owner visual checks.
   authority closed and continue through the explicit contract, corpus,
   protected-export, and independent-replay tickets.
 - [Set the nine-sightline search-region and candidate-selection contract](tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md)
-  — use burst-centered 5-arcmin galaxy and 20-arcmin cluster regions, preserve
-  all query evidence, and apply deterministic redshift, quality, identity,
-  ambiguity, duplicate, and post-discovery halo-intersection rules.
+  — use frozen burst centers, a fully paginated 15-arcminute galaxy cone, a
+  separate 5 proper Mpc cluster search under Planck18, geometry-first candidate
+  admission, catalog-native `R500` for the budget gate, preserved raw query
+  evidence, and fail-closed classification, identity, ambiguity, duplicate, and
+  redshiftless-cluster rules. This is a new audit contract, not the historical
+  aperture.
 
 ## Not yet specified
 
