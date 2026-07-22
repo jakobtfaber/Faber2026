@@ -25,3 +25,15 @@ identifier, coordinates, separation, native quality and uncertainty fields,
 coverage result, response bytes or canonical snapshot, SHA-256, and one of
 `matched`, `unmatched`, `outside_footprint`, `ambiguous`, `access_denied`, or
 `query_error`. Do not change scientific or manuscript authority fields.
+
+## Work log
+
+- 2026-07-22: Added a fail-closed 126-cell manifest validator, live anonymous
+  service preflight, regression tests, and the public PS1--STRM bulk extraction
+  route. See
+  [the execution checkpoint](../../specs/research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md).
+- Keep this ticket open. Service reachability is proven, but a preflight is not
+  the required fully paginated nine-sightline corpus. Closure still requires
+  all service/sightline query cells and exposure-first X-ray evidence.
+- No owner credential or decision is required. The official PS1--STRM shard is
+  anonymously downloadable; authenticated MAST CasJobs is optional only.
