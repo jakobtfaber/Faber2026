@@ -6,11 +6,11 @@
       "artifact_sha256": "53e1378e67d5fa573a8037629991eb7f941d2982956e13c56be532687ecf80ed",
       "claim": "Morphology candidates only; fitted values remain trust-pending",
       "decision": {
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null,
-        "reviewer_role": null,
-        "status": "pending"
+        "notes": "Owner visual review: C2D3 morphology is wrong. Required morphology is C2D4: one clear isolated leading DSA sub-pulse followed by a lower-S/N cluster of three trailing peaks; broadening merges the cluster so C2 is appropriate for CHIME. Inspect the deprecated C2D4 failure before rerunning. No fitted values approved.",
+        "reviewed_at": "2026-07-22T19:33:00+00:00",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "status": "needs_revision"
       },
       "dm_measurement": {
         "adopted_dm": "262.361665",
@@ -152,11 +152,11 @@
       "artifact_sha256": "490d297f3d0fee5d44d55cfd5d9f24f7bceafcb49b4c11d236b3b70b6e3febca",
       "claim": "Morphology candidates only; fitted values remain trust-pending",
       "decision": {
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null,
-        "reviewer_role": null,
-        "status": "pending"
+        "notes": "Owner visual review: D1C1 morphology looks correct. Morphology approved; residual adequacy is explicitly flagged for the controlled rerun. Fitted values remain trust-pending.",
+        "reviewed_at": "2026-07-22T19:31:05+00:00",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "status": "approved"
       },
       "dm_measurement": {
         "adopted_dm": "397.015535",
@@ -298,11 +298,11 @@
       "artifact_sha256": "60ea8a16eb8963c318ab3f7bd81cb9bece7c9cbe47d4ff9a28972a68b6c2f601",
       "claim": "Morphology candidates only; fitted values remain trust-pending",
       "decision": {
-        "notes": null,
-        "reviewed_at": null,
-        "reviewer": null,
-        "reviewer_role": null,
-        "status": "pending"
+        "notes": "Owner visual review: morphology looks correct and the intended count is D2C2. The certified panel provenance is C1D2; this count mismatch must be reconciled before the controlled rerun. Approval is limited to morphology; no fitted values are approved.",
+        "reviewed_at": "2026-07-22T19:37:44+00:00",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "status": "approved"
       },
       "dm_measurement": {
         "adopted_dm": "696.518001",
