@@ -283,6 +283,66 @@ figures:
     depends_on: []
     approval_slot: null
 
+  - id: joint_scattering_oran_candidate
+    tex: null
+    manuscript: false
+    clone_ok: false
+    repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/oran_triptych.pdf
+    notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
+    producer:
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, oran, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      cwd: .
+    inputs:
+      - results-library:scattering/jointmodel/latest/oran/jointmodel.npz
+      - results-library:scattering/jointmodel/latest/oran/fit.json
+      - analysis/scripts/jointmodel_triptych_manifest.yaml
+      - pipeline/crossmatching/toa_crossmatch_results.json
+      - pipeline/crossmatching/notebook_reproduction_fixture.json
+    outputs:
+      - figure_review/staging/joint_scattering/figures/codetection_triptych/oran_triptych.pdf
+    depends_on: []
+    approval_slot: triptych-oran
+
+  - id: joint_scattering_johndoeii_candidate
+    tex: null
+    manuscript: false
+    clone_ok: false
+    repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/johndoeii_triptych.pdf
+    notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
+    producer:
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, johndoeii, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      cwd: .
+    inputs:
+      - results-library:scattering/jointmodel/latest/johndoeii/jointmodel.npz
+      - results-library:scattering/jointmodel/latest/johndoeii/fit.json
+      - analysis/scripts/jointmodel_triptych_manifest.yaml
+      - pipeline/crossmatching/toa_crossmatch_results.json
+      - pipeline/crossmatching/notebook_reproduction_fixture.json
+    outputs:
+      - figure_review/staging/joint_scattering/figures/codetection_triptych/johndoeii_triptych.pdf
+    depends_on: []
+    approval_slot: triptych-johndoeii
+
+  - id: joint_scattering_zach_candidate
+    tex: null
+    manuscript: false
+    clone_ok: false
+    repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/zach_triptych.pdf
+    notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
+    producer:
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, zach, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      cwd: .
+    inputs:
+      - results-library:scattering/jointmodel/latest/zach/jointmodel.npz
+      - results-library:scattering/jointmodel/latest/zach/fit.json
+      - analysis/scripts/jointmodel_triptych_manifest.yaml
+      - pipeline/crossmatching/toa_crossmatch_results.json
+      - pipeline/crossmatching/notebook_reproduction_fixture.json
+    outputs:
+      - figure_review/staging/joint_scattering/figures/codetection_triptych/zach_triptych.pdf
+    depends_on: []
+    approval_slot: triptych-zach
+
   - id: dsa_acf_family
     tex: null
     manuscript: false

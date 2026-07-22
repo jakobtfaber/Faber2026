@@ -19,7 +19,10 @@ Run: conda run -n flits python scripts/plot_codetection_triptych.py
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
+import hashlib
 import json
+import os
 import re
 import sys
 import warnings
@@ -31,6 +34,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
+
+matplotlib.rcParams["svg.hashsalt"] = "Faber2026-codetection-triptych-v2"
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "pipeline"))
@@ -49,6 +54,7 @@ from plot_codetection_gallery import (  # noqa: E402
     load_band,
     onpulse_span,
 )
+from results_library import results_library_root  # noqa: E402
 
 MANIFEST_DEFAULT = ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"
 OUT_DEFAULT = ROOT / "figures" / "codetection_triptych"
@@ -65,6 +71,25 @@ def load_manifest(path: Path) -> list[dict]:
     if len(rows) != 12:
         raise ValueError(f"manifest must list 12 bursts, got {len(rows)}")
     return rows
+
+
+def resolve_artifact_path(spec: str, *, root: Path = ROOT) -> Path:
+    """Resolve a repository path or a results-library URI."""
+    prefix = "results-library:"
+    if spec.startswith(prefix):
+        relative = spec.removeprefix(prefix).lstrip("/")
+        return results_library_root() / relative
+    path = Path(spec).expanduser()
+    return path if path.is_absolute() else root / path
+
+
+def require_sha256(path: Path, expected: str, *, label: str) -> None:
+    """Fail closed when an external candidate artifact changed."""
+    if not path.is_file():
+        raise FileNotFoundError(f"{label} missing: {path}")
+    actual = hashlib.sha256(path.read_bytes()).hexdigest()
+    if actual != expected:
+        raise ValueError(f"{label} SHA-256 mismatch: expected {expected}, got {actual}")
 
 
 def _band_from_npz(z, band: str) -> BandSpectrum:
@@ -116,9 +141,7 @@ def toa_offset_at_dm_ms(
     f_ref = float(fixture["reference_frequency_mhz"])
     f_dsa = float(fixture["dsa_native_frequency_mhz"])
     delta_dm = float(target_dm) - float(row["dm"])
-    dsa_delta_ms = (
-        1e3 * K_DM_S_MHZ2 * delta_dm * (f_ref**-2 - f_dsa**-2)
-    )
+    dsa_delta_ms = 1e3 * K_DM_S_MHZ2 * delta_dm * (f_ref**-2 - f_dsa**-2)
     return float(row["measured_offset_ms"]) - dsa_delta_ms
 
 
@@ -147,7 +170,9 @@ def _align_toa(
 
 def fit_json_path(npz_path: Path) -> Path:
     """joint_fit JSON tracked beside a jointmodel NPZ (same run suffix)."""
-    return Path(str(npz_path).replace("_jointmodel_", "_joint_fit_")).with_suffix(".json")
+    return Path(str(npz_path).replace("_jointmodel_", "_joint_fit_")).with_suffix(
+        ".json"
+    )
 
 
 def dominant_t0_ms(
@@ -229,11 +254,15 @@ def crop_spectrum(b: BandSpectrum, t0: float, t1: float) -> BandSpectrum:
     )
 
 
-def crop_bands(bands: list[BandSpectrum], xlim: tuple[float, float]) -> list[BandSpectrum]:
+def crop_bands(
+    bands: list[BandSpectrum], xlim: tuple[float, float]
+) -> list[BandSpectrum]:
     return [crop_spectrum(b, *xlim) for b in bands]
 
 
-def bands_from_npz(npz_path: Path, nick: str) -> list[BandSpectrum]:
+def bands_from_npz(
+    npz_path: Path, nick: str, *, fit_json: Path | None = None
+) -> list[BandSpectrum]:
     """Data + model on the identical fit-delivery grid from the NPZ.
 
     Time axes are anchored on the fitted arrival times: the DSA-110 dominant
@@ -244,24 +273,32 @@ def bands_from_npz(npz_path: Path, nick: str) -> list[BandSpectrum]:
     """
     z = np.load(npz_path, allow_pickle=True)
     chime, dsa = _band_from_npz(z, "C"), _band_from_npz(z, "D")
-    fj = fit_json_path(npz_path)
+    fj = fit_json if fit_json is not None else fit_json_path(npz_path)
     offset = _toa_offset(nick)
     if fj.exists() and offset is not None:
         percentiles = json.loads(fj.read_text())["percentiles"]
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=RuntimeWarning)
             t0_c = dominant_t0_ms(
-                percentiles, "C", z["timeC"], np.nansum(np.asarray(z["modelC"], float), axis=0)
+                percentiles,
+                "C",
+                z["timeC"],
+                np.nansum(np.asarray(z["modelC"], float), axis=0),
             )
             t0_d = dominant_t0_ms(
-                percentiles, "D", z["timeD"], np.nansum(np.asarray(z["modelD"], float), axis=0)
+                percentiles,
+                "D",
+                z["timeD"],
+                np.nansum(np.asarray(z["modelD"], float), axis=0),
             )
         bands = [_shift_time(chime, offset - t0_c), _shift_time(dsa, -t0_d)]
     else:
         bands = _align_toa([chime, dsa], nick)
     for b in bands:
         if b.data.shape != b.model.shape:
-            raise RuntimeError(f"{nick} {b.label}: data/model shape mismatch {b.data.shape} vs {b.model.shape}")
+            raise RuntimeError(
+                f"{nick} {b.label}: data/model shape mismatch {b.data.shape} vs {b.model.shape}"
+            )
     return crop_bands(bands, chime_width_display_window(bands))
 
 
@@ -363,6 +400,19 @@ def panel_title(tns: str, flag: str | None) -> str:
     return tns
 
 
+def render_metadata(suffix: str) -> dict | None:
+    """Stable vector-file timestamps when SOURCE_DATE_EPOCH is supplied."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch is None:
+        return None
+    stamp = datetime.fromtimestamp(int(epoch), timezone.utc)
+    if suffix == ".pdf":
+        return {"CreationDate": stamp, "ModDate": stamp}
+    if suffix == ".svg":
+        return {"Date": stamp.isoformat()}
+    return None
+
+
 def render_row(
     row: dict,
     *,
@@ -376,7 +426,11 @@ def render_row(
     flag = row.get("flag")
     npz = row.get("npz")
     if npz:
-        bands = bands_from_npz(root / npz, nick)
+        npz_path = resolve_artifact_path(npz, root=root)
+        fit_path = resolve_artifact_path(row["fit_json"], root=root)
+        require_sha256(npz_path, row["npz_sha256"], label=f"{nick} joint model")
+        require_sha256(fit_path, row["fit_json_sha256"], label=f"{nick} fit summary")
+        bands = bands_from_npz(npz_path, nick, fit_json=fit_path)
         columns = ("data", "model", "resid")
         title = panel_title(tns, flag)
     else:
@@ -400,9 +454,14 @@ def render_row(
     fig.suptitle(title, fontsize=10, y=1.02)
     out_dir.mkdir(parents=True, exist_ok=True)
     stem = out_dir / f"{nick}_triptych"
-    fig.savefig(stem.with_suffix(".png"), dpi=dpi, bbox_inches="tight")
-    fig.savefig(stem.with_suffix(".pdf"), bbox_inches="tight")
-    fig.savefig(stem.with_suffix(".svg"), bbox_inches="tight")
+    for suffix in (".png", ".pdf", ".svg"):
+        kwargs = {"bbox_inches": "tight"}
+        if suffix == ".png":
+            kwargs["dpi"] = dpi
+        metadata = render_metadata(suffix)
+        if metadata is not None:
+            kwargs["metadata"] = metadata
+        fig.savefig(stem.with_suffix(suffix), **kwargs)
     plt.close(fig)
     return stem.with_suffix(".pdf")
 
@@ -421,7 +480,9 @@ def main() -> int:
         want = set(args.burst)
         rows = [r for r in rows if r["nick"] in want]
     written = [
-        render_row(r, root=ROOT, data_root=args.data_root, out_dir=args.out_dir, dpi=args.dpi)
+        render_row(
+            r, root=ROOT, data_root=args.data_root, out_dir=args.out_dir, dpi=args.dpi
+        )
         for r in rows
     ]
     print(f"rendered {len(written)} triptych(s) → {args.out_dir}")

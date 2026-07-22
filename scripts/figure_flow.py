@@ -21,6 +21,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from results_library import results_library_root
+
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_DEFAULT = ROOT / "figures" / "catalog.yaml"
 RECEIPTS_DIR = ROOT / "figures" / ".receipts"
@@ -50,7 +52,10 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 
 def expand_path(raw: str, *, root: Path = ROOT) -> Path:
-    """Expand ~ and repo-relative paths."""
+    """Expand results-library, home-relative, and repository-relative paths."""
+    prefix = "results-library:"
+    if raw.startswith(prefix):
+        return results_library_root() / raw.removeprefix(prefix).lstrip("/")
     text = os.path.expanduser(raw)
     path = Path(text)
     if path.is_absolute():
@@ -213,7 +218,7 @@ def approval_hint(fig: dict[str, Any]) -> str | None:
         "APPROVAL_REQUIRED: do not promote silently. Stage a review batch, e.g.\n"
         f"  python3 scripts/figure_review.py new-batch \\\n"
         f"    $(date +%Y-%m-%d)-{fig['id']} \\\n"
-        f"    --title \"{fig.get('tex') or fig['id']}\" \\\n"
+        f'    --title "{fig.get("tex") or fig["id"]}" \\\n'
         f"    --candidate {slot} \\\n"
         f"    --candidate-root {candidate_root} \\\n"
         f"    --pipeline-revision $(git -C pipeline rev-parse HEAD)"
@@ -403,7 +408,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("stale", help="report stale / missing-input manuscript figures")
 
     regen = sub.add_parser("regen", help="regenerate selected figures")
-    regen.add_argument("--id", action="append", dest="ids", help="figure id (repeatable)")
+    regen.add_argument(
+        "--id", action="append", dest="ids", help="figure id (repeatable)"
+    )
     regen.add_argument(
         "--manuscript",
         action="store_true",

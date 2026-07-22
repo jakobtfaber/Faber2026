@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import csv
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -11,6 +11,15 @@ import numpy as np
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
+LATEST_MANIFEST = (
+    ROOT
+    / "analysis"
+    / "figure_review"
+    / "batches"
+    / "2026-07-22-joint-scattering-current"
+    / "provenance"
+    / "joint-latest-manifest.json"
+)
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "pipeline"))
 
@@ -35,7 +44,9 @@ def _fake_band(label: str, t0: float, t1: float, dt: float = 0.033) -> BandSpect
     data[:, i0:i1] = 5.0
     data += 0.01  # keep finite
     return BandSpectrum(
-        freq_mhz=np.linspace(400, 800, n_f) if "CHIME" in label else np.linspace(1300, 1500, n_f),
+        freq_mhz=np.linspace(400, 800, n_f)
+        if "CHIME" in label
+        else np.linspace(1300, 1500, n_f),
         time_ms=t,
         data=data,
         model=data * 0.9,
@@ -50,7 +61,7 @@ def test_manifest_has_twelve_and_chromatica_null():
     assert len(rows) == 12
     chrom = next(r for r in rows if r["nick"] == "chromatica")
     assert chrom["npz"] is None
-    assert sum(1 for r in rows if r["npz"]) == 11
+    assert sum(1 for r in rows if r["npz"]) == 3
 
 
 def test_chromatica_archival_chime_uses_x13_time_binning():
@@ -139,10 +150,7 @@ def test_toa_offset_is_rereferenced_to_target_dm():
     target = 397.015535
     old_dm = 396.882
     expected_delta = (
-        1e3
-        * triptych.K_DM_S_MHZ2
-        * (target - old_dm)
-        * (400.0**-2 - 1530.0**-2)
+        1e3 * triptych.K_DM_S_MHZ2 * (target - old_dm) * (400.0**-2 - 1530.0**-2)
     )
     got = triptych.toa_offset_at_dm_ms("oran", target)
     assert got == pytest.approx(legacy - expected_delta)
@@ -160,7 +168,11 @@ def test_render_disables_model_overlay(monkeypatch, tmp_path):
         def savefig(self, *args, **kwargs):
             pass
 
-    monkeypatch.setattr(triptych, "bands_from_npz", lambda *args: [])
+    artifact = tmp_path / "fit.npz"
+    summary = tmp_path / "fit.json"
+    artifact.write_bytes(b"npz")
+    summary.write_bytes(b"json")
+    monkeypatch.setattr(triptych, "bands_from_npz", lambda *args, **kwargs: [])
     monkeypatch.setattr(
         triptych,
         "plot_codetection",
@@ -169,13 +181,44 @@ def test_render_disables_model_overlay(monkeypatch, tmp_path):
     monkeypatch.setattr(triptych.plt, "close", lambda fig: None)
 
     triptych.render_row(
-        {"nick": "zach", "tns": "FRB 20220207C", "npz": "fit.npz"},
+        {
+            "nick": "zach",
+            "tns": "FRB 20220207C",
+            "npz": str(artifact),
+            "npz_sha256": hashlib.sha256(b"npz").hexdigest(),
+            "fit_json": str(summary),
+            "fit_json_sha256": hashlib.sha256(b"json").hexdigest(),
+        },
         root=tmp_path,
         data_root=tmp_path,
         out_dir=tmp_path,
         dpi=72,
     )
     assert calls[0]["show_model_on_data"] is False
+
+
+def test_render_metadata_uses_source_date_epoch(monkeypatch):
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "1784505600")
+    pdf = triptych.render_metadata(".pdf")
+    svg = triptych.render_metadata(".svg")
+    assert pdf["CreationDate"] == pdf["ModDate"]
+    assert pdf["CreationDate"].tzinfo is not None
+    assert svg == {"Date": "2026-07-20T00:00:00+00:00"}
+    assert triptych.matplotlib.rcParams["svg.hashsalt"] == (
+        "Faber2026-codetection-triptych-v2"
+    )
+
+
+def test_candidate_hash_mismatch_fails_closed(tmp_path):
+    artifact = tmp_path / "artifact.npz"
+    artifact.write_bytes(b"changed")
+    with pytest.raises(ValueError, match="SHA-256 mismatch"):
+        triptych.require_sha256(artifact, "0" * 64, label="candidate")
+
+
+def test_candidate_missing_fails_closed(tmp_path):
+    with pytest.raises(FileNotFoundError, match="candidate missing"):
+        triptych.require_sha256(tmp_path / "missing.npz", "0" * 64, label="candidate")
 
 
 def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
@@ -199,19 +242,31 @@ def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
     npz = tmp_path / "syn_jointmodel_X.npz"
     np.savez(
         npz,
-        timeC=t, dataC=dataC, modelC=modelC, noiseC=np.ones(6), validC=np.ones(6, bool),
+        timeC=t,
+        dataC=dataC,
+        modelC=modelC,
+        noiseC=np.ones(6),
+        validC=np.ones(6, bool),
         freqC=np.linspace(0.4, 0.8, 6),
-        timeD=t, dataD=dataD, modelD=modelD, noiseD=np.ones(6), validD=np.ones(6, bool),
+        timeD=t,
+        dataD=dataD,
+        modelD=modelD,
+        noiseD=np.ones(6),
+        validD=np.ones(6, bool),
         freqD=np.linspace(1.31, 1.5, 6),
     )
     t_burst = float(t[burst_idx])
-    (tmp_path / "syn_joint_fit_X.json").write_text(_json.dumps({
-        "percentiles": {
-            "t0_C1": {"median": t_burst - 0.3},
-            "t0_C2": {"median": t_burst - 6.0},  # weak early component: ignored
-            "t0_D1": {"median": t_burst - 0.1},
-        }
-    }))
+    (tmp_path / "syn_joint_fit_X.json").write_text(
+        _json.dumps(
+            {
+                "percentiles": {
+                    "t0_C1": {"median": t_burst - 0.3},
+                    "t0_C2": {"median": t_burst - 6.0},  # weak early component: ignored
+                    "t0_D1": {"median": t_burst - 0.1},
+                }
+            }
+        )
+    )
     offset = 2.0
     monkeypatch.setattr(triptych, "toa_offset_ms", lambda nick, toa_json=None: offset)
 
@@ -231,37 +286,65 @@ def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
 def test_manifest_yaml_parses_flags():
     rows = load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
     flagged = {r["nick"] for r in rows if r.get("flag") and r["nick"] != "chromatica"}
-    assert flagged == {"zach", "wilhelm", "hamilton", "casey"}
+    assert flagged == {
+        row["nick"]
+        for row in load_manifest(ROOT / "scripts/jointmodel_triptych_manifest.yaml")
+        if row["nick"] != "chromatica"
+    }
 
 
-def test_manifest_fit_artifacts_use_the_adopted_dm_in_both_bands():
-    with (ROOT / "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv").open(
-        newline=""
-    ) as handle:
-        catalog = {row["nick"].lower(): float(row["adopted_dm"]) for row in csv.DictReader(handle)}
-    with (
-        ROOT
-        / "pipeline/analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv"
-    ).open(newline="") as handle:
-        campaign = {row["burst"].lower(): row for row in csv.DictReader(handle)}
+def test_only_current_jointtf_candidates_have_model_artifacts():
+    rows = {
+        row["nick"]: row
+        for row in load_manifest(ROOT / "scripts/jointmodel_triptych_manifest.yaml")
+    }
+    expected = {
+        "oran": ("C1D1", 171),
+        "johndoeii": ("C1D2", 175),
+        "zach": ("C2D3", 178),
+    }
+    assert {nick for nick, row in rows.items() if row["npz"]} == set(expected)
+    for nick, (components, job) in expected.items():
+        row = rows[nick]
+        assert row["status"] == "candidate-v2-owner-pending"
+        assert row["components"] == components
+        assert row["fit_job"] == job
+        assert row["gain_s2"] == 100
+        assert row["fit_generation_reproducible"] is False
+        assert row["npz"].startswith("results-library:")
+        assert row["fit_json"].startswith("results-library:")
+        assert len(row["npz_sha256"]) == 64
+        assert len(row["fit_json_sha256"]) == 64
+    for nick, row in rows.items():
+        if nick not in expected:
+            assert row["status"] == "withheld-no-current-candidate"
+            assert row["npz"] is None
 
+
+def test_candidate_fit_artifacts_match_declared_counts_and_gain_prior():
+    latest = {
+        row["nick"].lower(): row
+        for row in json.loads(LATEST_MANIFEST.read_text())["bursts"]
+        if row["promotion_status"] == "artifact-present"
+    }
     for row in load_manifest(ROOT / "scripts/jointmodel_triptych_manifest.yaml"):
         if not row["npz"]:
             continue
-        fit = json.loads(triptych.fit_json_path(ROOT / row["npz"]).read_text())
-        adopted = catalog[row["nick"].lower()]
-        campaign_row = campaign[row["nick"].lower()]
-        assert float(campaign_row["adopted_dm"]) == pytest.approx(adopted, abs=5e-7)
-        fixed = fit["fixed_parameters"]
-        assert fixed["delta_dm_C"] == pytest.approx(
-            adopted - float(campaign_row["product_dm_C"]), abs=5e-7
+        source = latest[row["nick"].lower()]
+        assert source["components"] == row["components"]
+        assert source["gain_s2"] == pytest.approx(row["gain_s2"])
+        assert source["fit_job"] == row["fit_job"]
+        assert source["artifacts"]["fit_json"]["sha256"] == row["fit_json_sha256"]
+        assert source["artifacts"]["jointmodel_npz"]["sha256"] == row["npz_sha256"]
+
+        fit_path = triptych.resolve_artifact_path(row["fit_json"])
+        if not fit_path.is_file():
+            continue
+        triptych.require_sha256(
+            fit_path, row["fit_json_sha256"], label=f"{row['nick']} fit summary"
         )
-        assert fixed["delta_dm_D"] == pytest.approx(
-            adopted - float(campaign_row["product_dm_D"]), abs=5e-7
-        )
-        assert fixed["delta_dm_C"] == pytest.approx(
-            fit["percentiles"]["delta_dm_C"]["median"], abs=5e-7
-        )
-        assert fixed["delta_dm_D"] == pytest.approx(
-            fit["percentiles"]["delta_dm_D"]["median"], abs=5e-7
-        )
+        fit = json.loads(fit_path.read_text())
+        assert row["status"] == "candidate-v2-owner-pending"
+        assert fit["fixed_parameters"] == {}
+        assert fit["gain_s2"] == pytest.approx(row["gain_s2"])
+        assert f"C{fit['components_C']}D{fit['components_D']}" == row["components"]
