@@ -1,35 +1,50 @@
-# Faber2026
+# Faber2026-analysis
 
-Manuscript: **Scattering, Scintillation, and Energetics of Fast Radio Bursts Codetected by CHIME/FRB and
-DSA-110**
+Research-control workspace for the Faber2026 manuscript.
 
-Per-sightline attribution of the observed DM and scattering of 12 CHIME/FRB–
-DSA-110 co-detected FRBs to the relevant foreground medium (Milky-Way ISM/halo,
-intervening foreground-galaxy CGM, the IGM, and the host).
+This repository owns analysis products, scientific tests, figure-generation
+sources, provenance, review material, and operational documentation. It is
+mounted as the public `analysis/` submodule of
+[`jakobtfaber/Faber2026`](https://github.com/jakobtfaber/Faber2026).
+
+## Expected checkout
+
+```text
+Faber2026/
+├── main.tex             manuscript authority
+├── figures/             final embedded assets
+├── pipeline/            dsa110-FLITS submodule
+└── analysis/            this repository
+```
+
+The parent pins the exact analysis and pipeline commits used by the manuscript.
+Overleaf synchronizes the parent but does not need either submodule to compile.
 
 ## Layout
 
-```
-main.tex          root manuscript (AASTeX631)
-auth.tex          author / affiliation block (\input by main.tex)
-sections/         \input'd section files
-figures/          figures exported from dsa110-FLITS (tracked, for Overleaf)
-bib/refs.bib      bibliography
-pipeline/         git submodule -> dsa110-FLITS (reproducibility; see PIPELINE.md)
-Makefile          latexmk build (mirrors Overleaf)
-```
+- `docs/` — research control, decisions, verification, and handoffs.
+- `dm-joint-phase-v2/` and related top-level directories — analysis products.
+- `scripts/` — manuscript analysis and control tooling.
+- `tests/` — scientific and provenance checks.
+- `figure_review/` — fail-closed figure review state.
+- `figures/` — noncompiled sources, diagnostics, and historical assets.
 
-## Pipeline
+Final manuscript TeX, generated tables, and embedded figures remain in the
+parent repository.
 
-The analysis lives in **dsa110-FLITS**, pinned as the `pipeline/` submodule rather
-than vendored — the paper *references* the pipeline; the pipeline does not carry
-the paper. See `PIPELINE.md`. (Overleaf ignores the submodule and compiles the
-`.tex`/figures at the root.)
+## Commands
 
-## Build
+From the parent checkout:
 
 ```sh
-make          # latexmk -> main.pdf
-make watch    # continuous preview
-make clean
+make test-science
+make figures
+make kb-index
+```
+
+Or from this submodule:
+
+```sh
+make test MANUSCRIPT_ROOT=..
+make kb-index
 ```

@@ -1,6 +1,16 @@
 # AGENTS.md
 
-Agent brief for the **Faber2026** manuscript repo.
+Agent brief for the **Faber2026-analysis** research-control repository.
+
+## Repository boundary
+
+- This repository is mounted at `Faber2026/analysis/`.
+- The manuscript authority is the parent checkout (`../main.tex`, `../sections/`,
+  generated root tables, and final `../figures/` assets).
+- The fitting pipeline is the sibling `../pipeline/` submodule.
+- Run analysis tools from this repository unless they explicitly require the
+  parent pair; use `FABER2026_ROOT=..` or the provided Makefile targets then.
+- Do not copy analysis/control material back into the manuscript repository.
 
 ## Response style (required for all responses in this repo)
 

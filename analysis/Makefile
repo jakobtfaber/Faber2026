@@ -1,44 +1,32 @@
-# Faber2026 manuscript build. Mirrors what Overleaf does (latexmk + bibtex).
-MAIN := main
+# Faber2026 analysis/control workspace.
+MANUSCRIPT_ROOT ?= ..
+MANUSCRIPT_ROOT_ABS := $(abspath $(MANUSCRIPT_ROOT))
 UV ?= uv
 
-.PHONY: all clean watch test-science check-state figures wayfinder-plan wayfinder-status wayfinder-launch
+.PHONY: check-mount check-state test figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
 
-all: $(MAIN).pdf
+check-mount:
+	@test -f "$(MANUSCRIPT_ROOT_ABS)/main.tex" || \
+		(echo "Faber2026 parent not found at $(MANUSCRIPT_ROOT_ABS)" >&2; exit 1)
+	@test -d "$(MANUSCRIPT_ROOT_ABS)/pipeline" || \
+		(echo "pipeline submodule not found at $(MANUSCRIPT_ROOT_ABS)/pipeline" >&2; exit 1)
 
-$(MAIN).pdf: $(MAIN).tex auth.tex sections/*.tex bib/refs.bib
-	latexmk -pdf -interaction=nonstopmode -halt-on-error $(MAIN).tex
+check-state: check-mount
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/sync_state.py --check --offline
 
-watch:
-	latexmk -pdf -pvc -interaction=nonstopmode $(MAIN).tex
-
-clean:
-	latexmk -C
-	rm -f $(MAIN).bbl
-
-# Root manuscript/provenance tests use the pinned FLITS environment so the
-# parent repo and CI exercise the same (super-repo commit, submodule pin) pair.
-# Control-state drift/contradiction/rules gate (stdlib only, no submodule env).
-# --offline keeps CI hermetic; run `python3 scripts/sync_state.py --check`
-# locally for the live stored<->GitHub contradiction pass.
-check-state:
-	python3 scripts/sync_state.py --check --offline
-
-test-science: check-state
-	$(UV) run --project pipeline --frozen python -m pytest -q -ra \
-		--strict-config --strict-markers tests
-	python3 scripts/figure_review.py verify
+test: check-state
+	cd "$(MANUSCRIPT_ROOT_ABS)" && \
+		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
+		$(UV) run --project pipeline --frozen python -m pytest -q -ra \
+		--strict-config --strict-markers analysis/tests
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh
 
-# Clone-safe embedded manuscript figures (figures/catalog.yaml).
-# Needs flits conda env + pipeline uv lock. Skips fig1 / external-data nodes.
-# Full manuscript set (incl. data-bound): python3 scripts/figure_flow.py regen --manuscript
-# Agent runbook: figures/ax/SKILL.md
-figures:
-	python3 scripts/figure_flow.py regen --manuscript --clone-ok
+figures: check-mount
+	cd "$(MANUSCRIPT_ROOT_ABS)" && \
+		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
+		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 
-# Repo knowledge base (docs, tickets, git, code, refs). See docs/rse/ops/knowledge-base.md.
-.PHONY: kb-index kb-refs-sync
 kb-index:
 	python3 scripts/kb index
 
@@ -46,8 +34,6 @@ kb-refs-sync:
 	python3 scripts/kb_refs_sync.py
 	python3 scripts/kb index --source refs
 
-# ADHD Running Notes → headless Claude Code CLI (see docs/rse/ops/running-notes/).
-.PHONY: notes-serve notes
 notes-serve:
 	python3 scripts/running_notes.py serve
 
@@ -55,7 +41,6 @@ notes:
 	@test -n "$(MSG)" || (echo 'Usage: make notes MSG="your running note"' >&2; exit 1)
 	python3 scripts/running_notes.py submit "$(MSG)"
 
-# Reviewed, fail-closed Wayfinder task automation. Launch requires WAVE.
 wayfinder-plan:
 	python3 scripts/wayfinder_controller.py plan --wave "$(or $(WAVE),first)"
 

@@ -12,7 +12,7 @@
 *.snm
 *.vrb
 
-# Built PDF of the manuscript itself (figures under figures/ ARE tracked).
+# Built PDF of any local manuscript/prototype.
 /main.pdf
 
 # Research data lives in ~/Data/Faber2026/; data/ holds machine-local absolute
@@ -55,7 +55,7 @@ graphify-out/
 # (see scripts/results_library_catalog.yaml). Recreate local symlinks with:
 #   python3 scripts/materialize_results_library.py
 # CI/manuscript-coupled curated files stay tracked; bulk diagnostics do not.
-/analysis/dm-joint-phase-v2/results/diagnostics
+/dm-joint-phase-v2/results/diagnostics
 
 # Knowledge-base SQLite index (rebuild with: make kb-index)
 /.kb/
