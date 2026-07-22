@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:research` (AFK)
 - Status: open
-- Assignee: unassigned
+- Assignee: Codex (host-redshift source agent)
 - Blocked by: none
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: not covered by the standing delegation; created after `main` commit `33e9e1ce3570`
