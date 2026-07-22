@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-21
 **Scope:** Internal code, configuration, H5 metadata, and live h17 products
-**Code state:** Parent `bd149c00`; pipeline `ab6af1f7`
+**Code state:** Parent `3eaa7e85`; pipeline `ab6af1f7`
 **Related Documents:** [RFI review ticket](../wayfinder/tickets/rfi-validation-01a-review-preservation-dynamic-spectrum.md)
 
 ## Question / Scope
@@ -68,6 +68,37 @@ learn bandpass/RFI masks only from off-pulse training bins `[55,137)`, and show
 the padded aligned interval `[197,305)`. Integrate the one-dimensional spectrum
 only over `[229,273)`. Keep the result diagnostic-only: the alignment is now
 defined, but the RFI method still lacks known truth.
+
+## Owner review and residual-RFI diagnosis
+
+The owner rejected the candidate after seeing residual RFI between 700 and
+750 MHz in the corrected diagnostic. A deterministic read-only check of the
+saved spectrum and final row mask gives:
+
+- retained-band median `10.30` and median-based spread estimate `10.65`;
+- maximum `206.22` at `738.876 MHz`, or `18.39` times that spread above the
+  median;
+- 20 retained rows above `100`, spanning `737.405–739.200 MHz`.
+
+The same assertion failed identically on two runs. It is a diagnostic feedback
+loop, not an acceptance limit: `10` times the median-based spread was used only
+to make this already owner-observed failure machine-detectable.
+
+The cleaner learns both masks only from the off-pulse training interval
+(`scripts/review_real_zach_rfi_cleaner.py:171-209`). A time-resolved probe of
+the retained rows found two behaviors. The 738.876-MHz row is strongly
+on-pulse (`4.69` mean versus `0.17` off-pulse), while nearby retained rows also
+have off-pulse maxima of `14–60`. The evidence therefore rules out a single
+pure bandpass explanation: the whole-row training-only mask misses a mixture of
+time-local and persistent narrow-frequency structure. The time-integrated panel
+and row-decision panel expose that miss
+(`scripts/review_real_zach_rfi_cleaner.py:379-428,516-532`).
+
+Zach cannot determine whether every burst-coincident narrow feature is RFI or
+astrophysical structure because it has no known truth. The next method must not
+be tuned by simply cutting 700–750 MHz or adjusting thresholds on this event.
+It needs an independently specified time-frequency detector and known-truth
+signal-preservation validation before a new Zach review.
 
 ## References / Sources
 
