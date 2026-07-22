@@ -7,8 +7,10 @@ import csv
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
+CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 OUT = ROOT / "dm_measurements_table.tex"
 
 HEAD = r"""% Generated from analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv

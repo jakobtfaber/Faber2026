@@ -44,9 +44,10 @@ from plot_codetection_triptych import (
     bands_archival,
     load_manifest,
 )
+from workspace import ANALYSIS_ROOT
 
 OUT_DEFAULT = ROOT / "figures" / "codetection_data_grid"
-DM_CATALOG_DEFAULT = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+DM_CATALOG_DEFAULT = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 
 # Block-averaging factors of the native archival grids (f_factor, t_factor):
 # DSA 6144ch/32.768us -> 512ch at native time (1024ch buries the faintest DSA

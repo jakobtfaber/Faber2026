@@ -22,7 +22,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from association_diagnostics import class_aware_chance_probability  # noqa: E402
@@ -33,7 +35,7 @@ REGISTRY = PIPELINE_SOURCE / "configs" / "bursts.yaml"
 TOA_RESULTS = PIPELINE_SOURCE / "crossmatching" / "toa_crossmatch_results.json"
 ASSOCIATION_REPORT = PIPELINE_SOURCE / "crossmatching" / "association_report.json"
 OUT = ROOT / "figures" / "association_summary.pdf"
-DM_CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+DM_CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 
 CLOCK_MS = 1.0
 DM_COLOR = "#0072B2"  # Okabe--Ito blue

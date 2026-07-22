@@ -21,9 +21,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[1]
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 CATALOG_DEFAULT = ROOT / "figures" / "catalog.yaml"
-RECEIPTS_DIR = ROOT / "figures" / ".receipts"
+RECEIPTS_DIR = ANALYSIS_ROOT / "figure_receipts"
 
 
 class FigureFlowError(Exception):

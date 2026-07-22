@@ -17,7 +17,8 @@ check-state: check-mount
 test: check-state
 	cd "$(MANUSCRIPT_ROOT_ABS)" && \
 		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
-		$(UV) run --project pipeline --frozen python -m pytest -q -ra \
+		PYTHONPATH="$(MANUSCRIPT_ROOT_ABS)/analysis:$(MANUSCRIPT_ROOT_ABS)/analysis/scripts" \
+		$(UV) run --project pipeline --group test --frozen python -m pytest -q -ra \
 		--strict-config --strict-markers analysis/tests
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh
@@ -27,12 +28,12 @@ figures: check-mount
 		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
 		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 
-kb-index:
-	python3 scripts/kb index
+kb-index: check-mount
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb index
 
-kb-refs-sync:
-	python3 scripts/kb_refs_sync.py
-	python3 scripts/kb index --source refs
+kb-refs-sync: check-mount
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb_refs_sync.py
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb index --source refs
 
 notes-serve:
 	python3 scripts/running_notes.py serve

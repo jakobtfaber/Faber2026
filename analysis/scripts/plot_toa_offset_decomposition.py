@@ -30,7 +30,9 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+from workspace import manuscript_root
+
+ROOT = manuscript_root()
 TOA_RESULTS = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
 OUT = ROOT / "figures" / "toa_offset_decomposition.pdf"
 

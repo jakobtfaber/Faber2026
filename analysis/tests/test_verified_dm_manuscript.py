@@ -9,8 +9,11 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+ANALYSIS_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
+from workspace import manuscript_root  # noqa: E402
+
+ROOT = manuscript_root()
 
 import render_budget_table  # noqa: E402
 import render_dm_measurements_table  # noqa: E402

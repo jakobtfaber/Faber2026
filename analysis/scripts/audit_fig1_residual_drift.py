@@ -12,7 +12,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 PIPELINE = ROOT / "pipeline"
 sys.path.insert(0, str(PIPELINE))
 
@@ -30,8 +32,8 @@ from dispersion.dm_power_analysis import (  # noqa: E402
 
 CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
-CATALOG_DEFAULT = ROOT / "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
-ROSTER_DEFAULT = ROOT / "scripts/jointmodel_triptych_manifest.yaml"
+CATALOG_DEFAULT = ANALYSIS_ROOT / "dm-joint-phase-v2/manuscript_dm_catalog.csv"
+ROSTER_DEFAULT = ANALYSIS_ROOT / "scripts/jointmodel_triptych_manifest.yaml"
 
 
 def roster_nicks(manifest_path: Path) -> set[str]:

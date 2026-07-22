@@ -3,8 +3,11 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+ANALYSIS_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
+from workspace import manuscript_root  # noqa: E402
+
+ROOT = manuscript_root()
 
 from plot_codetection_gallery import (  # noqa: E402
     NICK_TNS,

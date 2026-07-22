@@ -3,12 +3,12 @@ import importlib.util
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _load_audit():
     spec = importlib.util.spec_from_file_location(
-        "consistency_audit", ROOT / "scripts/consistency_audit.py")
+        "consistency_audit", ANALYSIS_ROOT / "scripts/consistency_audit.py")
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)

@@ -10,8 +10,11 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+ANALYSIS_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
+from workspace import manuscript_root  # noqa: E402
+
+ROOT = manuscript_root()
 sys.path.insert(0, str(ROOT / "pipeline"))
 
 import plot_codetection_triptych as triptych  # noqa: E402
@@ -46,7 +49,7 @@ def _fake_band(label: str, t0: float, t1: float, dt: float = 0.033) -> BandSpect
 
 
 def test_manifest_has_twelve_and_chromatica_null():
-    rows = load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
+    rows = load_manifest(ANALYSIS_ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
     assert len(rows) == 12
     chrom = next(r for r in rows if r["nick"] == "chromatica")
     assert chrom["npz"] is None
@@ -230,7 +233,7 @@ def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
 
 
 def test_manifest_yaml_parses_flags():
-    rows = load_manifest(ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
+    rows = load_manifest(ANALYSIS_ROOT / "scripts" / "jointmodel_triptych_manifest.yaml")
     flagged = {r["nick"] for r in rows if r.get("flag") and r["nick"] != "chromatica"}
     assert flagged == {"zach", "wilhelm", "hamilton", "casey"}
 
@@ -246,10 +249,10 @@ def test_manifest_fit_artifacts_use_the_adopted_dm_in_both_bands():
     ).open(newline="") as handle:
         campaign = {row["burst"].lower(): row for row in csv.DictReader(handle)}
 
-    for row in load_manifest(ROOT / "scripts/jointmodel_triptych_manifest.yaml"):
+    for row in load_manifest(ANALYSIS_ROOT / "scripts/jointmodel_triptych_manifest.yaml"):
         if not row["npz"]:
             continue
-        fit = json.loads(triptych.fit_json_path(ROOT / row["npz"]).read_text())
+        fit = json.loads(triptych.fit_json_path(ANALYSIS_ROOT / row["npz"]).read_text())
         adopted = catalog[row["nick"].lower()]
         campaign_row = campaign[row["nick"].lower()]
         assert float(campaign_row["adopted_dm"]) == pytest.approx(adopted, abs=5e-7)

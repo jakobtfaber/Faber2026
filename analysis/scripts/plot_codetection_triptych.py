@@ -32,7 +32,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 sys.path.insert(0, str(ROOT / "pipeline"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
@@ -50,7 +52,7 @@ from plot_codetection_gallery import (  # noqa: E402
     onpulse_span,
 )
 
-MANIFEST_DEFAULT = ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"
+MANIFEST_DEFAULT = ANALYSIS_ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"
 OUT_DEFAULT = ROOT / "figures" / "codetection_triptych"
 CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"

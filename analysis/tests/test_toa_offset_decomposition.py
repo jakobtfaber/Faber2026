@@ -7,14 +7,16 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pytest
 
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
+from scripts.workspace import manuscript_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = manuscript_root()
 
 
 def _load_module():
     spec = importlib.util.spec_from_file_location(
         "plot_toa_offset_decomposition",
-        ROOT / "scripts/plot_toa_offset_decomposition.py",
+        ANALYSIS_ROOT / "scripts/plot_toa_offset_decomposition.py",
     )
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None

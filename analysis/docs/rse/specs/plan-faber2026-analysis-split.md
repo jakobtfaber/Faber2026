@@ -90,20 +90,20 @@ pair.
 
 **Tasks:**
 
-- Fresh-clone the migration branch into a temporary directory.
-- Run `git filter-repo --dry-run` selecting `analysis/`,
+- [x] Fresh-clone the migration branch into a temporary directory.
+- [x] Run `git filter-repo --dry-run` selecting `analysis/`,
   `codetections_polarization/`, `data/`, `docs/`, `figure_review/`, `figures/`,
   `logs/`, `outputs/`, `quarantine/`, `scripts/`, `tests/`, and root
   control/provenance files; apply `--path-rename analysis/:`.
-- Inspect `.git/filter-repo/fast-export.filtered` for the selected path set.
-- Repeat in a fresh clone without `--dry-run`; remove final parent-owned assets,
+- [x] Inspect `.git/filter-repo/fast-export.filtered` for the selected path set.
+- [x] Repeat in a fresh clone without `--dry-run`; remove final parent-owned assets,
   `figures/catalog.yaml`, and `figures/ax/` from the analysis tip while retaining
   their history.
-- Add an analysis README, `.gitignore`, and Makefile documenting the required
+- [x] Add an analysis README, `.gitignore`, and Makefile documenting the required
   mount at `Faber2026/analysis` and sibling `../pipeline` contract.
-- Run `git fsck --full`, compare current selected-file hashes, and verify sample
+- [x] Run `git fsck --full`, compare current selected-file hashes, and verify sample
   history with `git log --follow -- docs/rse/control/BOARD.md`.
-- Create public repository with
+- [x] Create public repository with
   `gh repo create jakobtfaber/Faber2026-analysis --public --source <filtered> --remote origin --push`.
 
 **Verification:** Remote `main` equals the validated local filtered commit and
@@ -115,17 +115,17 @@ fresh cloning succeeds.
 
 **Tasks:**
 
-- Remove the selected analysis/control paths and all non-allowlisted figure
+- [x] Remove the selected analysis/control paths and all non-allowlisted figure
   assets from the migration branch using path-specific `git rm` commands.
-- Add `https://github.com/jakobtfaber/Faber2026-analysis.git` at `analysis/`.
-- Rewrite `README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.gitignore`,
+- [x] Add `https://github.com/jakobtfaber/Faber2026-analysis.git` at `analysis/`.
+- [x] Rewrite `README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.gitignore`,
   `.olignore`, and `Makefile` for the two-submodule boundary.
-- Update retained manuscript comments/prose and generated-table provenance paths
+- [x] Update retained manuscript comments/prose and generated-table provenance paths
   from `scripts/`/`docs/` to `analysis/scripts/`/`analysis/docs/` or the public
   repository URL.
-- Update parent workflows to use `analysis/tests/` and `analysis/scripts/` while
+- [x] Update parent workflows to use `analysis/tests/` and `analysis/scripts/` while
   checking out both submodules recursively.
-- Run the boundary test; expect pass.
+- [x] Run the boundary test; expect pass.
 
 **Verification:** `git ls-tree HEAD analysis pipeline` reports mode `160000` for
 both and no retained TeX dependency is inside either gitlink.
@@ -136,11 +136,11 @@ both and no retained TeX dependency is inside either gitlink.
 
 **Tasks:**
 
-- Run `latexmk -C` then
+- [x] Run `latexmk -C` then
   `latexmk -pdf -interaction=nonstopmode -halt-on-error -recorder main.tex`.
-- Compare PDF page count and inspect source closure; require 37 pages and no
+- [x] Compare PDF page count and inspect source closure; require 37 pages and no
   inputs under `analysis/` or `pipeline/`.
-- Run parent boundary tests and analysis scientific tests from the mounted
+- [x] Run parent boundary tests and analysis scientific tests from the mounted
   checkout.
 - Run `make kb-index` through the analysis-mounted command.
 - Run `agent-closeout-check` for both repositories with explicit touched paths

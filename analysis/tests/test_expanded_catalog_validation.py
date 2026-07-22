@@ -5,11 +5,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[1]
 
-VALIDATION_MD = Path(
+VALIDATION_MD = ROOT / (
     "docs/rse/specs/validation-expanded-foreground-photometry-and-morphology-catalog.md"
 )
-VALIDATION_JSON = Path("docs/rse/specs/validation-expanded-foreground-catalog.json")
+VALIDATION_JSON = ROOT / "docs/rse/specs/validation-expanded-foreground-catalog.json"
 
 REQUIRED_DEFECTS = {
     "moster-input-units",
@@ -52,7 +53,7 @@ def test_expanded_catalog_validator_exits_nonzero_until_rebuilt():
     result = subprocess.run(
         [
             sys.executable,
-            "scripts/validate_expanded_foreground_catalog_gate.py",
+            str(ROOT / "scripts/validate_expanded_foreground_catalog_gate.py"),
             "--gate",
             str(VALIDATION_JSON),
         ],

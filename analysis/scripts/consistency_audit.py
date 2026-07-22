@@ -23,7 +23,9 @@ import sys
 from pathlib import Path
 from typing import Iterable
 
-ROOT = Path(__file__).resolve().parents[1]
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 
 # Commands whose argument is a label that must exist.
 REF_CMDS = (r"\\ref\*?", r"\\cref\*?", r"\\Cref\*?", r"\\nameref\*?",
@@ -181,7 +183,8 @@ def check_toa_correction_gate(findings: list[str]) -> None:
         ),
     }
     for relpath, patterns in promotion_patterns.items():
-        text = read_text(ROOT / relpath)
+        source = ANALYSIS_ROOT / relpath if relpath == "repro_manifest.csv" else ROOT / relpath
+        text = read_text(source)
         if relpath.endswith(".tex"):
             text = strip_comments(text)
         for pattern, reason in patterns:
@@ -372,7 +375,7 @@ def normalize_figure_path(raw: str) -> str:
 
 
 def manifest_entries(kind: str | None = None) -> list[dict[str, str]]:
-    with (ROOT / "repro_manifest.csv").open(newline="", encoding="utf-8") as fh:
+    with (ANALYSIS_ROOT / "repro_manifest.csv").open(newline="", encoding="utf-8") as fh:
         rows = csv.DictReader(fh)
         return [row for row in rows
                 if row.get("embedded_in_manuscript", "").lower() == "yes"

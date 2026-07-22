@@ -9,6 +9,7 @@ from scripts.association_diagnostics import (
     reported_chance_probability,
 )
 from scripts.plot_association_summary import load_rows
+from scripts.workspace import manuscript_root
 
 
 def test_reported_probability_validates_class_aware_provenance():
@@ -73,7 +74,7 @@ def test_figure_five_uses_verified_dms_without_reclassifying_associations():
 
 
 def test_committed_report_has_eight_dm_filtered_and_four_position_time_rows():
-    root = Path(__file__).resolve().parents[1]
+    root = manuscript_root()
     pipeline = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", root / "pipeline"))
     report = json.loads(
         (pipeline / "crossmatching/association_report.json").read_text()

@@ -6,9 +6,10 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
 
-from kb import db, search  # noqa: E402
+from kb import adapters, config, db, search  # noqa: E402
 from kb.chunkers import chunk_markdown, chunk_python  # noqa: E402
 from kb.adapters import _bib_entries  # noqa: E402
+from workspace import manuscript_root  # noqa: E402
 
 
 def _mkdb(tmp_path):
@@ -75,10 +76,19 @@ def test_chunk_python_functions():
 
 
 def test_bib_parser_roundtrip():
-    bib = REPO / "bib" / "refs.bib"
+    bib = manuscript_root() / "bib" / "refs.bib"
     entries = list(_bib_entries(bib.read_text(errors="replace")))
     assert len(entries) >= 60
     keys = {k for _, k, _ in entries}
     assert "Macquart2020" in keys
     for _, _, fields in entries:
         assert "title" in fields or "author" in fields
+
+
+def test_sources_span_analysis_manuscript_and_pipeline():
+    assert config.ANALYSIS_ROOT == REPO
+    assert config.MANUSCRIPT_ROOT == manuscript_root()
+    assert any(doc[1] == "main.tex" for doc in adapters.iter_docs())
+    assert any(doc[1].startswith("analysis/docs/") for doc in adapters.iter_docs())
+    assert next(adapters.iter_config())[1].startswith("pipeline/")
+    assert any(doc[1] == "Macquart2020" for doc in adapters.iter_refs())

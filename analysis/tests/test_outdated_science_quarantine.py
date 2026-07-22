@@ -3,9 +3,11 @@
 import json
 from pathlib import Path
 
+from scripts.workspace import manuscript_root
 
-ROOT = Path(__file__).resolve().parents[1]
-QUARANTINE = ROOT / "quarantine" / "2026-07-17-outdated-science"
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
+ROOT = manuscript_root()
+QUARANTINE = ANALYSIS_ROOT / "quarantine" / "2026-07-17-outdated-science"
 
 
 def test_obsolete_tables_and_full_ledger_are_quarantined():
@@ -44,7 +46,7 @@ def test_compiled_tex_has_no_quarantined_labels_or_inputs():
 
 def test_active_propagation_ledger_is_fail_closed_only():
     active = json.loads(
-        (ROOT / "analysis/provisional_propagation/results.json").read_text()
+        (ANALYSIS_ROOT / "provisional_propagation/results.json").read_text()
     )
     assert active["screen_analysis_status"] == "PENDING_ALPHA4_CONSISTENCY_REFITS"
     assert "foreground_alignment_rows" not in active
@@ -53,7 +55,7 @@ def test_active_propagation_ledger_is_fail_closed_only():
 
 
 def test_generator_cannot_recreate_live_obsolete_tables():
-    source = (ROOT / "scripts/build_provisional_propagation_tables.py").read_text()
+    source = (ANALYSIS_ROOT / "scripts/build_provisional_propagation_tables.py").read_text()
     assert "2026-07-17-outdated-science" in source
     assert 'table(ROOT / "joint_fit_provisional_table.tex"' not in source
     assert 'table(ROOT / "dsa_scint_provisional_table.tex"' not in source

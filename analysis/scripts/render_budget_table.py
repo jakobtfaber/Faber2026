@@ -15,10 +15,12 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 PIPELINE = ROOT / "pipeline"
-CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
-HOST_CSV = ROOT / "scripts" / "dm_budget_uncertainty.csv"
+CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+HOST_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
 BASE_DATA = PIPELINE / "galaxies" / "foreground" / "budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 
@@ -77,7 +79,7 @@ def render() -> str:
         "%    galaxies/foreground/budget_table_data.json; markup in budget_table_emitter.py.\n"
         "%    Regenerate: python -m galaxies.foreground.budget_table_emitter --out <this file>\n",
         "% !! GENERATED FILE -- do not edit by hand.\n"
-        "%    Regenerate: python scripts/render_budget_table.py\n"
+        "%    Regenerate: python analysis/scripts/render_budget_table.py\n"
         "% Foreground columns come from pipeline/galaxies/foreground/budget_table_data.json;\n"
         "% DM_obs and DM_host come from the verified super-repository products.\n",
     ).replace(
