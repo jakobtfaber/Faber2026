@@ -106,6 +106,42 @@ class Service(NamedTuple):
     bulk_object: str = ""
 
 
+class EvidenceStore:
+    """Read evidence from loose acquisition files or the deterministic bundle."""
+
+    def __init__(self, root: Path, bundle_name: str | None = None):
+        self.root = root
+        self.bundle_path = root / (bundle_name or "evidence-bundle.tar.gz")
+        self._archive = tarfile.open(self.bundle_path, "r:gz") if self.bundle_path.is_file() else None
+
+    def close(self) -> None:
+        if self._archive is not None:
+            self._archive.close()
+
+    def read(self, path: Path) -> bytes:
+        if path.is_file():
+            return path.read_bytes()
+        if self._archive is None:
+            raise FileNotFoundError(path)
+        relative = path.resolve().relative_to(self.root.resolve()).as_posix()
+        try:
+            member = self._archive.getmember(relative)
+        except KeyError as exc:
+            raise FileNotFoundError(path) from exc
+        extracted = self._archive.extractfile(member)
+        if extracted is None:
+            raise FileNotFoundError(path)
+        return extracted.read()
+
+    def sha256(self, path: Path) -> str:
+        return sha256_bytes(self.read(path))
+
+    def member_names(self) -> list[str]:
+        if self._archive is None:
+            return []
+        return [member.name for member in self._archive.getmembers() if member.isfile()]
+
+
 SERVICES = (
     Service(
         "desi_dr1",
@@ -471,20 +507,31 @@ def _safe_evidence_path(root: Path, value: object, label: str, errors: list[str]
     return path
 
 
-def _check_hash(path: Path | None, expected: object, label: str, errors: list[str]) -> None:
+def _check_hash(
+    path: Path | None,
+    expected: object,
+    label: str,
+    errors: list[str],
+    store: EvidenceStore,
+) -> None:
     if not isinstance(expected, str) or not SHA256_RE.fullmatch(expected):
         errors.append(f"{label} SHA-256 missing or malformed")
         return
-    if path is None or not path.is_file():
+    if path is None:
         errors.append(f"{label} bytes missing")
         return
-    actual = sha256_file(path)
+    try:
+        actual = store.sha256(path)
+    except FileNotFoundError:
+        errors.append(f"{label} bytes missing")
+        return
     if actual != expected:
         errors.append(f"{label} SHA-256 mismatch")
 
 
-def _read_canonical_rows(path: Path) -> list[dict]:
-    payload = gzip.decompress(path.read_bytes()) if path.suffix == ".gz" else path.read_bytes()
+def _read_canonical_rows(path: Path, store: EvidenceStore) -> list[dict]:
+    stored = store.read(path)
+    payload = gzip.decompress(stored) if path.suffix == ".gz" else stored
     rows = json.loads(payload)
     if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
         raise ValueError("canonical payload is not a list of records")
@@ -494,6 +541,22 @@ def _read_canonical_rows(path: Path) -> list[dict]:
 def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
     """Return all contract failures; an empty list is the only passing verdict."""
     errors: list[str] = []
+    bundle_name = manifest.get("evidence_bundle_path")
+    store = EvidenceStore(evidence_root, bundle_name if isinstance(bundle_name, str) else None)
+    if isinstance(bundle_name, str):
+        bundle_path = evidence_root / bundle_name
+        expected_bundle_hash = manifest.get("evidence_bundle_sha256")
+        if not bundle_path.is_file():
+            errors.append("evidence bundle missing")
+        elif not isinstance(expected_bundle_hash, str) or sha256_file(bundle_path) != expected_bundle_hash:
+            errors.append("evidence bundle SHA-256 mismatch")
+        member_names = store.member_names()
+        if len(member_names) != manifest.get("evidence_bundle_member_count"):
+            errors.append("evidence bundle member count mismatch")
+        if len(member_names) != len(set(member_names)):
+            errors.append("evidence bundle contains duplicate members")
+        if any(Path(name).is_absolute() or ".." in Path(name).parts for name in member_names):
+            errors.append("evidence bundle contains an unsafe member path")
     if manifest.get("schema_version") != SCHEMA_VERSION:
         errors.append("schema version mismatch")
     if manifest.get("input_sha256") != FROZEN_INPUT_SHA256:
@@ -560,8 +623,6 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
             errors.append(f"{prefix}: row count missing or invalid")
         if not isinstance(guard_count, int) or guard_count < 0:
             errors.append(f"{prefix}: guard-ring count missing or invalid")
-        elif isinstance(row_count, int) and guard_count > row_count:
-            errors.append(f"{prefix}: guard-ring count exceeds row count")
         if status in {"unmatched", "outside_footprint"} and row_count != 0:
             errors.append(f"{prefix}: {status} cell has rows")
         if status == "matched" and row_count == 0:
@@ -578,20 +639,26 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
             if not isinstance(pagination.get("pages"), int) or pagination["pages"] < 1:
                 errors.append(f"{prefix}: pagination pages missing or invalid")
             server_total = pagination.get("server_total")
-            if server_total is not None and isinstance(row_count, int) and server_total != row_count:
-                errors.append(f"{prefix}: server total does not equal frozen row count")
+            if (
+                server_total is not None
+                and isinstance(row_count, int)
+                and isinstance(guard_count, int)
+                and server_total != row_count + guard_count
+                and service.role != "cluster_discovery"
+            ):
+                errors.append(f"{prefix}: server total does not equal admitted plus guard rows")
 
         raw_path = _safe_evidence_path(evidence_root, cell.get("raw_path"), f"{prefix}: raw", errors)
         canonical_path = _safe_evidence_path(
             evidence_root, cell.get("canonical_path"), f"{prefix}: canonical", errors
         )
-        _check_hash(raw_path, cell.get("raw_sha256"), f"{prefix}: raw", errors)
-        _check_hash(canonical_path, cell.get("canonical_sha256"), f"{prefix}: canonical", errors)
+        _check_hash(raw_path, cell.get("raw_sha256"), f"{prefix}: raw", errors, store)
+        _check_hash(canonical_path, cell.get("canonical_sha256"), f"{prefix}: canonical", errors, store)
         if raw_path is not None and canonical_path is not None and raw_path == canonical_path:
             errors.append(f"{prefix}: raw and canonical evidence paths must differ")
-        if canonical_path is not None and canonical_path.is_file():
+        if canonical_path is not None:
             try:
-                canonical_rows = _read_canonical_rows(canonical_path)
+                canonical_rows = _read_canonical_rows(canonical_path, store)
             except (OSError, ValueError, json.JSONDecodeError) as exc:
                 errors.append(f"{prefix}: canonical payload unreadable: {exc}")
                 canonical_rows = []
@@ -599,7 +666,6 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                 errors.append(
                     f"{prefix}: canonical row count {len(canonical_rows)} does not equal manifest {row_count}"
                 )
-            canonical_guard_count = 0
             previous_sort_key = None
             for row_index, row in enumerate(canonical_rows):
                 label = f"{prefix}: canonical row {row_index}"
@@ -639,9 +705,8 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                             errors.append(f"{label}: violates cluster search geometry")
                     else:
                         expected_state = admission_state(expected_separation)
-                        if row.get("admission_state") != expected_state:
+                        if expected_state != "admitted" or row.get("admission_state") != "admitted":
                             errors.append(f"{label}: galaxy admission state mismatch")
-                        canonical_guard_count += expected_state == "guard_ring"
                 except (KeyError, TypeError, ValueError):
                     errors.append(f"{label}: invalid geometry fields")
                     continue
@@ -649,8 +714,32 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                 if previous_sort_key is not None and sort_key < previous_sort_key:
                     errors.append(f"{label}: canonical ordering is not deterministic")
                 previous_sort_key = sort_key
-            if service.role != "cluster_discovery" and canonical_guard_count != guard_count:
-                errors.append(f"{prefix}: canonical guard-ring count mismatch")
+
+        guard_path = _safe_evidence_path(
+            evidence_root, cell.get("guard_evidence_path"), f"{prefix}: guard", errors
+        )
+        _check_hash(guard_path, cell.get("guard_evidence_sha256"), f"{prefix}: guard", errors, store)
+        if guard_path is not None:
+            try:
+                guard_rows = _read_canonical_rows(guard_path, store)
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                errors.append(f"{prefix}: guard payload unreadable: {exc}")
+                guard_rows = []
+            if isinstance(guard_count, int) and len(guard_rows) != guard_count:
+                errors.append(f"{prefix}: guard row count mismatch")
+            for row_index, row in enumerate(guard_rows):
+                label = f"{prefix}: guard row {row_index}"
+                try:
+                    separation = spherical_separation_arcmin(
+                        SIGHTLINE_COORDS[key[0]][0], SIGHTLINE_COORDS[key[0]][1],
+                        float(row["ra_deg"]), float(row["dec_deg"]),
+                    )
+                    if admission_state(separation) != "guard_ring" or row.get("admission_state") != "guard_ring":
+                        errors.append(f"{label}: row is not in the guard ring")
+                    if row.get("status") != "guard_only":
+                        errors.append(f"{label}: status is not guard_only")
+                except (KeyError, TypeError, ValueError):
+                    errors.append(f"{label}: invalid geometry fields")
 
         if service.key in COVERAGE_CONFIG:
             if cell.get("coverage_checked") is not True:
@@ -666,6 +755,7 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                 cell.get("coverage_evidence_sha256"),
                 f"{prefix}: exposure coverage",
                 errors,
+                store,
             )
         if isinstance(pagination, dict) and pagination.get("method") in {
             "count_verified_single_response",
@@ -684,7 +774,9 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                 pagination.get("count_response_sha256"),
                 f"{prefix}: count response",
                 errors,
+                store,
             )
+    store.close()
     return errors
 
 
@@ -1026,10 +1118,13 @@ def _lookup(row: dict, column: str):
     return row.get(key) if key else None
 
 
-def _normalize_rows(service: Service, sightline: str, native_rows: list[dict]) -> tuple[list[dict], list[str]]:
+def _normalize_rows(
+    service: Service, sightline: str, native_rows: list[dict]
+) -> tuple[list[dict], list[dict], list[str]]:
     config = QUERY_CONFIG[service.key]
     center_ra, center_dec = SIGHTLINE_COORDS[sightline]
     normalized = []
+    guard_rows = []
     defects = []
     for index, native in enumerate(native_rows):
         try:
@@ -1061,8 +1156,7 @@ def _normalize_rows(service: Service, sightline: str, native_rows: list[dict]) -
                 defects.append(f"row {index}: service returned row beyond guard cone ({separation})")
                 continue
             projected_mpc = None
-        normalized.append(
-            {
+        record = {
                 "sightline": sightline,
                 "service": service.key,
                 "release": service.release,
@@ -1071,7 +1165,7 @@ def _normalize_rows(service: Service, sightline: str, native_rows: list[dict]) -
                 "dec_deg": row_dec,
                 "separation_arcmin": separation,
                 "admission_state": state,
-                "status": "matched",
+                "status": "matched" if state == "admitted" else "guard_only",
                 "native": native,
                 **(
                     {
@@ -1086,9 +1180,10 @@ def _normalize_rows(service: Service, sightline: str, native_rows: list[dict]) -
                     else {}
                 ),
             }
-        )
+        (guard_rows if state == "guard_ring" else normalized).append(record)
     normalized.sort(key=lambda row: (row["separation_arcmin"], service.key, service.release, row["source_id"]))
-    return normalized, defects
+    guard_rows.sort(key=lambda row: (row["separation_arcmin"], service.key, service.release, row["source_id"]))
+    return normalized, guard_rows, defects
 
 
 def _fragment_valid(cell: dict, root: Path, service: Service) -> bool:
@@ -1098,7 +1193,11 @@ def _fragment_valid(cell: dict, root: Path, service: Service) -> bool:
         return False
     if service.key in COVERAGE_CONFIG and cell.get("coverage_checked") is not True:
         return False
-    for path_key, hash_key in (("raw_path", "raw_sha256"), ("canonical_path", "canonical_sha256")):
+    for path_key, hash_key in (
+        ("raw_path", "raw_sha256"),
+        ("canonical_path", "canonical_sha256"),
+        ("guard_evidence_path", "guard_evidence_sha256"),
+    ):
         path = root / str(cell.get(path_key, ""))
         if not path.is_file() or sha256_file(path) != cell.get(hash_key):
             return False
@@ -1116,6 +1215,8 @@ def _failure_cell(service: Service, sightline: str, root: Path, query: str, erro
     raw_sha, response_sha = _archive_bytes(root / raw_path, payload)
     canonical_path = Path("canonical") / sightline / f"{service.key}.json.gz"
     canonical_sha = _write_canonical(root / canonical_path, [])
+    guard_path = Path("guard") / sightline / f"{service.key}.json.gz"
+    guard_sha = _write_canonical(root / guard_path, [])
     return {
         "sightline": sightline,
         "service": service.key,
@@ -1134,6 +1235,8 @@ def _failure_cell(service: Service, sightline: str, root: Path, query: str, erro
         "native_columns": ["unavailable"],
         "row_count": 0,
         "guard_ring_count": 0,
+        "guard_evidence_path": str(guard_path),
+        "guard_evidence_sha256": guard_sha,
         "pagination": {"method": "failed", "complete": False, "overflow": False, "pages": 0, "row_limit": 1_000_000, "server_total": None},
         "error": str(error),
     }
@@ -1157,6 +1260,8 @@ def _outside_coverage_cell(
     raw_sha, response_sha = _archive_bytes(root / raw_path, skip)
     canonical_path = Path("canonical") / sightline / f"{service.key}.json.gz"
     canonical_sha = _write_canonical(root / canonical_path, [])
+    guard_path = Path("guard") / sightline / f"{service.key}.json.gz"
+    guard_sha = _write_canonical(root / guard_path, [])
     return {
         "sightline": sightline,
         "service": service.key,
@@ -1175,6 +1280,8 @@ def _outside_coverage_cell(
         "native_columns": ["coverage_only"],
         "row_count": 0,
         "guard_ring_count": 0,
+        "guard_evidence_path": str(guard_path),
+        "guard_evidence_sha256": guard_sha,
         "pagination": {
             "method": "coverage_skip",
             "complete": True,
@@ -1309,9 +1416,11 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
             raise RuntimeError("service response declared overflow")
         raw_path = Path("raw") / sightline / f"{service.key}.response.gz"
         raw_sha, response_sha = _archive_bytes(root / raw_path, source_body)
-        normalized, defects = _normalize_rows(service, sightline, native_rows)
+        normalized, guard_rows, defects = _normalize_rows(service, sightline, native_rows)
         canonical_path = Path("canonical") / sightline / f"{service.key}.json.gz"
         canonical_sha = _write_canonical(root / canonical_path, normalized)
+        guard_path = Path("guard") / sightline / f"{service.key}.json.gz"
+        guard_sha = _write_canonical(root / guard_path, guard_rows)
         count_mismatch = server_total != len(native_rows)
         status = "query_error" if defects or count_mismatch else ("matched" if normalized else "unmatched")
         cell = {
@@ -1331,7 +1440,9 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
             "canonical_sha256": canonical_sha,
             "native_columns": native_columns or ["empty_response"],
             "row_count": len(normalized),
-            "guard_ring_count": sum(row["admission_state"] == "guard_ring" for row in normalized),
+            "guard_ring_count": len(guard_rows),
+            "guard_evidence_path": str(guard_path),
+            "guard_evidence_sha256": guard_sha,
             "pagination": {
                 "method": (
                     "complete_official_bulk_catalogue"
@@ -1374,20 +1485,31 @@ def _ps1_cells(root: Path) -> list[dict]:
     canonical_path = Path(extraction["canonical_path"])
     if not (root / canonical_path).is_file():
         canonical_path = canonical_path.resolve().relative_to(root.resolve())
-    if sha256_file(root / canonical_path) != extraction["canonical_sha256"]:
+    store = EvidenceStore(root)
+    try:
+        canonical_bytes = store.read(root / canonical_path)
+    finally:
+        store.close()
+    if sha256_bytes(canonical_bytes) != extraction["canonical_sha256"]:
         raise RuntimeError("PS1 canonical snapshot hash mismatch")
-    with gzip.open(root / canonical_path, "rt") as handle:
-        rows = json.load(handle)
+    rows = json.loads(gzip.decompress(canonical_bytes))
     head_path = Path("raw") / "ps1_strm_v1.bin"
     head_sha = sha256_file(root / head_path)
     cells = []
     for sightline in SIGHTLINE_NAMES:
-        selected = [row for row in rows if row["sightline"] == sightline]
+        all_selected = [row for row in rows if row["sightline"] == sightline]
+        selected = [row for row in all_selected if row["admission_state"] == "admitted"]
+        guard_rows = [row for row in all_selected if row["admission_state"] == "guard_ring"]
         for row in selected:
             row.setdefault("release", service.release)
             row.setdefault("status", "matched")
+        for row in guard_rows:
+            row.setdefault("release", service.release)
+            row["status"] = "guard_only"
         sightline_canonical_path = Path("canonical") / sightline / "ps1_strm_v1.json.gz"
         sightline_canonical_sha = _write_canonical(root / sightline_canonical_path, selected)
+        guard_path = Path("guard") / sightline / "ps1_strm_v1.json.gz"
+        guard_sha = _write_canonical(root / guard_path, guard_rows)
         cells.append(
             {
                 "sightline": sightline,
@@ -1406,14 +1528,16 @@ def _ps1_cells(root: Path) -> list[dict]:
                 "canonical_sha256": sightline_canonical_sha,
                 "native_columns": extraction["published_native_columns"],
                 "row_count": len(selected),
-                "guard_ring_count": sum(row["admission_state"] == "guard_ring" for row in selected),
+                "guard_ring_count": len(guard_rows),
+                "guard_evidence_path": str(guard_path),
+                "guard_evidence_sha256": guard_sha,
                 "pagination": {
                     "method": "complete_official_declination_shard_stream",
                     "complete": True,
                     "overflow": False,
                     "pages": 1,
                     "row_limit": None,
-                    "server_total": len(selected),
+                    "server_total": len(selected) + len(guard_rows),
                 },
                 "source_size_bytes": extraction["source_size_bytes"],
                 "source_sha256": extraction["source_sha256"],
@@ -1451,6 +1575,89 @@ def acquire_corpus(output_dir: Path, timeout: float, workers: int, resume: bool)
     return manifest, validate_manifest(manifest, output_dir)
 
 
+def pack_evidence(output_dir: Path) -> dict:
+    """Pack loose byte evidence deterministically without changing member bytes."""
+    member_paths = []
+    for directory in ("raw", "canonical", "guard", "counts", "coverage"):
+        root = output_dir / directory
+        if root.is_dir():
+            member_paths.extend(path for path in root.rglob("*") if path.is_file())
+    member_paths.sort(key=lambda path: path.relative_to(output_dir).as_posix())
+    if not member_paths:
+        raise ValueError("no loose evidence files found to pack")
+
+    bundle_path = output_dir / "evidence-bundle.tar.gz"
+    temporary = output_dir / "evidence-bundle.tar.gz.tmp"
+    with temporary.open("wb") as raw_handle:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw_handle, mtime=0) as gzip_handle:
+            with tarfile.open(fileobj=gzip_handle, mode="w", format=tarfile.PAX_FORMAT) as archive:
+                for path in member_paths:
+                    info = archive.gettarinfo(
+                        str(path), arcname=path.relative_to(output_dir).as_posix()
+                    )
+                    info.uid = 0
+                    info.gid = 0
+                    info.uname = ""
+                    info.gname = ""
+                    info.mtime = 0
+                    with path.open("rb") as handle:
+                        archive.addfile(info, handle)
+    temporary.replace(bundle_path)
+
+    manifest_path = output_dir / "corpus-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["evidence_bundle_path"] = bundle_path.name
+    manifest["evidence_bundle_sha256"] = sha256_file(bundle_path)
+    manifest["evidence_bundle_member_count"] = len(member_paths)
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return {
+        "bundle_path": str(bundle_path),
+        "bundle_sha256": manifest["evidence_bundle_sha256"],
+        "member_count": len(member_paths),
+    }
+
+
+def repair_admission_evidence(output_dir: Path) -> dict:
+    """Separate legacy guard rows from admitted canonical rows in-place."""
+    manifest_path = output_dir / "corpus-manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    store = EvidenceStore(output_dir, manifest.get("evidence_bundle_path"))
+    admitted_total = 0
+    guard_total = 0
+    try:
+        for cell in manifest["cells"]:
+            canonical_path = Path(cell["canonical_path"])
+            rows = _read_canonical_rows(output_dir / canonical_path, store)
+            if cell["role"] == "cluster_discovery":
+                admitted = rows
+                guard_rows = []
+            else:
+                admitted = [row for row in rows if row.get("admission_state") == "admitted"]
+                guard_rows = [row for row in rows if row.get("admission_state") == "guard_ring"]
+            for row in admitted:
+                row["status"] = "matched"
+            for row in guard_rows:
+                row["status"] = "guard_only"
+            cell["canonical_sha256"] = _write_canonical(output_dir / canonical_path, admitted)
+            guard_path = Path("guard") / cell["sightline"] / f"{cell['service']}.json.gz"
+            cell["guard_evidence_path"] = str(guard_path)
+            cell["guard_evidence_sha256"] = _write_canonical(output_dir / guard_path, guard_rows)
+            cell["row_count"] = len(admitted)
+            cell["guard_ring_count"] = len(guard_rows)
+            if cell["status"] in {"matched", "unmatched"}:
+                cell["status"] = "matched" if admitted else "unmatched"
+            admitted_total += len(admitted)
+            guard_total += len(guard_rows)
+    finally:
+        store.close()
+    for key in ("evidence_bundle_path", "evidence_bundle_sha256", "evidence_bundle_member_count"):
+        manifest.pop(key, None)
+    manifest["admission_contract"] = "canonical rows use exact inclusive separation <=15.0 arcmin"
+    manifest["guard_contract"] = "15.0 < separation <=15.1 arcmin; evidence only, never matched"
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return {"admitted_rows": admitted_total, "guard_rows": guard_total}
+
+
 def _main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -1470,6 +1677,12 @@ def _main() -> int:
     acquire.add_argument("--timeout", type=float, default=120.0)
     acquire.add_argument("--workers", type=int, default=4)
     acquire.add_argument("--no-resume", action="store_true")
+    pack = subparsers.add_parser("pack", help="pack loose evidence into one deterministic bundle")
+    pack.add_argument("--output-dir", type=Path, required=True)
+    repair_admission = subparsers.add_parser(
+        "repair-admission", help="move legacy 15.0-15.1 arcmin rows into guard evidence"
+    )
+    repair_admission.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
 
     if args.command == "validate":
@@ -1501,6 +1714,18 @@ def _main() -> int:
                 print(f"FAIL: {error}", file=sys.stderr)
             return 1
         print(f"PASS: all {len(manifest['cells'])} cells satisfy the frozen corpus contract")
+        return 0
+
+    if args.command == "pack":
+        result = pack_evidence(args.output_dir)
+        print(
+            f"Packed {result['member_count']} evidence files; SHA-256 {result['bundle_sha256']}"
+        )
+        return 0
+
+    if args.command == "repair-admission":
+        result = repair_admission_evidence(args.output_dir)
+        print(f"Admitted {result['admitted_rows']} rows; isolated {result['guard_rows']} guard rows")
         return 0
 
     result = extract_ps1_strm(args.input, args.output, args.expected_size)

@@ -1,4 +1,5 @@
 {
+  "admission_contract": "canonical rows use exact inclusive separation <=15.0 arcmin",
   "cells": [
     {
       "canonical_path": "canonical/casey/chandra_exposure.json.gz",
@@ -11,6 +12,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -36,11 +39,13 @@
     },
     {
       "canonical_path": "canonical/casey/desi_dr1.json.gz",
-      "canonical_sha256": "8fdcc5f545088be1f44027364bf1e12d905d394d5a638a7b9befd6f1e5903831",
+      "canonical_sha256": "f1a3c41d83dbfd6bacf714e8cd8a49e5db63c0187932f211272a2ae586bea341",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,169.983541700000,70.676222220000,0.251666666667)='t'",
+      "guard_evidence_path": "guard/casey/desi_dr1.json.gz",
+      "guard_evidence_sha256": "15e5d22159feed5bc6639fb99956f2d43ba659127cc627a4a5fb5095031d03a4",
       "guard_ring_count": 1,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -169,7 +174,7 @@
       "response_sha256": "baf73abead7b621e0c652268c9db0af0222256d54a5e89a40a6b507c51c8dbbb",
       "retrieved_at_utc": "2026-07-22T17:21:52Z",
       "role": "discovery_spectroscopy",
-      "row_count": 334,
+      "row_count": 333,
       "service": "desi_dr1",
       "sightline": "casey",
       "status": "matched"
@@ -185,6 +190,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (169.983541700000,70.676222220000), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/casey/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -219,6 +226,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=169.983541700000&DEC=70.676222220000&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/casey/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -244,11 +253,13 @@
     },
     {
       "canonical_path": "canonical/casey/gaia_dr3.json.gz",
-      "canonical_sha256": "fc55dbc3ca99a17c4636bd35cfdabbc7aa8ad6396b8281777f4f54fda8cc2f00",
+      "canonical_sha256": "cd79348e27d5199df6c6b570de165ed52413f0c17813aeeffc60942f2a0979ea",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "4c8eee24182656f56e9ab350fb9393b197dd3cb6e5434040ba7d1b0b4cca407b",
       "guard_ring_count": 9,
       "native_columns": [
         "solution_id",
@@ -422,7 +433,7 @@
       "response_sha256": "e8e644656f274f835b55c21e41ab2b1a4a06b79db2ec9896cdf597c0629dcd3b",
       "retrieved_at_utc": "2026-07-22T17:23:18Z",
       "role": "classification_enrichment",
-      "row_count": 776,
+      "row_count": 767,
       "service": "gaia_dr3",
       "sightline": "casey",
       "status": "matched"
@@ -438,6 +449,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -468,6 +481,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -544,6 +559,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,169.983541700000,70.676222220000,0.251666666667)='t'",
+      "guard_evidence_path": "guard/casey/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "ls_id",
@@ -603,11 +620,13 @@
     },
     {
       "canonical_path": "canonical/casey/lotss_dr3.json.gz",
-      "canonical_sha256": "e2ff9c808768fdea46c54470afbcbfce0ae44556750cd1b66e0695ba17b6e750",
+      "canonical_sha256": "c1718ae82d2e39f7b7afd49a8bec3a86b641d744108878f6d0f7dc250b224b1b",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "4eb151fe7d94f175dc7148b59ba738df451a4423adb7d5d5bf31a177de462db1",
       "guard_ring_count": 1,
       "native_columns": [
         "source_name",
@@ -657,7 +676,7 @@
       "response_sha256": "10ccc62824379b41f50b5ace738c7a40a4429e0db19172045dfd9b981f302104",
       "retrieved_at_utc": "2026-07-22T17:23:19Z",
       "role": "classification_enrichment",
-      "row_count": 137,
+      "row_count": 136,
       "service": "lotss_dr3",
       "sightline": "casey",
       "status": "matched"
@@ -673,6 +692,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -698,10 +719,12 @@
     },
     {
       "canonical_path": "canonical/casey/ps1_strm_v1.json.gz",
-      "canonical_sha256": "4318a8b7f1d62626d65281455c27c5cd97953c7617ac08b59cf963e47142a45e",
+      "canonical_sha256": "54feb90216722560ea891dbc142a13961407b7bedfe5fac961e3087b3e5d3b33",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/casey/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "3a61e59375508dc20964027394d0ef03cf68e8f6ff127c244f8914a6661bc79a",
       "guard_ring_count": 119,
       "native_columns": [
         "objID",
@@ -738,7 +761,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 8994,
+      "row_count": 8875,
       "service": "ps1_strm_v1",
       "sightline": "casey",
       "source_rows_scanned": 49745965,
@@ -753,6 +776,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(169.983541700000,70.676222220000,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/casey/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -987,6 +1012,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -1258,6 +1285,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -1365,6 +1394,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',169.983541700000,70.676222220000,0.251666666667))",
+      "guard_evidence_path": "guard/casey/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -1399,6 +1430,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -1429,6 +1462,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,312.619125000000,73.900000000000,0.251666666667)='t'",
+      "guard_evidence_path": "guard/chromatica/desi_dr1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -1573,6 +1608,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (312.619125000000,73.900000000000), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/chromatica/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -1607,6 +1644,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=312.619125000000&DEC=73.900000000000&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/chromatica/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -1632,11 +1671,13 @@
     },
     {
       "canonical_path": "canonical/chromatica/gaia_dr3.json.gz",
-      "canonical_sha256": "c71347421cbf20b10efe4d949789fd02ff784a876b5d261bbd6619442a70b2f6",
+      "canonical_sha256": "b85840506de9102c8d0b71506b9bdf2444ea8ea27359370690d5881d2c35edc7",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "98b38385d8ed2d0fd63d93522596ce461364553243a4cd29ec70c6a25ce95d39",
       "guard_ring_count": 28,
       "native_columns": [
         "solution_id",
@@ -1810,7 +1851,7 @@
       "response_sha256": "cda578597fb26f1c9efda58429bd28af967a1d66a0aed4d50e172c0d4c2ba866",
       "retrieved_at_utc": "2026-07-22T17:22:59Z",
       "role": "classification_enrichment",
-      "row_count": 2267,
+      "row_count": 2239,
       "service": "gaia_dr3",
       "sightline": "chromatica",
       "status": "matched"
@@ -1826,6 +1867,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -1856,6 +1899,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -1931,6 +1976,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,312.619125000000,73.900000000000,0.251666666667)='t'",
+      "guard_evidence_path": "guard/chromatica/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -1961,6 +2008,8 @@
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "source_name",
@@ -2026,6 +2075,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -2051,10 +2102,12 @@
     },
     {
       "canonical_path": "canonical/chromatica/ps1_strm_v1.json.gz",
-      "canonical_sha256": "e995a52b1939174551878500a3435a11e5653d067a371c13c6f4606dc660b2db",
+      "canonical_sha256": "9bddba0dae8fd421a8024f68bbbd6ec59d79e9fec09aea8fedef06348427c4fa",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/chromatica/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "0ac3117132746f8dcf047867c38bb6b619c6a0492a67bd1a92669e6b2cc95703",
       "guard_ring_count": 140,
       "native_columns": [
         "objID",
@@ -2091,7 +2144,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 10782,
+      "row_count": 10642,
       "service": "ps1_strm_v1",
       "sightline": "chromatica",
       "source_rows_scanned": 49745965,
@@ -2106,6 +2159,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(312.619125000000,73.900000000000,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/chromatica/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -2340,6 +2395,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -2611,6 +2668,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -2718,6 +2777,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',312.619125000000,73.900000000000,0.251666666667))",
+      "guard_evidence_path": "guard/chromatica/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -2752,6 +2813,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -2782,6 +2845,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,305.037166666700,70.792766666700,0.251666666667)='t'",
+      "guard_evidence_path": "guard/hamilton/desi_dr1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -2926,6 +2991,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (305.037166666700,70.792766666700), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/hamilton/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -2960,6 +3027,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=305.037166666700&DEC=70.792766666700&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/hamilton/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -2985,11 +3054,13 @@
     },
     {
       "canonical_path": "canonical/hamilton/gaia_dr3.json.gz",
-      "canonical_sha256": "a44d1f2c28ca29d1a2911598eec194070bbcf31a6f9a680bffb3517f80f30c24",
+      "canonical_sha256": "6fb85976f43b3fd24a19d742769daf6b516e54e9b9f1e2846b1948ce7cb1b45c",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "fda80bbc767585b8013c838c18e335442d4d2024e2d466b5a48a88c5ea85a19b",
       "guard_ring_count": 35,
       "native_columns": [
         "solution_id",
@@ -3163,7 +3234,7 @@
       "response_sha256": "84d01d7b9a12f3439bd19633af128697502709d9be8bca30ae6b08683fb54f3e",
       "retrieved_at_utc": "2026-07-22T17:22:56Z",
       "role": "classification_enrichment",
-      "row_count": 2838,
+      "row_count": 2803,
       "service": "gaia_dr3",
       "sightline": "hamilton",
       "status": "matched"
@@ -3179,6 +3250,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -3209,6 +3282,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -3284,6 +3359,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,305.037166666700,70.792766666700,0.251666666667)='t'",
+      "guard_evidence_path": "guard/hamilton/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -3314,6 +3391,8 @@
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "source_name",
@@ -3379,6 +3458,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -3404,10 +3485,12 @@
     },
     {
       "canonical_path": "canonical/hamilton/ps1_strm_v1.json.gz",
-      "canonical_sha256": "fb992adb0eee4d625ebe8baea68b91c1c918691b0fc196f6fba78ca95374df88",
+      "canonical_sha256": "0548bd952688636e1eb01e5a871e6bf3ec1865cc8510426d0cf910a92ad81e9f",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/hamilton/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "4d34dc993cc300d8d8802737843e75d2dcea5c35165e2e36bbeeda58de2de93b",
       "guard_ring_count": 176,
       "native_columns": [
         "objID",
@@ -3444,7 +3527,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 11674,
+      "row_count": 11498,
       "service": "ps1_strm_v1",
       "sightline": "hamilton",
       "source_rows_scanned": 49745965,
@@ -3459,6 +3542,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(305.037166666700,70.792766666700,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/hamilton/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -3693,6 +3778,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -3964,6 +4051,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -4071,6 +4160,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',305.037166666700,70.792766666700,0.251666666667))",
+      "guard_evidence_path": "guard/hamilton/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -4105,6 +4196,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -4135,6 +4228,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,71.411000000000,70.307388888900,0.251666666667)='t'",
+      "guard_evidence_path": "guard/isha/desi_dr1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -4279,6 +4374,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (71.411000000000,70.307388888900), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/isha/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -4313,6 +4410,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=71.411000000000&DEC=70.307388888900&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/isha/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -4338,11 +4437,13 @@
     },
     {
       "canonical_path": "canonical/isha/gaia_dr3.json.gz",
-      "canonical_sha256": "db1b07380921f787c802969306a0fe17529ced93dac3584ade31ce205f8eaaba",
+      "canonical_sha256": "329001303c9c4e490b64cc811ecb4908efa61b88d55f842509de7c31b12b0a47",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "4cd43683122f4b6de0371a0511f1a1ae56e7cbc992ffb394742def6d20bc2bf3",
       "guard_ring_count": 43,
       "native_columns": [
         "solution_id",
@@ -4516,7 +4617,7 @@
       "response_sha256": "89d97df1eac36810e6f06226ad2ee32b6413adce6cc88aa51c017e5122a27ec3",
       "retrieved_at_utc": "2026-07-22T17:22:30Z",
       "role": "classification_enrichment",
-      "row_count": 3820,
+      "row_count": 3777,
       "service": "gaia_dr3",
       "sightline": "isha",
       "status": "matched"
@@ -4532,6 +4633,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -4562,6 +4665,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -4637,6 +4742,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,71.411000000000,70.307388888900,0.251666666667)='t'",
+      "guard_evidence_path": "guard/isha/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -4662,11 +4769,13 @@
     },
     {
       "canonical_path": "canonical/isha/lotss_dr3.json.gz",
-      "canonical_sha256": "29b69e85b3813ede30d52d34055c1f442719045a960eebb40358923975d6ebbf",
+      "canonical_sha256": "ea16fdd648083d0e796a50ef87bfa7286a867bdfd09aa87e7b1a5dff7da11435",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "bcedd7863e0a80cd1a672e40079f1f8d1c83d17c0c4e208e9bdec1a77925e383",
       "guard_ring_count": 1,
       "native_columns": [
         "source_name",
@@ -4716,7 +4825,7 @@
       "response_sha256": "57048170aa93f67c1272a2a280deaeaadc64f9695bd72a797464a2f4dfb21179",
       "retrieved_at_utc": "2026-07-22T17:23:16Z",
       "role": "classification_enrichment",
-      "row_count": 166,
+      "row_count": 165,
       "service": "lotss_dr3",
       "sightline": "isha",
       "status": "matched"
@@ -4732,6 +4841,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -4757,10 +4868,12 @@
     },
     {
       "canonical_path": "canonical/isha/ps1_strm_v1.json.gz",
-      "canonical_sha256": "6de2b6f2978f88f25c4b30476af8ed1395f0860d0e706b251e4bf3869e3dbf6c",
+      "canonical_sha256": "c40118f52827afcbdf0629a4c1fa9a47f786b99d34793a2ca5c6eecb0d11506d",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/isha/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "ee3cc3492a30de51e468c06413a652fb9d449d7230e977b99602932e42333389",
       "guard_ring_count": 166,
       "native_columns": [
         "objID",
@@ -4797,7 +4910,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 12767,
+      "row_count": 12601,
       "service": "ps1_strm_v1",
       "sightline": "isha",
       "source_rows_scanned": 49745965,
@@ -4812,6 +4925,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(71.411000000000,70.307388888900,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/isha/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -5046,6 +5161,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -5317,6 +5434,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -5424,6 +5543,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',71.411000000000,70.307388888900,0.251666666667))",
+      "guard_evidence_path": "guard/isha/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -5458,6 +5579,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -5488,6 +5611,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,318.044833333300,72.827277777800,0.251666666667)='t'",
+      "guard_evidence_path": "guard/oran/desi_dr1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -5632,6 +5757,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (318.044833333300,72.827277777800), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/oran/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -5666,6 +5793,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=318.044833333300&DEC=72.827277777800&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/oran/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -5691,11 +5820,13 @@
     },
     {
       "canonical_path": "canonical/oran/gaia_dr3.json.gz",
-      "canonical_sha256": "2708cdffa03281fcca8454cd1c2e56e5226d4a059cb253092e0fa24bd17693ba",
+      "canonical_sha256": "c25a5822dff326a894f00d1b413787341aa7670f7927c5fbfb400051d6e38a61",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "82fc82f902e2a3a77ea8cb1a5e246decdcf55f821142c31b11eac05b4101e471",
       "guard_ring_count": 36,
       "native_columns": [
         "solution_id",
@@ -5869,7 +6000,7 @@
       "response_sha256": "9a80e9e7b82d8c8c003bd3a13e5f420d2c6635593ed7f111449c7cab7feb21c3",
       "retrieved_at_utc": "2026-07-22T17:22:30Z",
       "role": "classification_enrichment",
-      "row_count": 2703,
+      "row_count": 2667,
       "service": "gaia_dr3",
       "sightline": "oran",
       "status": "matched"
@@ -5885,6 +6016,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -5915,6 +6048,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -5990,6 +6125,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,318.044833333300,72.827277777800,0.251666666667)='t'",
+      "guard_evidence_path": "guard/oran/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -6020,6 +6157,8 @@
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "source_name",
@@ -6085,6 +6224,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -6110,10 +6251,12 @@
     },
     {
       "canonical_path": "canonical/oran/ps1_strm_v1.json.gz",
-      "canonical_sha256": "1b91810f068fcbdb0ec4d899892b1ba8ebc92561fb6b412b0779c4372aecd7f0",
+      "canonical_sha256": "42bb5132008cfc57800ff10fb8d1b7065ebd0e9e643958ddbc65c654cd0e6ff9",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/oran/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "1c13f47ad774f801ba2fa9c7295a160b0a8bc655fdbe33c626b7a2eabc029ab5",
       "guard_ring_count": 120,
       "native_columns": [
         "objID",
@@ -6150,7 +6293,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 9713,
+      "row_count": 9593,
       "service": "ps1_strm_v1",
       "sightline": "oran",
       "source_rows_scanned": 49745965,
@@ -6165,6 +6308,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(318.044833333300,72.827277777800,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/oran/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -6399,6 +6544,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -6665,11 +6812,13 @@
     },
     {
       "canonical_path": "canonical/oran/vlass_ql_epoch1.json.gz",
-      "canonical_sha256": "cf41f8fb62b9dd3ffddb34d7710f0c41435ede54bb73c0e005f4127bd60914c8",
+      "canonical_sha256": "463cd136bf49c039e0db3bed7ff4702da092b4bd7212486fbd45b1692377105c",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "3e28c0cdaf9523f071328de217668c6c737045b3f36563c73fc3813bf1d5e1e3",
       "guard_ring_count": 1,
       "native_columns": [
         "recno",
@@ -6761,7 +6910,7 @@
       "response_sha256": "3fd1ef24d6c2276fb60845ef45128c685aec47a161ee57f72e304af5ab962fb4",
       "retrieved_at_utc": "2026-07-22T17:23:22Z",
       "role": "classification_enrichment",
-      "row_count": 24,
+      "row_count": 23,
       "service": "vlass_ql_epoch1",
       "sightline": "oran",
       "status": "matched"
@@ -6777,6 +6926,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',318.044833333300,72.827277777800,0.251666666667))",
+      "guard_evidence_path": "guard/oran/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -6812,6 +6963,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -7359,11 +7512,13 @@
     },
     {
       "canonical_path": "canonical/phineas/desi_dr1.json.gz",
-      "canonical_sha256": "cd9f1351108fd6b5b013e448decf8769682ca3dd2a7f1c586a766a6ff0777620",
+      "canonical_sha256": "a86be3c02e3a91fe2cb0c1d8886e59416d8e0d1d186a7e54d8e6996e1b7b92e5",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,177.781333333300,71.695638888900,0.251666666667)='t'",
+      "guard_evidence_path": "guard/phineas/desi_dr1.json.gz",
+      "guard_evidence_sha256": "db762ce9d258d99d36b2efabcdfaaf9a9c6df16fbc5e017d1cc43b287213dfbc",
       "guard_ring_count": 6,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -7492,7 +7647,7 @@
       "response_sha256": "5b88db125c15e25231e629eb264273d1f09a1c3a26b648a8cde2b38369993e9a",
       "retrieved_at_utc": "2026-07-22T17:21:50Z",
       "role": "discovery_spectroscopy",
-      "row_count": 364,
+      "row_count": 358,
       "service": "desi_dr1",
       "sightline": "phineas",
       "status": "matched"
@@ -7508,6 +7663,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (177.781333333300,71.695638888900), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/phineas/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -7542,6 +7699,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=177.781333333300&DEC=71.695638888900&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/phineas/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -7567,11 +7726,13 @@
     },
     {
       "canonical_path": "canonical/phineas/gaia_dr3.json.gz",
-      "canonical_sha256": "42941c226cc25b77adba737aa25eb1863664450d7ae7d24c06f61177c1329948",
+      "canonical_sha256": "c5fc7cc8e677f7499189aa033198ef6f6feee4e5ad0169e33f5fde5fd57e680a",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "51a6481a4275ec32cce70cd1d7d92fd713f678b7209ae6a1500bbed58e03ca94",
       "guard_ring_count": 10,
       "native_columns": [
         "solution_id",
@@ -7745,7 +7906,7 @@
       "response_sha256": "4102ab10e4cf550a58d670a1b056fb83a7379fae0f7843c5e9ee4ebb4f12bcaa",
       "retrieved_at_utc": "2026-07-22T17:22:55Z",
       "role": "classification_enrichment",
-      "row_count": 797,
+      "row_count": 787,
       "service": "gaia_dr3",
       "sightline": "phineas",
       "status": "matched"
@@ -7761,6 +7922,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -7791,6 +7954,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -7867,6 +8032,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,177.781333333300,71.695638888900,0.251666666667)='t'",
+      "guard_evidence_path": "guard/phineas/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "ls_id",
@@ -7931,6 +8098,8 @@
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "source_name",
@@ -7996,6 +8165,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -8021,10 +8192,12 @@
     },
     {
       "canonical_path": "canonical/phineas/ps1_strm_v1.json.gz",
-      "canonical_sha256": "41f7fb049e40358f13a8bf6be3777fb4d85262014ca419cb25bf4c6ccf93dbe3",
+      "canonical_sha256": "a65b51462a53e7d8c9582b6fe7eeed2c1d8abdf50b6e214f48d0f70f53bc3741",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/phineas/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "fb701d2417e75e7385ea814034dfcee6da9c96ce3b83e0ec56e2feb69879e603",
       "guard_ring_count": 127,
       "native_columns": [
         "objID",
@@ -8061,7 +8234,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 7510,
+      "row_count": 7383,
       "service": "ps1_strm_v1",
       "sightline": "phineas",
       "source_rows_scanned": 49745965,
@@ -8076,6 +8249,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(177.781333333300,71.695638888900,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/phineas/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -8310,6 +8485,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -8581,6 +8758,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -8688,6 +8867,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',177.781333333300,71.695638888900,0.251666666667))",
+      "guard_evidence_path": "guard/phineas/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -8723,6 +8904,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -9270,11 +9453,13 @@
     },
     {
       "canonical_path": "canonical/whitney/desi_dr1.json.gz",
-      "canonical_sha256": "7f282bb503719c38147e4d8606bc4f7338ccdce3289de92f0e352a0a7e85c06b",
+      "canonical_sha256": "58bb5fd62ada5b95387c7d7eb2aae307e20a1dd410c850762f34dc0bcb886e3c",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,134.720500000000,73.490833333300,0.251666666667)='t'",
+      "guard_evidence_path": "guard/whitney/desi_dr1.json.gz",
+      "guard_evidence_sha256": "4e0c9bc35a3bc011cdb07df785d9fcecb2fc9652dfadb29496f3d2fb6a04ccec",
       "guard_ring_count": 4,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -9403,7 +9588,7 @@
       "response_sha256": "b5dfc58a587fa3af761dc376096da964d9e30b63578c81faf98b09cb1355c143",
       "retrieved_at_utc": "2026-07-22T17:21:47Z",
       "role": "discovery_spectroscopy",
-      "row_count": 288,
+      "row_count": 284,
       "service": "desi_dr1",
       "sightline": "whitney",
       "status": "matched"
@@ -9419,6 +9604,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (134.720500000000,73.490833333300), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/whitney/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -9453,6 +9640,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=134.720500000000&DEC=73.490833333300&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/whitney/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -9478,11 +9667,13 @@
     },
     {
       "canonical_path": "canonical/whitney/gaia_dr3.json.gz",
-      "canonical_sha256": "187b1493568c328bb696fdc56fb8354db22538da3d43a163feb1f192c078676e",
+      "canonical_sha256": "a9a9d185a9111151f7e044ab167cc0c9406510adae1beddba86aae9e4c7bd1df",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "0d4d59cd020df4503595bb3323f1ab2573cd93ad05a012d8f2d5441b803f53be",
       "guard_ring_count": 14,
       "native_columns": [
         "solution_id",
@@ -9656,7 +9847,7 @@
       "response_sha256": "2d806a78744a011c8e5f35e05d88ab41ef9f97e8495b94bcebed1925f7f7f876",
       "retrieved_at_utc": "2026-07-22T17:22:29Z",
       "role": "classification_enrichment",
-      "row_count": 983,
+      "row_count": 969,
       "service": "gaia_dr3",
       "sightline": "whitney",
       "status": "matched"
@@ -9672,6 +9863,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -9702,6 +9895,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -9778,6 +9973,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,134.720500000000,73.490833333300,0.251666666667)='t'",
+      "guard_evidence_path": "guard/whitney/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "ls_id",
@@ -9837,11 +10034,13 @@
     },
     {
       "canonical_path": "canonical/whitney/lotss_dr3.json.gz",
-      "canonical_sha256": "a1c1661a7805392dd949b8571a899a157dccd0b044dee81bc0cabb013803f785",
+      "canonical_sha256": "6af6bc7e0702ac29784d40c07d677da5011bd521eaaef401803b8cecd3d6dd51",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "050f415926ce22934cd5ece14bb6c329ab5db329e709b0e44334e5ed65774306",
       "guard_ring_count": 2,
       "native_columns": [
         "source_name",
@@ -9891,7 +10090,7 @@
       "response_sha256": "9eb8f5705886ad279914ca08e0e66e5bc02f8cf6e450777065f32e4d2dab58bf",
       "retrieved_at_utc": "2026-07-22T17:23:13Z",
       "role": "classification_enrichment",
-      "row_count": 255,
+      "row_count": 253,
       "service": "lotss_dr3",
       "sightline": "whitney",
       "status": "matched"
@@ -9907,6 +10106,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -9932,10 +10133,12 @@
     },
     {
       "canonical_path": "canonical/whitney/ps1_strm_v1.json.gz",
-      "canonical_sha256": "b4765b595c3ad98fbac1c429515d7d506186e99e9c7a49f9eace017ec2e1c341",
+      "canonical_sha256": "11320ba03a7d8b9e7eb6bcf33630d612938abb3bfaba22537e064d2fb7309e3a",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/whitney/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "c7fed8346bef174d8bec79ac8f770102be6fa754db13e58070bd22c70656a8b2",
       "guard_ring_count": 108,
       "native_columns": [
         "objID",
@@ -9972,7 +10175,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 8524,
+      "row_count": 8416,
       "service": "ps1_strm_v1",
       "sightline": "whitney",
       "source_rows_scanned": 49745965,
@@ -9987,6 +10190,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(134.720500000000,73.490833333300,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/whitney/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -10221,6 +10426,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -10492,6 +10699,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -10600,6 +10809,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',134.720500000000,73.490833333300,0.251666666667))",
+      "guard_evidence_path": "guard/whitney/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -11062,6 +11273,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -11092,6 +11305,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,315.129541666700,72.037561111100,0.251666666667)='t'",
+      "guard_evidence_path": "guard/wilhelm/desi_dr1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -11236,6 +11451,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (315.129541666700,72.037561111100), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/wilhelm/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -11270,6 +11487,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=315.129541666700&DEC=72.037561111100&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/wilhelm/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -11295,11 +11514,13 @@
     },
     {
       "canonical_path": "canonical/wilhelm/gaia_dr3.json.gz",
-      "canonical_sha256": "b35051ecd106fdb1ad6976789904377d411f78536fcf232e1c7648a8b267ba99",
+      "canonical_sha256": "91f2159fb1457c4be1f589db435da277bb145d2e3a6c0ed5fe9dcc499675c927",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "84a567c0e6e55a8d454ed1649b4c19fe1d538bca216395e4ef53cfe5afc63bc2",
       "guard_ring_count": 30,
       "native_columns": [
         "solution_id",
@@ -11473,7 +11694,7 @@
       "response_sha256": "bac447b101e700bd2cb4774a33454603a0a523e1b0b03251c9701bc5824c3cee",
       "retrieved_at_utc": "2026-07-22T17:22:53Z",
       "role": "classification_enrichment",
-      "row_count": 2325,
+      "row_count": 2295,
       "service": "gaia_dr3",
       "sightline": "wilhelm",
       "status": "matched"
@@ -11489,6 +11710,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -11519,6 +11742,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -11594,6 +11819,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,315.129541666700,72.037561111100,0.251666666667)='t'",
+      "guard_evidence_path": "guard/wilhelm/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -11624,6 +11851,8 @@
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "source_name",
@@ -11689,6 +11918,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -11714,10 +11945,12 @@
     },
     {
       "canonical_path": "canonical/wilhelm/ps1_strm_v1.json.gz",
-      "canonical_sha256": "5e7ea52b761e61bffa3e3119f59e328b2d59ccc9b51c86ab7490c59c63a4660d",
+      "canonical_sha256": "9bad5a9e5bfd626a9efef991330cada1830e6c7dcfe6522cc987c95f6690faa1",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/wilhelm/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "065785e77608f69ba6c4c0c94f3c52e1723a2ee2a5a29a0551394291ba993fd3",
       "guard_ring_count": 140,
       "native_columns": [
         "objID",
@@ -11754,7 +11987,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 9636,
+      "row_count": 9496,
       "service": "ps1_strm_v1",
       "sightline": "wilhelm",
       "source_rows_scanned": 49745965,
@@ -11769,6 +12002,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(315.129541666700,72.037561111100,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/wilhelm/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -12003,6 +12238,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -12274,6 +12511,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -12381,6 +12620,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',315.129541666700,72.037561111100,0.251666666667))",
+      "guard_evidence_path": "guard/wilhelm/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -12415,6 +12656,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM csc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/chandra_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -12445,6 +12688,8 @@
       "defects": [],
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT * FROM desi_dr1.zpix WHERE q3c_radial_query(mean_fiber_ra,mean_fiber_dec,310.199525000000,72.882327222200,0.251666666667)='t'",
+      "guard_evidence_path": "guard/zach/desi_dr1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "tsnr2_lrg_b",
@@ -12589,6 +12834,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/",
       "exact_query": "GET https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/BulbulE_DR1/erass1cl_primary_v3.2.fits.tgz; read every row from erass1cl_main_v3.2.fits; for frozen ICRS center (310.199525000000,72.882327222200), retain exactly rows with finite positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc",
+      "guard_evidence_path": "guard/zach/erass1_clusters_primary_v3_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -12623,6 +12870,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS",
       "exact_query": "https://erosita.mpe.mpg.de/erodat/catalogue/SCS?CAT=DR1_Main&RA=310.199525000000&DEC=72.882327222200&SR=0.251666666667&VERB=3",
+      "guard_evidence_path": "guard/zach/erass1_main_v1_2.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -12648,11 +12897,13 @@
     },
     {
       "canonical_path": "canonical/zach/gaia_dr3.json.gz",
-      "canonical_sha256": "c3bcccde2f836c35fdb1b4b6ea0d2c6744a36e7ccd2ce3e4a5decee6a1315a51",
+      "canonical_sha256": "9abb861d2538b904fad420894884536cf3e7cec5adb39c09d666a1ddb4de393f",
       "coverage": "not_applicable",
       "defects": [],
       "endpoint": "https://gea.esac.esa.int/tap-server/tap/sync",
       "exact_query": "SELECT * FROM gaiadr3.gaia_source WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/gaia_dr3.json.gz",
+      "guard_evidence_sha256": "d1aa8dac34d28167a6a99872e8f418d6cddcbc6f593a688a02eaf0de12396c8b",
       "guard_ring_count": 38,
       "native_columns": [
         "solution_id",
@@ -12826,7 +13077,7 @@
       "response_sha256": "4ce8ace48b7e861f73fc885c06bf6bf79c628dedf4546a97d2aa57743b1a8fe8",
       "retrieved_at_utc": "2026-07-22T17:22:29Z",
       "role": "classification_enrichment",
-      "row_count": 2342,
+      "row_count": 2304,
       "service": "gaia_dr3",
       "sightline": "zach",
       "status": "matched"
@@ -12842,6 +13093,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/jplus-dr3/sync",
       "exact_query": "SELECT * FROM jplus.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/jplus_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -12872,6 +13125,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"V/162/dr11l\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/lamost_dr11.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -12947,6 +13202,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://datalab.noirlab.edu/tap/sync",
       "exact_query": "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, t.maskbits, t.fitbits, t.ref_cat, t.ref_id FROM ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id WHERE q3c_radial_query(t.ra,t.dec,310.199525000000,72.882327222200,0.251666666667)='t'",
+      "guard_evidence_path": "guard/zach/legacy_dr10_photoz.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -12977,6 +13234,8 @@
       "defects": [],
       "endpoint": "https://vo.astron.nl/tap/sync",
       "exact_query": "SELECT * FROM lotss_dr3.main_sources WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/lotss_dr3.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "source_name",
@@ -13042,6 +13301,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://archive.cefca.es/catalogues/vo/tap/minijpas-pdr201912/sync",
       "exact_query": "SELECT * FROM minijpas.MagABDualObj WHERE 1=CONTAINS(POINT('ICRS',ALPHA_J2000,DELTA_J2000),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/minijpas_pdr201912.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -13067,10 +13328,12 @@
     },
     {
       "canonical_path": "canonical/zach/ps1_strm_v1.json.gz",
-      "canonical_sha256": "4d4458c7f4e7d802ad8aa72df3c6c72d9b590d0f5522cdf45f1239a4a002d222",
+      "canonical_sha256": "e3452aaafacfd6c0c347a20ebc068017aeb3ad8c942e88d8f9c8f0c7167c885a",
       "coverage": "not_applicable",
       "endpoint": "https://archive.stsci.edu/hlsps/ps1-strm/",
       "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
+      "guard_evidence_path": "guard/zach/ps1_strm_v1.json.gz",
+      "guard_evidence_sha256": "864a2383b3df07f8b8682c134e5fa058c01f7a2769cd01998c8d6ce75b547f93",
       "guard_ring_count": 119,
       "native_columns": [
         "objID",
@@ -13107,7 +13370,7 @@
       "response_sha256": "9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3",
       "retrieved_at_utc": "2026-07-22T12:08:59Z",
       "role": "discovery_photometric_redshift",
-      "row_count": 10302,
+      "row_count": 10183,
       "service": "ps1_strm_v1",
       "sightline": "zach",
       "source_rows_scanned": 49745965,
@@ -13122,6 +13385,8 @@
       "defects": [],
       "endpoint": "https://skyserver.sdss.org/dr19/SkyServerWS/SearchTools/SqlSearch",
       "exact_query": "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s JOIN dbo.fGetNearbySpecObjEq(310.199525000000,72.882327222200,15.100000000000) AS n ON s.specObjID=n.specObjID",
+      "guard_evidence_path": "guard/zach/sdss_dr19.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "specObjID",
@@ -13356,6 +13621,8 @@
       "defects": [],
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM swiftlsxps WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/swift_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "__row",
@@ -13627,6 +13894,8 @@
       "defects": [],
       "endpoint": "https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync",
       "exact_query": "SELECT * FROM \"J/ApJS/255/30/comp\" WHERE 1=CONTAINS(POINT('ICRS',RAJ2000,DEJ2000),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/vlass_ql_epoch1.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "recno",
@@ -13734,6 +14003,8 @@
       "coverage_row_count": 0,
       "endpoint": "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
       "exact_query": "SELECT * FROM xmmssc WHERE 1=CONTAINS(POINT('ICRS',ra,dec),CIRCLE('ICRS',310.199525000000,72.882327222200,0.251666666667))",
+      "guard_evidence_path": "guard/zach/xmm_newton_exposure.json.gz",
+      "guard_evidence_sha256": "abc129be8d26e8d4afe9ce45f9d5a73c8ed9aa62810ca24ee789fe4581dc4a80",
       "guard_ring_count": 0,
       "native_columns": [
         "coverage_only"
@@ -13758,7 +14029,11 @@
       "status": "outside_footprint"
     }
   ],
+  "evidence_bundle_member_count": 552,
+  "evidence_bundle_path": "evidence-bundle.tar.gz",
+  "evidence_bundle_sha256": "7db3e8b2ba5d85cb3ef7e8a9bd31864e7c1e5241ee5e520f29526546d71ece8d",
   "generated_at_utc": "2026-07-22T17:24:56Z",
+  "guard_contract": "15.0 < separation <=15.1 arcmin; evidence only, never matched",
   "input_path": "pipeline/galaxies/foreground/data/frozen_census/bursts.csv",
   "input_sha256": "204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644",
   "schema_version": "faber2026.anonymous-nine-sightline-corpus.v1"

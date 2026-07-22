@@ -97,11 +97,10 @@ independent numerical, provenance, and owner visual checks.
   hashes are frozen, with row-level uncertainty explicitly unavailable. Census
   adoption remains with the later adjudication ticket.
 - [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
-  — froze 135 public-product/sightline cells and 110,591 normalized records
-  with exact queries, coverage, native bytes, stable identifiers, unrounded
-  geometry, complete count evidence, and hashes. The 37 matched, 41 unmatched,
-  and 57 outside-footprint cells contain no unresolved service state; ticket 16
-  remains the separate independent replay.
+  — reopened after independent review. Exact admission now contains 109,117
+  records; 1,474 guard-only rows are separate. Official Legacy DR10 and X-ray
+  footprint or exposure evidence must replace row-presence and pointing-center
+  proxies before closure.
 
 ## Open route
 

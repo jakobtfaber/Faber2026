@@ -28,8 +28,9 @@ The validator fails for a missing or duplicate cell, unresolved service state,
 wrong release or endpoint, missing exact query or retrieval time, incomplete
 pagination, overflow, server-count mismatch, missing bytes, hash mismatch,
 canonical/manifest disagreement, or X-ray query without coverage evidence.
-Exact unrounded spherical separations admit rows at 15 arcminutes and retain a
-15.0--15.1-arcminute guard ring.
+Exact unrounded spherical separations admit rows through 15 arcminutes. Rows in
+the 15.0--15.1-arcminute guard ring are separate evidence: never canonical,
+matched, or included in admitted totals.
 
 The eRASS1 primary cluster product is separate from the main source catalogue.
 Its complete official bulk catalogue is the completeness authority; candidate
@@ -60,22 +61,32 @@ The public high-declination shard is
 4,650,535,027 bytes; published and locally checked MD5 is
 `4ffea9f3b1f71ee6a8945077bcf87eaa`; SHA-256 is
 `9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3`.
-The producer streamed all 49,745,965 native rows and selected 89,902 rows,
-including 1,215 guard-ring rows. Counts are Casey 8,994; Chromatica 10,782;
-Hamilton 11,674; Isha 12,767; Oran 9,713; Phineas 7,510; Whitney 8,524;
-Wilhelm 9,636; and Zach 10,302.
+The producer streamed all 49,745,965 native rows. It froze 88,687 admitted
+per-sightline canonical rows and 1,215 separate guard-only rows. Admitted counts
+are Casey 8,875; Chromatica 10,642; Hamilton 11,498; Isha 12,601; Oran 9,593;
+Phineas 7,383; Whitney 8,416; Wilhelm 9,496; and Zach 10,183. The 4.65 GB source
+shard is not in this repository: its size and SHA-256 were verified during
+extraction, while the repository freezes and validates the derived per-sightline
+canonical bytes.
 
 ## Frozen result
 
 The completed manifest is
 [`corpus-manifest.json`](evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22/corpus-manifest.json)
-(SHA-256 `f4eb168580c92d858ba4bebf80146f4bd5ef67f924d9564f283027cb3e227839`).
-It binds 135 cells and 110,591 normalized records: 37 cells are `matched`, 41
+(SHA-256 `d6c9847979ffbc5ee4b431ef657b0193d26ac0ffb2b294b4b4ae30f18ad9f13e`).
+It binds 135 cells and 109,117 admitted records plus 1,474 separate guard-only
+records: 37 cells are `matched`, 41
 are `unmatched`, and 57 are `outside_footprint`. None is ambiguous,
 access-denied, query-error, truncated, or overflowed.
 
-The corpus contains 986 DESI DR1 rows, 18,851 Gaia DR3 rows, 705 LoTSS DR3
-rows, 143 VLASS rows, 89,902 PS1--STRM rows, and four Swift rows. SDSS DR19 and
+All 552 byte-evidence members are stored without alteration in deterministic
+`evidence-bundle.tar.gz`, SHA-256
+`7db3e8b2ba5d85cb3ef7e8a9bd31864e7c1e5241ee5e520f29526546d71ece8d`.
+The validator reads each manifest path directly from that bundle and checks its
+member hash, while the top-level manifest also checks the bundle hash.
+
+The corpus contains 975 DESI DR1 rows, 18,608 Gaia DR3 rows, 701 LoTSS DR3
+rows, 142 VLASS rows, 88,687 PS1--STRM rows, and four Swift rows. SDSS DR19 and
 LAMOST DR11 returned no rows. J-PLUS and miniJPAS are outside footprint for all
 nine positions. Legacy Survey DR10 coverage is outside for six positions and
 inside with no photo-redshift rows for three. All nine positions are outside
@@ -95,5 +106,18 @@ coverage evidence, and hashes. Focused tests cover inclusive 15-arcminute and
 5-proper-Mpc boundaries, Planck18 calculation, missing cluster redshift,
 overflow, count mismatch, and byte tampering.
 
-Ticket 14 is complete. Ticket 16 is the deliberately separate producer-
-independent replay gate.
+The exact admission repair is complete. Ticket 14 remains open until official
+exposure pixels or footprint polygons replace the Legacy DR10 and X-ray
+pointing proxies. Ticket 16 remains the separate producer-independent replay
+gate.
+
+## Coverage repair routes
+
+Live official-service checks identified the required replacements. XMM-Newton
+public observations expose exact `footprint_fov` polygons through XSA TAP.
+Chandra Source Catalog stacks expose chip-shaped `s_region` polygon unions
+through CSC TAP. Legacy DR10 publishes native-WCS per-brick NEXP images, whose
+positive pixels define actual included exposure. Swift publishes XRT exposure
+maps per dataset but no anonymous bulk polygon query; until those maps are
+downloaded and evaluated, Swift coverage remains unknown rather than inferred
+from a pointing center.

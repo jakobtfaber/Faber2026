@@ -4,6 +4,7 @@ import importlib.util
 import json
 import math
 from pathlib import Path
+import shutil
 
 import pytest
 from astropy.coordinates import SkyCoord
@@ -48,9 +49,11 @@ def _complete_manifest(tmp_path: Path) -> dict:
         for service in MODULE.SERVICES:
             raw_path = Path("raw") / sightline / f"{service.key}.csv"
             canonical_path = Path("canonical") / sightline / f"{service.key}.json"
+            guard_path = Path("guard") / sightline / f"{service.key}.json"
             raw_sha = _write(tmp_path / raw_path, b"source_id,ra,dec\n")
             canonical = json.dumps([], separators=(",", ":")).encode()
             canonical_sha = _write(tmp_path / canonical_path, canonical)
+            guard_sha = _write(tmp_path / guard_path, canonical)
             cell = {
                 "sightline": sightline,
                 "service": service.key,
@@ -68,6 +71,8 @@ def _complete_manifest(tmp_path: Path) -> dict:
                 "native_columns": ["source_id", "ra", "dec"],
                 "row_count": 0,
                 "guard_ring_count": 0,
+                "guard_evidence_path": str(guard_path),
+                "guard_evidence_sha256": guard_sha,
                 "pagination": {
                     "method": "tap_sync",
                     "complete": True,
@@ -103,6 +108,23 @@ def test_required_matrix_is_exact_and_has_release_authority():
 def test_complete_manifest_passes(tmp_path):
     manifest = _complete_manifest(tmp_path)
     assert MODULE.validate_manifest(manifest, tmp_path) == []
+
+
+def test_packed_evidence_validates_without_loose_members(tmp_path):
+    manifest = _complete_manifest(tmp_path)
+    manifest_path = tmp_path / "corpus-manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    result = MODULE.pack_evidence(tmp_path)
+    assert result["member_count"] > 0
+    for directory in ("raw", "canonical", "guard", "counts", "coverage"):
+        shutil.rmtree(tmp_path / directory, ignore_errors=True)
+    packed_manifest = json.loads(manifest_path.read_text())
+    assert MODULE.validate_manifest(packed_manifest, tmp_path) == []
+    bundle = tmp_path / packed_manifest["evidence_bundle_path"]
+    bundle.write_bytes(bundle.read_bytes() + b"tamper")
+    assert "evidence bundle SHA-256 mismatch" in MODULE.validate_manifest(
+        packed_manifest, tmp_path
+    )
 
 
 def test_canonical_payload_is_bound_to_cell_count_and_geometry(tmp_path):
@@ -277,7 +299,7 @@ def test_legacy_and_erass_coverage_routes_are_explicit():
 
 def test_normalization_is_geometry_first_and_fails_bad_identity():
     service = next(service for service in MODULE.SERVICES if service.key == "gaia_dr3")
-    rows, defects = MODULE._normalize_rows(
+    rows, guard_rows, defects = MODULE._normalize_rows(
         service,
         "zach",
         [
@@ -287,9 +309,29 @@ def test_normalization_is_geometry_first_and_fails_bad_identity():
         ],
     )
     assert len(rows) == 1
+    assert guard_rows == []
     assert rows[0]["native"]["quality"] == "bad"
     assert any("missing stable source identifier" in defect for defect in defects)
     assert any("beyond guard cone" in defect for defect in defects)
+
+
+def test_normalization_separates_guard_rows_from_admitted_corpus():
+    service = next(service for service in MODULE.SERVICES if service.key == "gaia_dr3")
+    center_ra, center_dec = MODULE.SIGHTLINE_COORDS["zach"]
+    guard_dec = center_dec + 15.05 / 60.0
+    admitted, guard, defects = MODULE._normalize_rows(
+        service,
+        "zach",
+        [
+            {"source_id": "inside", "ra": center_ra, "dec": center_dec},
+            {"source_id": "guard", "ra": center_ra, "dec": guard_dec},
+        ],
+    )
+    assert defects == []
+    assert [row["source_id"] for row in admitted] == ["inside"]
+    assert [row["source_id"] for row in guard] == ["guard"]
+    assert admitted[0]["status"] == "matched"
+    assert guard[0]["status"] == "guard_only"
 
 
 def test_ps1_bulk_filter_keeps_admitted_and_guard_ring_rows(tmp_path):

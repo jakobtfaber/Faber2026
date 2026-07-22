@@ -1,2 +1,0 @@
-ls_id,brickid,objid,z_phot_mean,z_phot_median,z_phot_std,z_phot_l68,z_phot_u68,z_phot_l95,z_phot_u95,z_phot_mean_i,z_phot_median_i,z_phot_std_i,z_phot_l68_i,z_phot_u68_i,z_phot_l95_i,z_phot_u95_i,z_spec,release,training,training_i,survey,kfold,kfold_i
-10995450622509111,318856,55,1.1381601,1.0977719,0.4251073,0.8902078,1.3075566,0.4434037,2.9409,1.1045642,1.0941173,0.35066795,0.85169184,1.3188689,0.4473214,2.0285113,-99,10000,f,f,,3,3
