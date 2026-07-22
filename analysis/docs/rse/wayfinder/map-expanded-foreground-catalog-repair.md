@@ -96,15 +96,19 @@ independent numerical, provenance, and owner visual checks.
   spectroscopic redshifts `0.043040` and `0.477958`; exact source extracts and
   hashes are frozen, with row-level uncertainty explicitly unavailable. Census
   adoption remains with the later adjudication ticket.
+- [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md)
+  — froze nine authenticated uncapped WISE--PS1--STRM responses, 20,788 exact
+  cone rows, every shared-WISE ambiguity, exact queries and job metadata, and a
+  current authenticated CADC `access_denied` receipt for CFIS. Credentials and
+  scientific authority fields are absent from the evidence.
 
 ## Open route
 
 The map remains open. Tickets 02 then 03 are resolved. Remaining strict
 dependency order:
 
-1. [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
-   and [freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
-2. After both corpus tickets resolve,
+1. [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md).
+2. After the anonymous corpus and now-resolved protected corpus tickets resolve,
    [independently replay the completed corpus](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
 3. After independent replay and the now-resolved host-source ticket,
    [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
