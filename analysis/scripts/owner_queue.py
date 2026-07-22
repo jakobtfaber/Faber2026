@@ -61,7 +61,9 @@ def collect_owner_board_tasks(root: Path = ROOT) -> list[str]:
     return tasks
 
 
-def collect_open_prs(repo: str = "jakobtfaber/Faber2026") -> list[dict[str, object]]:
+def collect_open_prs(
+    repo: str = "jakobtfaber/Faber2026-analysis",
+) -> list[dict[str, object]]:
     gh = shutil.which("gh")
     if gh is None and Path("/opt/homebrew/bin/gh").is_file():
         gh = "/opt/homebrew/bin/gh"

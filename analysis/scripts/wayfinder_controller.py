@@ -39,6 +39,7 @@ TERMINAL_STATUSES = {
 }
 RECEIPT_OUTCOMES = {"resolved", "review_ready", "blocked", "failed"}
 MODES = {"resolve", "review"}
+EXECUTIONS = {"afk", "hitl"}
 
 
 @dataclass(frozen=True)
@@ -51,6 +52,17 @@ class Task:
     depends_on: tuple[str, ...]
     expected_artifact: str
     instructions: str
+    execution: str
+    repo: str
+
+
+@dataclass(frozen=True)
+class History:
+    id: str
+    ticket: str
+    execution: str
+    depends_on: tuple[str, ...]
+    status: str
 
 
 @dataclass(frozen=True)
@@ -64,6 +76,8 @@ class Manifest:
     max_parallel: int
     timeout_seconds: int
     tasks: tuple[Task, ...]
+    history: tuple[History, ...]
+    ticket_glob: str
     path: Path
 
 
@@ -97,6 +111,7 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
     raw = tomllib.loads(path.read_text(encoding="utf-8"))
     control = _required(raw, "controller", "manifest")
     task_rows = _required(raw, "task", "manifest")
+    history_rows = _required(raw, "history", "manifest")
     base_branch = str(_required(control, "base_branch", "controller"))
     if base_branch != "main":
         raise ValueError("controller base_branch must be main")
@@ -128,6 +143,7 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
     tasks: list[Task] = []
     ids: set[str] = set()
     branches: set[str] = set()
+    controller_repo = str(_required(control, "repo", "controller"))
     for row in task_rows:
         task = Task(
             id=str(_required(row, "id", "task")),
@@ -138,6 +154,8 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
             depends_on=tuple(str(value) for value in row.get("depends_on", [])),
             expected_artifact=str(row.get("expected_artifact", "")),
             instructions=str(_required(row, "instructions", "task")),
+            execution=str(_required(row, "execution", "task")).lower(),
+            repo=str(_required(row, "repo", "task")),
         )
         if task.id in ids:
             raise ValueError(f"duplicate task id: {task.id}")
@@ -149,6 +167,13 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
             raise ValueError(f"task {task.id} branch must start codex/auto-")
         if task.mode not in MODES:
             raise ValueError(f"task {task.id} mode must be resolve or review")
+        if task.execution not in EXECUTIONS:
+            raise ValueError(f"task {task.id} execution must be afk or hitl")
+        if task.repo != controller_repo:
+            raise ValueError(
+                f"cross-repository task {task.id} must be decomposed into a "
+                f"{controller_repo} task"
+            )
         if task.mode == "review" and not task.expected_artifact:
             raise ValueError(f"review task {task.id} requires expected_artifact")
         if task.mode == "resolve" and task.expected_artifact:
@@ -164,17 +189,39 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
         branches.add(task.branch)
         tasks.append(task)
 
+    history: list[History] = []
+    for row in history_rows:
+        item = History(
+            id=str(_required(row, "id", "history")),
+            ticket=str(_required(row, "ticket", "history")),
+            execution=str(_required(row, "execution", "history")).lower(),
+            depends_on=tuple(str(value) for value in row.get("depends_on", [])),
+            status=str(_required(row, "status", "history")).lower(),
+        )
+        if item.id in ids:
+            raise ValueError(f"duplicate node id: {item.id}")
+        if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", item.id):
+            raise ValueError(f"invalid history id: {item.id}")
+        if item.execution not in EXECUTIONS:
+            raise ValueError(f"history {item.id} execution must be afk or hitl")
+        if item.status != "resolved":
+            raise ValueError(f"history {item.id} status must be resolved")
+        if Path(item.ticket).is_absolute() or ".." in Path(item.ticket).parts:
+            raise ValueError(f"history {item.id} ticket must be repo-relative")
+        ids.add(item.id)
+        history.append(item)
+
     unknown = {
         dependency
-        for task in tasks
-        for dependency in task.depends_on
+        for node in [*tasks, *history]
+        for dependency in node.depends_on
         if dependency not in ids
     }
     if unknown:
         raise ValueError(f"unknown task dependencies: {sorted(unknown)}")
 
-    return Manifest(
-        repo=str(_required(control, "repo", "controller")),
+    manifest = Manifest(
+        repo=controller_repo,
         base_branch=base_branch,
         state_dir=state_dir,
         worktree_root=worktree_root,
@@ -183,8 +230,80 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
         max_parallel=max_parallel,
         timeout_seconds=timeout_seconds,
         tasks=tuple(tasks),
+        history=tuple(history),
+        ticket_glob=str(_required(control, "ticket_glob", "controller")),
         path=path,
     )
+    repo_root = ROOT if path.is_relative_to(ROOT) else path.parent
+    validate_manifest_ticket_graph(manifest, repo_root)
+    return manifest
+
+
+def validate_manifest_ticket_graph(manifest: Manifest, repo: Path = ROOT) -> None:
+    """Require exact ticket coverage, dependency parity, and execution parity."""
+
+    repo = repo.resolve()
+    matched = {
+        path.resolve() for path in repo.glob(manifest.ticket_glob) if path.is_file()
+    }
+    nodes = [*manifest.tasks, *manifest.history]
+    configured: dict[Path, Task | History] = {}
+    ids: dict[str, Task | History] = {}
+    for node in nodes:
+        path = (repo / node.ticket).resolve()
+        if not path.is_relative_to(repo):
+            raise ValueError(f"ticket escapes repository: {node.ticket}")
+        if path in configured:
+            raise ValueError(f"duplicate configured ticket: {node.ticket}")
+        configured[path] = node
+        ids[node.id] = node
+
+    missing = sorted(
+        str(path.relative_to(repo)) for path in matched - configured.keys()
+    )
+    extra = sorted(str(path.relative_to(repo)) for path in configured.keys() - matched)
+    if missing or extra:
+        raise ValueError(
+            f"manifest ticket coverage mismatch; missing={missing}, extra={extra}"
+        )
+
+    path_to_id = {path: node.id for path, node in configured.items()}
+    task_ids = {task.id for task in manifest.tasks}
+    for path, node in configured.items():
+        if isinstance(node, Task) and node.repo != manifest.repo:
+            raise ValueError(
+                f"cross-repository task {node.id} must be decomposed into a "
+                f"{manifest.repo} task"
+            )
+        ticket = parse_ticket_text(path.read_text(encoding="utf-8"), path)
+        if node.id in task_ids and not ticket.is_open:
+            raise ValueError(f"active task {node.id} ticket is not open")
+        if node.id not in task_ids and ticket.status != "resolved":
+            raise ValueError(f"history {node.id} ticket is not resolved")
+        expected_execution = "hitl" if ticket.is_owner_facing else "afk"
+        if node.execution != expected_execution:
+            raise ValueError(
+                f"ticket execution mismatch for {node.id}: "
+                f"expected {expected_execution}, got {node.execution}"
+            )
+
+        expected_dependencies: list[str] = []
+        for blocker in ticket.blockers:
+            if blocker.target is None:
+                raise ValueError(f"unresolved textual blocker for {node.id}")
+            target = (path.parent / blocker.target).resolve()
+            dependency_id = path_to_id.get(target)
+            if dependency_id is None:
+                raise ValueError(
+                    f"blocker for {node.id} is outside configured graph: "
+                    f"{blocker.target}"
+                )
+            expected_dependencies.append(dependency_id)
+        if node.depends_on != tuple(expected_dependencies):
+            raise ValueError(
+                f"dependency mismatch for {node.id}: expected "
+                f"{expected_dependencies}, got {list(node.depends_on)}"
+            )
 
 
 def tasks_for_wave(manifest: Manifest, wave: str) -> list[Task]:
@@ -195,6 +314,7 @@ def empty_state(manifest: Manifest) -> dict[str, Any]:
     return {
         "version": 1,
         "manifest": str(manifest.path),
+        "identity": manifest_state_identity(manifest),
         "supervisor": {"pid": None, "wave": None, "status": "idle"},
         "tasks": {
             task.id: {
@@ -206,6 +326,18 @@ def empty_state(manifest: Manifest) -> dict[str, Any]:
             }
             for task in manifest.tasks
         },
+    }
+
+
+def manifest_state_identity(manifest: Manifest) -> dict[str, Any]:
+    """Return stable controller identity; the ticket graph evolves in place."""
+
+    return {
+        "repo": manifest.repo,
+        "base_branch": manifest.base_branch,
+        "state_dir": str(manifest.state_dir.resolve()),
+        "worktree_root": str(manifest.worktree_root.resolve()),
+        "ticket_glob": manifest.ticket_glob,
     }
 
 
@@ -225,7 +357,9 @@ def load_state(manifest: Manifest) -> dict[str, Any]:
     state = json.loads(path.read_text(encoding="utf-8"))
     if state.get("version") != 1:
         raise ValueError("unsupported controller state version")
-    state["manifest"] = str(manifest.path)
+    expected_identity = manifest_state_identity(manifest)
+    if state.get("identity") != expected_identity:
+        raise ValueError("controller state identity mismatch")
     for task in manifest.tasks:
         state.setdefault("tasks", {}).setdefault(
             task.id,
@@ -248,19 +382,25 @@ def ready_tasks(manifest: Manifest, state: dict[str, Any], wave: str) -> list[Ta
     ready: list[Task] = []
     task_state = state["tasks"]
     for task in tasks_for_wave(manifest, wave):
+        if task.execution != "afk":
+            continue
         if task_state[task.id]["status"] != "queued":
             continue
         if all(
-            task_state[dependency]["status"]
-            == (
-                "review_ready"
-                if _task_by_id(manifest, dependency).mode == "review"
-                else "resolved"
-            )
-            for dependency in task.depends_on
+            _dependency_satisfied(manifest, state, item) for item in task.depends_on
         ):
             ready.append(task)
     return ready
+
+
+def _dependency_satisfied(
+    manifest: Manifest, state: dict[str, Any], dependency: str
+) -> bool:
+    if any(item.id == dependency for item in manifest.history):
+        return True
+    upstream = _task_by_id(manifest, dependency)
+    expected = "review_ready" if upstream.mode == "review" else "resolved"
+    return state["tasks"][dependency]["status"] == expected
 
 
 def ticket_resolution_satisfies(text: str, required_outcome: str | None = None) -> bool:
@@ -293,16 +433,16 @@ def ensure_ticket_blockers_satisfied(
 
     parsed = parse_ticket_text(read(ticket), repo / ticket)
     for blocker in parsed.blockers:
-        if blocker.required_outcome is None or blocker.target is None:
-            continue
+        if blocker.target is None:
+            raise RuntimeError(f"ticket {ticket} has unresolved blocker text")
         blocker_relative = ticket.parent / blocker.target
         blocker_ticket = parse_ticket_text(
             read(blocker_relative), repo / blocker_relative
         )
         if not ticket_clears_dependency(blocker_ticket, blocker.required_outcome):
+            requirement = blocker.required_outcome or "resolution"
             raise RuntimeError(
-                f"ticket {ticket} requires {blocker.required_outcome} "
-                f"from {blocker.target}"
+                f"ticket {ticket} requires {requirement} from {blocker.target}"
             )
 
 
@@ -386,7 +526,43 @@ def process_alive(pid: int | None) -> bool:
     return True
 
 
+def _remote_repo(remote: str) -> str | None:
+    match = re.search(r"github\.com(?::|/)([^/]+/[^/]+?)(?:\.git)?$", remote.strip())
+    return match.group(1) if match else None
+
+
+def validate_repository_identity(manifest: Manifest, repo: Path = ROOT) -> None:
+    repo = repo.resolve()
+    top = _git(repo, "rev-parse", "--show-toplevel", check=False)
+    if top.returncode != 0 or Path(top.stdout.strip()).resolve() != repo:
+        raise RuntimeError(f"controller repository root mismatch: {repo}")
+    remote = _git(repo, "remote", "get-url", "origin", check=False)
+    actual_repo = _remote_repo(remote.stdout) if remote.returncode == 0 else None
+    if actual_repo != manifest.repo:
+        raise RuntimeError(
+            f"origin repository mismatch: expected {manifest.repo}, got "
+            f"{actual_repo or 'unknown'}"
+        )
+
+
+def _common_git_dir(repo: Path) -> Path:
+    result = _git(repo, "rev-parse", "--git-common-dir")
+    path = Path(result.stdout.strip())
+    return (repo / path).resolve() if not path.is_absolute() else path.resolve()
+
+
+def validate_worktree_identity(
+    manifest: Manifest, worktree: Path, controller_repo: Path = ROOT
+) -> None:
+    validate_repository_identity(manifest, worktree)
+    if _common_git_dir(worktree.resolve()) != _common_git_dir(
+        controller_repo.resolve()
+    ):
+        raise RuntimeError(f"worktree repository mismatch: {worktree}")
+
+
 def ensure_controller_is_merged(manifest: Manifest, repo: Path = ROOT) -> None:
+    validate_repository_identity(manifest, repo)
     _git(repo, "fetch", "origin", manifest.base_branch)
     for relative in (
         "scripts/wayfinder_controller.py",
@@ -495,6 +671,7 @@ def repository_mutation_lock(manifest: Manifest):
 
 
 def prepare_worktree(manifest: Manifest, task: Task, repo: Path = ROOT) -> Path:
+    validate_repository_identity(manifest, repo)
     path = manifest.worktree_root / task.id
     manifest.worktree_root.mkdir(parents=True, exist_ok=True)
     with repository_mutation_lock(manifest):
@@ -554,6 +731,7 @@ def prepare_worktree(manifest: Manifest, task: Task, repo: Path = ROOT) -> Path:
                     str(path),
                     f"origin/{manifest.base_branch}",
                 )
+        validate_worktree_identity(manifest, path, repo)
         _git(path, "submodule", "update", "--init", "--recursive")
     return path
 
@@ -682,6 +860,8 @@ def _task_by_id(manifest: Manifest, task_id: str) -> Task:
 
 
 def run_task(manifest: Manifest, task: Task, attempt_id: str) -> int:
+    if task.execution != "afk":
+        raise RuntimeError(f"HITL task {task.id} cannot be run by the controller")
     task_dir = manifest.state_dir / "tasks" / task.id
     task_dir.mkdir(parents=True, exist_ok=True)
     attempt_dir = task_dir / "attempts" / attempt_id
@@ -1025,7 +1205,8 @@ def print_plan(manifest: Manifest, wave: str) -> int:
         dependencies = ",".join(task.depends_on) or "none"
         print(
             f"{task.id}: {state['tasks'][task.id]['status']} "
-            f"mode={task.mode} dependencies={dependencies}"
+            f"mode={task.mode} execution={task.execution} "
+            f"dependencies={dependencies}"
         )
     return 0
 
@@ -1044,7 +1225,10 @@ def print_status(manifest: Manifest, as_json: bool) -> int:
         )
         for task in manifest.tasks:
             entry = state["tasks"][task.id]
-            print(f"{task.id}: {entry['status']} {entry.get('detail', '')}".rstrip())
+            print(
+                f"{task.id}: {entry['status']} execution={task.execution} "
+                f"{entry.get('detail', '')}".rstrip()
+            )
     return 0
 
 

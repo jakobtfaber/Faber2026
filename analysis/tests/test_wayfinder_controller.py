@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import fcntl
 import json
+import subprocess
 import sys
 import threading
 import time
@@ -27,38 +28,111 @@ def load_controller():
     return module
 
 
-def test_manifest_has_reviewed_first_wave():
+def test_manifest_has_analysis_specific_controller_roots():
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     assert manifest.repo == "jakobtfaber/Faber2026-analysis"
-    assert manifest.worktree_root == Path(
-        "~/Developer/scratch/worktrees/Faber2026-analysis-wayfinder-auto"
-    ).expanduser()
+    assert (
+        manifest.state_dir
+        == Path("~/.local/state/Faber2026-analysis/wayfinder-controller").expanduser()
+    )
+    assert (
+        manifest.worktree_root
+        == Path(
+            "~/Developer/scratch/worktrees/Faber2026-analysis-wayfinder-auto"
+        ).expanduser()
+    )
     assert manifest.max_parallel == 4
-    assert [task.id for task in wc.tasks_for_wave(manifest, "first")] == [
-        "fail-close-expanded-catalog",
-        "freeze-candidate-redshifts",
-        "audit-results-library-conflicts",
-        "correct-census-wording",
-        "retire-stage-codes",
-    ]
+    assert len(wc.tasks_for_wave(manifest, "first")) == 9
 
 
-def test_manifest_parses_blocker_first_frontier():
+def test_manifest_represents_expanded_foreground_active_graph_and_history():
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
-    tasks = wc.tasks_for_wave(manifest, "blocker-first")
+    assert manifest.ticket_glob == (
+        "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-*.md"
+    )
+    assert {Path(task.ticket).name for task in manifest.tasks} == {
+        f"expanded-foreground-catalog-repair-{number:02d}-{slug}.md"
+        for number, slug in [
+            (3, "set-physics-authority"),
+            (4, "set-figure-3-gate"),
+            (5, "set-independent-validation-gate"),
+            (9, "repeat-redshift-source-verification"),
+            (14, "freeze-anonymous-nine-sightline-query-corpus"),
+            (15, "freeze-protected-nine-sightline-query-evidence"),
+            (16, "independently-replay-nine-sightline-query-corpus"),
+            (18, "source-zach-whitney-host-redshifts"),
+            (19, "adjudicate-host-redshift-differences"),
+        ]
+    }
+    assert {Path(item.ticket).name for item in manifest.history} == {
+        f"expanded-foreground-catalog-repair-{number:02d}-{slug}.md"
+        for number, slug in [
+            (1, "fail-close-validation"),
+            (2, "set-crossmatch-contract"),
+            (6, "verify-redshift-verdicts"),
+            (7, "freeze-host-redshift-provenance"),
+            (8, "freeze-candidate-redshift-provenance"),
+            (10, "restore-knowledge-base-launcher"),
+            (11, "resolve-zach-intercatalog-redshift"),
+            (12, "expand-nine-sightline-catalogs"),
+            (13, "set-nine-sightline-search-contract"),
+            (17, "obtain-authoritative-host-redshift-ledger"),
+        ]
+    }
+    wc.validate_manifest_ticket_graph(manifest, ROOT)
 
-    assert [task.id for task in tasks] == [
-        "review-trust-ledger",
-        "review-count-audit",
-        "review-rfi-preservation-limits",
-        "resolve-expanded-crossmatch-contract",
-        "review-technical-robustness-dispositions",
-        "review-coauthor-candidates",
-    ]
-    assert all(task.mode in {"resolve", "review"} for task in tasks)
-    assert all(task.expected_artifact for task in tasks if task.mode == "review")
+
+def test_manifest_graph_rejects_coverage_dependency_and_execution_drift():
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+
+    with pytest.raises(ValueError, match="coverage mismatch"):
+        wc.validate_manifest_ticket_graph(
+            replace(manifest, tasks=manifest.tasks[1:]), ROOT
+        )
+
+    task = next(
+        item for item in manifest.tasks if item.id == "set-expanded-physics-authority"
+    )
+    drifted = replace(task, depends_on=())
+    tasks = tuple(drifted if item.id == task.id else item for item in manifest.tasks)
+    with pytest.raises(ValueError, match="dependency mismatch"):
+        wc.validate_manifest_ticket_graph(replace(manifest, tasks=tasks), ROOT)
+
+    hitl = next(item for item in manifest.tasks if item.execution == "hitl")
+    drifted = replace(hitl, execution="afk")
+    tasks = tuple(drifted if item.id == hitl.id else item for item in manifest.tasks)
+    with pytest.raises(ValueError, match="execution mismatch"):
+        wc.validate_manifest_ticket_graph(replace(manifest, tasks=tasks), ROOT)
+
+    cross_repo = replace(manifest.tasks[0], repo="jakobtfaber/Faber2026")
+    tasks = (cross_repo, *manifest.tasks[1:])
+    with pytest.raises(ValueError, match="cross-repository"):
+        wc.validate_manifest_ticket_graph(replace(manifest, tasks=tasks), ROOT)
+
+
+def test_hitl_tasks_are_never_ready_or_directly_runnable(tmp_path):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+    manifest = replace(manifest, state_dir=tmp_path)
+    state = wc.empty_state(manifest)
+    hitl = next(item for item in manifest.tasks if item.execution == "hitl")
+
+    assert hitl not in wc.ready_tasks(manifest, state, hitl.wave)
+    with pytest.raises(RuntimeError, match="HITL"):
+        wc.run_task(manifest, hitl, "1" * 32)
+
+
+def test_plan_labels_hitl_as_owner_facing(capsys):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+
+    assert wc.print_plan(manifest, "first") == 0
+    output = capsys.readouterr().out
+    assert "freeze-protected-query-evidence: queued" in output
+    assert "execution=hitl" in output
 
 
 def test_manifest_rejects_unsafe_branch_and_mode(tmp_path):
@@ -69,6 +143,7 @@ def test_manifest_rejects_unsafe_branch_and_mode(tmp_path):
 [controller]
 repo = "owner/repo"
 base_branch = "main"
+ticket_glob = "tickets/*.md"
 state_dir = "~/.local/state/test"
 model = "gpt-5.5"
 reasoning_effort = "medium"
@@ -81,8 +156,17 @@ wave = "first"
 ticket = "ticket.md"
 branch = "main"
 mode = "delete"
+execution = "afk"
+repo = "owner/repo"
 depends_on = []
 instructions = "bad"
+
+[[history]]
+id = "old"
+ticket = "old.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
 """,
         encoding="utf-8",
     )
@@ -94,14 +178,15 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     state = wc.empty_state(manifest)
-    ready = {task.id for task in wc.ready_tasks(manifest, state, "blocker-first")}
-    assert "review-trust-ledger" not in ready
-    assert "review-count-audit" not in ready
-    state["tasks"]["fail-close-expanded-catalog"]["status"] = "resolved"
-    state["tasks"]["freeze-candidate-redshifts"]["status"] = "resolved"
-    state["tasks"]["audit-results-library-conflicts"]["status"] = "review_ready"
-    ready = {task.id for task in wc.ready_tasks(manifest, state, "blocker-first")}
-    assert {"review-trust-ledger", "review-count-audit"} <= ready
+    ready = {task.id for task in wc.ready_tasks(manifest, state, "first")}
+    assert ready == {
+        "set-expanded-physics-authority",
+        "freeze-anonymous-query-corpus",
+        "source-zach-whitney-host-redshifts",
+    }
+    assert "freeze-protected-query-evidence" not in ready
+    assert "replay-nine-sightline-query-corpus" not in ready
+    assert "set-expanded-physics-authority" in ready
 
 
 def test_pass_only_ticket_cannot_resolve_as_no_go():
@@ -147,6 +232,25 @@ def test_required_pass_blocker_is_enforced_before_worktree_setup(tmp_path):
     wc.ensure_ticket_blockers_satisfied(downstream.relative_to(tmp_path), tmp_path)
 
 
+def test_ordinary_ticket_blocker_is_enforced_before_worktree_setup(tmp_path):
+    wc = load_controller()
+    tickets = tmp_path / "tickets"
+    tickets.mkdir()
+    upstream = tickets / "upstream.md"
+    downstream = tickets / "downstream.md"
+    upstream.write_text("# Upstream\n\n- Status: open\n", encoding="utf-8")
+    downstream.write_text(
+        "# Downstream\n\n- Status: open\n- Blocked by: [Upstream](upstream.md)\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError, match="requires resolution"):
+        wc.ensure_ticket_blockers_satisfied(downstream.relative_to(tmp_path), tmp_path)
+
+    upstream.write_text("# Upstream\n\n- Status: resolved\n", encoding="utf-8")
+    wc.ensure_ticket_blockers_satisfied(downstream.relative_to(tmp_path), tmp_path)
+
+
 def test_required_pass_blocker_uses_explicit_remote_ref(monkeypatch, tmp_path):
     wc = load_controller()
     downstream = (
@@ -181,20 +285,69 @@ def test_state_write_is_atomic_json(tmp_path):
     assert not (tmp_path / "state.json.tmp").exists()
 
 
-def test_load_state_refreshes_manifest_path_without_resetting_tasks(tmp_path):
+def test_load_state_rejects_identity_mismatch(tmp_path):
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     manifest = replace(manifest, state_dir=tmp_path, path=tmp_path / "current.toml")
     state = wc.empty_state(manifest)
-    state["manifest"] = "/stale/parent/runtime/manifest.toml"
-    task_id = manifest.tasks[0].id
-    state["tasks"][task_id]["status"] = "resolved"
+    state["identity"]["repo"] = "jakobtfaber/Faber2026"
+    wc.write_json_atomic(tmp_path / "state.json", state)
+
+    with pytest.raises(ValueError, match="state identity mismatch"):
+        wc.load_state(manifest)
+
+
+def test_load_state_accepts_ticket_graph_evolution(tmp_path):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+    manifest = replace(manifest, state_dir=tmp_path)
+    state = wc.empty_state(manifest)
+    stale_task = {
+        "status": "resolved",
+        "pid": None,
+        "attempt_id": "prior",
+        "updated_at": None,
+        "detail": "preserved",
+    }
+    state["tasks"]["prior-resolved-task"] = stale_task
     wc.write_json_atomic(tmp_path / "state.json", state)
 
     loaded = wc.load_state(manifest)
 
-    assert loaded["manifest"] == str(manifest.path)
-    assert loaded["tasks"][task_id]["status"] == "resolved"
+    assert loaded["tasks"]["prior-resolved-task"] == stale_task
+
+
+def test_repository_and_worktree_identity_mismatches_are_rejected(tmp_path):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+
+    wrong_origin = tmp_path / "wrong-origin"
+    wrong_origin.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=wrong_origin, check=True)
+    subprocess.run(
+        ["git", "remote", "add", "origin", "https://github.com/other/repo.git"],
+        cwd=wrong_origin,
+        check=True,
+    )
+    with pytest.raises(RuntimeError, match="origin repository mismatch"):
+        wc.validate_repository_identity(manifest, wrong_origin)
+
+    unrelated = tmp_path / "unrelated"
+    unrelated.mkdir()
+    subprocess.run(["git", "init", "-q"], cwd=unrelated, check=True)
+    subprocess.run(
+        [
+            "git",
+            "remote",
+            "add",
+            "origin",
+            "https://github.com/jakobtfaber/Faber2026-analysis.git",
+        ],
+        cwd=unrelated,
+        check=True,
+    )
+    with pytest.raises(RuntimeError, match="worktree repository mismatch"):
+        wc.validate_worktree_identity(manifest, unrelated, ROOT)
 
 
 def test_receipt_policy_distinguishes_resolution_from_review(tmp_path):
@@ -428,7 +581,11 @@ def test_supervisor_does_not_signal_running_before_first_spawn(monkeypatch, tmp_
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     manifest = replace(manifest, state_dir=tmp_path)
     state = wc.empty_state(manifest)
-    state["supervisor"] = {"pid": wc.os.getpid(), "wave": "first", "status": "starting"}
+    state["supervisor"] = {
+        "pid": wc.os.getpid(),
+        "wave": "first",
+        "status": "starting",
+    }
     wc.save_state(manifest, state)
 
     def fail_spawn(*args, **kwargs):

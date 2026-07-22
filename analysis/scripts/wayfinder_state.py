@@ -127,7 +127,7 @@ def wayfinder_frontier(
         ticket
         for ticket in tickets
         if ticket.is_open
-        and not ticket.is_assigned
+        and (ticket.is_owner_facing or not ticket.is_assigned)
         and (not owner_facing_only or ticket.is_owner_facing)
         and ticket_is_unblocked(ticket, tickets_root)
     ]
