@@ -1,0 +1,48 @@
+{
+  "entries": [
+    {
+      "id": "archive.outdated-science-2026-07-17",
+      "sources": [
+        {
+          "destination": {
+            "inode": 330823926,
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Data/Faber2026/results-library/archive/2026-07-17-outdated-science",
+            "raw_link_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/.archive/outdated-science/2026-07-17",
+            "resolved_target": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/.archive/outdated-science/2026-07-17",
+            "resolves": true,
+            "size": 112,
+            "type": "symlink",
+            "uid": 501
+          },
+          "link_status": "linked",
+          "rel": "analysis/.archive/outdated-science/2026-07-17",
+          "source": {
+            "inode": 330791870,
+            "manifest": {
+              "bytes": 16516,
+              "files": 5,
+              "sha256": "e8f5fdef092a12d7fd6c17a8b674aa4b2ca7ecb2dfd419972095e622100a8504"
+            },
+            "mode": "0o755",
+            "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/.archive/outdated-science/2026-07-17",
+            "size": 224,
+            "type": "directory",
+            "uid": 501
+          }
+        }
+      ]
+    }
+  ],
+  "faber2026_root": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
+  "git": {
+    "parent_commit": "cca8f8e7900c54d4b5ff2b10e12f3ad8d31dbcef",
+    "pipeline_commit": "7d26b1f7d3747afebb0ed7064d3058d25fb33396"
+  },
+  "library_root": "/Users/jakobfaber/Data/Faber2026/results-library",
+  "observed_at": "2026-07-22T11:07:19Z",
+  "schema": "faber2026-results-library-repair-receipt/v1",
+  "selected_ids": [
+    "archive.outdated-science-2026-07-17"
+  ]
+}

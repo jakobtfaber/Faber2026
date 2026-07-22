@@ -14,6 +14,7 @@ SCRIPTS = ROOT / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from build_results_library_inventory import (  # noqa: E402
+    _repo_root,
     build_receipt,
     link_dest,
     load_catalog,
@@ -22,6 +23,12 @@ from build_results_library_inventory import (  # noqa: E402
     tree_manifest,
 )
 from materialize_results_library import materialize_one  # noqa: E402
+
+
+def test_default_repo_root_is_the_mounted_manuscript() -> None:
+    root = _repo_root(None)
+    assert (root / "main.tex").is_file()
+    assert (root / "analysis").resolve() == ROOT.resolve()
 
 
 def _catalog(tmp_path: Path) -> Path:

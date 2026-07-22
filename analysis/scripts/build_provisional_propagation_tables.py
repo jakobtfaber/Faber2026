@@ -13,8 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 JOINT = ROOT / "pipeline/analysis/scattering-dm-locked-2026-07-14/results"
 SCINT = ROOT / "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results"
 OUT = ROOT / "analysis/provisional_propagation"
-QUARANTINE = ROOT / "quarantine" / "2026-07-17-outdated-science"
-QUARANTINE_REGENERATED = QUARANTINE / "regenerated"
+ARCHIVE = ROOT / ".archive" / "outdated-science" / "2026-07-17"
+ARCHIVE_REGENERATED = ARCHIVE / "regenerated"
 SINGLE_SCREEN_MAX = 2.0
 FOREGROUND = ROOT / "pipeline/galaxies/foreground"
 BUDGET_PATH = FOREGROUND / "budget_table_data.json"
@@ -260,10 +260,10 @@ def main():
                         "All values are best-so-far and provisional unless explicitly certified.") + "}\n"
                         "\\end{deluxetable*}\n")
 
-    table(QUARANTINE_REGENERATED / "joint_fit_provisional_table.tex", "tab:joint-fit-provisional",
+    table(ARCHIVE_REGENERATED / "joint_fit_provisional_table.tex", "tab:joint-fit-provisional",
           "Best-so-far DM-locked two-dimensional joint fits (provisional).",
           "lcccccc", "\\colhead{FRB} & \\colhead{Model} & \\colhead{$\\tau_{1\\,GHz}$ (ms)} & \\colhead{$\\alpha$} & \\colhead{$\\beta$} & \\colhead{$\\chi^2_{\\nu,C}/\\chi^2_{\\nu,D}$} & \\colhead{Residual status}", joint_rows)
-    table(QUARANTINE_REGENERATED / "dsa_scint_provisional_table.tex", "tab:dsa-scint-provisional",
+    table(ARCHIVE_REGENERATED / "dsa_scint_provisional_table.tex", "tab:dsa-scint-provisional",
           "Best-so-far clean narrow-component DSA-110 bandwidth fits (provisional).",
           "lcccl", "\\colhead{FRB} & \\colhead{$N$} & \\colhead{Median $\\Delta\\nu_d$ (MHz)} & \\colhead{Range (MHz)} & \\colhead{Status}", dsa_rows)
     table(ROOT / "twoscreen_provisional_table.tex", "tab:twoscreen-provisional",
@@ -273,7 +273,7 @@ def main():
           "$\\tau_{\\rm consistency}$ refits. No products or verdicts are "
           "reported until those refits exist; free-$\\alpha$ joint $\\tau$ is "
           "not substituted.")
-    table(QUARANTINE_REGENERATED / "foreground_propagation_provisional_table.tex",
+    table(ARCHIVE_REGENERATED / "foreground_propagation_provisional_table.tex",
           "tab:foreground-propagation-provisional",
           "Foreground-census alignment with provisional propagation constraints.",
           "llccccccc", "\\colhead{FRB} & \\colhead{Screen test} & \\colhead{Coverage} & "
@@ -304,7 +304,7 @@ def main():
         "foreground_alignment_rows": foreground_json,
     }
     regenerated_ledger = (
-        QUARANTINE_REGENERATED / "analysis" / "provisional_propagation" /
+        ARCHIVE_REGENERATED / "analysis" / "provisional_propagation" /
         "results.json"
     )
     regenerated_ledger.parent.mkdir(parents=True, exist_ok=True)
