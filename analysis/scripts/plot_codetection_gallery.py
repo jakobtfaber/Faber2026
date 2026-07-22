@@ -39,7 +39,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent.parent
+from workspace import manuscript_root
+
+ROOT = manuscript_root()
 sys.path.append(str(ROOT / "pipeline"))
 
 CHIME_FULL_ROOT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"

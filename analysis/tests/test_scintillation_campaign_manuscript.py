@@ -5,9 +5,11 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
+from workspace import manuscript_root  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
+ROOT = manuscript_root()
 
 import build_scintillation_campaign_summary as campaign_builder  # noqa: E402
 

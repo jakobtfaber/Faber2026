@@ -90,20 +90,20 @@ pair.
 
 **Tasks:**
 
-- Fresh-clone the migration branch into a temporary directory.
-- Run `git filter-repo --dry-run` selecting `analysis/`,
+- [x] Fresh-clone the migration branch into a temporary directory.
+- [x] Run `git filter-repo --dry-run` selecting `analysis/`,
   `codetections_polarization/`, `data/`, `docs/`, `figure_review/`, `figures/`,
   `logs/`, `outputs/`, `quarantine/`, `scripts/`, `tests/`, and root
   control/provenance files; apply `--path-rename analysis/:`.
-- Inspect `.git/filter-repo/fast-export.filtered` for the selected path set.
-- Repeat in a fresh clone without `--dry-run`; remove final parent-owned assets,
+- [x] Inspect `.git/filter-repo/fast-export.filtered` for the selected path set.
+- [x] Repeat in a fresh clone without `--dry-run`; remove final parent-owned assets,
   `figures/catalog.yaml`, and `figures/ax/` from the analysis tip while retaining
   their history.
-- Add an analysis README, `.gitignore`, and Makefile documenting the required
+- [x] Add an analysis README, `.gitignore`, and Makefile documenting the required
   mount at `Faber2026/analysis` and sibling `../pipeline` contract.
-- Run `git fsck --full`, compare current selected-file hashes, and verify sample
+- [x] Run `git fsck --full`, compare current selected-file hashes, and verify sample
   history with `git log --follow -- docs/rse/control/BOARD.md`.
-- Create public repository with
+- [x] Create public repository with
   `gh repo create jakobtfaber/Faber2026-analysis --public --source <filtered> --remote origin --push`.
 
 **Verification:** Remote `main` equals the validated local filtered commit and

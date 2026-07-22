@@ -9,6 +9,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 from kb import db, search  # noqa: E402
 from kb.chunkers import chunk_markdown, chunk_python  # noqa: E402
 from kb.adapters import _bib_entries  # noqa: E402
+from workspace import manuscript_root  # noqa: E402
 
 
 def _mkdb(tmp_path):
@@ -75,7 +76,7 @@ def test_chunk_python_functions():
 
 
 def test_bib_parser_roundtrip():
-    bib = REPO / "bib" / "refs.bib"
+    bib = manuscript_root() / "bib" / "refs.bib"
     entries = list(_bib_entries(bib.read_text(errors="replace")))
     assert len(entries) >= 60
     keys = {k for _, k, _ in entries}

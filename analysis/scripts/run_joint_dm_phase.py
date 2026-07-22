@@ -16,9 +16,11 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 sys.path.insert(0, str(ROOT / "pipeline"))
-sys.path.insert(0, str(ROOT / "analysis/dm-joint-phase-v2/code"))
+sys.path.insert(0, str(ANALYSIS_ROOT / "dm-joint-phase-v2/code"))
 
 from dispersion.dm_joint_phase import (
     block_average,

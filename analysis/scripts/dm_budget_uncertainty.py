@@ -67,13 +67,15 @@ import numpy as np
 from numpy.polynomial.legendre import leggauss
 from scipy import integrate, interpolate, signal, stats
 
-REPO = Path(__file__).resolve().parent.parent
-OUT_CSV = REPO / "scripts" / "dm_budget_uncertainty.csv"
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+REPO = manuscript_root()
+OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
 OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf"
 OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png"
 BUDGET_DATA = REPO / "pipeline" / "galaxies" / "foreground" / "budget_table_data.json"
-DM_CATALOG = REPO / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
-SYSTEMS_CSV = REPO / "scripts" / "dm_budget_intervening_systems.csv"
+DM_CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+SYSTEMS_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_intervening_systems.csv"
 
 RNG = np.random.default_rng(20260707)
 GRID_DX = 0.1

@@ -19,14 +19,15 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
+from workspace import ANALYSIS_ROOT, manuscript_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = manuscript_root()
 PIPELINE = ROOT / "pipeline"
 CAMPAIGN_RELATIVE = Path("analysis/window-tuning-campaign-2026-07-17/results")
 CAMPAIGN = PIPELINE / CAMPAIGN_RELATIVE
 TABLE_PATH = ROOT / "chime_scintillation_campaign_table.tex"
-PROVENANCE_PATH = ROOT / "analysis/scintillation-summary/campaign_provenance.json"
-FIGURE_PROVENANCE_PATH = ROOT / "analysis/scintillation-summary/joint_figure_provenance.json"
+PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation-summary/campaign_provenance.json"
+FIGURE_PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation-summary/joint_figure_provenance.json"
 DSA_VALIDATION_RELATIVE = Path(
     "analysis/scintillation-dsa-lorentzian-2026-07-07/results/"
     "oran_qualified/validation.json"

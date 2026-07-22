@@ -7,15 +7,17 @@ from pathlib import Path
 import pytest
 import yaml
 
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
+from workspace import manuscript_root  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
+ROOT = manuscript_root()
 
 from audit_fig1_frequency_axes import root_for_telescope  # noqa: E402
 
 
 def _load_current_joint_dm_runner():
-    path = ROOT / "scripts/run_joint_dm_phase.py"
+    path = ANALYSIS_ROOT / "scripts/run_joint_dm_phase.py"
     spec = importlib.util.spec_from_file_location("current_joint_dm_runner", path)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)

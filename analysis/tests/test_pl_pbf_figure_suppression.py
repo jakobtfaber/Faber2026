@@ -4,13 +4,15 @@ import csv
 import importlib.util
 from pathlib import Path
 
+from scripts.workspace import manuscript_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
+ROOT = manuscript_root()
 
 
 def _load_audit():
     spec = importlib.util.spec_from_file_location(
-        "consistency_audit", ROOT / "scripts/consistency_audit.py"
+        "consistency_audit", ANALYSIS_ROOT / "scripts/consistency_audit.py"
     )
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
@@ -27,7 +29,7 @@ def _compiled_tex() -> str:
 
 
 def _manifest_rows():
-    with (ROOT / "repro_manifest.csv").open(newline="") as handle:
+    with (ANALYSIS_ROOT / "repro_manifest.csv").open(newline="") as handle:
         return {row["output"]: row for row in csv.DictReader(handle)}
 
 
