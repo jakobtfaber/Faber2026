@@ -25,6 +25,7 @@ from pathlib import Path
 
 from workspace import ANALYSIS_ROOT, manuscript_root
 import figure_flow
+from results_library import results_library_root
 
 ROOT = ANALYSIS_ROOT
 MANUSCRIPT_ROOT = manuscript_root()
@@ -48,7 +49,9 @@ def load_json(path: Path) -> dict:
 
 def write_json(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    path.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
 
 def utc_now() -> str:
@@ -85,8 +88,10 @@ def reproduction_errors(manifest: dict, candidate: dict) -> list[str]:
         errors.append(f"{candidate_id}: reproduction was not run from a clean worktree")
 
     command = receipt.get("command")
-    if not isinstance(command, list) or not command or not all(
-        isinstance(part, str) and part for part in command
+    if (
+        not isinstance(command, list)
+        or not command
+        or not all(isinstance(part, str) and part for part in command)
     ):
         errors.append(f"{candidate_id}: exact reproduction command is missing")
     environment = receipt.get("environment")
@@ -103,7 +108,10 @@ def reproduction_errors(manifest: dict, candidate: dict) -> list[str]:
                 errors.append(f"{candidate_id}: input {index} is missing its path")
                 continue
             digest = item.get("sha256")
-            if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
+            if (
+                not isinstance(digest, str)
+                or re.fullmatch(r"[0-9a-f]{64}", digest) is None
+            ):
                 errors.append(
                     f"{candidate_id}: input {item['path']} has no valid SHA-256"
                 )
@@ -147,7 +155,19 @@ def render_preview(pdf: Path, preview: Path) -> None:
         return
     prefix = preview.with_suffix("")
     subprocess.run(
-        ["pdftoppm", "-f", "1", "-l", "1", "-singlefile", "-png", "-r", "120", str(pdf), str(prefix)],
+        [
+            "pdftoppm",
+            "-f",
+            "1",
+            "-l",
+            "1",
+            "-singlefile",
+            "-png",
+            "-r",
+            "120",
+            str(pdf),
+            str(prefix),
+        ],
         check=True,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -192,8 +212,19 @@ def command_new_batch(args: argparse.Namespace) -> None:
     family_evidence = {
         "gallery": ["dm-catalog", "joint-render-manifest"],
         "association": ["dm-catalog"],
-        "joint-model": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
-        "codetection-triptych": ["dm-catalog", "joint-render-manifest", "joint-fit-roster", "joint-fit-adjudication"],
+        "joint-model": [
+            "dm-catalog",
+            "joint-render-manifest",
+            "joint-fit-roster",
+            "joint-fit-adjudication",
+        ],
+        "codetection-triptych": [
+            "dm-catalog",
+            "joint-render-manifest",
+            "joint-latest-manifest",
+            "joint-fit-roster",
+            "joint-fit-adjudication",
+        ],
         "scintillation-summary": [
             "oran-qualification",
             "chime-campaign-validation",
@@ -229,38 +260,128 @@ def command_new_batch(args: argparse.Namespace) -> None:
     provenance_dir.mkdir()
     evidence_specs = [
         ("dm-catalog", "analysis", "dm-joint-phase-v2/manuscript_dm_catalog.csv"),
-        ("joint-render-manifest", "analysis", "scripts/jointmodel_triptych_manifest.yaml"),
-        ("joint-fit-roster", "pipeline", "analysis/scattering-dm-locked-2026-07-14/fit_roster.csv"),
-        ("joint-fit-adjudication", "pipeline", "analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv"),
-        ("scint-component-catalog", "pipeline", "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv"),
-        ("scint-fit-catalog", "pipeline", "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_fits.json"),
-        ("oran-qualification", "pipeline", "analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json"),
-        ("chime-campaign-validation", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/validation.json"),
-        ("chime-campaign-records", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"),
-        ("chromatica-hi-campaign", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json"),
-        ("chime-campaign-figure-review", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json"),
-        ("joint-scint-figure-provenance", "analysis", "scintillation-summary/joint_figure_provenance.json"),
-        ("expanded-catalog-build", "pipeline", "galaxies/foreground/data/expanded_catalog_build.json"),
-        ("figure3-input", "pipeline", "galaxies/foreground/data/sightline_halo_grid.csv"),
-        ("verdi-host-redshifts", "pipeline", "galaxies/foreground/data/frozen_census/verdi2025_host_redshift_extract.csv"),
-        ("law-host-redshifts", "pipeline", "galaxies/foreground/data/frozen_census/law2024_host_redshift_extract.csv"),
-        ("candidate-redshift-ledger", "pipeline", "galaxies/foreground/data/candidate_redshift_provenance.csv"),
-        ("candidate-redshift-replay", "pipeline", "galaxies/foreground/data/candidate_redshift_replay_2026-07-22.json"),
-        ("candidate-redshift-payloads", "pipeline", "galaxies/foreground/data/candidate_redshift_source_payloads_2026-07-22.json"),
+        (
+            "joint-render-manifest",
+            "analysis",
+            "scripts/jointmodel_triptych_manifest.yaml",
+        ),
+        (
+            "joint-latest-manifest",
+            "results-library",
+            "scattering/jointmodel/latest/manifest.json",
+        ),
+        (
+            "joint-fit-roster",
+            "pipeline",
+            "analysis/scattering-dm-locked-2026-07-14/fit_roster.csv",
+        ),
+        (
+            "joint-fit-adjudication",
+            "pipeline",
+            "analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv",
+        ),
+        (
+            "scint-component-catalog",
+            "pipeline",
+            "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv",
+        ),
+        (
+            "scint-fit-catalog",
+            "pipeline",
+            "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_fits.json",
+        ),
+        (
+            "oran-qualification",
+            "pipeline",
+            "analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json",
+        ),
+        (
+            "chime-campaign-validation",
+            "pipeline",
+            "analysis/window-tuning-campaign-2026-07-17/results/validation.json",
+        ),
+        (
+            "chime-campaign-records",
+            "pipeline",
+            "analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl",
+        ),
+        (
+            "chromatica-hi-campaign",
+            "pipeline",
+            "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json",
+        ),
+        (
+            "chime-campaign-figure-review",
+            "pipeline",
+            "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json",
+        ),
+        (
+            "joint-scint-figure-provenance",
+            "analysis",
+            "scintillation-summary/joint_figure_provenance.json",
+        ),
+        (
+            "expanded-catalog-build",
+            "pipeline",
+            "galaxies/foreground/data/expanded_catalog_build.json",
+        ),
+        (
+            "figure3-input",
+            "pipeline",
+            "galaxies/foreground/data/sightline_halo_grid.csv",
+        ),
+        (
+            "verdi-host-redshifts",
+            "pipeline",
+            "galaxies/foreground/data/frozen_census/verdi2025_host_redshift_extract.csv",
+        ),
+        (
+            "law-host-redshifts",
+            "pipeline",
+            "galaxies/foreground/data/frozen_census/law2024_host_redshift_extract.csv",
+        ),
+        (
+            "candidate-redshift-ledger",
+            "pipeline",
+            "galaxies/foreground/data/candidate_redshift_provenance.csv",
+        ),
+        (
+            "candidate-redshift-replay",
+            "pipeline",
+            "galaxies/foreground/data/candidate_redshift_replay_2026-07-22.json",
+        ),
+        (
+            "candidate-redshift-payloads",
+            "pipeline",
+            "galaxies/foreground/data/candidate_redshift_source_payloads_2026-07-22.json",
+        ),
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
         if evidence_id not in required_evidence:
             continue
+        suffix = Path(source_path).suffix
+        stored = provenance_dir / f"{evidence_id}{suffix}"
         if repository == "analysis":
             command = ["git", "show", f"{source_revision}:{source_path}"]
             revision = source_revision
-        else:
-            command = ["git", "-C", str(args.pipeline_repo), "show", f"{args.pipeline_revision}:{source_path}"]
+            stored.write_bytes(subprocess.check_output(command, cwd=ROOT))
+        elif repository == "pipeline":
+            command = [
+                "git",
+                "-C",
+                str(args.pipeline_repo),
+                "show",
+                f"{args.pipeline_revision}:{source_path}",
+            ]
             revision = args.pipeline_revision
-        suffix = Path(source_path).suffix
-        stored = provenance_dir / f"{evidence_id}{suffix}"
-        stored.write_bytes(subprocess.check_output(command, cwd=ROOT))
+            stored.write_bytes(subprocess.check_output(command, cwd=ROOT))
+        else:
+            source = results_library_root() / source_path
+            if not source.is_file():
+                raise SystemExit(f"missing results-library evidence: {source}")
+            stored.write_bytes(source.read_bytes())
+            revision = sha256(source)
         evidence.append(
             {
                 "id": evidence_id,
@@ -275,8 +396,12 @@ def command_new_batch(args: argparse.Namespace) -> None:
     for slot in selected_slots:
         source = args.candidate_root / slot["target"]
         if not source.exists() and not args.read_from_revision:
-            raise SystemExit(f"missing candidate source for {slot['id']}: {slot['target']}")
-        artifact_rel = Path("candidates") / f"{slot['id']}{Path(slot['target']).suffix.lower()}"
+            raise SystemExit(
+                f"missing candidate source for {slot['id']}: {slot['target']}"
+            )
+        artifact_rel = (
+            Path("candidates") / f"{slot['id']}{Path(slot['target']).suffix.lower()}"
+        )
         preview_rel = Path("previews") / f"{slot['id']}.png"
         artifact = destination / artifact_rel
         if args.read_from_revision:
@@ -296,23 +421,23 @@ def command_new_batch(args: argparse.Namespace) -> None:
             shutil.copy2(source, artifact)
         render_preview(artifact, destination / preview_rel)
         record = {
-                **slot,
-                "artifact": str(artifact_rel),
-                "artifact_sha256": sha256(artifact),
-                "preview": str(preview_rel),
-                "decision": {
-                    "status": args.initial_status,
-                    "reviewer": args.reviewer,
-                    "reviewer_role": "manuscript_owner" if args.reviewer else None,
-                    "reviewed_at": utc_now() if args.reviewer else None,
-                    "notes": args.note,
-                },
-                "evidence_ids": family_evidence[slot["family"]],
-                "priority": args.priority,
-                "manuscript_section": args.manuscript_section,
-                "claim": args.claim,
-                "review_question": args.review_question,
-            }
+            **slot,
+            "artifact": str(artifact_rel),
+            "artifact_sha256": sha256(artifact),
+            "preview": str(preview_rel),
+            "decision": {
+                "status": args.initial_status,
+                "reviewer": args.reviewer,
+                "reviewer_role": "manuscript_owner" if args.reviewer else None,
+                "reviewed_at": utc_now() if args.reviewer else None,
+                "notes": args.note,
+            },
+            "evidence_ids": family_evidence[slot["family"]],
+            "priority": args.priority,
+            "manuscript_section": args.manuscript_section,
+            "claim": args.claim,
+            "review_question": args.review_question,
+        }
         subject_nick = slot.get("subject", {}).get("nick")
         if subject_nick:
             record["dm_measurement"] = dm_by_nick.get(subject_nick.casefold())
@@ -404,7 +529,9 @@ def render_packet(batch_id: str) -> None:
         )
         dm_payload = candidate.get("dm_measurement") or candidate.get("dm_measurements")
         dm_html = (
-            f"<pre>{html.escape(json.dumps(dm_payload, indent=2))}</pre>" if dm_payload else "None"
+            f"<pre>{html.escape(json.dumps(dm_payload, indent=2))}</pre>"
+            if dm_payload
+            else "None"
         )
         figure_html = (
             f'<a href="{html.escape(candidate["artifact"])}"><img src="{html.escape(candidate["preview"])}" alt="{html.escape(candidate["title"])}"></a>'
@@ -412,33 +539,33 @@ def render_packet(batch_id: str) -> None:
             else '<div class="withheld"><strong>Figure withheld.</strong> Reproduction gate has not passed.</div>'
         )
         reproduction_html = (
-            "Verified"
-            if reviewable
-            else html.escape("; ".join(repro_errors))
+            "Verified" if reviewable else html.escape("; ".join(repro_errors))
         )
         cards.append(
             f"""
-<article id="{html.escape(candidate['id'])}" class="card status-{html.escape(decision['status'])}">
-  <h2>{html.escape(candidate['id'])}: {html.escape(candidate['title'])}</h2>
-  <p><strong>Status:</strong> {html.escape(decision['status'])}</p>
+<article id="{html.escape(candidate["id"])}" class="card status-{html.escape(decision["status"])}">
+  <h2>{html.escape(candidate["id"])}: {html.escape(candidate["title"])}</h2>
+  <p><strong>Status:</strong> {html.escape(decision["status"])}</p>
   <p>{subject_text}</p>
   {figure_html}
   <dl>
     <dt>Reproduction gate</dt><dd>{reproduction_html}</dd>
-    <dt>Manuscript section</dt><dd>{html.escape(candidate.get('manuscript_section') or 'Not recorded')}</dd>
-    <dt>Claim</dt><dd>{html.escape(candidate.get('claim') or 'Not recorded')}</dd>
-    <dt>Owner review question</dt><dd>{html.escape(candidate.get('review_question') or 'Not recorded')}</dd>
-    <dt>Manuscript target</dt><dd><code>{html.escape(candidate['target'])}</code></dd>
-    <dt>Candidate SHA-256</dt><dd><code>{html.escape(candidate['artifact_sha256'])}</code></dd>
-    <dt>Generator</dt><dd><code>{html.escape(candidate['generator'])}</code></dd>
-    <dt>Required provenance</dt><dd>{html.escape('; '.join(candidate['required_provenance']))}</dd>
+    <dt>Manuscript section</dt><dd>{html.escape(candidate.get("manuscript_section") or "Not recorded")}</dd>
+    <dt>Claim</dt><dd>{html.escape(candidate.get("claim") or "Not recorded")}</dd>
+    <dt>Owner review question</dt><dd>{html.escape(candidate.get("review_question") or "Not recorded")}</dd>
+    <dt>Manuscript target</dt><dd><code>{html.escape(candidate["target"])}</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>{html.escape(candidate["artifact_sha256"])}</code></dd>
+    <dt>Generator</dt><dd><code>{html.escape(candidate["generator"])}</code></dd>
+    <dt>Required provenance</dt><dd>{html.escape("; ".join(candidate["required_provenance"]))}</dd>
     <dt>Frozen evidence</dt><dd>{evidence_links}</dd>
     <dt>DM record</dt><dd>{dm_html}</dd>
-    <dt>Reviewer notes</dt><dd>{html.escape(decision.get('notes') or 'None yet')}</dd>
+    <dt>Reviewer notes</dt><dd>{html.escape(decision.get("notes") or "None yet")}</dd>
   </dl>
 </article>"""
         )
-    error_html = "".join(f"<li>{html.escape(error)}</li>" for error in errors) or "<li>None</li>"
+    error_html = (
+        "".join(f"<li>{html.escape(error)}</li>" for error in errors) or "<li>None</li>"
+    )
     contact_sheet = batch / "contact-sheet.png"
     preview_paths = [
         batch / candidate["preview"]
@@ -455,7 +582,9 @@ def render_packet(batch_id: str) -> None:
         if rows == 0:
             sheet = None
         else:
-            sheet = Image.new("RGB", (columns * cell_width, rows * cell_height), "white")
+            sheet = Image.new(
+                "RGB", (columns * cell_width, rows * cell_height), "white"
+            )
         for index, path in enumerate(preview_paths):
             with Image.open(path) as opened:
                 tile = opened.convert("RGB")
@@ -467,7 +596,7 @@ def render_packet(batch_id: str) -> None:
         if sheet is not None:
             sheet.save(contact_sheet)
     page = f"""<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>{html.escape(manifest['title'])}</title>
+<html lang="en"><head><meta charset="utf-8"><title>{html.escape(manifest["title"])}</title>
 <style>
 body{{font:16px system-ui,sans-serif;max-width:1500px;margin:auto;padding:2rem;background:#f5f6f8;color:#17202a}}
 .summary,.card{{background:white;border:1px solid #ccd2d8;border-radius:10px;padding:1rem;margin:1rem 0}}
@@ -476,15 +605,15 @@ body{{font:16px system-ui,sans-serif;max-width:1500px;margin:auto;padding:2rem;b
 .withheld{{padding:3rem 1rem;text-align:center;background:#fff4e5;border:1px solid #c17d00;border-radius:6px}}
 img{{width:100%;max-height:680px;object-fit:contain;background:white}} code{{word-break:break-all}} dt{{font-weight:700;margin-top:.5rem}}
 </style></head><body>
-<h1>{html.escape(manifest['title'])}</h1>
+<h1>{html.escape(manifest["title"])}</h1>
 <section class="summary"><p><strong>Batch:</strong> <code>{html.escape(batch_id)}</code><br>
-<strong>Source revision:</strong> <code>{html.escape(manifest['source_revision'])}</code><br>
-<strong>Pipeline revision:</strong> <code>{html.escape(manifest['pipeline_revision'])}</code><br>
-<strong>DM catalog:</strong> <code>{html.escape(manifest['dm_catalog']['sha256'])}</code></p>
+<strong>Source revision:</strong> <code>{html.escape(manifest["source_revision"])}</code><br>
+<strong>Pipeline revision:</strong> <code>{html.escape(manifest["pipeline_revision"])}</code><br>
+<strong>DM catalog:</strong> <code>{html.escape(manifest["dm_catalog"]["sha256"])}</code></p>
 <p>Approval is per candidate. Reply with the stable candidate ID and either <em>approve</em> or <em>needs revision</em>, plus notes. Promotion is impossible unless the approved candidate bytes still match this packet.</p>
 <p>Figures remain hidden until exact inputs, code revisions, command, environment, and regenerated output have passed the reproduction gate.</p>
 <h3>Packet validation</h3><ul>{error_html}</ul></section>
-<main class="grid">{''.join(cards)}</main></body></html>"""
+<main class="grid">{"".join(cards)}</main></body></html>"""
     (batch / "index.html").write_text(page, encoding="utf-8")
 
 
@@ -500,7 +629,9 @@ def command_decide(args: argparse.Namespace) -> None:
     manifest, errors = validate_batch(args.batch_id)
     if errors:
         raise SystemExit("\n".join(errors))
-    candidate = next((item for item in manifest["candidates"] if item["id"] == args.candidate), None)
+    candidate = next(
+        (item for item in manifest["candidates"] if item["id"] == args.candidate), None
+    )
     if candidate is None:
         raise SystemExit(f"unknown candidate: {args.candidate}")
     repro_errors = reproduction_errors(manifest, candidate)
@@ -522,14 +653,19 @@ def command_promote(args: argparse.Namespace) -> None:
     manifest, errors = validate_batch(args.batch_id)
     if errors:
         raise SystemExit("\n".join(errors))
-    candidate = next((item for item in manifest["candidates"] if item["id"] == args.candidate), None)
+    candidate = next(
+        (item for item in manifest["candidates"] if item["id"] == args.candidate), None
+    )
     if candidate is None:
         raise SystemExit(f"unknown candidate: {args.candidate}")
     repro_errors = reproduction_errors(manifest, candidate)
     if repro_errors:
         raise SystemExit("\n".join(repro_errors))
     decision = candidate["decision"]
-    if decision.get("status") != "approved" or decision.get("reviewer_role") != "manuscript_owner":
+    if (
+        decision.get("status") != "approved"
+        or decision.get("reviewer_role") != "manuscript_owner"
+    ):
         raise SystemExit(f"{args.candidate} is not approved by the manuscript owner")
     source = batch_dir(args.batch_id) / candidate["artifact"]
     if sha256(source) != candidate["artifact_sha256"]:
@@ -678,7 +814,9 @@ def manuscript_figure_status() -> list[dict]:
                     state = "manuscript-ready"
                 else:
                     state = "approval-drift"
-                    blockers.append("approved candidate does not match the promoted receipt")
+                    blockers.append(
+                        "approved candidate does not match the promoted receipt"
+                    )
 
         trust = sorted(
             {
@@ -750,7 +888,9 @@ def included_tex() -> str:
     return "\n".join(chunks)
 
 
-def approval_errors(tex: str, protected: dict[str, str], receipts: dict[str, dict]) -> list[str]:
+def approval_errors(
+    tex: str, protected: dict[str, str], receipts: dict[str, dict]
+) -> list[str]:
     errors: list[str] = []
     for target, candidate_id in protected.items():
         if target not in tex and target.removeprefix("figures/") not in tex:
@@ -758,7 +898,9 @@ def approval_errors(tex: str, protected: dict[str, str], receipts: dict[str, dic
         artifact = MANUSCRIPT_ROOT / target
         receipt = receipts.get(target)
         if receipt is None:
-            errors.append(f"protected figure is included without approval: {candidate_id} ({target})")
+            errors.append(
+                f"protected figure is included without approval: {candidate_id} ({target})"
+            )
             continue
         if receipt["decision"].get("status") != "approved":
             errors.append(f"receipt is not approved: {candidate_id}")
@@ -817,7 +959,9 @@ def parser() -> argparse.ArgumentParser:
         default=MANUSCRIPT_ROOT / "pipeline",
         help="FLITS checkout used to read submodule artifacts",
     )
-    new.add_argument("--initial-status", choices=("pending", "needs_revision"), default="pending")
+    new.add_argument(
+        "--initial-status", choices=("pending", "needs_revision"), default="pending"
+    )
     new.add_argument("--reviewer")
     new.add_argument("--note")
     new.add_argument("--priority", type=int, default=100)

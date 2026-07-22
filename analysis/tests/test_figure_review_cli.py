@@ -81,6 +81,14 @@ def test_status_command_supports_json_flag():
     assert args.json is True
 
 
+def test_triptych_slots_require_fit_and_residual_provenance():
+    slot = next(item for item in figure_review.slots() if item["id"] == "triptych-zach")
+    requirements = " ".join(slot["required_provenance"])
+    assert "fit summary" in requirements
+    assert "fit-generation reproducibility" in requirements
+    assert "residual diagnostics" in requirements
+
+
 def test_registry_artifact_matching_handles_hashes_globs_and_directories():
     assert figure_review.registry_artifact_matches(
         "figures/dm_host_posteriors.pdf",
