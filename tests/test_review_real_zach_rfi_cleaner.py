@@ -63,6 +63,10 @@ def test_status_forbids_cleaner_validation_claim():
     assert MODULE.STATUS == "diagnostic_only_real_event_method_comparison"
 
 
+def test_review_uses_the_frozen_pixel_threshold():
+    assert MODULE.ABSOLUTE_PIXEL_THRESHOLD == 6.0
+
+
 def test_display_contains_documented_on_pulse_envelope_with_padding():
     display_width_ms = (MODULE.DISPLAY[1] - MODULE.DISPLAY[0]) * MODULE.DT_MS
     on_pulse_width_ms = (MODULE.ON_PULSE[1] - MODULE.ON_PULSE[0]) * MODULE.DT_MS
@@ -132,3 +136,45 @@ def test_integrated_spectrum_uses_only_fixed_on_pulse_window_and_valid_rows():
 
     assert spectrum[0] == 3.0
     assert np.isnan(spectrum[1])
+
+
+def test_reference_is_restricted_to_candidate_pixel_support_without_zero_fill():
+    reference = np.array([[1.0, 2.0], [3.0, 4.0]])
+    candidate = np.array([[1.0, np.nan], [np.nan, 4.0]])
+
+    common = MODULE.restrict_to_finite_support(reference, candidate)
+
+    np.testing.assert_array_equal(common[np.isfinite(common)], [1.0, 4.0])
+    assert np.isnan(common[0, 1])
+    assert np.isnan(common[1, 0])
+
+
+def test_median_spread_outlier_matches_analytic_three_value_case():
+    summary = MODULE.median_spread_outlier(
+        np.array([0.0, 1.0, 10.0]),
+        np.array([705.0, 715.0, 725.0]),
+        np.array([True, True, True]),
+    )
+
+    assert summary["median"] == 1.0
+    assert summary["median_based_spread"] == pytest.approx(1.4826)
+    assert summary["maximum_spread_units_above_median"] == pytest.approx(9.0 / 1.4826)
+
+
+def test_coarsened_mask_fraction_counts_only_valid_fine_rows():
+    mask = np.array(
+        [
+            [True, False],
+            [False, True],
+            [True, True],
+            [True, True],
+        ]
+    )
+    fraction = MODULE.coarsen_mask_fraction(
+        mask,
+        np.array([True, True, False, False]),
+        factor=2,
+    )
+
+    np.testing.assert_allclose(fraction[0], [0.5, 0.5])
+    np.testing.assert_allclose(fraction[1], [0.0, 0.0])

@@ -23,6 +23,14 @@ import numpy as np
 from scipy.signal import find_peaks
 from scipy.special import erfc
 
+SCRIPT_DIRECTORY = Path(__file__).resolve().parent
+if str(SCRIPT_DIRECTORY) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIRECTORY))
+from rfi_time_frequency_candidate import (  # noqa: E402
+    ABSOLUTE_PIXEL_THRESHOLD,
+    apply_pixel_mask,
+)
+
 
 STATUS = "development_only_not_cleaner_validation"
 SEED = 2026072101
@@ -347,12 +355,18 @@ def run_rejected_cleaner(
 
 def mask_confusion(
     truth_mask: np.ndarray,
-    predicted_rows: np.ndarray,
+    predicted_mask: np.ndarray,
     valid_pixels: np.ndarray,
 ) -> dict[str, int]:
     truth = np.asarray(truth_mask, dtype=bool)
     valid = np.broadcast_to(np.asarray(valid_pixels, dtype=bool), truth.shape)
-    predicted = np.broadcast_to(np.asarray(predicted_rows, dtype=bool)[:, None], truth.shape)
+    predicted_input = np.asarray(predicted_mask, dtype=bool)
+    if predicted_input.shape == truth.shape:
+        predicted = predicted_input
+    elif predicted_input.shape == (truth.shape[0],):
+        predicted = np.broadcast_to(predicted_input[:, None], truth.shape)
+    else:
+        raise ValueError("predicted mask must have one value per row or per pixel")
     return {
         "tp": int(np.sum(valid & truth & predicted)),
         "fp": int(np.sum(valid & ~truth & predicted)),
@@ -598,15 +612,18 @@ def _json_safe(value: Any) -> Any:
 def _coarse_mask_rgb(
     source_valid: np.ndarray,
     truth_rfi: np.ndarray,
-    predicted_rows: np.ndarray,
+    predicted_mask: np.ndarray,
     factor: int = 64,
 ) -> np.ndarray:
     ncoarse = source_valid.size // factor
     source = source_valid.reshape(ncoarse, factor)
     truth = truth_rfi.reshape(ncoarse, factor, truth_rfi.shape[1])
-    predicted = np.broadcast_to(predicted_rows[:, None], truth_rfi.shape).reshape(
-        ncoarse, factor, truth_rfi.shape[1]
-    )
+    predicted_input = np.asarray(predicted_mask, dtype=bool)
+    if predicted_input.shape == (source_valid.size,):
+        predicted_input = np.broadcast_to(predicted_input[:, None], truth_rfi.shape)
+    if predicted_input.shape != truth_rfi.shape:
+        raise ValueError("predicted mask must have one value per row or per pixel")
+    predicted = predicted_input.reshape(ncoarse, factor, truth_rfi.shape[1])
     source_pixels = np.broadcast_to(source[:, :, None], truth.shape)
     denominator = np.maximum(source.sum(axis=1)[:, None], 1)
     tp = np.sum(source_pixels & truth & predicted, axis=1) / denominator
@@ -675,7 +692,7 @@ def make_figure(
     top_data = [
         (truth_coarse, "Known truth: noise + two-component burst"),
         (contaminated_coarse, "Truth + known synthetic RFI"),
-        (cleaned_coarse, "Rejected cleaner output"),
+        (cleaned_coarse, "Pixel-6 candidate output"),
         (residual, "Cleaner output − truth on common support"),
     ]
     images = []
@@ -700,8 +717,9 @@ def make_figure(
         ax.axvspan(burst[0] * dt_ms, burst[1] * dt_ms, color="gold", alpha=0.08)
     fig.colorbar(images[0], ax=[fig.axes[i] for i in range(4)], shrink=0.75, label="Standardized intensity")
 
-    predicted_rows = source_valid & ~final_valid
-    mask_rgb = _coarse_mask_rgb(source_valid, case["rfi_mask"], predicted_rows)
+    predicted = np.broadcast_to((source_valid & ~final_valid)[:, None], case["rfi_mask"].shape)
+    predicted = predicted | cleaned["time_frequency_mask"]
+    mask_rgb = _coarse_mask_rgb(source_valid, case["rfi_mask"], predicted)
     ax_mask = fig.add_subplot(grid[1, 0])
     ax_mask.imshow(
         mask_rgb,
@@ -791,6 +809,7 @@ def make_figure(
             f"component count stable: {'yes' if stable else 'no'}",
             "",
             f"retained source rows: {measurements['retained_row_fraction']:.1%}",
+            f"retained measured pixels: {measurements['retained_pixel_fraction']:.1%}",
             f"RFI pixel recall: {measurements['mask']['pixel_recall']:.1%}",
             f"RFI pixel precision: {measurements['mask']['pixel_precision']:.1%}",
             "",
@@ -834,19 +853,38 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         input_root / "code/audit_chime_preprocessing_v2.py",
     )
 
+    row_only_cleaned = np.asarray(cleaned["cleaned"], dtype=np.float32).copy()
+    candidate_cleaned, time_frequency_mask = apply_pixel_mask(
+        row_only_cleaned,
+        cleaned["final_valid"],
+    )
+    cleaned["row_only_cleaned"] = row_only_cleaned
+    cleaned["cleaned"] = candidate_cleaned
+    cleaned["time_frequency_mask"] = time_frequency_mask
+
     final_valid = cleaned["final_valid"]
-    predicted_rows = case["source_valid"] & ~final_valid
+    predicted = np.broadcast_to(
+        (case["source_valid"] & ~final_valid)[:, None],
+        case["rfi_mask"].shape,
+    )
+    predicted = predicted | time_frequency_mask
     valid_pixels = np.broadcast_to(case["source_valid"][:, None], case["rfi_mask"].shape)
-    confusion = mask_confusion(case["rfi_mask"], predicted_rows, valid_pixels)
+    confusion = mask_confusion(case["rfi_mask"], predicted, valid_pixels)
     precision = confusion["tp"] / max(confusion["tp"] + confusion["fp"], 1)
     recall = confusion["tp"] / max(confusion["tp"] + confusion["fn"], 1)
 
     truth_full, coarse_frequency, full_counts = coarsen(
         case["truth"], frequency, case["source_valid"]
     )
-    truth_common, _, retained_counts = coarsen(case["truth"], frequency, final_valid)
+    truth_on_common_pixels = np.asarray(case["truth"], dtype=np.float32).copy()
+    truth_on_common_pixels[time_frequency_mask] = np.nan
+    signal_on_common_pixels = np.asarray(case["signal"], dtype=np.float32).copy()
+    signal_on_common_pixels[time_frequency_mask] = np.nan
+    truth_common, _, retained_counts = coarsen(
+        truth_on_common_pixels, frequency, final_valid
+    )
     cleaned_common, _, _ = coarsen(cleaned["cleaned"], frequency, final_valid)
-    signal_common, _, _ = coarsen(case["signal"], frequency, final_valid)
+    signal_common, _, _ = coarsen(signal_on_common_pixels, frequency, final_valid)
     burst_window = tuple(case["parameters"]["windows"]["burst"])
     full_measurements = measure_summary(
         truth_full,
@@ -925,6 +963,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             truth_measurements["component_count"] == cleaned_measurements["component_count"]
         ),
         "retained_row_fraction": float(final_valid.sum() / max(case["source_valid"].sum(), 1)),
+        "retained_pixel_fraction": float(
+            np.sum(valid_pixels & ~predicted) / max(np.sum(valid_pixels), 1)
+        ),
         "mask": {
             "counts": confusion,
             "pixel_precision": precision,
@@ -936,6 +977,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     make_figure(svg_path, case, cleaned, measurement_record, slices)
     script_copy = output_dir / Path(__file__).name
     shutil.copy2(Path(__file__).resolve(), script_copy)
+    candidate_source = Path(apply_pixel_mask.__code__.co_filename).resolve()
+    candidate_copy = output_dir / candidate_source.name
+    shutil.copy2(candidate_source, candidate_copy)
     record = {
         "status": STATUS,
         "warning": "One controlled development example; distribution limits and cleaner validation are not exercised.",
@@ -943,6 +987,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "input_hashes": verified_inputs,
             "pipeline_revision": args.pipeline_revision,
             "script_sha256": sha256(script_copy),
+            "candidate_module_sha256": sha256(candidate_copy),
             "container_digest": args.container_digest,
             "container_image_id": args.container_image_id,
             "python": platform.python_version(),
@@ -965,9 +1010,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "function": "baseband_analysis.core.flagging.get_RFI_channels",
             "threshold_mean": 5.0,
             "threshold_standard_deviation": 3.0,
-            "order": ["package RFI", "learn mean and scale", "normalize", "package RFI"],
+            "order": [
+                "package row RFI",
+                "learn mean and scale",
+                "normalize",
+                "package row RFI",
+                "absolute per-pixel mask",
+            ],
+            "absolute_pixel_threshold": ABSOLUTE_PIXEL_THRESHOLD,
             "initial_rejected_rows": int(cleaned["initial_rfi_rows"].sum()),
             "post_bandpass_rejected_rows": int(cleaned["post_bandpass_rfi_rows"].sum()),
+            "time_frequency_rejected_pixels": int(time_frequency_mask.sum()),
         },
         "measurements": measurement_record,
         "broad_frequency_slice_fluence": slices,
@@ -986,7 +1039,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     checksum_path = output_dir / "SHA256SUMS"
     checksum_lines = [
         f"{sha256(path)}  {path.name}"
-        for path in (svg_path, json_path, script_copy)
+        for path in (svg_path, json_path, script_copy, candidate_copy)
     ]
     checksum_path.write_text("\n".join(checksum_lines) + "\n")
     return record
