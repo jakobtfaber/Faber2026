@@ -21,6 +21,9 @@ joint-fit artifact participates in Figure 1.
 
 The default remains the manuscript's 12-panel grid. Repeating ``--burst``
 creates a manifest-ordered data-only subset for owner morphology review.
+Every panel is clipped to the intersection of the two bands' time support, so
+the displayed width always contains data from both instruments. Missing-time
+edge regions are never hatched or shown as manuscript-ready coverage.
 """
 
 from __future__ import annotations
@@ -187,7 +190,7 @@ def _gap_display_map(bands, gap_scale: float = GAP_COMPRESS):
 
 
 def draw_joint_waterfall(ax, bands, *, title: str, fmap=None) -> None:
-    """Both bands on one frequency axis (gap compressed); masked channels gray."""
+    """Draw both bands over their common time support; masked channels gray."""
     bands = sorted(bands, key=lambda band: band.frange[0])
     if fmap is None:
         fmap = _gap_display_map(bands)
@@ -215,8 +218,10 @@ def draw_joint_waterfall(ax, bands, *, title: str, fmap=None) -> None:
             ),
             rasterized=True,
         )
-    x0 = min(b.time_ms[0] for b in bands)
-    x1 = max(b.time_ms[-1] for b in bands)
+    x0 = max(b.time_ms[0] for b in bands)
+    x1 = min(b.time_ms[-1] for b in bands)
+    if x1 <= x0:
+        raise ValueError("CHIME/FRB and DSA-110 have no shared time support")
     for lower, upper in zip(bands[:-1], bands[1:], strict=False):
         if upper.frange[0] > lower.frange[1]:
             ax.add_patch(

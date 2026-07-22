@@ -19,8 +19,14 @@ import plot_codetection_data_grid as grid  # noqa: E402
 from flits.batch.codetection_plots import BandSpectrum  # noqa: E402
 
 
-def _band(label: str, f0: float, f1: float) -> BandSpectrum:
-    time = np.linspace(-2.0, 2.0, 16)
+def _band(
+    label: str,
+    f0: float,
+    f1: float,
+    time_start: float = -2.0,
+    time_stop: float = 2.0,
+) -> BandSpectrum:
+    time = np.linspace(time_start, time_stop, 16)
     data = np.arange(8 * 16, dtype=float).reshape(8, 16)
     return BandSpectrum(
         freq_mhz=np.linspace(f0, f1, 8),
@@ -271,6 +277,20 @@ def test_draw_joint_waterfall_draws_two_bands_and_hatched_gap():
     assert len(ax.images) == 2
     assert len(ax.patches) == 1
     assert ax.get_title() == "FRB test"
+    plt.close(fig)
+
+
+def test_draw_joint_waterfall_displays_only_shared_time_support():
+    fig, ax = plt.subplots()
+    grid.draw_joint_waterfall(
+        ax,
+        [
+            _band("CHIME/FRB", 400.0, 800.0, -2.0, 2.0),
+            _band("DSA-110", 1310.0, 1500.0, -1.5, 1.0),
+        ],
+        title="",
+    )
+    assert np.allclose(ax.get_xlim(), (-1.5, 1.0))
     plt.close(fig)
 
 
