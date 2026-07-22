@@ -11,13 +11,17 @@ unresolved, truncated, or overflowed response.
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import csv
 import gzip
 import hashlib
+import io
 import json
 import math
 import re
 import sys
+import tarfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -30,6 +34,11 @@ SCHEMA_VERSION = "faber2026.anonymous-nine-sightline-corpus.v1"
 FROZEN_INPUT_SHA256 = "204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644"
 GALAXY_RADIUS_ARCMIN = 15.0
 GUARD_RADIUS_ARCMIN = 15.1
+ERASS1_WESTERN_L_MIN_DEG = 179.94423568
+ERASS1_WESTERN_L_MAX_DEG = 359.94423568
+ERASS1_CATALOG_AUTHORITY_URL = (
+    "https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/"
+)
 SIGHTLINE_NAMES = (
     "zach",
     "whitney",
@@ -189,30 +198,112 @@ SERVICES = (
         "DR1_Main",
     ),
     Service(
+        "erass1_clusters_primary_v3_2",
+        "eROSITA eRASS1 galaxy groups and clusters primary catalogue v3.2",
+        "cluster_discovery",
+        "bulk_full_catalog",
+        ERASS1_CATALOG_AUTHORITY_URL + "BulbulE_DR1/",
+        "erass1cl_main_v3.2.fits",
+        True,
+        "erass1cl_primary_v3.2.fits.tgz",
+    ),
+    Service(
         "xmm_newton_exposure",
-        "HEASARC XMMMASTER current snapshot",
+        "5XMM-DR15 XMM-Newton Serendipitous Source Catalog",
         "exposure_first_xray",
         "tap",
         "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
-        "xmmmaster",
+        "xmmssc",
     ),
     Service(
         "chandra_exposure",
-        "HEASARC CHANMASTER current snapshot",
+        "Chandra Source Catalog v2.1.1",
         "exposure_first_xray",
         "tap",
         "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
-        "chanmaster",
+        "csc",
     ),
     Service(
         "swift_exposure",
-        "HEASARC SWIFTMASTR current snapshot",
+        "Swift-XRT Living Point Source Catalog snapshot 2026-07-22",
         "exposure_first_xray",
         "tap",
         "https://heasarc.gsfc.nasa.gov/xamin/vo/tap/sync",
-        "swiftmastr",
+        "swiftlsxps",
     ),
 )
+
+QUERY_CONFIG = {
+    "desi_dr1": {"ra": "mean_fiber_ra", "dec": "mean_fiber_dec", "ids": ("targetid",)},
+    "sdss_dr19": {"ra": "ra", "dec": "dec", "ids": ("specObjID",)},
+    "lamost_dr11": {"ra": "RAJ2000", "dec": "DEJ2000", "ids": ("ObsID",)},
+    "legacy_dr10_photoz": {"ra": "match_ra", "dec": "match_dec", "ids": ("ls_id",)},
+    "jplus_dr3": {"ra": "ALPHA_J2000", "dec": "DELTA_J2000", "ids": ("TILE_ID", "NUMBER")},
+    "minijpas_pdr201912": {
+        "ra": "ALPHA_J2000",
+        "dec": "DELTA_J2000",
+        "ids": ("TILE_ID", "NUMBER"),
+    },
+    "gaia_dr3": {"ra": "ra", "dec": "dec", "ids": ("source_id",)},
+    "lotss_dr3": {"ra": "ra", "dec": "dec", "ids": ("source_name",)},
+    "vlass_ql_epoch1": {"ra": "RAJ2000", "dec": "DEJ2000", "ids": ("CompName", "CompId")},
+    "erass1_main_v1_2": {"ra": "ra", "dec": "dec", "ids": ("uid",)},
+    "erass1_clusters_primary_v3_2": {
+        "ra": "RA",
+        "dec": "DEC",
+        "ids": ("NAME",),
+        "redshift": "BEST_Z",
+    },
+    "xmm_newton_exposure": {"ra": "ra", "dec": "dec", "ids": ("srcid",)},
+    "chandra_exposure": {"ra": "ra", "dec": "dec", "ids": ("name",)},
+    "swift_exposure": {"ra": "ra", "dec": "dec", "ids": ("source_number",)},
+}
+
+COVERAGE_CONFIG = {
+    "legacy_dr10_photoz": {
+        "table": "ls_dr10.tractor",
+        "kind": "catalog",
+    },
+    "jplus_dr3": {
+        "table": "ivoa.ObsCore",
+        "kind": "region",
+    },
+    "minijpas_pdr201912": {
+        "table": "ivoa.ObsCore",
+        "kind": "region",
+    },
+    "erass1_main_v1_2": {
+        "kind": "erass1_german_half",
+        "authority": (
+            "eROSITA-DE DR1 data-rights boundary: "
+            "179.94423568 < Galactic longitude < 359.94423568 degrees"
+        ),
+        "authority_url": "https://erosita.mpe.mpg.de/dr1/",
+    },
+    "erass1_clusters_primary_v3_2": {
+        "kind": "erass1_german_half",
+        "authority": (
+            "eROSITA-DE DR1 data-rights boundary: "
+            "179.94423568 < Galactic longitude < 359.94423568 degrees"
+        ),
+        "authority_url": "https://erosita.mpe.mpg.de/dr1/",
+    },
+    "xmm_newton_exposure": {
+        "table": "xmmmaster",
+        "kind": "pointing",
+        "radius_deg": 1.0,
+    },
+    "chandra_exposure": {
+        "table": "chanmaster",
+        "kind": "pointing",
+        "radius_deg": 1.0,
+    },
+    "swift_exposure": {
+        "table": "swiftmastr",
+        "kind": "pointing",
+        "radius_deg": 1.0,
+    },
+}
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -253,6 +344,21 @@ def spherical_separation_arcmin(ra1: float, dec1: float, ra2: float, dec2: float
         + math.cos(dec1_rad) * math.cos(dec2_rad) * math.sin(delta_ra / 2.0) ** 2
     )
     return math.degrees(2.0 * math.asin(math.sqrt(min(1.0, max(0.0, hav))))) * 60.0
+
+
+def cluster_projected_separation_mpc(separation_arcmin: float, redshift: float) -> float:
+    """Return proper transverse separation under the ticket-13 Planck18 rule."""
+    if not math.isfinite(redshift) or redshift <= 0:
+        raise ValueError("cluster search geometry requires a finite positive redshift")
+    from astropy.cosmology import Planck18
+    import astropy.units as u
+
+    theta = (separation_arcmin * u.arcmin).to_value(u.rad)
+    return float(theta * Planck18.angular_diameter_distance(redshift).to_value(u.Mpc))
+
+
+def cluster_admission_state(separation_arcmin: float, redshift: float) -> str:
+    return "admitted" if cluster_projected_separation_mpc(separation_arcmin, redshift) <= 5.0 else "outside_query"
 
 
 def extract_ps1_strm(source: Path, output: Path, expected_size: int | None = None) -> dict:
@@ -310,11 +416,13 @@ def extract_ps1_strm(source: Path, output: Path, expected_size: int | None = Non
                     {
                         "sightline": sightline,
                         "service": "ps1_strm_v1",
+                        "release": "PS1-STRM HLSP v1",
                         "source_id": row["uniquePspsOBid"] or row["objID"],
                         "ra_deg": row_ra,
                         "dec_deg": row_dec,
                         "separation_arcmin": separation,
                         "admission_state": state,
+                        "status": "matched",
                         "native": row,
                     }
                 )
@@ -373,6 +481,14 @@ def _check_hash(path: Path | None, expected: object, label: str, errors: list[st
     actual = sha256_file(path)
     if actual != expected:
         errors.append(f"{label} SHA-256 mismatch")
+
+
+def _read_canonical_rows(path: Path) -> list[dict]:
+    payload = gzip.decompress(path.read_bytes()) if path.suffix == ".gz" else path.read_bytes()
+    rows = json.loads(payload)
+    if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+        raise ValueError("canonical payload is not a list of records")
+    return rows
 
 
 def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
@@ -473,10 +589,72 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
         _check_hash(canonical_path, cell.get("canonical_sha256"), f"{prefix}: canonical", errors)
         if raw_path is not None and canonical_path is not None and raw_path == canonical_path:
             errors.append(f"{prefix}: raw and canonical evidence paths must differ")
+        if canonical_path is not None and canonical_path.is_file():
+            try:
+                canonical_rows = _read_canonical_rows(canonical_path)
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                errors.append(f"{prefix}: canonical payload unreadable: {exc}")
+                canonical_rows = []
+            if isinstance(row_count, int) and len(canonical_rows) != row_count:
+                errors.append(
+                    f"{prefix}: canonical row count {len(canonical_rows)} does not equal manifest {row_count}"
+                )
+            canonical_guard_count = 0
+            previous_sort_key = None
+            for row_index, row in enumerate(canonical_rows):
+                label = f"{prefix}: canonical row {row_index}"
+                if row.get("sightline") != key[0] or row.get("service") != key[1]:
+                    errors.append(f"{label}: matrix identity mismatch")
+                if row.get("release") != service.release:
+                    errors.append(f"{label}: release mismatch")
+                if row.get("status") != "matched":
+                    errors.append(f"{label}: record status is not matched")
+                if not str(row.get("source_id", "")).strip():
+                    errors.append(f"{label}: stable source identifier missing")
+                if not isinstance(row.get("native"), dict):
+                    errors.append(f"{label}: native record missing")
+                try:
+                    row_ra = float(row["ra_deg"])
+                    row_dec = float(row["dec_deg"])
+                    recorded_separation = float(row["separation_arcmin"])
+                    expected_separation = spherical_separation_arcmin(
+                        SIGHTLINE_COORDS[key[0]][0],
+                        SIGHTLINE_COORDS[key[0]][1],
+                        row_ra,
+                        row_dec,
+                    )
+                    if not math.isclose(recorded_separation, expected_separation, rel_tol=1e-12, abs_tol=1e-12):
+                        errors.append(f"{label}: spherical separation mismatch")
+                    if service.role == "cluster_discovery":
+                        redshift = float(row["search_geometry_redshift"])
+                        expected_projected = cluster_projected_separation_mpc(expected_separation, redshift)
+                        if not math.isclose(
+                            float(row["projected_separation_mpc"]),
+                            expected_projected,
+                            rel_tol=1e-12,
+                            abs_tol=1e-12,
+                        ):
+                            errors.append(f"{label}: Planck18 projected separation mismatch")
+                        if expected_projected > 5.0 or row.get("cosmology") != "Planck18":
+                            errors.append(f"{label}: violates cluster search geometry")
+                    else:
+                        expected_state = admission_state(expected_separation)
+                        if row.get("admission_state") != expected_state:
+                            errors.append(f"{label}: galaxy admission state mismatch")
+                        canonical_guard_count += expected_state == "guard_ring"
+                except (KeyError, TypeError, ValueError):
+                    errors.append(f"{label}: invalid geometry fields")
+                    continue
+                sort_key = (recorded_separation, service.key, service.release, str(row["source_id"]))
+                if previous_sort_key is not None and sort_key < previous_sort_key:
+                    errors.append(f"{label}: canonical ordering is not deterministic")
+                previous_sort_key = sort_key
+            if service.role != "cluster_discovery" and canonical_guard_count != guard_count:
+                errors.append(f"{prefix}: canonical guard-ring count mismatch")
 
-        if service.role == "exposure_first_xray":
+        if service.key in COVERAGE_CONFIG:
             if cell.get("coverage_checked") is not True:
-                errors.append(f"{prefix}: exposure coverage not checked")
+                errors.append(f"{prefix}: required coverage not checked")
             coverage_path = _safe_evidence_path(
                 evidence_root,
                 cell.get("coverage_evidence_path"),
@@ -487,6 +665,24 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                 coverage_path,
                 cell.get("coverage_evidence_sha256"),
                 f"{prefix}: exposure coverage",
+                errors,
+            )
+        if isinstance(pagination, dict) and pagination.get("method") in {
+            "count_verified_single_response",
+            "complete_official_bulk_catalogue",
+        }:
+            if not isinstance(pagination.get("count_query"), str) or not pagination["count_query"].strip():
+                errors.append(f"{prefix}: pagination count query missing")
+            count_path = _safe_evidence_path(
+                evidence_root,
+                pagination.get("count_response_path"),
+                f"{prefix}: count response",
+                errors,
+            )
+            _check_hash(
+                count_path,
+                pagination.get("count_response_sha256"),
+                f"{prefix}: count response",
                 errors,
             )
     return errors
@@ -607,6 +803,654 @@ def run_preflight(output_dir: Path, timeout: float) -> dict:
     return manifest
 
 
+def _adql_table(table: str) -> str:
+    return f'"{table}"' if "/" in table else table
+
+
+def _cone_predicate(
+    ra_column: str,
+    dec_column: str,
+    ra: float,
+    dec: float,
+    radius_deg: float,
+    *,
+    include_frame: bool = True,
+) -> str:
+    frame = "'ICRS'," if include_frame else ""
+    return (
+        f"1=CONTAINS(POINT({frame}{ra_column},{dec_column}),"
+        f"CIRCLE({frame}{ra:.12f},{dec:.12f},{radius_deg:.12f}))"
+    )
+
+
+def _datalab_cone_predicate(ra_column: str, dec_column: str, ra: float, dec: float, radius_deg: float) -> str:
+    return (
+        f"q3c_radial_query({ra_column},{dec_column},{ra:.12f},{dec:.12f},{radius_deg:.12f})='t'"
+    )
+
+
+def source_queries(service: Service, sightline: str) -> tuple[str, str]:
+    """Return the exact row and count queries for one frozen cell."""
+    ra, dec = SIGHTLINE_COORDS[sightline]
+    radius_deg = GUARD_RADIUS_ARCMIN / 60.0
+    config = QUERY_CONFIG[service.key]
+    if service.transport == "bulk_full_catalog":
+        source = (
+            f"GET {service.endpoint}{service.bulk_object}; read every row from {service.table}; "
+            f"for frozen ICRS center ({ra:.12f},{dec:.12f}), retain exactly rows with finite "
+            "positive BEST_Z and theta * Planck18.angular_diameter_distance(BEST_Z) <= 5 proper Mpc"
+        )
+        return source, "complete official bulk catalogue; no server-side row limit"
+    if service.transport == "simple_cone_search":
+        params = urllib.parse.urlencode(
+            {"CAT": service.table, "RA": f"{ra:.12f}", "DEC": f"{dec:.12f}", "SR": f"{radius_deg:.12f}", "VERB": 3}
+        )
+        return f"{service.endpoint}?{params}", "SCS response completeness from QUERY_STATUS/no OVERFLOW"
+    if service.key == "sdss_dr19":
+        nearby = f"dbo.fGetNearbySpecObjEq({ra:.12f},{dec:.12f},{GUARD_RADIUS_ARCMIN:.12f})"
+        source = (
+            "SELECT s.*, n.distance AS query_distance_arcmin FROM SpecObj AS s "
+            f"JOIN {nearby} AS n ON s.specObjID=n.specObjID"
+        )
+        count = (
+            "SELECT COUNT(*) AS row_total FROM SpecObj AS s "
+            f"JOIN {nearby} AS n ON s.specObjID=n.specObjID"
+        )
+        return source, count
+    if service.key == "legacy_dr10_photoz":
+        joined = "ls_dr10.photo_z AS p JOIN ls_dr10.tractor AS t ON p.ls_id=t.ls_id"
+        predicate = _datalab_cone_predicate("t.ra", "t.dec", ra, dec, radius_deg)
+        source = (
+            "SELECT p.*, t.ra AS match_ra, t.dec AS match_dec, t.type AS tractor_type, "
+            "t.maskbits, t.fitbits, t.ref_cat, t.ref_id "
+            f"FROM {joined} WHERE {predicate}"
+        )
+        return source, f"SELECT COUNT(*) AS row_total FROM {joined} WHERE {predicate}"
+    table = _adql_table(service.table)
+    if "datalab.noirlab.edu" in service.endpoint:
+        predicate = _datalab_cone_predicate(config["ra"], config["dec"], ra, dec, radius_deg)
+    else:
+        predicate = _cone_predicate(config["ra"], config["dec"], ra, dec, radius_deg)
+    return f"SELECT * FROM {table} WHERE {predicate}", f"SELECT COUNT(*) AS row_total FROM {table} WHERE {predicate}"
+
+
+def coverage_queries(service: Service, sightline: str) -> tuple[str, str] | None:
+    config = COVERAGE_CONFIG.get(service.key)
+    if config is None:
+        return None
+    if config["kind"] == "erass1_german_half":
+        return None
+    ra, dec = SIGHTLINE_COORDS[sightline]
+    table = config["table"]
+    if config["kind"] == "region":
+        predicate = (
+            f"1=INTERSECTS(s_region,CIRCLE('ICRS',{ra:.12f},{dec:.12f},"
+            f"{GUARD_RADIUS_ARCMIN / 60.0:.12f}))"
+        )
+    elif config["kind"] == "catalog":
+        predicate = _datalab_cone_predicate("ra", "dec", ra, dec, GUARD_RADIUS_ARCMIN / 60.0)
+    else:
+        predicate = _cone_predicate("ra", "dec", ra, dec, float(config["radius_deg"]))
+    return f"SELECT * FROM {table} WHERE {predicate}", f"SELECT COUNT(*) AS row_total FROM {table} WHERE {predicate}"
+
+
+def _fetch(request: urllib.request.Request, timeout: float, attempts: int = 4) -> tuple[bytes, dict, int, str]:
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        try:
+            retrieved = utc_now()
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                body = response.read()
+                protocol_error = application_response_error(body)
+                if protocol_error:
+                    raise RuntimeError(protocol_error)
+                return body, dict(response.headers.items()), response.status, retrieved
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, RuntimeError) as exc:
+            last_error = exc
+            if isinstance(exc, urllib.error.HTTPError) and exc.code < 500 and exc.code != 429:
+                break
+            if attempt + 1 < attempts:
+                time.sleep(2**attempt)
+    raise RuntimeError(f"request failed after {attempts} attempts: {last_error}")
+
+
+def _tap_request(service: Service, query: str) -> urllib.request.Request:
+    output_format = "votable" if "heasarc.gsfc.nasa.gov" in service.endpoint else "csv"
+    data = urllib.parse.urlencode(
+        {
+            "REQUEST": "doQuery",
+            "LANG": "ADQL",
+            "FORMAT": output_format,
+            "MAXREC": 1_000_000,
+            "QUERY": query,
+        }
+    ).encode()
+    return urllib.request.Request(service.endpoint, data=data)
+
+
+def _request_for_query(service: Service, query: str) -> urllib.request.Request:
+    if service.transport == "tap":
+        return _tap_request(service, query)
+    if service.transport == "skyserver_sql":
+        params = urllib.parse.urlencode({"cmd": query, "format": "csv"})
+        return urllib.request.Request(f"{service.endpoint}?{params}")
+    raise ValueError(f"query transport not supported for {service.key}: {service.transport}")
+
+
+def _parse_erass1_cluster_archive(body: bytes, expected_member: str) -> tuple[list[str], list[dict]]:
+    """Read the complete official cluster FITS member from its frozen tarball."""
+    from astropy.table import Table
+
+    with tarfile.open(fileobj=io.BytesIO(body), mode="r:gz") as archive:
+        members = [member for member in archive.getmembers() if member.isfile()]
+        matches = [member for member in members if Path(member.name).name == expected_member]
+        if len(matches) != 1:
+            raise ValueError(f"expected one {expected_member} member, found {len(matches)}")
+        extracted = archive.extractfile(matches[0])
+        if extracted is None:
+            raise ValueError(f"could not read {expected_member}")
+        fits_bytes = extracted.read()
+    table = Table.read(io.BytesIO(fits_bytes), format="fits")
+    columns = list(table.colnames)
+    rows = [{column: _json_scalar(row[column]) for column in columns} for row in table]
+    return columns, rows
+
+
+def _json_scalar(value):
+    try:
+        import numpy as np
+
+        if np.ma.is_masked(value):
+            return None
+        if isinstance(value, np.generic):
+            value = value.item()
+    except ImportError:
+        pass
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    if isinstance(value, (str, int, float, bool)) or value is None:
+        return value
+    return str(value)
+
+
+def parse_response_rows(body: bytes) -> tuple[list[str], list[dict]]:
+    """Parse CSV or VOTable while raw response bytes remain separately frozen."""
+    if application_response_error(body):
+        raise ValueError(application_response_error(body))
+    if body.lstrip().startswith(b"<"):
+        from astropy.io.votable import parse_single_table
+
+        table = parse_single_table(io.BytesIO(body)).to_table(use_names_over_ids=True)
+        columns = list(table.colnames)
+        rows = [{column: _json_scalar(row[column]) for column in columns} for row in table]
+        return columns, rows
+    text_lines = body.decode("utf-8-sig").splitlines()
+    data_lines = [line for line in text_lines if line.strip() and not line.startswith("#")]
+    if not data_lines:
+        return ["empty_response"], []
+    reader = csv.DictReader(data_lines)
+    columns = list(reader.fieldnames or [])
+    return columns, [dict(row) for row in reader]
+
+
+def _row_total(body: bytes) -> int:
+    _, rows = parse_response_rows(body)
+    if len(rows) != 1 or len(rows[0]) != 1:
+        raise ValueError("count query did not return one scalar row")
+    value = next(iter(rows[0].values()))
+    return int(value)
+
+
+def _archive_bytes(path: Path, response: bytes) -> tuple[str, str]:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    stored = gzip.compress(response, mtime=0)
+    path.write_bytes(stored)
+    return sha256_bytes(stored), sha256_bytes(response)
+
+
+def _write_canonical(path: Path, rows: list[dict]) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    canonical = json.dumps(rows, sort_keys=True, separators=(",", ":"), allow_nan=False).encode() + b"\n"
+    stored = gzip.compress(canonical, mtime=0)
+    path.write_bytes(stored)
+    return sha256_bytes(stored)
+
+
+def _lookup(row: dict, column: str):
+    if column in row:
+        return row[column]
+    lowered = {key.lower(): key for key in row}
+    key = lowered.get(column.lower())
+    return row.get(key) if key else None
+
+
+def _normalize_rows(service: Service, sightline: str, native_rows: list[dict]) -> tuple[list[dict], list[str]]:
+    config = QUERY_CONFIG[service.key]
+    center_ra, center_dec = SIGHTLINE_COORDS[sightline]
+    normalized = []
+    defects = []
+    for index, native in enumerate(native_rows):
+        try:
+            row_ra = float(_lookup(native, config["ra"]))
+            row_dec = float(_lookup(native, config["dec"]))
+            if not (math.isfinite(row_ra) and math.isfinite(row_dec) and -90.0 <= row_dec <= 90.0):
+                raise ValueError
+        except (TypeError, ValueError):
+            defects.append(f"row {index}: invalid coordinates")
+            continue
+        id_values = [_lookup(native, column) for column in config["ids"]]
+        if any(value in {None, ""} for value in id_values):
+            defects.append(f"row {index}: missing stable source identifier")
+            continue
+        separation = spherical_separation_arcmin(center_ra, center_dec, row_ra, row_dec)
+        if service.role == "cluster_discovery":
+            try:
+                redshift = float(_lookup(native, config["redshift"]))
+                state = cluster_admission_state(separation, redshift)
+            except (TypeError, ValueError):
+                defects.append(f"row {index}: cluster_search_geometry_unresolved")
+                continue
+            if state == "outside_query":
+                continue
+            projected_mpc = cluster_projected_separation_mpc(separation, redshift)
+        else:
+            state = admission_state(separation)
+            if state == "outside_query":
+                defects.append(f"row {index}: service returned row beyond guard cone ({separation})")
+                continue
+            projected_mpc = None
+        normalized.append(
+            {
+                "sightline": sightline,
+                "service": service.key,
+                "release": service.release,
+                "source_id": "/".join(str(value) for value in id_values),
+                "ra_deg": row_ra,
+                "dec_deg": row_dec,
+                "separation_arcmin": separation,
+                "admission_state": state,
+                "status": "matched",
+                "native": native,
+                **(
+                    {
+                        "search_geometry_redshift": redshift,
+                        "search_geometry_redshift_source": (
+                            f"{service.key}/{service.release}/{'/'.join(str(value) for value in id_values)}"
+                        ),
+                        "projected_separation_mpc": projected_mpc,
+                        "cosmology": "Planck18",
+                    }
+                    if service.role == "cluster_discovery"
+                    else {}
+                ),
+            }
+        )
+    normalized.sort(key=lambda row: (row["separation_arcmin"], service.key, service.release, row["source_id"]))
+    return normalized, defects
+
+
+def _fragment_valid(cell: dict, root: Path, service: Service) -> bool:
+    if cell.get("status") not in TERMINAL_STATUSES:
+        return False
+    if cell.get("release") != service.release or cell.get("endpoint") != service.endpoint:
+        return False
+    if service.key in COVERAGE_CONFIG and cell.get("coverage_checked") is not True:
+        return False
+    for path_key, hash_key in (("raw_path", "raw_sha256"), ("canonical_path", "canonical_sha256")):
+        path = root / str(cell.get(path_key, ""))
+        if not path.is_file() or sha256_file(path) != cell.get(hash_key):
+            return False
+    coverage_path = cell.get("coverage_evidence_path")
+    if coverage_path:
+        path = root / coverage_path
+        if not path.is_file() or sha256_file(path) != cell.get("coverage_evidence_sha256"):
+            return False
+    return True
+
+
+def _failure_cell(service: Service, sightline: str, root: Path, query: str, error: Exception) -> dict:
+    payload = json.dumps({"error": str(error), "query": query}, sort_keys=True).encode() + b"\n"
+    raw_path = Path("raw") / sightline / f"{service.key}.error.json.gz"
+    raw_sha, response_sha = _archive_bytes(root / raw_path, payload)
+    canonical_path = Path("canonical") / sightline / f"{service.key}.json.gz"
+    canonical_sha = _write_canonical(root / canonical_path, [])
+    return {
+        "sightline": sightline,
+        "service": service.key,
+        "release": service.release,
+        "role": service.role,
+        "endpoint": service.endpoint,
+        "exact_query": query,
+        "retrieved_at_utc": utc_now(),
+        "coverage": "not_applicable",
+        "status": "query_error",
+        "raw_path": str(raw_path),
+        "raw_sha256": raw_sha,
+        "response_sha256": response_sha,
+        "canonical_path": str(canonical_path),
+        "canonical_sha256": canonical_sha,
+        "native_columns": ["unavailable"],
+        "row_count": 0,
+        "guard_ring_count": 0,
+        "pagination": {"method": "failed", "complete": False, "overflow": False, "pages": 0, "row_limit": 1_000_000, "server_total": None},
+        "error": str(error),
+    }
+
+
+def _outside_coverage_cell(
+    service: Service,
+    sightline: str,
+    root: Path,
+    source_query: str,
+    coverage_exact_query: str,
+    coverage_count: int,
+    coverage_path: Path,
+    coverage_sha: str,
+) -> dict:
+    skip = json.dumps(
+        {"source_query_executed": False, "reason": "outside frozen coverage evidence"},
+        sort_keys=True,
+    ).encode() + b"\n"
+    raw_path = Path("raw") / sightline / f"{service.key}.skipped.json.gz"
+    raw_sha, response_sha = _archive_bytes(root / raw_path, skip)
+    canonical_path = Path("canonical") / sightline / f"{service.key}.json.gz"
+    canonical_sha = _write_canonical(root / canonical_path, [])
+    return {
+        "sightline": sightline,
+        "service": service.key,
+        "release": service.release,
+        "role": service.role,
+        "endpoint": service.endpoint,
+        "exact_query": source_query,
+        "retrieved_at_utc": utc_now(),
+        "coverage": "outside",
+        "status": "outside_footprint",
+        "raw_path": str(raw_path),
+        "raw_sha256": raw_sha,
+        "response_sha256": response_sha,
+        "canonical_path": str(canonical_path),
+        "canonical_sha256": canonical_sha,
+        "native_columns": ["coverage_only"],
+        "row_count": 0,
+        "guard_ring_count": 0,
+        "pagination": {
+            "method": "coverage_skip",
+            "complete": True,
+            "overflow": False,
+            "pages": 1,
+            "row_limit": 1_000_000,
+            "server_total": 0,
+        },
+        "coverage_checked": True,
+        "coverage_exact_query": coverage_exact_query,
+        "coverage_row_count": coverage_count,
+        "coverage_evidence_path": str(coverage_path),
+        "coverage_evidence_sha256": coverage_sha,
+    }
+
+
+def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, resume: bool) -> dict:
+    fragment = root / "cells" / service.key / f"{sightline}.json"
+    if resume and fragment.is_file():
+        existing = json.loads(fragment.read_text(encoding="utf-8"))
+        if _fragment_valid(existing, root, service):
+            return existing
+    source_query, count_query = source_queries(service, sightline)
+    try:
+        coverage = "not_applicable"
+        coverage_checked = False
+        coverage_path = None
+        coverage_sha = None
+        coverage_count = None
+        coverage_exact_query = None
+        coverage_config = COVERAGE_CONFIG.get(service.key)
+        if coverage_config and coverage_config["kind"] == "erass1_german_half":
+            from astropy.coordinates import SkyCoord
+            import astropy.units as u
+
+            center_ra, center_dec = SIGHTLINE_COORDS[sightline]
+            galactic_l = float(SkyCoord(center_ra * u.deg, center_dec * u.deg).galactic.l.deg)
+            inside = ERASS1_WESTERN_L_MIN_DEG < galactic_l < ERASS1_WESTERN_L_MAX_DEG
+            coverage_record = {
+                "authority": coverage_config["authority"],
+                "authority_url": coverage_config["authority_url"],
+                "center_ra_deg": center_ra,
+                "center_dec_deg": center_dec,
+                "galactic_longitude_deg": galactic_l,
+                "rule": (
+                    f"{ERASS1_WESTERN_L_MIN_DEG} < Galactic longitude < "
+                    f"{ERASS1_WESTERN_L_MAX_DEG} degrees"
+                ),
+                "inside": inside,
+            }
+            coverage_bytes = json.dumps(coverage_record, sort_keys=True).encode() + b"\n"
+            coverage_path = Path("coverage") / sightline / f"{service.key}.json.gz"
+            coverage_sha, _ = _archive_bytes(root / coverage_path, coverage_bytes)
+            coverage_checked = True
+            coverage_count = int(inside)
+            coverage = "inside" if inside else "outside"
+            coverage_exact_query = coverage_record["rule"]
+            if not inside:
+                cell = _outside_coverage_cell(
+                    service,
+                    sightline,
+                    root,
+                    source_query,
+                    coverage_exact_query,
+                    coverage_count,
+                    coverage_path,
+                    coverage_sha,
+                )
+                fragment.parent.mkdir(parents=True, exist_ok=True)
+                fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+                return cell
+        coverage_pair = coverage_queries(service, sightline)
+        if coverage_pair:
+            coverage_query, coverage_count_query = coverage_pair
+            coverage_exact_query = coverage_query
+            count_body, _, _, _ = _fetch(_tap_request(service, coverage_count_query), timeout)
+            coverage_count = _row_total(count_body)
+            coverage_body, _, _, _ = _fetch(_tap_request(service, coverage_query), timeout)
+            _, coverage_rows = parse_response_rows(coverage_body)
+            if len(coverage_rows) != coverage_count:
+                raise RuntimeError(
+                    f"coverage count mismatch: server {coverage_count}, response {len(coverage_rows)}"
+                )
+            coverage_path = Path("coverage") / sightline / f"{service.key}.votable.gz"
+            coverage_sha, _ = _archive_bytes(root / coverage_path, coverage_body)
+            coverage_checked = True
+            coverage = "inside" if coverage_count else "outside"
+            if not coverage_count:
+                cell = _outside_coverage_cell(
+                    service,
+                    sightline,
+                    root,
+                    source_query,
+                    coverage_exact_query,
+                    coverage_count,
+                    coverage_path,
+                    coverage_sha,
+                )
+                fragment.parent.mkdir(parents=True, exist_ok=True)
+                fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+                return cell
+
+        if service.transport == "simple_cone_search":
+            source_body, _, _, retrieved = _fetch(urllib.request.Request(source_query), timeout)
+            native_columns, native_rows = parse_response_rows(source_body)
+            server_total = len(native_rows)
+            count_body = json.dumps(
+                {"protocol": "SCS", "query_status": "complete", "row_total": server_total},
+                sort_keys=True,
+            ).encode() + b"\n"
+        elif service.transport == "bulk_full_catalog":
+            request = urllib.request.Request(service.endpoint + service.bulk_object)
+            source_body, _, _, retrieved = _fetch(request, timeout)
+            native_columns, native_rows = _parse_erass1_cluster_archive(source_body, service.table)
+            server_total = len(native_rows)
+            count_body = json.dumps(
+                {
+                    "protocol": "official_complete_bulk_catalogue",
+                    "row_total": server_total,
+                    "source_url": service.endpoint + service.bulk_object,
+                },
+                sort_keys=True,
+            ).encode() + b"\n"
+        else:
+            count_body, _, _, _ = _fetch(_request_for_query(service, count_query), timeout)
+            server_total = _row_total(count_body)
+            source_body, _, _, retrieved = _fetch(_request_for_query(service, source_query), timeout)
+            native_columns, native_rows = parse_response_rows(source_body)
+        count_path = Path("counts") / sightline / f"{service.key}.response.gz"
+        count_sha, count_response_sha = _archive_bytes(root / count_path, count_body)
+        if b'VALUE="OVERFLOW"' in source_body.upper().replace(b"'", b'"'):
+            raise RuntimeError("service response declared overflow")
+        raw_path = Path("raw") / sightline / f"{service.key}.response.gz"
+        raw_sha, response_sha = _archive_bytes(root / raw_path, source_body)
+        normalized, defects = _normalize_rows(service, sightline, native_rows)
+        canonical_path = Path("canonical") / sightline / f"{service.key}.json.gz"
+        canonical_sha = _write_canonical(root / canonical_path, normalized)
+        count_mismatch = server_total != len(native_rows)
+        status = "query_error" if defects or count_mismatch else ("matched" if normalized else "unmatched")
+        cell = {
+            "sightline": sightline,
+            "service": service.key,
+            "release": service.release,
+            "role": service.role,
+            "endpoint": service.endpoint,
+            "exact_query": source_query,
+            "retrieved_at_utc": retrieved,
+            "coverage": coverage,
+            "status": status,
+            "raw_path": str(raw_path),
+            "raw_sha256": raw_sha,
+            "response_sha256": response_sha,
+            "canonical_path": str(canonical_path),
+            "canonical_sha256": canonical_sha,
+            "native_columns": native_columns or ["empty_response"],
+            "row_count": len(normalized),
+            "guard_ring_count": sum(row["admission_state"] == "guard_ring" for row in normalized),
+            "pagination": {
+                "method": (
+                    "complete_official_bulk_catalogue"
+                    if service.transport == "bulk_full_catalog"
+                    else "count_verified_single_response"
+                ),
+                "complete": not count_mismatch,
+                "overflow": count_mismatch,
+                "pages": 1,
+                "row_limit": 1_000_000,
+                "server_total": server_total,
+                "count_query": count_query,
+                "count_response_path": str(count_path),
+                "count_response_sha256": count_sha,
+                "count_uncompressed_sha256": count_response_sha,
+            },
+            "defects": defects,
+        }
+        if coverage_pair:
+            cell.update(
+                coverage_checked=coverage_checked,
+                coverage_exact_query=coverage_exact_query,
+                coverage_row_count=coverage_count,
+                coverage_evidence_path=str(coverage_path),
+                coverage_evidence_sha256=coverage_sha,
+            )
+        fragment.parent.mkdir(parents=True, exist_ok=True)
+        fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return cell
+    except Exception as exc:
+        cell = _failure_cell(service, sightline, root, source_query, exc)
+        fragment.parent.mkdir(parents=True, exist_ok=True)
+        fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return cell
+
+
+def _ps1_cells(root: Path) -> list[dict]:
+    service = next(service for service in SERVICES if service.key == "ps1_strm_v1")
+    extraction = json.loads((root / "ps1-strm-extract.json").read_text(encoding="utf-8"))
+    canonical_path = Path(extraction["canonical_path"])
+    if not (root / canonical_path).is_file():
+        canonical_path = canonical_path.resolve().relative_to(root.resolve())
+    if sha256_file(root / canonical_path) != extraction["canonical_sha256"]:
+        raise RuntimeError("PS1 canonical snapshot hash mismatch")
+    with gzip.open(root / canonical_path, "rt") as handle:
+        rows = json.load(handle)
+    head_path = Path("raw") / "ps1_strm_v1.bin"
+    head_sha = sha256_file(root / head_path)
+    cells = []
+    for sightline in SIGHTLINE_NAMES:
+        selected = [row for row in rows if row["sightline"] == sightline]
+        for row in selected:
+            row.setdefault("release", service.release)
+            row.setdefault("status", "matched")
+        sightline_canonical_path = Path("canonical") / sightline / "ps1_strm_v1.json.gz"
+        sightline_canonical_sha = _write_canonical(root / sightline_canonical_path, selected)
+        cells.append(
+            {
+                "sightline": sightline,
+                "service": service.key,
+                "release": service.release,
+                "role": service.role,
+                "endpoint": service.endpoint,
+                "exact_query": extraction["exact_query"],
+                "retrieved_at_utc": extraction["completed_at_utc"],
+                "coverage": "not_applicable",
+                "status": "matched" if selected else "unmatched",
+                "raw_path": str(head_path),
+                "raw_sha256": head_sha,
+                "response_sha256": extraction["source_sha256"],
+                "canonical_path": str(sightline_canonical_path),
+                "canonical_sha256": sightline_canonical_sha,
+                "native_columns": extraction["published_native_columns"],
+                "row_count": len(selected),
+                "guard_ring_count": sum(row["admission_state"] == "guard_ring" for row in selected),
+                "pagination": {
+                    "method": "complete_official_declination_shard_stream",
+                    "complete": True,
+                    "overflow": False,
+                    "pages": 1,
+                    "row_limit": None,
+                    "server_total": len(selected),
+                },
+                "source_size_bytes": extraction["source_size_bytes"],
+                "source_sha256": extraction["source_sha256"],
+                "source_rows_scanned": extraction["source_rows_scanned"],
+            }
+        )
+    return cells
+
+
+def acquire_corpus(output_dir: Path, timeout: float, workers: int, resume: bool) -> tuple[dict, list[str]]:
+    services = [service for service in SERVICES if service.key != "ps1_strm_v1"]
+    futures = {}
+    cells = []
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        for service in services:
+            for sightline in SIGHTLINE_NAMES:
+                future = executor.submit(acquire_cell, service, sightline, output_dir, timeout, resume)
+                futures[future] = (service.key, sightline)
+        for future in as_completed(futures):
+            service_key, sightline = futures[future]
+            cell = future.result()
+            cells.append(cell)
+            print(f"{service_key}/{sightline}: {cell['status']} ({cell['row_count']} rows)", flush=True)
+    cells.extend(_ps1_cells(output_dir))
+    cells.sort(key=lambda cell: (cell["sightline"], cell["service"]))
+    manifest = {
+        "schema_version": SCHEMA_VERSION,
+        "input_path": "pipeline/galaxies/foreground/data/frozen_census/bursts.csv",
+        "input_sha256": FROZEN_INPUT_SHA256,
+        "generated_at_utc": utc_now(),
+        "cells": cells,
+    }
+    manifest_path = output_dir / "corpus-manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return manifest, validate_manifest(manifest, output_dir)
+
+
 def _main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -621,6 +1465,11 @@ def _main() -> int:
     extract_ps1.add_argument("--output", type=Path, required=True)
     extract_ps1.add_argument("--manifest", type=Path, required=True)
     extract_ps1.add_argument("--expected-size", type=int, default=4_650_535_027)
+    acquire = subparsers.add_parser("acquire", help="freeze all 126 service-sightline cells")
+    acquire.add_argument("--output-dir", type=Path, required=True)
+    acquire.add_argument("--timeout", type=float, default=120.0)
+    acquire.add_argument("--workers", type=int, default=4)
+    acquire.add_argument("--no-resume", action="store_true")
     args = parser.parse_args()
 
     if args.command == "validate":
@@ -631,7 +1480,7 @@ def _main() -> int:
             for error in errors:
                 print(f"FAIL: {error}", file=sys.stderr)
             return 1
-        print("PASS: all 126 service-sightline cells satisfy the frozen corpus contract")
+        print(f"PASS: all {len(manifest['cells'])} service-sightline cells satisfy the frozen corpus contract")
         return 0
 
     if args.command == "preflight":
@@ -640,6 +1489,19 @@ def _main() -> int:
         blocked = len(manifest["entries"]) - reachable
         print(f"Preflight: {reachable} anonymous query routes reachable; {blocked} unresolved or non-cone routes")
         return 1 if blocked else 0
+
+    if args.command == "acquire":
+        manifest, errors = acquire_corpus(args.output_dir, args.timeout, args.workers, not args.no_resume)
+        if errors:
+            print(
+                f"FAIL: {len(errors)} corpus-contract error(s) across {len(manifest['cells'])} cells",
+                file=sys.stderr,
+            )
+            for error in errors:
+                print(f"FAIL: {error}", file=sys.stderr)
+            return 1
+        print(f"PASS: all {len(manifest['cells'])} cells satisfy the frozen corpus contract")
+        return 0
 
     result = extract_ps1_strm(args.input, args.output, args.expected_size)
     args.manifest.parent.mkdir(parents=True, exist_ok=True)

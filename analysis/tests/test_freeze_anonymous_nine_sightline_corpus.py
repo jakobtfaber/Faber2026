@@ -29,6 +29,7 @@ EXPECTED_SERVICES = {
     "lotss_dr3",
     "vlass_ql_epoch1",
     "erass1_main_v1_2",
+    "erass1_clusters_primary_v3_2",
     "xmm_newton_exposure",
     "chandra_exposure",
     "swift_exposure",
@@ -76,7 +77,7 @@ def _complete_manifest(tmp_path: Path) -> dict:
                     "server_total": 0,
                 },
             }
-            if service.role == "exposure_first_xray":
+            if service.key in MODULE.COVERAGE_CONFIG:
                 coverage_path = Path("coverage") / sightline / f"{service.key}.json"
                 coverage_sha = _write(tmp_path / coverage_path, b"{}")
                 cell.update(
@@ -102,6 +103,30 @@ def test_required_matrix_is_exact_and_has_release_authority():
 def test_complete_manifest_passes(tmp_path):
     manifest = _complete_manifest(tmp_path)
     assert MODULE.validate_manifest(manifest, tmp_path) == []
+
+
+def test_canonical_payload_is_bound_to_cell_count_and_geometry(tmp_path):
+    manifest = _complete_manifest(tmp_path)
+    cell = next(c for c in manifest["cells"] if c["service"] == "gaia_dr3")
+    row = {
+        "sightline": cell["sightline"],
+        "service": cell["service"],
+        "release": cell["release"],
+        "status": "matched",
+        "source_id": "1",
+        "ra_deg": MODULE.SIGHTLINE_COORDS[cell["sightline"]][0],
+        "dec_deg": MODULE.SIGHTLINE_COORDS[cell["sightline"]][1],
+        "separation_arcmin": 0.0,
+        "admission_state": "admitted",
+        "native": {"source_id": "1"},
+    }
+    payload = json.dumps([row], separators=(",", ":")).encode() + b"\n"
+    path = tmp_path / cell["canonical_path"]
+    stored = gzip.compress(payload, mtime=0) if path.suffix == ".gz" else payload
+    path.write_bytes(stored)
+    cell["canonical_sha256"] = hashlib.sha256(stored).hexdigest()
+    errors = MODULE.validate_manifest(manifest, tmp_path)
+    assert any("canonical row count 1 does not equal manifest 0" in error for error in errors)
 
 
 def test_missing_cell_and_unresolved_service_fail_closed(tmp_path):
@@ -148,7 +173,7 @@ def test_xray_query_cannot_precede_exposure_coverage(tmp_path):
     cell = next(c for c in manifest["cells"] if c["service"] == "xmm_newton_exposure")
     cell["coverage_checked"] = False
     errors = MODULE.validate_manifest(manifest, tmp_path)
-    assert any("exposure coverage not checked" in error for error in errors)
+    assert any("required coverage not checked" in error for error in errors)
 
 
 def test_guard_ring_uses_unrounded_spherical_separation():
@@ -156,6 +181,19 @@ def test_guard_ring_uses_unrounded_spherical_separation():
     assert MODULE.admission_state(15.0 + 1e-12) == "guard_ring"
     assert MODULE.admission_state(15.1) == "guard_ring"
     assert MODULE.admission_state(15.1 + 1e-12) == "outside_query"
+
+
+def test_cluster_boundary_uses_planck18_proper_separation():
+    from astropy.cosmology import Planck18
+
+    redshift = 0.2
+    distance_mpc = Planck18.angular_diameter_distance(redshift).value
+    boundary_arcmin = math.degrees(5.0 / distance_mpc) * 60.0
+    assert MODULE.cluster_admission_state(boundary_arcmin, redshift) == "admitted"
+    assert MODULE.cluster_admission_state(boundary_arcmin * (1.0 + 1e-10), redshift) == "outside_query"
+    for invalid in (0.0, -0.1, float("nan")):
+        with pytest.raises(ValueError):
+            MODULE.cluster_projected_separation_mpc(1.0, invalid)
 
 
 def test_spherical_separation_agrees_with_independent_astropy_path():
@@ -195,6 +233,63 @@ def test_http_200_votable_query_error_is_not_reachable():
 def test_legacy_probe_uses_a_real_table_not_the_join_authority_label():
     service = next(service for service in MODULE.SERVICES if service.key == "legacy_dr10_photoz")
     assert MODULE._tap_probe_query(service) == "SELECT TOP 1 * FROM ls_dr10.photo_z"
+
+
+def test_source_queries_use_frozen_guard_cone_and_release_tables():
+    by_key = {service.key: service for service in MODULE.SERVICES}
+    desi_query, desi_count = MODULE.source_queries(by_key["desi_dr1"], "zach")
+    assert "0.251666666667" in desi_query
+    assert "mean_fiber_ra" in desi_query
+    assert "COUNT(*)" in desi_count
+    legacy_query, _ = MODULE.source_queries(by_key["legacy_dr10_photoz"], "zach")
+    assert "photo_z AS p JOIN ls_dr10.tractor AS t" in legacy_query
+    assert "match_ra" in legacy_query
+    assert by_key["xmm_newton_exposure"].table == "xmmssc"
+    assert by_key["chandra_exposure"].table == "csc"
+    assert by_key["swift_exposure"].table == "swiftlsxps"
+
+
+def test_exposure_first_queries_are_separate_from_source_queries():
+    by_key = {service.key: service for service in MODULE.SERVICES}
+    for key, coverage_table in (
+        ("xmm_newton_exposure", "xmmmaster"),
+        ("chandra_exposure", "chanmaster"),
+        ("swift_exposure", "swiftmastr"),
+    ):
+        source, _ = MODULE.source_queries(by_key[key], "zach")
+        coverage, coverage_count = MODULE.coverage_queries(by_key[key], "zach")
+        assert coverage_table in coverage
+        assert by_key[key].table in source
+        assert coverage_table not in source
+        assert "COUNT(*)" in coverage_count
+
+
+def test_legacy_and_erass_coverage_routes_are_explicit():
+    by_key = {service.key: service for service in MODULE.SERVICES}
+    legacy_coverage, _ = MODULE.coverage_queries(by_key["legacy_dr10_photoz"], "zach")
+    assert "ls_dr10.tractor" in legacy_coverage
+    assert "q3c_radial_query" in legacy_coverage
+    assert MODULE.COVERAGE_CONFIG["erass1_main_v1_2"]["kind"] == "erass1_german_half"
+    assert MODULE.COVERAGE_CONFIG["erass1_clusters_primary_v3_2"]["kind"] == "erass1_german_half"
+    assert MODULE.ERASS1_WESTERN_L_MIN_DEG == 179.94423568
+    assert MODULE.ERASS1_WESTERN_L_MAX_DEG == 359.94423568
+
+
+def test_normalization_is_geometry_first_and_fails_bad_identity():
+    service = next(service for service in MODULE.SERVICES if service.key == "gaia_dr3")
+    rows, defects = MODULE._normalize_rows(
+        service,
+        "zach",
+        [
+            {"source_id": "1", "ra": "310.199525", "dec": "72.8823272222", "quality": "bad"},
+            {"source_id": "", "ra": "310.199525", "dec": "72.8823272222"},
+            {"source_id": "3", "ra": "10", "dec": "0"},
+        ],
+    )
+    assert len(rows) == 1
+    assert rows[0]["native"]["quality"] == "bad"
+    assert any("missing stable source identifier" in defect for defect in defects)
+    assert any("beyond guard cone" in defect for defect in defects)
 
 
 def test_ps1_bulk_filter_keeps_admitted_and_guard_ring_rows(tmp_path):

@@ -1,12 +1,12 @@
 # Freeze the anonymous nine-sightline expanded-survey query corpus
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
+- Status: resolved
 - Assignee: Codex (anonymous-corpus agent)
 - Blocked by: [Set the nine-sightline search-region and candidate-selection contract](expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: not covered by the standing delegation; created after `main` commit `33e9e1ce3570`
-- Triage: `ready-for-agent`
+- Triage: `resolved`
 
 ## Question
 
@@ -26,14 +26,27 @@ coverage result, response bytes or canonical snapshot, SHA-256, and one of
 `matched`, `unmatched`, `outside_footprint`, `ambiguous`, `access_denied`, or
 `query_error`. Do not change scientific or manuscript authority fields.
 
-## Work log
+## Resolution
 
-- 2026-07-22: Added a fail-closed 126-cell manifest validator, live anonymous
-  service preflight, regression tests, and the public PS1--STRM bulk extraction
-  route. See
-  [the execution checkpoint](../../specs/research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md).
-- Keep this ticket open. Service reachability is proven, but a preflight is not
-  the required fully paginated nine-sightline corpus. Closure still requires
-  all service/sightline query cells and exposure-first X-ray evidence.
-- No owner credential or decision is required. The official PS1--STRM shard is
-  anonymously downloadable; authenticated MAST CasJobs is optional only.
+Resolved 2026-07-22. The producer froze 135 public-product/sightline cells in
+[`corpus-manifest.json`](../../specs/evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22/corpus-manifest.json),
+including separate eRASS1 main and primary-cluster products. The manifest binds
+110,591 normalized records, exact queries, releases, UTC retrieval times,
+coverage decisions, native response bytes or canonical PS1 subsets, stable
+identifiers, unrounded separations, native flags and uncertainties, complete
+count/pagination evidence, and SHA-256 hashes. Its SHA-256 is
+`f4eb168580c92d858ba4bebf80146f4bd5ef67f924d9564f283027cb3e227839`.
+
+The terminal states are 37 `matched`, 41 `unmatched`, and 57
+`outside_footprint`; none is access-denied, query-error, truncated, or
+overflowed. XMM-Newton, Chandra, and Swift source queries were coverage-gated.
+The exact eROSITA-DE public boundary puts all nine positions outside both
+public eRASS1 products. The cluster route fixes the complete official bulk
+catalogue and inclusive 5-proper-Mpc Planck18 calculation with no angular
+fallback.
+
+Focused producer tests pass (`23 passed`), and the byte-level validator passes
+all 135 cells. Full evidence and primary-source links are in
+[`research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md`](../../specs/research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md).
+No scientific or manuscript authority changed. Ticket 16 remains the separate
+independent replay gate.
