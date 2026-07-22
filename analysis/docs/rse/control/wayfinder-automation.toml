@@ -43,28 +43,6 @@ depends_on = ["source-zach-whitney-host-redshifts", "replay-nine-sightline-query
 instructions = "Repeat source-level redshift verification after the host sources and independent query replay resolve. Preserve existing verdicts until separately adjudicated."
 
 [[task]]
-id = "freeze-anonymous-query-corpus"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
-branch = "codex/auto-review-corrected-ticket14-corpus"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = []
-instructions = "Independently review the corrected JohndoeII anonymous corpus before resolving. Reject every cell outside the parsed authoritative roster and do not unblock ticket 16 on producer-only validation."
-
-[[task]]
-id = "replay-nine-sightline-query-corpus"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md"
-branch = "codex/auto-replay-nine-sightline-query-corpus"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["freeze-anonymous-query-corpus", "freeze-protected-query-evidence"]
-instructions = "Independently replay the complete anonymous and protected nine-sightline corpus. Stop on missing evidence or disagreement."
-
-[[task]]
 id = "adjudicate-host-redshift-differences"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md"
@@ -78,6 +56,20 @@ instructions = "Owner-facing host-redshift adjudication. The controller records 
 [[history]]
 id = "fail-close-expanded-catalog"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-01-fail-close-validation.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-anonymous-query-corpus"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "replay-nine-sightline-query-corpus"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md"
 execution = "afk"
 depends_on = []
 status = "resolved"

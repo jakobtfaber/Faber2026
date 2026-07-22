@@ -1,12 +1,12 @@
 # Freeze the anonymous nine-sightline expanded-survey query corpus
 
 - Type: `wayfinder:task` (AFK)
-- Status: open — corrected corpus awaits independent review
+- Status: resolved
 - Assignee: —
 - Blocked by: none
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: not covered by the standing delegation; created after `main` commit `33e9e1ce3570`
-- Triage: `review-required`
+- Triage: `resolved`
 
 ## Question
 
@@ -26,7 +26,7 @@ coverage result, response bytes or canonical snapshot, SHA-256, and one of
 `matched`, `unmatched`, `outside_footprint`, `ambiguous`, `access_denied`, or
 `query_error`. Do not change scientific or manuscript authority fields.
 
-## Corrected corpus awaiting review
+## Corrected corpus resolution
 
 The previous closure used a sightline outside the authoritative Verdi and
 protected roster naming JohndoeII. That mixed-roster closure is withdrawn. The same
@@ -59,5 +59,6 @@ and Casey are inside Swift coverage; JohndoeII and the other six are outside. Fu
 evidence and primary-source links are in
 [`research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md`](../../specs/research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md).
 No scientific or manuscript authority changed. The producer validator reports
-zero errors, but ticket 14 remains open until independent review accepts the
-corrected roster and evidence. Ticket 16 remains blocked until then.
+zero errors. Ticket 16 independently replayed all hashes, rows, geometry,
+coverage, and ambiguity from the corrected frozen bytes and accepted the
+JohndoeII roster; that independent result closes this ticket.
