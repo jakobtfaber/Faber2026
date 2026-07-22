@@ -21,3 +21,5 @@ Identified canonical modules and data paths:
 2. **Data Paths**:
    - CHIME (400–800 MHz): `~/Data/Faber2026/dsa110/scintillation-data/{nickname}_chime.npz` (staging at `/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/{nickname}_chime_upchan.npy`).
    - DSA-110 (1280–1530 MHz): `~/Data/Faber2026/dsa110/scintillation/data/{nickname}.npz` and `~/Data/Faber2026/dsa110/DSA_bursts/{nickname}_dsa_I_*_2500b_cntr_bpc.npy`.
+
+Authority correction: [Choose canonical input, preprocessing, and burst-envelope contract](scint-notebook-06-choose-canonical-input-preprocessing-and-envelope-contract.md) supersedes any interpretation that all listed products are interchangeable or authoritative. The CHIME/FRB source is a three-file upchannelized set; the DSA-110 source is the CANFAR dynamic-spectrum NPZ.

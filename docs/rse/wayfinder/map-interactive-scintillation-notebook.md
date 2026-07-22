@@ -10,24 +10,24 @@ An interactive Jupyter notebook (`notebooks/scintillation_interactive_walkthroug
 ## Notes
 
 - **Domain:** FRB scintillation, 2D auto-correlation functions (ACF), sub-band Lorentzian/Gaussian fitting, modulation index calculation, power-law frequency scaling fit (\(\alpha\)).
-- **Standing Context:** [`CONTEXT.md`](../../../CONTEXT.md), `pipeline/scintillation/scint_analysis/`, and `analysis/scintillation-dsa-lorentzian-2026-07-07/`.
+- **Standing Context:** [`pipeline/CONTEXT.md`](../../../pipeline/CONTEXT.md), `pipeline/scintillation/scint_analysis/`, and `pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/`.
 - **Skills:** `/grilling`, `/domain-modeling`, `/research`, `/prototype`.
-- **Data paths:** DSA-110 Stokes-I cubes under `~/Data/Faber2026/dsa110/DSA_bursts/` and CHIME under `~/Data/Faber2026/chimefrb/CHIME_bursts/`.
+- **Input authority:** CHIME/FRB scintillation uses the verified upchannelized waterfall + frequency-axis + time-metadata source set; DSA-110 scintillation uses the CANFAR dynamic-spectrum NPZ. Local packaged products are verified replicas or caches, never competing authorities.
 
 ## Decisions so far
 
 <!-- one line per closed ticket: gist + link -->
 
-- [Locate canonical scintillation code, routines, and burst data](tickets/scint-notebook-01-locate-canonical-scintillation-code-and-data.md) — Canonical Python modules located in `pipeline/scintillation/scint_analysis/` (`core.py`, `analysis.py`, `fitting_2d.py`); CHIME and DSA-110 `.npz`/`.npy` data product paths cataloged.
+- [Locate canonical scintillation code, routines, and burst data](tickets/scint-notebook-01-locate-canonical-scintillation-code-and-data.md) — Canonical Python modules and candidate data products located; authority interpretation corrected by [Choose canonical input, preprocessing, and burst-envelope contract](tickets/scint-notebook-06-choose-canonical-input-preprocessing-and-envelope-contract.md).
 - [Define notebook structure and interactive execution flow](tickets/scint-notebook-02-define-notebook-structure-and-execution-flow.md) — Established 6-stage sequential cell structure for single-event execution using Python config dicts combined with interactive `ipywidgets` controls in `notebooks/scintillation_interactive_walkthrough.ipynb`.
 - [Define sub-band ACF and fitting contract](tickets/scint-notebook-03-define-subband-acf-and-fitting-contract.md) — Ratified Lorentzian ACF fitting with zero-lag noise spike masking (`first_fit_lag=1`) and equal S/N sub-band partitioning (4 sub-bands for CHIME, 2 for DSA-110).
 - [Define modulation index and error analysis](tickets/scint-notebook-04-define-modulation-index-and-error-analysis.md) — Adopted canonical `analysis.py` ACF-fitted $m(\nu)$ sub-band amplitude with leastsq covariance error and profile-domain sliding $m(t)$.
 - [Define alpha power law fit and visualization specification](tickets/scint-notebook-05-define-alpha-power-law-fit-and-visualization.md) — Confirmed ODR log-log power-law fit ($\nu_{\text{ref}} = 600\text{ MHz}$) and 3-tier dynamic spectrum, $\Delta\nu_d(\nu)$, and $m(\nu)$ multi-panel summary figure layout.
+- [Choose canonical input, preprocessing, and burst-envelope contract](tickets/scint-notebook-06-choose-canonical-input-preprocessing-and-envelope-contract.md) — Locked band-specific input authority, manifest-verified read-only caches, fail-closed preprocessing, and owner-reviewed band-specific envelopes.
 
 ## Not yet specified
 
-- **Interactive Widget Scope:** Interactive `ipywidgets` controls for dynamic lag masking and sub-band boundary tuning vs cell-based configuration dictionaries.
-- **Export & Production Pipeline Sync:** Re-exporting modified fit parameters back into the pipeline's canonical JSON validation schemas.
+<!-- none; current fog has graduated into open child tickets -->
 
 ## Out of scope
 
