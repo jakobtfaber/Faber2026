@@ -77,11 +77,12 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   contract with geometry adjudication (legacy C1) — **12/12 production
   mass-refit landscape landed 2026-07-18** (jointtf lane, h17): 4 interior /
   3 ceiling-adjacent / 3 ceiling-rail / new floor-rail class
-  (hamilton, whitney); PL-PBF collapsed to production EMG; free-α win =
-  mismatch signature. Remaining: leakage-injection verdict, count adoption
+  (hamilton, whitney); PL-PBF collapsed to production EMG. The free-α win is a
+  diagnostic mismatch signature only; mechanism injections are closed and its
+  reporting is confined to Methods or an appendix
+  ([wf-14](../wayfinder/tickets/14-free-alpha-diagnostic-reporting.md)). Remaining:
+  count adoption
   ([wf-15](wayfinder/tickets/15-count-audit-remediation-standing-method.md)),
-  free-α reporting
-  ([wf-14](wayfinder/tickets/14-free-alpha-diagnostic-reporting.md)),
   validation + ratification before manuscript use
 - [ ] Per-band systematics pass on flagged sightlines (legacy C2)
 - [ ] Pipeline pin bump + table/figure regeneration from the campaign (legacy C3)
