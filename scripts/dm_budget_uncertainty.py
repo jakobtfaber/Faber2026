@@ -63,13 +63,13 @@ import json
 import math
 import os
 from dataclasses import dataclass
-from pathlib import Path
 
 import numpy as np
 from numpy.polynomial.legendre import leggauss
 from scipy import integrate, interpolate, signal, stats
 
 import phineas_halo_crossing_probability as phineas_crossing
+from pathlib import Path
 
 # Reproducible PDF timestamp.  2026-07-22T08:27:00-07:00
 # Override with SOURCE_DATE_EPOCH for a different declared reproducibility stamp.
@@ -102,7 +102,7 @@ class InterveningSystem:
     kind: str
     mass_source: str
     model: str
-    dm_point: float
+    dm_point: float | None
     impact_kpc: float
 
 
@@ -429,6 +429,8 @@ def _system_sigma(mass_source: str) -> float:
 def system_pdf(system: InterveningSystem, *, dx: float) -> DiscretePDF:
     """Return the adopted per-system distribution."""
     if system.model == "fixed_lognormal":
+        if system.dm_point is None:
+            raise ValueError("fixed-lognormal system lacks a point column")
         return lognormal_pdf(system.dm_point, _system_sigma(system.mass_source), dx=dx)
     if system.model == "probabilistic_crossing":
         if not system.object:
@@ -449,7 +451,7 @@ def load_intervening_systems() -> dict[str, tuple[InterveningSystem, ...]]:
                     kind=row["kind"],
                     mass_source=row["mass_source"],
                     model=row["model"],
-                    dm_point=float(row["dm_point"]),
+                    dm_point=float(row["dm_point"]) if row["dm_point"] else None,
                     impact_kpc=float(row["impact_kpc"]),
                 )
             )
@@ -476,7 +478,25 @@ def load_sightlines() -> tuple[Sightline, ...]:
             raise ValueError(
                 f"{name}: zero budget DM_int but census systems are present"
             )
-        if dm_int > 0.0 and round(sum(s.dm_point for s in sightline_systems)) != dm_int:
+        point_columns = [
+            system.dm_point
+            for system in sightline_systems
+            if system.model == "fixed_lognormal"
+        ]
+        if any(system.model == "probabilistic_crossing" for system in sightline_systems):
+            record = json.loads(phineas_crossing.DEFAULT_OUTPUT.read_text(encoding="utf-8"))
+            observed_hash = phineas_crossing._sha256(phineas_crossing.INPUTS)
+            if record.get("input_sha256") != observed_hash:
+                raise ValueError("Phineas crossing record does not match its frozen inputs")
+            record_objects = set(record.get("halos", {}))
+            census_objects = {
+                system.object
+                for system in sightline_systems
+                if system.model == "probabilistic_crossing"
+            }
+            if record_objects != census_objects:
+                raise ValueError("Phineas crossing record and system census disagree")
+        elif dm_int > 0.0 and round(sum(point for point in point_columns if point is not None)) != dm_int:
             raise ValueError(
                 f"{name}: per-system columns do not reproduce budget DM_int"
             )
@@ -587,6 +607,7 @@ def sample_host_for_validation(
     intervening = np.zeros(n)
     for index, system in enumerate(row.intervening_systems):
         if system.model == "fixed_lognormal":
+            assert system.dm_point is not None
             intervening += lognormal(system.dm_point, _system_sigma(system.mass_source))
         elif system.model == "probabilistic_crossing":
             halo_input = phineas_crossing.load_inputs()[system.object]
