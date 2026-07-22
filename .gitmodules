@@ -1,3 +1,6 @@
 [submodule "pipeline"]
 	path = pipeline
 	url = https://github.com/jakobtfaber/dsa110-FLITS.git
+[submodule "analysis"]
+	path = analysis
+	url = https://github.com/jakobtfaber/Faber2026-analysis.git

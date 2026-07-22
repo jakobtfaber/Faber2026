@@ -1,6 +1,6 @@
 # Manuscript figure regeneration catalog.
-# Source of truth for `scripts/figure_flow.py` / `make figures`.
-# Cross-check: repro_manifest.csv rows (repro_output) and figure_review/slots.json.
+# Source of truth for `analysis/scripts/figure_flow.py` / `make figures`.
+# Cross-check: analysis/repro_manifest.csv and analysis/figure_review/slots.json.
 schema_version: 1
 
 figures:
@@ -17,12 +17,12 @@ figures:
         - flits
         - --no-capture-output
         - python
-        - scripts/dm_budget_uncertainty.py
+        - analysis/scripts/dm_budget_uncertainty.py
       cwd: .
     inputs:
       - pipeline/galaxies/foreground/budget_table_data.json
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
-      - scripts/dm_budget_intervening_systems.csv
+      - analysis/scripts/dm_budget_intervening_systems.csv
     outputs:
       - figures/dm_host_posteriors.pdf
     depends_on: []
@@ -41,12 +41,12 @@ figures:
         - flits
         - --no-capture-output
         - python
-        - scripts/plot_ne2025_mw_properties.py
+        - analysis/scripts/plot_ne2025_mw_properties.py
         - --nside
         - "32"
       cwd: .
     inputs:
-      - scripts/ne2025_allsky_cache_nside32.npz
+      - analysis/scripts/ne2025_allsky_cache_nside32.npz
     outputs:
       - figures/ne2025_mw_characterization_nside32.pdf
     depends_on: []
@@ -147,7 +147,7 @@ figures:
         - flits
         - --no-capture-output
         - python
-        - scripts/plot_toa_offset_decomposition.py
+        - analysis/scripts/plot_toa_offset_decomposition.py
       cwd: .
     inputs:
       - pipeline/crossmatching/toa_crossmatch_results.json
@@ -173,19 +173,19 @@ figures:
         - flits
         - --no-capture-output
         - python
-        - scripts/plot_codetection_data_grid.py
+        - analysis/scripts/plot_codetection_data_grid.py
         - --out
-        - figure_review/staging/fig1_gallery/figures/codetection_data_grid
+        - analysis/figure_review/staging/fig1_gallery/figures/codetection_data_grid
       cwd: .
     inputs:
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
-      - scripts/jointmodel_triptych_manifest.yaml
+      - analysis/scripts/jointmodel_triptych_manifest.yaml
       - ~/Data/Faber2026/chimefrb/CHIME_bursts
       - ~/Data/Faber2026/dsa110/DSA_bursts
     outputs:
-      - figure_review/staging/fig1_gallery/figures/codetection_data_grid.pdf
+      - analysis/figure_review/staging/fig1_gallery/figures/codetection_data_grid.pdf
     manuscript_target: figures/codetection_data_grid.pdf
-    candidate_root: figure_review/staging/fig1_gallery
+    candidate_root: analysis/figure_review/staging/fig1_gallery
     depends_on: []
     approval_slot: fig1-gallery
 
@@ -229,7 +229,7 @@ figures:
         - flits
         - --no-capture-output
         - python
-        - scripts/plot_association_summary.py
+        - analysis/scripts/plot_association_summary.py
       cwd: .
     inputs:
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
