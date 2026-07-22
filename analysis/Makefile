@@ -28,12 +28,12 @@ figures: check-mount
 		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
 		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 
-kb-index:
-	python3 scripts/kb index
+kb-index: check-mount
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb index
 
-kb-refs-sync:
-	python3 scripts/kb_refs_sync.py
-	python3 scripts/kb index --source refs
+kb-refs-sync: check-mount
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb_refs_sync.py
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb index --source refs
 
 notes-serve:
 	python3 scripts/running_notes.py serve

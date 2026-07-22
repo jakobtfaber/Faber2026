@@ -115,17 +115,17 @@ fresh cloning succeeds.
 
 **Tasks:**
 
-- Remove the selected analysis/control paths and all non-allowlisted figure
+- [x] Remove the selected analysis/control paths and all non-allowlisted figure
   assets from the migration branch using path-specific `git rm` commands.
-- Add `https://github.com/jakobtfaber/Faber2026-analysis.git` at `analysis/`.
-- Rewrite `README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.gitignore`,
+- [x] Add `https://github.com/jakobtfaber/Faber2026-analysis.git` at `analysis/`.
+- [x] Rewrite `README.md`, `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.gitignore`,
   `.olignore`, and `Makefile` for the two-submodule boundary.
-- Update retained manuscript comments/prose and generated-table provenance paths
+- [x] Update retained manuscript comments/prose and generated-table provenance paths
   from `scripts/`/`docs/` to `analysis/scripts/`/`analysis/docs/` or the public
   repository URL.
-- Update parent workflows to use `analysis/tests/` and `analysis/scripts/` while
+- [x] Update parent workflows to use `analysis/tests/` and `analysis/scripts/` while
   checking out both submodules recursively.
-- Run the boundary test; expect pass.
+- [x] Run the boundary test; expect pass.
 
 **Verification:** `git ls-tree HEAD analysis pipeline` reports mode `160000` for
 both and no retained TeX dependency is inside either gitlink.
@@ -136,11 +136,11 @@ both and no retained TeX dependency is inside either gitlink.
 
 **Tasks:**
 
-- Run `latexmk -C` then
+- [x] Run `latexmk -C` then
   `latexmk -pdf -interaction=nonstopmode -halt-on-error -recorder main.tex`.
-- Compare PDF page count and inspect source closure; require 37 pages and no
+- [x] Compare PDF page count and inspect source closure; require 37 pages and no
   inputs under `analysis/` or `pipeline/`.
-- Run parent boundary tests and analysis scientific tests from the mounted
+- [x] Run parent boundary tests and analysis scientific tests from the mounted
   checkout.
 - Run `make kb-index` through the analysis-mounted command.
 - Run `agent-closeout-check` for both repositories with explicit touched paths

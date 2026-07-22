@@ -28,7 +28,10 @@ def _mtime(path: Path) -> str:
 
 
 def _rel(path: Path) -> str:
-    return str(path.relative_to(config.REPO_ROOT))
+    try:
+        return str(path.relative_to(config.MANUSCRIPT_ROOT))
+    except ValueError:
+        return str(Path("analysis") / path.relative_to(config.ANALYSIS_ROOT))
 
 
 def _excluded(path: Path) -> bool:
@@ -41,8 +44,8 @@ def _excluded(path: Path) -> bool:
 
 def iter_docs() -> Iterator[Doc]:
     seen: set[Path] = set()
-    for pattern in config.DOCS_GLOBS:
-        for path in sorted(config.REPO_ROOT.glob(pattern)):
+    for root, pattern in config.DOCS_GLOBS:
+        for path in sorted(root.glob(pattern)):
             if path in seen or _excluded(path) or not path.is_file():
                 continue
             if config.TICKETS_DIR in path.parents:
@@ -99,18 +102,17 @@ def _iter_log(cwd: Path, ref_prefix: str = "") -> Iterator[Doc]:
 
 
 def iter_git() -> Iterator[Doc]:
-    yield from _iter_log(config.REPO_ROOT)
-    for sub in config.GIT_SUBMODULES:
-        subdir = config.REPO_ROOT / sub
-        if (subdir / ".git").exists():
-            yield from _iter_log(subdir, ref_prefix=f"{sub}@")
+    for repo, prefix in config.GIT_REPOS:
+        if (repo / ".git").exists():
+            yield from _iter_log(repo, ref_prefix=prefix)
 
     if shutil.which("gh"):
         try:
             prs = json.loads(subprocess.run(
                 ["gh", "pr", "list", "--state", "all", "--limit", "500",
                  "--json", "number,title,body,mergedAt,updatedAt,author"],
-                cwd=config.REPO_ROOT, capture_output=True, text=True, check=True,
+                cwd=config.MANUSCRIPT_ROOT,
+                capture_output=True, text=True, check=True,
             ).stdout)
         except (subprocess.CalledProcessError, json.JSONDecodeError):
             print("kb: gh present but PR listing failed; skipping PRs",
@@ -143,8 +145,7 @@ def _chunk_notebook(path: Path) -> list:
 
 
 def iter_code() -> Iterator[Doc]:
-    for dir_ in config.CODE_DIRS:
-        base = config.REPO_ROOT / dir_
+    for base in config.CODE_DIRS:
         if not base.is_dir():
             continue
         for path in sorted(base.rglob("*.py")):
@@ -170,8 +171,8 @@ def iter_code() -> Iterator[Doc]:
 
 def iter_config() -> Iterator[Doc]:
     seen: set[Path] = set()
-    for pattern in config.CONFIG_GLOBS:
-        for path in sorted(config.REPO_ROOT.glob(pattern)):
+    for root, pattern in config.CONFIG_GLOBS:
+        for path in sorted(root.glob(pattern)):
             if path in seen or _excluded(path) or not path.is_file():
                 continue
             if "checkpoint" in path.name or path.stat().st_size > 100_000:
@@ -239,8 +240,7 @@ def iter_refs() -> Iterator[Doc]:
             for k in filter(None, [item.get("id"),
                                    (item.get("DOI") or "").lower()]):
                 enrich[str(k)] = item
-    for bib in config.BIB_FILES:
-        path = config.REPO_ROOT / bib
+    for path in config.BIB_FILES:
         if not path.is_file():
             continue
         for etype, key, f in _bib_entries(path.read_text(errors="replace")):

@@ -8,48 +8,52 @@ from __future__ import annotations
 
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+MANUSCRIPT_ROOT = manuscript_root()
 
 # SQLite database (gitignored).
-DB_PATH = REPO_ROOT / ".kb" / "kb.sqlite3"
+DB_PATH = ANALYSIS_ROOT / ".kb" / "kb.sqlite3"
 
 # ---------------------------------------------------------------------------
 # docs: manuscript + operational documentation
 # ---------------------------------------------------------------------------
 DOCS_GLOBS = [
-    "*.md",                # CONTEXT.md, PIPELINE.md, REPRODUCE.md, ...
-    "docs/**/*.md",        # rse specs, board, protocols, referee docs
-    "sections/*.tex",
-    "main.tex",
-    "pipeline/*.md",       # submodule top-level docs
-    "pipeline/docs/**/*.md",
-    "pipeline/external/**/*.md",   # vendored-tool READMEs
-    "pipeline/exports/*.tex",      # generated manuscript tables
+    (ANALYSIS_ROOT, "*.md"),
+    (ANALYSIS_ROOT, "docs/**/*.md"),
+    (MANUSCRIPT_ROOT, "*.md"),
+    (MANUSCRIPT_ROOT, "sections/*.tex"),
+    (MANUSCRIPT_ROOT, "main.tex"),
+    (MANUSCRIPT_ROOT, "pipeline/*.md"),
+    (MANUSCRIPT_ROOT, "pipeline/docs/**/*.md"),
+    (MANUSCRIPT_ROOT, "pipeline/external/**/*.md"),
+    (MANUSCRIPT_ROOT, "pipeline/exports/*.tex"),
 ]
 # Paths never indexed by the docs adapter (tickets have their own adapter).
 DOCS_EXCLUDE_PARTS = {
     ".venv", "node_modules", "__pycache__", "quarantine", "graphify-out",
 }
-TICKETS_DIR = REPO_ROOT / "docs" / "rse" / "wayfinder" / "tickets"
+TICKETS_DIR = ANALYSIS_ROOT / "docs" / "rse" / "wayfinder" / "tickets"
 
 # ---------------------------------------------------------------------------
 # code: python source, path-allowlisted (mirrors Cerebras per-repo allowlists)
 # ---------------------------------------------------------------------------
 CODE_DIRS = [
-    "scripts",
-    "tests",
-    "pipeline/analysis",
-    "pipeline/galaxies",
-    "pipeline/scintillation",
-    "pipeline/scattering",
-    "pipeline/flits",
-    "pipeline/simulation",
-    "pipeline/dispersion",
-    "pipeline/crossmatching",
-    "pipeline/scripts",
-    "pipeline/tests",
-    "pipeline/notebooks",   # .py and .ipynb (cell-level chunks)
-    "pipeline/external",    # vendored DM-power / DM_phase
+    ANALYSIS_ROOT / "scripts",
+    ANALYSIS_ROOT / "tests",
+    MANUSCRIPT_ROOT / "figures" / "ax",
+    MANUSCRIPT_ROOT / "pipeline" / "analysis",
+    MANUSCRIPT_ROOT / "pipeline" / "galaxies",
+    MANUSCRIPT_ROOT / "pipeline" / "scintillation",
+    MANUSCRIPT_ROOT / "pipeline" / "scattering",
+    MANUSCRIPT_ROOT / "pipeline" / "flits",
+    MANUSCRIPT_ROOT / "pipeline" / "simulation",
+    MANUSCRIPT_ROOT / "pipeline" / "dispersion",
+    MANUSCRIPT_ROOT / "pipeline" / "crossmatching",
+    MANUSCRIPT_ROOT / "pipeline" / "scripts",
+    MANUSCRIPT_ROOT / "pipeline" / "tests",
+    MANUSCRIPT_ROOT / "pipeline" / "notebooks",
+    MANUSCRIPT_ROOT / "pipeline" / "external",
 ]
 CODE_MAX_FILE_BYTES = 200_000
 NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are skipped
@@ -58,23 +62,27 @@ NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are 
 # config: pipeline YAML (telescopes, samplers, bursts, manifests, envs)
 # ---------------------------------------------------------------------------
 CONFIG_GLOBS = [
-    "pipeline/**/*.yaml",
-    "pipeline/**/*.yml",
+    (MANUSCRIPT_ROOT, "pipeline/**/*.yaml"),
+    (MANUSCRIPT_ROOT, "pipeline/**/*.yml"),
 ]
 
 # ---------------------------------------------------------------------------
 # git: commit history (parent repo + pipeline/ submodule). PRs via `gh`.
 # ---------------------------------------------------------------------------
 GIT_MAX_COMMITS = 2000
-GIT_SUBMODULES = ["pipeline"]   # refs become "pipeline@<sha>"
+GIT_REPOS = [
+    (ANALYSIS_ROOT, "analysis@"),
+    (MANUSCRIPT_ROOT, ""),
+    (MANUSCRIPT_ROOT / "pipeline", "pipeline@"),
+]
 
 # ---------------------------------------------------------------------------
 # refs: cited-references library
 # ---------------------------------------------------------------------------
-BIB_FILES = ["bib/refs.bib"]
+BIB_FILES = [MANUSCRIPT_ROOT / "bib" / "refs.bib"]
 # Optional Zotero-enriched export (CSL JSON, keyed by DOI/citekey); created by
 # the references-library workflow. Merged into bib entries when present.
-REFS_CSL_JSON = REPO_ROOT / "bib" / "references_library.json"
+REFS_CSL_JSON = MANUSCRIPT_ROOT / "bib" / "references_library.json"
 
 # ---------------------------------------------------------------------------
 # obsidian: personal vault (optional). Set to an absolute Path to enable, e.g.
