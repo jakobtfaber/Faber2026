@@ -44,6 +44,11 @@ independent numerical, provenance, and owner visual checks.
   — the superseded validation is explicitly failed, its defects are
   machine-readable, and the gate exits nonzero until a rebuilt catalog and
   independent report pass.
+- [Set the catalog crossmatch and quality contract](tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md)
+  — accepted the deterministic nearest-match, ambiguity, query-state, frozen
+  snapshot, provenance, error, and catalog-native quality contract already
+  merged in dsa110-FLITS PR #213 and reverified on current pipeline
+  `origin/main` at `f3c8d22a9088`.
 - [Independently verify foreground redshifts and verdicts](tickets/expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
   — all stored verdict and budget arithmetic reproduces, but 0/52 rows has a
   complete host-plus-candidate source chain; retain the legacy adjudications and
@@ -84,16 +89,14 @@ independent numerical, provenance, and owner visual checks.
 
 ## Open route
 
-The map remains open. The current controller frontier is:
+Ticket 02 is resolved. The current controller frontier is:
 
-- [Set the catalog crossmatch and quality contract](tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md).
+- [Set the stellar-mass, halo-mass, and radius authority](tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md).
 - [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md).
 - [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
 - [Source the Zach and Whitney host redshifts](tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md), without re-adjudicating either value.
 
-Later replay, physics-authority, validation, and Figure 3 gates remain open and
-depend on this evidence frontier.
-
+Later replay, validation, and Figure 3 gates remain open and depend on this evidence frontier.
 ## Out of scope
 
 - Changing foreground redshifts or budget eligibility without a separate,
