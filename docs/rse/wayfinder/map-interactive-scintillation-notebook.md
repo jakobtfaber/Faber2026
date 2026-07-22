@@ -1,6 +1,8 @@
 <!-- wayfinder:map -->
 # Map: Interactive Scintillation Analysis Notebook
 
+- Status: closed (2026-07-22)
+
 Tickets live in [`tickets/`](tickets/). A ticket is claimed by writing an assignee into its header; blocking uses the `Blocked by:` header line (local markdown tracker — no native dependency links). The frontier = open tickets with no open blockers and no assignee.
 
 ## Destination
@@ -27,7 +29,7 @@ An interactive Jupyter notebook (`notebooks/scintillation_interactive_walkthroug
 
 ## Not yet specified
 
-<!-- none; current fog has graduated into open child tickets -->
+<!-- none; route fully walked and map closed -->
 
 ## Out of scope
 
