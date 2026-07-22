@@ -76,6 +76,9 @@ existing lane system. The map does not carry the execution itself.
   the interpretation unchanged. Only FRB 20220310F has P(host DM < 0) above
   one half, and the central shift is primarily the lower fitted
   $f_{\rm IGM}$, not a generic skew correction.
+- [Decide how the free-α diagnostic is reported in the paper](tickets/14-free-alpha-diagnostic-reporting.md)
+  — methods/appendix mismatch diagnostic only; excluded from physical tables,
+  screen inference, abstract, conclusions, and headline claims.
 
 ## Not yet specified
 

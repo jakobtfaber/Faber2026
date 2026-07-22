@@ -46,6 +46,17 @@ with different τ(ν) mixing across the CHIME/DSA lever arm). This is a hypothes
 **by elimination** — no forward two-screen model has been fit. Decision framing:
 `decision-two-screen-charter-2026-07-18.md`.
 
+**Independent preservation and check (2026-07-22):** the six scintillation-
+gain products, jobs 147--152 logs, driver, job script, fitter provenance, and
+current diagnostic input records are hash-bound in
+[`free-alpha-diagnostic-2026-07-22`](../research/evidence/free-alpha-diagnostic-2026-07-22/).
+The standard-library verifier confirms all six 90% intervals contain alpha=4,
+maximum absolute bias 0.016916 across all runs, and 0.014076 across the four
+decorrelating runs. The packet records that the h17 driver and provenance were
+untracked and that the current input records postdate the injections; use the
+packet to verify the landed `|bias| < 0.02` bound, not to claim a clean-room
+fitter rerun.
+
 Secondary finding (flagged separately on the deck): the two β-ceiling rails have
 different origins — **casey's rail is peak-associated** (masked-tied β = 3.44,
 CI ±0.01, tightly excludes 3.99; diagnostic of what pins the rail — production
