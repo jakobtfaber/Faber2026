@@ -1,0 +1,151 @@
+{
+  "artifacts": {
+    "comparison_fit": {
+      "name": "zach_joint_fit_C2D3_s2-100_fine.json",
+      "sha256": "a0a1adaa1918e6b58cd9e14ff832794e71f069cd5812dfb03389f646bab561dc"
+    },
+    "comparison_model_grid": {
+      "name": "zach_jointmodel_C2D3_s2-100_fine.npz",
+      "sha256": "eda4e8f5d4d67f6dd96d307719bb292de9215e0fc0352ff7f5e94c7dc99eb408"
+    },
+    "fit": {
+      "name": "zach_joint_fit_C2D4_s2-100_fine.json",
+      "sha256": "55bc7397ae1d100718bdb7b9cb9b2a7dd9c0ca70908c60ed684e8795e0e05590"
+    },
+    "model_grid": {
+      "name": "zach_jointmodel_C2D4_s2-100_fine.npz",
+      "sha256": "8efa4f8dc6572cdd448dfcedebaf6c4e17a30da6f3bc8a37aba1cd5944836051"
+    },
+    "samples": {
+      "name": "zach_joint_samples_C2D4_s2-100_fine.npz",
+      "sha256": "87681b33410cc60e42630c3cbc4e666f63c16c0976d14db9197dedbff39730be"
+    },
+    "stderr_log": {
+      "name": "jtfzf_180.err",
+      "sha256": "9d4d6c6f02bdabbd9c1841fc3bb6e73dd174561f4f4af7efe3cbfbaeff4cf04b"
+    },
+    "stdout_log": {
+      "name": "jtfzf_180.out",
+      "sha256": "ac90959e86a3a39308fb749b700f51afcbc8949ba68761171a344f6cd8bf8b1a"
+    }
+  },
+  "comparison_to_c2d3": {
+    "common_parameter_sigma_separation": {
+      "beta": 0.06351046691660896,
+      "tau_1ghz": 0.17032265532485896
+    },
+    "configuration_matched": true,
+    "log_evidence_C2D4_minus_C2D3": -10.102266464396962,
+    "mode_continuous": true,
+    "reduced_residual_statistic_C2D3": {
+      "CHIME": 2.0251645806032714,
+      "DSA": 1.2125665308248763
+    }
+  },
+  "execution": {
+    "burst": "zach",
+    "extra_args": "--components-C 2 --components-D 4 --gain-s2 100",
+    "host": "lxd110h17",
+    "job": 180,
+    "max_channels": "def",
+    "nlive": 400,
+    "nproc": 4,
+    "snr_target": "def",
+    "start": "2026-07-19T14:55:43-07:00"
+  },
+  "failure": {
+    "all_arrival_medians_in_window": true,
+    "arrival_medians_in_window": {
+      "t0_D1": true,
+      "t0_D2": true,
+      "t0_D3": true,
+      "t0_D4": true
+    },
+    "arrival_medians_ms": {
+      "t0_D1": 1.5073909565738,
+      "t0_D2": 3.534581319947264,
+      "t0_D3": 4.04303586543174,
+      "t0_D4": 4.723581149269058
+    },
+    "broad_low_fluence_pedestal": true,
+    "dsa_component_fluence": [
+      147.31391896873066,
+      14.232755313329346,
+      94.87344754537766,
+      8.153709424222372
+    ],
+    "dsa_component_fluence_fractions": [
+      0.5567970130371931,
+      0.05379502290909221,
+      0.35858968778788625,
+      0.03081827626582859
+    ],
+    "dsa_fitted_window_ms": [
+      0.0,
+      5.8982399999999995
+    ],
+    "dsa_fitted_window_span_ms": 5.8982399999999995,
+    "fourth_component_fluence_fraction": 0.03081827626582859,
+    "fourth_component_width_ms": 350.23531131967604,
+    "fourth_component_width_to_window_ratio": 59.37963041851062,
+    "reduced_residual_statistic": {
+      "CHIME": 2.02518898355345,
+      "DSA": 1.1295642163523316
+    },
+    "thresholds": {
+      "maximum_low_fluence_fraction": 0.05,
+      "minimum_width_to_window_ratio": 5.0
+    }
+  },
+  "guard_contract": {
+    "flag_broad_low_fluence_components": true,
+    "require_arrival_medians_inside_fitted_window": true,
+    "require_component_count_identity_across_artifacts": true,
+    "require_mode_and_configuration_match_for_evidence_comparison": true,
+    "require_residual_morphology_review": true
+  },
+  "posterior_reconstruction": {
+    "matches_fit_summary_exactly": true,
+    "quantiles_16_50_84": {
+      "t0_D1": [
+        1.505016477519518,
+        1.5073909565738,
+        1.5097329027703439
+      ],
+      "t0_D2": [
+        3.530686262478944,
+        3.534581319947264,
+        3.5382814616353797
+      ],
+      "t0_D3": [
+        4.035079229603725,
+        4.04303586543174,
+        4.050603813254438
+      ],
+      "t0_D4": [
+        4.290544182306397,
+        4.723581149269058,
+        5.40513124200951
+      ],
+      "zeta_D4": [
+        321.2095557335053,
+        350.23531131967604,
+        367.6403889840353
+      ]
+    },
+    "sample_count": 36243,
+    "weight_sum": 1.0
+  },
+  "schema": "faber2026-deprecated-joint-fit-audit/v1",
+  "subject": {
+    "burst": "zach",
+    "disposition": "deprecated_reject",
+    "model": "C2D4",
+    "tns": "FRB 20220207C"
+  },
+  "verdict": {
+    "deprecated_fit_value_trusted": false,
+    "deprecated_panel_review_eligible": false,
+    "guard_triggered": true
+  }
+}
