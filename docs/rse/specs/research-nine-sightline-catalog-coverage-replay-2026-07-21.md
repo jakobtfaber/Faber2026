@@ -1,8 +1,10 @@
 # Research: nine-sightline catalog coverage replay
 
-Date: 2026-07-21 PDT / 2026-07-22 UTC  
-Parent commit: `4df872d532822eaf1657d982f0acd857428397b8`  
-Pipeline commit: `ab6af1f713496abd2ff2d71bf11edf4100871e94`  
+Date: 2026-07-21 PDT / 2026-07-22 UTC
+
+Parent commit: `4df872d532822eaf1657d982f0acd857428397b8`
+
+Pipeline commit: `ab6af1f713496abd2ff2d71bf11edf4100871e94`
 Disposition: **fail closed; source-row replay passes, expanded search coverage does not exist**
 
 ## Question and boundary
