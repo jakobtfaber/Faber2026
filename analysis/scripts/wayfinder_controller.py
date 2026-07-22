@@ -225,6 +225,7 @@ def load_state(manifest: Manifest) -> dict[str, Any]:
     state = json.loads(path.read_text(encoding="utf-8"))
     if state.get("version") != 1:
         raise ValueError("unsupported controller state version")
+    state["manifest"] = str(manifest.path)
     for task in manifest.tasks:
         state.setdefault("tasks", {}).setdefault(
             task.id,

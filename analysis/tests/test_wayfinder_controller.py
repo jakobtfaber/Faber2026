@@ -30,7 +30,11 @@ def load_controller():
 def test_manifest_has_reviewed_first_wave():
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
-    assert manifest.max_parallel == 2
+    assert manifest.repo == "jakobtfaber/Faber2026-analysis"
+    assert manifest.worktree_root == Path(
+        "~/Developer/scratch/worktrees/Faber2026-analysis-wayfinder-auto"
+    ).expanduser()
+    assert manifest.max_parallel == 4
     assert [task.id for task in wc.tasks_for_wave(manifest, "first")] == [
         "fail-close-expanded-catalog",
         "freeze-candidate-redshifts",
@@ -38,6 +42,23 @@ def test_manifest_has_reviewed_first_wave():
         "correct-census-wording",
         "retire-stage-codes",
     ]
+
+
+def test_manifest_parses_blocker_first_frontier():
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+    tasks = wc.tasks_for_wave(manifest, "blocker-first")
+
+    assert [task.id for task in tasks] == [
+        "review-trust-ledger",
+        "review-count-audit",
+        "review-rfi-preservation-limits",
+        "resolve-expanded-crossmatch-contract",
+        "review-technical-robustness-dispositions",
+        "review-coauthor-candidates",
+    ]
+    assert all(task.mode in {"resolve", "review"} for task in tasks)
+    assert all(task.expected_artifact for task in tasks if task.mode == "review")
 
 
 def test_manifest_rejects_unsafe_branch_and_mode(tmp_path):
@@ -73,15 +94,14 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     state = wc.empty_state(manifest)
-    ready = wc.ready_tasks(manifest, state, "second")
-    assert ready == []
+    ready = {task.id for task in wc.ready_tasks(manifest, state, "blocker-first")}
+    assert "review-trust-ledger" not in ready
+    assert "review-count-audit" not in ready
     state["tasks"]["fail-close-expanded-catalog"]["status"] = "resolved"
     state["tasks"]["freeze-candidate-redshifts"]["status"] = "resolved"
     state["tasks"]["audit-results-library-conflicts"]["status"] = "review_ready"
-    assert [task.id for task in wc.ready_tasks(manifest, state, "second")] == [
-        "review-trust-ledger",
-        "review-count-audit",
-    ]
+    ready = {task.id for task in wc.ready_tasks(manifest, state, "blocker-first")}
+    assert {"review-trust-ledger", "review-count-audit"} <= ready
 
 
 def test_pass_only_ticket_cannot_resolve_as_no_go():
@@ -159,6 +179,22 @@ def test_state_write_is_atomic_json(tmp_path):
     wc.write_json_atomic(target, payload)
     assert json.loads(target.read_text()) == payload
     assert not (tmp_path / "state.json.tmp").exists()
+
+
+def test_load_state_refreshes_manifest_path_without_resetting_tasks(tmp_path):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+    manifest = replace(manifest, state_dir=tmp_path, path=tmp_path / "current.toml")
+    state = wc.empty_state(manifest)
+    state["manifest"] = "/stale/parent/runtime/manifest.toml"
+    task_id = manifest.tasks[0].id
+    state["tasks"][task_id]["status"] = "resolved"
+    wc.write_json_atomic(tmp_path / "state.json", state)
+
+    loaded = wc.load_state(manifest)
+
+    assert loaded["manifest"] == str(manifest.path)
+    assert loaded["tasks"][task_id]["status"] == "resolved"
 
 
 def test_receipt_policy_distinguishes_resolution_from_review(tmp_path):
@@ -356,7 +392,7 @@ def test_remote_pr_is_bound_to_repo_head_and_check_names(monkeypatch):
         "summary": "done",
         "branch": task.branch,
         "commit": "a" * 40,
-        "pr_url": "https://github.com/jakobtfaber/Faber2026/pull/1",
+        "pr_url": "https://github.com/jakobtfaber/Faber2026-analysis/pull/1",
         "checks": ["root-science-tests"],
         "blocker": "",
     }

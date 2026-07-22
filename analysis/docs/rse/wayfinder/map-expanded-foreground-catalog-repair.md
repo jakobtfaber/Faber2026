@@ -82,9 +82,17 @@ independent numerical, provenance, and owner visual checks.
   authoritative; the older `test.tex` is superseded, blank cells remain blank,
   and absent Zach and Whitney rows continue through a separate source ticket.
 
-## Not yet specified
+## Open route
 
-None. Remaining questions are explicit open child tickets.
+The map remains open. The current controller frontier is:
+
+- [Set the catalog crossmatch and quality contract](tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md).
+- [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md).
+- [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
+- [Source the Zach and Whitney host redshifts](tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md), without re-adjudicating either value.
+
+Later replay, physics-authority, validation, and Figure 3 gates remain open and
+depend on this evidence frontier.
 
 ## Out of scope
 

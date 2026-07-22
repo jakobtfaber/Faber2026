@@ -1,11 +1,11 @@
 [controller]
-repo = "jakobtfaber/Faber2026"
+repo = "jakobtfaber/Faber2026-analysis"
 base_branch = "main"
 state_dir = "~/.local/state/Faber2026/wayfinder-controller"
-worktree_root = "~/Developer/scratch/worktrees/Faber2026-wayfinder-auto"
+worktree_root = "~/Developer/scratch/worktrees/Faber2026-analysis-wayfinder-auto"
 model = "gpt-5.5"
 reasoning_effort = "medium"
-max_parallel = 2
+max_parallel = 4
 timeout_seconds = 14400
 
 [[task]]
@@ -56,7 +56,7 @@ instructions = "Add the complete legacy-code glossary and make CONTEXT.md pendin
 
 [[task]]
 id = "review-trust-ledger"
-wave = "second"
+wave = "blocker-first"
 ticket = "docs/rse/wayfinder/tickets/13-overhaul-trust-assessment.md"
 branch = "codex/auto-review-trust-ledger"
 mode = "review"
@@ -66,10 +66,49 @@ instructions = "Produce a row-by-row evidence audit and exact recommended trust-
 
 [[task]]
 id = "review-count-audit"
-wave = "second"
+wave = "blocker-first"
 ticket = "docs/rse/wayfinder/tickets/15-count-audit-remediation-standing-method.md"
 branch = "codex/auto-review-count-audit"
 mode = "review"
 depends_on = ["fail-close-expanded-catalog", "freeze-candidate-redshifts", "audit-results-library-conflicts"]
 expected_artifact = "docs/rse/specs/research-count-audit-remediation-2026-07-20.md"
 instructions = "Run the count-method comparisons and prepare an exact decision packet. Do not adopt morphology-dependent count changes or resolve the ticket. Stop at owner visual review."
+
+[[task]]
+id = "review-rfi-preservation-limits"
+wave = "blocker-first"
+ticket = "docs/rse/wayfinder/tickets/rfi-validation-01a-review-preservation-dynamic-spectrum.md"
+branch = "codex/auto-review-rfi-preservation-limits"
+mode = "review"
+depends_on = []
+expected_artifact = "docs/rse/specs/research-rfi-preservation-limits-review.md"
+instructions = "Build the controlled diagnostic review artifact requested by the ticket using only synthetic interference and known-truth injection data. Bind inputs, code, environment, and output hashes. Do not open sealed test data, validate a cleaner, or resolve the ticket. Stop at the owner visual gate with a compact decision packet."
+
+[[task]]
+id = "resolve-expanded-crossmatch-contract"
+wave = "blocker-first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md"
+branch = "codex/auto-resolve-expanded-crossmatch-contract"
+mode = "resolve"
+depends_on = ["fail-close-expanded-catalog"]
+instructions = "Implement the ticket's already-recorded crossmatch and quality contract, including deterministic selection, ambiguity handling, evidence fields, normalized fixtures, and focused tests. Preserve scientific authority fields. Resolve only when acceptance checks pass."
+
+[[task]]
+id = "review-technical-robustness-dispositions"
+wave = "blocker-first"
+ticket = "docs/rse/wayfinder/tickets/10-disposition-technical-review-robustness-items.md"
+branch = "codex/auto-review-technical-robustness-dispositions"
+mode = "review"
+depends_on = []
+expected_artifact = "docs/rse/specs/research-technical-review-robustness-dispositions.md"
+instructions = "Prepare the ticket's per-item evidence table and recommended in, out, or defer-with-caveat disposition. Use standing delegated authority for recommendations. Do not execute adopted science changes or resolve the ticket; batch unresolved owner scientific decisions into one minimal packet."
+
+[[task]]
+id = "review-coauthor-candidates"
+wave = "blocker-first"
+ticket = "docs/rse/wayfinder/tickets/11-prune-coauthor-list.md"
+branch = "codex/auto-review-coauthor-candidates"
+mode = "review"
+depends_on = []
+expected_artifact = "docs/rse/specs/research-coauthor-candidate-packet.md"
+instructions = "Build the candidate coauthor overlap and ordering evidence from the named source lists, including affiliation and identifier gaps. Do not add, remove, rank, or contact personnel and do not edit auth.tex. Stop at the owner personnel gate with one compact candidate packet."

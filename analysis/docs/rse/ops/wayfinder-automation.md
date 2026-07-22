@@ -10,13 +10,15 @@ state; runtime state and logs are outside the repository at
 ```bash
 python3 scripts/wayfinder_controller.py plan --wave first
 python3 scripts/wayfinder_controller.py launch --wave first
+python3 scripts/wayfinder_controller.py plan --wave blocker-first
+python3 scripts/wayfinder_controller.py launch --wave blocker-first
 python3 scripts/wayfinder_controller.py status
 python3 scripts/wayfinder_controller.py status --json
 ```
 
 `launch` refuses to run until the controller, schema, and manifest match
 `origin/main`. It starts a detached supervisor. Each task gets an isolated
-worktree below `~/Developer/scratch/worktrees/Faber2026-wayfinder-auto/`, a
+worktree below `~/Developer/scratch/worktrees/Faber2026-analysis-wayfinder-auto/`, a
 `codex/auto-*` branch, bounded `codex exec`, closed stdin, and a schema-checked
 receipt.
 

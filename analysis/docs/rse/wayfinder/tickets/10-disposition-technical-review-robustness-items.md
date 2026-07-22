@@ -3,11 +3,14 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: Codex controller
-- Blocked by: — (formerly the deadline-reconciliation ticket, closed 2026-07-18: dispositions are decided on scientific need, not schedule)
+- Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 
 ## Question
+
+The former deadline-reconciliation blocker closed on 2026-07-18. Dispositions
+are decided on scientific need, not schedule.
 
 The 2026-07-15 technical-review triage leaves a set of valid,
 not-yet-dispositioned robustness items; decide in / out /
