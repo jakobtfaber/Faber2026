@@ -1,8 +1,8 @@
 # Build the verified Zach CHIME preprocessing baseline
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
-- Assignee: Codex
+- Status: resolved
+- Assignee: —
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner request, 2026-07-21
@@ -45,5 +45,23 @@ Implementation and live h17 execution are complete. See
   response and produces an unstable, excessive mask.
 - Science fit/claim: not run.
 
-Status remains open pending owner review of the diagnostic figure and acceptance
-of the no-go/current-next-method decision. Ticket 02 remains blocked.
+Owner review is complete. The no-go/current-next-method decision is accepted,
+and the resulting validation route is:
+
+1. [Review the preservation limits on a controlled dynamic spectrum](rfi-validation-01a-review-preservation-dynamic-spectrum.md);
+2. [Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md);
+3. [Stabilize and qualify the CHIME bandpass model](rfi-validation-01b-stabilize-bandpass-model.md);
+4. [Build the frozen CHIME RFI-validation benchmark](rfi-validation-02-build-frozen-benchmark.md);
+5. [Compare and choose the CHIME RFI cleaner](rfi-validation-03-compare-and-choose-cleaner.md);
+6. [Blind-validate the selected CHIME RFI cleaner](rfi-validation-04-blind-validate-cleaner.md); and
+7. [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md).
+
+Ticket 02 remains blocked by the complete input-remediation and campaign-rerun
+ticket, not only by radio-frequency-interference validation.
+
+## Resolution — 2026-07-21
+
+The owner accepted the fail-closed baseline by directing this follow-on route.
+The explicit-mask grid and migration preflight changes pass. Bandpass
+correction is required but not yet stable. The current package RFI cleaner is
+rejected, and no science fit or claim is admitted.
