@@ -96,6 +96,10 @@ independent numerical, provenance, and owner visual checks.
   spectroscopic redshifts `0.043040` and `0.477958`; exact source extracts and
   hashes are frozen, with row-level uncertainty explicitly unavailable. Census
   adoption remains with the later adjudication ticket.
+- [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
+  — resolved after independent review. Exact admission contains 109,117
+  records; 1,474 guard-only rows are separate. Official Legacy Survey, XMM,
+  Chandra, and Swift coverage evidence is frozen and replays with zero errors.
 - [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md)
   — froze nine authenticated uncapped WISE--PS1--STRM responses, 20,788 exact
   cone rows, every shared-WISE ambiguity, exact queries and job metadata, and a
@@ -104,17 +108,16 @@ independent numerical, provenance, and owner visual checks.
 
 ## Open route
 
-The map remains open. Tickets 02 then 03 are resolved. Remaining strict
-dependency order:
+The map remains open. Remaining strict dependency order:
 
-1. [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md).
-2. After the anonymous corpus and now-resolved protected corpus tickets resolve,
-   [independently replay the completed corpus](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
-3. After independent replay and the now-resolved host-source ticket,
+Tickets 14 and 15 are resolved. Next:
+
+1. [Independently replay both corpora](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
+2. After independent replay and the now-resolved host-source ticket,
    [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
-4. After ticket 09 and the now-resolved physics-authority ticket,
+3. After ticket 09 and the now-resolved physics-authority ticket,
    [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
-5. Only after the Figure 3 gate resolves,
+4. Only after the Figure 3 gate resolves,
    [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
 
 ## Out of scope
