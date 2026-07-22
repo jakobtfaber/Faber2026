@@ -113,3 +113,20 @@ def test_map_and_board_reference_successor():
     assert "Profile-component-count statistic: deferred for this submission" in board_text
     assert "Fit re-validation contract ratification" in board_text
     assert "[x] Fit re-validation contract ratification" in board_text
+
+
+RECEIPT_URL = "https://github.com/jakobtfaber/Faber2026-analysis/pull/46#issuecomment-5050854194"
+
+
+def test_affected_tickets_cite_exact_owner_receipt_and_ticket_10_does_not():
+    for name in (
+        "03-ratify-fit-retrust-contract.md",
+        "05-profile-component-statistic-blocker-decision.md",
+        "15-count-audit-remediation-standing-method.md",
+    ):
+        text = _ticket_text(name)
+        assert RECEIPT_URL in text, f"{name} must cite the owner receipt URL"
+        assert "Manuscript-owner governance receipt — 2026-07-22" in text
+    ten = _ticket_text("10-disposition-technical-review-robustness-items.md")
+    assert RECEIPT_URL not in ten
+    assert "Manuscript-owner governance receipt" not in ten

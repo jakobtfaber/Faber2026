@@ -34,4 +34,4 @@ submission. This ticket answered only the blocker/defer question.
 - Any component-count choices used in the manuscript must record the visual
   review evidence and the caveat that a calibrated statistic is pending.
 
-Owner receipt: manuscript-owner checkpoint, 2026-07-22.
+Owner receipt: [Manuscript-owner governance receipt — 2026-07-22](https://github.com/jakobtfaber/Faber2026-analysis/pull/46#issuecomment-5050854194).

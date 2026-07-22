@@ -40,4 +40,4 @@ Owner accepted the recommendation in
   The neighbor protocol is a stopgap aid for that statistic, not its completed
   realization.
 
-Owner receipt: manuscript-owner checkpoint, 2026-07-22.
+Owner receipt: [Manuscript-owner governance receipt — 2026-07-22](https://github.com/jakobtfaber/Faber2026-analysis/pull/46#issuecomment-5050854194).

@@ -42,4 +42,4 @@ materially changed likelihood or forward model, any model-selection procedure,
 and any component-count-setting statistic. It is not required as a standalone
 step for re-trusting the existing fit path.
 
-Owner receipt: manuscript-owner checkpoint, 2026-07-22.
+Owner receipt: [Manuscript-owner governance receipt — 2026-07-22](https://github.com/jakobtfaber/Faber2026-analysis/pull/46#issuecomment-5050854194).
