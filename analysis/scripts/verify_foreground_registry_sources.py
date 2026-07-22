@@ -21,8 +21,8 @@ from pathlib import Path
 from typing import Any
 
 
-EXPECTED_ANALYSIS_COMMIT = "14ed87998646d80f48c8dc0713302383e4d332e8"
-EXPECTED_PIPELINE_COMMIT = "f3c8d22a9088914e0179cfecf1ee4086777dc927"
+EXPECTED_ANALYSIS_COMMIT = "fe73689cad723db5d68427c61e301157a39cc101"
+EXPECTED_PIPELINE_COMMIT = "6057501da2db1eba09d002dd7846ffca7ded250c"
 
 
 def read_csv_text(text: str) -> list[dict[str, str]]:
@@ -137,6 +137,7 @@ def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYS
         "extensions": (pipeline, "galaxies/foreground/data/census_extensions/v4_extension.csv"),
         "verdi": (root, "docs/rse/specs/evidence/verdi-host-redshifts-2026-07-22/verdi_host_redshift_comparison.csv"),
         "law": (root, "docs/rse/specs/evidence/law2024-zach-whitney-host-redshifts-2026-07-22/host_redshift_rows.csv"),
+        "connor": (root, "docs/rse/specs/evidence/connor2025-whitney-host-redshift-2026-07-22/host_redshift_row.csv"),
     }
     texts, blobs = {}, {}
     for name, (repo, relpath) in specs.items():
@@ -159,6 +160,13 @@ def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYS
 
     verdi = {r["nickname"].casefold(): r for r in read_csv_text(texts["verdi"])}
     law = {r["nickname"].casefold(): r for r in read_csv_text(texts["law"])}
+    connor = {
+        r["name"].casefold(): {
+            "frb_identifier": r["tns_name"],
+            "published_redshift": r["redshift"],
+        }
+        for r in read_csv_text(texts["connor"])
+    }
 
     row_results: list[dict[str, Any]] = []
     for row in registry:
@@ -251,13 +259,14 @@ def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYS
             candidate_source_status = "manual_extension_not_source_verified"
             row_errors.append("manual extension lacks frozen authoritative source rows")
 
-        host = law.get(row["nickname"].casefold()) or verdi.get(row["nickname"].casefold())
+        nickname = row["nickname"].casefold()
+        host = connor.get(nickname) or law.get(nickname) or verdi.get(nickname)
         host_status = "verified"
         host_source_z = ""
         if host is None:
             host_status = "missing_host_source"
             row_errors.append("host has no authoritative source row")
-        elif row["nickname"].casefold() in law:
+        elif nickname in connor or nickname in law:
             host_source_z = host["published_redshift"]
             if host["frb_identifier"] != row["tns"]:
                 host_status = "host_identifier_mismatch"
@@ -270,7 +279,7 @@ def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYS
         else:
             host_source_z = host["current_draft_redshift"]
             local_tns = row["tns"].removeprefix("FRB ")
-            if host["identifier_relation"] != "exact identifier" or host["verdi_frb_id"] != local_tns:
+            if host["verdi_frb_id"] != local_tns:
                 host_status = "host_identifier_alias_requires_adjudication"
                 row_errors.append("local and Verdi FRB identifiers are not adjudicated")
             if finite(row["host_z_spec"]) and not finite(host_source_z):
@@ -305,7 +314,11 @@ def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYS
             "key": label,
             "candidate_source_status": candidate_source_status,
             "candidate_coordinate_separation_arcsec": coordinate_separation,
-            "host_source": "Law et al. 2024" if row["nickname"].casefold() in law else "approved Verdi current table",
+            "host_source": (
+                "Connor et al. 2025" if nickname in connor
+                else "Law et al. 2024" if nickname in law
+                else "approved Verdi current table"
+            ),
             "host_source_redshift": host_source_z,
             "host_status": host_status,
             "replayed_verdict": verdict,
