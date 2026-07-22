@@ -77,7 +77,7 @@ def render() -> str:
         "%    galaxies/foreground/budget_table_data.json; markup in budget_table_emitter.py.\n"
         "%    Regenerate: python -m galaxies.foreground.budget_table_emitter --out <this file>\n",
         "% !! GENERATED FILE -- do not edit by hand.\n"
-        "%    Regenerate: python scripts/render_budget_table.py\n"
+        "%    Regenerate: python analysis/scripts/render_budget_table.py\n"
         "% Foreground columns come from pipeline/galaxies/foreground/budget_table_data.json;\n"
         "% DM_obs and DM_host come from the verified super-repository products.\n",
     ).replace(
