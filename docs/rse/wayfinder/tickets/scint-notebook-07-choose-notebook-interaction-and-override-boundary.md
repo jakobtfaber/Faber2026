@@ -3,7 +3,7 @@
 
 - Type: prototype
 - Status: open
-- Assignee:
+- Assignee: antigravity
 - Blocked by: [`scint-notebook-03-define-subband-acf-and-fitting-contract.md`](scint-notebook-03-define-subband-acf-and-fitting-contract.md), [`scint-notebook-06-choose-canonical-input-preprocessing-and-envelope-contract.md`](scint-notebook-06-choose-canonical-input-preprocessing-and-envelope-contract.md)
 - Map: [`../map-interactive-scintillation-notebook.md`](../map-interactive-scintillation-notebook.md)
 
