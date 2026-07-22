@@ -203,6 +203,32 @@ As a higher-value equivalent, anonymous NOIRLab queries of Legacy Surveys DR10
 `ls_dr10.tractor` returned zero rows within 5 arcsec. There is no independent
 DR10 morphology or photometric-redshift row to use at this position.
 
+### Additional northern-survey sweep
+
+An additional source-level sweep on `2026-07-22 UTC` checked surveys that could
+either supply an independent photometric redshift or test the quasar/blend
+interpretation:
+
+| survey or service | radius | result | scientific use |
+|---|---:|---|---|
+| [J-PLUS DR4](https://www.j-plus.es/datareleases/data_release_dr4) dual-object and tile services | 5 arcsec | zero object rows and zero tile rows | The position is not covered; its 12-band photometric redshifts cannot be used. |
+| J-PAS EDR dual-object and tile services | 5 arcsec | zero object rows and zero tile rows | The position is not covered. |
+| [LoTSS DR3](https://lofar-surveys.org/dr3.html) source catalog | 10 arcsec | zero rows | No cataloged 120--168 MHz counterpart. |
+| [VLASS quick-look catalog](https://cirada.ca/vlasscatalogueql0) | 10 arcsec | zero rows | No cataloged 3 GHz counterpart. |
+| NVSS, WENSS, and TGSS ADR1 | 30, 60, and 30 arcsec | zero rows | No brighter low-resolution radio counterpart. |
+| [eROSITA eRASS1](https://erosita.mpe.mpg.de/dr1/AllSkySurveyData_dr1/Catalogues_dr1/) | 30 arcsec | zero rows | No cataloged all-sky X-ray counterpart. |
+| 5XMM-DR15, Chandra Source Catalog 2.1.1, and Swift 2SXPS | 30 arcsec | zero rows | No cataloged pointed X-ray counterpart. |
+| NED | 10 arcsec | one WISE infrared-source entry, no redshift and no redshift measurement | Repeats the known WISE source; adds no distance constraint. |
+| SIMBAD | 10 arcsec | zero rows | Adds no independent classification or redshift. |
+
+The radio and X-ray non-detections do not distinguish a normal galaxy at low
+redshift from one near `z=0.47`; they only fail to provide positive evidence for
+a radio- or X-ray-bright active nucleus. J-PLUS and J-PAS would have been the
+most useful independent multi-band photometric-redshift catalogs, but neither
+covers this position. UNIONS/CFIS therefore remains the only identified public
+northern imaging program likely to add a decisive optical band and sharper
+morphology here, subject to `CFIS-read` access and a separately validated fit.
+
 ## Disposition
 
 - The combined row is now identified exactly as PS1
@@ -214,6 +240,8 @@ DR10 morphology or photometric-redshift row to use at this position.
   verified, but not scientifically validated.
 - Public DESI, SDSS, LAMOST, Gaia, and Legacy Surveys searches add only
   documented non-detections.
+- J-PLUS and J-PAS do not cover the position. Additional radio and X-ray
+  catalogs contain no counterpart and therefore add no redshift constraint.
 - Freeze the CasJobs query, job identifier, and retrieval time beside the
   supplied bytes. CADC/CFIS access remains useful if `CFIS-read` can be
   obtained.
