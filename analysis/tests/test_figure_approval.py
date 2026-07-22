@@ -69,6 +69,30 @@ def test_figure3_review_slot_does_not_retroactively_protect_old_bytes() -> None:
     assert slot["protect_in_manuscript"] is False
 
 
+def test_figure3_source_replay_batch_is_exactly_pinned() -> None:
+    batch = ROOT / "figure_review/batches/2026-07-22-fig3-source-replay"
+    manifest = json.loads((batch / "manifest.json").read_text())
+    candidate = manifest["candidates"][0]
+    assert manifest["source_revision"] == "afa9cc7d59f3f64b5098acd6cf8dca842ca86661"
+    assert manifest["pipeline_revision"] == "f3c8d22a9088914e0179cfecf1ee4086777dc927"
+    assert candidate["id"] == "fig3-halo-grid"
+    assert candidate["artifact_sha256"] == (
+        "45017274a7e3d60cf6918d72c3e89558c0e9d50e27427d39a216547c4999fa6c"
+    )
+    assert candidate["decision"]["status"] == "pending"
+    assert candidate["protect_in_manuscript"] is False
+    assert candidate["evidence_ids"] == [item["id"] for item in manifest["evidence"]]
+    assert {item["id"]: item["sha256"] for item in manifest["evidence"]} == {
+        "expanded-catalog-build": "6d7881c243613149b436de53e69b02d575041b84918f801a9c03a6d927329aef",
+        "figure3-input": "ce0179a27fd2d4f18b7599cea9f8d56f98874d9c4c6a7a654e84395ff163acc3",
+        "verdi-host-redshifts": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa",
+        "law-host-redshifts": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
+        "candidate-redshift-ledger": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+        "candidate-redshift-replay": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
+        "candidate-redshift-payloads": "f1c21a95f174bd1ec0bbbf4bb4e82e15a0cac2442d3a529000eeb26787e75dd7",
+    }
+
+
 def test_gate_rejects_unapproved_protected_inclusion() -> None:
     module = load_review_module()
     target = "figures/codetection_data_grid.pdf"
