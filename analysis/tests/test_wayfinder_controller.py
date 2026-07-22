@@ -127,6 +127,31 @@ def test_required_pass_blocker_is_enforced_before_worktree_setup(tmp_path):
     wc.ensure_ticket_blockers_satisfied(downstream.relative_to(tmp_path), tmp_path)
 
 
+def test_required_pass_blocker_uses_explicit_remote_ref(monkeypatch, tmp_path):
+    wc = load_controller()
+    downstream = (
+        "# Downstream\n\n- Status: open\n"
+        "- Blocked by: [Upstream](upstream.md) (requires `pass`)\n"
+    )
+    upstream_no_go = (
+        "# Upstream\n\n- Status: resolved\n- Resolution gate: pass-only\n"
+        "- Gate outcome: no-go\n"
+    )
+
+    def fake_git(_repo, *args, **_kwargs):
+        assert args[0] == "show"
+        text = (
+            downstream if args[1].endswith(":tickets/downstream.md") else upstream_no_go
+        )
+        return SimpleNamespace(returncode=0, stdout=text)
+
+    monkeypatch.setattr(wc, "_git", fake_git)
+    with pytest.raises(RuntimeError, match="requires pass"):
+        wc.ensure_ticket_blockers_satisfied(
+            Path("tickets/downstream.md"), tmp_path, ref="origin/main"
+        )
+
+
 def test_state_write_is_atomic_json(tmp_path):
     wc = load_controller()
     target = tmp_path / "state.json"

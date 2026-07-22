@@ -130,6 +130,9 @@ redshift, verdict, budget flag, trust state, or Figure 3 status.
   spectroscopic foreground, host-local ambiguity, photometric interval
   overlap, background, and `no_usable_redshift`. Conflicting recovered
   redshifts keep `cluster_search_geometry_unresolved` and close the corpus gate.
+  The executable reference is
+  `scripts/foreground_search_contract.py::classify_recovered_cluster_redshift`;
+  `tests/test_foreground_search_contract.py` fixes these transition cases.
 - A cluster with finite search geometry but missing `R500` remains in the audit
   corpus as `geometry_unresolved` and is not budget eligible. A row at exactly
   `b = R500` is budget eligible; a row beyond it is not.

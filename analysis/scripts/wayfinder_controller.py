@@ -19,6 +19,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.wayfinder_state import parse_ticket_text, ticket_clears_dependency
+except (
+    ModuleNotFoundError
+):  # direct ``python scripts/wayfinder_controller.py`` execution
+    from wayfinder_state import parse_ticket_text, ticket_clears_dependency
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "docs/rse/control/wayfinder-automation.toml"
@@ -32,22 +39,6 @@ TERMINAL_STATUSES = {
 }
 RECEIPT_OUTCOMES = {"resolved", "review_ready", "blocked", "failed"}
 MODES = {"resolve", "review"}
-TICKET_STATUS_RE = re.compile(
-    r"^- Status:\s+(?:\*\*)?(?P<status>[a-z_-]+)",
-    re.MULTILINE | re.IGNORECASE,
-)
-TICKET_GATE_RE = re.compile(
-    r"^- Gate outcome:\s+`?(?P<outcome>pending|pass|no-go)`?\s*$",
-    re.MULTILINE | re.IGNORECASE,
-)
-PASS_ONLY_RE = re.compile(
-    r"^- Resolution gate:\s+`?pass-only`?\s*$",
-    re.MULTILINE | re.IGNORECASE,
-)
-REQUIRED_PASS_BLOCKER_RE = re.compile(
-    r"\[[^]]+\]\((?P<target>[^)]+\.md)\)\s+\(requires\s+`pass`\)",
-    re.IGNORECASE,
-)
 
 
 @dataclass(frozen=True)
@@ -118,10 +109,18 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
 
     state_dir = Path(str(_required(control, "state_dir", "controller"))).expanduser()
     worktree_root = Path(
-        str(control.get("worktree_root", "~/Developer/scratch/worktrees/Faber2026-wayfinder-auto"))
+        str(
+            control.get(
+                "worktree_root",
+                "~/Developer/scratch/worktrees/Faber2026-wayfinder-auto",
+            )
+        )
     ).expanduser()
     home = Path.home().resolve()
-    for label, candidate in (("state_dir", state_dir), ("worktree_root", worktree_root)):
+    for label, candidate in (
+        ("state_dir", state_dir),
+        ("worktree_root", worktree_root),
+    ):
         resolved = candidate.resolve()
         if resolved in {Path("/").resolve(), home}:
             raise ValueError(f"controller {label} is too broad")
@@ -213,7 +212,9 @@ def empty_state(manifest: Manifest) -> dict[str, Any]:
 def write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
-    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     os.replace(temporary, path)
 
 
@@ -250,7 +251,11 @@ def ready_tasks(manifest: Manifest, state: dict[str, Any], wave: str) -> list[Ta
             continue
         if all(
             task_state[dependency]["status"]
-            == ("review_ready" if _task_by_id(manifest, dependency).mode == "review" else "resolved")
+            == (
+                "review_ready"
+                if _task_by_id(manifest, dependency).mode == "review"
+                else "resolved"
+            )
             for dependency in task.depends_on
         ):
             ready.append(task)
@@ -258,40 +263,45 @@ def ready_tasks(manifest: Manifest, state: dict[str, Any], wave: str) -> list[Ta
 
 
 def ticket_resolution_satisfies(text: str, required_outcome: str | None = None) -> bool:
-    """Return whether a ticket can clear a downstream dependency.
+    """Compatibility wrapper around the shared Wayfinder state authority."""
 
-    A pass-only ticket is deliberately stricter than the legacy Markdown
-    convention: writing ``Status: resolved`` cannot clear it unless the same
-    ticket records ``Gate outcome: pass``.
-    """
-
-    status = TICKET_STATUS_RE.search(text)
-    if status is None or status.group("status").lower() != "resolved":
-        return False
-    gate = TICKET_GATE_RE.search(text)
-    outcome = gate.group("outcome").lower() if gate else None
-    if PASS_ONLY_RE.search(text) and outcome != "pass":
-        return False
-    return required_outcome is None or outcome == required_outcome
+    return ticket_clears_dependency(parse_ticket_text(text), required_outcome)
 
 
-def ensure_ticket_blockers_satisfied(ticket: Path, repo: Path = ROOT) -> None:
-    """Fail closed on explicit pass-required Markdown blockers."""
+def ensure_ticket_blockers_satisfied(
+    ticket: Path, repo: Path = ROOT, *, ref: str | None = None
+) -> None:
+    """Fail closed on pass-required blockers from one explicit repository state."""
 
     repo = repo.resolve()
-    ticket_path = (repo / ticket).resolve()
-    if not ticket_path.is_relative_to(repo):
+    if ticket.is_absolute() or ".." in ticket.parts:
         raise RuntimeError(f"ticket escapes repository: {ticket}")
-    text = ticket_path.read_text(encoding="utf-8")
-    for blocker in REQUIRED_PASS_BLOCKER_RE.finditer(text):
-        blocker_path = (ticket_path.parent / blocker.group("target")).resolve()
-        if not blocker_path.is_relative_to(repo) or not blocker_path.is_file():
-            raise RuntimeError(f"required pass blocker is missing: {blocker.group('target')}")
-        if not ticket_resolution_satisfies(
-            blocker_path.read_text(encoding="utf-8"), required_outcome="pass"
-        ):
+
+    def read(relative: Path) -> str:
+        if relative.is_absolute() or ".." in relative.parts:
+            raise RuntimeError(f"ticket escapes repository: {relative}")
+        if ref is None:
+            path = (repo / relative).resolve()
+            if not path.is_relative_to(repo) or not path.is_file():
+                raise RuntimeError(f"ticket is missing: {relative}")
+            return path.read_text(encoding="utf-8")
+        result = _git(repo, "show", f"{ref}:{relative.as_posix()}", check=False)
+        if result.returncode != 0:
+            raise RuntimeError(f"ticket is missing from {ref}: {relative}")
+        return result.stdout
+
+    parsed = parse_ticket_text(read(ticket), repo / ticket)
+    for blocker in parsed.blockers:
+        if blocker.required_outcome is None or blocker.target is None:
+            continue
+        blocker_relative = ticket.parent / blocker.target
+        blocker_ticket = parse_ticket_text(
+            read(blocker_relative), repo / blocker_relative
+        )
+        if not ticket_clears_dependency(blocker_ticket, blocker.required_outcome):
             raise RuntimeError(
-                f"ticket {ticket} requires pass from {blocker.group('target')}"
+                f"ticket {ticket} requires {blocker.required_outcome} "
+                f"from {blocker.target}"
             )
 
 
@@ -316,11 +326,15 @@ def validate_receipt(receipt: dict[str, Any], mode: str) -> dict[str, Any]:
     outcome = receipt["outcome"]
     if outcome not in RECEIPT_OUTCOMES:
         raise ValueError(f"invalid receipt outcome: {outcome}")
-    allowed = {"resolved", "blocked", "failed"} if mode == "resolve" else {
-        "review_ready",
-        "blocked",
-        "failed",
-    }
+    allowed = (
+        {"resolved", "blocked", "failed"}
+        if mode == "resolve"
+        else {
+            "review_ready",
+            "blocked",
+            "failed",
+        }
+    )
     if outcome not in allowed:
         expected = "resolved" if mode == "resolve" else "review_ready"
         raise ValueError(f"{mode} task must end {expected}, blocked, or failed")
@@ -336,7 +350,9 @@ def validate_receipt(receipt: dict[str, Any], mode: str) -> dict[str, Any]:
     if commit and not re.fullmatch(r"[0-9a-f]{40}", commit):
         raise ValueError("receipt commit must be a full lowercase SHA")
     pr_url = receipt["pr_url"]
-    if pr_url and not re.fullmatch(r"https://github\.com/[^/]+/[^/]+/pull/[0-9]+", pr_url):
+    if pr_url and not re.fullmatch(
+        r"https://github\.com/[^/]+/[^/]+/pull/[0-9]+", pr_url
+    ):
         raise ValueError("receipt pr_url must be a GitHub pull request URL")
     if outcome in {"resolved", "review_ready"} and not commit:
         raise ValueError(f"{outcome} receipt requires a commit")
@@ -347,11 +363,15 @@ def validate_receipt(receipt: dict[str, Any], mode: str) -> dict[str, Any]:
     return receipt
 
 
-def _run(command: list[str], cwd: Path, *, check: bool = True) -> subprocess.CompletedProcess[str]:
+def _run(
+    command: list[str], cwd: Path, *, check: bool = True
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(command, cwd=cwd, text=True, capture_output=True, check=check)
 
 
-def _git(repo: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
+def _git(
+    repo: Path, *args: str, check: bool = True
+) -> subprocess.CompletedProcess[str]:
     return _run(["git", *args], repo, check=check)
 
 
@@ -369,6 +389,7 @@ def ensure_controller_is_merged(manifest: Manifest, repo: Path = ROOT) -> None:
     _git(repo, "fetch", "origin", manifest.base_branch)
     for relative in (
         "scripts/wayfinder_controller.py",
+        "scripts/wayfinder_state.py",
         "scripts/wayfinder_receipt.schema.json",
         "docs/rse/control/wayfinder-automation.toml",
     ):
@@ -377,7 +398,9 @@ def ensure_controller_is_merged(manifest: Manifest, repo: Path = ROOT) -> None:
             ["git", "show", f"origin/{manifest.base_branch}:{relative}"], cwd=repo
         )
         if local != remote:
-            raise RuntimeError(f"controller launch refused: {relative} is not merged on origin/main")
+            raise RuntimeError(
+                f"controller launch refused: {relative} is not merged on origin/main"
+            )
 
 
 def task_prompt(manifest: Manifest, task: Task, attempt_id: str) -> str:
@@ -471,11 +494,13 @@ def repository_mutation_lock(manifest: Manifest):
 
 
 def prepare_worktree(manifest: Manifest, task: Task, repo: Path = ROOT) -> Path:
-    ensure_ticket_blockers_satisfied(Path(task.ticket), repo)
     path = manifest.worktree_root / task.id
     manifest.worktree_root.mkdir(parents=True, exist_ok=True)
     with repository_mutation_lock(manifest):
         _git(repo, "fetch", "origin", manifest.base_branch)
+        ensure_ticket_blockers_satisfied(
+            Path(task.ticket), repo, ref=f"origin/{manifest.base_branch}"
+        )
         if path.exists():
             status = _git(path, "status", "--short").stdout.strip()
             branch = _git(path, "branch", "--show-current").stdout.strip()
@@ -486,16 +511,26 @@ def prepare_worktree(manifest: Manifest, task: Task, repo: Path = ROOT) -> Path:
                     f"existing task worktree has branch {branch}, expected {task.branch}"
                 )
         else:
-            local_branch = _git(
-                repo, "show-ref", "--verify", f"refs/heads/{task.branch}", check=False
-            ).returncode == 0
-            remote_branch = _git(
-                repo,
-                "show-ref",
-                "--verify",
-                f"refs/remotes/origin/{task.branch}",
-                check=False,
-            ).returncode == 0
+            local_branch = (
+                _git(
+                    repo,
+                    "show-ref",
+                    "--verify",
+                    f"refs/heads/{task.branch}",
+                    check=False,
+                ).returncode
+                == 0
+            )
+            remote_branch = (
+                _git(
+                    repo,
+                    "show-ref",
+                    "--verify",
+                    f"refs/remotes/origin/{task.branch}",
+                    check=False,
+                ).returncode
+                == 0
+            )
             if local_branch:
                 _git(repo, "worktree", "add", str(path), task.branch)
             elif remote_branch:
@@ -549,7 +584,10 @@ def remote_pr_evidence(
     pr = json.loads(result.stdout)
     if pr.get("state") != expected_state:
         return False, f"PR {pr.get('state', 'unknown').lower()}"
-    if pr.get("baseRefName") != manifest.base_branch or pr.get("headRefName") != task.branch:
+    if (
+        pr.get("baseRefName") != manifest.base_branch
+        or pr.get("headRefName") != task.branch
+    ):
         return False, "PR branch/base differs from manifest"
     if pr.get("headRefOid") != receipt.get("commit"):
         return False, "receipt commit differs from PR head"
@@ -586,7 +624,10 @@ def remote_resolution_evidence(
     if ticket.returncode != 0:
         return False, "ticket missing from origin/main"
     if not ticket_resolution_satisfies(ticket.stdout):
-        return False, "ticket is not resolved with its required gate outcome on origin/main"
+        return (
+            False,
+            "ticket is not resolved with its required gate outcome on origin/main",
+        )
     return True, "merged PR and resolved ticket verified on origin/main"
 
 
@@ -655,7 +696,11 @@ def run_task(manifest: Manifest, task: Task, attempt_id: str) -> int:
             raise RuntimeError(f"task {task.id} already has a live runner") from error
         write_json_atomic(
             attempt_dir / "runner-owner.json",
-            {"attempt_id": attempt_id, "pid": os.getpid(), "started_at": int(time.time())},
+            {
+                "attempt_id": attempt_id,
+                "pid": os.getpid(),
+                "started_at": int(time.time()),
+            },
         )
         worktree = prepare_worktree(manifest, task)
         command = codex_command(
@@ -714,7 +759,11 @@ def supervise(manifest: Manifest, wave: str) -> int:
         else:
             print("supervisor launch handshake timed out", file=sys.stderr)
             return 2
-        state["supervisor"] = {"pid": os.getpid(), "wave": wave, "status": "initializing"}
+        state["supervisor"] = {
+            "pid": os.getpid(),
+            "wave": wave,
+            "status": "initializing",
+        }
         save_state(manifest, state)
         running: dict[str, subprocess.Popen[bytes] | ExistingProcess] = {}
         runner_logs: dict[str, Any] = {}
@@ -727,7 +776,9 @@ def supervise(manifest: Manifest, wave: str) -> int:
                 if not attempt_id:
                     entry.update({"status": "queued", "pid": None})
                     continue
-                attempt_dir = manifest.state_dir / "tasks" / task.id / "attempts" / attempt_id
+                attempt_dir = (
+                    manifest.state_dir / "tasks" / task.id / "attempts" / attempt_id
+                )
                 pid = entry.get("pid")
                 owner_path = attempt_dir / "runner-owner.json"
                 if not pid and owner_path.exists():
@@ -770,7 +821,9 @@ def supervise(manifest: Manifest, wave: str) -> int:
                             / "receipt.json"
                         )
                         try:
-                            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+                            receipt = json.loads(
+                                receipt_path.read_text(encoding="utf-8")
+                            )
                             status, detail = classify_receipt(
                                 manifest,
                                 task,
@@ -778,7 +831,10 @@ def supervise(manifest: Manifest, wave: str) -> int:
                                 expected_attempt=str(attempt_id),
                             )
                         except Exception as error:  # fail-closed receipt boundary
-                            status, detail = "needs_attention", f"receipt verification failed: {error}"
+                            status, detail = (
+                                "needs_attention",
+                                f"receipt verification failed: {error}",
+                            )
                         entry["status"] = status
                         entry["detail"] = detail
                     running.pop(task_id)
@@ -847,7 +903,8 @@ def supervise(manifest: Manifest, wave: str) -> int:
 
                 selected = tasks_for_wave(manifest, wave)
                 if not running and all(
-                    state["tasks"][task.id]["status"] in TERMINAL_STATUSES for task in selected
+                    state["tasks"][task.id]["status"] in TERMINAL_STATUSES
+                    for task in selected
                 ):
                     break
                 if not running and not ready_tasks(manifest, state, wave):

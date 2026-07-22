@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import re
+import shutil
 from pathlib import Path
 
+import pytest
+
+from scripts.owner_queue import collect_wayfinder_frontier
 
 ROOT = Path(__file__).resolve().parents[1]
 TICKETS = ROOT / "docs/rse/wayfinder/tickets"
@@ -66,27 +70,52 @@ def test_chime_ratification_waits_for_remediated_campaign_review():
     assert "owner review" in remediation.lower()
 
 
-def test_no_go_outcomes_cannot_clear_pass_only_route_gates():
-    guarded_links = {
-        "rfi-validation-02-build-frozen-benchmark.md": (
-            "rfi-validation-01b-stabilize-bandpass-model.md",
-            "bandpass",
-        ),
-        "rfi-validation-04-blind-validate-cleaner.md": (
-            "rfi-validation-03-compare-and-choose-cleaner.md",
-            "cleaner comparison",
-        ),
-        "17-remediate-scintillation-inputs-and-rerun.md": (
-            "rfi-validation-05-ratify-cleaning-boundary.md",
-            "cleaning boundary",
-        ),
-    }
-    for downstream, (upstream, label) in guarded_links.items():
-        upstream_text = ticket(upstream)
-        downstream_text = ticket(downstream)
-        assert "- Resolution gate: pass-only" in upstream_text, label
-        assert "- Gate outcome: pending" in upstream_text, label
-        assert f"]({upstream}) (requires `pass`)" in downstream_text, label
+GUARDED_LINKS = [
+    (
+        "rfi-validation-01b-stabilize-bandpass-model.md",
+        "rfi-validation-02-build-frozen-benchmark.md",
+    ),
+    (
+        "rfi-validation-03-compare-and-choose-cleaner.md",
+        "rfi-validation-04-blind-validate-cleaner.md",
+    ),
+    (
+        "rfi-validation-05-ratify-cleaning-boundary.md",
+        "17-remediate-scintillation-inputs-and-rerun.md",
+    ),
+]
+
+
+@pytest.mark.parametrize("upstream,downstream", GUARDED_LINKS)
+@pytest.mark.parametrize(
+    "status,outcome,clears",
+    [
+        ("open", "pending", False),
+        ("open", "no-go", False),
+        ("resolved", "no-go", False),
+        ("resolved", "pass", True),
+    ],
+)
+def test_authoritative_frontier_enforces_exact_route_transitions(
+    tmp_path, upstream, downstream, status, outcome, clears
+):
+    tickets = tmp_path / "tickets"
+    tickets.mkdir()
+    for name in {upstream, downstream}:
+        shutil.copy2(TICKETS / name, tickets / name)
+
+    upstream_path = tickets / upstream
+    upstream_text = upstream_path.read_text(encoding="utf-8")
+    upstream_text = re.sub(
+        r"^- Status:.*$", f"- Status: {status}", upstream_text, flags=re.M
+    )
+    upstream_text = re.sub(
+        r"^- Gate outcome:.*$", f"- Gate outcome: {outcome}", upstream_text, flags=re.M
+    )
+    upstream_path.write_text(upstream_text, encoding="utf-8")
+
+    frontier = {item.path.name for item in collect_wayfinder_frontier(tickets)}
+    assert (downstream in frontier) is clears
 
 
 def test_recovered_cluster_redshifts_have_deterministic_classification():
