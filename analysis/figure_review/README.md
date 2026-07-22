@@ -1,10 +1,47 @@
 # Figure candidate review and approval
 
-Scientific figures use a two-PR, fail-closed workflow. Automated tests and an
-agent's visual inspection can establish that a figure is reproducible and
-legible; they do **not** constitute manuscript-owner approval.
+Scientific figures use a fail-closed reproduction and approval workflow. A
+figure is withheld from the manuscript owner until an agent has traced and
+verified its exact inputs, processing, fit configuration, code revisions,
+command, environment, and regenerated output. Automated checks and an agent's
+visual inspection still do **not** constitute manuscript-owner approval.
 
-## 1. Candidate PR
+## 0. Reproduce before presenting
+
+Create the candidate batch as below, but do not send its preview to the owner.
+Re-run the producer from a clean worktree. Record the run using
+[`reproduction-receipt.example.json`](reproduction-receipt.example.json):
+
+```bash
+python scripts/figure_review.py certify-reproduction <batch> <candidate> \
+  --receipt /path/to/completed-reproduction-receipt.json
+```
+
+The receipt must bind the candidate to:
+
+- complete SHA-256 input inventory;
+- exact parent and pipeline revisions;
+- argument-vector command and working directory;
+- environment identity, such as a lockfile or container digest;
+- a clean-worktree run; and
+- regenerated output SHA-256 matching the candidate bytes.
+
+Until this passes, the review page hides the image, owner decisions are
+rejected, and promotion is impossible. Find the single next eligible figure
+with:
+
+```bash
+python scripts/figure_review.py next
+```
+
+Audit every current manuscript figure across the regeneration catalog, review
+batches, approval receipts, promoted bytes, and results-registry trust state:
+
+```bash
+python scripts/figure_review.py status
+```
+
+## 1. Candidate batch
 
 Generate figures outside their manuscript targets, then stage an immutable
 review batch:
@@ -37,7 +74,7 @@ python scripts/figure_review.py decide <batch> dsa-acf-zach needs_revision \
 
 Silence, automated checks, PR creation, and agent review never imply approval.
 
-## 2. Promotion PR
+## 2. Owner decision and promotion
 
 Only an owner-approved candidate can be promoted:
 
@@ -69,3 +106,6 @@ Every approval should explicitly cover:
 
 If any item cannot be established from the packet, mark the candidate
 `needs_revision`. Corrected figures belong in a new batch with new hashes.
+
+The review queue is derived from immutable batch manifests. Do not maintain a
+second status spreadsheet or duplicate figure inventory.

@@ -3,7 +3,7 @@ MANUSCRIPT_ROOT ?= ..
 MANUSCRIPT_ROOT_ABS := $(abspath $(MANUSCRIPT_ROOT))
 UV ?= uv
 
-.PHONY: check-mount check-state test figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
+.PHONY: check-mount check-state test figures figure-review-status figure-review-next kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
 
 check-mount:
 	@test -f "$(MANUSCRIPT_ROOT_ABS)/main.tex" || \
@@ -27,6 +27,12 @@ figures: check-mount
 	cd "$(MANUSCRIPT_ROOT_ABS)" && \
 		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
 		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
+
+figure-review-next:
+	python3 scripts/figure_review.py next
+
+figure-review-status:
+	python3 scripts/figure_review.py status
 
 kb-index: check-mount
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb index

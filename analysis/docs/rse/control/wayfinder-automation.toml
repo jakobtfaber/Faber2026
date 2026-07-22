@@ -10,17 +10,6 @@ max_parallel = 4
 timeout_seconds = 14400
 
 [[task]]
-id = "freeze-anonymous-query-corpus"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
-branch = "codex/auto-freeze-anonymous-query-corpus"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["set-nine-sightline-search-contract"]
-instructions = "Replace Legacy DR10 proxies with official NEXP positive pixels, XMM with XSA footprint_fov polygons, and Chandra with CSC s_region polygons. Keep Swift coverage_unknown unless official XRT exposure maps are evaluated. Preserve exact 15-arcminute admission and separate 15.0-15.1 guard evidence."
-
-[[task]]
 id = "set-expanded-figure3-gate"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md"
@@ -52,17 +41,6 @@ execution = "afk"
 repo = "jakobtfaber/Faber2026-analysis"
 depends_on = ["source-zach-whitney-host-redshifts", "replay-nine-sightline-query-corpus"]
 instructions = "Repeat source-level redshift verification after the host sources and independent query replay resolve. Preserve existing verdicts until separately adjudicated."
-
-[[task]]
-id = "freeze-protected-query-evidence"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md"
-branch = "codex/auto-freeze-protected-query-evidence"
-mode = "resolve"
-execution = "hitl"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["set-nine-sightline-search-contract"]
-instructions = "Owner-facing protected-query evidence gate. The controller records it but never spawns it."
 
 [[task]]
 id = "replay-nine-sightline-query-corpus"
@@ -152,6 +130,20 @@ status = "resolved"
 [[history]]
 id = "set-nine-sightline-search-contract"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-anonymous-query-corpus"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-protected-query-evidence"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md"
 execution = "hitl"
 depends_on = []
 status = "resolved"
