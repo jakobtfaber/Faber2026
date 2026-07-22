@@ -3,7 +3,7 @@
 - Type: `wayfinder:task` (AFK)
 - Status: open
 - Assignee: —
-- Blocked by: [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md)
+- Blocked by: [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md) (requires `pass`)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner data-review findings, 2026-07-18
 

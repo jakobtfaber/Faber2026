@@ -62,7 +62,13 @@ redshift, verdict, budget flag, trust state, or Figure 3 status.
   non-astrophysical artifact or failed redshift fit is classified later; it is
   not removed from the raw corpus.
 - Redshift classification follows admission. For galaxies, and for clusters
-  whose catalog redshift already established search geometry, a secure
+  whose finite positive search-geometry redshift came from the catalog or
+  separately sourced record, classify with that same frozen redshift evidence.
+  Every recovered cluster records `search_geometry_redshift_source` as the
+  stable catalog/release/source identifier plus row or response hash, and
+  records whether the evidence is spectroscopic or photometric. Multiple
+  conflicting recovered redshifts leave search geometry unresolved until
+  owner adjudication; source order never chooses one implicitly. A secure
   spectroscopic redshift
   is foreground only for `0 < z < z_host`; a source within 500 km/s of the host
   is `host_local_ambiguous`. A photometric estimate is potentially foreground
@@ -118,6 +124,12 @@ redshift, verdict, budget flag, trust state, or Figure 3 status.
   as `cluster_search_geometry_unresolved`, is absent from the admitted corpus,
   and makes the completed-corpus check fail. The corresponding galaxy fixture
   remains admitted and receives `no_usable_redshift` after admission.
+- A cluster recovered with one separately sourced finite positive redshift is
+  re-tested against the 5 proper Mpc boundary, admitted only when it passes,
+  and classified from the same frozen redshift evidence. Fixtures cover secure
+  spectroscopic foreground, host-local ambiguity, photometric interval
+  overlap, background, and `no_usable_redshift`. Conflicting recovered
+  redshifts keep `cluster_search_geometry_unresolved` and close the corpus gate.
 - A cluster with finite search geometry but missing `R500` remains in the audit
   corpus as `geometry_unresolved` and is not budget eligible. A row at exactly
   `b = R500` is budget eligible; a row beyond it is not.

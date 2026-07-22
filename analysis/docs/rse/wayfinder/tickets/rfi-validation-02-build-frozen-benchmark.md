@@ -3,7 +3,7 @@
 - Type: `wayfinder:task` (AFK)
 - Status: open
 - Assignee: —
-- Blocked by: [Stabilize and qualify the CHIME bandpass model](rfi-validation-01b-stabilize-bandpass-model.md)
+- Blocked by: [Stabilize and qualify the CHIME bandpass model](rfi-validation-01b-stabilize-bandpass-model.md) (requires `pass`)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner request, 2026-07-21
 

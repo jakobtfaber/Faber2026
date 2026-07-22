@@ -2,6 +2,8 @@
 
 - Type: `wayfinder:prototype` (HITL)
 - Status: open
+- Resolution gate: pass-only
+- Gate outcome: pending
 - Assignee: —
 - Blocked by: [Build the frozen CHIME RFI-validation benchmark](rfi-validation-02-build-frozen-benchmark.md)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -20,5 +22,6 @@ The untouched test data must remain sealed.
 
 Resolve with the owner's visual and numerical choice of one method, one
 operation order, and one frozen configuration tied to a code revision. A
-failure to find a qualifying candidate is a valid no-go resolution and must
-not be converted into relaxed thresholds after results are seen.
+failure to find a qualifying candidate records `Gate outcome: no-go` but keeps
+this ticket open, so blind validation remains blocked. It must not be converted
+into relaxed thresholds after results are seen.

@@ -32,6 +32,22 @@ TERMINAL_STATUSES = {
 }
 RECEIPT_OUTCOMES = {"resolved", "review_ready", "blocked", "failed"}
 MODES = {"resolve", "review"}
+TICKET_STATUS_RE = re.compile(
+    r"^- Status:\s+(?:\*\*)?(?P<status>[a-z_-]+)",
+    re.MULTILINE | re.IGNORECASE,
+)
+TICKET_GATE_RE = re.compile(
+    r"^- Gate outcome:\s+`?(?P<outcome>pending|pass|no-go)`?\s*$",
+    re.MULTILINE | re.IGNORECASE,
+)
+PASS_ONLY_RE = re.compile(
+    r"^- Resolution gate:\s+`?pass-only`?\s*$",
+    re.MULTILINE | re.IGNORECASE,
+)
+REQUIRED_PASS_BLOCKER_RE = re.compile(
+    r"\[[^]]+\]\((?P<target>[^)]+\.md)\)\s+\(requires\s+`pass`\)",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -241,6 +257,44 @@ def ready_tasks(manifest: Manifest, state: dict[str, Any], wave: str) -> list[Ta
     return ready
 
 
+def ticket_resolution_satisfies(text: str, required_outcome: str | None = None) -> bool:
+    """Return whether a ticket can clear a downstream dependency.
+
+    A pass-only ticket is deliberately stricter than the legacy Markdown
+    convention: writing ``Status: resolved`` cannot clear it unless the same
+    ticket records ``Gate outcome: pass``.
+    """
+
+    status = TICKET_STATUS_RE.search(text)
+    if status is None or status.group("status").lower() != "resolved":
+        return False
+    gate = TICKET_GATE_RE.search(text)
+    outcome = gate.group("outcome").lower() if gate else None
+    if PASS_ONLY_RE.search(text) and outcome != "pass":
+        return False
+    return required_outcome is None or outcome == required_outcome
+
+
+def ensure_ticket_blockers_satisfied(ticket: Path, repo: Path = ROOT) -> None:
+    """Fail closed on explicit pass-required Markdown blockers."""
+
+    repo = repo.resolve()
+    ticket_path = (repo / ticket).resolve()
+    if not ticket_path.is_relative_to(repo):
+        raise RuntimeError(f"ticket escapes repository: {ticket}")
+    text = ticket_path.read_text(encoding="utf-8")
+    for blocker in REQUIRED_PASS_BLOCKER_RE.finditer(text):
+        blocker_path = (ticket_path.parent / blocker.group("target")).resolve()
+        if not blocker_path.is_relative_to(repo) or not blocker_path.is_file():
+            raise RuntimeError(f"required pass blocker is missing: {blocker.group('target')}")
+        if not ticket_resolution_satisfies(
+            blocker_path.read_text(encoding="utf-8"), required_outcome="pass"
+        ):
+            raise RuntimeError(
+                f"ticket {ticket} requires pass from {blocker.group('target')}"
+            )
+
+
 def success_status(task: Task) -> str:
     return "resolved" if task.mode == "resolve" else "review_ready"
 
@@ -417,6 +471,7 @@ def repository_mutation_lock(manifest: Manifest):
 
 
 def prepare_worktree(manifest: Manifest, task: Task, repo: Path = ROOT) -> Path:
+    ensure_ticket_blockers_satisfied(Path(task.ticket), repo)
     path = manifest.worktree_root / task.id
     manifest.worktree_root.mkdir(parents=True, exist_ok=True)
     with repository_mutation_lock(manifest):
@@ -530,8 +585,8 @@ def remote_resolution_evidence(
     )
     if ticket.returncode != 0:
         return False, "ticket missing from origin/main"
-    if not re.search(r"^- Status:\s+(?:\*\*)?resolved\b", ticket.stdout, re.MULTILINE | re.IGNORECASE):
-        return False, "ticket is not resolved on origin/main"
+    if not ticket_resolution_satisfies(ticket.stdout):
+        return False, "ticket is not resolved with its required gate outcome on origin/main"
     return True, "merged PR and resolved ticket verified on origin/main"
 
 

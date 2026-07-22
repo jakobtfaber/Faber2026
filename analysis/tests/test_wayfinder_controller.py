@@ -84,6 +84,49 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     ]
 
 
+def test_pass_only_ticket_cannot_resolve_as_no_go():
+    wc = load_controller()
+    no_go = """\
+# Gate
+
+- Status: resolved
+- Resolution gate: pass-only
+- Gate outcome: no-go
+"""
+    passed = no_go.replace("no-go", "pass")
+
+    assert not wc.ticket_resolution_satisfies(no_go)
+    assert wc.ticket_resolution_satisfies(passed)
+
+
+def test_required_pass_blocker_is_enforced_before_worktree_setup(tmp_path):
+    wc = load_controller()
+    tickets = tmp_path / "tickets"
+    tickets.mkdir()
+    upstream = tickets / "upstream.md"
+    downstream = tickets / "downstream.md"
+    upstream.write_text(
+        "# Upstream\n\n- Status: open\n- Resolution gate: pass-only\n"
+        "- Gate outcome: no-go\n",
+        encoding="utf-8",
+    )
+    downstream.write_text(
+        "# Downstream\n\n- Status: open\n"
+        "- Blocked by: [Upstream](upstream.md) (requires `pass`)\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(RuntimeError, match="requires pass"):
+        wc.ensure_ticket_blockers_satisfied(downstream.relative_to(tmp_path), tmp_path)
+
+    upstream.write_text(
+        "# Upstream\n\n- Status: resolved\n- Resolution gate: pass-only\n"
+        "- Gate outcome: pass\n",
+        encoding="utf-8",
+    )
+    wc.ensure_ticket_blockers_satisfied(downstream.relative_to(tmp_path), tmp_path)
+
+
 def test_state_write_is_atomic_json(tmp_path):
     wc = load_controller()
     target = tmp_path / "state.json"

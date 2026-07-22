@@ -3,7 +3,7 @@
 - Type: `wayfinder:task` (AFK)
 - Status: open
 - Assignee: —
-- Blocked by: [Compare and choose the CHIME RFI cleaner](rfi-validation-03-compare-and-choose-cleaner.md)
+- Blocked by: [Compare and choose the CHIME RFI cleaner](rfi-validation-03-compare-and-choose-cleaner.md) (requires `pass`)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner request, 2026-07-21
 
