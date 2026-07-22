@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-21
 **Author:** Codex
-**Status:** In Progress
+**Status:** Automated validation complete; manual Overleaf gate pending
 **Related Documents:**
 - [Research: Faber2026 analysis repository split](research-faber2026-analysis-split.md)
 ---
@@ -142,10 +142,10 @@ both and no retained TeX dependency is inside either gitlink.
   inputs under `analysis/` or `pipeline/`.
 - [x] Run parent boundary tests and analysis scientific tests from the mounted
   checkout.
-- Run `make kb-index` through the analysis-mounted command.
-- Run `agent-closeout-check` for both repositories with explicit touched paths
+- [x] Run `make kb-index` through the analysis-mounted command.
+- [x] Run `agent-closeout-check` for both repositories with explicit touched paths
   and dirty-state packets.
-- Commit/push analysis first, then commit/push the parent branch and open a
+- [x] Commit/push analysis first, then commit/push the parent branch and open a
   focused pull request. Close PR #172 as superseded without deleting its branch.
 
 **Verification:** Both remotes contain the reported commits; parent checks pass;

@@ -3,7 +3,7 @@
 ---
 **Date:** 2026-07-22
 **Author:** AI Assistant
-**Status:** In Progress
+**Status:** Automated validation complete; manual Overleaf gate pending
 **Plan Reference:** [plan-faber2026-analysis-split.md](plan-faber2026-analysis-split.md)
 
 ---
@@ -15,8 +15,8 @@ Split research, control, diagnostics, and tests into the public
 manuscript repository. Scientific values and the 37-page TeX closure remain
 unchanged.
 
-**Final Status:** Partially complete. Local implementation passes; publication,
-independent validation, and live Overleaf verification remain.
+**Final Status:** Ready for parent merge. Automated and remote checks pass;
+live Overleaf verification remains.
 
 ## Plan Adherence
 
@@ -32,8 +32,8 @@ and tests their combined source inventory.
   `520f4c4`.
 - Phase 3: parent reduced to its allowlist; mounted analysis integration and
   two-gitlink interface implemented.
-- Phase 4: local manuscript and scientific checks pass; publication and manual
-  Overleaf checks remain.
+- Phase 4: local, fresh-clone, and pull-request checks pass; manual Overleaf
+  checks remain.
 
 ## Key Changes
 
@@ -48,13 +48,18 @@ and tests their combined source inventory.
 ## Verification Results
 
 - `tests/test_manuscript_boundary.py`: 3 passed.
-- Mounted scientific suite: 222 passed, 1 expected failure.
+- Mounted scientific suite: 223 passed, 1 expected failure.
 - Figure approval and state-drift gates: passed.
 - Clean `latexmk` build: 37 pages; no recorder inputs under either submodule.
-- PDF SHA-256: `806fc47ac58810b8ca3fc5ff1a29434d67efe306da3e0222079b495f164f79d9`.
+- Fresh local PDF SHA-256:
+  `a6d0fef64861b3f94071f66da31643ab4e483a6f760839d26c481ea79da26c3a`.
 - Knowledge-base regression tests: 9 passed.
-- Knowledge-base source inventory: 354 documents, 696 code files, 90 pipeline
-  configuration files, 63 bibliography entries, and 2,294 git records.
+- Knowledge-base source inventory: 359 documents, 697 code files, 90 pipeline
+  configuration files, 63 bibliography entries, and 2,321 git records.
+- Final knowledge base: all 14,581 chunks embedded; vector retrieval passed.
+- Fresh recursive clone: both public pins resolved; boundary and integrity
+  checks passed.
+- Parent pull request #179: mergeable; all four checks passed.
 
 ## Issues Encountered
 
@@ -66,11 +71,11 @@ and tests their combined source inventory.
 
 ## Remaining Work
 
-- [ ] Finish the local embedding pass and verify hybrid retrieval.
-- [ ] Run both repository integrity and closeout checks.
-- [ ] Publish and merge the analysis integration pull request.
-- [ ] Pin merged analysis `main`; validate and publish the parent pull request.
-- [ ] Run independent plan validation before parent merge.
+- [x] Finish the local embedding pass and verify hybrid retrieval.
+- [x] Run both repository integrity and closeout checks.
+- [x] Publish and merge the analysis integration pull request.
+- [x] Pin merged analysis `main`; validate and publish the parent pull request.
+- [x] Run independent plan validation before parent merge.
 - [ ] Pull through Overleaf GitHub Sync and confirm the 37-page compile.
 
 ## References
