@@ -219,7 +219,7 @@ populate first, adjudicate row-by-row on top.
   - [ ] Restore the TOA prose from “triggers” to “FRB detections”; preserve the
     deterministic MJD rule and trial-set receipt
 - 3.2 Dispersion-measure decomposition
-  - [ ] ✋ Fiducial priors sign-off + host-DM right-skew headline acceptance
+  - [x] Fiducial priors and host-DM headline accepted (2026-07-22)
     ([wf-07](wayfinder/tickets/07-sign-off-budget-priors-and-host-dm-headline.md))
 - 3.2b Intervening foreground galaxies & clusters
   - [ ] ✋ Phineas halo-mass prescription conflict (census flags vs budget
