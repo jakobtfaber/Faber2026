@@ -1,0 +1,96 @@
+<!doctype html><html><head><meta charset="utf-8"><title>ACF review — all events, both bands (2026-07-18)</title>
+<style>
+body{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;margin:0;background:#fff;color:#222}
+header{background:#1E2761;color:#fff;padding:24px 32px}
+header h1{margin:0 0 8px;font-size:24px} header p{margin:4px 0;color:#CADCFC;font-size:13px;max-width:1100px}
+nav{padding:10px 32px;background:#F4F7FE;font-size:13px;position:sticky;top:0;border-bottom:1px solid #dde}
+section{padding:18px 32px;border-bottom:1px solid #eee}
+h2{font-size:18px;color:#1E2761;margin:6px 0 10px}
+.badge{font-size:11px;color:#fff;border-radius:4px;padding:2px 8px;vertical-align:middle}
+.det{font-size:13px;color:#555;font-weight:normal;margin-left:8px}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+figure{margin:0} img{width:100%;border:1px solid #ddd;border-radius:4px}
+figcaption{font-size:11px;color:#666;margin-top:4px;line-height:1.35}
+.missing div{border:1px dashed #bbb;border-radius:4px;height:180px;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px}
+.warn{background:#FDF3E3;border-left:none;border:1px solid #E8D5AC;border-radius:6px;padding:10px 14px;margin:14px 32px;font-size:13px;color:#6b4e0e}
+</style></head><body>
+<header><h1>ACF review — all twelve co-detections, both bands</h1>
+<p>Assembled 2026-07-18 for the CHIME-method ratification review (wayfinder ticket 02). Three generations of products are shown side by side, deliberately: judging the R5/R6 verdicts requires seeing what the earlier products looked like.</p>
+<p><b>Column 1–2:</b> CHIME two-component campaign renders (12 std + 12 hi, hash-reviewed candidates from the 2026-07-17 batch, on branch ms/scint-joint-candidate-20260717 — never merged). <b>Column 3:</b> R5/R6 window-refit subband ladders (FLITS 666306d1) — only four were rendered; the other eight have campaign records but no committed ladder figure. <b>Column 4:</b> DSA-110 single-Lorentzian panels (2026-07-07 lane) — wave-1 REVOKED, comparison only.</p></header>
+<div class="warn">Caveats for review: (1) the three generations use different windowing and models — differences between columns are expected and are part of what is being judged; (2) no figure here is manuscript-approved; (3) the R5/R6 closure record is stale (validation.json not regenerated) and α-error conventions differ between the records and the staged two-band figure — both are open ratification conditions; (4) DSA panels are shown to answer "what does the other band look like" — their fits are not citable.</div>
+<nav><a href="#chromatica">chromatica</a> · <a href="#zach">zach</a> · <a href="#hamilton">hamilton</a> · <a href="#casey">casey</a> · <a href="#freya">freya</a> · <a href="#phineas">phineas</a> · <a href="#wilhelm">wilhelm</a> · <a href="#isha">isha</a> · <a href="#johndoeII">johndoeII</a> · <a href="#mahi">mahi</a> · <a href="#oran">oran</a> · <a href="#whitney">whitney</a></nav>
+<section id="chromatica"><h2>chromatica <span class="badge" style="background:#2C6E49">detection</span> <span class="det">α = +1.72 ± 0.40 (n=4 resolved)</span></h2>
+<div class="row">
+<figure><a href="img/chime-chromatica-standard.png" target="_blank"><img src="img/chime-chromatica-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-chromatica-high_resolution.png" target="_blank"><img src="img/chime-chromatica-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure><a href="img/chromatica_acf_ladder.png" target="_blank"><img src="img/chromatica_acf_ladder.png" loading="lazy"></a><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-chromatica.png" target="_blank"><img src="img/dsa-chromatica.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="zach"><h2>zach <span class="badge" style="background:#2C6E49">detection</span> <span class="det">α = +3.03 ± 0.65 (n=3 resolved)</span></h2>
+<div class="row">
+<figure><a href="img/chime-zach-standard.png" target="_blank"><img src="img/chime-zach-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-zach-high_resolution.png" target="_blank"><img src="img/chime-zach-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure><a href="img/zach_acf_ladder.png" target="_blank"><img src="img/zach_acf_ladder.png" loading="lazy"></a><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-zach.png" target="_blank"><img src="img/dsa-zach.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="hamilton"><h2>hamilton <span class="badge" style="background:#B07A1E">diagnostic_only</span> <span class="det">α = +8.94 ± 3.22 — unphysical slope</span></h2>
+<div class="row">
+<figure><a href="img/chime-hamilton-standard.png" target="_blank"><img src="img/chime-hamilton-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-hamilton-high_resolution.png" target="_blank"><img src="img/chime-hamilton-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure><a href="img/hamilton_acf_ladder.png" target="_blank"><img src="img/hamilton_acf_ladder.png" loading="lazy"></a><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-hamilton.png" target="_blank"><img src="img/dsa-hamilton.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="casey"><h2>casey <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">1 resolved subband</span></h2>
+<div class="row">
+<figure><a href="img/chime-casey-standard.png" target="_blank"><img src="img/chime-casey-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-casey-high_resolution.png" target="_blank"><img src="img/chime-casey-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-casey.png" target="_blank"><img src="img/dsa-casey.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="freya"><h2>freya <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">1 resolved subband</span></h2>
+<div class="row">
+<figure><a href="img/chime-freya-standard.png" target="_blank"><img src="img/chime-freya-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-freya-high_resolution.png" target="_blank"><img src="img/chime-freya-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure><a href="img/freya_acf_ladder.png" target="_blank"><img src="img/freya_acf_ladder.png" loading="lazy"></a><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-freya.png" target="_blank"><img src="img/dsa-freya.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="phineas"><h2>phineas <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">1 resolved subband</span></h2>
+<div class="row">
+<figure><a href="img/chime-phineas-standard.png" target="_blank"><img src="img/chime-phineas-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-phineas-high_resolution.png" target="_blank"><img src="img/chime-phineas-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-phineas.png" target="_blank"><img src="img/dsa-phineas.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="wilhelm"><h2>wilhelm <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">1 resolved subband</span></h2>
+<div class="row">
+<figure><a href="img/chime-wilhelm-standard.png" target="_blank"><img src="img/chime-wilhelm-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-wilhelm-high_resolution.png" target="_blank"><img src="img/chime-wilhelm-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-wilhelm.png" target="_blank"><img src="img/dsa-wilhelm.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="isha"><h2>isha <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">0 resolved subbands</span></h2>
+<div class="row">
+<figure><a href="img/chime-isha-standard.png" target="_blank"><img src="img/chime-isha-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-isha-high_resolution.png" target="_blank"><img src="img/chime-isha-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-isha.png" target="_blank"><img src="img/dsa-isha.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="johndoeII"><h2>johndoeII <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">0 resolved subbands</span></h2>
+<div class="row">
+<figure><a href="img/chime-johndoeII-standard.png" target="_blank"><img src="img/chime-johndoeII-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-johndoeII-high_resolution.png" target="_blank"><img src="img/chime-johndoeII-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-johndoeII.png" target="_blank"><img src="img/dsa-johndoeII.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="mahi"><h2>mahi <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">0 resolved subbands</span></h2>
+<div class="row">
+<figure><a href="img/chime-mahi-standard.png" target="_blank"><img src="img/chime-mahi-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-mahi-high_resolution.png" target="_blank"><img src="img/chime-mahi-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-mahi.png" target="_blank"><img src="img/dsa-mahi.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="oran"><h2>oran <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">0 resolved subbands</span></h2>
+<div class="row">
+<figure><a href="img/chime-oran-standard.png" target="_blank"><img src="img/chime-oran-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-oran-high_resolution.png" target="_blank"><img src="img/chime-oran-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-oran.png" target="_blank"><img src="img/dsa-oran.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section><section id="whitney"><h2>whitney <span class="badge" style="background:#6B7280">non_detection</span> <span class="det">0 resolved subbands</span></h2>
+<div class="row">
+<figure><a href="img/chime-whitney-standard.png" target="_blank"><img src="img/chime-whitney-standard.png" loading="lazy"></a><figcaption>CHIME — standard res (two-component campaign, hash-reviewed candidate, 2026-07-17)</figcaption></figure>
+<figure><a href="img/chime-whitney-high_resolution.png" target="_blank"><img src="img/chime-whitney-high_resolution.png" loading="lazy"></a><figcaption>CHIME — high res (same campaign)</figcaption></figure>
+<figure class="missing"><div>not generated at this revision</div><figcaption>CHIME — R5/R6 window-refit subband ladder (the campaign under ratification)</figcaption></figure>
+<figure><a href="img/dsa-whitney.png" target="_blank"><img src="img/dsa-whitney.png" loading="lazy"></a><figcaption>DSA-110 — per-burst ACF, single-Lorentzian fits (2026-07-07 lane — REVOKED-era, shown for comparison only)</figcaption></figure>
+</div></section>
+<section><h2>Two-band scaling summary (staged in PR #140)</h2><div class="row"><figure><a href="img/twoband_scint_summary.png" target="_blank"><img src="img/twoband_scint_summary.png"></a><figcaption>zach / chromatica / freya two-band Δν_d(ν) scaling</figcaption></figure></div></section>
+</body></html>
