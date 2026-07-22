@@ -14,19 +14,19 @@ Agent brief for the **Faber2026** manuscript repo.
 ## Orient with the knowledge base before grepping
 
 Before exploratory `grep`/`glob`/file-reading to reconstruct context, run
-`python3 scripts/kb search "<topic>"` — hybrid keyword+semantic search over
+`python3 analysis/scripts/kb search "<topic>"` — hybrid keyword+semantic search over
 manuscript docs, wayfinder tickets, git history (parent + `pipeline/`
 submodule), pipeline code, configs, and cited references, with ranked
 cross-source results. Filter with `--source tickets|docs|git|code|config|refs`.
 Refresh after changes with `make kb-index` (incremental, seconds when
-embeddings are current). See [`docs/rse/knowledge-base.md`](docs/rse/knowledge-base.md).
+embeddings are current). See [`analysis/docs/rse/ops/knowledge-base.md`](analysis/docs/rse/ops/knowledge-base.md).
 Fall back to grep for exhaustive sweeps (every call site, every match).
 
 ## Owner queue walkthrough
 
 On "walk me through my queue": follow
-[`docs/rse/control/owner-queue-ritual.md`](docs/rse/control/owner-queue-ritual.md) —
-regenerate via `python3 scripts/owner_queue.py`, verify heuristics, present
+[`analysis/docs/rse/control/owner-queue-ritual.md`](analysis/docs/rse/control/owner-queue-ritual.md) —
+regenerate via `python3 analysis/scripts/owner_queue.py`, verify heuristics, present
 one item at a time with its evidence, record every decision at its source.
 Never scheduled; owner-triggered only. Science/domain context and the
 trust-reset state live in [`CONTEXT.md`](CONTEXT.md) (and
@@ -57,7 +57,7 @@ Scope and guardrails — this authorization is not a licence to be careless:
 > Managed-Agent `permission_policy` (should be set to `always_allow`) plus the
 > per-session GitHub token — control-plane config, not writable from inside a
 > session. These field names are unverified against the live Managed-Agents
-> schema (confirm before relying on them). See the handoff in `docs/rse/specs/`
+> schema (confirm before relying on them). See the handoff in `analysis/docs/rse/specs/`
 > if the approval prompt reappears.
 
 ## Learned User Preferences
@@ -69,9 +69,9 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - When reporting science or manuscript status, answer whether work is science-ready and vetted and whether it is in the manuscript draft (plus a one-line section status); do not lead with campaign progress metrics.
 - Prefer plain verification vocabulary over L#/Tier codes: data chain = Raw Data → Input Data Products → Measurements and Fits → Analyses and Interpretations → In-Manuscript Claims; checks = Equation / Calculation / Model/Fit / Reference / No-Context Review.
 - Owner spot-check is required before closing raw-layer certification; agents must not mark that layer trusted without owner sign-off.
-- Prefer separating analysis results from fitting code across Faber2026 and `pipeline/`, funneling products into a clear navigable results inventory; put analysis/diagnostic review under `docs/analysis/` as MkDocs/HTML prose plus SVG plot panels — not PNG assets or matplotlib text sidebars.
+- Prefer separating analysis results from fitting code across Faber2026 and `pipeline/`, funneling products into a clear navigable results inventory; put analysis/diagnostic review under `analysis/docs/analysis/` as MkDocs/HTML prose plus SVG plot panels — not PNG assets or matplotlib text sidebars.
 - For heavy parallel work, orchestrate via headless Codex/Claude CLI so ChatGPT and Claude Max subscriptions are used, then guide and merge locally; route author Running Notes sorting through headless Claude Code (`claude -p`), not a Cursor agent.
-- When scrubbing `docs/`, prioritize accuracy and concision over historical record; prefer deleting obsolete or misleading material over archiving it.
+- When scrubbing `analysis/docs/`, prioritize accuracy and concision over historical record; prefer deleting obsolete or misleading material over archiving it.
 - Structure in-manuscript figure production as a declarative catalog/workflow (`figures/catalog.yaml` / ax) so regeneration does not require agents to rediscover plot scripts.
 - For dual-band dispersion-measure fits: use band-specific on-pulse envelopes (owner eye-set is fine when automated widths under-cut); multi-component events span first through last component (not only the brightest); before DM-phase, center the burst with band-specific off-pulse padding and visually check crops on the dynamic spectra.
 
@@ -79,11 +79,11 @@ Scope and guardrails — this authorization is not a licence to be careless:
 
 - A separate Overleaf working copy lives at `~/Developer/overleaf/Faber2026` and can sync independently of this checkout — respect Overleaf/GitHub merge order so prose sync does not revert git-only edits.
 - Project data and provenance span jakob-mbp, iacobus, h17, CANFAR/arc, and Google Drive; treat machine inventory as part of provenance, not only “active data stores.”
-- Session handoffs, science-gate plans, and RSE specs live under `docs/rse/specs/` as markdown-only workflow artifacts; PNGs and other binaries belong elsewhere (e.g. decks, figures, verify trees).
+- Session handoffs, science-gate plans, and RSE specs live under `analysis/docs/rse/specs/` as markdown-only workflow artifacts; PNGs and other binaries belong elsewhere (e.g. decks, figures, verify trees).
 - Raw CHIME data means only the twelve singlebeam voltage `.h5` files on h17; intensity and upchannelized `.npy` products are derived, not raw.
 - Dispersion measures are not frozen in those raw voltage `.h5` files; they are applied when dynamic-spectrum products are built, so derived CANFAR vs h17 arrays can disagree on dispersion measure without the raw archive being wrong.
 - Dual-band codetection / dynamic-spectrum figures label the bands as CHIME/FRB and DSA-110; CHIME–DSA time alignment depends on measured ToA offsets (e.g. `geometric_delay_ms`), not arbitrary visual spacing.
-- Author-facing manuscript pulse / Running Notes live as standalone local HTML under `docs/rse/ops/running-notes/` (also at `https://faber2026.jakobtfaber.com`; not a Cursor canvas).
+- Author-facing manuscript pulse / Running Notes live as standalone local HTML under `analysis/docs/rse/ops/running-notes/` (also at `https://faber2026.jakobtfaber.com`; not a Cursor canvas).
 - Oran does not get a dedicated in-manuscript figure; treat any doc that assigns one as a mistake to remove.
 - Local burst products live under `~/Data/Faber2026/dsa110/` (DSA-110; Stokes-I cubes in `DSA_bursts/`) and `~/Data/Faber2026/chimefrb/` (CHIME/FRB; Stokes-I cubes in `CHIME_bursts/`); do not mix instruments across those trees or paper over layout drift with compatibility symlinks — fix referencing paths universally instead.
 - Product dispersion measures in `_cntr_bpc.npy` filenames are per-band archival referral values and can differ between CHIME and DSA for the same event.

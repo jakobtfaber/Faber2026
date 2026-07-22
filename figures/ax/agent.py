@@ -101,7 +101,7 @@ def build_agent():
     except ImportError as exc:  # pragma: no cover
         raise SystemExit(
             "axllm not installed. Install with: pip install axllm\n"
-            "Or use the deterministic CLI: python3 scripts/figure_flow.py --help"
+            "Or use the deterministic CLI: python3 analysis/scripts/figure_flow.py --help"
         ) from exc
 
     skill_body = load_skill_text()

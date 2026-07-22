@@ -1,8 +1,0 @@
-rclone v1.73.5
-- os/version: darwin 26.5.1 (64 bit)
-- os/kernel: 25.5.0 (x86_64)
-- os/type: darwin
-- os/arch: amd64
-- go/version: go1.26.2
-- go/linking: dynamic
-- go/tags: none
