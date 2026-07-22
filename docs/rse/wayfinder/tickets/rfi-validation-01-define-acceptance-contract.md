@@ -47,3 +47,9 @@ explicit masks for missing or rejected samples, and forbid calling a product
   thresholds before viewing test outputs. Only predeclared per-file estimates
   from designated off-pulse data are allowed. A failed blind test consumes the
   test data; another attempt requires new untouched test data.
+- **Protected measurements accepted 2026-07-21:** injected-signal tests must
+  preserve total fluence; fluence by broad frequency slice; time of arrival;
+  burst width; component count and separation; dispersion measure;
+  two-dimensional time-frequency morphology; scattering-tail timescale; and
+  the frequency autocorrelation, modulation strength, and decorrelation
+  bandwidth used for scintillation analysis.
