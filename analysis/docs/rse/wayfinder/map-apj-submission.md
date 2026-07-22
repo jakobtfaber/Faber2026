@@ -62,9 +62,10 @@ existing lane system. The map does not carry the execution itself.
   — active planning now uses descriptive names; a validated glossary preserves
   historical-code traceability without rewriting closed records.
 - [Build the verified Zach CHIME preprocessing baseline](tickets/16-build-verified-zach-chime-preprocessing-baseline.md)
-  — explicit-mask channel restoration and migration preflight pass; current
-  radio-frequency-interference cleaning is rejected, and science remains
-  fail-closed pending the linked validation and input-remediation route.
+  — explicit-mask channel restoration and migration preflight pass; the owner
+  clarified that the accepted diagnostic precedes the bad-channel mask,
+  current radio-frequency-interference cleaning is rejected, and science
+  remains fail-closed pending the linked validation and input-remediation route.
 
 ## Not yet specified
 

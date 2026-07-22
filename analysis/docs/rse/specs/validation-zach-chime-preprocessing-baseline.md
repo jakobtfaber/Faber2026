@@ -8,7 +8,7 @@
 
 - Phases: 3 of 3 implemented.
 - Automated checks: 7 passing, 0 failing.
-- Manual testing: 1 owner review remains.
+- Manual testing: owner review completed 2026-07-22.
 - Critical implementation issues: 0.
 - Important scientific-method issues: 1 — current RFI excision is rejected.
 
@@ -86,11 +86,13 @@ Both deviations are accepted and evidence-bearing.
   not established.
 - Dispersion measure and time-axis interpretation remain outside this ticket.
 
-## Manual Testing Required
+## Manual Testing
 
-1. Review the [diagnostic figure](../verify/zach-chime-preprocessing-20260721/zach_rfi_bandpass_audit.svg)
-   and the no-go interpretation below. Expected outcome: accept the nominal
-   grid/mask contract while leaving current RFI/bandpass science use blocked.
+1. Owner reviewed the [diagnostic figure](../verify/zach-chime-preprocessing-20260721/zach_rfi_bandpass_audit.svg)
+   on 2026-07-22 and accepted the nominal grid/mask contract and no-go decision.
+   The owner clarified that the figure is before the bad-channel mask; it does
+   not approve or review the final science mask. Current RFI/bandpass science
+   use remains blocked.
 
 ## Recommendations
 

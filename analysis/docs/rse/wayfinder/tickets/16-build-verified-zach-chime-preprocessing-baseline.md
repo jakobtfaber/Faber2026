@@ -1,7 +1,7 @@
 # Build the verified Zach CHIME preprocessing baseline
 
 - Type: `wayfinder:task` (AFK)
-- Status: resolved
+- Status: resolved (2026-07-22)
 - Assignee: —
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -46,7 +46,9 @@ Implementation and live h17 execution are complete. See
 - Science fit/claim: not run.
 
 Owner review is complete. The no-go/current-next-method decision is accepted,
-and the resulting validation route is:
+with the owner's 2026-07-22 clarification that the reviewed diagnostic is
+**pre-bad-channel mask** and therefore does not approve the final science mask.
+The resulting validation route is:
 
 1. [Review the preservation limits on a controlled dynamic spectrum](rfi-validation-01a-review-preservation-dynamic-spectrum.md);
 2. [Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md);
@@ -59,7 +61,7 @@ and the resulting validation route is:
 Ticket 02 remains blocked by the complete input-remediation and campaign-rerun
 ticket, not only by radio-frequency-interference validation.
 
-## Resolution — 2026-07-21
+## Resolution — 2026-07-22
 
 The owner accepted the fail-closed baseline by directing this follow-on route.
 The explicit-mask grid and migration preflight changes pass. Bandpass
