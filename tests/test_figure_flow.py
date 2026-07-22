@@ -43,16 +43,12 @@ def test_topo_sort_sightline_budget_before_clusters():
 
 def test_clone_ok_selection_excludes_fig1():
     figures = figure_flow.load_catalog(CATALOG)
-    selected = figure_flow.select_ids(
-        figures, ids=None, manuscript=True, clone_ok=True
-    )
+    selected = figure_flow.select_ids(figures, ids=None, manuscript=True, clone_ok=True)
     assert "fig1_gallery" not in selected
     assert "toa_offset_decomposition" in selected
     assert "dm_host_posteriors" in selected
     assert "oran_qualified_scint" not in selected
-    manuscript_ids = {
-        f["id"] for f in figures if f.get("manuscript")
-    }
+    manuscript_ids = {f["id"] for f in figures if f.get("manuscript")}
     assert "oran_qualified_scint" not in manuscript_ids
 
 
@@ -78,6 +74,25 @@ def test_missing_inputs_typed_error(tmp_path: Path):
     with pytest.raises(figure_flow.FigureFlowError) as exc:
         figure_flow.run_node(figures[0], root=tmp_path, dry_run=False)
     assert exc.value.code == "MISSING_INPUTS"
+
+
+def test_results_library_input_uri(monkeypatch, tmp_path: Path):
+    library = tmp_path / "library"
+    artifact = library / "scattering" / "fit.npz"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_bytes(b"fit")
+    monkeypatch.setenv("FABER2026_RESULTS_LIBRARY", str(library))
+    figure = {
+        "id": "external",
+        "producer": {"argv": ["true"], "cwd": "."},
+        "inputs": ["results-library:scattering/fit.npz"],
+        "outputs": ["out.pdf"],
+    }
+    assert figure_flow.missing_inputs(figure, root=tmp_path) == []
+    assert (
+        figure_flow.expand_path("results-library:scattering/fit.npz", root=tmp_path)
+        == artifact
+    )
 
 
 def test_skip_missing_on_manuscript_sweep(tmp_path: Path):
