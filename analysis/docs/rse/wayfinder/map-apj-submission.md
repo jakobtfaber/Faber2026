@@ -66,6 +66,10 @@ existing lane system. The map does not carry the execution itself.
   clarified that the accepted diagnostic precedes the bad-channel mask,
   current radio-frequency-interference cleaning is rejected, and science
   remains fail-closed pending the linked validation and input-remediation route.
+- [Obtain the exact DSA-110 detection denominator](tickets/09-obtain-dsa-trigger-denominator.md)
+  — use the 64 FRB detections with finite MJD in `59611 <= MJD < 60370`;
+  candidate-name parity is coincidental, and the manuscript must say
+  “detections,” not raw “triggers.”
 
 ## Not yet specified
 
