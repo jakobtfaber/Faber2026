@@ -1,0 +1,19 @@
+{
+  "component_leakage": [
+    {"product": "plpbf_leakage_b3.99_tau0.019_W1.0_a0.1_dt0.1_s0.json", "job": 121, "amp_frac": 0.1, "dt_offset_ms": 0.1, "bias": -0.24387653743318705},
+    {"product": "plpbf_leakage_b3.99_tau0.019_W1.0_a0.1_dt0.3_s0.json", "job": 122, "amp_frac": 0.1, "dt_offset_ms": 0.3, "bias": 0.1099305570344038},
+    {"product": "plpbf_leakage_b3.99_tau0.019_W1.0_a0.1_dt0.6_s0.json", "job": 123, "amp_frac": 0.1, "dt_offset_ms": 0.6, "bias": 0.27259532647231666},
+    {"product": "plpbf_leakage_b3.99_tau0.019_W1.0_a0.15_dt0.5_s0.json", "job": null, "amp_frac": 0.15, "dt_offset_ms": 0.5, "bias": 0.375552584706373},
+    {"product": "plpbf_leakage_b3.99_tau0.019_W1.0_a0.2_dt0.1_s0.json", "job": 124, "amp_frac": 0.2, "dt_offset_ms": 0.1, "bias": -0.43040582429955254},
+    {"product": "plpbf_leakage_b3.99_tau0.019_W1.0_a0.2_dt0.3_s0.json", "job": 125, "amp_frac": 0.2, "dt_offset_ms": 0.3, "bias": 0.11149353263488226},
+    {"product": "plpbf_leakage_b3.99_tau0.019_W1.0_a0.2_dt0.6_s0.json", "job": 126, "amp_frac": 0.2, "dt_offset_ms": 0.6, "bias": 0.5299165094782659}
+  ],
+  "tail_plus_component": [
+    {"product": "plpbf_both_b3.5_si3.0_W1.0_a0.2_dt0.1_s0.json", "job": 135, "s_i": 3.0, "W_over_tau": 1.0, "amp_frac": 0.2, "bias": -0.4789607504662863},
+    {"product": "plpbf_both_b3.5_si3.0_W1.0_a0.4_dt0.1_s0.json", "job": 136, "s_i": 3.0, "W_over_tau": 1.0, "amp_frac": 0.4, "bias": -0.748276389141231},
+    {"product": "plpbf_both_b3.5_si10.0_W1.0_a0.4_dt0.1_s0.json", "job": 137, "s_i": 10.0, "W_over_tau": 1.0, "amp_frac": 0.4, "bias": -0.8561575297363464},
+    {"product": "plpbf_both_b3.5_si3.0_W0.3_a0.2_dt0.1_s0.json", "job": 138, "s_i": 3.0, "W_over_tau": 0.3, "amp_frac": 0.2, "bias": -0.4098707923256457},
+    {"product": "plpbf_both_b3.5_si10.0_W1.0_a0.2_dt0.1_s0.json", "job": null, "s_i": 10.0, "W_over_tau": 1.0, "amp_frac": 0.2, "bias": -0.5761003940899121}
+  ],
+  "limitations": "Jobs 121-126 and 135-138 have recovered successful logs. The two null-job pilot products have no recovered launch logs. This is a recovered-directory snapshot, not an immutable launch manifest."
+}

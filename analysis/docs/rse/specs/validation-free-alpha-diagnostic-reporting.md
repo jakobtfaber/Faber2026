@@ -9,7 +9,7 @@
 ## Implementation Status
 
 - Mechanism blocker checked against live h17 artifacts: complete.
-- Six-run evidence packet preserved and hash-bound: complete.
+- Three-family evidence packet preserved and hash-bound: complete.
 - Landed bounds independently parsed: complete.
 - Fail-closed reporting contract recorded in the ticket: complete.
 - Map and board state reconciled: complete.
@@ -17,8 +17,9 @@
 ## Automated Verification Results
 
 - `python3 docs/rse/specs/research/evidence/free-alpha-diagnostic-2026-07-22/verify_packet.py`
-  passes 23 hashes, six products, six successful logs, empty error logs,
-  posterior and bias arithmetic, and both leakage bounds.
+  passes 60 hashes and the exact filesystem roster; six scintillation products;
+  seven component products; five combined products; scheduled-log agreement;
+  empty error logs; posterior and bias arithmetic; and all reported bounds.
 - `python3 -m py_compile docs/rse/specs/research/evidence/free-alpha-diagnostic-2026-07-22/verify_packet.py`
   passes.
 - Exact search of the live manuscript `main.tex` and `sections/*.tex` finds no
@@ -31,13 +32,16 @@
 
 ## Code Review Findings
 
-The reporting contract matches the evidence and standing context. One preserved
+The reporting contract matches the recovered tested envelope and standing context. One preserved
 metadata field reports nominal rather than actual frequency-grid spacing; the
 verifier checks the distinction and confirms the computed effective modulation
 used the actual grid. The fit driver and provenance were untracked on h17, and
-the currently available campaign-input records postdate the injection. These
-limitations prohibit a clean-room fitter-reproduction claim but do not affect
-the independently parsed `|bias| < 0.02` result.
+the currently available campaign-input records postdate the injection. Sampler
+and runtime settings are incomplete, and no commit proves the untracked drivers
+were runtime bytes. Two pilot products lack recovered launch logs. These limits
+prohibit a clean-room reproduction or universal mechanism-exclusion claim, but
+do not affect the independently parsed `|bias| < 0.02`, component minimum
+`-0.43040582429955254`, or combined minimum `-0.8561575297363464`.
 
 ## Manual Testing Required
 

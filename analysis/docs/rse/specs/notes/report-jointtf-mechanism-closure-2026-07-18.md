@@ -1,4 +1,4 @@
-# Report: Joint-TF model-selection verdict + mechanism elimination (evening closure)
+# Report: Joint-TF model-selection verdict + tested mechanism envelope
 
 ---
 **Date:** 2026-07-18 (evening)
@@ -27,35 +27,40 @@ default; the production EMG family and its β>3.98 / α=4 limits stand, hardened
 against PBF-shape systematics.** Recorded in FLITS-side
 `PLPBF_FITTER_PROVENANCE.md` (Results 2026-07-18).
 
-## 2. Mechanism elimination for the wedges — COMPLETE
+## 2. Recovered mechanism tests for the wedges — TESTED ENVELOPE COMPLETE
 
 The free-α wedges (+5537 casey, +731 wilhelm; both still-EMG diagnostic fits) are
-**chromatic-scaling anomalies**: τ(ν) deviates from ν⁻⁴ for a cause that is, by
-quantitative exclusion, none of:
+**chromatic-scaling anomalies**: τ(ν) deviates from ν⁻⁴. The recovered tests
+did not reproduce the full anomaly in these configurations:
 
 | mechanism | test | max α-bias reached | needed (casey) | status |
 |---|---|---|---|---|
-| gross single-component tail | harsh-tail injections (s_i→1000) | −0.21 (W/τ=0.3); −0.01 casey-matched | −1.6 | excluded |
-| unfit close secondary (leakage) | leakage grid (amp×offset) | −0.43 (amp 0.2, dt 0.1 ms); sign flips + at dt≥0.3 | −1.6 | excluded |
-| tail + secondary combined | both-at-once grid | −0.86 plateau (and casey has no heavy tail per §1) | −1.6 | excluded |
-| frequency-coherent peak dipole | dipole-mask (exact √w exclusion + 10× down-weight; free-vs-tied on shared masked data) | wedge survives: casey +3540/+3795 of +5537, wilhelm +634/+586 of +731; α stays 2.27/2.75 | — | **excluded (DISTRIBUTED verdict, both)** |
-| scintillation-gain leakage | 6-run bound at 2L Δν_d, m=1 maximal, real channelization; static controls | bias −0.003; all runs recover α≈4 | −1.6 | excluded |
+| gross single-component tail | harsh-tail injections (s_i→1000) | −0.21 (W/τ=0.3); −0.01 casey-matched | −1.6 | not reproduced in tested configurations |
+| unfit close secondary (leakage) | recovered seven-product grid (amp×offset) | minimum −0.4304058243 (amp 0.2, dt 0.1 ms); sign flips + at dt≥0.3 | −1.6 | not reproduced in recovered grid |
+| tail + secondary combined | recovered five-product grid | minimum −0.8561575297 (and casey has no heavy tail per §1) | −1.6 | not reproduced in recovered grid |
+| frequency-coherent peak dipole | dipole-mask (exact √w exclusion + 10× down-weight; free-vs-tied on shared masked data) | wedge survives: casey +3540/+3795 of +5537, wilhelm +634/+586 of +731; α stays 2.27/2.75 | — | not reproduced in tested configurations |
+| scintillation-gain leakage | 6-run bound at 2L Δν_d, m=1 maximal, real channelization; static controls | bias −0.003; all runs recover α≈4 | −1.6 | not reproduced in tested configurations |
 
-**Sole surviving hypothesis: two-screen chromaticity** (two scattering screens
+**Remaining modeled candidate: two-screen chromaticity** (two scattering screens
 with different τ(ν) mixing across the CHIME/DSA lever arm). This is a hypothesis
-**by elimination** — no forward two-screen model has been fit. Decision framing:
+after the tested alternatives above, not a conclusion by elimination — no
+forward two-screen model has been fit. Decision framing:
 `decision-two-screen-charter-2026-07-18.md`.
 
-**Independent preservation and check (2026-07-22):** the six scintillation-
-gain products, jobs 147--152 logs, driver, job script, fitter provenance, and
-current diagnostic input records are hash-bound in
+**Independent preservation and check (2026-07-22):** six scintillation-gain
+products, seven component-leakage products, five combined products, recovered
+logs, drivers, job scripts, fitter provenance, and current diagnostic inputs
+are hash-bound in
 [`free-alpha-diagnostic-2026-07-22`](../research/evidence/free-alpha-diagnostic-2026-07-22/).
 The standard-library verifier confirms all six 90% intervals contain alpha=4,
 maximum absolute bias 0.016916 across all runs, and 0.014076 across the four
-decorrelating runs. The packet records that the h17 driver and provenance were
-untracked and that the current input records postdate the injections; use the
-packet to verify the landed `|bias| < 0.02` bound, not to claim a clean-room
-fitter rerun.
+decorrelating runs. It independently recovers minima −0.4304058243 for the
+seven-product component grid and −0.8561575297 for the five-product combined
+grid. Ten scheduled multi-component products have successful logs; two pilots
+have no recovered launch logs. The packet records incomplete runtime settings,
+untracked drivers not proven as runtime bytes, and postdated current inputs.
+Use it to verify landed arithmetic and recovered-grid bounds, not a clean-room
+rerun or universal mechanism exclusion.
 
 Secondary finding (flagged separately on the deck): the two β-ceiling rails have
 different origins — **casey's rail is peak-associated** (masked-tied β = 3.44,
@@ -66,7 +71,8 @@ opposite instruments (casey C ±32σ ↔ +5537; wilhelm D ±26σ ↔ +731; N=2).
 
 ## 3. Count-audit state (tasks #10–#12)
 
-- **zach**: C2D4 at 131 µs collapsed (ΔlnZ −2.3, params identical → 4th
+- **zach**: owner accepts the diagnostic as visually sound before the bad-channel
+  mask; it does not establish post-mask behavior. C2D4 at 131 µs collapsed (ΔlnZ −2.3, params identical → 4th
   component found nothing; owner ground truth 1+3 stands). Root cause of the
   earlier window bug (peak-anchored window truncating the +2.06/+2.52/+3.01 ms
   cluster members) fixed with a DSA-only envelope window (5.90 ms, all four

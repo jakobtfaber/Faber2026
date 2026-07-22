@@ -15,20 +15,33 @@
     "repository": "git@github.com:jakobtfaber/dsa110-FLITS.git",
     "worktree": "/home/ubuntu/worktrees/joint-tf-fits",
     "commit": "d292f4b91ef02dfd120a816c015fbb67cb15261f",
-    "note": "The copied driver and provenance file were untracked in this worktree; their bytes are authoritative only through SHA256SUMS."
+    "note": "All five copied Python/provenance files were untracked in this worktree. SHA256SUMS authenticates the captured bytes, but no commit or immutable launch manifest proves that these were the runtime bytes."
   },
   "campaign_inputs": {
     "repository": "git@github.com:jakobtfaber/dsa110-FLITS.git",
     "worktree": "/home/ubuntu/worktrees/t0audit-pr",
     "commit": "99dcef138a843d5f6255969d67e13b4aa7c6fcbc",
     "branch": "ms/audit-standing-line-toa-note-20260719",
-    "note": "These clean tracked files were located live on 2026-07-22. Their July 19 modification time postdates the July 18 injections, so they anchor the diagnostic status and approximate bandwidth inputs, not the exact runtime input bytes. Exact runtime parameters are embedded in each output JSON and Slurm log."
+    "note": "These clean tracked files were located live on 2026-07-22. Their July 19 modification time postdates the July 18 injections, so they anchor diagnostic status and approximate bandwidth inputs, not exact runtime input bytes. Only the physical injection parameters needed to verify the reported bias arithmetic are embedded in products and scheduled logs. Sampler and runtime provenance remains incomplete."
   },
   "remote_roots": {
     "source": "/home/ubuntu/worktrees/joint-tf-fits/analysis/scattering-refit-2026-06",
-    "job": "/home/ubuntu/flits-runs/jobs/fit_scintleak.sbatch",
-    "logs": "/home/ubuntu/flits-runs/logs/jtfsl_{147..152}.{out,err}",
-    "products": "/home/ubuntu/flits-runs/data/scintleak/scintleak_*.json",
+    "jobs": [
+      "/home/ubuntu/flits-runs/jobs/fit_scintleak.sbatch",
+      "/home/ubuntu/flits-runs/jobs/fit_plpbf_leakage.sbatch",
+      "/home/ubuntu/flits-runs/jobs/fit_plpbf_both.sbatch"
+    ],
+    "logs": [
+      "/home/ubuntu/flits-runs/logs/jtfsl_{147..152}.{out,err}",
+      "/home/ubuntu/flits-runs/logs/plik_{121..126}.{out,err}",
+      "/home/ubuntu/flits-runs/logs/plbo_{135..138}.{out,err}"
+    ],
+    "products": [
+      "/home/ubuntu/flits-runs/data/scintleak/scintleak_*.json",
+      "/tmp/plpbf_leakage_*.json",
+      "/tmp/plpbf_both_*.json"
+    ],
     "campaign_inputs": "/home/ubuntu/worktrees/t0audit-pr/analysis/window-tuning-campaign-2026-07-17/results/{casey,wilhelm}_campaign.json"
-  }
+  },
+  "reproducibility_limit": "The packet preserves the full recovered product rosters: 7 component-leakage products and 5 tail-plus-component products. Ten scheduled products have successful logs; two pilot products have no recovered logs. No posterior samples, environment lock, scheduler accounting, or immutable launch manifest establishes an exact clean-room rerun."
 }

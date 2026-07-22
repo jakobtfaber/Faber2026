@@ -1,30 +1,40 @@
 # Free-alpha diagnostic evidence packet
 
-Read-only capture from h17 on 2026-07-22. It preserves the six July 18
-scintillation-gain-leakage products, their successful and empty-error Slurm
-logs, the current driver and job-script bytes, the h17 fitter provenance, and
-the two currently tracked campaign-input records.
+Read-only capture from h17 on 2026-07-22. It preserves three diagnostic
+families: six scintillation-gain products, seven component-leakage products,
+and five tail-plus-component products. Ten component-grid products and all six
+scintillation products have successful, empty-error Slurm logs. Two additional
+pilot products have no recovered launch logs. It also preserves current driver,
+job-script, fitter-provenance, and campaign-input bytes.
 
-The copied evidence totals less than 100 KiB. `SHA256SUMS` binds every copied
+The copied evidence totals about 260 KiB. `SHA256SUMS` binds all 60 copied
 artifact. `manifest.json` records the host, environment, remote paths, code
 commits, and important limitations: the driver and fitter provenance were
 untracked in their h17 worktree, so no repository commit proves they are the
-exact bytes used by the runs. The campaign-input records now available on
-h17 postdate the injections by one day; the exact numerical inputs used at run
-time remain embedded in each product and log. Environment versions were
-observed during capture and may have drifted since the July 18 runs.
+exact runtime bytes. The campaign-input records postdate the injections by one
+day. Only physical injection parameters needed to check the landed bias
+arithmetic are embedded; sampler and runtime settings remain incomplete.
+Observed environment versions may have drifted since the July 18 runs.
 
-Verify from a clean checkout with Python 3.9 or newer; only the standard
+Verify from a clean checkout with Python 3.10 or newer; only the standard
 library is required:
 
 ```bash
 python3 docs/rse/specs/research/evidence/free-alpha-diagnostic-2026-07-22/verify_packet.py
 ```
 
-The verifier checks hashes, the six-product roster, input diagnostic status,
+The verifier checks hashes and the exact filesystem roster, input diagnostic status,
 the analytic within-channel modulation suppression, posterior ordering,
-bias arithmetic, agreement between product and log, successful return codes,
-empty error logs, and the reported bounds.
+bias arithmetic, agreement between scheduled products and logs, successful
+return codes, empty error logs, and the reported bounds. `grid_roster.json`
+records every recovered multi-component product and distinguishes the two
+unlogged pilots.
+
+Recovered bounds are exact over these rosters: the minimum component-only bias
+is `-0.43040582429955254` among seven products; the minimum combined-tail-and-
+component bias is `-0.8561575297363464` among five. These grids did not reproduce
+the approximately `-1.6` anomaly. They do not universally exclude either
+mechanism outside the recovered tested envelope.
 
 Independent parsing found one metadata-only defect. The driver constructs an
 inclusive 400--800 MHz frequency grid, so the spacing used in the effective
