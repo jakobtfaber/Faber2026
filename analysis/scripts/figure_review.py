@@ -158,6 +158,10 @@ def command_new_batch(args: argparse.Namespace) -> None:
             "expanded-catalog-build",
             "figure3-input",
             "verdi-host-redshifts",
+            "law-host-redshifts",
+            "candidate-redshift-ledger",
+            "candidate-redshift-replay",
+            "candidate-redshift-payloads",
         ],
     }
     required_evidence = {
@@ -184,6 +188,10 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ("expanded-catalog-build", "pipeline", "galaxies/foreground/data/expanded_catalog_build.json"),
         ("figure3-input", "pipeline", "galaxies/foreground/data/sightline_halo_grid.csv"),
         ("verdi-host-redshifts", "pipeline", "galaxies/foreground/data/frozen_census/verdi2025_host_redshift_extract.csv"),
+        ("law-host-redshifts", "pipeline", "galaxies/foreground/data/frozen_census/law2024_host_redshift_extract.csv"),
+        ("candidate-redshift-ledger", "pipeline", "galaxies/foreground/data/candidate_redshift_provenance.csv"),
+        ("candidate-redshift-replay", "pipeline", "galaxies/foreground/data/candidate_redshift_replay_2026-07-22.json"),
+        ("candidate-redshift-payloads", "pipeline", "galaxies/foreground/data/candidate_redshift_source_payloads_2026-07-22.json"),
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
