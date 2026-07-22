@@ -25,35 +25,39 @@ redshift, verdict, budget flag, trust state, or Figure 3 status.
 
 ## Decision log
 
-- Owner approved a two-stage, mass-independent discovery structure on
-  2026-07-21. Each search is centered on the burst position. Catalog quality
-  and foreground-redshift rules create the candidate pool; derived halo
-  intersection is classified afterward using `b <= R200c` for galaxies and
-  `b <= R500` for clusters. A halo mass is not required for discovery.
-- Owner approved separate circular search regions on 2026-07-21: `5 arcmin`
-  for galaxy catalogs and `20 arcmin` for cluster catalogs, both centered on
-  the burst coordinates. Admission uses exact spherical separation at or
-  inside the boundary. Query cones are `5.1 arcmin` and `20.1 arcmin`;
-  guard-ring rows are retained but not admitted. These limits enclose all
-  frozen rows: the largest stored separations are `4.72 arcmin` and
-  `19.999 arcmin`.
-- Owner approved the foreground-redshift rule on 2026-07-21. A secure
-  spectroscopic redshift is admitted only for `0 < z < z_host`; a source
-  within 500 km/s of the host is `host_local_ambiguous`. A photometric
-  redshift is admitted when its published 95% interval overlaps
-  `0 < z < z_host`; if only a one-sigma error is published, the interval is
-  `z +/- 1.96 sigma`. If the central estimate lies outside the foreground
-  range while its interval overlaps, the row is `redshift_ambiguous`. Rows
-  without usable redshift evidence remain frozen as `no_usable_redshift` and
-  enter only if another catalog identifies the same source and supplies
-  admissible evidence.
-- By the owner's instruction to accept the remaining recommendations, discovery
-  uses only predeclared catalog-native fatal-quality exclusions: invalid
-  coordinates, missing stable release/source identity, failed redshift fit, or
-  a documented non-astrophysical artifact. Every excluded row remains in the
-  corpus with its native flags and exclusion reason. Missing optional quality
-  fields yield `quality_unknown`, not rejection. Morphology, color, halo mass,
-  richness, and later classification enrichments are not discovery cuts.
+- Owner revised the search contract on 2026-07-22. This decision supersedes the
+  earlier 5-arcminute galaxy cone, 20-arcminute cluster cone, and redshift-first
+  candidate admission recorded on 2026-07-21.
+- Center every query on the frozen FRB International Celestial Reference System
+  coordinates in `pipeline/galaxies/foreground/data/frozen_census/bursts.csv`.
+  Do not center on the host or a foreground candidate.
+- Galaxy search: a fully paginated, inclusive 15-arcminute cone per sightline.
+  Record exact spherical separation. A service row limit must not truncate the
+  result set.
+- Cluster search: a separate, inclusive projected-separation limit of 5 Mpc at
+  each candidate cluster redshift. If a service requires an angular prefilter
+  before returning redshifts, the query must either evaluate the projected
+  limit server-side or use a documented cone proven to contain every catalog
+  row satisfying the 5 Mpc rule. If completeness cannot be proved, the query
+  remains incomplete rather than silently truncating candidates.
+- Initial candidate admission is geometry-first. A returned row needs a stable
+  catalog release/source identifier, finite coordinates, and inclusion in the
+  approved region. Redshift, color, morphology, catalog class, photometry,
+  richness, halo mass, and quality warnings are not initial admission cuts.
+  Invalid coordinates or missing stable identity prevent candidate formation
+  but remain frozen as source-response defects.
+- Preserve every returned row with its native values and flags. Missing
+  optional quality fields yield `quality_unknown`, not rejection. A documented
+  non-astrophysical artifact or failed redshift fit is classified later; it is
+  not removed from the raw corpus.
+- Redshift classification follows admission. A secure spectroscopic redshift
+  is foreground only for `0 < z < z_host`; a source within 500 km/s of the host
+  is `host_local_ambiguous`. A photometric estimate is potentially foreground
+  when its published 95% interval overlaps `0 < z < z_host`; if only a
+  one-sigma error is published, use `z +/- 1.96 sigma`. A central estimate
+  outside the foreground range with an overlapping interval is
+  `redshift_ambiguous`. Missing usable redshift evidence is
+  `no_usable_redshift`, not an admission failure.
 - A source identity is its `catalog + release + source_id`. Published
   cross-identifiers may link catalogs. Otherwise, galaxy detections link only
   when separation is at most 1 arcsec and their redshift evidence is compatible.
@@ -69,11 +73,14 @@ redshift, verdict, budget flag, trust state, or Figure 3 status.
   pairwise; chained proximity does not create an identity. Conflicting secure
   spectra, non-overlapping photometric 95% intervals, or mixed source classes
   make the group `ambiguous` and require separate owner adjudication.
-- Classification follows discovery. Secure stellar evidence marks a
+- Classification follows admission. Secure stellar evidence marks a
   `star_contaminant`; uncertain or conflicting class evidence remains
   `classification_ambiguous`. Only a galaxy or cluster with resolved geometry
-  can be tested against `R200c` or `R500`. Missing mass or radius produces
-  `geometry_unresolved`, never a fallback aperture.
+  can be tested against `R200c` or `R500`. Galaxy halo intersection uses
+  `b <= R200c`. Cluster retention uses `b <= 2 R200`; dispersion-budget
+  admission uses `b <= R500`. Search, retention, and budget admission remain
+  distinct. Missing mass or radius produces `geometry_unresolved`, never a
+  fallback aperture.
 - All calculations use the frozen International Celestial Reference System
   coordinates and exact spherical separation. Output order is separation,
   catalog, release, then source identifier. The corpus retains query text,
@@ -84,12 +91,12 @@ redshift, verdict, budget flag, trust state, or Figure 3 status.
 
 ## Resolution
 
-Resolved 2026-07-21 through the owner exchange recorded above. The approved
-contract defines a new audit search, not a reconstruction of the unknown
-historical aperture. It preserves all raw evidence and all existing scientific
-authority fields while making search region, candidate admission, identity,
-ambiguity, duplicate grouping, and post-discovery halo intersection
-deterministic.
+Resolved 2026-07-21 and revised by the owner on 2026-07-22 through the exchange
+recorded above. The approved contract defines a new audit search, not a
+reconstruction of the unknown historical aperture. It preserves all raw
+evidence and all existing scientific authority fields while making search
+region, candidate admission, identity, ambiguity, duplicate grouping, and
+post-admission classification deterministic.
 
 No adopted redshift, verdict, duplicate disposition, budget flag, trust state,
 or Figure 3 artifact changed.
