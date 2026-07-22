@@ -94,6 +94,8 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   integration, SEFD/beam prior budget) (legacy V3 + review S20)
 
 ### Figures
+- [Visual scientific review workflow](visual-review-workflow.md): agents must
+  trace and exactly regenerate a figure before it reaches the owner.
 - [ ] Figure 1 twelve-burst gallery — **at owner-decide gate** (2026-07-18):
   observed-peak candidate merged + promotable
   (`2026-07-17-fig1-observed-peak-audit`); dmcorr variant refuted

@@ -1,0 +1,32 @@
+{
+  "candidate_id": "fig3-halo-grid",
+  "clean_worktree": true,
+  "command": [
+    "uv",
+    "run",
+    "python",
+    "galaxies/v2_0/sightline_halo_grid.py",
+    "--halo-csv",
+    "galaxies/foreground/data/sightline_halo_grid.csv",
+    "--out-dir",
+    "/absolute/path/to/isolated-output"
+  ],
+  "cwd": "pipeline",
+  "environment": {
+    "identity": "pipeline/uv.lock",
+    "runner": "uv --frozen",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "inputs": [
+    {
+      "path": "pipeline/galaxies/foreground/data/sightline_halo_grid.csv",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "output_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "pipeline_revision": "exact 40-character pipeline commit",
+  "source_revision": "exact 40-character analysis commit",
+  "status": "verified",
+  "verified_at": "2026-07-22T00:00:00+00:00",
+  "verifier": "agent name"
+}
