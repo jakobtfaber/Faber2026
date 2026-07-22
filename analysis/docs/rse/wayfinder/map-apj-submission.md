@@ -80,6 +80,9 @@ existing lane system. The map does not carry the execution itself.
 - [Decide how the free-α diagnostic is reported in the paper](tickets/14-free-alpha-diagnostic-reporting.md)
   — methods/appendix mismatch diagnostic only; excluded from physical tables,
   screen inference, abstract, conclusions, and headline claims.
+- [Adjudicate the conflicting halo-mass prescriptions on the phineas sightline](tickets/06-adjudicate-phineas-halo-mass-prescriptions.md)
+  — adopt a probabilistic crossing mixture tied to the modified-NFW gas
+  truncation radius; retain `R200c` crossing as a reported geometry sensitivity.
 
 ## Not yet specified
 
