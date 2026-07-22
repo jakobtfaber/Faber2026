@@ -12,6 +12,10 @@ _Generated 2026-07-22. Manual walkthrough ritual: see `docs/rse/control/owner-qu
   `docs/rse/wayfinder/tickets/13-overhaul-trust-assessment.md`
 - **Adopt count-audit remediation as standing method** — open, unblocked, owner-facing
   `docs/rse/wayfinder/tickets/15-count-audit-remediation-standing-method.md`
+- **Freeze protected WISE--PS1--STRM and UNIONS/CFIS evidence** — open, unblocked, owner-facing
+  `docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md`
+- **Obtain the authoritative host-redshift ledger** — open, unblocked, owner-facing
+  `docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-17-obtain-authoritative-host-redshift-ledger.md`
 - **Review the RFI preservation limits on a controlled dynamic spectrum** — open, unblocked, owner-facing
   `docs/rse/wayfinder/tickets/rfi-validation-01a-review-preservation-dynamic-spectrum.md`
 
@@ -63,5 +67,4 @@ _Generated 2026-07-22. Manual walkthrough ritual: see `docs/rse/control/owner-qu
 
 ## Open PRs (review or delegate)
 
-- **#193 Pin Verdi host-redshift evidence audit** — open
-  `https://github.com/jakobtfaber/Faber2026/pull/193`
+- None found (GitHub query is best-effort).

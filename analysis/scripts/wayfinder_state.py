@@ -41,7 +41,13 @@ class Ticket:
 
     @property
     def is_assigned(self) -> bool:
-        return self.assignee.strip().lower() not in {"", "-", "—", "none"}
+        return self.assignee.strip().lower() not in {
+            "",
+            "-",
+            "—",
+            "none",
+            "unassigned",
+        }
 
 
 def _normalized_status(value: str) -> str:

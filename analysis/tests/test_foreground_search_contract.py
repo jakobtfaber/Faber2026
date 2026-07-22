@@ -17,17 +17,38 @@ def evidence(
     interval_95: tuple[float, float] | None = None,
     *,
     sigma: float | None = None,
+    secure_spectrum: bool | None = None,
     source_id: str = "catalog/release/source-row",
 ) -> RecoveredRedshiftEvidence:
-    return RecoveredRedshiftEvidence(source_id, SHA, redshift, kind, interval_95, sigma)
+    return RecoveredRedshiftEvidence(
+        source_id,
+        SHA,
+        redshift,
+        kind,
+        interval_95,
+        sigma,
+        secure_spectrum,
+    )
 
 
 @pytest.mark.parametrize(
     "item,z_host,expected",
     [
-        (evidence(0.10, "spectroscopic"), 0.20, "foreground"),
-        (evidence(0.2001, "spectroscopic"), 0.20, "host_local_ambiguous"),
-        (evidence(0.30, "spectroscopic"), 0.20, "background"),
+        (
+            evidence(0.10, "spectroscopic", secure_spectrum=True),
+            0.20,
+            "foreground",
+        ),
+        (
+            evidence(0.2001, "spectroscopic", secure_spectrum=True),
+            0.20,
+            "host_local_ambiguous",
+        ),
+        (
+            evidence(0.30, "spectroscopic", secure_spectrum=True),
+            0.20,
+            "background",
+        ),
         (
             evidence(0.10, "photometric", (0.08, 0.12)),
             0.20,
@@ -66,3 +87,17 @@ def test_conflicting_recovered_redshifts_remain_geometry_unresolved():
     assert result.geometry_state == "cluster_search_geometry_unresolved"
     assert result.redshift_state is None
     assert result.search_geometry_redshift_source is None
+
+
+@pytest.mark.parametrize("secure_spectrum", [False, None])
+def test_insecure_or_unknown_spectroscopic_redshift_is_not_classified(
+    secure_spectrum,
+):
+    item = evidence(
+        0.10,
+        "spectroscopic",
+        secure_spectrum=secure_spectrum,
+    )
+    result = classify_recovered_cluster_redshift([item], z_host=0.20)
+    assert result.geometry_state == "resolved"
+    assert result.redshift_state == "no_usable_redshift"

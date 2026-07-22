@@ -21,6 +21,7 @@ class RecoveredRedshiftEvidence:
     kind: str
     interval_95: tuple[float, float] | None = None
     sigma: float | None = None
+    secure_spectrum: bool | None = None
 
 
 @dataclass(frozen=True)
@@ -63,15 +64,18 @@ def classify_recovered_cluster_redshift(
     source = f"{item.source_id}@sha256:{item.row_sha256}"
     kind = item.kind.lower()
     if kind == "spectroscopic":
-        velocity_offset = (
-            SPEED_OF_LIGHT_KM_S * abs(item.redshift - z_host) / (1.0 + z_host)
-        )
-        if velocity_offset <= 500.0:
-            state = "host_local_ambiguous"
-        elif item.redshift < z_host:
-            state = "foreground"
+        if item.secure_spectrum is not True:
+            state = "no_usable_redshift"
         else:
-            state = "background"
+            velocity_offset = (
+                SPEED_OF_LIGHT_KM_S * abs(item.redshift - z_host) / (1.0 + z_host)
+            )
+            if velocity_offset <= 500.0:
+                state = "host_local_ambiguous"
+            elif item.redshift < z_host:
+                state = "foreground"
+            else:
+                state = "background"
     elif kind == "photometric":
         interval = item.interval_95
         if interval is None and item.sigma is not None:
