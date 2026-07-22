@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: open
-- Assignee: unassigned
+- Assignee: Codex (anonymous-corpus agent)
 - Blocked by: [Set the nine-sightline search-region and candidate-selection contract](expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: not covered by the standing delegation; created after `main` commit `33e9e1ce3570`
