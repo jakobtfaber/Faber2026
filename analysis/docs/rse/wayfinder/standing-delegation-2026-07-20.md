@@ -25,11 +25,42 @@
 > exceeds the ticket's recorded scope. New tickets are not covered
 > automatically.
 
+## Owner amendment — recommendation accepted by default
+
+**Granted:** 2026-07-22
+
+For every ticket already covered by this grant, the owner accepts Codex's
+eventual evidence-backed recommended option by default. Codex may claim the
+ticket, investigate it, record the recommendation and supporting evidence, and
+perform ticket-scoped work already authorized by the ticket. For an
+away-from-keyboard ticket, Codex may also validate and resolve it without
+waiting for another per-ticket approval.
+
+Default acceptance applies only when the recommendation stays within the
+recorded question and all blockers, acceptance criteria, and independent checks
+pass. It does not waive any exception or stop condition in the original grant.
+In particular, it is not advance approval for an evidence-free outcome, a new
+owner preference, a materially changed scientific claim, a required visual
+judgment, or an irreversible action.
+
+For a human-in-the-loop ticket, default acceptance guides the recommendation
+but does not replace Wayfinder's required live owner exchange. Codex must
+present the ticket-specific recommendation and receive the owner's response
+before resolving the ticket.
+
+This amendment removes the requirement for a second owner response only for a
+covered away-from-keyboard ticket. It does not expand the covered-ticket list.
+
 ## Operational interpretation
 
-- This is delegated authority to choose an evidence-backed recommendation, not
-  advance approval of an unknown result.
-- It does not claim, close, unblock, or otherwise change any ticket by itself.
+- For a covered ticket, the owner's default preference is **accept the
+  evidence-backed recommendation**, unless an exception or stop condition fires.
+- The grant does not claim, close, unblock, or otherwise change a ticket by
+  itself. After ticket-specific evidence and validation are recorded, Codex may
+  resolve a covered away-from-keyboard ticket without another owner response.
+- A human-in-the-loop ticket still resolves through a live exchange. Codex may
+  prepare its recommendation in advance, but it must present that recommendation
+  and receive the owner's response before closing the ticket.
 - Ticket blocking, acceptance criteria, validation, and strict completion
   semantics remain unchanged.
 - A covered ticket's resolution must cite this grant and the evidence that
@@ -77,6 +108,8 @@
 ## Explicitly outside this grant
 
 - Any ticket not listed above, including tickets created after the scope anchor.
-- Automatic resolution based on this grant alone.
+- Resolution before ticket-specific evidence, acceptance criteria, and
+  validation are complete and recorded.
+- Autonomous resolution of a human-in-the-loop ticket.
 - Waiver of a blocker, acceptance criterion, independent check, owner visual
   review, or the exceptions stated in the owner grant.
