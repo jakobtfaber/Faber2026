@@ -256,8 +256,8 @@ inputs = []
 external_sources = []
 artifact = "figures/codetection_data_grid.pdf md5:4f966f2d"
 consumed_by = ["sections/observations.tex"]
-trust = "pending"
-cleared_by = ""
+trust = "trusted"
+cleared_by = "Wayfinder tickets 06 and 07; independent physical and Monte Carlo checks"
 current = false
 notes = "contract locked 2026-07-14 (data-only 4x3); UPDATE 2026-07-18: observed-peak candidate merged + promotable (PRs #121/#128/#130; batch 2026-07-17-fig1-observed-peak-audit); dmcorr variant REFUTED by marker-dependence (PR #132 kill record); awaits owner figure_review decide, then promotion PR"
 
@@ -456,12 +456,12 @@ producing_script = "scripts/dm_budget_uncertainty.py"
 pipeline_pin = "23fbd295 (inferred: regen 2026-07-15..18 at current gitlink; confirm receipt)"
 inputs = ["scripts/dm_budget_uncertainty.csv"]
 external_sources = ["TNG IGM lognormal"]
-artifact = "figures/dm_host_posteriors.pdf md5:2cb97b38"
+artifact = "figures/dm_host_posteriors.pdf md5:a9634986"
 consumed_by = ["sections/appendix.tex", "sections/results.tex"]
 trust = "pending"
 cleared_by = ""
 current = true
-notes = "machinery V5-cleared; PENDING = fiducial priors + right-skew headline await owner sign-off (wf-07); two sightlines P(DM_host<0)~0.45"
+notes = "Phineas boundary halos use the resolved probabilistic crossing mixture (wf-06); remaining priors and headline logic were accepted in wf-07"
 
 # ── Scattering fits (wave-1 revoked; refill from re-fit campaign) ─────────
 

@@ -18,7 +18,9 @@ the calculation uses the redshift-zero rather than redshift-dependent Moster et
 al. (2013) relation; and the hard virial-crossing decisions omit mass-relation,
 stellar-mass, and photometric-redshift uncertainty. Keep the Wayfinder ticket
 open. Use a probabilistic crossing model before freezing the Phineas foreground
-or host-dispersion headline.
+or host-dispersion headline. That probabilistic route was implemented and
+validated on 2026-07-22; see
+[the follow-up research record](research-phineas-probabilistic-crossing-model.md).
 
 ## How the approved result was obtained
 
