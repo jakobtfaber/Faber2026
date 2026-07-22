@@ -72,6 +72,11 @@ independent numerical, provenance, and owner visual checks.
   evidence, and fail-closed classification, identity, ambiguity, duplicate, and
   redshiftless-cluster rules. This is a new audit contract, not the historical
   aperture.
+- [Freeze authoritative host-redshift evidence](tickets/expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md)
+  — the supplied Verdi archive is hash-frozen as a minimal comparison, but its
+  two drafts conflict, two sightlines are absent, four identifiers differ, and
+  every row lacks a host identifier and row-level uncertainty. Authority stays
+  closed pending an owner-approved host-redshift ledger.
 
 ## Not yet specified
 

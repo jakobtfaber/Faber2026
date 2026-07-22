@@ -20,6 +20,17 @@ and DESI DR1 extracts also omit their stable catalog identifiers and query
 metadata. Figure 3 therefore remains blocked under the ticket's acceptance
 rule.
 
+**Follow-up, 2026-07-22:** the owner supplied a Verdi draft archive. A minimal,
+hashed comparison is now frozen under
+[`evidence/verdi-host-redshifts-2026-07-22/`](evidence/verdi-host-redshifts-2026-07-22/).
+It does not remove the host-source block: two included drafts conflict, two
+sightlines are absent, four FRB suffixes differ, and no row contains both a
+host-galaxy identifier and row-level redshift uncertainty. Candidate provenance
+was separately frozen after this audit snapshot. See
+[Freeze authoritative host-redshift evidence](../wayfinder/tickets/expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md)
+and
+[Freeze candidate-redshift source evidence](../wayfinder/tickets/expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md).
+
 ## Frozen inputs
 
 All calculations used the files below without network access. SHA-256 hashes
