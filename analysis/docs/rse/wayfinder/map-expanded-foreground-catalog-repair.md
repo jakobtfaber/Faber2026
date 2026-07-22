@@ -49,6 +49,11 @@ independent numerical, provenance, and owner visual checks.
   snapshot, provenance, error, and catalog-native quality contract already
   merged in dsa110-FLITS PR #213 and reverified on current pipeline
   `origin/main` at `f3c8d22a9088`.
+- [Set the stellar-mass, halo-mass, and radius authority](tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md)
+  — after the crossmatch ticket resolved, accepted the census-mass authority,
+  redshift-dependent Moster `M200c`, critical-density `R200c`, conditional
+  diagnostic Cluver value, explicit-null uncertainty, and cluster `M500/R500`
+  boundaries already merged in the same pipeline pull request.
 - [Independently verify foreground redshifts and verdicts](tickets/expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
   — all stored verdict and budget arithmetic reproduces, but 0/52 rows has a
   complete host-plus-candidate source chain; retain the legacy adjudications and
@@ -89,14 +94,22 @@ independent numerical, provenance, and owner visual checks.
 
 ## Open route
 
-Ticket 02 is resolved. The current controller frontier is:
+The map remains open. Tickets 02 then 03 are resolved. Remaining strict
+dependency order:
 
-- [Set the stellar-mass, halo-mass, and radius authority](tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md).
-- [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md).
-- [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
-- [Source the Zach and Whitney host redshifts](tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md), without re-adjudicating either value.
+1. [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
+   and [freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
+2. After both corpus tickets resolve,
+   [independently replay the completed corpus](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
+3. In parallel with the corpus work,
+   [source the Zach and Whitney host redshifts](tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md), without re-adjudicating either value.
+4. After both independent replay and the two missing host sources resolve,
+   [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
+5. After ticket 09 and the now-resolved physics-authority ticket,
+   [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
+6. Only after the Figure 3 gate resolves,
+   [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
 
-Later replay, validation, and Figure 3 gates remain open and depend on this evidence frontier.
 ## Out of scope
 
 - Changing foreground redshifts or budget eligibility without a separate,
