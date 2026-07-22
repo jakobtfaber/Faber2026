@@ -22,8 +22,9 @@ independent numerical, provenance, and owner visual checks.
 - `intervening_census_registry.csv` remains the classification and budget
   authority. Crossmatches may flag conflicts; they may not silently change a
   verdict.
-- Catalog states are `matched`, `unmatched`, `ambiguous`, or `query_error`.
-  Missing data and failed queries are different states.
+- Query states are `matched`, `unmatched`, `outside_footprint`,
+  `ambiguous`, `access_denied`, or `query_error`. Missing coverage, denied
+  access, and failed queries are different states.
 - Cluver et al. (2014) coefficients `-2.54, -0.17` are the resolved-source
   relation, Equation 1, for rest-frame color. No colorless fallback is allowed.
 - Moster et al. (2013) uses redshift-dependent Table 1 parameters and accepts
@@ -64,6 +65,10 @@ independent numerical, provenance, and owner visual checks.
   original search aperture and required expanded-survey corpus are absent; keep
   authority closed and continue through the explicit contract, corpus,
   protected-export, and independent-replay tickets.
+- [Set the nine-sightline search-region and candidate-selection contract](tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md)
+  — use burst-centered 5-arcmin galaxy and 20-arcmin cluster regions, preserve
+  all query evidence, and apply deterministic redshift, quality, identity,
+  ambiguity, duplicate, and post-discovery halo-intersection rules.
 
 ## Not yet specified
 
