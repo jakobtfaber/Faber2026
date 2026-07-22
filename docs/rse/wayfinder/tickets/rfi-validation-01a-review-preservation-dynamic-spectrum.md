@@ -30,3 +30,30 @@ artifact is diagnostic only: it cannot validate the cleaner or admit science.
 
 Resolution requires owner review of the figure and either acceptance or
 revision of the proposed preservation limits.
+
+## Observed-event supplement — 2026-07-21
+
+Owner requested the candidate cleaner applied to a real sample event. The
+supplement uses Zach's observed CHIME/FRB Stokes-I product. It loads numerical
+samples only from public training columns `[55,137)` and configured burst
+columns `[232,248)`; the full file is read only as bytes for its checksum. It
+does not read the public validation interval or the sealed test interval.
+
+- Figure: [real Zach method comparison](../../verify/rfi-real-event-review-20260721/real_zach_rfi_method_comparison.svg)
+- Machine record: [JSON](../../verify/rfi-real-event-review-20260721/real_zach_rfi_method_comparison.json)
+- Exact script: [`review_real_zach_rfi_cleaner.py`](../../../../scripts/review_real_zach_rfi_cleaner.py)
+- Remote evidence: `/data/Faber2026/evidence/rfi-real-event-review-20260721/`
+- Reproduction: pinned `baseband-analysis` container runs `run-7` and `run-8`
+  have byte-identical output manifests. Recomputed cleaner masks and bandpass
+  arrays are byte-identical to the earlier audit-v2 products.
+
+Result: the cleaner retains 50,238 of 55,744 measured frequency rows and drops
+5,506 rows (9.88%). On retained rows, its values equal the bandpass-only result
+exactly; the maximum absolute difference is `0.0`. The visible effect is thus
+support removal. Because the observed event has no known truth, this supplement
+does not establish whether the removed rows are interference or signal and does
+not validate the cleaner. Relative product time and provisional dispersion
+measure `262.368 pc cm^-3` are diagnostic only; the arrival-time audit remains
+open.
+
+Owner review remains required before this ticket can close.

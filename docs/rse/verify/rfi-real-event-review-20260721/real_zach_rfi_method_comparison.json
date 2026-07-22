@@ -1,0 +1,131 @@
+{
+  "approved_observed_slices_half_open": {
+    "burst": [
+      232,
+      248
+    ],
+    "training": [
+      55,
+      137
+    ]
+  },
+  "broad_frequency_sums": {
+    "combined_common": [
+      1.3698289761672802,
+      1.6923630301346926,
+      2.163238847454132,
+      2.753108500190098,
+      6.619108130248495,
+      10.86076522437556,
+      10.888269730987659,
+      5.27238324975195
+    ],
+    "labels": [
+      "400\u2013450",
+      "450\u2013500",
+      "500\u2013550",
+      "550\u2013600",
+      "600\u2013650",
+      "650\u2013700",
+      "700\u2013750",
+      "750\u2013800"
+    ],
+    "reference_common": [
+      1.3698289761672802,
+      1.6923630301346926,
+      2.163238847454132,
+      2.753108500190098,
+      6.619108130248495,
+      10.86076522437556,
+      10.888269730987659,
+      5.27238324975195
+    ],
+    "reference_full": [
+      1.3733502972825193,
+      1.6708117812394174,
+      2.1224414903178657,
+      2.7503633762623814,
+      6.356594574085913,
+      10.857023407753564,
+      9.11611891307557,
+      3.9683187770036326
+    ]
+  },
+  "dedispersion_measure_status": "not adopted",
+  "event": "zach",
+  "instrument": "CHIME/FRB",
+  "method_comparison": {
+    "common_support_values_equal": true,
+    "interpretation": "On retained rows, the methods are identical; the cleaner changes only row support.",
+    "maximum_absolute_common_support_difference": 0.0
+  },
+  "methods": {
+    "package_threshold_mean": 5.0,
+    "package_threshold_standard_deviation": 3.0,
+    "reference": "bandpass mean and sample standard deviation learned on training without RFI mask",
+    "rejected_cleaner": [
+      "package RFI row mask on training",
+      "bandpass mean and sample standard deviation on surviving training rows",
+      "normalize",
+      "second package RFI row mask on normalized training"
+    ]
+  },
+  "observed_columns_read": [
+    [
+      55,
+      137
+    ],
+    [
+      232,
+      248
+    ]
+  ],
+  "provenance": {
+    "array_hashes": {
+      "combined_mean.npy": "472a58567d60221dd8fa2f91eb3fd855f7893cc28dff112b52c911c04900b753",
+      "combined_scale.npy": "e3082210b0ec2d49ed86517446f662b56f01ab14ec03b3903cb890cbaf30027c",
+      "final_valid.npy": "17dc89ce9c0ccd51713b0bba4d45e0442106cf846c0dbd36b316cb9ee0a581f8",
+      "initial_rfi_rows.npy": "e584179a2a81ad35a6f59f0f11bde4a371d8de3582446f726664497ec37dc0d1",
+      "model_valid.npy": "a4fc872e776b0aa6121b98a9672e7b13a3e6aad19db7385075f0d924dd1b2d88",
+      "post_bandpass_rfi_rows.npy": "f2fc48dde70bb20c891dcf189e22c5783dac63dbc4757a439b48402a32bfbaff",
+      "reference_mean.npy": "1e1eb36c57c39e725a77ce0f3082d03f292d5d1abde7efac5d1f55e76c1706eb",
+      "reference_scale.npy": "b8b95004c8ed429a31764f22beac53ab0a3abe76c601918365130f46f86c27e3",
+      "reference_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e"
+    },
+    "baseband_analysis_revision": "e08df9dacc49e1007f28759b7edca71c7b8e5273",
+    "baseband_analysis_version": "1.9.0",
+    "command": "python /review/code/review_real_zach_rfi_cleaner.py --input-root /evidence --output-dir /review/run-N",
+    "container_digest": "chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41",
+    "container_image_id": "sha256:8c903ec6a5a836e8a97fe3468fd3ee02177c220ead84e6d1d25e8f41b735db4b",
+    "input_hashes": {
+      "code/audit_chime_preprocessing_v2.py": "5df48f411c6d9f9ce59873b6ccb147de30e22fa8306b3543bb06632212340c83",
+      "products/zach_chime_freq.npy": "02c794745bd79ca235d1d3e18d46b2f43f7529616a5747ccab2a5db094a9cba2",
+      "products/zach_chime_preprocessing_metadata.json": "bdc588557c7f8750e8714b6267569a7741b03994590c7cc9beabe21c482dca65",
+      "products/zach_chime_source_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e",
+      "products/zach_chime_upchan.npy": "974551c7386cb5dd77b0572be133a57f6c8faf6be40357cb197d787c259f541e"
+    },
+    "numpy": "1.26.4",
+    "pipeline_revision": "ab6af1f713496abd2ff2d71bf11edf4100871e94",
+    "python": "3.11.15",
+    "rejected_cleaner_outputs_match_prior_audit": true,
+    "script_sha256": "9ab054a2fa161ea00be752b99dbdd38d2564f4cb8450d82c0cca7548908d7343",
+    "source_h5": "/data/Faber2026/data/chime-frb/zach/singlebeam_210456524.h5",
+    "source_h5_sha256": "215079a689c18b50a4b2cd8003529e34d531a326be677a86187be02e47d0f1a9"
+  },
+  "provisional_dedispersion_measure_pc_cm3": 262.368,
+  "status": "diagnostic_only_real_event_method_comparison",
+  "support": {
+    "additional_measured_rows_removed": 5506,
+    "bandpass_only_valid_rows": 55744,
+    "cleaner_final_valid_rows": 50238,
+    "cleaner_retained_fraction_of_source": 0.9012270378874856,
+    "source_valid_rows": 55744
+  },
+  "time_axis": {
+    "absolute_arrival_time_status": "uncertified",
+    "cadence_ms": 0.32768,
+    "frame_center_formula": "(128*j + 63.5) * 2.56 microseconds",
+    "label": "relative product time"
+  },
+  "warning": "Observed event with no known truth; this does not validate the cleaner."
+}
