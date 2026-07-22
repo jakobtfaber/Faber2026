@@ -43,7 +43,7 @@ def test_manifest_has_analysis_specific_controller_roots():
         ).expanduser()
     )
     assert manifest.max_parallel == 4
-    assert len(wc.tasks_for_wave(manifest, "first")) == 4
+    assert len(wc.tasks_for_wave(manifest, "first")) == 3
 
 
 def test_manifest_represents_expanded_foreground_active_graph_and_history():
@@ -57,7 +57,6 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
         for number, slug in [
             (4, "set-figure-3-gate"),
             (5, "set-independent-validation-gate"),
-            (9, "repeat-redshift-source-verification"),
             (19, "adjudicate-host-redshift-differences"),
         ]
     }
@@ -70,6 +69,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (6, "verify-redshift-verdicts"),
             (7, "freeze-host-redshift-provenance"),
             (8, "freeze-candidate-redshift-provenance"),
+            (9, "repeat-redshift-source-verification"),
             (10, "restore-knowledge-base-launcher"),
             (11, "resolve-zach-intercatalog-redshift"),
             (12, "expand-nine-sightline-catalogs"),
@@ -179,7 +179,19 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     state = wc.empty_state(manifest)
     ready = {task.id for task in wc.ready_tasks(manifest, state, "first")}
-    assert ready == {"repeat-expanded-redshift-verification"}
+    assert ready == {"set-expanded-figure3-gate"}
+
+
+def test_current_plan_accepts_resolved_ticket09_and_keeps_ticket19_owner_only(capsys):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+
+    assert wc.print_plan(manifest, "first") == 0
+    output = capsys.readouterr().out
+    assert "repeat-expanded-redshift-verification: queued" not in output
+    assert "set-expanded-figure3-gate: queued" in output
+    assert "adjudicate-host-redshift-differences: queued" in output
+    assert "execution=hitl" in output
 
 
 def test_pass_only_ticket_cannot_resolve_as_no_go():
