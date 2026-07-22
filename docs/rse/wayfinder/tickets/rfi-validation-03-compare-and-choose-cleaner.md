@@ -1,7 +1,7 @@
 # Compare and choose the CHIME RFI cleaner
 
 - Type: `wayfinder:prototype` (HITL)
-- Status: open
+- Status: deferred — conditional
 - Assignee: —
 - Blocked by: [Build the frozen CHIME RFI-validation benchmark](rfi-validation-02-build-frozen-benchmark.md)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -11,6 +11,10 @@
 
 Which RFI method, thresholds, and ordering relative to bandpass correction
 should advance to blind validation?
+
+This ticket concerns only an additional time-frequency mask activated by a
+demonstrated residual-RFI measurement bias. It cannot replace or modify the
+owner-approved manual channel-row authority.
 
 Compare a small, justified candidate set on tuning and validation data only.
 The comparison must expose separate RFI-removal and bandpass effects, report

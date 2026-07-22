@@ -67,6 +67,9 @@ existing lane system. The map does not carry the execution itself.
 - [Review the RFI preservation limits on a controlled dynamic spectrum](tickets/rfi-validation-01a-review-preservation-dynamic-spectrum.md)
   — automated candidates rejected; Zach CHIME/FRB now uses the hash-bound,
   owner-approved five-range manual channel map as complete row authority.
+- [Define the CHIME RFI-cleaning acceptance contract](tickets/rfi-validation-01-define-acceptance-contract.md)
+  — manual maps remain channel-row authority; Zach returns to original-product,
+  time-axis, dispersion-measure, and burst-model gates before any ACF work.
 
 ## Not yet specified
 

@@ -1,7 +1,7 @@
 # Blind-validate the selected CHIME RFI cleaner
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
+- Status: deferred — conditional
 - Assignee: —
 - Blocked by: [Compare and choose the CHIME RFI cleaner](rfi-validation-03-compare-and-choose-cleaner.md)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -11,6 +11,9 @@
 
 Run the frozen cleaner and configuration once on the untouched test data and
 determine whether every predeclared acceptance limit passes.
+
+This ticket runs only if the conditional automated time-frequency-cleaner lane
+is activated. Manual channel maps remain a separate fixed input.
 
 Do not retune after opening the test results. Record per-case and aggregate
 contamination removal, false removal, retained-data fraction, mask stability,
