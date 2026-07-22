@@ -31,7 +31,7 @@ DOCS_GLOBS = [
 ]
 # Paths never indexed by the docs adapter (tickets have their own adapter).
 DOCS_EXCLUDE_PARTS = {
-    ".venv", "node_modules", "__pycache__", "quarantine", "graphify-out",
+    ".venv", "node_modules", "__pycache__", ".archive", "quarantine", "graphify-out",
 }
 TICKETS_DIR = ANALYSIS_ROOT / "docs" / "rse" / "wayfinder" / "tickets"
 

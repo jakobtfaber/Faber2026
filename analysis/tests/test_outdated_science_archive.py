@@ -1,4 +1,4 @@
-"""Guards for obsolete manuscript science moved into quarantine."""
+"""Guards for obsolete manuscript science moved into the archive."""
 
 import json
 from pathlib import Path
@@ -7,25 +7,25 @@ from scripts.workspace import manuscript_root
 
 ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
 ROOT = manuscript_root()
-QUARANTINE = ANALYSIS_ROOT / "quarantine" / "2026-07-17-outdated-science"
+ARCHIVE = ANALYSIS_ROOT / ".archive" / "outdated-science" / "2026-07-17"
 
 
-def test_obsolete_tables_and_full_ledger_are_quarantined():
+def test_obsolete_tables_and_full_ledger_are_archived():
     moved = {
         ROOT / "joint_fit_provisional_table.tex":
-            QUARANTINE / "joint_fit_provisional_table.tex",
+            ARCHIVE / "joint_fit_provisional_table.tex",
         ROOT / "dsa_scint_provisional_table.tex":
-            QUARANTINE / "dsa_scint_provisional_table.tex",
+            ARCHIVE / "dsa_scint_provisional_table.tex",
         ROOT / "foreground_propagation_provisional_table.tex":
-            QUARANTINE / "foreground_propagation_provisional_table.tex",
+            ARCHIVE / "foreground_propagation_provisional_table.tex",
     }
-    for active, quarantined in moved.items():
-        assert quarantined.is_file(), quarantined
+    for active, archived in moved.items():
+        assert archived.is_file(), archived
         assert not active.exists(), active
-    assert (QUARANTINE / "analysis/provisional_propagation/results.json").is_file()
+    assert (ARCHIVE / "analysis/provisional_propagation/results.json").is_file()
 
 
-def test_compiled_tex_has_no_quarantined_labels_or_inputs():
+def test_compiled_tex_has_no_archived_labels_or_inputs():
     compiled = "\n".join(
         (ROOT / path).read_text()
         for path in ("sections/results.tex", "sections/discussion.tex")
@@ -56,13 +56,13 @@ def test_active_propagation_ledger_is_fail_closed_only():
 
 def test_generator_cannot_recreate_live_obsolete_tables():
     source = (ANALYSIS_ROOT / "scripts/build_provisional_propagation_tables.py").read_text()
-    assert "2026-07-17-outdated-science" in source
+    assert '".archive" / "outdated-science" / "2026-07-17"' in source
     assert 'table(ROOT / "joint_fit_provisional_table.tex"' not in source
     assert 'table(ROOT / "dsa_scint_provisional_table.tex"' not in source
     assert 'table(ROOT / "foreground_propagation_provisional_table.tex"' not in source
 
 
-def test_quarantine_has_review_index():
-    index = (QUARANTINE / "README.md").read_text()
+def test_archive_has_review_index():
+    index = (ARCHIVE / "README.md").read_text()
     assert "Do not cite" in index
     assert "Original path" in index

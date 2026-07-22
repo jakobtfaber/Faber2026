@@ -25,9 +25,9 @@ from typing import Any, Literal
 import yaml
 
 from results_library import DEFAULT_LIBRARY
+from workspace import manuscript_root
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent
 CATALOG_PATH = SCRIPT_DIR / "results_library_catalog.yaml"
 
 RepoKind = Literal["pipeline", "parent", "external"]
@@ -77,10 +77,7 @@ class Catalog:
 def _repo_root(cli_root: Path | None) -> Path:
     if cli_root is not None:
         return cli_root.expanduser().resolve()
-    env = os.environ.get("FABER2026_ROOT")
-    if env:
-        return Path(env).expanduser().resolve()
-    return REPO_ROOT
+    return manuscript_root()
 
 
 def load_catalog(path: Path = CATALOG_PATH) -> Catalog:

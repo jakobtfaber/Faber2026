@@ -172,7 +172,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - quarantine/2026-07-17-outdated-science
+      - analysis/.archive/outdated-science/2026-07-17
     notes: Exact obsolete science bytes retained for re-examination; never a current claim source.
 
   - id: foreground.v3-energetics
