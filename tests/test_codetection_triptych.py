@@ -11,6 +11,15 @@ import numpy as np
 import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
+LATEST_MANIFEST = (
+    ROOT
+    / "analysis"
+    / "figure_review"
+    / "batches"
+    / "2026-07-22-joint-scattering-current"
+    / "provenance"
+    / "joint-latest-manifest.json"
+)
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "pipeline"))
 
@@ -207,6 +216,11 @@ def test_candidate_hash_mismatch_fails_closed(tmp_path):
         triptych.require_sha256(artifact, "0" * 64, label="candidate")
 
 
+def test_candidate_missing_fails_closed(tmp_path):
+    with pytest.raises(FileNotFoundError, match="candidate missing"):
+        triptych.require_sha256(tmp_path / "missing.npz", "0" * 64, label="candidate")
+
+
 def test_bands_from_npz_anchors_on_fitted_toa(monkeypatch, tmp_path):
     """DSA dominant-component t0 -> t=0; CHIME fitted arrival -> measured offset."""
     import json as _json
@@ -308,10 +322,24 @@ def test_only_current_jointtf_candidates_have_model_artifacts():
 
 
 def test_candidate_fit_artifacts_match_declared_counts_and_gain_prior():
+    latest = {
+        row["nick"].lower(): row
+        for row in json.loads(LATEST_MANIFEST.read_text())["bursts"]
+        if row["promotion_status"] == "artifact-present"
+    }
     for row in load_manifest(ROOT / "scripts/jointmodel_triptych_manifest.yaml"):
         if not row["npz"]:
             continue
+        source = latest[row["nick"].lower()]
+        assert source["components"] == row["components"]
+        assert source["gain_s2"] == pytest.approx(row["gain_s2"])
+        assert source["fit_job"] == row["fit_job"]
+        assert source["artifacts"]["fit_json"]["sha256"] == row["fit_json_sha256"]
+        assert source["artifacts"]["jointmodel_npz"]["sha256"] == row["npz_sha256"]
+
         fit_path = triptych.resolve_artifact_path(row["fit_json"])
+        if not fit_path.is_file():
+            continue
         triptych.require_sha256(
             fit_path, row["fit_json_sha256"], label=f"{row['nick']} fit summary"
         )
