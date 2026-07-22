@@ -18,7 +18,7 @@ def run_notebook(notebook_path="notebooks/scintillation_interactive_walkthrough.
         nb = json.load(f)
 
     print(f"Executing cells from {notebook_path}...")
-    
+
     # Global environment dictionary for cell execution
     global_env = {}
 
