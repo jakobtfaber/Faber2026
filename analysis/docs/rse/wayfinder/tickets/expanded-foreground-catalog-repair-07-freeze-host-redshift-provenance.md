@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:task` (HITL)
 - Status: open
-- Assignee: unassigned
+- Assignee: Codex
 - Blocked by: [Independently verify foreground redshifts and verdicts](expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
