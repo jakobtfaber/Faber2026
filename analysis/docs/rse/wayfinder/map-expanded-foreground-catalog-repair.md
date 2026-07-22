@@ -67,9 +67,11 @@ independent numerical, provenance, and owner visual checks.
   protected-export, and independent-replay tickets.
 - [Set the nine-sightline search-region and candidate-selection contract](tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md)
   — use frozen burst centers, a fully paginated 15-arcminute galaxy cone, a
-  separate 5 Mpc cluster search, geometry-first candidate admission, preserved
-  raw query evidence, and fail-closed classification, identity, ambiguity, and
-  duplicate rules. This is a new audit contract, not the historical aperture.
+  separate 5 proper Mpc cluster search under Planck18, geometry-first candidate
+  admission, catalog-native `R500` for the budget gate, preserved raw query
+  evidence, and fail-closed classification, identity, ambiguity, duplicate, and
+  redshiftless-cluster rules. This is a new audit contract, not the historical
+  aperture.
 
 ## Not yet specified
 
