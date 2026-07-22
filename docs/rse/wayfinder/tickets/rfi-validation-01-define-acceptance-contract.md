@@ -3,7 +3,7 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: Codex
-- Blocked by: [Build the verified Zach CHIME preprocessing baseline](16-build-verified-zach-chime-preprocessing-baseline.md)
+- Blocked by: [Review the RFI preservation limits on a controlled dynamic spectrum](rfi-validation-01a-review-preservation-dynamic-spectrum.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner request, 2026-07-21
 
@@ -53,3 +53,11 @@ explicit masks for missing or rejected samples, and forbid calling a product
   two-dimensional time-frequency morphology; scattering-tail timescale; and
   the frequency autocorrelation, modulation strength, and decorrelation
   bandwidth used for scintillation analysis.
+- **Signal-preservation limits tentatively accepted 2026-07-21:** on
+  interference-free injections, median cleaner-induced shift no greater than
+  0.25 measurement uncertainty, 95% no greater than 0.5, and none greater than
+  1; on contaminated injections, at least 95% within 1 uncertainty of truth
+  and median systematic offset no greater than 0.25. Detection status and
+  component count must remain unchanged away from predeclared decision
+  boundaries. Final acceptance is blocked on the controlled dynamic-spectrum
+  review.
