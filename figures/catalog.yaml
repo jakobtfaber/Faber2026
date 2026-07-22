@@ -23,6 +23,7 @@ figures:
       - pipeline/galaxies/foreground/budget_table_data.json
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
       - scripts/dm_budget_intervening_systems.csv
+      - scripts/phineas_halo_crossing_inputs.csv
     outputs:
       - figures/dm_host_posteriors.pdf
     depends_on: []

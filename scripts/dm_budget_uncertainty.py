@@ -48,8 +48,9 @@ those DM_host are upper limits (dagger on the figure panel titles).
 
 The figure is a 3x3 of peak-normalized PDFs per redshift-constrained sightline:
 faded MW-disk / MW-halo / IGM / per-system intervening curves under a bold
-P(DM_host). All plotted curves are direct numerical PDFs; neither sampling nor
-KDE enters the host results or figure.
+P(DM_host). Most curves are direct numerical PDFs. The two boundary-sensitive
+Phineas halos use a fixed, deterministic Sobol integration; no kernel-density
+estimate enters the host results or figure.
 
 Regenerate: python scripts/dm_budget_uncertainty.py
 """
@@ -66,6 +67,8 @@ from pathlib import Path
 import numpy as np
 from numpy.polynomial.legendre import leggauss
 from scipy import integrate, interpolate, signal, stats
+
+import phineas_halo_crossing_probability as phineas_crossing
 
 REPO = Path(__file__).resolve().parent.parent
 OUT_CSV = REPO / "scripts" / "dm_budget_uncertainty.csv"
@@ -88,8 +91,10 @@ DM_MW_HALO = 40.0
 
 @dataclass(frozen=True)
 class InterveningSystem:
+    object: str
     kind: str
     mass_source: str
+    model: str
     dm_point: float
     impact_kpc: float
 
@@ -407,6 +412,18 @@ def _system_sigma(mass_source: str) -> float:
     return INT_SIGMA_LN["assumed"]
 
 
+def system_pdf(system: InterveningSystem, *, dx: float) -> DiscretePDF:
+    """Return the adopted per-system distribution."""
+    if system.model == "fixed_lognormal":
+        return lognormal_pdf(system.dm_point, _system_sigma(system.mass_source), dx=dx)
+    if system.model == "probabilistic_crossing":
+        if not system.object:
+            raise ValueError("probabilistic crossing system lacks an object identifier")
+        x0, density = phineas_crossing.halo_dm_histogram(system.object, dx=dx)
+        return DiscretePDF(x0=x0, dx=dx, density=density)
+    raise ValueError(f"unknown intervening-system model: {system.model}")
+
+
 def load_intervening_systems() -> dict[str, tuple[InterveningSystem, ...]]:
     """Load the current per-system census columns used by the budget."""
     by_tns: dict[str, list[InterveningSystem]] = {}
@@ -414,8 +431,10 @@ def load_intervening_systems() -> dict[str, tuple[InterveningSystem, ...]]:
         for row in csv.DictReader(handle):
             by_tns.setdefault(row["tns"], []).append(
                 InterveningSystem(
+                    object=row["object"],
                     kind=row["kind"],
                     mass_source=row["mass_source"],
+                    model=row["model"],
                     dm_point=float(row["dm_point"]),
                     impact_kpc=float(row["impact_kpc"]),
                 )
@@ -480,10 +499,7 @@ def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
     disk = lognormal_pdf(dm_disk, SIGMA_DISK_FRAC, dx=dx)
     halo = lognormal_pdf(DM_MW_HALO, HALO_SIGMA_LN, dx=dx)
     cosmic = igm_mixture_pdf(row.z, dx=dx)
-    system_pdfs = tuple(
-        lognormal_pdf(system.dm_point, _system_sigma(system.mass_source), dx=dx)
-        for system in row.intervening_systems
-    )
+    system_pdfs = tuple(system_pdf(system, dx=dx) for system in row.intervening_systems)
     interv = convolve_pdfs(system_pdfs) if system_pdfs else delta_pdf(dx=dx)
     foreground = convolve_pdfs((disk, halo, cosmic, interv))
     host = host_pdf_from_foreground(foreground, row.dm_obs)
@@ -491,11 +507,25 @@ def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
         pdf_quantile(host, probability) for probability in (0.16, 0.5, 0.84)
     )
     r16, r50, r84 = ((1.0 + row.z) * value for value in (p16, p50, p84))
+    int16, int50, int84 = (
+        pdf_quantile(interv, probability) for probability in (0.16, 0.5, 0.84)
+    )
+    arithmetic_dm_int = (
+        int50
+        if any(
+            system.model == "probabilistic_crossing"
+            for system in row.intervening_systems
+        )
+        else row.dm_int
+    )
     return {
         "name": row.name,
         "z": row.z,
         "dm_int": row.dm_int,
-        "dm_host_arith": row.dm_obs - row.dm_mw - row.dm_cos_mean - row.dm_int,
+        "dm_int_p16": int16,
+        "dm_int_p50": int50,
+        "dm_int_p84": int84,
+        "dm_host_arith": row.dm_obs - row.dm_mw - row.dm_cos_mean - arithmetic_dm_int,
         "dm_host_p16": p16,
         "dm_host_p50": p50,
         "dm_host_p84": p84,
@@ -534,16 +564,28 @@ def sample_host_for_validation(
         return median * rng.lognormal(mu, sigma_ln, n)
 
     disk = lognormal(row.dm_mw - DM_MW_HALO, SIGMA_DISK_FRAC)
-    halo = lognormal(DM_MW_HALO, HALO_SIGMA_LN)
+    mw_halo = lognormal(DM_MW_HALO, HALO_SIGMA_LN)
     u = rng.normal(size=n)
     scale = np.where(u < 0.0, FIGM_SIG_LO, FIGM_SIG_HI)
     figm = np.clip(FIGM_MED + u * scale, *FIGM_CLIP)
     mu_tng, sigma_ln = igm_lognormal_shape(row.z)
     cosmic = rng.lognormal(mu_tng + np.log(figm / FIGM_TNG), sigma_ln)
     intervening = np.zeros(n)
-    for system in row.intervening_systems:
-        intervening += lognormal(system.dm_point, _system_sigma(system.mass_source))
-    return row.dm_obs - disk - halo - cosmic - intervening
+    for index, system in enumerate(row.intervening_systems):
+        if system.model == "fixed_lognormal":
+            intervening += lognormal(system.dm_point, _system_sigma(system.mass_source))
+        elif system.model == "probabilistic_crossing":
+            halo_input = phineas_crossing.load_inputs()[system.object]
+            draws = phineas_crossing.simulate_halo(
+                halo_input,
+                n=n,
+                seed=seed + 10_000 + index,
+                quasi=False,
+            )
+            intervening += draws.dm
+        else:
+            raise ValueError(f"unknown intervening-system model: {system.model}")
+    return row.dm_obs - disk - mw_halo - cosmic - intervening
 
 
 # --- B2: FRB 20230307A intracluster column (mNFW vs beta-model) ----------------
@@ -675,6 +717,9 @@ def main(argv: list[str] | None = None) -> int:
                 "burst",
                 "z",
                 "dm_host_arith",
+                "dm_int_p16",
+                "dm_int_p50",
+                "dm_int_p84",
                 "dm_host_p16",
                 "dm_host_p50",
                 "dm_host_p84",
@@ -690,6 +735,9 @@ def main(argv: list[str] | None = None) -> int:
                     r["name"],
                     r["z"],
                     f"{r['dm_host_arith']:.0f}",
+                    f"{r['dm_int_p16']:.0f}",
+                    f"{r['dm_int_p50']:.0f}",
+                    f"{r['dm_int_p84']:.0f}",
                     f"{r['dm_host_p16']:.0f}",
                     f"{r['dm_host_p50']:.0f}",
                     f"{r['dm_host_p84']:.0f}",

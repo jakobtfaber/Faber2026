@@ -77,7 +77,7 @@ def render() -> str:
         "%    galaxies/foreground/budget_table_data.json; markup in budget_table_emitter.py.\n"
         "%    Regenerate: python -m galaxies.foreground.budget_table_emitter --out <this file>\n",
         "% !! GENERATED FILE -- do not edit by hand.\n"
-        "%    Regenerate: python scripts/render_budget_table.py\n"
+        "%    Regenerate: python analysis/scripts/render_budget_table.py\n"
         "% Foreground columns come from pipeline/galaxies/foreground/budget_table_data.json;\n"
         "% DM_obs and DM_host come from the verified super-repository products.\n",
     ).replace(
@@ -88,6 +88,12 @@ def render() -> str:
     rendered_rows = []
     for row in rows:
         cells = base.render_cells(row)
+        if row["burst"] == "FRB 20230307A":
+            h = host[row["burst"]]
+            p16, p50, p84 = (
+                int(h[k]) for k in ("dm_int_p16", "dm_int_p50", "dm_int_p84")
+            )
+            cells[5] = rf"${p50}^{{+{p84 - p50}}}_{{-{p50 - p16}}}$\tablenotemark{{h}}"
         if row["burst"] in PROVISIONAL_REDSHIFTS:
             cells[1] += r"\tablenotemark{r}"
         rendered_rows.append(" & ".join(cells) + r" \\")
@@ -99,8 +105,8 @@ def render() -> str:
             "\\tablecomments{Because the diffuse cosmic term follows a skewed log-normal,\n"
             "the host posteriors are asymmetric and their medians exceed the naive\n"
             "mean-subtracted residuals. One high-redshift sightline",
-        "\\tablecomments{The host posteriors are asymmetric because the diffuse cosmic\n"
-        "term follows a skewed log-normal. Their medians sit above the naive\n"
+            "\\tablecomments{The host posteriors are asymmetric because the diffuse cosmic\n"
+            "term follows a skewed log-normal. Their medians sit above the naive\n"
             "mean-subtracted residuals, but that offset is driven mainly by the lower IGM\n"
             "normalization adopted here ($f_{\\rm IGM}=0.76$ versus $0.84$), not by the\n"
             "skew; the forward model's value is the asymmetric interval and the\n"
@@ -117,6 +123,9 @@ def render() -> str:
         )
         .replace(
             "\\tablenotetext{u}{Position lies outside",
+            "\\tablenotetext{h}{Boundary-sensitive galaxy halos are marginalized "
+            "over photometry, photometric redshift, stellar-to-halo mass scatter, "
+            "and the modified-NFW virial-crossing condition.}\n"
             "\\tablenotetext{r}{Provisional internal host redshift; no citable "
             "published provenance is currently available.}\n"
             "\\tablenotetext{u}{Position lies outside",
