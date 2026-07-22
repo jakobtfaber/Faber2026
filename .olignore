@@ -12,6 +12,7 @@ GEMINI.md
 
 # Repository metadata not needed by Overleaf.
 .github/
+analysis/
 pipeline/
 .git/
 .gitignore

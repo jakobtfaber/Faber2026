@@ -12,33 +12,33 @@ source. The LLM must never draw or restyle figures.
 | Artifact | Role |
 |----------|------|
 | [`figures/catalog.yaml`](../catalog.yaml) | Declarative DAG: producer argv, inputs, outputs, deps, approval slots |
-| [`scripts/figure_flow.py`](../../scripts/figure_flow.py) | Deterministic runner (no API keys) |
-| [`repro_manifest.csv`](../../repro_manifest.csv) | Broader inventory (tables + historical notes) |
-| [`figure_review/slots.json`](../../figure_review/slots.json) | Hash-bound approval for protected targets |
+| [`analysis/scripts/figure_flow.py`](../../analysis/scripts/figure_flow.py) | Deterministic runner (no API keys) |
+| [`analysis/repro_manifest.csv`](../../analysis/repro_manifest.csv) | Broader inventory (tables + historical notes) |
+| [`analysis/figure_review/slots.json`](../../analysis/figure_review/slots.json) | Hash-bound approval for protected targets |
 
 ## Commands
 
 ```bash
 # Inventory
-python3 scripts/figure_flow.py list
-python3 scripts/figure_flow.py stale
+python3 analysis/scripts/figure_flow.py list
+python3 analysis/scripts/figure_flow.py stale
 
 # Clone-safe embedded set (same as `make figures`)
-python3 scripts/figure_flow.py regen --manuscript --clone-ok
+python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 make figures
 
 # One figure (fails closed if inputs missing)
-python3 scripts/figure_flow.py regen --id toa_offset_decomposition
-python3 scripts/figure_flow.py regen --id clusters_icm   # runs sightline_budget first
+python3 analysis/scripts/figure_flow.py regen --id toa_offset_decomposition
+python3 analysis/scripts/figure_flow.py regen --id clusters_icm   # runs sightline_budget first
 
 # Fig. 1 — external waterfalls; staging only
-python3 scripts/figure_flow.py regen --id fig1_gallery
-# then follow the APPROVAL_REQUIRED hint → figure_review.py new-batch / decide / promote
+python3 analysis/scripts/figure_flow.py regen --id fig1_gallery
+# then follow the APPROVAL_REQUIRED hint → analysis/figure_review.py new-batch / decide / promote
 ```
 
 ## Agent rules
 
-1. Prefer `figure_flow.py` / `make figures` over reading `scripts/plot_*.py`.
+1. Prefer `figure_flow.py` / `make figures` over reading `analysis/scripts/plot_*.py`.
 2. Open producer source **only** after a typed `PRODUCER_FAILED` / `MISSING_INPUTS`
    error and only the failing node.
 3. Never copy staging PDFs onto `figures/` for slots with `approval_slot`.

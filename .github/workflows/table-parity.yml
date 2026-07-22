@@ -1,7 +1,7 @@
 name: table-parity
 
 # The budget-table parity test spans BOTH repositories: it lives in the
-# `pipeline` submodule but reads `scripts/dm_budget_uncertainty.csv` from this
+# `pipeline` submodule but reads `analysis/scripts/dm_budget_uncertainty.csv`
 # one. Its verdict is a property of the (super-repo commit, submodule pin) pair,
 # so it can only run in a checkout that has both — which is what this workflow
 # provides.
@@ -46,7 +46,7 @@ jobs:
         run: |
           uv run --frozen pytest -q \
             galaxies/foreground/test_foreground_table_emitter.py \
-            ../tests/test_verified_dm_manuscript.py
+            ../analysis/tests/test_verified_dm_manuscript.py
 
       # The submodule's own tests only compare the emitter against
       # `pipeline/exports/`. The artifact the manuscript actually \input's is the
@@ -54,8 +54,8 @@ jobs:
       # anchor. `--check` compares against whatever `--out` names.
       - name: Emitter output matches the manuscript's committed table
         run: |
-          python scripts/render_dm_measurements_table.py --check
-          python scripts/render_budget_table.py --check
+          python analysis/scripts/render_dm_measurements_table.py --check
+          python analysis/scripts/render_budget_table.py --check
           cd pipeline
           uv run --frozen python -m galaxies.foreground.foreground_table_emitter \
             --check --out ../foreground_table.tex

@@ -14,36 +14,36 @@ Agent brief for the **Faber2026** manuscript repo.
 ## Orient with the knowledge base before grepping
 
 Before exploratory `grep`/`glob`/file-reading to reconstruct context, run
-`python3 scripts/kb search "<topic>"` — hybrid keyword+semantic search over
+`python3 analysis/scripts/kb search "<topic>"` — hybrid keyword+semantic search over
 manuscript docs, wayfinder tickets, git history (parent + `pipeline/`
 submodule), pipeline code, configs, and cited references, with ranked
 cross-source results. Filter with `--source tickets|docs|git|code|config|refs`.
 Refresh after changes with `make kb-index` (incremental, seconds when
-embeddings are current). See [`docs/rse/knowledge-base.md`](docs/rse/knowledge-base.md).
+embeddings are current). See [`analysis/docs/rse/ops/knowledge-base.md`](analysis/docs/rse/ops/knowledge-base.md).
 Fall back to grep for exhaustive sweeps (every call site, every match).
 
 ## Agent skills
 
 ### Issue tracker
 
-Local Markdown maps and tickets live under `docs/rse/wayfinder/`. See
-`docs/agents/issue-tracker.md`.
+Local Markdown maps and tickets live under `analysis/docs/rse/wayfinder/`. See
+`analysis/docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
 Use the default Matt Pocock skill labels. See
-`docs/agents/triage-labels.md`.
+`analysis/docs/agents/triage-labels.md`.
 
 ### Domain docs
 
 Use the manuscript context at `CONTEXT.md` and the fitting context at
-`pipeline/CONTEXT.md`. See `docs/agents/domain.md`.
+`pipeline/CONTEXT.md`. See `analysis/docs/agents/domain.md`.
 
 ## Owner queue walkthrough (manual trigger — never scheduled)
 
 When the owner says anything like **"walk me through my queue"**:
 
-1. Run `python3 scripts/owner_queue.py` (regenerates `OWNER_QUEUE.md` from
+1. Run `python3 analysis/scripts/owner_queue.py` (regenerates `analysis/OWNER_QUEUE.md` from
    the wayfinder frontier, figure-review batches, ✋ board tasks, and open
    PRs). Verify its heuristics before presenting — e.g. confirm a
    "no receipt" figure batch is genuinely undecided.
@@ -87,5 +87,5 @@ Scope and guardrails — this authorization is not a licence to be careless:
 > Managed-Agent `permission_policy` (should be set to `always_allow`) plus the
 > per-session GitHub token — control-plane config, not writable from inside a
 > session. These field names are unverified against the live Managed-Agents
-> schema (confirm before relying on them). See the handoff in `docs/rse/specs/`
+> schema (confirm before relying on them). See the handoff in `analysis/docs/rse/specs/`
 > if the approval prompt reappears.
