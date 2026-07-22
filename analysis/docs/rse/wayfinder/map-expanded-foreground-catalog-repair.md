@@ -59,6 +59,11 @@ independent numerical, provenance, and owner visual checks.
   — the authenticated row confirms the low value is extrapolated `z_phot0`
   from a PS1 object sharing its WISE source with a closer QSO-classified PS1
   neighbor; retain both STRM estimates pending separate adjudication.
+- [Expand and independently replay catalog coverage for nine host-redshift sightlines](tickets/expanded-foreground-catalog-repair-12-expand-nine-sightline-catalogs.md)
+  — stored verdicts, budget flags, and duplicate separations replay, but the
+  original search aperture and required expanded-survey corpus are absent; keep
+  authority closed and continue through the explicit contract, corpus,
+  protected-export, and independent-replay tickets.
 
 ## Not yet specified
 

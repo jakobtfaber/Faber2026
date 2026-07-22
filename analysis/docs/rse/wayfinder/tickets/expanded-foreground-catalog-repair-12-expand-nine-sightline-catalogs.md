@@ -1,12 +1,12 @@
 # Expand and independently replay catalog coverage for nine host-redshift sightlines
 
 - Type: `wayfinder:research` (AFK)
-- Status: open
-- Assignee: unassigned
+- Status: resolved
+- Assignee: Codex
 - Blocked by: none
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: not covered by the standing delegation; created after `main` commit `33e9e1ce3570`
-- Triage: `ready-for-agent`
+- Triage: `resolved`
 
 ## Question
 
@@ -47,3 +47,45 @@ redshifts outrank photometric estimates; extrapolated or materially disagreeing
 photometric estimates remain inconclusive. Results may flag conflicts but may
 not silently change an adopted redshift, candidate verdict, duplicate
 disposition, budget eligibility, scientific-trust state, or Figure 3 status.
+
+## Resolution
+
+Resolved 2026-07-21 by
+[Nine-sightline catalog coverage replay](../../specs/research-nine-sightline-catalog-coverage-replay-2026-07-21.md).
+
+The answer is **no at the full ticket scope**. The current 50 finite-host rows
+can be replayed internally, but the required uniform expanded-survey search and
+independent selection replay cannot yet be executed.
+
+What reproduced:
+
+- 50/50 stored verdicts: 30 confirmed, 13 inconclusive, 7 refuted.
+- 50/50 budget flags; 15 row-level flags are true.
+- All seven duplicate-pair separations, stored redshifts, and verdicts.
+- All 50 rows in the existing GSC 2.4.2, ALLWISE, CatWISE2020, and unWISE
+  snapshots.
+- A diagnostic, non-independent live adapter run reproduced all 44 adopted
+  stable source identifiers and selected-row hashes. Seven cluster-cone
+  response hashes drifted while the selected sources remained unchanged.
+
+What blocks the full answer:
+
+- The frozen census never recorded its original discovery cone or aperture, so
+  “full recorded sightline region” is not an executable uniform query contract.
+- No frozen nine-sightline response corpus exists for the required DESI,
+  Sloan Digital Sky Survey, LAMOST, Legacy, STRM, J-PLUS, J-PAS, CFIS, Gaia,
+  radio, or X-ray survey matrix.
+- The current duplicate table is owner-adjudicated and lacks the source-row
+  evidence needed for independent duplicate discovery.
+- Authoritative host-redshift source rows remain a separate open gate.
+
+No adopted redshift, verdict, duplicate mapping, budget flag, trust state, or
+Figure 3 artifact changed. Scientific trust and Figure 3 promotion remain
+closed.
+
+The route continues through
+[Set the nine-sightline search-region and candidate-selection contract](expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md),
+[Freeze the anonymous nine-sightline expanded-survey query corpus](expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md),
+[Freeze protected WISE--PS1--STRM and UNIONS/CFIS evidence](expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md),
+and
+[Independently replay the completed nine-sightline query corpus](expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
