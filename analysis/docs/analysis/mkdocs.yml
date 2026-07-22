@@ -37,3 +37,5 @@ nav:
   - Overview: index.md
   - DM:
       - Window sweep (manual envelopes): dm/window-sweep.md
+  - Scattering:
+      - Current joint-fit candidates: scattering/joint-fit-candidates.md

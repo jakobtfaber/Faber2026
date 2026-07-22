@@ -1,54 +1,88 @@
 # MJD-ordered roster shared by the Figure 1 data grid and fit-audit figures.
-# Paths are relative to the manuscript repo root unless absolute.
-# DMLOCK artifacts use the CHIME-primary DM fixed in both bands. A non-null
-# artifact can be retained for a transparent morphology audit even when its
-# residual structure excludes it from the physical/PBF roster.
+# Current candidate artifacts resolve through FABER2026_RESULTS_LIBRARY.
+# Pre-PL-PBF rows are withheld, not silently regenerated. Candidate panels are
+# morphology audits only: their rendering is reproducible, but their original
+# stochastic fits are not because no sampler seed was recorded and executed
+# fitting code was modified or untracked.
 bursts:
   - nick: zach
     tns: "FRB 20220207C"
-    npz: figures/jointmodel_pair/fit_artifacts/zach_jointmodel_DMLOCK_C2D4.npz
-    flag: "morphology audit only: structured DSA residual"
+    npz: results-library:scattering/jointmodel/latest/zach/jointmodel.npz
+    npz_sha256: eda4e8f5d4d67f6dd96d307719bb292de9215e0fc0352ff7f5e94c7dc99eb408
+    fit_json: results-library:scattering/jointmodel/latest/zach/fit.json
+    fit_json_sha256: a0a1adaa1918e6b58cd9e14ff832794e71f069cd5812dfb03389f646bab561dc
+    flag: "candidate v2 C2D3; owner rejected C2D4 job 180 as active display"
+    status: candidate-v2-owner-pending
+    components: C2D3
+    gain_s2: 100
+    fit_job: 178
+    fit_generation_reproducible: false
   - nick: whitney
     tns: "FRB 20220310F"
-    npz: figures/jointmodel_pair/fit_artifacts/whitney_jointmodel_DMLOCK_C2D3.npz
-    flag: null
+    npz: null
+    flag: "no current post-PL-PBF candidate"
+    status: withheld-no-current-candidate
   - nick: oran
     tns: "FRB 20220506D"
-    npz: figures/jointmodel_pair/fit_artifacts/oran_jointmodel_DMLOCK_C2D1.npz
-    flag: null
+    npz: results-library:scattering/jointmodel/latest/oran/jointmodel.npz
+    npz_sha256: b550ddf48d8d922751735fda8fdff0aa5dfd1287d67c8d4ac19ee7b76382ffa6
+    fit_json: results-library:scattering/jointmodel/latest/oran/fit.json
+    fit_json_sha256: bdfbb3a49b2427db7fbdff20c67fe14c4d94396da503c06d5dda220a6e4cd609
+    flag: "candidate v2 C1D1; owner ratification pending"
+    status: candidate-v2-owner-pending
+    components: C1D1
+    gain_s2: 100
+    fit_job: 171
+    fit_generation_reproducible: false
   - nick: isha
     tns: "FRB 20221113A"
-    npz: figures/jointmodel_pair/fit_artifacts/isha_jointmodel_DMLOCK_C2D1.npz
-    flag: null
+    npz: null
+    flag: "no current post-PL-PBF candidate"
+    status: withheld-no-current-candidate
   - nick: wilhelm
     tns: "FRB 20221203A"
-    npz: figures/jointmodel_pair/fit_artifacts/wilhelm_jointmodel_DMLOCK_C1D4.npz
-    flag: "rejected physical fit: structured DSA residual"
+    npz: null
+    flag: "no current post-PL-PBF candidate; prior fit had structured DSA residual"
+    status: withheld-no-current-candidate
   - nick: phineas
     tns: "FRB 20230307A"
-    npz: figures/jointmodel_pair/fit_artifacts/phineas_jointmodel_DMLOCK_C3D3.npz
-    flag: null
+    npz: null
+    flag: "no current post-PL-PBF candidate"
+    status: withheld-no-current-candidate
   - nick: freya
     tns: "FRB 20230325A"
-    npz: figures/jointmodel_pair/fit_artifacts/freya_jointmodel_DMLOCK_C1D1.npz
-    flag: null
+    npz: null
+    flag: "no current post-PL-PBF candidate"
+    status: withheld-no-current-candidate
   - nick: johndoeii
     tns: "FRB 20230814B"
-    npz: figures/jointmodel_pair/fit_artifacts/johndoeII_jointmodel_DMLOCK_C2D2.npz
-    flag: null
+    npz: results-library:scattering/jointmodel/latest/johndoeii/jointmodel.npz
+    npz_sha256: 2095a1891531c14714d83334abee134c3ad54293c3385994296ff4c4c282dea6
+    fit_json: results-library:scattering/jointmodel/latest/johndoeii/fit.json
+    fit_json_sha256: c95a126664fc017a607f38dad13d32ca6961f859c3bed97e649119429941bf36
+    flag: "candidate v2 C1D2; owner ratification pending"
+    status: candidate-v2-owner-pending
+    components: C1D2
+    gain_s2: 100
+    fit_job: 175
+    fit_generation_reproducible: false
   - nick: hamilton
     tns: "FRB 20230913A"
-    npz: figures/jointmodel_pair/fit_artifacts/hamilton_jointmodel_DMLOCK_C4D1.npz
-    flag: "morphology audit only: structured CHIME residual"
+    npz: null
+    flag: "no current post-PL-PBF candidate; prior fit had structured CHIME residual"
+    status: withheld-no-current-candidate
   - nick: mahi
     tns: "FRB 20240122A"
-    npz: figures/jointmodel_pair/fit_artifacts/mahi_jointmodel_DMLOCK_C1D2.npz
-    flag: null
+    npz: null
+    flag: "no current post-PL-PBF candidate"
+    status: withheld-no-current-candidate
   - nick: chromatica
     tns: "FRB 20240203A"
     npz: null
-    flag: "no accepted joint fit"
+    flag: "no current post-PL-PBF candidate"
+    status: withheld-no-current-candidate
   - nick: casey
     tns: "FRB 20240229A"
-    npz: figures/jointmodel_pair/fit_artifacts/casey_jointmodel_DMLOCK_C2D1.npz
-    flag: "morphology audit only: coherent CHIME tail"
+    npz: null
+    flag: "no current post-PL-PBF candidate; prior fit had a coherent CHIME tail"
+    status: withheld-no-current-candidate
