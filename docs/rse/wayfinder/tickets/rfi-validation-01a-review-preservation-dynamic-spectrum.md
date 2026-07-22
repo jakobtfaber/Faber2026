@@ -34,26 +34,36 @@ revision of the proposed preservation limits.
 ## Observed-event supplement — 2026-07-21
 
 Owner requested the candidate cleaner applied to a real sample event. The
-supplement uses Zach's observed CHIME/FRB Stokes-I product. It loads numerical
-samples only from public training columns `[55,137)` and configured burst
-columns `[232,248)`; the full file is read only as bytes for its checksum. It
-does not read the public validation interval or the sealed test interval.
+supplement uses Zach's observed CHIME/FRB Stokes-I product. The first version at
+commit `bd149c00` is invalid: it used the 5.24-ms scintillation sub-window
+`[232,248)` and treated array column number as a common time coordinate.
+
+The replacement is coherently dedispersed at the source H5
+`tiedbeam_power.DM_coherent` value, `262.4359033801 pc cm^-3`, then aligned
+without wraparound from each coarse channel's `fpga_count`. The independent fit
+of the H5 cutout-start schedule corresponds to `263.247551 pc cm^-3`; that is a
+time-coordinate property, not the coherent filter or a manuscript dispersion
+measure. The aligned review shows the 14.42-ms on-pulse interval `[229,273)`
+inside the 35.39-ms display `[197,305)`, with 10.49 ms of off-pulse padding on
+each side. It adds a time-integrated on-pulse spectrum for visual RFI review.
+
+Only off-pulse training columns `[55,137)` and source-context columns
+`[149,305)` are loaded as numerical samples. The public validation interval and
+sealed test interval remain unopened.
 
 - Figure: [real Zach method comparison](../../verify/rfi-real-event-review-20260721/real_zach_rfi_method_comparison.svg)
 - Machine record: [JSON](../../verify/rfi-real-event-review-20260721/real_zach_rfi_method_comparison.json)
 - Exact script: [`review_real_zach_rfi_cleaner.py`](../../../../scripts/review_real_zach_rfi_cleaner.py)
-- Remote evidence: `/data/Faber2026/evidence/rfi-real-event-review-20260721/`
-- Reproduction: pinned `baseband-analysis` container runs `run-7` and `run-8`
-  have byte-identical output manifests. Recomputed cleaner masks and bandpass
-  arrays are byte-identical to the earlier audit-v2 products.
+- Remote evidence:
+  `/data/Faber2026/evidence/zach-chime-rfi-review-correction-20260721/`
+- Reproduction: pinned, network-disabled `baseband-analysis` container runs
+  `review-1` and `review-2` have byte-identical output manifests.
 
-Result: the cleaner retains 50,238 of 55,744 measured frequency rows and drops
-5,506 rows (9.88%). On retained rows, its values equal the bandpass-only result
+Result: the cleaner retains 50,250 of 55,744 measured frequency rows and drops
+5,494 rows (9.86%). On retained rows, its values equal the bandpass-only result
 exactly; the maximum absolute difference is `0.0`. The visible effect is thus
 support removal. Because the observed event has no known truth, this supplement
 does not establish whether the removed rows are interference or signal and does
-not validate the cleaner. Relative product time and provisional dispersion
-measure `262.368 pc cm^-3` are diagnostic only; the arrival-time audit remains
-open.
+not validate the cleaner. Absolute arrival time remains uncertified.
 
 Owner review remains required before this ticket can close.

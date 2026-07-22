@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Render a diagnostic-only comparison on Zach's observed CHIME/FRB burst.
 
-Only the public training slice and configured burst slice are loaded as
-numerical samples. The full file is byte-read only for its checksum. This is a
-method comparison, not cleaner validation.
+Only the off-pulse training slice and the source columns required for the
+padded, aligned display are loaded as numerical samples. The full file is
+byte-read only for its checksum. This is a method comparison, not cleaner
+validation.
 """
 
 from __future__ import annotations
@@ -22,22 +23,25 @@ import numpy as np
 
 STATUS = "diagnostic_only_real_event_method_comparison"
 TRAINING = (55, 137)
-BURST = (232, 248)
+DISPLAY = (197, 305)
+ON_PULSE = (229, 273)
+MAX_ALIGNMENT_SHIFT_BINS = 48
+SOURCE_CONTEXT = (DISPLAY[0] - MAX_ALIGNMENT_SHIFT_BINS, DISPLAY[1])
 DT_MS = 0.32768
+NATIVE_DT_S = 2.56e-6
 FRAME_CENTER_OFFSET_MS = 63.5 * 2.56e-3
+K_DM_S_MHZ2 = 4.148808e3
+COHERENT_DM = 262.4359033801
+UPCHANNEL_FACTOR = 64
+CHIME_TOP_EDGE_MHZ = 800.1953125
+CHIME_COARSE_WIDTH_MHZ = 0.390625
 EXPECTED = {
-    "products/zach_chime_upchan.npy": "974551c7386cb5dd77b0572be133a57f6c8faf6be40357cb197d787c259f541e",
+    "products/zach_chime_upchan.npy": "264f1e643f57012fce1385dcd7b6dfe6a12086f43eb1fa907be5540fb3359192",
     "products/zach_chime_freq.npy": "02c794745bd79ca235d1d3e18d46b2f43f7529616a5747ccab2a5db094a9cba2",
     "products/zach_chime_source_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e",
-    "products/zach_chime_preprocessing_metadata.json": "bdc588557c7f8750e8714b6267569a7741b03994590c7cc9beabe21c482dca65",
+    "products/zach_chime_preprocessing_metadata.json": "badcba0e4a3152645b15a81c9f031a5c41c032b63a991d91240892f75c872f0e",
     "code/audit_chime_preprocessing_v2.py": "5df48f411c6d9f9ce59873b6ccb147de30e22fa8306b3543bb06632212340c83",
-}
-EXPECTED_REJECTED_OUTPUTS = {
-    "initial_rfi_rows.npy": "e584179a2a81ad35a6f59f0f11bde4a371d8de3582446f726664497ec37dc0d1",
-    "combined_mean.npy": "472a58567d60221dd8fa2f91eb3fd855f7893cc28dff112b52c911c04900b753",
-    "combined_scale.npy": "e3082210b0ec2d49ed86517446f662b56f01ab14ec03b3903cb890cbaf30027c",
-    "post_bandpass_rfi_rows.npy": "f2fc48dde70bb20c891dcf189e22c5783dac63dbc4757a439b48402a32bfbaff",
-    "final_valid.npy": "17dc89ce9c0ccd51713b0bba4d45e0442106cf846c0dbd36b316cb9ee0a581f8",
+    "code/upchannelize_chime.py": "1825746445782cb2f36b806668241cfcd7e03a9c11531457b903d43974007b4e",
 }
 
 
@@ -61,12 +65,98 @@ def verify_inputs(root: Path) -> dict[str, str]:
 
 
 def load_allowed_slices(array: Any) -> tuple[np.ndarray, np.ndarray]:
-    """Read exactly the approved training and burst columns."""
+    """Read exactly the approved training and alignment-context columns."""
     if tuple(array.shape) != (65536, 437):
         raise ValueError(f"unexpected observed-array shape: {array.shape}")
     training = np.array(array[:, TRAINING[0] : TRAINING[1]], dtype=np.float32, copy=True)
-    burst = np.array(array[:, BURST[0] : BURST[1]], dtype=np.float32, copy=True)
-    return training, burst
+    context = np.array(
+        array[:, SOURCE_CONTEXT[0] : SOURCE_CONTEXT[1]], dtype=np.float32, copy=True
+    )
+    return training, context
+
+
+def alignment_shifts(
+    frequency_mhz: np.ndarray,
+    coarse_ids: np.ndarray,
+    fpga_count_by_id: dict[int, int | float],
+    *,
+    target_dm: float,
+    native_dt_s: float,
+    output_dt_s: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Return nonnegative output-bin shifts from H5 channel start times."""
+    frequency = np.asarray(frequency_mhz, dtype=np.float64)
+    identifiers = np.asarray(coarse_ids, dtype=np.int64)
+    if frequency.shape != identifiers.shape:
+        raise ValueError("frequency and coarse identifiers must have the same shape")
+    if not np.isfinite(frequency).all() or np.any(frequency <= 0):
+        raise ValueError("frequencies must be finite and positive")
+    try:
+        fpga = np.array([fpga_count_by_id[int(cid)] for cid in identifiers], dtype=np.float64)
+    except KeyError as exc:
+        raise ValueError(f"missing FPGA count for coarse channel {exc.args[0]}") from exc
+
+    reference = int(np.argmax(frequency))
+    offsets = (
+        (fpga - fpga[reference]) * native_dt_s
+        - K_DM_S_MHZ2
+        * target_dm
+        * (frequency**-2 - frequency[reference] ** -2)
+    )
+    offsets -= np.min(offsets)
+    shifts = np.rint(offsets / output_dt_s).astype(np.int64)
+    return shifts, offsets
+
+
+def nominal_coarse_ids(frequency_mhz: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Map nominal fine-channel centres to CHIME coarse identifiers/centres."""
+    frequency = np.asarray(frequency_mhz, dtype=np.float64)
+    fine_width = CHIME_COARSE_WIDTH_MHZ / UPCHANNEL_FACTOR
+    fine_ids = np.rint((CHIME_TOP_EDGE_MHZ - frequency) / fine_width - 0.5).astype(
+        np.int64
+    )
+    coarse_ids = fine_ids // UPCHANNEL_FACTOR
+    coarse_frequency = 800.0 - coarse_ids * CHIME_COARSE_WIDTH_MHZ
+    return coarse_ids, coarse_frequency
+
+
+def infer_time0_schedule_dm(
+    freq_ids: np.ndarray, fpga_counts: np.ndarray, native_dt_s: float
+) -> tuple[float, float, float]:
+    """Fit the H5 cutout-start schedule to the cold-plasma delay law."""
+    ids = np.asarray(freq_ids, dtype=np.int64)
+    counts = np.asarray(fpga_counts, dtype=np.float64)
+    frequency = 800.0 - ids * CHIME_COARSE_WIDTH_MHZ
+    x = frequency**-2
+    reference = int(np.argmax(frequency))
+    x_centered = x - x[reference]
+    y_centered = (counts - counts[reference]) * native_dt_s
+    slope, intercept = np.polyfit(x_centered, y_centered, 1)
+    residual = y_centered - (slope * x_centered + intercept)
+    return (
+        float(slope / K_DM_S_MHZ2),
+        float(np.std(residual) * 1e6),
+        float(np.max(np.abs(residual)) * 1e6),
+    )
+
+
+def align_nonwrapping(values: np.ndarray, shifts: np.ndarray) -> np.ndarray:
+    """Place each row on a common output grid; shifted-in samples remain NaN."""
+    data = np.asarray(values)
+    row_shifts = np.asarray(shifts, dtype=np.int64)
+    if data.ndim != 2 or row_shifts.shape != (data.shape[0],):
+        raise ValueError("values must be 2D with one shift per row")
+    normalized = row_shifts - np.min(row_shifts)
+    output = np.full(
+        (data.shape[0], data.shape[1] + int(np.max(normalized))),
+        np.nan,
+        dtype=np.result_type(data.dtype, np.float32),
+    )
+    for shift in np.unique(normalized):
+        rows = np.flatnonzero(normalized == shift)
+        columns = np.arange(int(shift), int(shift) + data.shape[1])
+        output[rows[:, None], columns[None, :]] = data[rows]
+    return output
 
 
 def _load_audit(path: Path):
@@ -80,13 +170,13 @@ def _load_audit(path: Path):
 
 def apply_methods(
     training: np.ndarray,
-    burst: np.ndarray,
+    context: np.ndarray,
     source_valid: np.ndarray,
     audit_path: Path,
 ) -> dict[str, np.ndarray]:
-    """Learn both methods on training only, then apply them to the burst."""
+    """Learn both methods on training only, then apply them to display context."""
     audit = _load_audit(audit_path)
-    compact = np.concatenate((training, burst), axis=1)
+    compact = np.concatenate((training, context), axis=1)
     compact_training = (0, training.shape[1])
 
     reference_mean, reference_scale, reference_valid = audit._bandpass_model(
@@ -118,10 +208,10 @@ def apply_methods(
     final_valid = model_valid & ~post
     combined[~final_valid] = np.nan
 
-    burst_start = training.shape[1]
+    context_start = training.shape[1]
     return {
-        "reference_burst": np.asarray(reference[:, burst_start:], dtype=np.float32),
-        "combined_burst": np.asarray(combined[:, burst_start:], dtype=np.float32),
+        "reference_context": np.asarray(reference[:, context_start:], dtype=np.float32),
+        "combined_context": np.asarray(combined[:, context_start:], dtype=np.float32),
         "reference_mean": reference_mean,
         "reference_scale": reference_scale,
         "reference_valid": reference_valid,
@@ -163,16 +253,44 @@ def time_profile(values: np.ndarray, valid_rows: np.ndarray) -> np.ndarray:
     return np.nanmean(np.asarray(values, dtype=np.float64)[valid], axis=0)
 
 
-def broad_band_sums(
-    values: np.ndarray, frequency_mhz: np.ndarray, valid_rows: np.ndarray
+def integrated_spectrum(
+    values: np.ndarray, valid_rows: np.ndarray, window: tuple[int, int]
+) -> np.ndarray:
+    """Time-integrated standardized spectrum on a fixed half-open window."""
+    data = np.asarray(values, dtype=np.float64)
+    valid = np.asarray(valid_rows, dtype=bool)
+    start, stop = window
+    if not 0 <= start < stop <= data.shape[1]:
+        raise ValueError("spectrum window lies outside the display")
+    spectrum = np.nansum(data[:, start:stop], axis=1)
+    spectrum[~valid] = np.nan
+    return spectrum
+
+
+def broad_band_summary(
+    spectrum: np.ndarray, frequency_mhz: np.ndarray, valid_rows: np.ndarray
 ) -> tuple[list[str], list[float | None]]:
-    spectrum = np.nansum(np.asarray(values, dtype=np.float64), axis=1)
-    labels, sums = [], []
+    labels, means = [], []
     for low in range(400, 800, 50):
         use = valid_rows & (frequency_mhz >= low) & (frequency_mhz < low + 50)
         labels.append(f"{low}–{low + 50}")
-        sums.append(float(np.nanmean(spectrum[use])) if np.any(use) else None)
-    return labels, sums
+        means.append(float(np.nanmean(spectrum[use])) if np.any(use) else None)
+    return labels, means
+
+
+def fixed_band_peak_bins(
+    values: np.ndarray, frequency_mhz: np.ndarray, valid_rows: np.ndarray
+) -> dict[str, int | None]:
+    peaks: dict[str, int | None] = {}
+    for low in range(400, 800, 50):
+        label = f"{low}–{low + 50}"
+        use = valid_rows & (frequency_mhz >= low) & (frequency_mhz < low + 50)
+        if not np.any(use):
+            peaks[label] = None
+            continue
+        profile = np.nanmean(values[use], axis=0)
+        peaks[label] = int(np.nanargmax(profile)) if np.isfinite(profile).any() else None
+    return peaks
 
 
 def make_figure(
@@ -180,7 +298,6 @@ def make_figure(
     frequency_mhz: np.ndarray,
     source_valid: np.ndarray,
     result: dict[str, np.ndarray],
-    bands: dict[str, Any],
 ) -> None:
     import matplotlib as mpl
     import matplotlib.pyplot as plt
@@ -195,20 +312,18 @@ def make_figure(
         }
     )
     final_valid = result["final_valid"]
-    reference = result["reference_burst"]
-    combined = result["combined_burst"]
+    reference = result["reference_display"]
+    combined = result["combined_display"]
     reference_common = reference.copy()
     reference_common[~final_valid] = np.nan
 
     ref_coarse, coarse_frequency, _ = coarsen(reference, frequency_mhz, source_valid)
     common_coarse, _, common_counts = coarsen(reference_common, frequency_mhz, final_valid)
     combined_coarse, _, _ = coarsen(combined, frequency_mhz, final_valid)
-    method_difference = combined_coarse - common_coarse
-
-    time_centers = FRAME_CENTER_OFFSET_MS + np.arange(BURST[0], BURST[1]) * DT_MS
+    time_centers = (np.arange(reference.shape[1]) + 0.5) * DT_MS
     extent = [
-        time_centers[0] - DT_MS / 2,
-        time_centers[-1] + DT_MS / 2,
+        0.0,
+        reference.shape[1] * DT_MS,
         float(np.nanmin(coarse_frequency)),
         float(np.nanmax(coarse_frequency)),
     ]
@@ -216,10 +331,10 @@ def make_figure(
         [ref_coarse[np.isfinite(ref_coarse)], combined_coarse[np.isfinite(combined_coarse)]]
     )
     limit = max(0.5, float(np.percentile(np.abs(comparable), 99.5)))
-    diff_finite = method_difference[np.isfinite(method_difference)]
-    difference_limit = max(0.05, float(np.percentile(np.abs(diff_finite), 99.5)))
     cmap = mpl.colormaps["RdBu_r"].copy()
     cmap.set_bad("0.76")
+    on_local = (ON_PULSE[0] - DISPLAY[0], ON_PULSE[1] - DISPLAY[0])
+    on_span = (on_local[0] * DT_MS, on_local[1] * DT_MS)
 
     fig = plt.figure(figsize=(15, 8.2), constrained_layout=True)
     grid = fig.add_gridspec(2, 3, height_ratios=(1.15, 0.85))
@@ -245,7 +360,8 @@ def make_figure(
         )
         images.append(image)
         ax.set_title(title)
-        ax.set_xlabel("Relative product time (ms)")
+        ax.set_xlabel("Aligned relative time (ms)")
+        ax.axvspan(*on_span, color="gold", alpha=0.08, lw=0)
         if column == 0:
             ax.set_ylabel("Frequency (MHz)")
     fig.colorbar(images[0], ax=top_axes, label="Standardized intensity", shrink=0.8)
@@ -254,42 +370,62 @@ def make_figure(
     ax_profile.plot(time_centers, time_profile(reference, source_valid), label="bandpass only, full", lw=1.2)
     ax_profile.plot(time_centers, time_profile(reference_common, final_valid), label="bandpass only, retained", lw=1.2)
     ax_profile.plot(time_centers, time_profile(combined, final_valid), label="rejected cleaner, retained", lw=1.2)
+    ax_profile.axvspan(*on_span, color="gold", alpha=0.12, lw=0)
     ax_profile.set_title("Frequency-averaged burst profile")
-    ax_profile.set_xlabel("Relative product time (ms)")
+    ax_profile.set_xlabel("Aligned relative time (ms)")
     ax_profile.set_ylabel("Mean standardized intensity")
     ax_profile.legend(frameon=False)
 
-    ax_bands = fig.add_subplot(grid[1, 1])
-    x = np.arange(len(bands["labels"]))
-    width = 0.26
-    for offset, key, label in (
-        (-width, "reference_full", "bandpass only, full"),
-        (0.0, "reference_common", "bandpass only, retained"),
-        (width, "combined_common", "rejected cleaner, retained"),
-    ):
-        values = np.array([np.nan if v is None else v for v in bands[key]])
-        ax_bands.bar(x + offset, values, width, label=label)
-    ax_bands.set_xticks(x, bands["labels"], rotation=45, ha="right")
-    ax_bands.set_title("Burst sum by fixed 50-MHz band")
-    ax_bands.set_xlabel("Frequency range (MHz)")
-    ax_bands.set_ylabel("Mean standardized sum")
-    ax_bands.legend(frameon=False)
-
-    ax_difference = fig.add_subplot(grid[1, 2])
-    difference_image = ax_difference.imshow(
-        np.ma.masked_invalid(method_difference),
-        origin="lower",
-        aspect="auto",
-        extent=extent,
-        cmap=cmap,
-        vmin=-difference_limit,
-        vmax=difference_limit,
-        interpolation="nearest",
+    ax_spectrum = fig.add_subplot(grid[1, 1])
+    ax_spectrum.plot(
+        frequency_mhz,
+        result["reference_full_spectrum"],
+        label="bandpass only, full",
+        lw=0.38,
+        alpha=0.85,
     )
-    ax_difference.set_title("Difference is zero on retained rows; gray = not retained")
-    ax_difference.set_xlabel("Relative product time (ms)")
-    ax_difference.set_ylabel("Frequency (MHz)")
-    fig.colorbar(difference_image, ax=ax_difference, label="Difference", shrink=0.8)
+    ax_spectrum.plot(
+        frequency_mhz,
+        result["reference_common_spectrum"],
+        label="bandpass only, retained",
+        lw=0.55,
+    )
+    ax_spectrum.plot(
+        frequency_mhz,
+        result["combined_common_spectrum"],
+        label="rejected cleaner, retained",
+        lw=0.55,
+        alpha=0.8,
+    )
+    ax_spectrum.set_xlim(400, 800)
+    ax_spectrum.set_title("Time-integrated on-pulse spectrum")
+    ax_spectrum.set_xlabel("Frequency (MHz)")
+    ax_spectrum.set_ylabel("Standardized intensity sum")
+    ax_spectrum.legend(frameon=False)
+
+    ax_mask = fig.add_subplot(grid[1, 2])
+    initial = result["initial_rfi_rows"] & source_valid
+    post = result["post_bandpass_rfi_rows"] & source_valid & ~initial
+    retained = final_valid
+    for level, rows, label, color in (
+        (2, initial, "first RFI pass", "#d95f02"),
+        (1, post, "second RFI pass", "#7570b3"),
+        (0, retained, "retained", "#1b9e77"),
+    ):
+        ax_mask.scatter(
+            frequency_mhz[rows],
+            np.full(int(rows.sum()), level),
+            marker="|",
+            s=9,
+            linewidths=0.35,
+            color=color,
+            rasterized=True,
+        )
+    ax_mask.set_xlim(400, 800)
+    ax_mask.set_ylim(-0.7, 2.7)
+    ax_mask.set_yticks([0, 1, 2], ["retained", "second pass", "first pass"])
+    ax_mask.set_title("Frequency-row decision")
+    ax_mask.set_xlabel("Frequency (MHz)")
 
     fig.savefig(path, format="svg", metadata={"Date": None, "Creator": "Faber2026"})
     plt.close(fig)
@@ -308,6 +444,11 @@ def _save_arrays(output_dir: Path, result: dict[str, np.ndarray]) -> dict[str, s
         "model_valid",
         "post_bandpass_rfi_rows",
         "final_valid",
+        "alignment_shifts",
+        "alignment_offsets_s",
+        "reference_full_spectrum",
+        "reference_common_spectrum",
+        "combined_common_spectrum",
     ):
         path = output_dir / f"{key}.npy"
         np.save(path, result[key])
@@ -324,24 +465,79 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     output.mkdir(parents=True)
 
     observed = np.load(root / "products/zach_chime_upchan.npy", mmap_mode="r")
-    training, burst = load_allowed_slices(observed)
+    training, context = load_allowed_slices(observed)
     del observed
     frequency = np.load(root / "products/zach_chime_freq.npy")
     source_valid = np.load(root / "products/zach_chime_source_valid.npy").astype(bool)
+    metadata = json.loads(
+        (root / "products/zach_chime_preprocessing_metadata.json").read_text()
+    )
+    if not np.isclose(metadata["dm_pc_cm3"], COHERENT_DM, rtol=0, atol=1e-10):
+        raise ValueError("input product was not coherently dedispersed at the H5 power DM")
     result = apply_methods(
         training,
-        burst,
+        context,
         source_valid,
         root / "code/audit_chime_preprocessing_v2.py",
     )
 
-    reference = result["reference_burst"]
+    coarse_ids, coarse_frequency = nominal_coarse_ids(frequency)
+    fpga_count_by_id = {
+        int(cid): int(count)
+        for cid, count in zip(metadata["freq_id"], metadata["fpga_count"], strict=True)
+    }
+    shifts = np.zeros(frequency.size, dtype=np.int64)
+    offsets = np.full(frequency.size, np.nan)
+    valid_shifts, valid_offsets = alignment_shifts(
+        coarse_frequency[source_valid],
+        coarse_ids[source_valid],
+        fpga_count_by_id,
+        target_dm=COHERENT_DM,
+        native_dt_s=NATIVE_DT_S,
+        output_dt_s=DT_MS * 1e-3,
+    )
+    shifts[source_valid] = valid_shifts
+    offsets[source_valid] = valid_offsets
+    if int(np.max(valid_shifts)) != MAX_ALIGNMENT_SHIFT_BINS:
+        raise ValueError(
+            f"alignment span changed: {np.max(valid_shifts)} != {MAX_ALIGNMENT_SHIFT_BINS} bins"
+        )
+
+    crop_start = DISPLAY[0] - SOURCE_CONTEXT[0]
+    crop_stop = DISPLAY[1] - SOURCE_CONTEXT[0]
+
+    def align_and_crop(values: np.ndarray) -> np.ndarray:
+        aligned = align_nonwrapping(values, shifts)
+        cropped = aligned[:, crop_start:crop_stop]
+        if cropped.shape[1] != DISPLAY[1] - DISPLAY[0]:
+            raise ValueError("aligned display has the wrong width")
+        return cropped
+
+    result["reference_display"] = align_and_crop(result["reference_context"])
+    result["combined_display"] = align_and_crop(result["combined_context"])
+    result["alignment_shifts"] = shifts
+    result["alignment_offsets_s"] = offsets
+    reference = result["reference_display"]
     reference_common = reference.copy()
     reference_common[~result["final_valid"]] = np.nan
-    labels, reference_full_bands = broad_band_sums(reference, frequency, source_valid)
-    _, reference_common_bands = broad_band_sums(reference_common, frequency, result["final_valid"])
-    _, combined_common_bands = broad_band_sums(
-        result["combined_burst"], frequency, result["final_valid"]
+    on_local = (ON_PULSE[0] - DISPLAY[0], ON_PULSE[1] - DISPLAY[0])
+    result["reference_full_spectrum"] = integrated_spectrum(
+        reference, source_valid, on_local
+    )
+    result["reference_common_spectrum"] = integrated_spectrum(
+        reference_common, result["final_valid"], on_local
+    )
+    result["combined_common_spectrum"] = integrated_spectrum(
+        result["combined_display"], result["final_valid"], on_local
+    )
+    labels, reference_full_bands = broad_band_summary(
+        result["reference_full_spectrum"], frequency, source_valid
+    )
+    _, reference_common_bands = broad_band_summary(
+        result["reference_common_spectrum"], frequency, result["final_valid"]
+    )
+    _, combined_common_bands = broad_band_summary(
+        result["combined_common_spectrum"], frequency, result["final_valid"]
     )
     bands = {
         "labels": labels,
@@ -349,32 +545,74 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "reference_common": reference_common_bands,
         "combined_common": combined_common_bands,
     }
-    common = result["final_valid"][:, None] & np.isfinite(reference_common)
-    common_difference = result["combined_burst"][common] - reference_common[common]
+    common = (
+        result["final_valid"][:, None]
+        & np.isfinite(reference_common)
+        & np.isfinite(result["combined_display"])
+    )
+    common_difference = result["combined_display"][common] - reference_common[common]
+    peak_bins = fixed_band_peak_bins(reference, frequency, source_valid)
+    finite_peaks = [value for value in peak_bins.values() if value is not None]
+    schedule_dm, schedule_rms_us, schedule_max_us = infer_time0_schedule_dm(
+        np.asarray(metadata["freq_id"]),
+        np.asarray(metadata["fpga_count"]),
+        NATIVE_DT_S,
+    )
 
     figure = output / "real_zach_rfi_method_comparison.svg"
-    make_figure(figure, frequency, source_valid, result, bands)
+    make_figure(figure, frequency, source_valid, result)
     array_hashes = _save_arrays(output, result)
-    for name, expected in EXPECTED_REJECTED_OUTPUTS.items():
-        if array_hashes[name] != expected:
-            raise ValueError(f"rejected-cleaner artifact mismatch for {name}")
     script_copy = output / Path(__file__).name
     shutil.copy2(Path(__file__).resolve(), script_copy)
     record = {
         "status": STATUS,
         "warning": "Observed event with no known truth; this does not validate the cleaner.",
+        "supersedes": {
+            "commit": "bd149c00",
+            "reason": "The prior figure used a scintillation sub-window and treated column index as a shared time axis.",
+        },
         "event": "zach",
         "instrument": "CHIME/FRB",
-        "approved_observed_slices_half_open": {"training": list(TRAINING), "burst": list(BURST)},
-        "observed_columns_read": [list(TRAINING), list(BURST)],
+        "observed_slices_half_open": {
+            "training": list(TRAINING),
+            "alignment_source": list(SOURCE_CONTEXT),
+            "aligned_display": list(DISPLAY),
+            "on_pulse_integration": list(ON_PULSE),
+        },
+        "observed_sample_columns_loaded": [list(TRAINING), list(SOURCE_CONTEXT)],
         "time_axis": {
-            "label": "relative product time",
+            "label": "aligned relative time",
             "cadence_ms": DT_MS,
             "frame_center_formula": "(128*j + 63.5) * 2.56 microseconds",
+            "alignment_formula": "(fpga_count-fpga_ref)*2.56 us - K_DM*DM*(nu^-2-nu_ref^-2)",
+            "alignment_is_nonwrapping": True,
+            "alignment_offset_range_ms": [
+                float(np.nanmin(valid_offsets) * 1e3),
+                float(np.nanmax(valid_offsets) * 1e3),
+            ],
+            "alignment_shift_range_bins": [
+                int(np.min(valid_shifts)),
+                int(np.max(valid_shifts)),
+            ],
+            "time0_schedule_dm_pc_cm3": schedule_dm,
+            "time0_schedule_fit_residual_rms_us": schedule_rms_us,
+            "time0_schedule_fit_residual_max_us": schedule_max_us,
             "absolute_arrival_time_status": "uncertified",
         },
-        "provisional_dedispersion_measure_pc_cm3": 262.368,
-        "dedispersion_measure_status": "not adopted",
+        "coherent_dedispersion_measure_pc_cm3": COHERENT_DM,
+        "coherent_dm_source": "source H5 tiedbeam_power.DM_coherent",
+        "dedispersion_measure_status": "product-specific; not a manuscript adoption",
+        "window_validation": {
+            "documented_on_pulse_envelope_ms": 14.21,
+            "selected_on_pulse_width_ms": (ON_PULSE[1] - ON_PULSE[0]) * DT_MS,
+            "display_width_ms": (DISPLAY[1] - DISPLAY[0]) * DT_MS,
+            "left_padding_ms": (ON_PULSE[0] - DISPLAY[0]) * DT_MS,
+            "right_padding_ms": (DISPLAY[1] - ON_PULSE[1]) * DT_MS,
+            "fixed_band_peak_bins_in_display": peak_bins,
+            "fixed_band_peak_spread_bins": max(finite_peaks) - min(finite_peaks),
+            "fixed_band_peak_spread_ms": (max(finite_peaks) - min(finite_peaks))
+            * DT_MS,
+        },
         "methods": {
             "reference": "bandpass mean and sample standard deviation learned on training without RFI mask",
             "rejected_cleaner": [
@@ -399,7 +637,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "method_comparison": {
             "common_support_values_equal": bool(
-                np.array_equal(result["combined_burst"][common], reference_common[common])
+                np.array_equal(result["combined_display"][common], reference_common[common])
             ),
             "maximum_absolute_common_support_difference": float(
                 np.max(np.abs(common_difference))
@@ -418,10 +656,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "python": platform.python_version(),
             "numpy": np.__version__,
             "array_hashes": array_hashes,
-            "rejected_cleaner_outputs_match_prior_audit": True,
             "baseband_analysis_version": "1.9.0",
             "baseband_analysis_revision": "e08df9dacc49e1007f28759b7edca71c7b8e5273",
-            "command": (
+            "upchannel_command": (
+                "python -c 'import staged worker; set TARGETS[\"zach\"][\"dm\"]=262.4359033801; "
+                "recover_target(\"zach\", ..., time_shift=False)'"
+            ),
+            "review_command": (
                 "python /review/code/review_real_zach_rfi_cleaner.py "
                 "--input-root /evidence --output-dir /review/run-N"
             ),
