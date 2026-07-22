@@ -1,0 +1,259 @@
+{
+  "schema": "faber2026-latest-analysis/v1",
+  "analysis": "jointmodel",
+  "domain": "scattering",
+  "generated_at": "2026-07-20T14:10:00Z",
+  "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+  "spec_path": "analysis/jointmodel-latest.yaml",
+  "policy": {
+    "latest_means": "newest promoted artifact, not scientific acceptance",
+    "supersession": "archive the displaced per-burst slot before replacement",
+    "raw_products": "posterior samples and experiment ladders remain outside latest"
+  },
+  "summary": {
+    "artifact_present": 3,
+    "not_yet_promoted": 9
+  },
+  "bursts": [
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "zach",
+      "tns": "FRB 20220207C",
+      "promotion_status": "artifact-present",
+      "components": "C2D3",
+      "gain_s2": 100,
+      "fit_job": 178,
+      "fit_quality_status": "not-classified-under-authoritative-contract",
+      "figure_review_status": "structural-vet-reviewed-full-fit-gate-incomplete",
+      "adoption_status": "owner-pending",
+      "validation_reference": "docs/rse/specs/validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md",
+      "artifacts": {
+        "fit_json": {
+          "source_path": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_joint_fit_C2D3_s2-100_fine.json",
+          "latest_name": "fit.json",
+          "sha256": "a0a1adaa1918e6b58cd9e14ff832794e71f069cd5812dfb03389f646bab561dc",
+          "bytes": 3927
+        },
+        "jointmodel_npz": {
+          "source_path": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_jointmodel_C2D3_s2-100_fine.npz",
+          "latest_name": "jointmodel.npz",
+          "sha256": "eda4e8f5d4d67f6dd96d307719bb292de9215e0fc0352ff7f5e94c7dc99eb408",
+          "bytes": 294502
+        }
+      },
+      "content_fingerprint": "8fe7b40799a5baa2feb9d45f4a80556cc2d7669678bebbc1c079605dc2f83cad",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "whitney",
+      "tns": "FRB 20220310F",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "655aedea58cfd9ed38b123bb57d51aedb4c2667643c8c2eaea73c9745f3dd6a3",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "oran",
+      "tns": "FRB 20220506D",
+      "promotion_status": "artifact-present",
+      "components": "C1D1",
+      "gain_s2": 100,
+      "fit_job": 171,
+      "fit_quality_status": "not-classified-under-authoritative-contract",
+      "figure_review_status": "structural-vet-reviewed-full-fit-gate-incomplete",
+      "adoption_status": "owner-pending",
+      "validation_reference": "docs/rse/specs/validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md",
+      "artifacts": {
+        "fit_json": {
+          "source_path": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/oran_joint_fit_C1D1_s2-100.json",
+          "latest_name": "fit.json",
+          "sha256": "bdfbb3a49b2427db7fbdff20c67fe14c4d94396da503c06d5dda220a6e4cd609",
+          "bytes": 2586
+        },
+        "jointmodel_npz": {
+          "source_path": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/oran_jointmodel_C1D1_s2-100.npz",
+          "latest_name": "jointmodel.npz",
+          "sha256": "b550ddf48d8d922751735fda8fdff0aa5dfd1287d67c8d4ac19ee7b76382ffa6",
+          "bytes": 103307
+        }
+      },
+      "content_fingerprint": "b77198e0af40de300714060cb9d9c4f9f7e61a2b31fd10bfcd172ad0666d3e42",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "isha",
+      "tns": "FRB 20221113A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "96e2d63ed0961348cea8c2b0944f325069d3bd345de61768ef3349848b724167",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "wilhelm",
+      "tns": "FRB 20221203A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "f45c3706af787b7b55caf5ef89ef898ca6876e0cf7b740fbce734915eb9ec63c",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "phineas",
+      "tns": "FRB 20230307A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "f5744d90a1485ff532d06b146ba573b82079cfd4adaff0328558b2e7abb6fed6",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "freya",
+      "tns": "FRB 20230325A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "442865557c8fe8b551e430128615439ee13aad573793553ef0ffee2c39b4f65d",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "johndoeii",
+      "tns": "FRB 20230814B",
+      "promotion_status": "artifact-present",
+      "components": "C1D2",
+      "gain_s2": 100,
+      "fit_job": 175,
+      "fit_quality_status": "not-classified-under-authoritative-contract",
+      "figure_review_status": "structural-vet-reviewed-full-fit-gate-incomplete",
+      "adoption_status": "owner-pending",
+      "validation_reference": "docs/rse/specs/validation/validation-jointtf-v2-rerun-harvest-2026-07-19.md",
+      "artifacts": {
+        "fit_json": {
+          "source_path": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/johndoeII_joint_fit_C1D2_s2-100.json",
+          "latest_name": "fit.json",
+          "sha256": "c95a126664fc017a607f38dad13d32ca6961f859c3bed97e649119429941bf36",
+          "bytes": 3097
+        },
+        "jointmodel_npz": {
+          "source_path": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/johndoeII_jointmodel_C1D2_s2-100.npz",
+          "latest_name": "jointmodel.npz",
+          "sha256": "2095a1891531c14714d83334abee134c3ad54293c3385994296ff4c4c282dea6",
+          "bytes": 99095
+        }
+      },
+      "content_fingerprint": "f4b5ee363b98aa26610bc622ca871f3a0917d577cb45e08bd2a9c05dbda4e33f",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "hamilton",
+      "tns": "FRB 20230913A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "dd25886ef7eceed958192195170f64649b3109c98320e43a2f80714e4040eb09",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "mahi",
+      "tns": "FRB 20240122A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "e917dbaea83816e605e1c83035aef464c50c3a97649d0716d2b11f9b1fd63b39",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "chromatica",
+      "tns": "FRB 20240203A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no accepted current JointModel fit exists",
+      "artifacts": {},
+      "content_fingerprint": "c7392810b219bacec229da0b2c67edfa74cb90d04d3a74803708ee085b1215c7",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    },
+    {
+      "schema": "faber2026-latest-analysis/v1",
+      "analysis": "jointmodel",
+      "domain": "scattering",
+      "source_commit": "c3e9870b26849663a9e46b1b328dbe6e50115f0d",
+      "nick": "casey",
+      "tns": "FRB 20240229A",
+      "promotion_status": "not-yet-promoted",
+      "fit_quality_status": "unavailable",
+      "figure_review_status": "unavailable",
+      "adoption_status": "not-applicable",
+      "reason": "no current post-PL-PBF JointModel artifact has been promoted",
+      "artifacts": {},
+      "content_fingerprint": "95ba7e5deb2422982a485f936f5d60a39001910ccabdb627a06ef5d3f06d38de",
+      "promoted_at": "2026-07-20T14:05:18Z"
+    }
+  ]
+}

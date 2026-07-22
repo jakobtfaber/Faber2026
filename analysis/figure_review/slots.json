@@ -163,8 +163,11 @@
       "required_provenance": [
         "adopted DM and input-product DM for both telescopes",
         "exact joint-model artifact SHA-256 or explicit data-only status",
+        "exact fit summary and configuration SHA-256",
+        "component counts, priors, and fit-generation reproducibility status",
         "display window, resolution, and masks",
         "residual normalization and color scale",
+        "per-band residual diagnostics and morphology verdict",
         "relationship to the approved Figure 1 layout"
       ],
       "items": [

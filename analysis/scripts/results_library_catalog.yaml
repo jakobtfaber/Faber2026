@@ -60,6 +60,20 @@ entries:
       - analysis/beta_campaign/beta_campaign_verdicts.json
     notes: Small JSON stays git-tracked for FLITS CI; full posteriors under $FLITS_RUNS.
 
+  - id: scattering.jointmodel-latest
+    domain: scattering
+    slot: scattering/jointmodel/latest
+    trust: diagnostic_only
+    repo: external
+    mode: link_only
+    result_ids:
+      - scattering.jointtf_v2_candidate_panels
+    sources: []
+    external_paths:
+      - env: FABER2026_RESULTS_LIBRARY
+        suffix: scattering/jointmodel/latest
+    notes: Three current morphology-audit candidates; latest is not fit acceptance or manuscript adoption.
+
   # --- scintillation ---
   - id: scintillation.dsa-lorentzian-2026-07-07
     domain: scintillation
