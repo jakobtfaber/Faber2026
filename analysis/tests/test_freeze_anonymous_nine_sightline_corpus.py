@@ -85,7 +85,35 @@ def _complete_manifest(tmp_path: Path) -> dict:
             }
             if service.key in MODULE.COVERAGE_CONFIG:
                 coverage_path = Path("coverage") / sightline / f"{service.key}.json"
-                coverage_sha = _write(tmp_path / coverage_path, b"{}")
+                coverage_bytes = b"{}"
+                if service.key == "swift_exposure":
+                    threshold = 1619.0
+                    members = {
+                        "envelope.request.json": json.dumps({"APIFunc": "queryDB", "APIVersion": "1.0.5", "constraints": [{"colName": "IsStackedImage", "filter": "=", "val": 0}, {"colName": "ImageSize", "filter": ">", "val": threshold}]}).encode(),
+                        "envelope.response.json": json.dumps({"Results": [], "NumRows": 0, "OK": 1, "APIVersion": "1.0.5"}).encode(),
+                        "query.request.json": json.dumps({"APIFunc": "queryDB", "APIVersion": "1.0.5", "searchRad": 60.0, "numRows": 1000}).encode(),
+                        "query.response.json": json.dumps({"Results": [], "NumRows": 0, "OK": 1, "APIVersion": "1.0.5"}).encode(),
+                    }
+                    metadata = {
+                        "format": "faber2026.swift-lsxps-exposure-replay.v1",
+                        "maximum_unseen_image_size_pixels": threshold,
+                        "query_radius_arcmin": 60.0,
+                        "pixel_scale_arcsec": 2.357,
+                        "coverage_radius_arcmin": 15.0,
+                        "api_endpoint": "https://www.swift.ac.uk/API/main.php",
+                        "api_version": "1.0.5",
+                        "client": "swifttools 4.0.2",
+                        "coverage_fits_member_count": 0,
+                        "maps": {},
+                    }
+                    coverage_bytes = gzip.compress(MODULE._swift_bundle(members, metadata), mtime=0)
+                    cell.update(
+                        coverage="outside",
+                        status="outside_footprint",
+                        coverage_row_count=0,
+                        coverage_fits_member_count=0,
+                    )
+                coverage_sha = _write(tmp_path / coverage_path, coverage_bytes)
                 cell.update(
                     coverage_checked=True,
                     coverage_evidence_path=str(coverage_path),
@@ -93,10 +121,10 @@ def _complete_manifest(tmp_path: Path) -> dict:
                 )
                 kind = MODULE.COVERAGE_CONFIG[service.key]["kind"]
                 method = {
-                    "legacy_nexp": "legacy_dr10_official_nexp_positive_pixels",
+                    "legacy_dr9_sia_nexp": "legacy_dr9_official_sia_nexp_positive_pixels",
                     "tap_polygon": "tap_polygon",
                     "stcs_polygon": "stcs_polygon",
-                    "official_exposure_maps_required": "swift_official_exposure_maps",
+                    "swift_lsxps_exposure_maps": "swift_lsxps_native_wcs_positive_pixels",
                 }.get(kind)
                 if method:
                     cell["coverage_method"] = method
@@ -293,7 +321,16 @@ def test_exposure_first_queries_are_separate_from_source_queries():
     assert MODULE.coverage_queries(by_key["chandra_exposure"], "zach") is None
     assert MODULE.COVERAGE_CONFIG["chandra_exposure"]["table"] == "ivoa.ObsCore"
     assert MODULE.coverage_queries(by_key["swift_exposure"], "zach") is None
-    assert MODULE.COVERAGE_CONFIG["swift_exposure"]["kind"] == "official_exposure_maps_required"
+    assert MODULE.COVERAGE_CONFIG["swift_exposure"]["kind"] == "swift_lsxps_exposure_maps"
+    assert MODULE.COVERAGE_CONFIG["swift_exposure"]["api_endpoint"] == "https://www.swift.ac.uk/API/main.php"
+    assert MODULE.COVERAGE_CONFIG["swift_exposure"]["client"] == "swifttools 4.0.2"
+
+
+def test_region_coverage_is_deferred_to_coverage_query(tmp_path):
+    service = next(s for s in MODULE.SERVICES if s.key == "jplus_dr3")
+    assert MODULE.COVERAGE_CONFIG[service.key]["kind"] == "region"
+    assert MODULE.exact_coverage(service, "zach", tmp_path, 10.0) is None
+    assert MODULE.coverage_queries(service, "zach") is not None
 
 
 def test_xmm_exact_coverage_uses_only_xsa_route(tmp_path, monkeypatch):
@@ -409,8 +446,13 @@ def test_legacy_coverage_manifest_artifact_contains_every_fits_byte(tmp_path, mo
     image_handle = io.BytesIO()
     fits.PrimaryHDU(data=data, header=wcs.to_header()).writeto(image_handle)
     image = image_handle.getvalue()
-    brick = b"brickname,ra1,ra2,dec1,dec2\n3101p728,309,311,72,73\n"
-    responses = iter([brick, image, image, image, image])
+    sia = b'''<VOTABLE><RESOURCE type="results"><INFO name="QUERY_STATUS" value="OK"/><TABLE>
+    <FIELD name="access_url" datatype="char" arraysize="*"/><DATA><TABLEDATA>
+    <TR><TD>https://example/brick-nexp-g.fits.fz</TD></TR>
+    <TR><TD>https://example/brick-nexp-r.fits.fz</TD></TR>
+    <TR><TD>https://example/brick-nexp-z.fits.fz</TD></TR>
+    </TABLEDATA></DATA></TABLE></RESOURCE></VOTABLE>'''
+    responses = iter([sia, image, image, image])
     monkeypatch.setattr(
         MODULE,
         "_fetch",
@@ -421,19 +463,91 @@ def test_legacy_coverage_manifest_artifact_contains_every_fits_byte(tmp_path, mo
     )
     artifact = tmp_path / result["coverage_evidence_path"]
     assert hashlib.sha256(artifact.read_bytes()).hexdigest() == result["coverage_evidence_sha256"]
-    assert result["coverage_fits_member_count"] == 4
-    assert MODULE.replay_legacy_nexp_bundle(gzip.decompress(artifact.read_bytes()), ra, dec) == (True, 4)
+    assert result["coverage_fits_member_count"] == 3
+    assert MODULE.replay_legacy_nexp_bundle(gzip.decompress(artifact.read_bytes()), ra, dec) == (True, 3)
 
 
 def test_legacy_and_erass_coverage_routes_are_explicit():
     by_key = {service.key: service for service in MODULE.SERVICES}
     assert MODULE.coverage_queries(by_key["legacy_dr10_photoz"], "zach") is None
-    assert MODULE.COVERAGE_CONFIG["legacy_dr10_photoz"]["kind"] == "legacy_nexp"
-    assert MODULE.COVERAGE_CONFIG["legacy_dr10_photoz"]["image_root"].startswith("https://portal.nersc.gov/")
+    assert MODULE.COVERAGE_CONFIG["legacy_dr10_photoz"]["kind"] == "legacy_dr9_sia_nexp"
+    assert MODULE.COVERAGE_CONFIG["legacy_dr10_photoz"]["sia_endpoint"] == "https://datalab.noirlab.edu/sia/ls_dr9"
+    assert MODULE.COVERAGE_CONFIG["legacy_dr10_photoz"]["bands"] == ("g", "r", "z")
     assert MODULE.COVERAGE_CONFIG["erass1_main_v1_2"]["kind"] == "erass1_german_half"
     assert MODULE.COVERAGE_CONFIG["erass1_clusters_primary_v3_2"]["kind"] == "erass1_german_half"
     assert MODULE.ERASS1_WESTERN_L_MIN_DEG == 179.94423568
     assert MODULE.ERASS1_WESTERN_L_MAX_DEG == 359.94423568
+
+
+def test_swift_exposure_bundle_replays_native_wcs_and_rejects_tamper():
+    import numpy as np
+    from astropy.io import fits
+    from astropy.wcs import WCS
+
+    ra, dec = MODULE.SIGHTLINE_COORDS["zach"]
+    wcs = WCS(naxis=2)
+    wcs.wcs.crpix = [2.0, 2.0]
+    wcs.wcs.cdelt = [-0.001, 0.001]
+    wcs.wcs.crval = [ra, dec]
+    wcs.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+    data = np.zeros((3, 3), dtype=np.float32)
+    data[1, 1] = 1
+    handle = io.BytesIO()
+    fits.PrimaryHDU(data=data, header=wcs.to_header()).writeto(handle)
+    compressed = gzip.compress(handle.getvalue(), mtime=0)
+    threshold = 1619.0
+    members = {
+        "envelope.request.json": json.dumps({"APIFunc": "queryDB", "APIVersion": "1.0.5", "constraints": [{"colName": "IsStackedImage", "filter": "=", "val": 0}, {"colName": "ImageSize", "filter": ">", "val": threshold}]}).encode(),
+        "envelope.response.json": json.dumps({"Results": [], "NumRows": 0, "OK": 1, "APIVersion": "1.0.5"}).encode(),
+        "query.request.json": json.dumps({"APIFunc": "queryDB", "APIVersion": "1.0.5", "searchRad": 60.0, "numRows": 1000}).encode(),
+        "query.response.json": json.dumps({"Results": [{"ObsID": "00000000001", "IsStackedImage": 0, "ImageSize": 1000, "_r": 1.0}], "NumRows": 1, "OK": 1, "APIVersion": "1.0.5"}).encode(),
+        "images/00000000001.request.json": json.dumps({"APIFunc": "getSXPSDatasetImages", "APIVersion": "1.0.5", "ObsID": "00000000001"}).encode(),
+        "images/00000000001.response.json": json.dumps({"Expmap": "https://www.swift.ac.uk/LSXPS/test.img.gz", "OK": 1, "APIVersion": "1.0.5"}).encode(),
+        "maps/00000000001.fits.gz": compressed,
+    }
+    metadata = {
+        "format": "faber2026.swift-lsxps-exposure-replay.v1",
+        "maximum_unseen_image_size_pixels": threshold,
+        "query_radius_arcmin": 60.0,
+        "pixel_scale_arcsec": 2.357,
+        "coverage_radius_arcmin": 15.0,
+        "api_endpoint": "https://www.swift.ac.uk/API/main.php",
+        "api_version": "1.0.5",
+        "client": "swifttools 4.0.2",
+        "coverage_fits_member_count": 1,
+        "maps": {"00000000001": {"url": "https://www.swift.ac.uk/LSXPS/test.img.gz"}},
+    }
+    bundle = MODULE._swift_bundle(members, metadata)
+    assert MODULE.replay_swift_exposure_bundle(bundle, ra, dec) == (True, 1)
+
+    import tarfile
+    with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:") as archive:
+        unpacked = {m.name: archive.extractfile(m).read() for m in archive.getmembers() if m.isfile()}
+    unpacked["maps/00000000001.fits.gz"] += b"tamper"
+    with pytest.raises(ValueError, match="byte hash mismatch"):
+        MODULE.replay_swift_exposure_bundle(MODULE._deterministic_tar(unpacked), ra, dec)
+
+    with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:") as archive:
+        semantic = {m.name: archive.extractfile(m).read() for m in archive.getmembers() if m.isfile()}
+    query_request = json.loads(semantic["query.request.json"])
+    query_request["APIFunc"] = "wrongFunction"
+    semantic["query.request.json"] = json.dumps(query_request).encode()
+    semantic_metadata = json.loads(semantic["metadata.json"])
+    semantic_metadata["member_sha256"]["query.request.json"] = hashlib.sha256(semantic["query.request.json"]).hexdigest()
+    semantic["metadata.json"] = json.dumps(semantic_metadata).encode()
+    with pytest.raises(ValueError, match="cone API request provenance mismatch"):
+        MODULE.replay_swift_exposure_bundle(MODULE._deterministic_tar(semantic), ra, dec)
+
+    with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:") as archive:
+        semantic = {m.name: archive.extractfile(m).read() for m in archive.getmembers() if m.isfile()}
+    envelope_request = json.loads(semantic["envelope.request.json"])
+    envelope_request["constraints"] = [c for c in envelope_request["constraints"] if c["colName"] != "IsStackedImage"]
+    semantic["envelope.request.json"] = json.dumps(envelope_request).encode()
+    semantic_metadata = json.loads(semantic["metadata.json"])
+    semantic_metadata["member_sha256"]["envelope.request.json"] = hashlib.sha256(semantic["envelope.request.json"]).hexdigest()
+    semantic["metadata.json"] = json.dumps(semantic_metadata).encode()
+    with pytest.raises(ValueError, match="does not restrict individual images"):
+        MODULE.replay_swift_exposure_bundle(MODULE._deterministic_tar(semantic), ra, dec)
 
 
 def test_csc_stcs_polygon_overlap_is_exact_at_cone_boundary():
@@ -507,7 +621,7 @@ def test_proxy_coverage_methods_fail_closed(tmp_path):
     swift = next(c for c in manifest["cells"] if c["service"] == "swift_exposure")
     swift.pop("coverage_method", None)
     errors = MODULE.validate_manifest(manifest, tmp_path)
-    assert sum("exact official coverage method missing or superseded" in e for e in errors) == 3
+    assert sum("exact official coverage method missing or superseded" in e for e in errors) == 4
     assert any("Swift terminal state lacks exact official exposure-map evidence" in e for e in errors)
 
 

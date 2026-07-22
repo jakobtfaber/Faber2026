@@ -298,10 +298,10 @@ QUERY_CONFIG = {
 
 COVERAGE_CONFIG = {
     "legacy_dr10_photoz": {
-        "table": "ls_dr10.bricks",
-        "kind": "legacy_nexp",
-        "authority_url": "https://www.legacysurvey.org/dr10/files/",
-        "image_root": "https://portal.nersc.gov/cfs/cosmo/data/legacysurvey/dr10/north/coadd",
+        "kind": "legacy_dr9_sia_nexp",
+        "authority_url": "https://datalab.noirlab.edu/sia/ls_dr9",
+        "sia_endpoint": "https://datalab.noirlab.edu/sia/ls_dr9",
+        "bands": ("g", "r", "z"),
     },
     "jplus_dr3": {
         "table": "ivoa.ObsCore",
@@ -342,8 +342,13 @@ COVERAGE_CONFIG = {
         "id_column": "obs_id",
     },
     "swift_exposure": {
-        "kind": "official_exposure_maps_required",
-        "authority_url": "https://www.swift.ac.uk/2SXPS/",
+        "kind": "swift_lsxps_exposure_maps",
+        "authority_url": "https://www.swift.ac.uk/LSXPS/",
+        "api_endpoint": "https://www.swift.ac.uk/API/main.php",
+        "api_version": "1.0.5",
+        "client": "swifttools 4.0.2",
+        "pixel_scale_arcsec": 2.357,
+        "query_radius_arcmin": 60.0,
     },
 }
 
@@ -752,16 +757,17 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
             if cell.get("coverage_checked") is not True:
                 errors.append(f"{prefix}: required coverage not checked")
             expected_method = {
-                "legacy_nexp": "legacy_dr10_official_nexp_positive_pixels",
+                "legacy_dr9_sia_nexp": "legacy_dr9_official_sia_nexp_positive_pixels",
                 "tap_polygon": "tap_polygon",
                 "stcs_polygon": "stcs_polygon",
+                "swift_lsxps_exposure_maps": "swift_lsxps_native_wcs_positive_pixels",
             }.get(coverage_config["kind"])
             if expected_method and cell.get("coverage_method") != expected_method:
                 errors.append(f"{prefix}: exact official coverage method missing or superseded")
             if (
-                coverage_config["kind"] == "official_exposure_maps_required"
+                coverage_config["kind"] == "swift_lsxps_exposure_maps"
                 and status in TERMINAL_STATUSES
-                and cell.get("coverage_method") != "swift_official_exposure_maps"
+                and cell.get("coverage_method") != "swift_lsxps_native_wcs_positive_pixels"
             ):
                 errors.append(f"{prefix}: Swift terminal state lacks exact official exposure-map evidence")
             coverage_path = _safe_evidence_path(
@@ -777,6 +783,23 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                 errors,
                 store,
             )
+            if coverage_config["kind"] == "swift_lsxps_exposure_maps" and coverage_path is not None:
+                try:
+                    swift_bundle = gzip.decompress(store.read(coverage_path))
+                    replay_inside, replay_pixels = replay_swift_exposure_bundle(
+                        swift_bundle,
+                        *SIGHTLINE_COORDS[key[0]],
+                    )
+                    if replay_inside != (cell.get("coverage") == "inside"):
+                        errors.append(f"{prefix}: Swift replay coverage mismatch")
+                    if replay_pixels != cell.get("coverage_row_count"):
+                        errors.append(f"{prefix}: Swift replay positive-pixel count mismatch")
+                    with tarfile.open(fileobj=io.BytesIO(swift_bundle), mode="r:") as archive:
+                        swift_metadata = json.loads(archive.extractfile("metadata.json").read())
+                    if cell.get("coverage_fits_member_count") != swift_metadata.get("coverage_fits_member_count"):
+                        errors.append(f"{prefix}: Swift manifest FITS member count mismatch")
+                except Exception as exc:
+                    errors.append(f"{prefix}: Swift exposure replay failed: {exc}")
         if isinstance(pagination, dict) and pagination.get("method") in {
             "count_verified_single_response",
             "complete_official_bulk_catalogue",
@@ -1012,8 +1035,8 @@ def coverage_queries(service: Service, sightline: str) -> tuple[str, str] | None
         return None
     if config["kind"] in {
         "erass1_german_half",
-        "legacy_nexp",
-        "official_exposure_maps_required",
+        "legacy_dr9_sia_nexp",
+        "swift_lsxps_exposure_maps",
         "stcs_polygon",
         "tap_polygon",
     }:
@@ -1068,16 +1091,16 @@ def _deterministic_tar(members: dict[str, bytes]) -> bytes:
     return output.getvalue()
 
 
-def _legacy_nexp_bundle(brick_body: bytes, images: dict[str, bytes]) -> bytes:
+def _legacy_nexp_bundle(source_body: bytes, images: dict[str, bytes]) -> bytes:
     hashes = {name: sha256_bytes(body) for name, body in images.items()}
     metadata = {
-        "format": "faber2026.legacy-dr10-nexp-replay.v1",
-        "brick_index_sha256": sha256_bytes(brick_body),
+        "format": "faber2026.legacy-dr9-sia-nexp-replay.v1",
+        "source_response_sha256": sha256_bytes(source_body),
         "image_sha256": hashes,
     }
     return _deterministic_tar(
         {
-            "brick-index.response": brick_body,
+            "sia.response": source_body,
             "metadata.json": json.dumps(metadata, sort_keys=True, separators=(",", ":")).encode() + b"\n",
             **{f"nexp/{name}": body for name, body in images.items()},
         }
@@ -1103,11 +1126,11 @@ def replay_legacy_nexp_bundle(bundle: bytes, ra: float, dec: float) -> tuple[boo
                 raise ValueError(f"missing NEXP evidence member {name}")
             bodies[name] = handle.read()
     metadata = json.loads(bodies.pop("metadata.json"))
-    brick_body = bodies.pop("brick-index.response")
-    if metadata.get("format") != "faber2026.legacy-dr10-nexp-replay.v1":
+    source_body = bodies.pop("sia.response")
+    if metadata.get("format") != "faber2026.legacy-dr9-sia-nexp-replay.v1":
         raise ValueError("wrong NEXP evidence format")
-    if sha256_bytes(brick_body) != metadata.get("brick_index_sha256"):
-        raise ValueError("NEXP brick-index byte hash mismatch")
+    if sha256_bytes(source_body) != metadata.get("source_response_sha256"):
+        raise ValueError("NEXP SIA-response byte hash mismatch")
     expected = metadata.get("image_sha256")
     actual_names = {name.removeprefix("nexp/") for name in bodies if name.startswith("nexp/")}
     if not isinstance(expected, dict) or actual_names != set(expected):
@@ -1280,67 +1303,259 @@ def _exact_polygon_coverage(
 def _legacy_nexp_coverage(
     service: Service, sightline: str, root: Path, timeout: float, config: dict
 ) -> dict:
-    """Evaluate official DR10 NEXP pixels for every brick touching the guard cone."""
+    """Evaluate reachable official DR9 north NEXP cutouts over the guard cone."""
     ra, dec = SIGHTLINE_COORDS[sightline]
     radius = GUARD_RADIUS_ARCMIN / 60.0
-    ra_pad = radius / max(math.cos(math.radians(dec)), 1e-12)
-    brick_query = (
-        "SELECT brickname,ra1,ra2,dec1,dec2 FROM ls_dr10.bricks WHERE "
-        f"dec2>={dec-radius:.12f} AND dec1<={dec+radius:.12f} AND "
-        f"ra2>={ra-ra_pad:.12f} AND ra1<={ra+ra_pad:.12f}"
+    query_url = config["sia_endpoint"] + "?" + urllib.parse.urlencode(
+        {"POS": f"{ra:.12f},{dec:.12f}", "SIZE": f"{2 * radius:.12f}", "FORMAT": "ALL"}
     )
-    brick_body, _, _, _ = _fetch(_tap_request_to(service.endpoint, brick_query, "csv"), timeout)
-    _, bricks = parse_response_rows(brick_body)
-    if not bricks:
-        raise CoverageUnavailable("official DR10 brick index returned no intersecting bricks")
+    source_body, _, _, _ = _fetch(urllib.request.Request(query_url), timeout)
+    _, rows = parse_response_rows(source_body)
     images: dict[str, bytes] = {}
-    for brick in bricks:
-        brickname = str(_lookup(brick, "brickname"))
-        for band in "griz":
-            url = (
-                f"{config['image_root']}/{brickname[:3]}/{brickname}/"
-                f"legacysurvey-{brickname}-nexp-{band}.fits.fz"
-            )
-            try:
-                image_body, _, _, _ = _fetch(urllib.request.Request(url), timeout)
-            except RuntimeError as exc:
-                raise CoverageUnavailable(f"required official NEXP image unavailable: {url}: {exc}") from exc
-            images[f"{brickname}/{band}.fits.fz"] = image_body
-    evidence_body = _legacy_nexp_bundle(brick_body, images)
+    urls = {}
+    for row in rows:
+        url = str(_lookup(row, "access_url") or "")
+        for band in config["bands"]:
+            if f"-nexp-{band}.fits" in url:
+                if band in urls:
+                    raise CoverageUnavailable(f"official DR9 SIA returned duplicate NEXP {band}-band products")
+                urls[band] = url
+    if rows and set(urls) != set(config["bands"]):
+        raise CoverageUnavailable("official DR9 SIA did not return one NEXP cutout for every g/r/z band")
+    for band, url in sorted(urls.items()):
+        try:
+            image_body, _, _, _ = _fetch(urllib.request.Request(url), timeout)
+        except RuntimeError as exc:
+            raise CoverageUnavailable(f"required official DR9 NEXP cutout unavailable: {url}: {exc}") from exc
+        images[f"{band}.fits.fz"] = image_body
+    evidence_body = _legacy_nexp_bundle(source_body, images)
     inside, positive_pixels = replay_legacy_nexp_bundle(evidence_body, ra, dec)
     path, sha = _coverage_artifact(root, sightline, service, evidence_body)
     return {
         "coverage": "inside" if inside else "outside",
         "coverage_checked": True,
-        "coverage_exact_query": brick_query + "; evaluate positive pixels in official g,r,i,z NEXP FITS/WCS",
+        "coverage_exact_query": query_url + "; evaluate positive pixels in official g,r,z NEXP FITS/WCS",
         "coverage_row_count": positive_pixels,
         "coverage_evidence_path": str(path),
         "coverage_evidence_sha256": sha,
-        "coverage_method": "legacy_dr10_official_nexp_positive_pixels",
+        "coverage_method": "legacy_dr9_official_sia_nexp_positive_pixels",
         "coverage_authority_endpoint": config["authority_url"],
-        "coverage_replay_format": "faber2026.legacy-dr10-nexp-replay.v1",
+        "coverage_replay_format": "faber2026.legacy-dr9-sia-nexp-replay.v1",
         "coverage_fits_member_count": len(images),
+    }
+
+
+def _swift_api_call(config: dict, function: str, payload: dict, timeout: float) -> tuple[bytes, bytes]:
+    request_payload = {**payload, "APIFunc": function, "APIVersion": config["api_version"]}
+    request_body = json.dumps(request_payload, sort_keys=True, separators=(",", ":")).encode() + b"\n"
+    request = urllib.request.Request(
+        config["api_endpoint"], data=request_body, headers={"Content-Type": "application/json"}
+    )
+    response_body, _, _, _ = _fetch(request, timeout)
+    response = json.loads(response_body)
+    if response.get("OK") != 1 or response.get("APIVersion") != config["api_version"]:
+        raise CoverageUnavailable("Swift LSXPS API returned a failed or unexpected-version response")
+    return request_body, response_body
+
+
+def _swift_bundle(members: dict[str, bytes], metadata: dict) -> bytes:
+    hashes = {name: sha256_bytes(body) for name, body in members.items()}
+    metadata = {**metadata, "member_sha256": hashes}
+    return _deterministic_tar(
+        {"metadata.json": json.dumps(metadata, sort_keys=True, separators=(",", ":")).encode() + b"\n", **members}
+    )
+
+
+def replay_swift_exposure_bundle(bundle: bytes, ra: float, dec: float) -> tuple[bool, int]:
+    """Verify API provenance and replay native-WCS Swift exposure pixels offline."""
+    import numpy as np
+    from astropy.coordinates import SkyCoord
+    from astropy.io import fits
+    from astropy.wcs import WCS
+    import astropy.units as u
+
+    with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:") as archive:
+        names = [member.name for member in archive.getmembers() if member.isfile()]
+        if len(names) != len(set(names)) or any(Path(name).is_absolute() or ".." in Path(name).parts for name in names):
+            raise ValueError("unsafe or duplicate Swift evidence member")
+        bodies = {name: archive.extractfile(name).read() for name in names}
+    metadata = json.loads(bodies.pop("metadata.json"))
+    if metadata.get("format") != "faber2026.swift-lsxps-exposure-replay.v1":
+        raise ValueError("wrong Swift evidence format")
+    if metadata.get("api_endpoint") != "https://www.swift.ac.uk/API/main.php":
+        raise ValueError("wrong Swift API endpoint")
+    if metadata.get("api_version") != "1.0.5":
+        raise ValueError("wrong Swift API version")
+    if metadata.get("client") != "swifttools 4.0.2":
+        raise ValueError("wrong Swift client version")
+    expected_hashes = metadata.get("member_sha256")
+    if not isinstance(expected_hashes, dict) or set(expected_hashes) != set(bodies):
+        raise ValueError("Swift evidence inventory mismatch")
+    for name, expected in expected_hashes.items():
+        if sha256_bytes(bodies[name]) != expected:
+            raise ValueError(f"Swift evidence byte hash mismatch: {name}")
+
+    envelope_request = json.loads(bodies["envelope.request.json"])
+    envelope_response = json.loads(bodies["envelope.response.json"])
+    if envelope_request.get("APIFunc") != "queryDB" or envelope_request.get("APIVersion") != metadata["api_version"]:
+        raise ValueError("Swift envelope API request provenance mismatch")
+    if envelope_response.get("OK") != 1 or envelope_response.get("APIVersion") != metadata["api_version"]:
+        raise ValueError("Swift envelope API response provenance mismatch")
+    if envelope_response.get("NumRows") != 0 or envelope_response.get("Results") != []:
+        raise ValueError("Swift candidate-envelope proof is not empty")
+    threshold = float(metadata["maximum_unseen_image_size_pixels"])
+    constraints = envelope_request.get("constraints", [])
+    if not any(c.get("colName") == "IsStackedImage" and c.get("filter") == "=" and int(c.get("val")) == 0 for c in constraints):
+        raise ValueError("Swift envelope does not restrict individual images")
+    if not any(c.get("colName") == "ImageSize" and c.get("filter") == ">" and float(c.get("val")) == threshold for c in constraints):
+        raise ValueError("Swift candidate-envelope threshold missing")
+
+    query_request = json.loads(bodies["query.request.json"])
+    query_response = json.loads(bodies["query.response.json"])
+    if query_request.get("APIFunc") != "queryDB" or query_request.get("APIVersion") != metadata["api_version"]:
+        raise ValueError("Swift cone API request provenance mismatch")
+    if query_response.get("OK") != 1 or query_response.get("APIVersion") != metadata["api_version"]:
+        raise ValueError("Swift cone API response provenance mismatch")
+    rows = query_response.get("Results")
+    if not isinstance(rows, list) or query_response.get("NumRows") != len(rows) or len(rows) >= int(query_request["numRows"]):
+        raise ValueError("Swift cone response is incomplete")
+    if float(query_request.get("searchRad")) != float(metadata["query_radius_arcmin"]):
+        raise ValueError("Swift cone radius mismatch")
+
+    pixel_scale = float(metadata["pixel_scale_arcsec"])
+    radius = float(metadata["coverage_radius_arcmin"])
+    candidates = {}
+    for row in rows:
+        if int(row.get("IsStackedImage", 1)) != 0:
+            continue
+        image_size = int(row["ImageSize"])
+        reach = radius + image_size * pixel_scale * math.sqrt(2.0) / (2.0 * 60.0)
+        if float(row["_r"]) <= reach:
+            candidates[str(row["ObsID"])] = row
+    map_names = {Path(name).stem.split(".")[0] for name in bodies if name.startswith("maps/")}
+    if map_names != set(candidates):
+        raise ValueError("Swift candidate map inventory mismatch")
+    if int(metadata.get("coverage_fits_member_count", -1)) != len(map_names):
+        raise ValueError("Swift FITS member count mismatch")
+
+    center = SkyCoord(ra * u.deg, dec * u.deg)
+    positive_pixels = 0
+    for obsid in sorted(candidates):
+        api_request = json.loads(bodies[f"images/{obsid}.request.json"])
+        api_response = json.loads(bodies[f"images/{obsid}.response.json"])
+        if (
+            api_request.get("APIFunc") != "getSXPSDatasetImages"
+            or api_request.get("APIVersion") != metadata["api_version"]
+            or str(api_request.get("ObsID")) != obsid
+        ):
+            raise ValueError(f"Swift image API request provenance mismatch: {obsid}")
+        if api_response.get("OK") != 1 or api_response.get("APIVersion") != metadata["api_version"]:
+            raise ValueError(f"Swift image API response provenance mismatch: {obsid}")
+        if api_response.get("Expmap") != metadata["maps"][obsid]["url"]:
+            raise ValueError(f"Swift exposure URL mismatch: {obsid}")
+        compressed = bodies[f"maps/{obsid}.fits.gz"]
+        with fits.open(io.BytesIO(gzip.decompress(compressed)), memmap=False) as hdus:
+            hdu = next(hdu for hdu in hdus if getattr(hdu, "data", None) is not None)
+            data = np.asarray(hdu.data)
+            yy, xx = np.nonzero(data > 0)
+            if len(xx):
+                sky = WCS(hdu.header).pixel_to_world(xx, yy)
+                positive_pixels += int(np.count_nonzero(sky.separation(center) <= radius * u.arcmin))
+    return positive_pixels > 0, positive_pixels
+
+
+def _swift_exact_coverage(
+    service: Service, sightline: str, root: Path, timeout: float, config: dict
+) -> dict:
+    ra, dec = SIGHTLINE_COORDS[sightline]
+    query_radius = float(config["query_radius_arcmin"])
+    pixel_scale = float(config["pixel_scale_arcsec"])
+    max_unseen = (query_radius - GALAXY_RADIUS_ARCMIN) * 60.0 * 2.0 / (pixel_scale * math.sqrt(2.0))
+    base = {"database": "LSXPS", "table": "datasets", "adUnits": "arcmin", "sortDir": "ASC", "numRows": 1000, "firstRow": 0}
+    envelope_payload = {
+        **base,
+        "constraints": [
+            {"colName": "IsStackedImage", "filter": "=", "val": 0, "combiner": None, "filter2": None, "val2": None},
+            {"colName": "ImageSize", "filter": ">", "val": max_unseen, "combiner": None, "filter2": None, "val2": None},
+        ],
+    }
+    envelope_request, envelope_response = _swift_api_call(config, "queryDB", envelope_payload, timeout)
+    if json.loads(envelope_response).get("NumRows") != 0:
+        raise CoverageUnavailable("Swift LSXPS has individual images too large for the candidate envelope")
+    query_payload = {
+        **base, "searchRA": ra, "searchDec": dec, "searchRad": query_radius, "RACol": "RA", "DecCol": "Decl"
+    }
+    query_request, query_response = _swift_api_call(config, "queryDB", query_payload, timeout)
+    response = json.loads(query_response)
+    rows = response.get("Results", [])
+    if response.get("NumRows") != len(rows) or len(rows) >= base["numRows"]:
+        raise CoverageUnavailable("Swift LSXPS cone response is incomplete")
+
+    candidates = {}
+    for row in rows:
+        if int(row.get("IsStackedImage", 1)) != 0:
+            continue
+        reach = GALAXY_RADIUS_ARCMIN + int(row["ImageSize"]) * pixel_scale * math.sqrt(2.0) / (2.0 * 60.0)
+        if float(row["_r"]) <= reach:
+            candidates[str(row["ObsID"])] = row
+    members = {
+        "query.request.json": query_request,
+        "query.response.json": query_response,
+        "envelope.request.json": envelope_request,
+        "envelope.response.json": envelope_response,
+    }
+    maps = {}
+    for obsid in sorted(candidates):
+        image_payload = {"whichCat": "LSXPS", "bands": "all", "types": "all", "getRegions": False, "ObsID": obsid}
+        image_request, image_response = _swift_api_call(config, "getSXPSDatasetImages", image_payload, timeout)
+        url = json.loads(image_response).get("Expmap")
+        if not isinstance(url, str) or not url.startswith("https://www.swift.ac.uk/LSXPS/"):
+            raise CoverageUnavailable(f"Swift LSXPS exposure map URL missing for {obsid}")
+        map_body, _, _, _ = _fetch(urllib.request.Request(url), timeout)
+        members[f"images/{obsid}.request.json"] = image_request
+        members[f"images/{obsid}.response.json"] = image_response
+        members[f"maps/{obsid}.fits.gz"] = map_body
+        maps[obsid] = {"url": url, "sha256": sha256_bytes(map_body)}
+    metadata = {
+        "format": "faber2026.swift-lsxps-exposure-replay.v1",
+        "api_endpoint": config["api_endpoint"],
+        "api_version": config["api_version"],
+        "client": config["client"],
+        "coverage_radius_arcmin": GALAXY_RADIUS_ARCMIN,
+        "query_radius_arcmin": query_radius,
+        "pixel_scale_arcsec": pixel_scale,
+        "maximum_unseen_image_size_pixels": max_unseen,
+        "candidate_formula": "center separation <= 15 arcmin + ImageSize*2.357 arcsec/pixel*sqrt(2)/2",
+        "maps": maps,
+        "coverage_fits_member_count": len(maps),
+    }
+    evidence_body = _swift_bundle(members, metadata)
+    inside, positive_pixels = replay_swift_exposure_bundle(evidence_body, ra, dec)
+    path, sha = _coverage_artifact(root, sightline, service, evidence_body)
+    return {
+        "coverage": "inside" if inside else "outside",
+        "coverage_checked": True,
+        "coverage_exact_query": f"LSXPS datasets within {query_radius} arcmin; replay native-WCS positive exposure pixels within 15 arcmin",
+        "coverage_row_count": positive_pixels,
+        "coverage_evidence_path": str(path),
+        "coverage_evidence_sha256": sha,
+        "coverage_method": "swift_lsxps_native_wcs_positive_pixels",
+        "coverage_authority_endpoint": config["authority_url"],
+        "coverage_replay_format": metadata["format"],
+        "coverage_fits_member_count": len(maps),
     }
 
 
 def exact_coverage(service: Service, sightline: str, root: Path, timeout: float) -> dict | None:
     config = COVERAGE_CONFIG.get(service.key)
-    if config is None or config["kind"] == "erass1_german_half":
+    if config is None or config["kind"] in {"erass1_german_half", "region"}:
         return None
-    if config["kind"] == "legacy_nexp":
+    if config["kind"] == "legacy_dr9_sia_nexp":
         return _legacy_nexp_coverage(service, sightline, root, timeout, config)
     if config["kind"] in {"tap_polygon", "stcs_polygon"}:
         return _exact_polygon_coverage(service, sightline, root, timeout, config)
-    if config["kind"] == "official_exposure_maps_required":
-        record = {
-            "authority_url": config["authority_url"],
-            "reason": "no exact official Swift-XRT exposure map set was supplied or evaluated",
-            "coverage": "unknown",
-        }
-        path, sha = _coverage_artifact(
-            root, sightline, service, json.dumps(record, sort_keys=True).encode() + b"\n"
-        )
-        raise CoverageUnavailable(f"{record['reason']}|{path}|{sha}")
+    if config["kind"] == "swift_lsxps_exposure_maps":
+        return _swift_exact_coverage(service, sightline, root, timeout, config)
     raise ValueError(f"unsupported exact coverage method: {config['kind']}")
 
 
@@ -1748,6 +1963,10 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
                     coverage_method=exact_result["coverage_method"],
                     coverage_authority_endpoint=exact_result["coverage_authority_endpoint"],
                 )
+                if "coverage_fits_member_count" in exact_result:
+                    cell["coverage_fits_member_count"] = exact_result["coverage_fits_member_count"]
+                if "coverage_replay_format" in exact_result:
+                    cell["coverage_replay_format"] = exact_result["coverage_replay_format"]
                 fragment.parent.mkdir(parents=True, exist_ok=True)
                 fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
                 return cell
@@ -1873,6 +2092,10 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
                     coverage_method=exact_result["coverage_method"],
                     coverage_authority_endpoint=exact_result["coverage_authority_endpoint"],
                 )
+                if "coverage_fits_member_count" in exact_result:
+                    cell["coverage_fits_member_count"] = exact_result["coverage_fits_member_count"]
+                if "coverage_replay_format" in exact_result:
+                    cell["coverage_replay_format"] = exact_result["coverage_replay_format"]
         fragment.parent.mkdir(parents=True, exist_ok=True)
         fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         return cell
@@ -1893,7 +2116,10 @@ def _ps1_cells(root: Path) -> list[dict]:
     extraction = json.loads((root / "ps1-strm-extract.json").read_text(encoding="utf-8"))
     canonical_path = Path(extraction["canonical_path"])
     if not (root / canonical_path).is_file():
-        canonical_path = canonical_path.resolve().relative_to(root.resolve())
+        local_path = Path("canonical") / canonical_path.name
+        if not (root / local_path).is_file():
+            raise FileNotFoundError(root / canonical_path)
+        canonical_path = local_path
     store = EvidenceStore(root)
     try:
         canonical_bytes = store.read(root / canonical_path)

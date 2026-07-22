@@ -2,7 +2,7 @@
 
 Date: 2026-07-22  
 Scope: execution evidence for Wayfinder ticket 14  
-Verdict: **fail closed; admission evidence repaired, exact coverage regeneration incomplete**
+Verdict: **complete; all 135 cells replay from frozen evidence**
 
 ## Authority boundary
 
@@ -39,7 +39,9 @@ There is no finite angular fallback.
 
 ## Primary service surfaces
 
-- DESI Data Release 1 and Legacy Survey Data Release 10: NOIRLab Data Lab TAP.
+- DESI Data Release 1 and Legacy Survey Data Release 10 photometric redshifts:
+  NOIRLab Data Lab TAP. Exact northern imaging coverage uses official Legacy
+  Survey Data Release 9 SIA g/r/z NEXP cutouts.
 - Sloan Digital Sky Survey Data Release 19: SkyServer SQL search.
 - LAMOST Data Release 11 and VLASS Quick Look Epoch 1: VizieR TAP mirrors.
 - J-PLUS Data Release 3 and miniJPAS PDR201912: CEFCA TAP.
@@ -52,8 +54,9 @@ There is no finite angular fallback.
   supplies the exact public western-hemisphere longitude boundary used here.
 - XMM-Newton source metadata: HEASARC TAP; exact footprints: XSA TAP.
 - Chandra source metadata: HEASARC TAP; exact polygons: CSC ObsCore TAP.
-- Swift source metadata: HEASARC TAP. Exact coverage requires official XRT
-  exposure maps; pointing metadata is not coverage evidence.
+- Swift source metadata: HEASARC TAP. Exact coverage uses the official UKSSDC
+  LSXPS API and native XRT exposure-map FITS files, queried with swifttools
+  4.0.2 and API version 1.0.5.
 - PS1--STRM v1: [official MAST bulk archive](https://archive.stsci.edu/hlsps/ps1-strm/)
   and [published column schema](https://archive.stsci.edu/hlsps/ps1-strm/hlsp_ps1-strm_ps1_gpc1_all_multi_v1_readme.txt).
 
@@ -72,36 +75,37 @@ shard is not in this repository: its size and SHA-256 were verified during
 extraction, while the repository freezes and validates the derived per-sightline
 canonical bytes.
 
-## Frozen admission result; provisional coverage result
+## Frozen result
 
 The current manifest is
 [`corpus-manifest.json`](evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22/corpus-manifest.json)
-(SHA-256 `d6c9847979ffbc5ee4b431ef657b0193d26ac0ffb2b294b4b4ae30f18ad9f13e`).
+(SHA-256 `6ce903044e91f5eb0a1dd4660d85b202aeb8d74b2a7a4af97a247a72596b62c8`).
 It binds 135 cells and 109,117 admitted records plus 1,474 separate guard-only
-records. Its 37 `matched`, 41 `unmatched`, and 57 `outside_footprint`
-classifications are provisional. Legacy Survey, XMM-Newton, Chandra, and Swift
-coverage was inferred from superseded proxies. These counts are not a completed
-coverage corpus and cannot feed ticket 16.
+records: 37 `matched`, 32 `unmatched`, and 66 `outside_footprint`. No cell is
+unresolved. Exact official coverage evidence is frozen wherever required.
 
-All 552 byte-evidence members are stored without alteration in deterministic
+All 626 byte-evidence members are stored without alteration in deterministic
 `evidence-bundle.tar.gz`, SHA-256
-`7db3e8b2ba5d85cb3ef7e8a9bd31864e7c1e5241ee5e520f29526546d71ece8d`.
+`1b53ea98abd5d232a793ed9b7bde8a876ea4fa44153ceba31608a014ecd09026`.
 The validator reads each manifest path directly from that bundle and checks its
 member hash, while the top-level manifest also checks the bundle hash.
 
 The frozen admission evidence contains 975 DESI DR1 rows, 18,608 Gaia DR3 rows, 701 LoTSS DR3
-rows, 142 VLASS rows, and 88,687 PS1--STRM rows. The four Swift rows and all
-Legacy Survey and X-ray matched/unmatched/outside classifications remain provisional. SDSS DR19 and
+rows, 142 VLASS rows, four Swift rows, and 88,687 PS1--STRM rows. SDSS DR19 and
 LAMOST DR11 returned no rows. J-PLUS and miniJPAS are outside footprint for all
-nine positions. Legacy Survey DR10 coverage is outside for six positions and
-inside with no photo-redshift rows for three. All nine positions are outside
+the nine positions. Official Legacy Survey DR9 northern g/r/z NEXP pixels put
+six positions outside and Whitney, Phineas, and Casey inside, with no Data
+Release 10 photo-redshift rows. Exact XMM-Newton and Chandra polygons put all
+the nine positions outside. Swift exposure pixels put Whitney, Wilhelm, and
+Casey inside; only Casey has source rows. The other six positions are outside.
+All nine positions are outside
 the exact eROSITA-DE public half-sky for both eRASS1 products.
 
-Every cell freezes query text, release, UTC retrieval time, provisional coverage,
+Every cell freezes query text, release, UTC retrieval time, coverage state,
 native response bytes or a canonical PS1 subset, normalized rows, stable source
 identifiers, exact separations, native flags and uncertainties, count or
-pagination evidence, and SHA-256 hashes. XMM-Newton, Chandra, and Swift source
-queries ran only after separate exposure-pointing queries; outside cells retain
+pagination evidence, and SHA-256 hashes. XMM-Newton and Chandra source queries
+ran only after exact polygon checks; outside cells retain
 the skipped source query and coverage bytes.
 
 The validator reads every canonical snapshot and checks cell
@@ -109,22 +113,23 @@ identity, row count, identifier, native record, exact spherical separation,
 deterministic ordering, guard-ring count, status, release, count response,
 coverage evidence, and hashes. Focused tests cover inclusive 15-arcminute and
 5-proper-Mpc boundaries, Planck18 calculation, missing cluster redshift,
-overflow, count mismatch, and byte tampering.
+overflow, count mismatch, and byte tampering. Swift validation additionally
+checks the raw API request and response inventory, the conservative image-size
+envelope, every FITS hash, and native-WCS positive pixels within 15 arcminutes.
 
-The exact admission repair is complete. Ticket 14 remains open. The repaired
-producer now requires official Legacy DR10 NEXP positive-exposure pixels,
-XMM-Newton XSA `footprint_fov` polygons, and Chandra CSC `s_region` polygons.
-Swift is `coverage_unknown` unless exact official XRT exposure maps are supplied
-and evaluated. Ticket 16 is blocked by both ticket 14 and protected-evidence
-ticket 15.
+Exact admission and all coverage repairs are complete. Ticket 14 is closed;
+ticket 16 can perform its independent replay.
 
 ## Coverage repair routes
 
-Live official-service checks identified the required replacements. XMM-Newton
-public observations expose exact `footprint_fov` polygons through XSA TAP.
-Chandra Source Catalog stacks expose chip-shaped `s_region` polygon unions
-through CSC TAP. Legacy DR10 publishes native-WCS per-brick NEXP images, whose
-positive pixels define actual included exposure. Swift publishes XRT exposure
-maps per dataset but no anonymous bulk polygon query; until those maps are
-downloaded and evaluated, Swift coverage remains unknown rather than inferred
-from a pointing center.
+Live official-service checks completed the reachable replacements. XMM-Newton
+uses XSA `footprint_fov` polygons. Chandra uses CSC `s_region` polygon unions.
+Legacy Survey uses reachable official Data Release 9 northern SIA g/r/z NEXP
+cutouts, with every FITS byte frozen and replayed through its native world
+coordinate system. Data Release 10 has no northern imaging products and no
+i-band northern exposure map. Swift uses a 60-arcminute LSXPS dataset query and
+an independently queried upper bound on individual image size. Twenty-nine
+candidate exposure maps were frozen. Native-WCS replay finds positive pixels
+within 15 arcminutes for Whitney, Wilhelm, and Casey only. Raw query and image
+API request and response bytes, API endpoint and version, map URLs, and every
+FITS byte and hash are in the evidence bundle.
