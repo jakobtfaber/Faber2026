@@ -17,7 +17,8 @@ check-state: check-mount
 test: check-state
 	cd "$(MANUSCRIPT_ROOT_ABS)" && \
 		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
-		$(UV) run --project pipeline --frozen python -m pytest -q -ra \
+		PYTHONPATH="$(MANUSCRIPT_ROOT_ABS)/analysis:$(MANUSCRIPT_ROOT_ABS)/analysis/scripts" \
+		$(UV) run --project pipeline --group test --frozen python -m pytest -q -ra \
 		--strict-config --strict-markers analysis/tests
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh

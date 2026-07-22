@@ -15,10 +15,12 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = manuscript_root()
 PIPELINE = ROOT / "pipeline"
-CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
-HOST_CSV = ROOT / "scripts" / "dm_budget_uncertainty.csv"
+CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+HOST_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
 BASE_DATA = PIPELINE / "galaxies" / "foreground" / "budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 

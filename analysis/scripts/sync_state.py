@@ -39,7 +39,10 @@ import sys
 import tomllib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from workspace import ANALYSIS_ROOT, manuscript_root
+
+ROOT = ANALYSIS_ROOT
+MANUSCRIPT_ROOT = manuscript_root()
 PROGRAM_STATE = ROOT / "docs/rse/control/program-state.toml"
 EVIDENCE_LEDGER = ROOT / "docs/rse/control/evidence-ledger.toml"
 ACTIVE_LANES = ROOT / "docs/rse/control/ACTIVE_LANES.md"
@@ -76,7 +79,7 @@ def load_toml(path: Path) -> dict:
 def manuscript_labels() -> set[str]:
     """Every \\label{} defined in main.tex and sections/*.tex (deterministic)."""
     labels: set[str] = set()
-    files = [ROOT / "main.tex"] + sorted((ROOT / "sections").glob("*.tex"))
+    files = [MANUSCRIPT_ROOT / "main.tex"] + sorted((MANUSCRIPT_ROOT / "sections").glob("*.tex"))
     pat = re.compile(r"\\label\{([^}]+)\}")
     for f in files:
         if f.exists():

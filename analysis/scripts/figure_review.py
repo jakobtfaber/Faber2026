@@ -16,13 +16,16 @@ import datetime as dt
 import hashlib
 import html
 import json
+import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
+from workspace import ANALYSIS_ROOT, manuscript_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = ANALYSIS_ROOT
+MANUSCRIPT_ROOT = manuscript_root()
 REVIEW_ROOT = ROOT / "figure_review"
 SLOTS_PATH = REVIEW_ROOT / "slots.json"
 RECEIPTS = REVIEW_ROOT / "approval_receipts"
@@ -126,7 +129,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
     source_revision = subprocess.check_output(
         ["git", "rev-parse", args.source_revision], cwd=ROOT, text=True
     ).strip()
-    dm_catalog = ROOT / "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"
+    dm_catalog = ROOT / "dm-joint-phase-v2/manuscript_dm_catalog.csv"
     with dm_catalog.open(newline="", encoding="utf-8") as stream:
         dm_rows = list(csv.DictReader(stream))
     dm_by_nick = {row["nick"].casefold(): row for row in dm_rows}
@@ -161,8 +164,8 @@ def command_new_batch(args: argparse.Namespace) -> None:
     provenance_dir = destination / "provenance"
     provenance_dir.mkdir()
     evidence_specs = [
-        ("dm-catalog", "parent", "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv"),
-        ("joint-render-manifest", "parent", "scripts/jointmodel_triptych_manifest.yaml"),
+        ("dm-catalog", "analysis", "dm-joint-phase-v2/manuscript_dm_catalog.csv"),
+        ("joint-render-manifest", "analysis", "scripts/jointmodel_triptych_manifest.yaml"),
         ("joint-fit-roster", "pipeline", "analysis/scattering-dm-locked-2026-07-14/fit_roster.csv"),
         ("joint-fit-adjudication", "pipeline", "analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv"),
         ("scint-component-catalog", "pipeline", "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv"),
@@ -172,13 +175,13 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ("chime-campaign-records", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl"),
         ("chromatica-hi-campaign", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json"),
         ("chime-campaign-figure-review", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json"),
-        ("joint-scint-figure-provenance", "parent", "analysis/scintillation-summary/joint_figure_provenance.json"),
+        ("joint-scint-figure-provenance", "analysis", "scintillation-summary/joint_figure_provenance.json"),
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
         if evidence_id not in required_evidence:
             continue
-        if repository == "parent":
+        if repository == "analysis":
             command = ["git", "show", f"{source_revision}:{source_path}"]
             revision = source_revision
         else:
@@ -423,7 +426,7 @@ def command_promote(args: argparse.Namespace) -> None:
     source = batch_dir(args.batch_id) / candidate["artifact"]
     if sha256(source) != candidate["artifact_sha256"]:
         raise SystemExit(f"{args.candidate} candidate bytes changed after approval")
-    target = ROOT / candidate["target"]
+    target = MANUSCRIPT_ROOT / candidate["target"]
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, target)
     receipt = {
@@ -444,7 +447,24 @@ def command_promote(args: argparse.Namespace) -> None:
 
 
 def included_tex() -> str:
-    return "\n".join(path.read_text(encoding="utf-8") for path in sorted((ROOT / "sections").glob("*.tex")))
+    """Return only TeX reachable from main.tex, excluding inactive draft files."""
+    seen: set[Path] = set()
+    chunks: list[str] = []
+    pending = [MANUSCRIPT_ROOT / "main.tex"]
+    input_pattern = re.compile(r"\\(?:input|include)\{([^}]+)\}")
+    while pending:
+        path = pending.pop()
+        if path in seen or not path.is_file():
+            continue
+        seen.add(path)
+        source = path.read_text(encoding="utf-8")
+        chunks.append(source)
+        for raw in input_pattern.findall(source):
+            child = MANUSCRIPT_ROOT / raw
+            if child.suffix == "":
+                child = child.with_suffix(".tex")
+            pending.append(child)
+    return "\n".join(chunks)
 
 
 def approval_errors(tex: str, protected: dict[str, str], receipts: dict[str, dict]) -> list[str]:
@@ -452,7 +472,7 @@ def approval_errors(tex: str, protected: dict[str, str], receipts: dict[str, dic
     for target, candidate_id in protected.items():
         if target not in tex and target.removeprefix("figures/") not in tex:
             continue
-        artifact = ROOT / target
+        artifact = MANUSCRIPT_ROOT / target
         receipt = receipts.get(target)
         if receipt is None:
             errors.append(f"protected figure is included without approval: {candidate_id} ({target})")
@@ -488,7 +508,7 @@ def parser() -> argparse.ArgumentParser:
     new.add_argument(
         "--candidate-root",
         type=Path,
-        default=ROOT,
+        default=MANUSCRIPT_ROOT,
         help="root containing candidate outputs in manuscript-relative paths",
     )
     new.add_argument(
@@ -507,7 +527,7 @@ def parser() -> argparse.ArgumentParser:
     new.add_argument(
         "--pipeline-repo",
         type=Path,
-        default=ROOT / "pipeline",
+        default=MANUSCRIPT_ROOT / "pipeline",
         help="FLITS checkout used to read submodule artifacts",
     )
     new.add_argument("--initial-status", choices=("pending", "needs_revision"), default="pending")
