@@ -162,8 +162,9 @@ figures:
     clone_ok: false
     repro_output: figures/codetection_data_grid.pdf
     notes: >-
-      Needs ~/Data/Faber2026/dsa110/DSA_bursts waterfalls. Writes staging tree
-      only; promote via figure_review (never silent overwrite of manuscript PDF).
+      Needs separate ~/Data/Faber2026/chimefrb/CHIME_bursts and
+      ~/Data/Faber2026/dsa110/DSA_bursts waterfalls. Writes staging tree only;
+      promote via figure_review (never silent overwrite of manuscript PDF).
     producer:
       argv:
         - conda
@@ -179,6 +180,7 @@ figures:
     inputs:
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
       - scripts/jointmodel_triptych_manifest.yaml
+      - ~/Data/Faber2026/chimefrb/CHIME_bursts
       - ~/Data/Faber2026/dsa110/DSA_bursts
     outputs:
       - figure_review/staging/fig1_gallery/figures/codetection_data_grid.pdf
