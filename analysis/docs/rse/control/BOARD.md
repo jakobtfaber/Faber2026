@@ -136,16 +136,16 @@ Consensus.)
 
 ## §0 — Results provenance & organization (pre-manuscript)
 
-**STRATIFIED RESTRUCTURE (owner, 2026-07-19):** work proceeds bottom-up along
-the data DAG per verification-protocol **Tier 0** — L0 bytes → L1 derived
-inputs (per-burst **data cards**, hash-bound owner approval) → L2
-measurements → L3 composites → L4 claims. The route is wayfinder tickets
-**17 → 18 → 19 → 20 → 21 → 22 → 02** (certify bytes → DM redo → TOA redo →
-upchan rebuild → scattering re-anchor → scint campaign → ratification);
-master resume doc `specs/handoff-2026-07-19-stratified-restart.md`. The
-scint-remediation tasks previously listed under the campaigns lane are
-absorbed by tickets 18/20/22. No Ln issue opens before its L(n−1)
-certificates exist.
+**CURRENT CHIME INPUT ROUTE (owner, 2026-07-22):** the Zach preprocessing
+baseline passes nominal-grid restoration and source-mask handling. The owner
+clarified that the accepted diagnostic is before the bad-channel mask, so it
+does not approve final science inputs. Continue through controlled-spectrum
+review → acceptance contract → stable bandpass → frozen benchmark → cleaner
+comparison → blind validation → cleaning-boundary ratification → complete
+input remediation and campaign rerun → CHIME-method ratification. See
+[the resolved baseline](../wayfinder/tickets/16-build-verified-zach-chime-preprocessing-baseline.md)
+and [the remediation ticket](../wayfinder/tickets/17-remediate-scintillation-inputs-and-rerun.md).
+No science fit or claim is admitted before the linked gates pass.
 
 Owner directive 2026-07-18: before section work, establish one reliable view
 of what results exist, where they originated (scripts, pipeline pin, external
