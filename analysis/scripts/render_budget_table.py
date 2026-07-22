@@ -127,7 +127,7 @@ def render() -> str:
             "\\tablenotetext{u}{Position lies outside",
             "\\tablenotetext{h}{Boundary-sensitive galaxy halos are marginalized "
             "over photometry, photometric redshift, stellar-to-halo mass scatter, "
-            "and the modified-NFW virial-crossing condition.}\\n"
+            "and the modified-NFW virial-crossing condition.}\n"
             "\\tablenotetext{r}{Provisional internal host redshift; no citable "
             "published provenance is currently available.}\n"
             "\\tablenotetext{u}{Position lies outside",
