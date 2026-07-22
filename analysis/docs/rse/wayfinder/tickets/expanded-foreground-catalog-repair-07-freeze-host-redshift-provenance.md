@@ -34,9 +34,10 @@ coordinates match. No row has a host-galaxy identifier or row-level redshift
 uncertainty; only Hamilton and Chromatica have explicit row-level spectroscopy
 descriptions in the draft.
 
-No adopted redshift, verdict, budget flag, or Figure 3 artifact changed.
-Authority remains closed pending
-[Obtain the authoritative host-redshift ledger](expanded-foreground-catalog-repair-17-obtain-authoritative-host-redshift-ledger.md).
+No adopted redshift, verdict, budget flag, or Figure 3 artifact changed in this
+freeze. The later
+[Obtain the authoritative host-redshift ledger](expanded-foreground-catalog-repair-17-obtain-authoritative-host-redshift-ledger.md)
+records the owner's authority decision.
 
 Rebuild and fail-closed check:
 
