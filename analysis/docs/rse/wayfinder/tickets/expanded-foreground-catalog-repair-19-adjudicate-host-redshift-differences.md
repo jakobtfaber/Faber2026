@@ -3,10 +3,10 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: unassigned
-- Blocked by: [Repeat source-level redshift verification](expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md)
+- Blocked by: none
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: not covered by the standing delegation; created after `main` commit `33e9e1ce3570`
-- Triage: `blocked`
+- Triage: `ready-for-human`
 
 ## Question
 
@@ -18,3 +18,10 @@ JohndoeII's local blank versus the approved `0.5535`, and the Freya, Hamilton,
 Mahi, and Chromatica suffix differences. Record every adopted change at its
 source; do not alter candidate verdicts, budget flags, or Figure 3 in this
 decision ticket.
+
+Ticket 09's independent replay is complete and fail-closed. The current
+decision packet is narrower than the original minimum list: production already
+leaves Wilhelm blank and contains no JohndoeII registry candidate. Adjudicate
+Whitney `0.479` versus Law et al. (2024) `0.477958`, plus the Freya, Hamilton,
+and Chromatica identifier aliases. See
+[`research-foreground-source-verification-2026-07-22.md`](../../specs/research-foreground-source-verification-2026-07-22.md).
