@@ -1,0 +1,204 @@
+{
+  "anonymous": {
+    "admitted_rows": 115713,
+    "bundle_members": 618,
+    "bundle_sha256": "fed672e29c1d84ffd09f93de2487a1337fb722c02bd5dc718f7f97c1e593d32d",
+    "cells": 135,
+    "coverage_cells_independently_replayed": 36,
+    "guard_only_rows": 1516,
+    "manifest_sha256": "14321fb328e372b8df0537d9a445dec2ab1376c4b258dabaf92116152eb023a5",
+    "sightline_centers": {
+      "casey": {
+        "dec_deg": 70.67622222,
+        "ra_deg": 169.9835417
+      },
+      "chromatica": {
+        "dec_deg": 73.9,
+        "ra_deg": 312.619125
+      },
+      "hamilton": {
+        "dec_deg": 70.7927666667,
+        "ra_deg": 305.0371666667
+      },
+      "isha": {
+        "dec_deg": 70.3073888889,
+        "ra_deg": 71.411
+      },
+      "johndoeii": {
+        "dec_deg": 73.02590556,
+        "ra_deg": 335.97475
+      },
+      "oran": {
+        "dec_deg": 72.8272777778,
+        "ra_deg": 318.0448333333
+      },
+      "phineas": {
+        "dec_deg": 71.6956388889,
+        "ra_deg": 177.7813333333
+      },
+      "whitney": {
+        "dec_deg": 73.4908333333,
+        "ra_deg": 134.7205
+      },
+      "zach": {
+        "dec_deg": 72.8823272222,
+        "ra_deg": 310.199525
+      }
+    },
+    "sightlines": [
+      "casey",
+      "chromatica",
+      "hamilton",
+      "isha",
+      "johndoeii",
+      "oran",
+      "phineas",
+      "whitney",
+      "zach"
+    ],
+    "states": {
+      "matched": 37,
+      "outside_footprint": 67,
+      "unmatched": 31
+    }
+  },
+  "cadc_cfis": {
+    "http_status": 400,
+    "status": "access_denied"
+  },
+  "errors": [],
+  "independence": "separate replay using Python, Astropy, and NumPy; no producer modules imported",
+  "ok": true,
+  "protected": {
+    "ambiguous_shared_wise_groups": 242,
+    "exact_cone_rows": 20788,
+    "guard_only_rows": 5752,
+    "manifest_sha256": "43af38cc4e996b7890ea0858ef5a760c124e877825dc8866bc4221d3d02b347f",
+    "raw_rows": 26540,
+    "shared_wise_identifier_groups": 242,
+    "sightline_identities": {
+      "casey": {
+        "dec_deg": 70.67622222,
+        "ra_deg": 169.9835417,
+        "tns": "FRB 20240229A"
+      },
+      "chromatica": {
+        "dec_deg": 73.9,
+        "ra_deg": 312.619125,
+        "tns": "FRB 20240203A"
+      },
+      "hamilton": {
+        "dec_deg": 70.7927666667,
+        "ra_deg": 305.0371666667,
+        "tns": "FRB 20230913A"
+      },
+      "isha": {
+        "dec_deg": 70.3073888889,
+        "ra_deg": 71.411,
+        "tns": "FRB 20221113A"
+      },
+      "johndoeII": {
+        "dec_deg": 73.02590556,
+        "ra_deg": 335.97475,
+        "tns": "FRB 20230814B"
+      },
+      "oran": {
+        "dec_deg": 72.8272777778,
+        "ra_deg": 318.0448333333,
+        "tns": "FRB 20220506D"
+      },
+      "phineas": {
+        "dec_deg": 71.6956388889,
+        "ra_deg": 177.7813333333,
+        "tns": "FRB 20230307A"
+      },
+      "whitney": {
+        "dec_deg": 73.4908333333,
+        "ra_deg": 134.7205,
+        "tns": "FRB 20220310F"
+      },
+      "zach": {
+        "dec_deg": 72.8823272222,
+        "ra_deg": 310.199525,
+        "tns": "FRB 20220207C"
+      }
+    },
+    "sightlines": [
+      "casey",
+      "chromatica",
+      "hamilton",
+      "isha",
+      "johndoeII",
+      "oran",
+      "phineas",
+      "whitney",
+      "zach"
+    ]
+  },
+  "registry_replay": {
+    "available": true,
+    "budget_mismatches": [],
+    "duplicate_checks": [
+      {
+        "matches": true,
+        "nickname": "casey",
+        "separation_arcsec": 0.038813140440831874
+      },
+      {
+        "matches": true,
+        "nickname": "casey",
+        "separation_arcsec": 0.0066889443671797645
+      },
+      {
+        "matches": true,
+        "nickname": "casey",
+        "separation_arcsec": 0.012530261413586746
+      },
+      {
+        "matches": true,
+        "nickname": "phineas",
+        "separation_arcsec": 0.014595791263964876
+      },
+      {
+        "matches": true,
+        "nickname": "phineas",
+        "separation_arcsec": 0.0178018459593366
+      },
+      {
+        "matches": true,
+        "nickname": "phineas",
+        "separation_arcsec": 0.012768174319142817
+      },
+      {
+        "matches": true,
+        "nickname": "whitney",
+        "separation_arcsec": 0.12129172774294743
+      }
+    ],
+    "finite_host_rows": 49,
+    "input_sha256": {
+      "candidate_redshift_provenance.csv": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+      "census_duplicates.csv": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
+      "intervening_census_registry.csv": "f35dd8beb733b08dbb38894e5df6fc04af13fc731fd57c3f61dfc8441afd6fbc",
+      "ps1_strm_resolution.csv": "18947acafc02b9781c4ac9612b9570d02eedd46c0115c9f73b5f3d79ec2c354e"
+    },
+    "pipeline_commit": "f3c8d22a9088914e0179cfecf1ee4086777dc927",
+    "provenance_rows": 52,
+    "rows": 52,
+    "sightlines": [
+      "casey",
+      "chromatica",
+      "hamilton",
+      "isha",
+      "oran",
+      "phineas",
+      "whitney",
+      "zach"
+    ],
+    "verdict_mismatches": []
+  },
+  "roster_case_aliases": {
+    "johndoeii": "johndoeII"
+  },
+  "schema_version": 1
+}

@@ -97,10 +97,9 @@ independent numerical, provenance, and owner visual checks.
   hashes are frozen, with row-level uncertainty explicitly unavailable. Census
   adoption remains with the later adjudication ticket.
 - [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
-  — reopened after the closed corpus was found to use a sightline outside the
-  authoritative JohndoeII roster. The corrected 135-cell corpus contains
-  115,713 records and 1,516 separate guard-only rows and passes the producer
-  validator; independent review is still required.
+  — corrected to the authoritative JohndoeII roster. The corrected 135-cell
+  corpus contains 115,713 records and 1,516 separate guard-only rows; producer
+  validation and the separate ticket-16 replay both pass.
 - [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md)
   — froze nine authenticated uncapped WISE--PS1--STRM responses, 20,788 exact
   cone rows, every shared-WISE ambiguity, exact queries and job metadata, and a
@@ -111,16 +110,15 @@ independent numerical, provenance, and owner visual checks.
 
 The map remains open. Remaining strict dependency order:
 
-Ticket 15 is resolved. Ticket 14 is corrected but awaiting independent review.
+Tickets 14, 15, and 16 are resolved. The independent replay reproduced both
+corrected corpus layers, all 52 candidate-provenance identities, all 49
+finite-host verdicts and budget flags, and all seven duplicate separations.
 Next:
 
-1. Independently review the corrected ticket-14 roster and frozen evidence.
-2. Only after ticket 14 resolves, [independently replay both corpora](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
-2. After independent replay and the now-resolved host-source ticket,
-   [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
-3. After ticket 09 and the now-resolved physics-authority ticket,
+1. [Repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
+2. After ticket 09 and the now-resolved physics-authority ticket,
    [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
-4. Only after the Figure 3 gate resolves,
+3. Only after the Figure 3 gate resolves,
    [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
 
 ## Out of scope
