@@ -61,6 +61,7 @@ import argparse
 import csv
 import json
 import math
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -70,10 +71,16 @@ from scipy import integrate, interpolate, signal, stats
 
 import phineas_halo_crossing_probability as phineas_crossing
 
+# Reproducible PDF timestamp.  2026-07-22T08:27:00-07:00
+# Override with SOURCE_DATE_EPOCH for a different declared reproducibility stamp.
+if "SOURCE_DATE_EPOCH" not in os.environ:
+    os.environ["SOURCE_DATE_EPOCH"] = "1784734020"
+
 REPO = Path(__file__).resolve().parent.parent
 OUT_CSV = REPO / "scripts" / "dm_budget_uncertainty.csv"
 OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf"
 OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png"
+OUT_TABLE = REPO / "host_forward_model_table.tex"
 BUDGET_DATA = REPO / "pipeline" / "galaxies" / "foreground" / "budget_table_data.json"
 DM_CATALOG = REPO / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 SYSTEMS_CSV = REPO / "scripts" / "dm_budget_intervening_systems.csv"
@@ -151,6 +158,13 @@ UPPER_LIMIT = {
     "FRB 20220207C",
     "FRB 20220506D",
     "FRB 20221113A",
+    "FRB 20230814B",
+    "FRB 20230913A",
+    "FRB 20240203A",
+}
+
+# Host redshifts adopted internally but lacking a citable published provenance.
+PROVISIONAL_REDSHIFTS = {
     "FRB 20230814B",
     "FRB 20230913A",
     "FRB 20240203A",
@@ -668,6 +682,76 @@ def cluster_column_range(n=40_000):
     return dm
 
 
+def _write_host_forward_table(results: list[dict[str, Any]]) -> None:
+    """Write the generated tab:host-forward-model environment to a file.
+
+    The observer- and rest-frame percentiles are rounded, then the interval is
+    the difference of rounded percentiles.  This matches the convention used in
+    the printed stdout rows and keeps the table in sync with the figure CSV.
+    """
+    OUT_TABLE.parent.mkdir(parents=True, exist_ok=True)
+
+    rows: list[str] = []
+    for r in results:
+        o50, o16, o84 = (
+            round(r["dm_host_p50"]),
+            round(r["dm_host_p16"]),
+            round(r["dm_host_p84"]),
+        )
+        s50, s16, s84 = (
+            round(r["dm_host_rest_p50"]),
+            round(r["dm_host_rest_p16"]),
+            round(r["dm_host_rest_p84"]),
+        )
+        original_name = r["name"]
+        name = original_name
+        if original_name in UPPER_LIMIT:
+            name += r"\tablenotemark{u}"
+        z_field = f"${r['z']:.3f}$"
+        if original_name in PROVISIONAL_REDSHIFTS:
+            z_field += r"\tablenotemark{r}"
+        rows.append(
+            f"{name} & {z_field} & "
+            f"${o50}^{{+{o84 - o50}}}_{{-{o50 - o16}}}$ & "
+            f"${s50}^{{+{s84 - s50}}}_{{-{s50 - s16}}}$ & "
+            f"${r['p_host_neg']:.2f}$ \\\\"
+        )
+
+    lines = [
+        "% !! GENERATED FILE -- do not edit by hand.",
+        "%    Regenerate: python scripts/dm_budget_uncertainty.py",
+        "%    Values come from the same CSV that feeds fig:dm_host_posteriors.",
+        r"\begin{deluxetable}{lcccc}",
+        r"\tabletypesize{\footnotesize}",
+        r"\tablecaption{Forward-modeled host-DM posteriors for the nine "
+        r"redshift-constrained sightlines: observer-frame and rest-frame "
+        r"[$(1+z)\,\mathrm{DM_{host}}$] median with $16$th--$84$th-percentile "
+        r"interval, and $P(\mathrm{DM_{host}}<0)$. Sightlines marked "
+        r"\tablenotemark{u} lie outside the deep-imaging footprints "
+        r"(Table~\ref{tab:budget}); their intervening census is incomplete, "
+        r"so the listed host DM is an \emph{upper limit}. DM in "
+        r"$\mathrm{pc\,cm^{-3}}$.}",
+        r"\label{tab:host-forward-model}",
+        r"\tablehead{\colhead{Burst} & \colhead{$z$} & "
+        r"\colhead{$\mathrm{DM_{host}}$ (obs.)} & "
+        r"\colhead{$\mathrm{DM_{host}}$ (rest)} & "
+        r"\colhead{$P(\mathrm{DM_{host}}<0)$}}",
+        r"\startdata",
+        *rows,
+        r"\enddata",
+        r"\tablenotetext{r}{Provisional internal host redshift; no citable "
+        r"published provenance is currently available.}",
+        r"\tablenotetext{u}{Sightline outside the deep-imaging footprints; "
+        r"the intervening census is incomplete and $\mathrm{DM_{int}}$ is a "
+        r"floor, so the tabulated host DM (both frames) is an upper limit on "
+        r"the true host contribution.}",
+        r"\end{deluxetable}",
+        "",
+    ]
+    OUT_TABLE.write_text("\n".join(lines), encoding="utf-8")
+    print(f"wrote {OUT_TABLE.relative_to(REPO)}")
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -776,6 +860,7 @@ def main(argv: list[str] | None = None) -> int:
             f"${s50}^{{+{s84 - s50}}}_{{-{s50 - s16}}}$ & ${r['p_host_neg']:.2f}$ \\\\"
         )
 
+    _write_host_forward_table(results)
     _make_figure(results)
     return 0
 
