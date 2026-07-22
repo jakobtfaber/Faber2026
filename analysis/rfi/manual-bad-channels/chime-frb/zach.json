@@ -1,0 +1,82 @@
+{
+  "bad_row_ranges": [
+    {
+      "evidence": "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
+      "frequency_max_mhz": 722.4578857421875,
+      "frequency_min_mhz": 721.8231201171875,
+      "reason": "owner manual selection",
+      "start": 52695,
+      "stop": 52800
+    },
+    {
+      "evidence": "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
+      "frequency_max_mhz": 723.6358642578125,
+      "frequency_min_mhz": 722.8546142578125,
+      "reason": "owner manual selection",
+      "start": 52864,
+      "stop": 52993
+    },
+    {
+      "evidence": "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
+      "frequency_max_mhz": 738.0828857421875,
+      "frequency_min_mhz": 737.3077392578125,
+      "reason": "owner manual selection",
+      "start": 55232,
+      "stop": 55360
+    },
+    {
+      "evidence": "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
+      "frequency_max_mhz": 739.2547607421875,
+      "frequency_min_mhz": 738.8702392578125,
+      "reason": "owner manual selection",
+      "start": 55488,
+      "stop": 55552
+    },
+    {
+      "evidence": "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
+      "frequency_max_mhz": 740.0360107421875,
+      "frequency_min_mhz": 739.6514892578125,
+      "reason": "owner manual selection",
+      "start": 55616,
+      "stop": 55680
+    }
+  ],
+  "event": "zach",
+  "frequency_axis": {
+    "measured_row_count": 55744,
+    "path": "/data/Faber2026/evidence/zach-chime-rfi-review-correction-20260721/run-dm262.435903-1/products/zach_chime_freq.npy",
+    "row_count": 65536,
+    "sha256": "02c794745bd79ca235d1d3e18d46b2f43f7529616a5747ccab2a5db094a9cba2",
+    "source_valid_sha256": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e"
+  },
+  "instrument": "chime-frb",
+  "raw_source": {
+    "path": "/data/Faber2026/data/chime-frb/zach/singlebeam_210456524.h5",
+    "sha256": "215079a689c18b50a4b2cd8003529e34d531a326be677a86187be02e47d0f1a9"
+  },
+  "review": {
+    "editor_sha256": "07c196b2dfcb330604488e5299d6a2402989f6317827eb56ade85fc1da9a6aad",
+    "evidence": [
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_400_450.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_450_500.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_500_550.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_550_600.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_600_650.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_650_700.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_700_750.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_750_800.svg",
+      "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_review_700_750.svg",
+      "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz"
+    ],
+    "gui_interface_sha256": "67da7c68b5e631ab8e442aae470aa4aca387c2753bae5b99aba4448145e1674d",
+    "notes": "Owner approved the five exact manual ranges after reviewing the regenerated 700-750 MHz before/after dynamic spectrum and time-integrated spectrum; approval instruction recorded in the Codex session on 2026-07-22.",
+    "reviewed_at": "2026-07-22T10:21:28Z",
+    "reviewer": "Jakob Faber"
+  },
+  "schema_version": 1,
+  "source_product": {
+    "path": "/data/Faber2026/evidence/zach-chime-rfi-review-correction-20260721/run-dm262.435903-1/products/zach_chime_upchan.npy",
+    "sha256": "264f1e643f57012fce1385dcd7b6dfe6a12086f43eb1fa907be5540fb3359192"
+  },
+  "status": "owner_approved"
+}

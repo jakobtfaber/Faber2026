@@ -64,6 +64,9 @@ existing lane system. The map does not carry the execution itself.
 - [Build the verified Zach CHIME preprocessing baseline](tickets/16-build-verified-zach-chime-preprocessing-baseline.md)
   — explicit-mask channel restoration and migration preflight pass; current
   RFI cleaning is rejected, and science remains fail-closed pending validation.
+- [Review the RFI preservation limits on a controlled dynamic spectrum](tickets/rfi-validation-01a-review-preservation-dynamic-spectrum.md)
+  — automated candidates rejected; Zach CHIME/FRB now uses the hash-bound,
+  owner-approved five-range manual channel map as complete row authority.
 
 ## Not yet specified
 

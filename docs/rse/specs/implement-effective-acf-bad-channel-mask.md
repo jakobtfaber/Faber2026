@@ -12,8 +12,8 @@
 Implemented a fail-closed ACF mask boundary. The materialized mask is exactly
 `not source_valid OR owner_manual`; the pipeline verifies its two file hashes,
 frequency-value digest, event, instrument, approval evidence, row counts, and
-union arithmetic before use. Zach CHIME/FRB now requires the artifact and is
-therefore blocked while its map remains a draft.
+union arithmetic before use. The Zach CHIME/FRB artifact was owner-approved,
+materialized, and wired on 2026-07-22.
 
 ## Plan Adherence
 
@@ -39,8 +39,8 @@ already includes the configured expected hashes.
 - Added cache-time artifact revalidation.
 - Bypassed legacy statistical channel-row promotion when the verified artifact
   is marked authoritative; retained source and bandpass-validity masks remain.
-- Activated the required gate for Zach CHIME/FRB without inventing artifact
-  paths or hashes.
+- Activated the required gate for Zach CHIME/FRB; exact artifact paths and
+  hashes were added only after owner approval and materialization.
 
 ### Phase 3: Hardening and reproduction
 
@@ -99,9 +99,9 @@ UV_PROJECT_ENVIRONMENT="$repro_env" uv sync --frozen --extra nested --group test
 
 ## Remaining Work
 
-No implementation work remains. Owner approval of the current Zach draft is a
-separate scientific gate. Until approval and materialization, Zach ACF runs are
-correctly blocked.
+No mask implementation work remains. The Zach mask gate now passes with the
+approved artifact. A complete Zach ACF run still requires the standardized
+`zach_chime.npz` input, which was not present on h17 during this approval step.
 
 ## References
 

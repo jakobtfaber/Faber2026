@@ -33,8 +33,8 @@ the mask excludes exactly the union of its two authoritative components.
   approval before broadcasting the row mask.
 - An authoritative artifact bypasses legacy statistical channel-row promotion;
   source masks and later non-finite/bandpass-validity masks remain active.
-- Zach CHIME/FRB requires the artifact and remains blocked while its map is a
-  draft.
+- Zach CHIME/FRB requires the artifact; the owner-approved artifact was wired
+  on 2026-07-22 after this implementation plan completed.
 
 ## What We're NOT Doing
 
@@ -99,8 +99,8 @@ tolerance or regression baseline is involved.
 
 ### Manual Verification
 
-None for the mechanism. Owner approval of the five current Zach draft ranges is
-a separate scientific gate and remains pending.
+- [x] Owner approval of the five Zach ranges was recorded on 2026-07-22 against
+  the regenerated before/after review.
 
 ### Reproducibility & Correctness
 
@@ -116,9 +116,8 @@ tests check integration regressions.
 
 ## Migration Strategy
 
-Only Zach CHIME is activated now. After owner approval, materialize its
-artifact and add the two expected hashes to its config. Other events opt in as
-their maps are reviewed.
+Zach CHIME is activated with its owner-approved artifact and exact hashes.
+Other events opt in as their maps are reviewed.
 
 ## Risk Assessment
 

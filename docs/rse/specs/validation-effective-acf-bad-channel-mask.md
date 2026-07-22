@@ -4,7 +4,7 @@
 > `implement-effective-acf-bad-channel-mask.md` at parent `5f204398` and
 > pipeline implementation commit `4ac08c8` on 2026-07-22.
 
-## Overall Status: PASS — implementation validated; Zach approval pending
+## Overall Status: PASS — implementation and Zach artifact validated
 
 ## Implementation Status
 
@@ -13,8 +13,10 @@
 - Cache revalidation: complete.
 - Legacy statistical channel-row promotion: bypassed for authoritative maps.
 - Zach CHIME/FRB required gate: active.
-- Owner approval/materialization of the five current Zach draft ranges: not
-  part of this implementation and still pending.
+- Owner approval/materialization of the five Zach ranges: complete on
+  2026-07-22.
+- Effective union: 9,792 source-unavailable rows plus 490 manual rows, zero
+  overlap, 10,282 total bad rows, and 55,254 retained rows.
 
 ## Automated Verification Results
 
@@ -28,6 +30,12 @@
 - PASS — `git diff --check` in both repositories.
 - PASS — live Zach config gate: `ValueError: bad-channel mask requires
   mask_path and provenance_path`.
+- PASS — approved mask SHA-256:
+  `5de1bd08ff2ea0a3aa8b3ea37f609e6c7530ae14869d4d5e5361609c9adb8038`.
+- PASS — provenance SHA-256:
+  `6501fe1bb15a96629e80e6f60d8e206bc955adad144c0128f91b2237033087ee`.
+- PASS — real consumer replay included every source-unavailable and approved
+  manual row, retained 55,254 rows, and left every retained value unchanged.
 
 The shared `py312` environment lacks the declared optional `dynesty` package,
 causing four unrelated full-suite failures. All affected nested-evidence tests
@@ -66,12 +74,15 @@ input.
 - Both ACF preparation paths bypass the legacy automatic row masker when the
   verified mask is authoritative.
 
-## Manual Testing Required
+## Manual Testing
 
-- Review and approve or revise Zach’s five draft ranges.
-- Materialize the approved artifact on the analysis host.
-- Add its exact mask and provenance hashes to `zach_chime.yaml`.
-- Then inspect the first post-mask dynamic spectrum before accepting any ACF.
+- COMPLETE — owner reviewed and approved the regenerated Zach before/after
+  dynamic-spectrum artifact.
+- COMPLETE — approved map was materialized on h17 and exact hashes were added
+  to `zach_chime.yaml`.
+- COMPLETE — the real artifact was replayed through the ACF mask consumer.
+- PENDING OUTSIDE THIS ARTIFACT GATE — inspect the first full post-mask ACF run
+  after the standardized `zach_chime.npz` input is restored or rebuilt.
 
 ## Recommendations
 
