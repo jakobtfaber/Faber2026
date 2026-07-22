@@ -166,6 +166,15 @@ This matches the [official query documentation](https://www.cadc-ccda.hia-iha.nr
 users must log into CADC and belong to `CFIS-read`. Caltech institutional
 authentication alone is not evidence of that authorization.
 
+An authenticated follow-up at `2026-07-22T02:10:13Z` separated general CADC
+access from CFIS authorization. The local CADC proxy certificate for
+`/CN=jfaber_1ff/OU=cadc/O=hia/C=ca` is valid through
+`2026-08-20T02:45:02Z`, and a live read-only VOSpace listing succeeded. A live
+CADC Group Management Service check nevertheless returned false for membership
+in `CFIS-read`; the authenticated `youcat` query continued to return the same
+hidden-table response. The machine can access CADC, but this identity cannot
+read `cfht.cfiscat` until a group administrator grants `CFIS-read`.
+
 ### Owner acquisition step
 
 1. Log into CADC/CANFAR and confirm membership in `CFIS-read`; if absent,
