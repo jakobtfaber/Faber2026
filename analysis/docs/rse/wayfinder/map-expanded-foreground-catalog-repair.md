@@ -105,20 +105,29 @@ independent numerical, provenance, and owner visual checks.
   cone rows, every shared-WISE ambiguity, exact queries and job metadata, and a
   current authenticated CADC `access_denied` receipt for CFIS. Credentials and
   scientific authority fields are absent from the evidence.
+- [Repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md)
+  — all 52 verdicts, budget flags, and seven duplicate mappings replay, but
+  only 34/52 rows have complete current host-plus-candidate source verification.
+  Whitney's host value, seven Verdi identifier aliases, four omitted PS1-STRM
+  identities, and two manual extension identities keep the result fail-closed.
+  No registry authority or Figure 3 artifact changed.
 
 ## Open route
 
 The map remains open. Remaining strict dependency order:
 
-Tickets 14, 15, and 16 are resolved. The independent replay reproduced both
-corrected corpus layers, all 52 candidate-provenance identities, all 49
+Tickets 09, 14, 15, and 16 are resolved. The independent replays reproduced both
+corrected corpus layers, all 52 registry-to-provenance keys, all 49
 finite-host verdicts and budget flags, and all seven duplicate separations.
 Next:
 
-1. [Repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
-2. After ticket 09 and the now-resolved physics-authority ticket,
+1. [Adjudicate census host redshifts against the approved Verdi table](tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md),
+   including Whitney's Law et al. value and the three unresolved Verdi aliases.
+2. Separately freeze source identities for the four redshiftless PS1-STRM rows
+   and two manual extension rows, then rerun ticket 09's verifier.
+3. After those source repairs and the now-resolved physics-authority ticket,
    [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
-3. Only after the Figure 3 gate resolves,
+4. Only after the Figure 3 gate resolves,
    [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
 
 ## Out of scope
