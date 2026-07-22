@@ -32,8 +32,8 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 - [ ] ✋ Trust-ledger overhaul — lane-by-lane re-audit of the revocation
   waves; sets the citability bar everywhere
   ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md))
-- [ ] ✋ Fit re-validation contract ratification (legacy V1) — bar for any
-  re-fit to be citable ([wf-03](wayfinder/tickets/03-ratify-fit-retrust-contract.md))
+- [x] Fit re-validation contract ratification (legacy V1) — ratified with
+  scoped injection policy ([wf-03](wayfinder/tickets/03-ratify-fit-retrust-contract.md))
 - [ ] CHIME scattering-input lineage check (legacy V2) — do the dynamic
   spectra feeding the scattering fits share the gen-1 de-chirp defect?
 
@@ -68,7 +68,7 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 ### Scattering re-fit campaign
 - [ ] ✋ Scintillation-to-scattering coupling design closure (legacy A1)
   ([wf-04](wayfinder/tickets/04-close-scint-scattering-coupling-design.md))
-- [ ] ✋ Profile-component-count statistic: blocker or deferred (legacy A5)
+- [x] Profile-component-count statistic: deferred for this submission (legacy A5)
   ([wf-05](wayfinder/tickets/05-profile-component-statistic-blocker-decision.md))
 - [ ] Extended-medium (uniform-LOS) PBF kernel, β-coupled, per band (legacy A2)
 - [ ] Per-sightline geometry model selection, thin vs extended,
