@@ -21,5 +21,9 @@ discoverable by these sources (owner-facing wayfinder ticket, figure-review
 batch, ✋ board line, or PR). **A request that isn't in the queue doesn't
 exist.**
 
+Assignment does not remove a human-in-the-loop ticket from the owner queue.
+Assigned human-review tickets remain visible until resolved; assignment only
+records who is preparing evidence or coordinating the decision.
+
 (This doc is the tracked copy; the machine-local `CLAUDE.md`/`AGENTS.md`
 briefs mirror it.)

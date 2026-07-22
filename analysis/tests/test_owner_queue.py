@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 import subprocess
 import sys
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,7 +27,7 @@ def _write_ticket(path: Path, *, title: str, status: str, assignee: str) -> None
     )
 
 
-def test_owner_frontier_contains_only_open_unassigned_owner_tickets(tmp_path):
+def test_owner_frontier_keeps_open_hitl_tickets_even_when_assigned(tmp_path):
     from scripts.owner_queue import collect_wayfinder_frontier
 
     tickets = tmp_path / "tickets"
@@ -50,11 +52,9 @@ def test_owner_frontier_contains_only_open_unassigned_owner_tickets(tmp_path):
     )
     titles = {
         ticket.title
-        for ticket in collect_wayfinder_frontier(
-            tickets, owner_facing_only=True
-        )
+        for ticket in collect_wayfinder_frontier(tickets, owner_facing_only=True)
     }
-    assert titles == {"Open owner decision"}
+    assert titles == {"Open owner decision", "Claimed owner decision"}
 
 
 def test_owner_queue_cli_regenerates_from_authoritative_frontier(tmp_path):
@@ -77,3 +77,19 @@ def test_owner_queue_cli_regenerates_from_authoritative_frontier(tmp_path):
     assert "Decisions (wayfinder frontier, owner-facing)" in rendered
     assert "Obtain the authoritative host-redshift ledger" not in rendered
     assert "Not queried (`--offline`)" in rendered
+
+
+def test_owner_queue_queries_analysis_repository(monkeypatch):
+    from scripts import owner_queue
+
+    seen: list[str] = []
+
+    def fake_run(command, **_kwargs):
+        seen.extend(command)
+        return SimpleNamespace(returncode=0, stdout=json.dumps([]))
+
+    monkeypatch.setattr(owner_queue.shutil, "which", lambda _name: "/usr/bin/gh")
+    monkeypatch.setattr(owner_queue.subprocess, "run", fake_run)
+
+    assert owner_queue.collect_open_prs() == []
+    assert seen[seen.index("--repo") + 1] == "jakobtfaber/Faber2026-analysis"

@@ -1,7 +1,8 @@
 [controller]
 repo = "jakobtfaber/Faber2026-analysis"
 base_branch = "main"
-state_dir = "~/.local/state/Faber2026/wayfinder-controller"
+ticket_glob = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-*.md"
+state_dir = "~/.local/state/Faber2026-analysis/wayfinder-controller"
 worktree_root = "~/Developer/scratch/worktrees/Faber2026-analysis-wayfinder-auto"
 model = "gpt-5.5"
 reasoning_effort = "medium"
@@ -9,106 +10,174 @@ max_parallel = 4
 timeout_seconds = 14400
 
 [[task]]
-id = "fail-close-expanded-catalog"
+id = "set-expanded-crossmatch-contract"
 wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-01-fail-close-validation.md"
-branch = "codex/auto-fail-close-expanded-catalog"
-mode = "resolve"
-depends_on = []
-instructions = "Implement Phase 1 of docs/rse/specs/plan-expanded-foreground-catalog-repair.md. Fail-close the invalid validation, add the machine-readable failed gate and tests, preserve all findings as superseded evidence, then resolve the ticket only after acceptance checks pass."
-
-[[task]]
-id = "freeze-candidate-redshifts"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md"
-branch = "codex/auto-freeze-candidate-redshifts"
-mode = "resolve"
-depends_on = []
-instructions = "Freeze stable source identifiers and hashed source rows or query responses for every adopted candidate redshift. Preserve existing verdicts. Do not re-adjudicate a redshift or budget flag. Stop as blocked if a required source cannot be frozen."
-
-[[task]]
-id = "audit-results-library-conflicts"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/authority-16-adjudicate-results-library-byte-conflicts.md"
-branch = "codex/auto-audit-results-library-conflicts"
-mode = "review"
-depends_on = []
-expected_artifact = "docs/rse/specs/research-authority-16-results-library-byte-conflicts.md"
-instructions = "Produce exact manifests, byte-difference evidence, producing commits, consumers, trust states, recovery evidence, and a non-overwriting disposition with rollback packet for both real-byte conflicts. Do not move, relink, replace, or delete any bytes."
-
-[[task]]
-id = "correct-census-wording"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/08-correct-census-aperture-description.md"
-branch = "codex/auto-correct-census-wording"
-mode = "resolve"
-depends_on = []
-instructions = "Adopt the ticket's recommended cheap path: describe the frozen census as built, including its observed envelope and provenance-based eligibility logic. Do not rerun or change the census. Stop if the exact wording would materially change a claim."
-
-[[task]]
-id = "retire-stage-codes"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/12-retire-letter-number-stage-names.md"
-branch = "codex/auto-retire-stage-codes"
-mode = "resolve"
-depends_on = []
-instructions = "Add the complete legacy-code glossary and make CONTEXT.md pending work descriptive-first. Do not rewrite closed handoffs or archived history. Validate links and resolve the ticket."
-
-[[task]]
-id = "review-trust-ledger"
-wave = "blocker-first"
-ticket = "docs/rse/wayfinder/tickets/13-overhaul-trust-assessment.md"
-branch = "codex/auto-review-trust-ledger"
-mode = "review"
-depends_on = ["fail-close-expanded-catalog", "freeze-candidate-redshifts", "audit-results-library-conflicts"]
-expected_artifact = "docs/rse/specs/research-trust-ledger-overhaul-2026-07-20.md"
-instructions = "Produce a row-by-row evidence audit and exact recommended trust-state changes. Do not promote scientific trust or resolve the ticket. End with a completed owner review artifact."
-
-[[task]]
-id = "review-count-audit"
-wave = "blocker-first"
-ticket = "docs/rse/wayfinder/tickets/15-count-audit-remediation-standing-method.md"
-branch = "codex/auto-review-count-audit"
-mode = "review"
-depends_on = ["fail-close-expanded-catalog", "freeze-candidate-redshifts", "audit-results-library-conflicts"]
-expected_artifact = "docs/rse/specs/research-count-audit-remediation-2026-07-20.md"
-instructions = "Run the count-method comparisons and prepare an exact decision packet. Do not adopt morphology-dependent count changes or resolve the ticket. Stop at owner visual review."
-
-[[task]]
-id = "review-rfi-preservation-limits"
-wave = "blocker-first"
-ticket = "docs/rse/wayfinder/tickets/rfi-validation-01a-review-preservation-dynamic-spectrum.md"
-branch = "codex/auto-review-rfi-preservation-limits"
-mode = "review"
-depends_on = []
-expected_artifact = "docs/rse/specs/research-rfi-preservation-limits-review.md"
-instructions = "Build the controlled diagnostic review artifact requested by the ticket using only synthetic interference and known-truth injection data. Bind inputs, code, environment, and output hashes. Do not open sealed test data, validate a cleaner, or resolve the ticket. Stop at the owner visual gate with a compact decision packet."
-
-[[task]]
-id = "resolve-expanded-crossmatch-contract"
-wave = "blocker-first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md"
 branch = "codex/auto-resolve-expanded-crossmatch-contract"
 mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
 depends_on = ["fail-close-expanded-catalog"]
-instructions = "Implement the ticket's already-recorded crossmatch and quality contract, including deterministic selection, ambiguity handling, evidence fields, normalized fixtures, and focused tests. Preserve scientific authority fields. Resolve only when acceptance checks pass."
+instructions = "Implement the recorded deterministic crossmatch and quality contract without changing scientific authority fields. Resolve only after the ticket checks pass."
 
 [[task]]
-id = "review-technical-robustness-dispositions"
-wave = "blocker-first"
-ticket = "docs/rse/wayfinder/tickets/10-disposition-technical-review-robustness-items.md"
-branch = "codex/auto-review-technical-robustness-dispositions"
-mode = "review"
-depends_on = []
-expected_artifact = "docs/rse/specs/research-technical-review-robustness-dispositions.md"
-instructions = "Prepare the ticket's per-item evidence table and recommended in, out, or defer-with-caveat disposition. Use standing delegated authority for recommendations. Do not execute adopted science changes or resolve the ticket; batch unresolved owner scientific decisions into one minimal packet."
+id = "set-expanded-physics-authority"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md"
+branch = "codex/auto-set-expanded-physics-authority"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["set-expanded-crossmatch-contract"]
+instructions = "Implement the ticket's stellar-mass, halo-mass, and radius authority after the crossmatch contract resolves. Keep classification and budget authority unchanged."
 
 [[task]]
-id = "review-coauthor-candidates"
-wave = "blocker-first"
-ticket = "docs/rse/wayfinder/tickets/11-prune-coauthor-list.md"
-branch = "codex/auto-review-coauthor-candidates"
-mode = "review"
+id = "set-expanded-figure3-gate"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md"
+branch = "codex/auto-set-expanded-figure3-gate"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["set-expanded-physics-authority", "repeat-expanded-redshift-verification"]
+instructions = "Implement the Figure 3 regeneration gate only after physics authority and repeated redshift verification resolve. Do not promote Figure 3."
+
+[[task]]
+id = "set-expanded-independent-validation"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md"
+branch = "codex/auto-set-expanded-independent-validation"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["set-expanded-figure3-gate"]
+instructions = "Implement the independent-validation gate after the Figure 3 gate resolves. Do not self-certify or promote scientific trust."
+
+[[task]]
+id = "repeat-expanded-redshift-verification"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md"
+branch = "codex/auto-repeat-expanded-redshift-verification"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["source-zach-whitney-host-redshifts", "replay-nine-sightline-query-corpus"]
+instructions = "Repeat source-level redshift verification after the host sources and independent query replay resolve. Preserve existing verdicts until separately adjudicated."
+
+[[task]]
+id = "freeze-anonymous-query-corpus"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
+branch = "codex/auto-freeze-anonymous-query-corpus"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["set-nine-sightline-search-contract"]
+instructions = "Freeze the anonymous nine-sightline query corpus under the resolved search contract. Preserve raw evidence and fail closed on missing coverage."
+
+[[task]]
+id = "freeze-protected-query-evidence"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md"
+branch = "codex/auto-freeze-protected-query-evidence"
+mode = "resolve"
+execution = "hitl"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["set-nine-sightline-search-contract"]
+instructions = "Owner-facing protected-query evidence gate. The controller records it but never spawns it."
+
+[[task]]
+id = "replay-nine-sightline-query-corpus"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md"
+branch = "codex/auto-replay-nine-sightline-query-corpus"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["freeze-anonymous-query-corpus", "freeze-protected-query-evidence"]
+instructions = "Independently replay the complete anonymous and protected nine-sightline corpus. Stop on missing evidence or disagreement."
+
+[[task]]
+id = "source-zach-whitney-host-redshifts"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md"
+branch = "codex/auto-host-redshifts"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
 depends_on = []
-expected_artifact = "docs/rse/specs/research-coauthor-candidate-packet.md"
-instructions = "Build the candidate coauthor overlap and ordering evidence from the named source lists, including affiliation and identifier gaps. Do not add, remove, rank, or contact personnel and do not edit auth.tex. Stop at the owner personnel gate with one compact candidate packet."
+instructions = "Source and freeze Zach and Whitney host-redshift evidence without re-adjudicating either value."
+
+[[task]]
+id = "adjudicate-host-redshift-differences"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md"
+branch = "codex/auto-adjudicate-host-redshifts"
+mode = "resolve"
+execution = "hitl"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["repeat-expanded-redshift-verification"]
+instructions = "Owner-facing host-redshift adjudication. The controller records it but never spawns it."
+
+[[history]]
+id = "fail-close-expanded-catalog"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-01-fail-close-validation.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "verify-expanded-redshift-verdicts"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-host-redshift-provenance"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md"
+execution = "hitl"
+depends_on = ["verify-expanded-redshift-verdicts"]
+status = "resolved"
+
+[[history]]
+id = "freeze-candidate-redshift-provenance"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md"
+execution = "afk"
+depends_on = ["verify-expanded-redshift-verdicts"]
+status = "resolved"
+
+[[history]]
+id = "restore-knowledge-base-launcher"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-10-restore-knowledge-base-launcher.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "resolve-zach-redshift-discrepancy"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-11-resolve-zach-intercatalog-redshift.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "expand-nine-sightline-catalogs"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-12-expand-nine-sightline-catalogs.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "set-nine-sightline-search-contract"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "obtain-authoritative-host-redshift-ledger"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-17-obtain-authoritative-host-redshift-ledger.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
