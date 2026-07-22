@@ -2,6 +2,8 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: open
+- Resolution gate: pass-only
+- Gate outcome: pending
 - Assignee: —
 - Blocked by: [Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -19,5 +21,6 @@ commands. Predeclare stability limits across time halves and protected broad
 frequency slices, and show the residual response without hiding missing data.
 
 Resolution requires the frozen model to pass the accepted stability limits on
-training and validation inputs. A no-go keeps the benchmark blocked. Bandpass
-qualification neither validates RFI removal nor authorizes a science fit.
+training and validation inputs. A no-go records `Gate outcome: no-go` but keeps
+this ticket open, so the benchmark remains blocked. Bandpass qualification
+neither validates RFI removal nor authorizes a science fit.

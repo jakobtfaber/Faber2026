@@ -64,3 +64,36 @@ def test_chime_ratification_waits_for_remediated_campaign_review():
     assert "17-remediate-scintillation-inputs-and-rerun.md" in ratification
     assert "rfi-validation-05-ratify-cleaning-boundary.md" in remediation
     assert "owner review" in remediation.lower()
+
+
+def test_no_go_outcomes_cannot_clear_pass_only_route_gates():
+    guarded_links = {
+        "rfi-validation-02-build-frozen-benchmark.md": (
+            "rfi-validation-01b-stabilize-bandpass-model.md",
+            "bandpass",
+        ),
+        "rfi-validation-04-blind-validate-cleaner.md": (
+            "rfi-validation-03-compare-and-choose-cleaner.md",
+            "cleaner comparison",
+        ),
+        "17-remediate-scintillation-inputs-and-rerun.md": (
+            "rfi-validation-05-ratify-cleaning-boundary.md",
+            "cleaning boundary",
+        ),
+    }
+    for downstream, (upstream, label) in guarded_links.items():
+        upstream_text = ticket(upstream)
+        downstream_text = ticket(downstream)
+        assert "- Resolution gate: pass-only" in upstream_text, label
+        assert "- Gate outcome: pending" in upstream_text, label
+        assert f"]({upstream}) (requires `pass`)" in downstream_text, label
+
+
+def test_recovered_cluster_redshifts_have_deterministic_classification():
+    contract = ticket(
+        "expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md"
+    )
+    assert "search_geometry_redshift_source" in contract
+    assert re.search(r"catalog or\s+separately sourced", contract)
+    assert "same frozen redshift evidence" in contract
+    assert "conflicting recovered redshifts" in contract
