@@ -1,0 +1,1 @@
+SELECT TOP 1 ID, u_ALPHA_J2000, u_DELTA_J2000 FROM cfht.cfiscat
