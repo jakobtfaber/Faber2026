@@ -3,7 +3,7 @@ MAIN := main
 UV ?= uv
 FABER2026_ROOT := $(CURDIR)
 
-.PHONY: all clean watch check-state test-science figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
+.PHONY: all clean watch check-state test-science figures figure-review-status figure-review-next kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
 
 all: $(MAIN).pdf
 
@@ -33,6 +33,12 @@ test-science: check-state
 figures:
 	FABER2026_ROOT="$(FABER2026_ROOT)" \
 		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
+
+figure-review-status:
+	$(MAKE) -C analysis figure-review-status MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
+
+figure-review-next:
+	$(MAKE) -C analysis figure-review-next MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
 
 kb-index:
 	$(MAKE) -C analysis kb-index MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
