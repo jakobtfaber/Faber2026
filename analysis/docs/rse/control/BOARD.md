@@ -66,6 +66,13 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   h17-side tooling (legacy B6)
 
 ### Scattering re-fit campaign
+- [x] Audit the deprecated Zach C2D4 failure; old panel remains hidden
+  ([audit ticket](../wayfinder/tickets/joint-scattering-controlled-rerun-01-audit-deprecated-zach-c2d4.md))
+- [x] Land the clean, seeded, provenance-complete joint-fit runner
+  ([runner ticket](../wayfinder/tickets/joint-scattering-controlled-rerun-02-build-seeded-runner.md))
+- [ ] Independently reproduce Oran C1D1, JohnDoeII C2D2, and Zach C2D4;
+  withhold every panel until its reproduction gate passes
+  ([controlled-rerun plan](../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md))
 - [ ] ✋ Scintillation-to-scattering coupling design closure (legacy A1)
   ([wf-04](wayfinder/tickets/04-close-scint-scattering-coupling-design.md))
 - [x] Profile-component-count statistic: deferred for this submission (legacy A5)
