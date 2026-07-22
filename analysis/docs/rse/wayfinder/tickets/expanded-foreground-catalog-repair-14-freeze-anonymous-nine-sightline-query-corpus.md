@@ -39,9 +39,9 @@ count/pagination evidence, and SHA-256 hashes. Its SHA-256 is
 The manifest binds a deterministic 552-member evidence bundle with SHA-256
 `7db3e8b2ba5d85cb3ef7e8a9bd31864e7c1e5241ee5e520f29526546d71ece8d`.
 
-The terminal states are 37 `matched`, 41 `unmatched`, and 57
-`outside_footprint`; none is access-denied, query-error, truncated, or
-overflowed. XMM-Newton, Chandra, and Swift source queries were coverage-gated.
+The current 37 `matched`, 41 `unmatched`, and 57 `outside_footprint` states are
+provisional. Broad pointing-center cones and catalog-row presence are not
+coverage gates. They cannot be promoted to terminal classifications.
 The exact eROSITA-DE public boundary puts all nine positions outside both
 public eRASS1 products. The cluster route fixes the complete official bulk
 catalogue and inclusive 5-proper-Mpc Planck18 calculation with no angular
@@ -52,8 +52,12 @@ repaired. Legacy DR10, XMM-Newton, Chandra, and Swift coverage evidence must be
 regenerated from official exposure pixels or footprint polygons before closure;
 catalog-row presence and broad pointing-center cones are not coverage evidence.
 
-Focused producer tests pass (`23 passed`), and the byte-level validator passes
-all 135 cells. Full evidence and primary-source links are in
+The repaired producer rejects those proxy methods. It requires Legacy DR10
+official NEXP positive pixels, XMM-Newton XSA footprint polygons, and Chandra
+CSC ObsCore polygons. Swift fails closed as `coverage_unknown` unless official
+XRT exposure maps are supplied and evaluated. Existing byte and admission
+evidence remains frozen; exact coverage evidence must be regenerated before
+closure. Full evidence and primary-source links are in
 [`research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md`](../../specs/research-nine-sightline-anonymous-catalog-corpus-2026-07-22.md).
-No scientific or manuscript authority changed. Ticket 16 remains the separate
-independent replay gate.
+No scientific or manuscript authority changed. Ticket 16 depends on closure of
+this ticket and ticket 15, then performs the separate independent replay.

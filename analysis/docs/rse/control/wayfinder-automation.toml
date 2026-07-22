@@ -18,7 +18,7 @@ mode = "resolve"
 execution = "afk"
 repo = "jakobtfaber/Faber2026-analysis"
 depends_on = ["set-nine-sightline-search-contract"]
-instructions = "Replace Legacy DR10 and X-ray coverage proxies with exact official footprints or exposure maps; preserve the repaired exact 15-arcminute admission split."
+instructions = "Replace Legacy DR10 proxies with official NEXP positive pixels, XMM with XSA footprint_fov polygons, and Chandra with CSC s_region polygons. Keep Swift coverage_unknown unless official XRT exposure maps are evaluated. Preserve exact 15-arcminute admission and separate 15.0-15.1 guard evidence."
 
 [[task]]
 id = "set-expanded-figure3-gate"

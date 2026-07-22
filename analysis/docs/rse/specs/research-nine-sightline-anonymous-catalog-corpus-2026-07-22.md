@@ -2,7 +2,7 @@
 
 Date: 2026-07-22  
 Scope: execution evidence for Wayfinder ticket 14  
-Verdict: **producer corpus complete; independent replay remains separate**
+Verdict: **fail closed; admission evidence repaired, exact coverage regeneration incomplete**
 
 ## Authority boundary
 
@@ -50,7 +50,10 @@ There is no finite angular fallback.
   identifies the 930,203-source main catalogue and 12,247-row primary cluster
   catalogue. The [DR1 data-rights page](https://erosita.mpe.mpg.de/dr1/)
   supplies the exact public western-hemisphere longitude boundary used here.
-- XMM-Newton, Chandra, and Swift exposure and source metadata: HEASARC TAP.
+- XMM-Newton source metadata: HEASARC TAP; exact footprints: XSA TAP.
+- Chandra source metadata: HEASARC TAP; exact polygons: CSC ObsCore TAP.
+- Swift source metadata: HEASARC TAP. Exact coverage requires official XRT
+  exposure maps; pointing metadata is not coverage evidence.
 - PS1--STRM v1: [official MAST bulk archive](https://archive.stsci.edu/hlsps/ps1-strm/)
   and [published column schema](https://archive.stsci.edu/hlsps/ps1-strm/hlsp_ps1-strm_ps1_gpc1_all_multi_v1_readme.txt).
 
@@ -69,15 +72,16 @@ shard is not in this repository: its size and SHA-256 were verified during
 extraction, while the repository freezes and validates the derived per-sightline
 canonical bytes.
 
-## Frozen result
+## Frozen admission result; provisional coverage result
 
-The completed manifest is
+The current manifest is
 [`corpus-manifest.json`](evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22/corpus-manifest.json)
 (SHA-256 `d6c9847979ffbc5ee4b431ef657b0193d26ac0ffb2b294b4b4ae30f18ad9f13e`).
 It binds 135 cells and 109,117 admitted records plus 1,474 separate guard-only
-records: 37 cells are `matched`, 41
-are `unmatched`, and 57 are `outside_footprint`. None is ambiguous,
-access-denied, query-error, truncated, or overflowed.
+records. Its 37 `matched`, 41 `unmatched`, and 57 `outside_footprint`
+classifications are provisional. Legacy Survey, XMM-Newton, Chandra, and Swift
+coverage was inferred from superseded proxies. These counts are not a completed
+coverage corpus and cannot feed ticket 16.
 
 All 552 byte-evidence members are stored without alteration in deterministic
 `evidence-bundle.tar.gz`, SHA-256
@@ -85,31 +89,34 @@ All 552 byte-evidence members are stored without alteration in deterministic
 The validator reads each manifest path directly from that bundle and checks its
 member hash, while the top-level manifest also checks the bundle hash.
 
-The corpus contains 975 DESI DR1 rows, 18,608 Gaia DR3 rows, 701 LoTSS DR3
-rows, 142 VLASS rows, 88,687 PS1--STRM rows, and four Swift rows. SDSS DR19 and
+The frozen admission evidence contains 975 DESI DR1 rows, 18,608 Gaia DR3 rows, 701 LoTSS DR3
+rows, 142 VLASS rows, and 88,687 PS1--STRM rows. The four Swift rows and all
+Legacy Survey and X-ray matched/unmatched/outside classifications remain provisional. SDSS DR19 and
 LAMOST DR11 returned no rows. J-PLUS and miniJPAS are outside footprint for all
 nine positions. Legacy Survey DR10 coverage is outside for six positions and
 inside with no photo-redshift rows for three. All nine positions are outside
 the exact eROSITA-DE public half-sky for both eRASS1 products.
 
-Every cell freezes exact query text, release, UTC retrieval time, coverage,
+Every cell freezes query text, release, UTC retrieval time, provisional coverage,
 native response bytes or a canonical PS1 subset, normalized rows, stable source
 identifiers, exact separations, native flags and uncertainties, count or
 pagination evidence, and SHA-256 hashes. XMM-Newton, Chandra, and Swift source
 queries ran only after separate exposure-pointing queries; outside cells retain
 the skipped source query and coverage bytes.
 
-The validator reads every canonical snapshot and independently checks cell
+The validator reads every canonical snapshot and checks cell
 identity, row count, identifier, native record, exact spherical separation,
 deterministic ordering, guard-ring count, status, release, count response,
 coverage evidence, and hashes. Focused tests cover inclusive 15-arcminute and
 5-proper-Mpc boundaries, Planck18 calculation, missing cluster redshift,
 overflow, count mismatch, and byte tampering.
 
-The exact admission repair is complete. Ticket 14 remains open until official
-exposure pixels or footprint polygons replace the Legacy DR10 and X-ray
-pointing proxies. Ticket 16 remains the separate producer-independent replay
-gate.
+The exact admission repair is complete. Ticket 14 remains open. The repaired
+producer now requires official Legacy DR10 NEXP positive-exposure pixels,
+XMM-Newton XSA `footprint_fov` polygons, and Chandra CSC `s_region` polygons.
+Swift is `coverage_unknown` unless exact official XRT exposure maps are supplied
+and evaluated. Ticket 16 is blocked by both ticket 14 and protected-evidence
+ticket 15.
 
 ## Coverage repair routes
 

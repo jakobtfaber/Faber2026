@@ -25,6 +25,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import NamedTuple
@@ -62,7 +63,7 @@ SIGHTLINE_COORDS = {
     "casey": (169.9835417, 70.67622222),
 }
 TERMINAL_STATUSES = {"matched", "unmatched", "outside_footprint", "ambiguous"}
-UNRESOLVED_STATUSES = {"access_denied", "query_error"}
+UNRESOLVED_STATUSES = {"access_denied", "coverage_unknown", "query_error"}
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 PS1_STRM_COLUMNS = (
     "objID",
@@ -297,8 +298,10 @@ QUERY_CONFIG = {
 
 COVERAGE_CONFIG = {
     "legacy_dr10_photoz": {
-        "table": "ls_dr10.tractor",
-        "kind": "catalog",
+        "table": "ls_dr10.bricks",
+        "kind": "legacy_nexp",
+        "authority_url": "https://www.legacysurvey.org/dr10/files/",
+        "image_root": "https://portal.nersc.gov/cfs/cosmo/data/legacysurvey/dr10/north/coadd",
     },
     "jplus_dr3": {
         "table": "ivoa.ObsCore",
@@ -325,19 +328,22 @@ COVERAGE_CONFIG = {
         "authority_url": "https://erosita.mpe.mpg.de/dr1/",
     },
     "xmm_newton_exposure": {
-        "table": "xmmmaster",
-        "kind": "pointing",
-        "radius_deg": 1.0,
+        "table": "xsa.v_public_observations",
+        "kind": "tap_polygon",
+        "endpoint": "https://nxsa.esac.esa.int/tap-server/tap/sync",
+        "region_column": "footprint_fov",
+        "id_column": "observation_id",
     },
     "chandra_exposure": {
-        "table": "chanmaster",
-        "kind": "pointing",
-        "radius_deg": 1.0,
+        "table": "ivoa.ObsCore",
+        "kind": "stcs_polygon",
+        "endpoint": "https://cda.cfa.harvard.edu/csc2tap/sync",
+        "region_column": "s_region",
+        "id_column": "obs_id",
     },
     "swift_exposure": {
-        "table": "swiftmastr",
-        "kind": "pointing",
-        "radius_deg": 1.0,
+        "kind": "official_exposure_maps_required",
+        "authority_url": "https://www.swift.ac.uk/2SXPS/",
     },
 }
 
@@ -600,7 +606,7 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
             errors.append(f"{prefix}: unresolved status {status}")
         elif status not in TERMINAL_STATUSES:
             errors.append(f"{prefix}: invalid status {status}")
-        if cell.get("coverage") not in {"inside", "outside", "not_applicable"}:
+        if cell.get("coverage") not in {"inside", "outside", "unknown", "not_applicable"}:
             errors.append(f"{prefix}: coverage state missing or invalid")
         if not isinstance(cell.get("exact_query"), str) or not cell["exact_query"].strip():
             errors.append(f"{prefix}: exact query missing")
@@ -742,8 +748,22 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
                     errors.append(f"{label}: invalid geometry fields")
 
         if service.key in COVERAGE_CONFIG:
+            coverage_config = COVERAGE_CONFIG[service.key]
             if cell.get("coverage_checked") is not True:
                 errors.append(f"{prefix}: required coverage not checked")
+            expected_method = {
+                "legacy_nexp": "legacy_dr10_official_nexp_positive_pixels",
+                "tap_polygon": "tap_polygon",
+                "stcs_polygon": "stcs_polygon",
+            }.get(coverage_config["kind"])
+            if expected_method and cell.get("coverage_method") != expected_method:
+                errors.append(f"{prefix}: exact official coverage method missing or superseded")
+            if (
+                coverage_config["kind"] == "official_exposure_maps_required"
+                and status in TERMINAL_STATUSES
+                and cell.get("coverage_method") != "swift_official_exposure_maps"
+            ):
+                errors.append(f"{prefix}: Swift terminal state lacks exact official exposure-map evidence")
             coverage_path = _safe_evidence_path(
                 evidence_root,
                 cell.get("coverage_evidence_path"),
@@ -795,6 +815,26 @@ def application_response_error(body: bytes) -> str | None:
     if b"QUERY_STATUS" in normalized and b'VALUE="ERROR"' in normalized:
         return "TAP query status ERROR"
     return None
+
+
+def application_response_overflow(body: bytes) -> bool:
+    """Read TAP QUERY_STATUS structurally; XML whitespace/quotes are irrelevant."""
+    if not body.lstrip().startswith(b"<"):
+        return False
+    try:
+        root = ET.fromstring(body)
+    except ET.ParseError:
+        return False
+    for element in root.iter():
+        if element.tag.rsplit("}", 1)[-1].upper() != "INFO":
+            continue
+        attributes = {key.rsplit("}", 1)[-1].upper(): value for key, value in element.attrib.items()}
+        if (
+            attributes.get("NAME", "").strip().upper() == "QUERY_STATUS"
+            and attributes.get("VALUE", "").strip().upper() == "OVERFLOW"
+        ):
+            return True
+    return False
 
 
 def _probe_request(service: Service) -> urllib.request.Request:
@@ -970,13 +1010,19 @@ def coverage_queries(service: Service, sightline: str) -> tuple[str, str] | None
     config = COVERAGE_CONFIG.get(service.key)
     if config is None:
         return None
-    if config["kind"] == "erass1_german_half":
+    if config["kind"] in {
+        "erass1_german_half",
+        "legacy_nexp",
+        "official_exposure_maps_required",
+        "stcs_polygon",
+        "tap_polygon",
+    }:
         return None
     ra, dec = SIGHTLINE_COORDS[sightline]
     table = config["table"]
-    if config["kind"] == "region":
+    if config["kind"] in {"region", "tap_polygon"}:
         predicate = (
-            f"1=INTERSECTS(s_region,CIRCLE('ICRS',{ra:.12f},{dec:.12f},"
+            f"1=INTERSECTS({config.get('region_column', 's_region')},CIRCLE('ICRS',{ra:.12f},{dec:.12f},"
             f"{GUARD_RADIUS_ARCMIN / 60.0:.12f}))"
         )
     elif config["kind"] == "catalog":
@@ -984,6 +1030,318 @@ def coverage_queries(service: Service, sightline: str) -> tuple[str, str] | None
     else:
         predicate = _cone_predicate("ra", "dec", ra, dec, float(config["radius_deg"]))
     return f"SELECT * FROM {table} WHERE {predicate}", f"SELECT COUNT(*) AS row_total FROM {table} WHERE {predicate}"
+
+
+class CoverageUnavailable(RuntimeError):
+    """Exact official exposure evidence was unavailable; never infer coverage."""
+
+
+def _tap_request_to(endpoint: str, query: str, output_format: str = "votable") -> urllib.request.Request:
+    data = urllib.parse.urlencode(
+        {
+            "REQUEST": "doQuery",
+            "LANG": "ADQL",
+            "FORMAT": output_format,
+            "MAXREC": 1_000_000,
+            "QUERY": query,
+        }
+    ).encode()
+    return urllib.request.Request(endpoint, data=data)
+
+
+def _coverage_artifact(root: Path, sightline: str, service: Service, body: bytes) -> tuple[Path, str]:
+    path = Path("coverage") / sightline / f"{service.key}.evidence.gz"
+    sha, _ = _archive_bytes(root / path, body)
+    return path, sha
+
+
+def _deterministic_tar(members: dict[str, bytes]) -> bytes:
+    output = io.BytesIO()
+    with tarfile.open(fileobj=output, mode="w", format=tarfile.PAX_FORMAT) as archive:
+        for name, body in sorted(members.items()):
+            info = tarfile.TarInfo(name)
+            info.size = len(body)
+            info.mtime = 0
+            info.uid = info.gid = 0
+            info.uname = info.gname = ""
+            archive.addfile(info, io.BytesIO(body))
+    return output.getvalue()
+
+
+def _legacy_nexp_bundle(brick_body: bytes, images: dict[str, bytes]) -> bytes:
+    hashes = {name: sha256_bytes(body) for name, body in images.items()}
+    metadata = {
+        "format": "faber2026.legacy-dr10-nexp-replay.v1",
+        "brick_index_sha256": sha256_bytes(brick_body),
+        "image_sha256": hashes,
+    }
+    return _deterministic_tar(
+        {
+            "brick-index.response": brick_body,
+            "metadata.json": json.dumps(metadata, sort_keys=True, separators=(",", ":")).encode() + b"\n",
+            **{f"nexp/{name}": body for name, body in images.items()},
+        }
+    )
+
+
+def replay_legacy_nexp_bundle(bundle: bytes, ra: float, dec: float) -> tuple[bool, int]:
+    """Verify and replay a self-contained official NEXP evidence bundle offline."""
+    from astropy.io import fits
+    from astropy.wcs import WCS
+    from astropy.coordinates import SkyCoord
+    import astropy.units as u
+    import numpy as np
+
+    with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:") as archive:
+        names = [member.name for member in archive.getmembers() if member.isfile()]
+        if len(names) != len(set(names)) or any(Path(name).is_absolute() or ".." in Path(name).parts for name in names):
+            raise ValueError("unsafe or duplicate NEXP evidence member")
+        bodies = {}
+        for name in names:
+            handle = archive.extractfile(name)
+            if handle is None:
+                raise ValueError(f"missing NEXP evidence member {name}")
+            bodies[name] = handle.read()
+    metadata = json.loads(bodies.pop("metadata.json"))
+    brick_body = bodies.pop("brick-index.response")
+    if metadata.get("format") != "faber2026.legacy-dr10-nexp-replay.v1":
+        raise ValueError("wrong NEXP evidence format")
+    if sha256_bytes(brick_body) != metadata.get("brick_index_sha256"):
+        raise ValueError("NEXP brick-index byte hash mismatch")
+    expected = metadata.get("image_sha256")
+    actual_names = {name.removeprefix("nexp/") for name in bodies if name.startswith("nexp/")}
+    if not isinstance(expected, dict) or actual_names != set(expected):
+        raise ValueError("NEXP image inventory mismatch")
+    radius = GUARD_RADIUS_ARCMIN / 60.0
+    center = SkyCoord(ra * u.deg, dec * u.deg)
+    positive_pixels = 0
+    for name in sorted(expected):
+        body = bodies[f"nexp/{name}"]
+        if sha256_bytes(body) != expected[name]:
+            raise ValueError(f"NEXP image byte hash mismatch: {name}")
+        with fits.open(io.BytesIO(body), memmap=False) as hdus:
+            hdu = next(hdu for hdu in hdus if getattr(hdu, "data", None) is not None)
+            data = np.asarray(hdu.data)
+            yy, xx = np.nonzero(data > 0)
+            if len(xx):
+                sky = WCS(hdu.header).pixel_to_world(xx, yy)
+                positive_pixels += int(np.count_nonzero(sky.separation(center) <= radius * u.deg))
+    return positive_pixels > 0, positive_pixels
+
+
+def _unit_vector(ra_deg: float, dec_deg: float) -> tuple[float, float, float]:
+    ra, dec = math.radians(ra_deg), math.radians(dec_deg)
+    return math.cos(dec) * math.cos(ra), math.cos(dec) * math.sin(ra), math.sin(dec)
+
+
+def _dot(a, b) -> float:
+    return sum(x * y for x, y in zip(a, b))
+
+
+def _cross(a, b) -> tuple[float, float, float]:
+    return (
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0],
+    )
+
+
+def _norm(a) -> float:
+    return math.sqrt(_dot(a, a))
+
+
+def _angular(a, b) -> float:
+    return math.atan2(_norm(_cross(a, b)), max(-1.0, min(1.0, _dot(a, b))))
+
+
+def _point_in_spherical_polygon(point, vertices) -> bool:
+    """Spherical winding test; boundary points count as inside."""
+    tangents = []
+    for vertex in vertices:
+        projected = tuple(vertex[i] - _dot(point, vertex) * point[i] for i in range(3))
+        length = _norm(projected)
+        if length < 1e-15:
+            return True
+        tangents.append(tuple(value / length for value in projected))
+    winding = 0.0
+    for first, second in zip(tangents, tangents[1:] + tangents[:1]):
+        winding += math.atan2(_dot(point, _cross(first, second)), _dot(first, second))
+    return abs(winding) > math.pi
+
+
+def _point_to_arc_distance(point, first, second) -> float:
+    """Exact angular distance to the minor great-circle arc."""
+    arc_length = _angular(first, second)
+    best = min(_angular(point, first), _angular(point, second))
+    normal = _cross(first, second)
+    normal_length = _norm(normal)
+    if normal_length < 1e-15:
+        return best
+    normal = tuple(value / normal_length for value in normal)
+    projected = tuple(point[i] - _dot(point, normal) * normal[i] for i in range(3))
+    projected_length = _norm(projected)
+    if projected_length < 1e-15:
+        return best
+    candidate = tuple(value / projected_length for value in projected)
+    for candidate in (candidate, tuple(-value for value in candidate)):
+        if abs((_angular(first, candidate) + _angular(candidate, second)) - arc_length) < 1e-10:
+            best = min(best, _angular(point, candidate))
+    return best
+
+
+def _stcs_polygons(stcs: str) -> list[list[tuple[float, float, float]]]:
+    polygons = []
+    for chunk in re.split(r"\bPOLYGON\b", stcs, flags=re.IGNORECASE)[1:]:
+        numbers = [
+            float(value)
+            for value in re.findall(r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][-+]?\d+)?", chunk)
+        ]
+        if len(numbers) < 6 or len(numbers) % 2:
+            raise ValueError("invalid STC-S POLYGON coordinate list")
+        polygons.append([_unit_vector(numbers[i], numbers[i + 1]) for i in range(0, len(numbers), 2)])
+    if not polygons:
+        raise ValueError("STC-S coverage contains no POLYGON")
+    return polygons
+
+
+def _exact_stcs_intersects_cone(stcs: str, ra: float, dec: float) -> bool:
+    """Exact great-circle polygon/cone intersection for official CSC STC-S."""
+    center = _unit_vector(ra, dec)
+    radius = math.radians(GUARD_RADIUS_ARCMIN / 60.0)
+    for vertices in _stcs_polygons(stcs):
+        if _point_in_spherical_polygon(center, vertices):
+            return True
+        if any(_angular(center, vertex) <= radius for vertex in vertices):
+            return True
+        if any(
+            _point_to_arc_distance(center, first, second) <= radius
+            for first, second in zip(vertices, vertices[1:] + vertices[:1])
+        ):
+            return True
+    return False
+
+
+def _exact_polygon_coverage(
+    service: Service, sightline: str, root: Path, timeout: float, config: dict
+) -> dict:
+    ra, dec = SIGHTLINE_COORDS[sightline]
+    if config["kind"] == "tap_polygon":
+        query = (
+            f"SELECT {config['id_column']},{config['region_column']} FROM {config['table']} WHERE "
+            f"1=INTERSECTS({config['region_column']},CIRCLE('ICRS',{ra:.12f},{dec:.12f},"
+            f"{GUARD_RADIUS_ARCMIN / 60.0:.12f}))"
+        )
+        body, _, _, _ = _fetch(_tap_request_to(config["endpoint"], query), timeout)
+        if application_response_overflow(body):
+            raise CoverageUnavailable("XSA footprint response declared OVERFLOW")
+        _, rows = parse_response_rows(body)
+        inside = bool(rows)
+    else:
+        # CSC TAP does not implement ADQL CIRCLE/INTERSECTS.  Freeze the complete
+        # official ObsCore polygon column, then perform the overlap locally.
+        query = f"SELECT {config['id_column']},{config['region_column']} FROM {config['table']}"
+        count_query = f"SELECT COUNT(*) AS row_total FROM {config['table']}"
+        count_body, _, _, _ = _fetch(_tap_request_to(config["endpoint"], count_query), timeout)
+        server_total = _row_total(count_body)
+        body, _, _, _ = _fetch(_tap_request_to(config["endpoint"], query), timeout)
+        if application_response_overflow(body):
+            raise CoverageUnavailable("CSC ObsCore response declared OVERFLOW")
+        _, rows = parse_response_rows(body)
+        if len(rows) != server_total:
+            raise CoverageUnavailable(
+                f"CSC ObsCore incomplete: server count {server_total}, response rows {len(rows)}"
+            )
+        overlaps = [
+            row for row in rows
+            if _exact_stcs_intersects_cone(str(_lookup(row, config["region_column"])), ra, dec)
+        ]
+        inside = bool(overlaps)
+        rows = overlaps
+        body = (
+            b"FABER2026-COUNT-BYTES\n"
+            + len(count_body).to_bytes(8, "big")
+            + count_body
+            + b"FABER2026-ROWS-BYTES\n"
+            + body
+        )
+    path, sha = _coverage_artifact(root, sightline, service, body)
+    return {
+        "coverage": "inside" if inside else "outside",
+        "coverage_checked": True,
+        "coverage_exact_query": query,
+        "coverage_row_count": len(rows),
+        "coverage_evidence_path": str(path),
+        "coverage_evidence_sha256": sha,
+        "coverage_method": config["kind"],
+        "coverage_authority_endpoint": config["endpoint"],
+    }
+
+
+def _legacy_nexp_coverage(
+    service: Service, sightline: str, root: Path, timeout: float, config: dict
+) -> dict:
+    """Evaluate official DR10 NEXP pixels for every brick touching the guard cone."""
+    ra, dec = SIGHTLINE_COORDS[sightline]
+    radius = GUARD_RADIUS_ARCMIN / 60.0
+    ra_pad = radius / max(math.cos(math.radians(dec)), 1e-12)
+    brick_query = (
+        "SELECT brickname,ra1,ra2,dec1,dec2 FROM ls_dr10.bricks WHERE "
+        f"dec2>={dec-radius:.12f} AND dec1<={dec+radius:.12f} AND "
+        f"ra2>={ra-ra_pad:.12f} AND ra1<={ra+ra_pad:.12f}"
+    )
+    brick_body, _, _, _ = _fetch(_tap_request_to(service.endpoint, brick_query, "csv"), timeout)
+    _, bricks = parse_response_rows(brick_body)
+    if not bricks:
+        raise CoverageUnavailable("official DR10 brick index returned no intersecting bricks")
+    images: dict[str, bytes] = {}
+    for brick in bricks:
+        brickname = str(_lookup(brick, "brickname"))
+        for band in "griz":
+            url = (
+                f"{config['image_root']}/{brickname[:3]}/{brickname}/"
+                f"legacysurvey-{brickname}-nexp-{band}.fits.fz"
+            )
+            try:
+                image_body, _, _, _ = _fetch(urllib.request.Request(url), timeout)
+            except RuntimeError as exc:
+                raise CoverageUnavailable(f"required official NEXP image unavailable: {url}: {exc}") from exc
+            images[f"{brickname}/{band}.fits.fz"] = image_body
+    evidence_body = _legacy_nexp_bundle(brick_body, images)
+    inside, positive_pixels = replay_legacy_nexp_bundle(evidence_body, ra, dec)
+    path, sha = _coverage_artifact(root, sightline, service, evidence_body)
+    return {
+        "coverage": "inside" if inside else "outside",
+        "coverage_checked": True,
+        "coverage_exact_query": brick_query + "; evaluate positive pixels in official g,r,i,z NEXP FITS/WCS",
+        "coverage_row_count": positive_pixels,
+        "coverage_evidence_path": str(path),
+        "coverage_evidence_sha256": sha,
+        "coverage_method": "legacy_dr10_official_nexp_positive_pixels",
+        "coverage_authority_endpoint": config["authority_url"],
+        "coverage_replay_format": "faber2026.legacy-dr10-nexp-replay.v1",
+        "coverage_fits_member_count": len(images),
+    }
+
+
+def exact_coverage(service: Service, sightline: str, root: Path, timeout: float) -> dict | None:
+    config = COVERAGE_CONFIG.get(service.key)
+    if config is None or config["kind"] == "erass1_german_half":
+        return None
+    if config["kind"] == "legacy_nexp":
+        return _legacy_nexp_coverage(service, sightline, root, timeout, config)
+    if config["kind"] in {"tap_polygon", "stcs_polygon"}:
+        return _exact_polygon_coverage(service, sightline, root, timeout, config)
+    if config["kind"] == "official_exposure_maps_required":
+        record = {
+            "authority_url": config["authority_url"],
+            "reason": "no exact official Swift-XRT exposure map set was supplied or evaluated",
+            "coverage": "unknown",
+        }
+        path, sha = _coverage_artifact(
+            root, sightline, service, json.dumps(record, sort_keys=True).encode() + b"\n"
+        )
+        raise CoverageUnavailable(f"{record['reason']}|{path}|{sha}")
+    raise ValueError(f"unsupported exact coverage method: {config['kind']}")
 
 
 def _fetch(request: urllib.request.Request, timeout: float, attempts: int = 4) -> tuple[bytes, dict, int, str]:
@@ -1242,6 +1600,26 @@ def _failure_cell(service: Service, sightline: str, root: Path, query: str, erro
     }
 
 
+def _coverage_unknown_cell(
+    service: Service, sightline: str, root: Path, query: str, error: CoverageUnavailable
+) -> dict:
+    parts = str(error).rsplit("|", 2)
+    reason = parts[0]
+    coverage_path = parts[1] if len(parts) == 3 else ""
+    coverage_sha = parts[2] if len(parts) == 3 else ""
+    cell = _failure_cell(service, sightline, root, query, error)
+    cell.update(
+        status="coverage_unknown",
+        coverage="unknown",
+        coverage_checked=False,
+        coverage_exact_query="official exposure maps required before source-query classification",
+        coverage_evidence_path=coverage_path,
+        coverage_evidence_sha256=coverage_sha,
+        error=reason,
+    )
+    return cell
+
+
 def _outside_coverage_cell(
     service: Service,
     sightline: str,
@@ -1353,6 +1731,27 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
                 fragment.parent.mkdir(parents=True, exist_ok=True)
                 fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
                 return cell
+        exact_result = exact_coverage(service, sightline, root, timeout)
+        if exact_result:
+            coverage = exact_result["coverage"]
+            coverage_checked = exact_result["coverage_checked"]
+            coverage_path = Path(exact_result["coverage_evidence_path"])
+            coverage_sha = exact_result["coverage_evidence_sha256"]
+            coverage_count = exact_result["coverage_row_count"]
+            coverage_exact_query = exact_result["coverage_exact_query"]
+            if coverage == "outside":
+                cell = _outside_coverage_cell(
+                    service, sightline, root, source_query, coverage_exact_query,
+                    coverage_count, coverage_path, coverage_sha,
+                )
+                cell.update(
+                    coverage_method=exact_result["coverage_method"],
+                    coverage_authority_endpoint=exact_result["coverage_authority_endpoint"],
+                )
+                fragment.parent.mkdir(parents=True, exist_ok=True)
+                fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+                return cell
+
         coverage_pair = coverage_queries(service, sightline)
         if coverage_pair:
             coverage_query, coverage_count_query = coverage_pair
@@ -1461,7 +1860,7 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
             },
             "defects": defects,
         }
-        if coverage_pair:
+        if coverage_pair or exact_result:
             cell.update(
                 coverage_checked=coverage_checked,
                 coverage_exact_query=coverage_exact_query,
@@ -1469,6 +1868,16 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
                 coverage_evidence_path=str(coverage_path),
                 coverage_evidence_sha256=coverage_sha,
             )
+            if exact_result:
+                cell.update(
+                    coverage_method=exact_result["coverage_method"],
+                    coverage_authority_endpoint=exact_result["coverage_authority_endpoint"],
+                )
+        fragment.parent.mkdir(parents=True, exist_ok=True)
+        fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        return cell
+    except CoverageUnavailable as exc:
+        cell = _coverage_unknown_cell(service, sightline, root, source_query, exc)
         fragment.parent.mkdir(parents=True, exist_ok=True)
         fragment.write_text(json.dumps(cell, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         return cell

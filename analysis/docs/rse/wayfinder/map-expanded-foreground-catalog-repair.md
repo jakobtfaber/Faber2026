@@ -106,9 +106,10 @@ independent numerical, provenance, and owner visual checks.
 
 The map remains open. Remaining strict dependency order:
 
-1. [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
-2. After the protected corpus ticket resolves,
-   [independently replay the completed corpus](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
+1. Complete both [exact anonymous coverage evidence](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
+   and [protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md).
+2. Only after tickets 14 and 15 resolve,
+   [independently replay both corpora](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
 3. After independent replay and the now-resolved host-source ticket,
    [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
 4. After ticket 09 and the now-resolved physics-authority ticket,
