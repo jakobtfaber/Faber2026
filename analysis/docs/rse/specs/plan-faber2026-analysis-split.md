@@ -72,13 +72,13 @@ pair.
 
 **Tasks:**
 
-- Add `manuscript-boundary.txt` listing the retained compile inputs and parent
+- [x] Add `manuscript-boundary.txt` listing the retained compile inputs and parent
   operational files, one path per line.
-- Add `tests/test_manuscript_boundary.py` asserting that `pipeline` and
+- [x] Add `tests/test_manuscript_boundary.py` asserting that `pipeline` and
   `analysis` are mode `160000`, forbidden control directories are absent from
   the parent, retained files exist, parent editable text is below 7,000,000
   bytes, and the parent tree is below 100,000,000 bytes.
-- Run `python3 -m pytest tests/test_manuscript_boundary.py -q` before the split;
+- [x] Run `python3 -m pytest tests/test_manuscript_boundary.py -q` before the split;
   expect failure because `analysis/` is still a directory and the control paths
   remain in the parent.
 
