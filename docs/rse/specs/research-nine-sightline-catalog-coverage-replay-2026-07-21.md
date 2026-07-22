@@ -5,7 +5,7 @@ Date: 2026-07-21 PDT / 2026-07-22 UTC
 Parent commit: `4df872d532822eaf1657d982f0acd857428397b8`
 
 Pipeline commit: `ab6af1f713496abd2ff2d71bf11edf4100871e94`
-Disposition: **fail closed; source-row replay passes, expanded search coverage does not exist**
+Disposition: **fail closed; stored-row arithmetic passes, expanded search coverage does not exist**
 
 ## Question and boundary
 
@@ -43,9 +43,9 @@ Phineas, Whitney, Wilhelm, and Zach.
 
 ## Independent replay
 
-### Candidate source rows
+### Diagnostic candidate source-row identity replay
 
-I called the live source adapters used by
+This check is not independent: I called the live source adapters used by
 `pipeline/galaxies/foreground/freeze_candidate_redshift_provenance.py` without
 writing its output. I then compared the returned source family, release,
 stable identifier, canonical source-row hash, complete query-response hash, and
@@ -143,29 +143,99 @@ normalized state, response bytes, and hash for these sources across all 50
 rows. The required normalized state set therefore cannot be audited, and the
 search catalogs cannot establish that the present registry is complete.
 
+The original frozen discovery cone or aperture was never recorded. Therefore
+the ticket phrase “full recorded sightline region” does not currently identify
+an executable, uniform query contract. Selecting a radius now would be a new
+search-policy decision, not a replay of a frozen region.
+
 Host redshift provenance is also still blocked: `bursts.csv` freezes values but
 not the authoritative source-bearing Verdi rows or citations.
 
-## Verification commands and observed results
+## Reproducibility
 
-```text
-python3 scripts/kb search "expanded foreground catalog nine host redshift sightlines 50 registry rows deterministic candidate selection replay"
-# completed; no nine-sightline expanded-query artifact surfaced
+Replay entry point:
+`scripts/replay_nine_sightline_catalog_coverage.py`. Offline mode uses only the
+Python standard library. It independently recomputes the 50-row scope,
+verdicts, budget flags, and spherical duplicate separations, and recounts the
+existing four-catalog statuses. It verifies every input against the SHA-256
+values above. It can check only that 44 stable identifiers and row hashes are
+present in the ledger; raw source responses were not frozen, so it cannot
+independently verify those identities offline.
 
-python3 <independent live source-row replay shown in session transcript>
-# 50/50 calls completed
-# 44/44 stable identifiers and selected-row hashes matched
-# 37/44 complete response hashes matched; seven cluster-cone responses drifted
+Live mode reuses
+`pipeline/galaxies/foreground/freeze_candidate_redshift_provenance.py`. It is a
+diagnostic identity check, **not independent validation** and not the ticket's
+required full-region search path. It compares the current adapter-selected
+source identifiers and hashes with the ledger. The earlier completed diagnostic
+run made 50 calls, matched all 44 adopted stable identifiers and selected-row
+hashes, and found the seven response-set drifts listed above. A later clean
+Conda rerun was bounded at 120 seconds and stopped incomplete; it produced no
+replacement result.
 
-python3 <independent verdict, budget, and haversine duplicate replay shown in session transcript>
-# verdict mismatches 0; budget mismatches 0; seven duplicate separations agree after rounding
+Environment:
 
-pytest -q tests/test_expanded_catalog_validation.py
-# 3 passed in 0.25s
+- Offline clean-room replay: macOS 27.0 build `26A5378n`, arm64, fresh `venv`,
+  Python `3.13.9`; no third-party packages, accelerator, parallel workers, or
+  random numbers.
+- Live diagnostic environment: clean `conda run -n py312`, Python `3.12.13`.
+  Repository environment declaration:
+  `pipeline/environment.yml`, SHA-256
+  `f4c5b36c9502f1386c7ca5d0a0cde3a8aea967068175698333fc7ab8d4762e6e`.
+- Code revision is emitted by the replay itself as `code.head`; dirty paths are
+  emitted as `code.dirty_paths`. The pipeline revision is pinned above.
+- Inputs and hashes are emitted under `inputs_sha256`. No seeds or numerical
+  tolerances apply. Duplicate mappings pass only when the independently
+  recomputed separation rounds to the stored two-decimal value.
 
-python3 scripts/validate_expanded_foreground_catalog_gate.py
-# nonzero; the top-level superseded gate remains failed with eight listed defects
+Exact offline clean-room commands, from the repository root:
+
+```bash
+repro_dir="$(mktemp -d)"
+python3 -m venv "$repro_dir/venv"
+"$repro_dir/venv/bin/python" \
+  scripts/replay_nine_sightline_catalog_coverage.py \
+  --mode offline \
+  --output "$repro_dir/offline.json"
+"$repro_dir/venv/bin/python" -m json.tool "$repro_dir/offline.json" >/dev/null
 ```
+
+Observed: exit `0`; `ok=true`; 52 total rows, 50 finite-host rows on nine
+sightlines; 44 adopted-redshift ledger rows and six no-redshift rows; zero
+verdict mismatches; zero budget mismatches; seven duplicate checks pass; the
+four catalog counts equal the tables above. The same offline JSON was produced
+by the working interpreter and the fresh virtual environment.
+
+Exact bounded live diagnostic command:
+
+```bash
+gtimeout 120s env -i \
+  HOME="$HOME" \
+  PATH="/opt/anaconda3/bin:/opt/homebrew/bin:/usr/bin:/bin" \
+  /opt/anaconda3/bin/conda run -n py312 \
+  python scripts/replay_nine_sightline_catalog_coverage.py \
+  --mode live \
+  --output /tmp/nine-sightline-live.json
+```
+
+Observed for the clean Conda rerun: timeout after 120 seconds; incomplete; no
+JSON result. This does not replace the earlier completed diagnostic result.
+Network response hashes may change later even when the selected source row is
+unchanged; live output reports both current drifts and whether they equal the
+seven observed here.
+
+Additional checks:
+
+```bash
+ruff check scripts/replay_nine_sightline_catalog_coverage.py
+python3 -m py_compile scripts/replay_nine_sightline_catalog_coverage.py
+pytest -q tests/test_expanded_catalog_validation.py
+python3 scripts/validate_expanded_foreground_catalog_gate.py
+```
+
+Observed: Ruff and byte-compilation passed; the focused tests reported `3
+passed in 0.25s`. The final command exits nonzero because it targets the
+intentionally failed, superseded top-level gate and lists its eight preserved
+defects.
 
 The unit tests validate the repaired offline artifact contract. They do not
 validate the missing expanded nine-sightline queries. The top-level validator
