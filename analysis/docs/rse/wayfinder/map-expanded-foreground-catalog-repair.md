@@ -97,9 +97,10 @@ independent numerical, provenance, and owner visual checks.
   hashes are frozen, with row-level uncertainty explicitly unavailable. Census
   adoption remains with the later adjudication ticket.
 - [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
-  — resolved after independent review. Exact admission contains 109,117
-  records; 1,474 guard-only rows are separate. Official Legacy Survey, XMM,
-  Chandra, and Swift coverage evidence is frozen and replays with zero errors.
+  — reopened after the closed corpus was found to use a sightline outside the
+  authoritative JohndoeII roster. The corrected 135-cell corpus contains
+  115,713 records and 1,516 separate guard-only rows and passes the producer
+  validator; independent review is still required.
 - [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md)
   — froze nine authenticated uncapped WISE--PS1--STRM responses, 20,788 exact
   cone rows, every shared-WISE ambiguity, exact queries and job metadata, and a
@@ -110,9 +111,11 @@ independent numerical, provenance, and owner visual checks.
 
 The map remains open. Remaining strict dependency order:
 
-Tickets 14 and 15 are resolved. Next:
+Ticket 15 is resolved. Ticket 14 is corrected but awaiting independent review.
+Next:
 
-1. [Independently replay both corpora](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
+1. Independently review the corrected ticket-14 roster and frozen evidence.
+2. Only after ticket 14 resolves, [independently replay both corpora](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
 2. After independent replay and the now-resolved host-source ticket,
    [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
 3. After ticket 09 and the now-resolved physics-authority ticket,

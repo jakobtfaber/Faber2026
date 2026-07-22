@@ -2,7 +2,7 @@
 
 Date: 2026-07-22  
 Scope: execution evidence for Wayfinder ticket 14  
-Verdict: **complete; all 135 cells replay from frozen evidence**
+Verdict: **producer-valid; corrected 135-cell corpus awaits independent review**
 
 ## Authority boundary
 
@@ -21,8 +21,12 @@ rows rather than preserved responses, and lacked complete provenance.
 
 [`freeze_anonymous_nine_sightline_corpus.py`](../../scripts/freeze_anonymous_nine_sightline_corpus.py)
 fixes the nine frozen burst centers and 15 required public products, or 135
-product/sightline cells. It binds the burst-center input SHA-256
-`204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644`.
+product/sightline cells. The corrected roster includes JohndoeII,
+matching the authoritative Verdi and protected-corpus roster. It binds both the
+burst-center input SHA-256
+`204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644`
+and protected-roster manifest SHA-256
+`43af38cc4e996b7890ea0858ef5a760c124e877825dc8866bc4221d3d02b347f`.
 
 The validator fails for a missing or duplicate cell, unresolved service state,
 wrong release or endpoint, missing exact query or retrieval time, incomplete
@@ -67,10 +71,11 @@ The public high-declination shard is
 4,650,535,027 bytes; published and locally checked MD5 is
 `4ffea9f3b1f71ee6a8945077bcf87eaa`; SHA-256 is
 `9c25f992f0b99bbf0cc7962d2d01b9058f514313041059617dc92fe78c3a77a3`.
-The producer streamed all 49,745,965 native rows. It froze 88,687 admitted
-per-sightline canonical rows and 1,215 separate guard-only rows. Admitted counts
-are Casey 8,875; Chromatica 10,642; Hamilton 11,498; Isha 12,601; Oran 9,593;
-Phineas 7,383; Whitney 8,416; Wilhelm 9,496; and Zach 10,183. The 4.65 GB source
+The producer streamed all 49,745,965 native rows. It froze 93,115 admitted
+per-sightline canonical rows and 1,232 separate guard-only rows. Admitted counts
+are Casey 8,875; Chromatica 10,642; Hamilton 11,498; Isha 12,601;
+JohndoeII 13,924; Oran 9,593; Phineas 7,383; Whitney 8,416; and Zach 10,183.
+The 4.65 GB source
 shard is not in this repository: its size and SHA-256 were verified during
 extraction, while the repository freezes and validates the derived per-sightline
 canonical bytes.
@@ -79,25 +84,25 @@ canonical bytes.
 
 The current manifest is
 [`corpus-manifest.json`](evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22/corpus-manifest.json)
-(SHA-256 `6ce903044e91f5eb0a1dd4660d85b202aeb8d74b2a7a4af97a247a72596b62c8`).
-It binds 135 cells and 109,117 admitted records plus 1,474 separate guard-only
-records: 37 `matched`, 32 `unmatched`, and 66 `outside_footprint`. No cell is
+(SHA-256 `14321fb328e372b8df0537d9a445dec2ab1376c4b258dabaf92116152eb023a5`).
+It binds 135 cells and 115,713 admitted records plus 1,516 separate guard-only
+records: 37 `matched`, 31 `unmatched`, and 67 `outside_footprint`. No cell is
 unresolved. Exact official coverage evidence is frozen wherever required.
 
-All 626 byte-evidence members are stored without alteration in deterministic
+All 618 byte-evidence members are stored without alteration in deterministic
 `evidence-bundle.tar.gz`, SHA-256
-`1b53ea98abd5d232a793ed9b7bde8a876ea4fa44153ceba31608a014ecd09026`.
+`fed672e29c1d84ffd09f93de2487a1337fb722c02bd5dc718f7f97c1e593d32d`.
 The validator reads each manifest path directly from that bundle and checks its
 member hash, while the top-level manifest also checks the bundle hash.
 
-The frozen admission evidence contains 975 DESI DR1 rows, 18,608 Gaia DR3 rows, 701 LoTSS DR3
-rows, 142 VLASS rows, four Swift rows, and 88,687 PS1--STRM rows. SDSS DR19 and
+The frozen admission evidence contains 975 DESI DR1 rows, 20,766 Gaia DR3 rows, 701 LoTSS DR3
+rows, 152 VLASS rows, four Swift rows, and 93,115 PS1--STRM rows. SDSS DR19 and
 LAMOST DR11 returned no rows. J-PLUS and miniJPAS are outside footprint for all
 the nine positions. Official Legacy Survey DR9 northern g/r/z NEXP pixels put
 six positions outside and Whitney, Phineas, and Casey inside, with no Data
 Release 10 photo-redshift rows. Exact XMM-Newton and Chandra polygons put all
-the nine positions outside. Swift exposure pixels put Whitney, Wilhelm, and
-Casey inside; only Casey has source rows. The other six positions are outside.
+the nine positions outside. Swift exposure pixels put Whitney and Casey inside;
+only Casey has source rows. JohndoeII and the other six positions are outside.
 All nine positions are outside
 the exact eROSITA-DE public half-sky for both eRASS1 products.
 
@@ -117,8 +122,9 @@ overflow, count mismatch, and byte tampering. Swift validation additionally
 checks the raw API request and response inventory, the conservative image-size
 envelope, every FITS hash, and native-WCS positive pixels within 15 arcminutes.
 
-Exact admission and all coverage repairs are complete. Ticket 14 is closed;
-ticket 16 can perform its independent replay.
+Exact admission and all coverage repairs pass the producer validator. Ticket 14
+remains open for independent review; ticket 16 remains blocked until that review
+accepts the corrected corpus.
 
 ## Coverage repair routes
 
@@ -130,6 +136,6 @@ coordinate system. Data Release 10 has no northern imaging products and no
 i-band northern exposure map. Swift uses a 60-arcminute LSXPS dataset query and
 an independently queried upper bound on individual image size. Twenty-nine
 candidate exposure maps were frozen. Native-WCS replay finds positive pixels
-within 15 arcminutes for Whitney, Wilhelm, and Casey only. Raw query and image
+within 15 arcminutes for Whitney and Casey only. Raw query and image
 API request and response bytes, API endpoint and version, map URLs, and every
 FITS byte and hash are in the evidence bundle.
