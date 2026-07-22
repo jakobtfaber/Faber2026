@@ -26,9 +26,10 @@ frequency coordinates, and remaining provenance ambiguities?
 4. Every voltage dataset lacks a dispersion-measure attribute. Every power
    dataset has `DM_coherent`. The power value cannot establish voltage
    processing history.
-5. Nine non-Zach DSA candidate files are byte-identical between `dsastorage`
-   and the `h17` project copy. Mahi and Casey conflict. Chromatica's candidate
-   filterbank is absent.
+5. Eight non-Zach DSA candidate files are byte-identical between `dsastorage`
+   and the `h17` project copy. Mahi and Casey differ on current `dsastorage`,
+   and Chromatica is absent there. All three have byte-identical recovery
+   copies under `h23:/dataz/dsa110/candidates/`.
 
 ## Evidence
 
@@ -36,6 +37,7 @@ frequency coordinates, and remaining provenance ambiguities?
 - `h24`: DSA producer table and the table → `DM0` → beamformer → toolkit code
   chain, all hash-pinned in the certificate.
 - `dsastorage`: current Level-3 files, sidecars, hashes, and missing-file state.
+- `h23`: live hashes for the Mahi, Chromatica, and Casey recovery copies.
 - Pinned CHIME container: per-file FPGA clock epochs using the producer's own
   function.
 

@@ -14,7 +14,7 @@ unresolved fields are in `metadata.json` and the four `events-*.json` files.
 `DSA DM` gives optimized/applied then trigger values. `CHIME DM` is the value
 stored on `tiedbeam_power`; it is **not** evidence for voltage dedispersion.
 
-| Event | DSA / CHIME ID | DSA DM (pc cm⁻³) | DSA `tstart` (MJD) | CHIME retained channels × samples | CHIME power DM (pc cm⁻³) | FPGA clock epoch (UTC) | Current DSA candidate relation |
+| Event | DSA / CHIME ID | DSA DM (pc cm⁻³) | DSA `tstart` (MJD) | CHIME retained channels × samples | CHIME power DM (pc cm⁻³) | FPGA clock epoch (UTC) | DSA custody |
 |---|---|---:|---:|---:|---:|---|---|
 | Whitney | 220310aaam / 215063905 | 462.150 / 462.700 | 59648.241721 | 863 × 55,950 | 462.213692 | 2022-01-27T18:58:36.999999960 | byte-identical |
 | Oran | 220506aabd / 224263996 | 396.930 / 396.700 | 59705.597013 | 851 × 72,837 | 397.174546 | 2022-04-19T21:54:44.999999960 | byte-identical |
@@ -24,9 +24,9 @@ stored on `tiedbeam_power`; it is **not** evidence for voltage dedispersion.
 | Freya | 230325aaag / 278720455 | 912.380 / 914.400 | 60028.071691 | 891 × 55,953 | 912.469851 | 2023-02-28T23:03:21.999999960 | byte-identical |
 | John Doe II | 230814aaas / 311723353 | 696.350 / 696.200 | 60170.360927 | 767 × 72,813 | 696.545741 | 2023-06-25T01:27:47.999999960 | byte-identical |
 | Hamilton | 230913aaao / 318353610 | 518.700 / 518.600 | 60200.20716 | 799 × 55,954 | 518.789552 | 2023-09-05T00:04:31.999999960 | byte-identical |
-| Mahi | 240122aaag / 354049284 | 959.900 / 957.973 | 60331.10428 | 756 × 55,946 | 960.207020 | 2023-11-22T15:46:15.999999960 | **different bytes** |
-| Chromatica | 240203aacl / 356959136 | 272.600 / 272.400 | 60343.83182 | 767 × 55,938 | 272.710163 | 2023-11-22T15:46:15.999999960 | **filterbank absent** |
-| Casey | 240229aaad / 362593221 | 491.150 / 491.600 | 60369.37095 | 771 × 55,945 | 491.209924 | 2024-02-13T18:36:20.999999960 | **different bytes** |
+| Mahi | 240122aaag / 354049284 | 959.900 / 957.973 | 60331.10428 | 756 × 55,946 | 960.207020 | 2023-11-22T15:46:15.999999960 | `h23` identical; `dsastorage` differs |
+| Chromatica | 240203aacl / 356959136 | 272.600 / 272.400 | 60343.83182 | 767 × 55,938 | 272.710163 | 2023-11-22T15:46:15.999999960 | `h23` identical; `dsastorage` absent |
+| Casey | 240229aaad / 362593221 | 491.150 / 491.600 | 60369.37095 | 771 × 55,945 | 491.209924 | 2024-02-13T18:36:20.999999960 | `h23` identical; `dsastorage` differs |
 
 ## Shared native coordinates
 
@@ -52,10 +52,13 @@ stored on `tiedbeam_power`; it is **not** evidence for voltage dedispersion.
 
 - Whitney through Hamilton, plus Zach: current `dsastorage` Level-3
   filterbanks are byte-identical to the project copies on `h17`.
-- Mahi and Casey: current `dsastorage` files are different reprocessings. Do
-  not replace the hash-pinned `h17` project copies.
-- Chromatica: no current Level-3 filterbank exists on `dsastorage`; only event
-  metadata remains there.
+- Mahi and Casey: current `dsastorage` files are different reprocessings. Their
+  `h23:/dataz/dsa110/candidates/<ID>/Level3/` copies are byte-identical to the
+  hash-pinned `h17` project copies.
+- Chromatica: no current Level-3 filterbank exists on `dsastorage`, but the
+  corresponding `h23` copy is byte-identical to the hash-pinned `h17` product.
+- Therefore all three canonical filterbanks survive on both `h17` and `h23`.
+  The exception is current `dsastorage` state, not loss from the wider estate.
 - Older `filaxes.json` files are partial sidecars. Zach and Isha contain only
   5,120 time entries; the others found contain 20,480. Their final frequency
   differs from the SIGPROC header-derived final channel centre. Preserve them
@@ -76,6 +79,12 @@ ssh h17 'find /data/Faber2026/data/{dsa-110,chime-frb} -type f -print0 | sort -z
 ssh h24 'sha256sum /home/ubuntu/msherman_nsfrb/DSA110-DSAPOL-PROJECT/dsapol_tables/DSA110-FRBs-PARSEC_TABLE.csv'
 
 ssh dsastorage 'find /mnt/data/dsa110/candidates/candidates -path "*/Level3/*_dev_polcal_I.fil" -print'
+
+ssh h23 'find /dataz/dsa110/candidates -type f \
+  \( -name "240122aaag_dev_polcal_I.fil" \
+  -o -name "240203aacl_dev_polcal_I.fil" \
+  -o -name "240229aaad_dev_polcal_I.fil" \) \
+  -print -exec sha256sum {} \;'
 ```
 
 CHIME clock epochs were recomputed with
