@@ -44,16 +44,16 @@ def utc_now() -> str:
 
 
 def load_sightlines(path: Path) -> list[dict[str, Any]]:
-    """Return the nine finite-host-redshift sightlines in stable input order."""
+    """Select the nine rows with finite positive input z_spec values."""
     with path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     selected = []
     for row in rows:
         try:
-            host_z = float(row["z_spec"])
+            input_z = float(row["z_spec"])
         except (TypeError, ValueError):
             continue
-        if not math.isfinite(host_z) or host_z <= 0:
+        if not math.isfinite(input_z) or input_z <= 0:
             continue
         selected.append(
             {
@@ -61,11 +61,10 @@ def load_sightlines(path: Path) -> list[dict[str, Any]]:
                 "tns": row["tns"],
                 "ra_deg": float(row["ra_deg"]),
                 "dec_deg": float(row["dec_deg"]),
-                "host_z": host_z,
             }
         )
     if len(selected) != 9:
-        raise ValueError(f"expected nine finite-redshift sightlines, found {len(selected)}")
+        raise ValueError(f"expected nine eligible sightlines, found {len(selected)}")
     return selected
 
 

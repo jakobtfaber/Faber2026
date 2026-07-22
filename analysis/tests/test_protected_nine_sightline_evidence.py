@@ -35,6 +35,10 @@ def test_mast_manifest_freezes_complete_nine_sightline_native_corpus():
         "chromatica",
         "casey",
     ]
+    serialized_manifest = json.dumps(manifest).lower()
+    assert "host_z" not in serialized_manifest
+    assert "redshift" not in serialized_manifest
+    assert "authority" not in serialized_manifest
 
     exact_total = 0
     for record in manifest["sightlines"]:

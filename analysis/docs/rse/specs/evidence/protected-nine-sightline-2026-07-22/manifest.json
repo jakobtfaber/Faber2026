@@ -27,7 +27,6 @@
         "ra_min": 309.3491807846027
       },
       "dec_deg": 72.8823272222,
-      "host_z": 0.043,
       "nickname": "zach",
       "output_job": {
         "Context": "500",
@@ -264,7 +263,6 @@
         "ra_min": 133.83973162931818
       },
       "dec_deg": 73.4908333333,
-      "host_z": 0.479,
       "nickname": "whitney",
       "output_job": {
         "Context": "500",
@@ -473,7 +471,6 @@
         "ra_min": 317.1971334771636
       },
       "dec_deg": 72.8272777778,
-      "host_z": 0.3005,
       "nickname": "oran",
       "output_job": {
         "Context": "500",
@@ -731,7 +728,6 @@
         "ra_min": 70.66825988307359
       },
       "dec_deg": 70.3073888889,
-      "host_z": 0.2505,
       "nickname": "isha",
       "output_job": {
         "Context": "500",
@@ -997,7 +993,6 @@
         "ra_min": 176.98441144189795
       },
       "dec_deg": 71.6956388889,
-      "host_z": 0.271,
       "nickname": "phineas",
       "output_job": {
         "Context": "500",
@@ -1263,7 +1258,6 @@
         "ra_min": 335.1174268279908
       },
       "dec_deg": 73.02590556,
-      "host_z": 0.5535,
       "nickname": "johndoeII",
       "output_job": {
         "Context": "500",
@@ -1514,7 +1508,6 @@
         "ra_min": 304.27639132324373
       },
       "dec_deg": 70.7927666667,
-      "host_z": 0.3024,
       "nickname": "hamilton",
       "output_job": {
         "Context": "500",
@@ -1772,7 +1765,6 @@
         "ra_min": 311.71658584615165
       },
       "dec_deg": 73.9,
-      "host_z": 0.074,
       "nickname": "chromatica",
       "output_job": {
         "Context": "500",
@@ -1988,7 +1980,6 @@
         "ra_min": 169.22718122529048
       },
       "dec_deg": 70.67622222,
-      "host_z": 0.287,
       "nickname": "casey",
       "output_job": {
         "Context": "500",
