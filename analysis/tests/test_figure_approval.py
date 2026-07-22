@@ -39,6 +39,7 @@ def test_review_slots_are_unique_and_cover_requested_families() -> None:
         "joint-model",
         "codetection-triptych",
         "scintillation-qualification",
+        "foreground-halo-grid",
     }
 
 
@@ -60,6 +61,12 @@ def test_new_batch_can_select_one_stable_candidate() -> None:
     )
     assert parsed.candidate == ["fig6-scint-summary"]
     assert parsed.only_family == ["chime-scintillation-acf"]
+
+
+def test_figure3_review_slot_does_not_retroactively_protect_old_bytes() -> None:
+    module = load_review_module()
+    slot = next(item for item in module.slots() if item["id"] == "fig3-halo-grid")
+    assert slot["protect_in_manuscript"] is False
 
 
 def test_gate_rejects_unapproved_protected_inclusion() -> None:

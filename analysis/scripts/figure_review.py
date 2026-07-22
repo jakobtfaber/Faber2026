@@ -154,6 +154,11 @@ def command_new_batch(args: argparse.Namespace) -> None:
             "joint-scint-figure-provenance",
         ],
         "scintillation-qualification": ["oran-qualification"],
+        "foreground-halo-grid": [
+            "expanded-catalog-build",
+            "figure3-input",
+            "verdi-host-redshifts",
+        ],
     }
     required_evidence = {
         evidence_id
@@ -176,6 +181,9 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ("chromatica-hi-campaign", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json"),
         ("chime-campaign-figure-review", "pipeline", "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json"),
         ("joint-scint-figure-provenance", "analysis", "scintillation-summary/joint_figure_provenance.json"),
+        ("expanded-catalog-build", "pipeline", "galaxies/foreground/data/expanded_catalog_build.json"),
+        ("figure3-input", "pipeline", "galaxies/foreground/data/sightline_halo_grid.csv"),
+        ("verdi-host-redshifts", "pipeline", "galaxies/foreground/data/frozen_census/verdi2025_host_redshift_extract.csv"),
     ]
     evidence: list[dict] = []
     for evidence_id, repository, source_path in evidence_specs:
@@ -487,7 +495,11 @@ def approval_errors(tex: str, protected: dict[str, str], receipts: dict[str, dic
 
 
 def command_verify(_: argparse.Namespace) -> None:
-    protected = {slot["target"]: slot["id"] for slot in slots()}
+    protected = {
+        slot["target"]: slot["id"]
+        for slot in slots()
+        if slot.get("protect_in_manuscript", True)
+    }
     receipts: dict[str, dict] = {}
     for path in RECEIPTS.glob("*.json") if RECEIPTS.exists() else []:
         receipt = load_json(path)
