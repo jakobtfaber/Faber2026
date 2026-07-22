@@ -212,8 +212,11 @@ populate first, adjudicate row-by-row on top.
     (review S3)
   - [ ] Deterministic trial-set rule + operational association windows as
     supplementary material (review S1)
-  - [ ] ✋ Exact DSA-110 trigger denominator — needs trigger-DB query
+  - [x] Exact DSA-110 FRB detection denominator — 64 detections selected by
+    finite MJD in `59611 <= MJD < 60370`
     ([wf-09](wayfinder/tickets/09-obtain-dsa-trigger-denominator.md))
+  - [ ] Restore the TOA prose from “triggers” to “FRB detections”; preserve the
+    deterministic MJD rule and trial-set receipt
 - 3.2 Dispersion-measure decomposition
   - [ ] ✋ Fiducial priors sign-off + host-DM right-skew headline acceptance
     ([wf-07](wayfinder/tickets/07-sign-off-budget-priors-and-host-dm-headline.md))

@@ -66,6 +66,16 @@ existing lane system. The map does not carry the execution itself.
   clarified that the accepted diagnostic precedes the bad-channel mask,
   current radio-frequency-interference cleaning is rejected, and science
   remains fail-closed pending the linked validation and input-remediation route.
+- [Obtain the exact DSA-110 detection denominator](tickets/09-obtain-dsa-trigger-denominator.md)
+  — use the 64 FRB detections with finite MJD in `59611 <= MJD < 60370`;
+  candidate-name parity is coincidental, and the manuscript must say
+  “detections,” not raw “triggers.”
+- [Sign off the dispersion-budget priors and host-DM headline](tickets/07-sign-off-budget-priors-and-host-dm-headline.md)
+  — retain the current Walker/Connor diffuse-gas continuation and remaining
+  nuisance priors; a `pyhesdm` plus continuous-TNG low-redshift benchmark leaves
+  the interpretation unchanged. Only FRB 20220310F has P(host DM < 0) above
+  one half, and the central shift is primarily the lower fitted
+  $f_{\rm IGM}$, not a generic skew correction.
 
 ## Not yet specified
 
