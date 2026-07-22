@@ -32,5 +32,6 @@ An interactive Jupyter notebook (`notebooks/scintillation_interactive_walkthroug
 ## Out of scope
 
 - [Choose notebook interaction and override boundary](tickets/scint-notebook-07-choose-notebook-interaction-and-override-boundary.md) — Closed per owner direction; superseded by external GUI-based scintillation workflow.
+- [Choose result export and production synchronization contract](tickets/scint-notebook-08-choose-result-export-and-production-synchronization-contract.md) — Closed per owner direction; superseded by external GUI-based scintillation workflow.
 - **Automated batch pipeline refactoring:** Updating background pipeline execution across all cataloged events (notebook is focused on interactive walkthrough and verification).
 - **Polarization scintillation:** Polarimetric scintillation / RM synthesis (scope is Stokes-I total intensity).
