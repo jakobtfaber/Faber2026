@@ -10,17 +10,6 @@ max_parallel = 4
 timeout_seconds = 14400
 
 [[task]]
-id = "set-expanded-crossmatch-contract"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md"
-branch = "codex/auto-resolve-expanded-crossmatch-contract"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["fail-close-expanded-catalog"]
-instructions = "Implement the recorded deterministic crossmatch and quality contract without changing scientific authority fields. Resolve only after the ticket checks pass."
-
-[[task]]
 id = "set-expanded-physics-authority"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md"
@@ -122,6 +111,13 @@ instructions = "Owner-facing host-redshift adjudication. The controller records 
 [[history]]
 id = "fail-close-expanded-catalog"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-01-fail-close-validation.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "set-expanded-crossmatch-contract"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md"
 execution = "afk"
 depends_on = []
 status = "resolved"

@@ -330,14 +330,14 @@ def empty_state(manifest: Manifest) -> dict[str, Any]:
 
 
 def manifest_state_identity(manifest: Manifest) -> dict[str, Any]:
+    """Return stable controller identity; the ticket graph evolves in place."""
+
     return {
         "repo": manifest.repo,
         "base_branch": manifest.base_branch,
         "state_dir": str(manifest.state_dir.resolve()),
         "worktree_root": str(manifest.worktree_root.resolve()),
         "ticket_glob": manifest.ticket_glob,
-        "tasks": [task.id for task in manifest.tasks],
-        "history": [item.id for item in manifest.history],
     }
 
 

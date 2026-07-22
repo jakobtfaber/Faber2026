@@ -43,7 +43,7 @@ def test_manifest_has_analysis_specific_controller_roots():
         ).expanduser()
     )
     assert manifest.max_parallel == 4
-    assert len(wc.tasks_for_wave(manifest, "first")) == 10
+    assert len(wc.tasks_for_wave(manifest, "first")) == 9
 
 
 def test_manifest_represents_expanded_foreground_active_graph_and_history():
@@ -55,7 +55,6 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
     assert {Path(task.ticket).name for task in manifest.tasks} == {
         f"expanded-foreground-catalog-repair-{number:02d}-{slug}.md"
         for number, slug in [
-            (2, "set-crossmatch-contract"),
             (3, "set-physics-authority"),
             (4, "set-figure-3-gate"),
             (5, "set-independent-validation-gate"),
@@ -71,6 +70,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
         f"expanded-foreground-catalog-repair-{number:02d}-{slug}.md"
         for number, slug in [
             (1, "fail-close-validation"),
+            (2, "set-crossmatch-contract"),
             (6, "verify-redshift-verdicts"),
             (7, "freeze-host-redshift-provenance"),
             (8, "freeze-candidate-redshift-provenance"),
@@ -180,14 +180,12 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     state = wc.empty_state(manifest)
     ready = {task.id for task in wc.ready_tasks(manifest, state, "first")}
     assert ready == {
-        "set-expanded-crossmatch-contract",
+        "set-expanded-physics-authority",
         "freeze-anonymous-query-corpus",
         "source-zach-whitney-host-redshifts",
     }
     assert "freeze-protected-query-evidence" not in ready
     assert "replay-nine-sightline-query-corpus" not in ready
-    state["tasks"]["set-expanded-crossmatch-contract"]["status"] = "resolved"
-    ready = {task.id for task in wc.ready_tasks(manifest, state, "first")}
     assert "set-expanded-physics-authority" in ready
 
 
@@ -297,6 +295,26 @@ def test_load_state_rejects_identity_mismatch(tmp_path):
 
     with pytest.raises(ValueError, match="state identity mismatch"):
         wc.load_state(manifest)
+
+
+def test_load_state_accepts_ticket_graph_evolution(tmp_path):
+    wc = load_controller()
+    manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+    manifest = replace(manifest, state_dir=tmp_path)
+    state = wc.empty_state(manifest)
+    stale_task = {
+        "status": "resolved",
+        "pid": None,
+        "attempt_id": "prior",
+        "updated_at": None,
+        "detail": "preserved",
+    }
+    state["tasks"]["prior-resolved-task"] = stale_task
+    wc.write_json_atomic(tmp_path / "state.json", state)
+
+    loaded = wc.load_state(manifest)
+
+    assert loaded["tasks"]["prior-resolved-task"] == stale_task
 
 
 def test_repository_and_worktree_identity_mismatches_are_rejected(tmp_path):

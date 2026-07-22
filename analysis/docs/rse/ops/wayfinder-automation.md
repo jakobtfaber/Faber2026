@@ -25,8 +25,9 @@ python3 scripts/wayfinder_controller.py status --json
 
 `launch` refuses to run until the controller, schema, and manifest match
 `origin/main`. Manifest loading also rejects missing or extra scoped tickets,
-ticket-blocker drift, AFK/HITL drift, cross-repository tasks, and state identity
-drift. Launch and worktree setup verify the repository root, `origin`, and
+ticket-blocker drift, AFK/HITL drift, cross-repository tasks, and stable state
+identity drift. Active tasks may become history without discarding their saved
+task records. Launch and worktree setup verify the repository root, `origin`, and
 shared Git directory. Cross-repository work must be decomposed into one task per
 repository.
 
