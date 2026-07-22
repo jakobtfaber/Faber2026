@@ -96,15 +96,19 @@ independent numerical, provenance, and owner visual checks.
   spectroscopic redshifts `0.043040` and `0.477958`; exact source extracts and
   hashes are frozen, with row-level uncertainty explicitly unavailable. Census
   adoption remains with the later adjudication ticket.
+- [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
+  — froze 135 public-product/sightline cells and 110,591 normalized records
+  with exact queries, coverage, native bytes, stable identifiers, unrounded
+  geometry, complete count evidence, and hashes. The 37 matched, 41 unmatched,
+  and 57 outside-footprint cells contain no unresolved service state; ticket 16
+  remains the separate independent replay.
 
 ## Open route
 
-The map remains open. Tickets 02 then 03 are resolved. Remaining strict
-dependency order:
+The map remains open. Remaining strict dependency order:
 
-1. [Freeze the anonymous nine-sightline query corpus](tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md)
-   and [freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
-2. After both corpus tickets resolve,
+1. [Freeze protected query evidence](tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md), stopping at any authenticated owner action.
+2. After the protected corpus ticket resolves,
    [independently replay the completed corpus](tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md).
 3. After independent replay and the now-resolved host-source ticket,
    [repeat source-level redshift verification](tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md).
