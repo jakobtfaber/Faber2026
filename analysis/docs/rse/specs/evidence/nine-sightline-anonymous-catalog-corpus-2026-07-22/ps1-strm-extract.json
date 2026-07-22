@@ -1,10 +1,10 @@
 {
   "canonical_encoding": "gzip-json",
   "canonical_path": "docs/rse/specs/evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22/canonical/ps1_strm_v1.json.gz",
-  "canonical_sha256": "05a2b825d28ac0a4ff54ab1e31afff807e42090db0010017dc08718a722f55e5",
-  "completed_at_utc": "2026-07-22T12:08:59Z",
+  "canonical_sha256": "4e08f681d3fe3415b0db5a215793a7e4aab3a28b0864736a479784f2eb7c6c4c",
+  "completed_at_utc": "2026-07-22T20:06:58Z",
   "exact_query": "stream all rows from official p69-p77 shard; retain unrounded exact spherical separation <= 15.1 arcmin for each frozen burst center; admit <= 15.0 arcmin",
-  "guard_ring_rows": 1215,
+  "guard_ring_rows": 1232,
   "published_native_columns": [
     "objID",
     "uniquePspsOBid",
@@ -28,7 +28,7 @@
   ],
   "published_schema_url": "https://archive.stsci.edu/hlsps/ps1-strm/hlsp_ps1-strm_ps1_gpc1_all_multi_v1_readme.txt",
   "release": "PS1-STRM HLSP v1",
-  "selected_rows": 89902,
+  "selected_rows": 94347,
   "service": "ps1_strm_v1",
   "source_path": "/Users/jakobfaber/Data/Faber2026/cache/ps1-strm/hlsp_ps1-strm_ps1_gpc1_p69-p77_multi_v1_cat.csv.gz",
   "source_rows_scanned": 49745965,

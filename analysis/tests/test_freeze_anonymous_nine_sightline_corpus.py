@@ -132,20 +132,85 @@ def _complete_manifest(tmp_path: Path) -> dict:
     return {
         "schema_version": MODULE.SCHEMA_VERSION,
         "input_sha256": MODULE.FROZEN_INPUT_SHA256,
+        "roster_authority_path": MODULE.ROSTER_AUTHORITY_PATH,
+        "roster_authority_sha256": MODULE.ROSTER_AUTHORITY_SHA256,
+        "sightline_centers": {
+            name: {"ra_deg": coords[0], "dec_deg": coords[1]}
+            for name, coords in MODULE.SIGHTLINE_COORDS.items()
+        },
         "cells": cells,
     }
 
 
 def test_required_matrix_is_exact_and_has_release_authority():
     assert len(MODULE.SIGHTLINE_NAMES) == 9
+    assert "johndoeii" in MODULE.SIGHTLINE_NAMES
+    assert "wilhelm" not in MODULE.SIGHTLINE_NAMES
     assert {service.key for service in MODULE.SERVICES} == EXPECTED_SERVICES
     assert all(service.release and service.endpoint for service in MODULE.SERVICES)
     assert len(MODULE.required_cell_keys()) == 9 * len(EXPECTED_SERVICES)
 
 
+def test_service_preflight_uses_authoritative_roster():
+    root = Path(MODULE.__file__).resolve().parents[1]
+    preflight = json.loads(
+        (root / "docs/rse/specs/evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22/service-preflight.json").read_text()
+    )
+    assert preflight["required_sightlines"] == list(MODULE.SIGHTLINE_NAMES)
+
+
 def test_complete_manifest_passes(tmp_path):
     manifest = _complete_manifest(tmp_path)
     assert MODULE.validate_manifest(manifest, tmp_path) == []
+
+
+def test_manifest_rejects_wrong_authoritative_name(tmp_path):
+    manifest = _complete_manifest(tmp_path)
+    manifest["sightline_centers"]["wrong-name"] = manifest["sightline_centers"].pop("johndoeii")
+    errors = MODULE.validate_manifest(manifest, tmp_path)
+    assert "manifest sightline names do not match roster authority" in errors
+
+
+def test_manifest_rejects_authoritative_coordinate_drift(tmp_path):
+    manifest = _complete_manifest(tmp_path)
+    manifest["sightline_centers"]["johndoeii"]["ra_deg"] += 1e-8
+    errors = MODULE.validate_manifest(manifest, tmp_path)
+    assert any("coordinates drift" in error for error in errors)
+
+
+def test_manifest_rejects_roster_authority_byte_mutation(tmp_path, monkeypatch):
+    source = Path(MODULE.__file__).resolve().parents[1] / MODULE.ROSTER_AUTHORITY_PATH
+    mutated = tmp_path / "mutated-roster.json"
+    mutated.write_bytes(source.read_bytes() + b"\n")
+    monkeypatch.setattr(MODULE, "ROSTER_AUTHORITY_PATH", str(mutated))
+    manifest = _complete_manifest(tmp_path)
+    manifest["roster_authority_path"] = str(mutated)
+    errors = MODULE.validate_manifest(manifest, tmp_path)
+    assert "roster authority file SHA-256 mismatch" in errors
+
+
+@pytest.mark.parametrize("value", [math.nan, math.inf, -math.inf])
+def test_manifest_rejects_nonfinite_sightline_coordinate(tmp_path, value):
+    manifest = _complete_manifest(tmp_path)
+    manifest["sightline_centers"]["johndoeii"]["ra_deg"] = value
+    errors = MODULE.validate_manifest(manifest, tmp_path)
+    assert "manifest sightline coordinates non-finite: johndoeii" in errors
+
+
+@pytest.mark.parametrize("value", [math.nan, math.inf, -math.inf])
+def test_manifest_rejects_nonfinite_authority_coordinate(tmp_path, monkeypatch, value):
+    source = Path(MODULE.__file__).resolve().parents[1] / MODULE.ROSTER_AUTHORITY_PATH
+    authority = json.loads(source.read_text())
+    row = next(row for row in authority["sightlines"] if row["nickname"].lower() == "johndoeii")
+    row["ra_deg"] = value
+    mutated = tmp_path / "nonfinite-roster.json"
+    mutated.write_text(json.dumps(authority, sort_keys=True))
+    mutated_sha = hashlib.sha256(mutated.read_bytes()).hexdigest()
+    monkeypatch.setattr(MODULE, "ROSTER_AUTHORITY_PATH", str(mutated))
+    monkeypatch.setattr(MODULE, "ROSTER_AUTHORITY_SHA256", mutated_sha)
+    manifest = _complete_manifest(tmp_path)
+    errors = MODULE.validate_manifest(manifest, tmp_path)
+    assert "roster authority coordinates non-finite: johndoeii" in errors
 
 
 def test_packed_evidence_validates_without_loose_members(tmp_path):

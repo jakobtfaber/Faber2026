@@ -31,8 +31,13 @@ from pathlib import Path
 from typing import NamedTuple
 
 
-SCHEMA_VERSION = "faber2026.anonymous-nine-sightline-corpus.v1"
+SCHEMA_VERSION = "faber2026.anonymous-nine-sightline-corpus.v2"
 FROZEN_INPUT_SHA256 = "204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644"
+ROSTER_AUTHORITY_PATH = (
+    "docs/rse/specs/evidence/protected-nine-sightline-2026-07-22/manifest.json"
+)
+ROSTER_AUTHORITY_SHA256 = "43af38cc4e996b7890ea0858ef5a760c124e877825dc8866bc4221d3d02b347f"
+ROSTER_COORD_TOLERANCE_DEG = 1e-10
 GALAXY_RADIUS_ARCMIN = 15.0
 GUARD_RADIUS_ARCMIN = 15.1
 ERASS1_WESTERN_L_MIN_DEG = 179.94423568
@@ -45,7 +50,7 @@ SIGHTLINE_NAMES = (
     "whitney",
     "oran",
     "isha",
-    "wilhelm",
+    "johndoeii",
     "phineas",
     "hamilton",
     "chromatica",
@@ -56,7 +61,7 @@ SIGHTLINE_COORDS = {
     "whitney": (134.7205, 73.4908333333),
     "oran": (318.0448333333, 72.8272777778),
     "isha": (71.411, 70.3073888889),
-    "wilhelm": (315.1295416667, 72.0375611111),
+    "johndoeii": (335.97475, 73.02590556),
     "phineas": (177.7813333333, 71.6956388889),
     "hamilton": (305.0371666667, 70.7927666667),
     "chromatica": (312.619125, 73.9),
@@ -572,6 +577,54 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
         errors.append("schema version mismatch")
     if manifest.get("input_sha256") != FROZEN_INPUT_SHA256:
         errors.append("input SHA-256 does not match frozen burst-center authority")
+    if manifest.get("roster_authority_path") != ROSTER_AUTHORITY_PATH:
+        errors.append("roster authority path mismatch")
+    if manifest.get("roster_authority_sha256") != ROSTER_AUTHORITY_SHA256:
+        errors.append("roster authority SHA-256 mismatch")
+    authority_path = Path(ROSTER_AUTHORITY_PATH)
+    if not authority_path.is_absolute():
+        authority_path = Path(__file__).resolve().parents[1] / authority_path
+    try:
+        authority_bytes = authority_path.read_bytes()
+        if sha256_bytes(authority_bytes) != ROSTER_AUTHORITY_SHA256:
+            errors.append("roster authority file SHA-256 mismatch")
+        authority = json.loads(authority_bytes)
+        authority_roster = {
+            str(row["nickname"]).lower(): (float(row["ra_deg"]), float(row["dec_deg"]))
+            for row in authority["sightlines"]
+        }
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        errors.append(f"roster authority file unreadable: {exc}")
+        authority_roster = {}
+    for name, coords in list(authority_roster.items()):
+        if not all(math.isfinite(value) for value in coords):
+            errors.append(f"roster authority coordinates non-finite: {name}")
+            authority_roster.pop(name)
+
+    manifest_centers = manifest.get("sightline_centers")
+    if not isinstance(manifest_centers, dict):
+        errors.append("manifest sightline centers missing")
+        manifest_roster = {}
+    else:
+        try:
+            manifest_roster = {
+                str(name): (float(coords["ra_deg"]), float(coords["dec_deg"]))
+                for name, coords in manifest_centers.items()
+            }
+        except (KeyError, TypeError, ValueError):
+            errors.append("manifest sightline centers malformed")
+            manifest_roster = {}
+    for name, coords in list(manifest_roster.items()):
+        if not all(math.isfinite(value) for value in coords):
+            errors.append(f"manifest sightline coordinates non-finite: {name}")
+            manifest_roster.pop(name)
+    if set(authority_roster) != set(manifest_roster):
+        errors.append("manifest sightline names do not match roster authority")
+    for name in sorted(set(authority_roster) & set(manifest_roster)):
+        expected = authority_roster[name]
+        actual = manifest_roster[name]
+        if any(abs(a - b) > ROSTER_COORD_TOLERANCE_DEG for a, b in zip(actual, expected)):
+            errors.append(f"manifest sightline coordinates drift from roster authority: {name}")
 
     raw_cells = manifest.get("cells")
     if not isinstance(raw_cells, list):
@@ -2202,6 +2255,12 @@ def acquire_corpus(output_dir: Path, timeout: float, workers: int, resume: bool)
         "schema_version": SCHEMA_VERSION,
         "input_path": "pipeline/galaxies/foreground/data/frozen_census/bursts.csv",
         "input_sha256": FROZEN_INPUT_SHA256,
+        "roster_authority_path": ROSTER_AUTHORITY_PATH,
+        "roster_authority_sha256": ROSTER_AUTHORITY_SHA256,
+        "sightline_centers": {
+            name: {"ra_deg": coords[0], "dec_deg": coords[1]}
+            for name, coords in SIGHTLINE_COORDS.items()
+        },
         "generated_at_utc": utc_now(),
         "cells": cells,
     }
