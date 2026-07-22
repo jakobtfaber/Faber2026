@@ -8,14 +8,14 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_known_unassigned_owner_tickets_are_in_frontier():
+def test_owner_frontier_includes_open_and_excludes_resolved_tickets():
     from scripts.owner_queue import collect_wayfinder_frontier
 
     titles = {
         ticket.title for ticket in collect_wayfinder_frontier(owner_facing_only=True)
     }
     assert "Freeze protected WISE--PS1--STRM and UNIONS/CFIS evidence" in titles
-    assert "Obtain the authoritative host-redshift ledger" in titles
+    assert "Obtain the authoritative host-redshift ledger" not in titles
 
 
 def test_owner_queue_cli_regenerates_from_authoritative_frontier(tmp_path):
@@ -37,5 +37,5 @@ def test_owner_queue_cli_regenerates_from_authoritative_frontier(tmp_path):
     rendered = output.read_text(encoding="utf-8")
     assert "Decisions (wayfinder frontier, owner-facing)" in rendered
     assert "Freeze protected WISE--PS1--STRM and UNIONS/CFIS evidence" in rendered
-    assert "Obtain the authoritative host-redshift ledger" in rendered
+    assert "Obtain the authoritative host-redshift ledger" not in rendered
     assert "Not queried (`--offline`)" in rendered
