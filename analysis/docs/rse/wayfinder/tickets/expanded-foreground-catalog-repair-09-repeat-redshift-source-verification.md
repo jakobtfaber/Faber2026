@@ -3,7 +3,7 @@
 - Type: `wayfinder:research` (AFK)
 - Status: open
 - Assignee: unassigned
-- Blocked by: [Freeze authoritative host-redshift evidence](expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md), [Freeze candidate-redshift source evidence](expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md)
+- Blocked by: [Freeze authoritative host-redshift evidence](expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md), [Freeze candidate-redshift source evidence](expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md), [Independently replay the completed nine-sightline query corpus](expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md)
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `blocked`

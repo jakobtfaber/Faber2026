@@ -22,8 +22,9 @@ independent numerical, provenance, and owner visual checks.
 - `intervening_census_registry.csv` remains the classification and budget
   authority. Crossmatches may flag conflicts; they may not silently change a
   verdict.
-- Catalog states are `matched`, `unmatched`, `ambiguous`, or `query_error`.
-  Missing data and failed queries are different states.
+- Query states are `matched`, `unmatched`, `outside_footprint`,
+  `ambiguous`, `access_denied`, or `query_error`. Missing coverage, denied
+  access, and failed queries are different states.
 - Cluver et al. (2014) coefficients `-2.54, -0.17` are the resolved-source
   relation, Equation 1, for rest-frame color. No colorless fallback is allowed.
 - Moster et al. (2013) uses redshift-dependent Table 1 parameters and accepts
@@ -55,6 +56,19 @@ independent numerical, provenance, and owner visual checks.
   and SHA-256 hashes for all 46 adopted candidate redshifts; verdicts and budget
   flags are preserved, and Figure 3 remains governed by the later independent
   replay and owner-review gates.
+- [Resolve Zach's inter-catalog redshift discrepancy](tickets/expanded-foreground-catalog-repair-11-resolve-zach-intercatalog-redshift.md)
+  — the authenticated row confirms the low value is extrapolated `z_phot0`
+  from a PS1 object sharing its WISE source with a closer QSO-classified PS1
+  neighbor; retain both STRM estimates pending separate adjudication.
+- [Expand and independently replay catalog coverage for nine host-redshift sightlines](tickets/expanded-foreground-catalog-repair-12-expand-nine-sightline-catalogs.md)
+  — stored verdicts, budget flags, and duplicate separations replay, but the
+  original search aperture and required expanded-survey corpus are absent; keep
+  authority closed and continue through the explicit contract, corpus,
+  protected-export, and independent-replay tickets.
+- [Set the nine-sightline search-region and candidate-selection contract](tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md)
+  — use burst-centered 5-arcmin galaxy and 20-arcmin cluster regions, preserve
+  all query evidence, and apply deterministic redshift, quality, identity,
+  ambiguity, duplicate, and post-discovery halo-intersection rules.
 
 ## Not yet specified
 
