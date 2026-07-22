@@ -290,12 +290,12 @@ figures:
     repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/oran_triptych.pdf
     notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
     producer:
-      argv: [conda, run, -n, flits, python, scripts/plot_codetection_triptych.py, --burst, oran, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, oran, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
       cwd: .
     inputs:
       - results-library:scattering/jointmodel/latest/oran/jointmodel.npz
       - results-library:scattering/jointmodel/latest/oran/fit.json
-      - scripts/jointmodel_triptych_manifest.yaml
+      - analysis/scripts/jointmodel_triptych_manifest.yaml
       - pipeline/crossmatching/toa_crossmatch_results.json
       - pipeline/crossmatching/notebook_reproduction_fixture.json
     outputs:
@@ -310,12 +310,12 @@ figures:
     repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/johndoeii_triptych.pdf
     notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
     producer:
-      argv: [conda, run, -n, flits, python, scripts/plot_codetection_triptych.py, --burst, johndoeii, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, johndoeii, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
       cwd: .
     inputs:
       - results-library:scattering/jointmodel/latest/johndoeii/jointmodel.npz
       - results-library:scattering/jointmodel/latest/johndoeii/fit.json
-      - scripts/jointmodel_triptych_manifest.yaml
+      - analysis/scripts/jointmodel_triptych_manifest.yaml
       - pipeline/crossmatching/toa_crossmatch_results.json
       - pipeline/crossmatching/notebook_reproduction_fixture.json
     outputs:
@@ -330,12 +330,12 @@ figures:
     repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/zach_triptych.pdf
     notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
     producer:
-      argv: [conda, run, -n, flits, python, scripts/plot_codetection_triptych.py, --burst, zach, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, zach, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
       cwd: .
     inputs:
       - results-library:scattering/jointmodel/latest/zach/jointmodel.npz
       - results-library:scattering/jointmodel/latest/zach/fit.json
-      - scripts/jointmodel_triptych_manifest.yaml
+      - analysis/scripts/jointmodel_triptych_manifest.yaml
       - pipeline/crossmatching/toa_crossmatch_results.json
       - pipeline/crossmatching/notebook_reproduction_fixture.json
     outputs:
