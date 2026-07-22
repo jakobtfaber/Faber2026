@@ -15,10 +15,19 @@ import importlib.util
 import json
 import platform
 import shutil
+import sys
 from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+SCRIPT_DIRECTORY = Path(__file__).resolve().parent
+if str(SCRIPT_DIRECTORY) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIRECTORY))
+from rfi_time_frequency_candidate import (  # noqa: E402
+    ABSOLUTE_PIXEL_THRESHOLD,
+    apply_pixel_mask,
+)
 
 
 STATUS = "diagnostic_only_real_event_method_comparison"
@@ -159,6 +168,17 @@ def align_nonwrapping(values: np.ndarray, shifts: np.ndarray) -> np.ndarray:
     return output
 
 
+def restrict_to_finite_support(values: np.ndarray, support_values: np.ndarray) -> np.ndarray:
+    """Copy values and retain only pixels finite in the support array."""
+    data = np.asarray(values)
+    support = np.asarray(support_values)
+    if data.shape != support.shape:
+        raise ValueError("values and support values must have the same shape")
+    output = np.array(data, copy=True, dtype=np.result_type(data.dtype, np.float32))
+    output[~np.isfinite(support)] = np.nan
+    return output
+
+
 def _load_audit(path: Path):
     spec = importlib.util.spec_from_file_location("exact_audit_v2", path)
     if spec is None or spec.loader is None:
@@ -207,11 +227,16 @@ def apply_methods(
     )
     final_valid = model_valid & ~post
     combined[~final_valid] = np.nan
+    candidate, time_frequency_mask = apply_pixel_mask(combined, final_valid)
 
     context_start = training.shape[1]
     return {
         "reference_context": np.asarray(reference[:, context_start:], dtype=np.float32),
-        "combined_context": np.asarray(combined[:, context_start:], dtype=np.float32),
+        "row_only_context": np.asarray(combined[:, context_start:], dtype=np.float32),
+        "combined_context": np.asarray(candidate[:, context_start:], dtype=np.float32),
+        "time_frequency_mask_context": np.asarray(
+            time_frequency_mask[:, context_start:], dtype=bool
+        ),
         "reference_mean": reference_mean,
         "reference_scale": reference_scale,
         "reference_valid": reference_valid,
@@ -267,6 +292,56 @@ def integrated_spectrum(
     return spectrum
 
 
+def median_spread_outlier(
+    spectrum: np.ndarray,
+    frequency_mhz: np.ndarray,
+    valid_rows: np.ndarray,
+    interval_mhz: tuple[float, float] = (700.0, 750.0),
+) -> dict[str, float | int]:
+    """Summarize the largest retained spectral value in a fixed band."""
+    values = np.asarray(spectrum, dtype=np.float64)
+    frequency = np.asarray(frequency_mhz, dtype=np.float64)
+    valid = np.asarray(valid_rows, dtype=bool)
+    low, high = interval_mhz
+    use = valid & np.isfinite(values) & (frequency >= low) & (frequency < high)
+    selected = values[use]
+    if selected.size == 0:
+        raise ValueError("no finite spectrum values in requested interval")
+    center = float(np.median(selected))
+    spread = float(1.4826 * np.median(np.abs(selected - center)))
+    maximum = float(np.max(selected))
+    score = float((maximum - center) / spread) if spread > 0 else float("inf")
+    indices = np.flatnonzero(use)
+    maximum_index = int(indices[np.argmax(values[indices])])
+    return {
+        "count": int(selected.size),
+        "median": center,
+        "median_based_spread": spread,
+        "maximum": maximum,
+        "maximum_frequency_mhz": float(frequency[maximum_index]),
+        "maximum_spread_units_above_median": score,
+        "rows_above_100": int(np.sum(selected > 100.0)),
+    }
+
+
+def coarsen_mask_fraction(
+    mask: np.ndarray,
+    row_valid: np.ndarray,
+    factor: int = 64,
+) -> np.ndarray:
+    """Return rejected fine-row fraction per coarse channel and time bin."""
+    pixels = np.asarray(mask, dtype=bool)
+    valid = np.asarray(row_valid, dtype=bool)
+    if pixels.ndim != 2 or valid.shape != (pixels.shape[0],):
+        raise ValueError("mask must be 2D with one row-valid value per row")
+    if pixels.shape[0] % factor:
+        raise ValueError("frequency dimension is not divisible by factor")
+    grouped = pixels.reshape(-1, factor, pixels.shape[1])
+    valid_group = valid.reshape(-1, factor)
+    denominator = np.maximum(valid_group.sum(axis=1), 1)[:, None]
+    return np.sum(grouped & valid_group[:, :, None], axis=1) / denominator
+
+
 def broad_band_summary(
     spectrum: np.ndarray, frequency_mhz: np.ndarray, valid_rows: np.ndarray
 ) -> tuple[list[str], list[float | None]]:
@@ -313,13 +388,12 @@ def make_figure(
     )
     final_valid = result["final_valid"]
     reference = result["reference_display"]
-    combined = result["combined_display"]
-    reference_common = reference.copy()
-    reference_common[~final_valid] = np.nan
+    row_only = result["row_only_display"]
+    candidate = result["combined_display"]
 
     ref_coarse, coarse_frequency, _ = coarsen(reference, frequency_mhz, source_valid)
-    common_coarse, _, common_counts = coarsen(reference_common, frequency_mhz, final_valid)
-    combined_coarse, _, _ = coarsen(combined, frequency_mhz, final_valid)
+    row_only_coarse, _, _ = coarsen(row_only, frequency_mhz, final_valid)
+    candidate_coarse, _, _ = coarsen(candidate, frequency_mhz, final_valid)
     time_centers = (np.arange(reference.shape[1]) + 0.5) * DT_MS
     extent = [
         0.0,
@@ -328,7 +402,7 @@ def make_figure(
         float(np.nanmax(coarse_frequency)),
     ]
     comparable = np.concatenate(
-        [ref_coarse[np.isfinite(ref_coarse)], combined_coarse[np.isfinite(combined_coarse)]]
+        [ref_coarse[np.isfinite(ref_coarse)], candidate_coarse[np.isfinite(candidate_coarse)]]
     )
     limit = max(0.5, float(np.percentile(np.abs(comparable), 99.5)))
     cmap = mpl.colormaps["RdBu_r"].copy()
@@ -337,11 +411,16 @@ def make_figure(
     on_span = (on_local[0] * DT_MS, on_local[1] * DT_MS)
 
     fig = plt.figure(figsize=(15, 8.2), constrained_layout=True)
+    fig.suptitle(
+        "REJECTED DEVELOPMENT CANDIDATE — failed synthetic preservation limits; not valid for science use",
+        color="#9c1c1c",
+        fontsize=10,
+    )
     grid = fig.add_gridspec(2, 3, height_ratios=(1.15, 0.85))
     top = [
         (ref_coarse, "Bandpass only — full measured support"),
-        (common_coarse, "Bandpass only — cleaner-retained support"),
-        (combined_coarse, "Rejected cleaner — same retained support"),
+        (row_only_coarse, "Package row-mask output"),
+        (candidate_coarse, "Pixel-6 candidate output — rejected"),
     ]
     images = []
     top_axes = []
@@ -368,8 +447,13 @@ def make_figure(
 
     ax_profile = fig.add_subplot(grid[1, 0])
     ax_profile.plot(time_centers, time_profile(reference, source_valid), label="bandpass only, full", lw=1.2)
-    ax_profile.plot(time_centers, time_profile(reference_common, final_valid), label="bandpass only, retained", lw=1.2)
-    ax_profile.plot(time_centers, time_profile(combined, final_valid), label="rejected cleaner, retained", lw=1.2)
+    ax_profile.plot(time_centers, time_profile(row_only, final_valid), label="package row mask", lw=1.2)
+    ax_profile.plot(
+        time_centers,
+        time_profile(candidate, final_valid),
+        label="Pixel 6 — rejected",
+        lw=1.2,
+    )
     ax_profile.axvspan(*on_span, color="gold", alpha=0.12, lw=0)
     ax_profile.set_title("Frequency-averaged burst profile")
     ax_profile.set_xlabel("Aligned relative time (ms)")
@@ -387,13 +471,13 @@ def make_figure(
     ax_spectrum.plot(
         frequency_mhz,
         result["reference_common_spectrum"],
-        label="bandpass only, retained",
+        label="package row mask",
         lw=0.55,
     )
     ax_spectrum.plot(
         frequency_mhz,
         result["combined_common_spectrum"],
-        label="rejected cleaner, retained",
+        label="Pixel 6 — rejected",
         lw=0.55,
         alpha=0.8,
     )
@@ -404,28 +488,24 @@ def make_figure(
     ax_spectrum.legend(frameon=False)
 
     ax_mask = fig.add_subplot(grid[1, 2])
-    initial = result["initial_rfi_rows"] & source_valid
-    post = result["post_bandpass_rfi_rows"] & source_valid & ~initial
-    retained = final_valid
-    for level, rows, label, color in (
-        (2, initial, "first RFI pass", "#d95f02"),
-        (1, post, "second RFI pass", "#7570b3"),
-        (0, retained, "retained", "#1b9e77"),
-    ):
-        ax_mask.scatter(
-            frequency_mhz[rows],
-            np.full(int(rows.sum()), level),
-            marker="|",
-            s=9,
-            linewidths=0.35,
-            color=color,
-            rasterized=True,
-        )
-    ax_mask.set_xlim(400, 800)
-    ax_mask.set_ylim(-0.7, 2.7)
-    ax_mask.set_yticks([0, 1, 2], ["retained", "second pass", "first pass"])
-    ax_mask.set_title("Frequency-row decision")
-    ax_mask.set_xlabel("Frequency (MHz)")
+    mask_fraction = coarsen_mask_fraction(
+        result["time_frequency_mask_display"], final_valid
+    )
+    mask_image = ax_mask.imshow(
+        mask_fraction,
+        origin="lower",
+        aspect="auto",
+        extent=extent,
+        cmap="magma_r",
+        vmin=0.0,
+        vmax=max(0.01, float(np.percentile(mask_fraction, 99.5))),
+        interpolation="nearest",
+    )
+    ax_mask.axvspan(*on_span, color="cyan", alpha=0.08, lw=0)
+    ax_mask.set_title("Pixel-6 rejected fine-row fraction")
+    ax_mask.set_xlabel("Aligned relative time (ms)")
+    ax_mask.set_ylabel("Frequency (MHz)")
+    fig.colorbar(mask_image, ax=ax_mask, label="Rejected fraction")
 
     fig.savefig(path, format="svg", metadata={"Date": None, "Creator": "Faber2026"})
     plt.close(fig)
@@ -446,6 +526,7 @@ def _save_arrays(output_dir: Path, result: dict[str, np.ndarray]) -> dict[str, s
         "final_valid",
         "alignment_shifts",
         "alignment_offsets_s",
+        "time_frequency_mask_display",
         "reference_full_spectrum",
         "reference_common_spectrum",
         "combined_common_spectrum",
@@ -514,21 +595,26 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         return cropped
 
     result["reference_display"] = align_and_crop(result["reference_context"])
+    result["row_only_display"] = align_and_crop(result["row_only_context"])
     result["combined_display"] = align_and_crop(result["combined_context"])
+    result["time_frequency_mask_display"] = (
+        np.isfinite(result["row_only_display"])
+        & ~np.isfinite(result["combined_display"])
+    )
     result["alignment_shifts"] = shifts
     result["alignment_offsets_s"] = offsets
     reference = result["reference_display"]
-    reference_common = reference.copy()
-    reference_common[~result["final_valid"]] = np.nan
+    row_only = result["row_only_display"]
+    candidate = result["combined_display"]
     on_local = (ON_PULSE[0] - DISPLAY[0], ON_PULSE[1] - DISPLAY[0])
     result["reference_full_spectrum"] = integrated_spectrum(
         reference, source_valid, on_local
     )
     result["reference_common_spectrum"] = integrated_spectrum(
-        reference_common, result["final_valid"], on_local
+        row_only, result["final_valid"], on_local
     )
     result["combined_common_spectrum"] = integrated_spectrum(
-        result["combined_display"], result["final_valid"], on_local
+        candidate, result["final_valid"], on_local
     )
     labels, reference_full_bands = broad_band_summary(
         result["reference_full_spectrum"], frequency, source_valid
@@ -545,12 +631,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "reference_common": reference_common_bands,
         "combined_common": combined_common_bands,
     }
-    common = (
-        result["final_valid"][:, None]
-        & np.isfinite(reference_common)
-        & np.isfinite(result["combined_display"])
+    common = result["final_valid"][:, None] & np.isfinite(candidate)
+    row_only_common = restrict_to_finite_support(row_only, candidate)
+    common_difference = candidate[common] - row_only_common[common]
+    row_outlier = median_spread_outlier(
+        result["reference_common_spectrum"],
+        frequency,
+        result["final_valid"],
     )
-    common_difference = result["combined_display"][common] - reference_common[common]
+    candidate_outlier = median_spread_outlier(
+        result["combined_common_spectrum"],
+        frequency,
+        result["final_valid"],
+    )
     peak_bins = fixed_band_peak_bins(reference, frequency, source_valid)
     finite_peaks = [value for value in peak_bins.values() if value is not None]
     schedule_dm, schedule_rms_us, schedule_max_us = infer_time0_schedule_dm(
@@ -564,6 +657,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     array_hashes = _save_arrays(output, result)
     script_copy = output / Path(__file__).name
     shutil.copy2(Path(__file__).resolve(), script_copy)
+    candidate_source = Path(apply_pixel_mask.__code__.co_filename).resolve()
+    candidate_copy = output / candidate_source.name
+    shutil.copy2(candidate_source, candidate_copy)
     record = {
         "status": STATUS,
         "warning": "Observed event with no known truth; this does not validate the cleaner.",
@@ -615,12 +711,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         },
         "methods": {
             "reference": "bandpass mean and sample standard deviation learned on training without RFI mask",
-            "rejected_cleaner": [
+            "package_row_mask": [
                 "package RFI row mask on training",
                 "bandpass mean and sample standard deviation on surviving training rows",
                 "normalize",
                 "second package RFI row mask on normalized training",
             ],
+            "time_frequency_candidate": {
+                "operation": "mask finite normalized pixels with absolute value at least threshold",
+                "threshold": ABSOLUTE_PIXEL_THRESHOLD,
+                "ordering": "after package row masks and bandpass normalization",
+                "replacement": "none; rejected pixels are NaN",
+                "status": "development-only; fails some synthetic preservation limits",
+            },
             "package_threshold_mean": 5.0,
             "package_threshold_standard_deviation": 3.0,
         },
@@ -634,15 +737,25 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "cleaner_retained_fraction_of_source": float(
                 result["final_valid"].sum() / source_valid.sum()
             ),
+            "time_frequency_rejected_display_pixels": int(
+                result["time_frequency_mask_display"].sum()
+            ),
+            "time_frequency_retained_display_fraction": float(
+                1.0
+                - result["time_frequency_mask_display"].sum()
+                / max(np.isfinite(row_only).sum(), 1)
+            ),
         },
         "method_comparison": {
             "common_support_values_equal": bool(
-                np.array_equal(result["combined_display"][common], reference_common[common])
+                np.array_equal(candidate[common], row_only_common[common])
             ),
             "maximum_absolute_common_support_difference": float(
                 np.max(np.abs(common_difference))
             ),
-            "interpretation": "On retained rows, the methods are identical; the cleaner changes only row support.",
+            "interpretation": "On retained pixels, Pixel 6 leaves package-normalized values unchanged and changes only explicit support.",
+            "row_only_700_750_mhz_outlier": row_outlier,
+            "pixel6_700_750_mhz_outlier": candidate_outlier,
         },
         "broad_frequency_sums": bands,
         "provenance": {
@@ -653,6 +766,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "container_image_id": args.container_image_id,
             "pipeline_revision": args.pipeline_revision,
             "script_sha256": sha256(script_copy),
+            "candidate_module_sha256": sha256(candidate_copy),
             "python": platform.python_version(),
             "numpy": np.__version__,
             "array_hashes": array_hashes,

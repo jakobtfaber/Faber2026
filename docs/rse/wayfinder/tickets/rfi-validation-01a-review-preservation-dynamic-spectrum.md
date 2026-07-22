@@ -79,3 +79,33 @@ threshold on Zach: the next method must be specified independently and tested
 against known truth before returning to this observed-event review.
 
 This ticket remains open for a revised candidate and repeat owner review.
+
+## Pixel-6 replacement attempt — 2026-07-21
+
+The independently specified replacement retained the package row masks and
+added a fixed two-dimensional mask after normalization: every finite,
+row-valid pixel with absolute standardized intensity at least `6.0` became
+explicit missing data. Threshold and code were frozen before Zach application.
+
+Known-truth recovery improved to 98.69% overall, 99.66% for the broadband
+impulse, and 100% for the drifting line. The candidate nevertheless failed
+three protected measurements: morphology by 17.70 measurement uncertainties,
+normalized residual by 14.47, and spectral modulation by 1.33. It is rejected.
+
+On Zach, the same frozen code lowered the 700–750 MHz outlier score from 18.39
+to 6.36 and removed all integrated rows above 100. The review panel also shows
+that it clips the burst: the rejected-pixel mask follows the burst and the time
+profile peak falls materially. This is not acceptable RFI cleaning.
+
+- [Synthetic known-truth review](../../verify/rfi-time-frequency-candidate-20260721/synthetic/rfi_preservation_review.svg)
+- [Synthetic machine record](../../verify/rfi-time-frequency-candidate-20260721/synthetic/rfi_preservation_review.json)
+- [Zach rejected-candidate review](../../verify/rfi-time-frequency-candidate-20260721/zach/real_zach_rfi_method_comparison.svg)
+- [Zach machine record](../../verify/rfi-time-frequency-candidate-20260721/zach/real_zach_rfi_method_comparison.json)
+- Remote evidence:
+  `/data/Faber2026/evidence/rfi-time-frequency-candidate-20260721/`
+- Exact final reruns: `synthetic-{1,2}` and `zach-{5,6}` have byte-identical
+  manifests within each pair.
+
+The ticket remains open. Owner review may confirm the rejection visually, but
+cannot promote Pixel 6. A future candidate must be specified from known truth,
+not tuned on Zach.

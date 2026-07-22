@@ -70,6 +70,20 @@ def test_mask_confusion_accounts_for_all_valid_pixels():
     assert sum(counts.values()) == truth.size
 
 
+def test_mask_confusion_accepts_an_explicit_pixel_mask():
+    truth = np.array([[False, True, False], [True, True, False]])
+    predicted = np.array([[False, True, True], [False, True, False]])
+    valid = np.ones_like(truth, dtype=bool)
+
+    counts = MODULE.mask_confusion(truth, predicted, valid)
+
+    assert counts == {"tp": 2, "fp": 1, "fn": 1, "tn": 2}
+
+
+def test_prototype_uses_the_frozen_pixel_threshold():
+    assert MODULE.ABSOLUTE_PIXEL_THRESHOLD == 6.0
+
+
 def test_measurements_use_common_finite_support_without_zero_fill():
     freq, source_valid, mean, scale, ntime = small_fixture()
     case = MODULE.generate_case(freq, source_valid, mean, scale, ntime, 0.5, 2026072101)
