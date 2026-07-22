@@ -32,6 +32,19 @@ MSUN_G = 1.988409870698051e33
 KPC_CM = 3.085677581491367e21
 PROTON_G = 1.67262192369e-24
 
+# Inputs independently reviewed on 2026-07-22.  The validator must fail closed
+# if a later pipeline checkout changes any source while preserving the same
+# rounded budget total.
+EXPECTED_INPUT_SHA256 = {
+    "bursts": "204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644",
+    "registry": "b45d698cde155427b272d0ead4c1a248303ef8c839ddcb84a0393adcdd1ae222",
+    "masses": "3cea6b099d8238bea971e6289dfe5c729ac0da20470ae0678c9de558783d12a9",
+    "duplicates": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
+    "overrides": "108a9ed842ec10c76ed281e87b58aca2c32bb2785fdcf2d2ef5082c809c76748",
+    "method": "3df502e9244f8603f06336262e15d0f23aa6d52c858d4c4934fc1bbe741567bc",
+    "budget": "e8ca970d48c06709ddc141182f5c61729f99ed1fa1f33cfbb00fdcd95111a90b",
+}
+
 
 def simpson(func, lo: float, hi: float, intervals: int = 8000) -> float:
     """Composite Simpson integral with a fixed, inspectable resolution."""
@@ -199,6 +212,17 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def input_hash_status(paths: dict[str, Path]) -> tuple[dict[str, str], dict[str, dict[str, str]]]:
+    """Return observed hashes and every mismatch from the reviewed inputs."""
+    observed = {name: _sha256(path) for name, path in paths.items()}
+    mismatches = {
+        name: {"expected": EXPECTED_INPUT_SHA256[name], "observed": observed[name]}
+        for name in EXPECTED_INPUT_SHA256
+        if observed[name] != EXPECTED_INPUT_SHA256[name]
+    }
+    return observed, mismatches
+
+
 def validate(pipeline_root: Path) -> dict:
     data = pipeline_root / "galaxies" / "foreground" / "data"
     paths = {
@@ -213,6 +237,9 @@ def validate(pipeline_root: Path) -> dict:
     missing = [str(path) for path in paths.values() if not path.is_file()]
     if missing:
         raise FileNotFoundError("missing required files: " + ", ".join(missing))
+
+    input_sha256, input_hash_mismatches = input_hash_status(paths)
+    input_hashes_match = not input_hash_mismatches
 
     burst = next(row for row in _read_csv(paths["bursts"]) if row["nickname"].lower() == "phineas")
     sight_ra = float(burst["ra_deg"])
@@ -344,6 +371,8 @@ def validate(pipeline_root: Path) -> dict:
         abs(row["owner_model"]["stored_r200_fractional_difference"]) for row in halo_results
     )
     owner_arithmetic_reproduced = (
+        input_hashes_match
+        and
         len(halo_rows_before_dedup) == 8
         and len(duplicate_rows) == 3
         and len(physical_halos) == 5
@@ -355,7 +384,10 @@ def validate(pipeline_root: Path) -> dict:
     return {
         "validator": "standard-library clean-room implementation; no pipeline imports",
         "pipeline_root": str(pipeline_root.resolve()),
-        "input_sha256": {name: _sha256(path) for name, path in paths.items()},
+        "input_sha256": input_sha256,
+        "expected_input_sha256": EXPECTED_INPUT_SHA256,
+        "input_hashes_match": input_hashes_match,
+        "input_hash_mismatches": input_hash_mismatches,
         "selection": {
             "confirmed_eligible_halo_rows_before_dedup": len(halo_rows_before_dedup),
             "duplicate_pairs_removed": len(duplicate_rows),

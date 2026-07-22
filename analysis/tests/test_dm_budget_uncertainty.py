@@ -34,8 +34,9 @@ not in a separate fixture; that ``.npy`` is not vendored in this repo.
 
 from __future__ import annotations
 
-import math
 import csv
+import json
+import math
 import sys
 from pathlib import Path
 
@@ -224,14 +225,31 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
         "194021777634832653",
         "983",
     }
-    assert sum(s.dm_point for s in phineas.intervening_systems) == pytest.approx(
-        phineas.dm_int, abs=0.5
-    )
+    assert all(system.dm_point is None for system in probabilistic)
     for row in sightlines:
         if row.dm_int == 0:
             assert row.intervening_systems == ()
         else:
-            assert round(sum(s.dm_point for s in row.intervening_systems)) == row.dm_int
+            fixed = [
+                system.dm_point
+                for system in row.intervening_systems
+                if system.model == "fixed_lognormal"
+            ]
+            if len(fixed) == len(row.intervening_systems):
+                assert round(sum(point for point in fixed if point is not None)) == row.dm_int
+
+
+def test_current_inputs_reject_a_stale_probabilistic_record(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+):
+    record = json.loads(dbu.phineas_crossing.DEFAULT_OUTPUT.read_text(encoding="utf-8"))
+    record["input_sha256"] = "0" * 64
+    stale = tmp_path / "stale-phineas-record.json"
+    stale.write_text(json.dumps(record), encoding="utf-8")
+    monkeypatch.setattr(dbu.phineas_crossing, "DEFAULT_OUTPUT", stale)
+
+    with pytest.raises(ValueError, match="does not match its frozen inputs"):
+        dbu.load_sightlines()
 
 
 @pytest.mark.parametrize(

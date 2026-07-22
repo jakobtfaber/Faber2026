@@ -7,6 +7,7 @@ import math
 from pathlib import Path
 
 
+
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "validate_phineas_owner_adjudication.py"
 SPEC = importlib.util.spec_from_file_location("phineas_validation", SCRIPT)
 assert SPEC and SPEC.loader
@@ -55,3 +56,14 @@ def test_modified_nfw_column_is_positive_inside_and_zero_outside():
     radius = validation._bryan_norman_rvir_kpc(mass, z)
     assert validation.modified_nfw_dm(mass, z, 0.5 * radius) > 0.0
     assert validation.modified_nfw_dm(mass, z, radius) == 0.0
+
+
+def test_validation_fails_closed_when_a_frozen_input_drifts(tmp_path: Path):
+    paths = {name: tmp_path / name for name in validation.EXPECTED_INPUT_SHA256}
+    for path in paths.values():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("drift\n", encoding="utf-8")
+
+    observed, mismatches = validation.input_hash_status(paths)
+    assert set(observed) == set(validation.EXPECTED_INPUT_SHA256)
+    assert set(mismatches) == set(validation.EXPECTED_INPUT_SHA256)

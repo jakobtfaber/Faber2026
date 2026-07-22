@@ -256,8 +256,8 @@ inputs = []
 external_sources = []
 artifact = "figures/codetection_data_grid.pdf md5:4f966f2d"
 consumed_by = ["sections/observations.tex"]
-trust = "trusted"
-cleared_by = "Wayfinder tickets 06 and 07; independent physical and Monte Carlo checks"
+trust = "pending"
+cleared_by = ""
 current = false
 notes = "contract locked 2026-07-14 (data-only 4x3); UPDATE 2026-07-18: observed-peak candidate merged + promotable (PRs #121/#128/#130; batch 2026-07-17-fig1-observed-peak-audit); dmcorr variant REFUTED by marker-dependence (PR #132 kill record); awaits owner figure_review decide, then promotion PR"
 
