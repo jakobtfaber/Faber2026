@@ -75,8 +75,12 @@ independent numerical, provenance, and owner visual checks.
 - [Freeze authoritative host-redshift evidence](tickets/expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md)
   — the supplied Verdi archive is hash-frozen as a minimal comparison, but its
   two drafts conflict, two sightlines are absent, four identifiers differ, and
-  every row lacks a host identifier and row-level uncertainty. Authority stays
-  closed pending an owner-approved host-redshift ledger.
+  every row lacks a host identifier and row-level uncertainty. Authority stayed
+  closed until the later owner decision named the current table.
+- [Obtain the authoritative host-redshift ledger](tickets/expanded-foreground-catalog-repair-17-obtain-authoritative-host-redshift-ledger.md)
+  — the manuscript owner approves the current `verdi2025.tex` table entries as
+  authoritative; the older `test.tex` is superseded, blank cells remain blank,
+  and absent Zach and Whitney rows continue through a separate source ticket.
 
 ## Not yet specified
 
