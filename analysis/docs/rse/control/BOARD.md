@@ -84,6 +84,10 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   count adoption
   ([wf-15](wayfinder/tickets/15-count-audit-remediation-standing-method.md)),
   validation + ratification before manuscript use
+- [ ] Zach bounded-window C2D3/C2D4/C2D5 adjudication after the clean C2D4
+  rerun
+  ([ticket](wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md),
+  [GitHub #205](https://github.com/jakobtfaber/Faber2026/issues/205))
 - [ ] Per-band systematics pass on flagged sightlines (legacy C2)
 - [ ] Pipeline pin bump + table/figure regeneration from the campaign (legacy C3)
 
@@ -101,6 +105,10 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   (`2026-07-17-fig1-observed-peak-audit`); dmcorr variant refuted
   (marker-dependence); owner runs the two `figure_review.py decide` commands
   (handoff-2026-07-18-14-44), then any session runs the promotion PR
+- [ ] Expanded foreground catalog repair and staged Figure 3
+  ([map](wayfinder/map-expanded-foreground-catalog-repair.md),
+  [GitHub #206](https://github.com/jakobtfaber/Faber2026/issues/206)); current
+  frontier: host-redshift adjudication, then Figure 3 and release gates
 - [ ] Wishlist figures: (re)insert per `specs/figure-wishlist.md` as their
   gates clear; strip draft `\fbox` placeholders before circulation
 

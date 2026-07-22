@@ -10,7 +10,7 @@
 # lane->branch/issue association) is stored here.
 
 [meta]
-updated = "2026-07-15"          # bumped by any edit; shown on the board
+updated = "2026-07-22"          # bumped by any edit; shown on the board
 wip_limit = 3                     # max concurrent in_progress lanes ( --check enforces )
 
 # Status vocabulary: proposed | in_progress | blocked | needs_owner |
@@ -75,17 +75,17 @@ next_action = "terminal: DOCUMENTED-FAIL (envelope not separable) — predeclare
 needs_owner = true
 
 [[lane]]
-id = "a5-profile-fit-statistic"
-title = "A5 N-component profile-fit justification statistic"
+id = "zach-component-count-adjudication"
+title = "Zach bounded-window C2D3/C2D4/C2D5 adjudication"
 strand = "scattering"
 status = "proposed"
 owner = ""
-issue = 56                        # GitHub issue (0 = not yet filed)
+issue = 205                       # GitHub issue (0 = not yet filed)
 branch = ""
 worktree = ""
 pr = 0
-gates = ["calibrated N-vs-1 profile model comparison design"]
-next_action = "design after the control system lands"
+gates = ["controlled C2D3/C2D4/C2D5 contract", "fixed s2 = 1, 10, 100", "same-mode and in-window components", "hash-bound owner review before promotion"]
+next_action = "complete the clean Zach C2D4 rerun, then execute controlled-rerun ticket 07"
 needs_owner = false
 
 [[lane]]
@@ -106,14 +106,28 @@ needs_owner = false
 id = "fig1-gallery"
 title = "Figure 1 data-only twelve-burst gallery"
 strand = "association"
-status = "proposed"
+status = "needs_owner"
 owner = ""
 issue = 58                        # GitHub issue (0 = not yet filed)
 branch = ""
 worktree = ""
 pr = 0
 gates = ["adopted-DM revalidation", "hash-bound owner approval of exact bytes"]
-next_action = "fresh isolated batch under the locked 4-by-3 data-only contract"
+next_action = "owner reviews the exact hash-bound candidate bytes; promote only the approved artifact"
+needs_owner = true
+
+[[lane]]
+id = "expanded-foreground-figure3-repair"
+title = "Expanded foreground catalog repair and staged Figure 3"
+strand = "budget_census"
+status = "proposed"
+owner = ""
+issue = 206
+branch = ""
+worktree = ""
+pr = 0
+gates = ["source-bearing host redshifts", "independent validation", "focused pipeline then parent pin", "hash-bound owner approval before Figure 3 promotion"]
+next_action = "adjudicate host-redshift differences in foreground ticket 19"
 needs_owner = false
 
 # ---------------------------------------------------------------------------
@@ -125,7 +139,7 @@ needs_owner = false
 # ---------------------------------------------------------------------------
 
 [owner_view]
-updated = "2026-07-15T12:35-0700"
+updated = "2026-07-22T15:44-0700"
 
 [[owner_view.now]]
 h = "P4 resolved: envelope not separable — ratify CHIME closure wording"
@@ -133,12 +147,16 @@ d = "P4 hit its predeclared E2 fail branch: models stiff enough to keep a scintl
 who = "owner"
 
 [[owner_view.next]]
-h = "A5: N-component profile-fit statistic"
-d = "calibrated N-vs-1 profile model comparison (owner charter at A1 closure); design after control system lands"
+h = "Zach component-count adjudication"
+d = "after the clean C2D4 rerun, execute the bounded-window C2D3/C2D4/C2D5 comparison under GitHub issue #205"
 
 [[owner_view.next]]
 h = "Figure 1 data-only gallery"
-d = "per the 2026-07-14 decision route; independent of the CHIME question"
+d = "exact candidate bytes remain at the hash-bound manuscript-owner approval gate; independent of Zach model acceptance"
+
+[[owner_view.next]]
+h = "Foreground catalog and Figure 3"
+d = "adjudicate host-redshift differences under GitHub issue #206, then advance the Figure 3 and release gates"
 
 [[owner_view.component]]
 name = "Sample & association"
