@@ -1,0 +1,125 @@
+{
+  "bands": [
+    {
+      "bandpass_retained_rows": 755,
+      "display_limit": 2.9655931639671542,
+      "fine_rows": 819,
+      "interval_mhz": [
+        600.0,
+        605.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 819,
+      "display_limit": 3.0974521398544237,
+      "fine_rows": 819,
+      "interval_mhz": [
+        605.0,
+        610.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 820,
+      "display_limit": 2.817960202693899,
+      "fine_rows": 820,
+      "interval_mhz": [
+        610.0,
+        615.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 454,
+      "display_limit": 2.9359953308105484,
+      "fine_rows": 819,
+      "interval_mhz": [
+        615.0,
+        620.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 128,
+      "display_limit": 4.869933304786686,
+      "fine_rows": 819,
+      "interval_mhz": [
+        620.0,
+        625.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 467,
+      "display_limit": 1.6621845877170571,
+      "fine_rows": 819,
+      "interval_mhz": [
+        625.0,
+        630.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 819,
+      "display_limit": 2.158359783887848,
+      "fine_rows": 819,
+      "interval_mhz": [
+        630.0,
+        635.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 756,
+      "display_limit": 2.828922456502913,
+      "fine_rows": 820,
+      "interval_mhz": [
+        635.0,
+        640.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 755,
+      "display_limit": 3.3697335207462307,
+      "fine_rows": 819,
+      "interval_mhz": [
+        640.0,
+        645.0
+      ]
+    },
+    {
+      "bandpass_retained_rows": 819,
+      "display_limit": 2.83667902350425,
+      "fine_rows": 819,
+      "interval_mhz": [
+        645.0,
+        650.0
+      ]
+    }
+  ],
+  "coherent_dm_pc_cm3": 262.4359033801,
+  "display_columns": [
+    197,
+    305
+  ],
+  "event": "zach",
+  "frequency_coarsening_factor": 8,
+  "frequency_interval_mhz": [
+    600.0,
+    650.0
+  ],
+  "instrument": "CHIME/FRB",
+  "manual_zaps_applied": false,
+  "protected_on_pulse": [
+    32,
+    76
+  ],
+  "provenance": {
+    "atlas_script_sha256": "9dfedae3d3d84d6f87392c0be4ee6a9984b851c42b08cc5da4c9fbf3529b5226",
+    "container_digest": "chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41",
+    "input_hashes": {
+      "code/audit_chime_preprocessing_v2.py": "5df48f411c6d9f9ce59873b6ccb147de30e22fa8306b3543bb06632212340c83",
+      "code/upchannelize_chime.py": "1825746445782cb2f36b806668241cfcd7e03a9c11531457b903d43974007b4e",
+      "products/zach_chime_freq.npy": "02c794745bd79ca235d1d3e18d46b2f43f7529616a5747ccab2a5db094a9cba2",
+      "products/zach_chime_preprocessing_metadata.json": "badcba0e4a3152645b15a81c9f031a5c41c032b63a991d91240892f75c872f0e",
+      "products/zach_chime_source_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e",
+      "products/zach_chime_upchan.npy": "264f1e643f57012fce1385dcd7b6dfe6a12086f43eb1fa907be5540fb3359192"
+    },
+    "review_script_sha256": "d94b6123e60aec3a17a9529d307a2ba8226d59807fdc098f5d7b1d68dfc6e445"
+  },
+  "status": "development_only_manual_zap_atlas"
+}
