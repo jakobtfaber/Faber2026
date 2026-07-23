@@ -28,8 +28,8 @@ OUT = ROOT / "budget_table.tex"
 # provenance. Keep that distinction visible in distance-dependent results.
 PROVISIONAL_REDSHIFTS = {
     "FRB 20230814B",
-    "FRB 20230913A",
-    "FRB 20240203A",
+    "FRB 20230913G",
+    "FRB 20240203D",
 }
 
 EMITTER = PIPELINE / "galaxies" / "foreground" / "budget_table_emitter.py"
@@ -120,8 +120,8 @@ def render() -> str:
             "(Section~\\ref{sec:obs-fg}).}",
             "not\nexcluded---absence of coverage is not absence of foreground\n"
             "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
-            "shallow-layer confirmed system (FRB~20240203A), the tabulated column\n"
-            "is a lower bound rather than a complete census.}",
+            "shallow-layer confirmed system, the tabulated column is a lower bound\n"
+            "rather than a complete census.}",
         )
         .replace(
             "\\tablenotetext{u}{Position lies outside",

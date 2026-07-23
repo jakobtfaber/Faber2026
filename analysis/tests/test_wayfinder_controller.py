@@ -43,7 +43,7 @@ def test_manifest_has_analysis_specific_controller_roots():
         ).expanduser()
     )
     assert manifest.max_parallel == 4
-    assert len(wc.tasks_for_wave(manifest, "first")) == 3
+    assert len(wc.tasks_for_wave(manifest, "first")) == 2
 
 
 def test_manifest_represents_expanded_foreground_active_graph_and_history():
@@ -57,7 +57,6 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
         for number, slug in [
             (4, "set-figure-3-gate"),
             (5, "set-independent-validation-gate"),
-            (19, "adjudicate-host-redshift-differences"),
         ]
     }
     assert {Path(item.ticket).name for item in manifest.history} == {
@@ -79,6 +78,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (16, "independently-replay-nine-sightline-query-corpus"),
             (17, "obtain-authoritative-host-redshift-ledger"),
             (18, "source-zach-whitney-host-redshifts"),
+            (19, "adjudicate-host-redshift-differences"),
         ]
     }
     wc.validate_manifest_ticket_graph(manifest, ROOT)
@@ -101,12 +101,6 @@ def test_manifest_graph_rejects_coverage_dependency_and_execution_drift():
     with pytest.raises(ValueError, match="dependency mismatch"):
         wc.validate_manifest_ticket_graph(replace(manifest, tasks=tasks), ROOT)
 
-    hitl = next(item for item in manifest.tasks if item.execution == "hitl")
-    drifted = replace(hitl, execution="afk")
-    tasks = tuple(drifted if item.id == hitl.id else item for item in manifest.tasks)
-    with pytest.raises(ValueError, match="execution mismatch"):
-        wc.validate_manifest_ticket_graph(replace(manifest, tasks=tasks), ROOT)
-
     cross_repo = replace(manifest.tasks[0], repo="jakobtfaber/Faber2026")
     tasks = (cross_repo, *manifest.tasks[1:])
     with pytest.raises(ValueError, match="cross-repository"):
@@ -118,21 +112,21 @@ def test_hitl_tasks_are_never_ready_or_directly_runnable(tmp_path):
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     manifest = replace(manifest, state_dir=tmp_path)
     state = wc.empty_state(manifest)
-    hitl = next(item for item in manifest.tasks if item.execution == "hitl")
+    hitl = replace(manifest.tasks[0], execution="hitl")
+    manifest = replace(manifest, tasks=(hitl, *manifest.tasks[1:]))
 
     assert hitl not in wc.ready_tasks(manifest, state, hitl.wave)
     with pytest.raises(RuntimeError, match="HITL"):
         wc.run_task(manifest, hitl, "1" * 32)
 
 
-def test_plan_labels_hitl_as_owner_facing(capsys):
+def test_plan_omits_resolved_hitl_task(capsys):
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
 
     assert wc.print_plan(manifest, "first") == 0
     output = capsys.readouterr().out
-    assert "adjudicate-host-redshift-differences: queued" in output
-    assert "execution=hitl" in output
+    assert "adjudicate-host-redshift-differences: queued" not in output
 
 
 def test_manifest_rejects_unsafe_branch_and_mode(tmp_path):
@@ -182,7 +176,7 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     assert ready == {"set-expanded-figure3-gate"}
 
 
-def test_current_plan_accepts_resolved_ticket09_and_keeps_ticket19_owner_only(capsys):
+def test_current_plan_accepts_resolved_ticket09_and_ticket19(capsys):
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
 
@@ -190,8 +184,7 @@ def test_current_plan_accepts_resolved_ticket09_and_keeps_ticket19_owner_only(ca
     output = capsys.readouterr().out
     assert "repeat-expanded-redshift-verification: queued" not in output
     assert "set-expanded-figure3-gate: queued" in output
-    assert "adjudicate-host-redshift-differences: queued" in output
-    assert "execution=hitl" in output
+    assert "adjudicate-host-redshift-differences: queued" not in output
 
 
 def test_pass_only_ticket_cannot_resolve_as_no_go():
