@@ -58,11 +58,11 @@ NICK_TNS = {
     "isha": "FRB 20221113A",
     "wilhelm": "FRB 20221203A",
     "phineas": "FRB 20230307A",
-    "freya": "FRB 20230325A",
+    "freya": "FRB 20230325C",
     "johndoeii": "FRB 20230814B",
-    "hamilton": "FRB 20230913A",
+    "hamilton": "FRB 20230913G",
     "mahi": "FRB 20240122A",
-    "chromatica": "FRB 20240203A",
+    "chromatica": "FRB 20240203D",
     "casey": "FRB 20240229A",
 }
 

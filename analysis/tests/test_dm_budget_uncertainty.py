@@ -209,8 +209,8 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
         "FRB 20221113A",
         "FRB 20230307A",
         "FRB 20230814B",
-        "FRB 20230913A",
-        "FRB 20240203A",
+        "FRB 20230913G",
+        "FRB 20240203D",
         "FRB 20240229A",
     }
     phineas = next(row for row in sightlines if row.name == "FRB 20230307A")

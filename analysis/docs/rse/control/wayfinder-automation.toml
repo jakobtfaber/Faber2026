@@ -31,22 +31,18 @@ repo = "jakobtfaber/Faber2026-analysis"
 depends_on = ["set-expanded-figure3-gate"]
 instructions = "Implement the independent-validation gate after the Figure 3 gate resolves. Do not self-certify or promote scientific trust."
 
-[[task]]
-id = "adjudicate-host-redshift-differences"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md"
-branch = "codex/auto-adjudicate-host-redshifts"
-mode = "resolve"
-execution = "hitl"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = []
-instructions = "Owner-facing host-redshift adjudication. The controller records it but never spawns it."
-
 [[history]]
 id = "repeat-expanded-redshift-verification"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md"
 execution = "afk"
 depends_on = ["source-zach-whitney-host-redshifts", "replay-nine-sightline-query-corpus"]
+status = "resolved"
+
+[[history]]
+id = "adjudicate-host-redshift-differences"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md"
+execution = "hitl"
+depends_on = []
 status = "resolved"
 
 [[history]]
