@@ -1,11 +1,11 @@
 {
-  "updated": "2026-07-22T15:44-0700",
+  "updated": "2026-07-23T13:54-0700",
   "needs_you": [],
   "now": [
     {
       "h": "P4 resolved: envelope not separable — ratify CHIME closure wording",
       "d": "P4 hit its predeclared E2 fail branch: models stiff enough to keep a scintle leave 5–72 sigma of un-attributable envelope-mismatch structure, the one control-clean model (GP 0.5 MHz) absorbs the injected scintles; all three families dropped, the real residual was never scanned (0/3 looks). The intrinsic envelope is not removable in-house, so the CHIME constraint stays envelope-confusion-limited with no post-subtraction upper limit either. OWNER: ratify the manuscript closure wording with P3' + P4 in hand (FLITS PR #182; record §Outcome)",
-      "who": "owner"
+      "who": "jakobtfaber"
     }
   ],
   "next": [
