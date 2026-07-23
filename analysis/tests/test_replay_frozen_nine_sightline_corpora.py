@@ -5,6 +5,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/replay_frozen_nine_sightline_corpora.py"
+FROZEN_REGISTRY_REPLAY = (
+    ROOT
+    / "docs/rse/specs/evidence/nine-sightline-registry-replay-2026-07-23/replay.json"
+)
 
 
 def _module():
@@ -18,6 +22,7 @@ def _module():
 def test_replay_matches_corpora_and_current_production_registry():
     module = _module()
     result = module.replay(ROOT)
+    frozen = json.loads(FROZEN_REGISTRY_REPLAY.read_text())
     assert result["ok"] is True
     assert result["anonymous"]["cells"] == 135
     assert result["anonymous"]["coverage_cells_independently_replayed"] == 36
@@ -37,11 +42,22 @@ def test_replay_matches_corpora_and_current_production_registry():
     assert result["roster_case_aliases"] == {"johndoeii": "johndoeII"}
     assert result["registry_replay"]["verdict_mismatches"] == []
     assert result["registry_replay"]["budget_mismatches"] == []
-    assert result["registry_replay"]["pipeline_commit"] == module.EXPECTED_PIPELINE_COMMIT
-    assert result["registry_replay"]["rows"] == 52
-    assert result["registry_replay"]["finite_host_rows"] == 49
+    assert result["registry_replay"]["pipeline_commit"] == frozen["pipeline_commit"]
+    assert frozen["pipeline_commit"] == module.EXPECTED_PIPELINE_COMMIT
+    assert (
+        result["registry_replay"]["input_sha256"]
+        == frozen["input_sha256"]
+        == module.EXPECTED_REGISTRY_INPUT_SHA256
+    )
+    assert result["registry_replay"]["rows"] == frozen["rows"] == 52
+    assert result["registry_replay"]["finite_host_rows"] == frozen["finite_host_rows"] == 49
     assert result["registry_replay"]["provenance_rows"] == 52
-    assert all(item["matches"] for item in result["registry_replay"]["duplicate_checks"])
+    assert sum(
+        item["matches"] for item in result["registry_replay"]["duplicate_checks"]
+    ) == frozen["duplicate_checks_passed"] == 7
+    assert frozen["verdict_mismatches"] == []
+    assert frozen["budget_mismatches"] == []
+    assert frozen["status"] == "validated"
     assert result["errors"] == []
 
 

@@ -1,6 +1,6 @@
 # OWNER QUEUE — regenerate with `python3 scripts/owner_queue.py`
 
-_Generated 2026-07-22. Manual walkthrough ritual: see `docs/rse/control/owner-queue-ritual.md`._
+_Generated 2026-07-23. Manual walkthrough ritual: see `docs/rse/control/owner-queue-ritual.md`._
 
 ## Decisions (wayfinder frontier, owner-facing)
 

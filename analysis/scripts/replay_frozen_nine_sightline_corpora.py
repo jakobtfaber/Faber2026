@@ -16,6 +16,7 @@ import hashlib
 import io
 import json
 import math
+import os
 import re
 import subprocess
 import tarfile
@@ -28,7 +29,13 @@ from typing import Any
 ANON = Path("docs/rse/specs/evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22")
 PROTECTED = Path("docs/rse/specs/evidence/protected-nine-sightline-2026-07-22")
 CADC = Path("docs/rse/specs/evidence/cadc-cfis-access-2026-07-22")
-EXPECTED_PIPELINE_COMMIT = "f3c8d22a9088914e0179cfecf1ee4086777dc927"
+EXPECTED_PIPELINE_COMMIT = "31f7744758cc078168fef2b56052711a15df5115"
+EXPECTED_REGISTRY_INPUT_SHA256 = {
+    "intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+    "candidate_redshift_provenance.csv": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+    "census_duplicates.csv": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
+    "ps1_strm_resolution.csv": "18947acafc02b9781c4ac9612b9570d02eedd46c0115c9f73b5f3d79ec2c354e",
+}
 EXPECTED_ANONYMOUS_MANIFEST_SHA256 = "14321fb328e372b8df0537d9a445dec2ab1376c4b258dabaf92116152eb023a5"
 EXPECTED_ANONYMOUS_BUNDLE_SHA256 = "fed672e29c1d84ffd09f93de2487a1337fb722c02bd5dc718f7f97c1e593d32d"
 EXPECTED_PROTECTED_MANIFEST_SHA256 = "43af38cc4e996b7890ea0858ef5a760c124e877825dc8866bc4221d3d02b347f"
@@ -145,12 +152,19 @@ def replay_registry(pipeline_dir: Path, errors: list[str]) -> dict[str, Any]:
         ["git", "rev-parse", "HEAD"], cwd=pipeline_dir, check=True,
         capture_output=True, text=True,
     ).stdout.strip()
+    input_sha256 = {path.name: sha256_file(path) for path in paths}
     if head != EXPECTED_PIPELINE_COMMIT:
         errors.append(f"pipeline commit mismatch: expected {EXPECTED_PIPELINE_COMMIT}, got {head}")
+    for name, expected in EXPECTED_REGISTRY_INPUT_SHA256.items():
+        if input_sha256[name] != expected:
+            errors.append(
+                f"registry replay input SHA-256 mismatch: {name}: "
+                f"expected {expected}, got {input_sha256[name]}"
+            )
     return {
         "available": True,
         "pipeline_commit": head,
-        "input_sha256": {path.name: sha256_file(path) for path in paths},
+        "input_sha256": input_sha256,
         "rows": len(registry_all),
         "finite_host_rows": len(registry),
         "sightlines": sorted(registry_names),
@@ -681,6 +695,9 @@ def replay_cadc(root: Path, errors: list[str]) -> dict[str, Any]:
 
 
 def _default_pipeline_dir(root: Path) -> Path:
+    configured = os.environ.get("FOREGROUND_PIPELINE_REPO")
+    if configured:
+        return Path(configured).expanduser().resolve()
     candidates = (
         root.parent / "dsa110-FLITS-ticket16-read",
         root.parent / "pipeline",
@@ -694,6 +711,9 @@ def _default_pipeline_dir(root: Path) -> Path:
             ).stdout.strip()
             if head == EXPECTED_PIPELINE_COMMIT:
                 return candidate
+    for candidate in candidates:
+        if candidate.is_dir():
+            return candidate
     return candidates[-1]
 
 
