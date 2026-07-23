@@ -62,7 +62,8 @@ import csv
 import json
 import math
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Any
 
 import numpy as np
 from numpy.polynomial.legendre import leggauss
@@ -147,6 +148,24 @@ class DiscretePDF:
     @property
     def x(self) -> np.ndarray:
         return self.x0 + self.dx * np.arange(self.density.size)
+
+
+# Alternate 1.5 R500 aperture: the only newly admitted system is the Phineas
+# near-miss J115128.2+713637 at b/R500=1.25.  Its 94.6258 pc cm^-3 point column
+# is produced by the same mNFW cluster model as fig:clusters_icm:
+# pipeline/galaxies/v2_0/systems_figures.py::cluster_params(1055, 1.25, 0.192).
+# The forward model treats that point as the median of the standard
+# cluster-catalog lognormal prior (sigma_ln=0.30), rather than subtracting it
+# from the fiducial posterior after the fact.
+WIDE_APERTURE_R500 = 1.5
+WIDE_APERTURE_NEAR_MISS = InterveningSystem(
+    object="J115128.2+713637",
+    kind="cluster",
+    mass_source="cluster_catalog",
+    model="fixed_lognormal",
+    dm_point=94.62576766871209,
+    impact_kpc=1055.0,
+)
 
 
 # Sightlines outside the deep-imaging footprints (budget_table.tex note u): the
@@ -576,6 +595,30 @@ def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
     }
 
 
+def widened_aperture_distribution(
+    row: Sightline, *, dx: float = GRID_DX
+) -> dict:
+    """Recompute Phineas at 1.5 R500 with the newly admitted cluster.
+
+    This is an alternate sensitivity scenario only.  It does not mutate the
+    fiducial R500 census or any manuscript figure/table generated from it.
+    """
+    if row.name != "FRB 20230307A":
+        raise ValueError(
+            "the 1.5 R500 sensitivity scenario applies only to FRB 20230307A"
+        )
+    assert WIDE_APERTURE_NEAR_MISS.dm_point is not None
+    widened = replace(
+        row,
+        dm_int=row.dm_int + WIDE_APERTURE_NEAR_MISS.dm_point,
+        intervening_systems=(
+            *row.intervening_systems,
+            WIDE_APERTURE_NEAR_MISS,
+        ),
+    )
+    return host_distribution(widened, dx=dx)
+
+
 def sample_host_for_validation(
     row: Sightline,
     *,
@@ -798,6 +841,17 @@ def main(argv: list[str] | None = None) -> int:
             f"{r['p_host_neg']:6.2f}"
         )
 
+    phineas = next(row for row in sightlines if row.name == "FRB 20230307A")
+    widened = widened_aperture_distribution(phineas)
+    print("\n=== 1.5 R500 aperture sensitivity: FRB 20230307A ===")
+    print(
+        "DM_int p16/p50/p84="
+        f"{widened['dm_int_p16']:.0f}/{widened['dm_int_p50']:.0f}/{widened['dm_int_p84']:.0f}; "
+        "DM_host p16/p50/p84="
+        f"{widened['dm_host_p16']:.0f}/{widened['dm_host_p50']:.0f}/{widened['dm_host_p84']:.0f}; "
+        f"P(DM_host<0)={widened['p_host_neg']:.2f}"
+    )
+
     print("\n=== B2: FRB 20230307A intracluster column ===")
     dm_cl = cluster_column_range()
     p16, p50, p84 = np.percentile(dm_cl, [16, 50, 84])
@@ -857,6 +911,25 @@ def main(argv: list[str] | None = None) -> int:
             ["cluster_beta_model_p16_p50_p84", f"{p16:.0f}", f"{p50:.0f}", f"{p84:.0f}"]
         )
         w.writerow(["cluster_95CI_lo_hi", f"{lo:.0f}", f"{hi:.0f}"])
+        w.writerow(
+            [
+                "aperture_1p5r500_dm_int_p16_p50_p84",
+                f"{widened['dm_int_p16']:.0f}",
+                f"{widened['dm_int_p50']:.0f}",
+                f"{widened['dm_int_p84']:.0f}",
+            ]
+        )
+        w.writerow(
+            [
+                "aperture_1p5r500_dm_host_p16_p50_p84",
+                f"{widened['dm_host_p16']:.0f}",
+                f"{widened['dm_host_p50']:.0f}",
+                f"{widened['dm_host_p84']:.0f}",
+            ]
+        )
+        w.writerow(
+            ["aperture_1p5r500_p_host_negative", f"{widened['p_host_neg']:.3f}"]
+        )
     print(f"\nwrote {OUT_CSV.relative_to(REPO)}")
 
     # LaTeX-ready rows for tab:host-forward-model (observer & rest frame), so the
