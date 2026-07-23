@@ -422,12 +422,13 @@ def test_submodule_checkout_kind_and_every_path_hint_is_labelled_pathname_infere
             str(tmp_path / f"{hint}-surface" / "Faber2026")
         )
         assert proposed == "path_hint_review"
-        assert evidence == [
-            {
-                "basis": "pathname inference",
-                "detail": f"path contains '{hint}'; this can suggest review context only and does not establish authority",
-            }
-        ]
+        assert {
+            "basis": "pathname inference",
+            "detail": (
+                f"path contains '{hint}'; this can suggest review context only "
+                "and does not establish authority"
+            ),
+        } in evidence
 
     analysis_source = tmp_path / "analysis-source"
     pipeline_source = tmp_path / "pipeline-source"
