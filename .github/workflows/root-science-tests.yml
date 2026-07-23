@@ -23,6 +23,9 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Materialize analysis evidence from Git LFS
+        run: git -C analysis lfs pull
+
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -32,4 +35,6 @@ jobs:
           enable-cache: true
 
       - name: Run root scientific and provenance tests
+        env:
+          FOREGROUND_PIPELINE_REPO: ${{ github.workspace }}/pipeline
         run: make test-science
