@@ -69,23 +69,36 @@ The complete row-level result and input hashes are frozen in
   provenance. No frozen authoritative source row establishes their identities
   and no-redshift dispositions.
 
+### Identity repair (2026-07-23)
+
+Pipeline commit `c913175e567db70980e5f2745dcdf8f7f3ad9fb4` repairs all six
+candidate identity chains:
+
+- The four redshiftless PS1-STRM rows now bind their exact frozen catalog rows,
+  stable object identifiers, and no-redshift semantics.
+- The two manual extensions now bind their exact AllWISE designations and
+  frozen CDS VizieR `II/328/allwise` query rows. A separate live VizieR query
+  returned both exact designations within the three-arcsecond search radius.
+- No candidate redshift was adopted. Stored verdicts and budget flags are
+  byte-for-byte unchanged.
+
+The independent standard-library replay now verifies 52/52 rows with no source
+discrepancies, verdict changes, or budget changes.
+
 ## Decision
 
-Host-source adjudication is complete and arithmetic remains internally
-consistent. All 52 rows still do not pass source-level verification because six
-candidate identity chains remain incomplete. Do not change registry authority,
-verdicts, budgets, trust state, or Figure 3 here.
-
-Repair the six candidate identity chains in a separate evidence-freeze change,
-then repeat this verifier. Figure 3 remains blocked.
+The source replay validates 52/52. A separate adversarial review of the repair
+diff remains required before closing the identity ticket. The source repair
+does not promote registry authority, change verdicts or budgets, or promote
+Figure 3.
 
 ## Reproduction
 
 ```bash
 python3 scripts/verify_foreground_registry_sources.py \
-  --pipeline-dir /path/to/pipeline-at-6057501 \
+  --pipeline-dir /path/to/pipeline-at-c913175 \
   --output docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json
-pytest -q tests/test_verify_foreground_registry_sources.py  # 14 tests
+pytest -q tests/test_verify_foreground_registry_sources.py
 ```
 
 The verifier exits nonzero while any row remains source-incomplete.

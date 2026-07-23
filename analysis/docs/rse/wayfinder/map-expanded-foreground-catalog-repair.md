@@ -128,9 +128,11 @@ corrected corpus layers, all 52 registry-to-provenance keys, all 49
 finite-host verdicts and budget flags, and all seven duplicate separations.
 Next:
 
-1. Separately freeze source identities for the four redshiftless PS1-STRM rows
-   and two manual extension rows, then rerun ticket 09's verifier.
-2. After those source repairs and the now-resolved physics-authority ticket,
+1. Independently adversarially review the
+   [six redshiftless identity repair](tickets/expanded-foreground-catalog-repair-20-freeze-six-redshiftless-identities.md).
+   The replay validates 52/52 with zero verdict or budget changes, but the
+   ticket remains open until that separate review passes.
+2. After the source-repair review and the resolved physics-authority ticket,
    [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
 3. Only after the Figure 3 gate resolves,
    [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
