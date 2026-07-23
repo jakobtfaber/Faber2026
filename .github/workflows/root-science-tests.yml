@@ -35,4 +35,6 @@ jobs:
           enable-cache: true
 
       - name: Run root scientific and provenance tests
+        env:
+          FOREGROUND_PIPELINE_REPO: ${{ github.workspace }}/pipeline
         run: make test-science
