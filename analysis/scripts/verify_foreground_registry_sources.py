@@ -22,7 +22,7 @@ from typing import Any
 
 
 EXPECTED_ANALYSIS_COMMIT = "fe73689cad723db5d68427c61e301157a39cc101"
-EXPECTED_PIPELINE_COMMIT = "6057501da2db1eba09d002dd7846ffca7ded250c"
+EXPECTED_PIPELINE_COMMIT = "c913175e567db70980e5f2745dcdf8f7f3ad9fb4"
 
 
 def read_csv_text(text: str) -> list[dict[str, str]]:
@@ -251,13 +251,62 @@ def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYS
                     row_errors.append("redshiftless PS1-STRM position mismatch")
                 if native["z_phot"] != "-999.0" or native["class"] != "UNSURE":
                     row_errors.append("redshiftless PS1-STRM semantics mismatch")
-                candidate_source_status = "verified_from_strm_row_but_ledger_identity_missing"
-                row_errors.append("candidate provenance ledger omits the PS1-STRM source identity")
+                if selected is None:
+                    row_errors.append("redshiftless PS1-STRM payload row missing")
+                else:
+                    for field in ("raMean", "decMean", "prob_Galaxy", "z_phot", "z_photErr", "z_phot0"):
+                        if not math.isclose(
+                            float(selected[field]), float(native[field]), rel_tol=0, abs_tol=1e-12
+                        ):
+                            row_errors.append(f"redshiftless PS1-STRM payload differs: {field}")
+                    if (
+                        str(selected["objID"]) != row["obj"]
+                        or selected["class"] != native["class"]
+                        or str(selected["extrapolation_Photoz"]) != native["extrapolation_Photoz"]
+                    ):
+                        row_errors.append("redshiftless PS1-STRM payload identity differs")
+                if (
+                    source["source_family"] != "PS1-STRM"
+                    or source["stable_source_id"] != f"objID:{row['obj']}"
+                    or source["measurement_kind"] != "no_trustworthy_redshift"
+                    or source["source_disposition"] != "identity_verified_no_catalog_redshift"
+                    or source["adopted_z"]
+                    or source["adopted_z_err"]
+                ):
+                    row_errors.append("redshiftless PS1-STRM ledger semantics mismatch")
+                candidate_source_status = "verified_identity_only_no_redshift"
         else:
-            if key not in extensions:
+            extension = extensions.get(key)
+            if extension is None:
                 row_errors.append("redshiftless extension identity missing")
-            candidate_source_status = "manual_extension_not_source_verified"
-            row_errors.append("manual extension lacks frozen authoritative source rows")
+            elif selected is None or response is None:
+                row_errors.append("manual extension lacks frozen authoritative source rows")
+            else:
+                designation = row["obj"].removeprefix("WISEA ")
+                if (
+                    source["source_family"] != "AllWISE"
+                    or source["stable_source_id"] != f"AllWISE:{designation}"
+                    or source["measurement_kind"] != "identity_only"
+                    or source["source_disposition"] != "identity_verified_catalog_has_no_redshift"
+                    or source["adopted_z"]
+                    or source["adopted_z_err"]
+                ):
+                    row_errors.append("manual extension identity-ledger semantics mismatch")
+                if selected.get("AllWISE") != designation or selected.get("catalog_id") != designation:
+                    row_errors.append("manual extension AllWISE designation mismatch")
+                coordinate_separation = separation_arcsec(
+                    float(row["ra_deg"]), float(row["dec_deg"]),
+                    float(selected["match_ra_deg"]), float(selected["match_dec_deg"]),
+                )
+                if coordinate_separation > 3:
+                    row_errors.append("manual extension AllWISE position mismatch")
+                if (
+                    response.get("service") != "CDS VizieR"
+                    or response.get("table") != "II/328/allwise"
+                    or selected not in response.get("rows", [])
+                ):
+                    row_errors.append("manual extension AllWISE query payload mismatch")
+            candidate_source_status = "verified_identity_only_no_redshift"
 
         nickname = row["nickname"].casefold()
         host = connor.get(nickname) or law.get(nickname) or verdi.get(nickname)

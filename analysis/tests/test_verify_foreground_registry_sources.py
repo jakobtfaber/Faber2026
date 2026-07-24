@@ -12,6 +12,11 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/verify_foreground_registry_sources.py"
 REPLAY = ROOT / "docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json"
+ADVERSARIAL_REVIEW = (
+    ROOT
+    / "docs/rse/specs/evidence/foreground-source-verification-2026-07-22"
+    / "adversarial-review.json"
+)
 PIPELINE_SOURCE = Path(os.environ.get(
     "FOREGROUND_PIPELINE_REPO",
     str(Path.home() / "Developer/repos/github.com/jakobtfaber/Faber2026/pipeline"),
@@ -26,16 +31,16 @@ def _module():
     return module
 
 
-def test_frozen_replay_is_row_complete_and_fail_closed():
+def test_frozen_replay_is_row_complete_and_passes():
     result = json.loads(REPLAY.read_text())
-    assert result["pipeline_commit"] == "6057501da2db1eba09d002dd7846ffca7ded250c"
+    assert result["pipeline_commit"] == "c913175e567db70980e5f2745dcdf8f7f3ad9fb4"
     assert result["rows"] == 52
     assert len(result["row_results"]) == 52
     assert len({row["key"] for row in result["row_results"]}) == 52
-    assert result["disposition"] == "fail_closed"
-    assert result["gate_pass"] is False
-    assert result["source_verified_rows"] == 46
-    assert result["rows_with_discrepancies"] == 6
+    assert result["disposition"] == "pass"
+    assert result["gate_pass"] is True
+    assert result["source_verified_rows"] == 52
+    assert result["rows_with_discrepancies"] == 0
     assert result["verdict_mismatches"] == []
     assert result["budget_mismatches"] == []
     assert result["errors"] == []
@@ -49,10 +54,21 @@ def test_replay_names_every_source_discrepancy_class():
         "verified_rounded_to_registry_precision": 1,
     }
     assert result["candidate_status_counts"] == {
-        "manual_extension_not_source_verified": 2,
         "verified": 46,
-        "verified_from_strm_row_but_ledger_identity_missing": 4,
+        "verified_identity_only_no_redshift": 6,
     }
+
+
+def test_adversarial_review_passes_identity_only_and_keeps_figure_blocked():
+    review = json.loads(ADVERSARIAL_REVIEW.read_text())
+    assert review["verdict"] == "pass"
+    assert len(review["rows"]) == 6
+    assert all(row["redshift_state"] == "blank" for row in review["rows"])
+    assert all(row["verdict"] == "inconclusive" for row in review["rows"])
+    assert all(row["budget_eligible"] is False for row in review["rows"])
+    assert review["figure_3"]["unchanged_from_pipeline_base"] is True
+    assert review["figure_3"]["identity_rows_in_confirmed_only_grid"] == 0
+    assert review["figure_3"]["promoted"] is False
 
 
 def test_host_precision_comparison_distinguishes_zach_and_whitney():
@@ -107,7 +123,7 @@ def mutable_repos(tmp_path):
     analysis_commit = _make_repo(
         analysis, ROOT, "fe73689cad723db5d68427c61e301157a39cc101", ANALYSIS_PATHS
     )
-    pipeline_commit = _make_repo(pipeline, PIPELINE_SOURCE, "6057501", PIPELINE_PATHS)
+    pipeline_commit = _make_repo(pipeline, PIPELINE_SOURCE, "c913175", PIPELINE_PATHS)
     return analysis, pipeline, analysis_commit, pipeline_commit
 
 
@@ -163,6 +179,20 @@ def test_verifier_rejects_adopted_error_mutation(mutable_repos):
     result = module.verify(analysis, pipeline, analysis_commit=ac, pipeline_commit=pc)
     target = next(r for r in result["row_results"] if r["key"] == "whitney/halo/1473")
     assert "candidate ledger and registry uncertainties differ" in target["discrepancies"]
+
+
+def test_verifier_rejects_identity_only_ledger_mutation(mutable_repos):
+    module = _module()
+    analysis, pipeline, ac, _ = mutable_repos
+    path = pipeline / PIPELINE_PATHS[1]
+    def mutate(rows):
+        row = next(r for r in rows if r["nickname"] == "isha")
+        row["stable_source_id"] = "AllWISE:wrong"
+    _rewrite_csv(path, mutate)
+    pc = _commit(pipeline, "mutate identity")
+    result = module.verify(analysis, pipeline, analysis_commit=ac, pipeline_commit=pc)
+    target = next(r for r in result["row_results"] if r["key"].startswith("isha/"))
+    assert "manual extension identity-ledger semantics mismatch" in target["discrepancies"]
 
 
 def test_verifier_rejects_paired_registry_and_ledger_error_mutation(mutable_repos):
