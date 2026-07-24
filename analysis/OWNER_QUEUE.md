@@ -4,8 +4,6 @@ _Generated 2026-07-23. Manual walkthrough ritual: see `docs/rse/control/owner-qu
 
 ## Decisions (wayfinder frontier, owner-facing)
 
-- **Prune and typeset the co-author list** — open, unblocked, owner-facing
-  `docs/rse/wayfinder/tickets/11-prune-coauthor-list.md`
 - **Define the CHIME RFI-cleaning acceptance contract** — open, unblocked, owner-facing
   `docs/rse/wayfinder/tickets/rfi-validation-01-define-acceptance-contract.md`
 
@@ -50,19 +48,11 @@ _Generated 2026-07-23. Manual walkthrough ritual: see `docs/rse/control/owner-qu
 
 ## Open PRs (review or delegate)
 
-- **#76 Record final author decision** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/76`
 - **#74 Define remaining CHIME RFI acceptance contract** — open
   `https://github.com/jakobtfaber/Faber2026-analysis/pull/74`
 - **#72 foreground: validate six source identity repairs** — open
   `https://github.com/jakobtfaber/Faber2026-analysis/pull/72`
-- **#67 Phase 0: reconcile owner queue accounting** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/67`
 - **#56 host-dm: deterministic PDF, generated appendix table, pending trust** — open
   `https://github.com/jakobtfaber/Faber2026-analysis/pull/56`
 - **#52 ms/checkout-advisory-triage: read-only checkout advisory classifier** — open
   `https://github.com/jakobtfaber/Faber2026-analysis/pull/52`
-- **#33 Converge analysis and owner-review frontiers** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/33`
-- **#31 Draft: overhaul manuscript result trust registry** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/31`
