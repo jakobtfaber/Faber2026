@@ -2,7 +2,7 @@
 
 Date: 2026-07-22
 
-Disposition: **fail closed**
+Disposition: **source identity pass; Figure 3 remains blocked**
 
 Pinned analysis commit: `fe73689cad723db5d68427c61e301157a39cc101`
 
@@ -87,10 +87,13 @@ discrepancies, verdict changes, or budget changes.
 
 ## Decision
 
-The source replay validates 52/52. A separate adversarial review of the repair
-diff remains required before closing the identity ticket. The source repair
-does not promote registry authority, change verdicts or budgets, or promote
-Figure 3.
+The source replay validates 52/52. A separate adversarial review directly
+checked all six pinned identities, coordinate separations, blank-redshift
+semantics, provenance hashes, and unchanged Figure 3 inputs and passed on
+2026-07-23. Its
+[receipt](evidence/foreground-source-verification-2026-07-22/adversarial-review.json)
+closes only the identity ticket. The source repair does not promote registry
+authority, change verdicts or budgets, or promote Figure 3.
 
 ## Reproduction
 

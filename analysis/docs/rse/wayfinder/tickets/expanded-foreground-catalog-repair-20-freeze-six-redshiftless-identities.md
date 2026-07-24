@@ -1,8 +1,8 @@
 # Freeze six redshiftless candidate identities
 
 - Type: `wayfinder:implement`
-- Status: validated; independent adversarial review pending
-- Assignee: Codex
+- Status: resolved (2026-07-23) — independent adversarial review passed
+- Assignee: —
 - Blocked by: none
 - Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
 - Triage: `ready-for-human`
@@ -28,5 +28,24 @@ discrepancies, no verdict changes, and no budget changes. Figure 3 remains
 unpromoted pending regeneration, independent validation, and owner visual
 approval.
 
-Do not resolve this ticket until a separate reviewer adversarially checks the
-identity-repair diff and records a pass.
+## Independent adversarial review — 2026-07-23
+
+The separate review passed. It did not trust the producing replay:
+
+- all four PS1-STRM identities and native rows were compared directly with the
+  pinned frozen STRM catalog;
+- both AllWISE designations and coordinates were checked against the pinned
+  query rows and fresh official CDS VizieR `II/328/allwise` responses;
+- source-row and query-response hashes were recomputed;
+- all six registry redshifts remain blank, verdicts remain inconclusive, and
+  budget flags remain false; and
+- the registry, expanded-catalog input, and checked-in Figure 3 grid are
+  byte-identical to the pre-repair revision. None of the six inconclusive rows
+  enters the confirmed-only Figure 3 grid.
+
+The machine-readable
+[review receipt](../../specs/evidence/foreground-source-verification-2026-07-22/adversarial-review.json)
+records the six row-level identities, coordinate separations, and source
+hashes. This resolves only the identity ticket. Figure 3 regeneration,
+independent figure validation, owner visual approval, and promotion remain
+blocked later gates.

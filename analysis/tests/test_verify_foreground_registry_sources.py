@@ -12,6 +12,11 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/verify_foreground_registry_sources.py"
 REPLAY = ROOT / "docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json"
+ADVERSARIAL_REVIEW = (
+    ROOT
+    / "docs/rse/specs/evidence/foreground-source-verification-2026-07-22"
+    / "adversarial-review.json"
+)
 PIPELINE_SOURCE = Path(os.environ.get(
     "FOREGROUND_PIPELINE_REPO",
     str(Path.home() / "Developer/repos/github.com/jakobtfaber/Faber2026/pipeline"),
@@ -52,6 +57,18 @@ def test_replay_names_every_source_discrepancy_class():
         "verified": 46,
         "verified_identity_only_no_redshift": 6,
     }
+
+
+def test_adversarial_review_passes_identity_only_and_keeps_figure_blocked():
+    review = json.loads(ADVERSARIAL_REVIEW.read_text())
+    assert review["verdict"] == "pass"
+    assert len(review["rows"]) == 6
+    assert all(row["redshift_state"] == "blank" for row in review["rows"])
+    assert all(row["verdict"] == "inconclusive" for row in review["rows"])
+    assert all(row["budget_eligible"] is False for row in review["rows"])
+    assert review["figure_3"]["unchanged_from_pipeline_base"] is True
+    assert review["figure_3"]["identity_rows_in_confirmed_only_grid"] == 0
+    assert review["figure_3"]["promoted"] is False
 
 
 def test_host_precision_comparison_distinguishes_zach_and_whitney():
