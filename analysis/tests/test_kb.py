@@ -1,12 +1,13 @@
 """Knowledge-base regression tests (FTS path only — no embedding deps)."""
 
 import sys
+from types import ModuleType
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "scripts"))
 
-from kb import adapters, config, db, search  # noqa: E402
+from kb import adapters, config, db, embed, search  # noqa: E402
 from kb.chunkers import chunk_markdown, chunk_python  # noqa: E402
 from kb.adapters import _bib_entries  # noqa: E402
 from workspace import manuscript_root  # noqa: E402
@@ -62,6 +63,26 @@ def test_prune_missing(tmp_path):
 def test_query_escaping_no_crash(tmp_path):
     con = _mkdb(tmp_path)
     search.search(con, 'AND OR "unbalanced ( NEAR', fts_only=True)
+
+
+def test_embedding_model_uses_persistent_repo_cache(monkeypatch):
+    calls = {}
+    fake_fastembed = ModuleType("fastembed")
+
+    def fake_text_embedding(model_name, **kwargs):
+        calls["model_name"] = model_name
+        calls.update(kwargs)
+        return object()
+
+    fake_fastembed.TextEmbedding = fake_text_embedding
+    monkeypatch.setitem(sys.modules, "fastembed", fake_fastembed)
+
+    embed._model()
+
+    assert calls == {
+        "model_name": config.EMBED_MODEL,
+        "cache_dir": str(REPO / ".kb" / "fastembed_cache"),
+    }
 
 
 def test_chunk_markdown_headings():

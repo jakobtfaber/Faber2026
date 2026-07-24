@@ -30,7 +30,10 @@ def available() -> bool:
 def _model():
     from fastembed import TextEmbedding
 
-    return TextEmbedding(config.EMBED_MODEL)
+    return TextEmbedding(
+        config.EMBED_MODEL,
+        cache_dir=str(config.EMBED_CACHE_DIR),
+    )
 
 
 def embed_pending(con: sqlite3.Connection, batch: int = 128) -> int:
