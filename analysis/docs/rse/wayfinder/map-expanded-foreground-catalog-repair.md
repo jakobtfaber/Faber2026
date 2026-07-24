@@ -115,6 +115,12 @@ independent numerical, provenance, and owner visual checks.
   — retained Whitney at spectroscopic redshift `0.479` using Connor et al.
   (2025), and adopted Verdi source-event identifiers for Freya, Hamilton, and
   Chromatica without changing verdicts, budgets, or Figure 3.
+- [Set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md)
+  — declared the versioned Figure 3 input in the analysis-owned figure catalog,
+  routed regeneration to `analysis/figure_review/staging/fig3_halo_grid`, tied
+  the candidate to the `fig3-halo-grid` approval slot, and left installed
+  manuscript bytes unpromoted pending independent validation and owner visual
+  approval.
 
 ## Open route
 
@@ -132,9 +138,7 @@ now has a separate adversarial pass: all six pinned identities, coordinates,
 blank-redshift semantics, and provenance hashes agree, while verdicts, budgets,
 and current Figure 3 inputs remain unchanged. Next:
 
-1. After the source-repair review and the resolved physics-authority ticket,
-   [set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md).
-2. Only after the Figure 3 gate resolves,
+1. With the identity repair and Figure 3 regeneration gate now resolved,
    [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
 
 ## Out of scope

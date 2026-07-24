@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-from datetime import date
 import json
 from pathlib import Path
 import re
@@ -32,6 +31,11 @@ def collect_wayfinder_frontier(
 
 def collect_undecided_figure_batches(root: Path = ROOT) -> list[Path]:
     receipts = root / "figure_review/approval_receipts"
+    dispositions_path = root / "figure_review/batch_dispositions.json"
+    dispositions: dict[str, dict[str, object]] = {}
+    if dispositions_path.is_file():
+        payload = json.loads(dispositions_path.read_text(encoding="utf-8"))
+        dispositions = payload.get("batches", {})
     undecided: list[Path] = []
     for manifest_path in sorted(
         (root / "figure_review/batches").glob("*/manifest.json")
@@ -40,6 +44,9 @@ def collect_undecided_figure_batches(root: Path = ROOT) -> list[Path]:
         candidate_ids = [
             candidate["id"] for candidate in manifest.get("candidates", [])
         ]
+        disposition = dispositions.get(manifest_path.parent.name, {})
+        if disposition.get("owner_queue") is False:
+            continue
         if any(
             not (receipts / f"{candidate_id}.json").is_file()
             for candidate_id in candidate_ids
@@ -88,7 +95,7 @@ def collect_open_prs(
     return json.loads(result.stdout) if result.returncode == 0 else []
 
 
-def render_owner_queue(root: Path = ROOT, *, include_github: bool = True) -> str:
+def render_owner_queue(root: Path = ROOT, *, include_github: bool = False) -> str:
     decisions = collect_wayfinder_frontier(
         root / "docs/rse/wayfinder/tickets", owner_facing_only=True
     )
@@ -98,7 +105,7 @@ def render_owner_queue(root: Path = ROOT, *, include_github: bool = True) -> str
     lines = [
         "# OWNER QUEUE — regenerate with `python3 scripts/owner_queue.py`",
         "",
-        f"_Generated {date.today().isoformat()}. Manual walkthrough ritual: "
+        "_Generated from repository state. Manual walkthrough ritual: "
         "see `docs/rse/control/owner-queue-ritual.md`._",
         "",
         "## Decisions (wayfinder frontier, owner-facing)",
@@ -156,7 +163,14 @@ def render_owner_queue(root: Path = ROOT, *, include_github: bool = True) -> str
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument(
-        "--offline", action="store_true", help="skip the GitHub PR query"
+        "--github",
+        action="store_true",
+        help="include a best-effort live GitHub PR query in the output",
+    )
+    result.add_argument(
+        "--offline",
+        action="store_true",
+        help=argparse.SUPPRESS,
     )
     result.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     return result
@@ -165,7 +179,7 @@ def parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = parser().parse_args()
     output = args.output.resolve()
-    rendered = render_owner_queue(include_github=not args.offline)
+    rendered = render_owner_queue(include_github=args.github and not args.offline)
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary = output.with_name(output.name + ".tmp")
     temporary.write_text(rendered, encoding="utf-8")

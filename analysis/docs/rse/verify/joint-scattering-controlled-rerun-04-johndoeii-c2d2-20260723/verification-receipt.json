@@ -1,0 +1,84 @@
+{
+  "checks": {
+    "all_contract_file_hashes": true,
+    "common_preprocessing": true,
+    "contract_c2d2_seed": true,
+    "crop_environment": true,
+    "diagnostic_c2d2": true,
+    "diagnostics_present": true,
+    "diagnostics_reproduced": true,
+    "diagnostics_run_b_raw_hash": true,
+    "fit_summary_present": true,
+    "fit_summary_reproduced": true,
+    "fit_summary_run_b_raw_hash": true,
+    "fit_values_untrusted": true,
+    "frozen_controls": true,
+    "model_grid_present": true,
+    "model_grid_reproduced": true,
+    "model_grid_run_b_raw_hash": true,
+    "old_c1d2_excluded": true,
+    "panel_present": true,
+    "panel_reproduced": true,
+    "panel_run_b_raw_hash": true,
+    "prior_edge_diagnostics_present": true,
+    "residual_diagnostics_present": true,
+    "run_a_gates": true,
+    "run_a_identity": true,
+    "run_b_gates": true,
+    "run_b_identity": true,
+    "source_revision": true,
+    "weighted_samples_present": true,
+    "weighted_samples_reproduced": true,
+    "weighted_samples_run_b_raw_hash": true,
+    "window_diagnostics_present": true
+  },
+  "contract_sha256": "9ca4976e69bdeaedfc7e000765d4857f992bd822a5f2acfb31090fd43e375727",
+  "h17": {
+    "job_id": 206,
+    "run_root": "/home/ubuntu/flits-controlled/joint-scattering-2026-07-23-v4/johndoeII",
+    "slurm_accounting": "disabled; COMPLETED marker and complete receipts present",
+    "source_worktree": "/home/ubuntu/Developer/worktrees/dsa110-FLITS-controlled-johndoeII-20260723-v4"
+  },
+  "morphology": "C2D2",
+  "next_gate": "independent scientific and visual review through ticket 6",
+  "outputs": {
+    "diagnostics": {
+      "method": "exact_bytes",
+      "verified_sha256": "431979cf7d3c4bd7e5e7d937c3703ee6ac0c875c5746c1fa0403d57118f936a3"
+    },
+    "fit_summary": {
+      "method": "exact_bytes",
+      "verified_sha256": "82999ad8d727aa2383d60b5bfe58c0b3d711b6bb73ca5a8e8b9af6df557636ad"
+    },
+    "model_grid": {
+      "method": "canonical_scientific_arrays",
+      "verified_sha256": "a0301460c77cb898643055a0528f06a8809d233ee5ce16debd114f6e4e414a10"
+    },
+    "panel": {
+      "method": "exact_bytes",
+      "verified_sha256": "d4e0f432486f3de8fae21d1494478f16b6e15fd54ae13744630ab729e046f7a9"
+    },
+    "weighted_samples": {
+      "method": "canonical_scientific_arrays",
+      "verified_sha256": "b7fad00ccd5c7e7bfd17dc3fb62a2f3553adbcd0b26a4300129752ed52bb5088"
+    }
+  },
+  "panel_approved": false,
+  "panel_review_eligible": false,
+  "reproduction_receipt_sha256": "f2b1fec84bb92cc69d9a4ef218f5fc05d7e8512fba059e04dfb540afc3e42326",
+  "run_a_receipt_sha256": "7067f761720ddb19b2a88174900c2618374874c9b7d3c5f7f8ad0a047041a31b",
+  "run_b_receipt_sha256": "7067f761720ddb19b2a88174900c2618374874c9b7d3c5f7f8ad0a047041a31b",
+  "schema": "faber2026-analysis-johndoeii-c2d2-independent-verification/v1",
+  "scientific_trust": "pending",
+  "source_revision": "fba755ad7edbd69dece059c8c5f0868da41e3f2b",
+  "superseded_artifacts": [
+    {
+      "path": "figure_review/batches/2026-07-22-joint-scattering-current/candidates/triptych-johndoeii.pdf",
+      "sha256": "60ea8a16eb8963c318ab3f7bd81cb9bece7c9cbe47d4ff9a28972a68b6c2f601"
+    },
+    {
+      "path": "figure_review/batches/2026-07-22-joint-scattering-current/previews/triptych-johndoeii.png",
+      "sha256": "bf9b4e83dbf0aff58e0dba0500e8bee86cfbbd7c59fe8a4502ff85d905a0711d"
+    }
+  ]
+}

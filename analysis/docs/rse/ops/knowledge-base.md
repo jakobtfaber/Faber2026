@@ -18,7 +18,9 @@ python3 scripts/kb stats
 First `kb index` with fastembed downloads the embedding model (~130 MB,
 BAAI/bge-small-en-v1.5, runs locally via ONNX) and embeds ~15k chunks —
 a few minutes on Apple Silicon. Re-indexing is incremental: only changed
-documents are re-chunked and re-embedded.
+documents are re-chunked and re-embedded. The model cache lives under
+`.kb/fastembed_cache` with the SQLite index, rather than in the operating
+system's temporary directory.
 
 Without fastembed/numpy everything still works as BM25 full-text search
 (`--fts-only` forces this). Tests (`tests/test_kb.py`) cover the FTS path

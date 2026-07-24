@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-07-23",
+  "recorded_by": "Jakob T. Faber",
+  "policy": "A missing promotion receipt is not by itself an owner decision. An explicit owner_queue=false disposition suppresses stale, diagnostic, already-decided, or deferred batches; undispositioned batches remain fail-closed in the queue.",
+  "batches": {
+    "2026-07-17-fig1-model-toa": {
+      "owner_queue": false,
+      "status": "needs_revision",
+      "reason": "Owner decision already recorded in the manifest."
+    },
+    "2026-07-17-joint-scintillation-qualified-and-chime-acf": {
+      "owner_queue": false,
+      "status": "diagnostic_only",
+      "reason": "Diagnostic packet; not a final-draft promotion request."
+    },
+    "2026-07-22-fig3-source-replay": {
+      "owner_queue": false,
+      "status": "available_for_future_review",
+      "reason": "The certified candidate remains available, but the owner approved no figure for the final draft on 2026-07-23."
+    },
+    "2026-07-22-fig3-verdi-roster": {
+      "owner_queue": false,
+      "status": "superseded",
+      "reason": "Superseded by the complete source-replay batch."
+    },
+    "2026-07-22-joint-scattering-current": {
+      "owner_queue": false,
+      "status": "decisions_recorded_morphology_only",
+      "reason": "Existing decisions cover morphology only; fitted values and final-draft promotion remain untrusted."
+    }
+  }
+}

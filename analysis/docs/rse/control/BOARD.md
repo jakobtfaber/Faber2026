@@ -12,11 +12,11 @@ references appear as `[wf-NN]`.
 **Naming:** descriptive-first; legacy letter+number codes appear once in
 parentheses for traceability into the frozen docs.
 
-**Trust:** until the trust-ledger overhaul resolves
-([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)), the
-`CONTEXT.md` trust-reset block governs what is citable. Tasks marked
-**⛔ trust** consume currently-revoked products and are sequenced behind the
-overhaul (or the re-validation it prescribes).
+**Trust:** the row-level registry and its independent claim-owner ledger govern
+what is citable ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)).
+Only rows marked trusted may be quoted, within their named scope. Pending and
+revoked rows remain fail-closed. Tasks marked **⛔ trust** consume those products
+and remain sequenced behind their named re-validation gates.
 
 **Legend:** `[ ]` open · `[x]` done · `⛔ trust` gated on trust
 overhaul/re-validation · `⏳ campaign` gated on a cross-cutting campaign ·
@@ -29,11 +29,11 @@ overhaul/re-validation · `⏳ campaign` gated on a cross-cutting campaign ·
 Feed multiple sections; section tasks reference them, never duplicate them.
 
 ### Trust & contracts
-- [ ] ✋ Trust-ledger overhaul — lane-by-lane re-audit of the revocation
+- [x] Trust-ledger overhaul — lane-by-lane re-audit of the revocation
   waves; sets the citability bar everywhere
   ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md))
-- [x] Fit re-validation contract ratification (legacy V1) — ratified with
-  scoped injection policy ([wf-03](wayfinder/tickets/03-ratify-fit-retrust-contract.md))
+- [ ] ✋ Fit re-validation contract ratification (legacy V1) — bar for any
+  re-fit to be citable ([wf-03](wayfinder/tickets/03-ratify-fit-retrust-contract.md))
 - [ ] CHIME scattering-input lineage check (legacy V2) — do the dynamic
   spectra feeding the scattering fits share the gen-1 de-chirp defect?
 
@@ -66,16 +66,9 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   h17-side tooling (legacy B6)
 
 ### Scattering re-fit campaign
-- [x] Audit the deprecated Zach C2D4 failure; old panel remains hidden
-  ([audit ticket](../wayfinder/tickets/joint-scattering-controlled-rerun-01-audit-deprecated-zach-c2d4.md))
-- [x] Land the clean, seeded, provenance-complete joint-fit runner
-  ([runner ticket](../wayfinder/tickets/joint-scattering-controlled-rerun-02-build-seeded-runner.md))
-- [ ] Independently reproduce Oran C1D1, JohnDoeII C2D2, and Zach C2D4;
-  withhold every panel until its reproduction gate passes
-  ([controlled-rerun plan](../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md))
 - [ ] ✋ Scintillation-to-scattering coupling design closure (legacy A1)
   ([wf-04](wayfinder/tickets/04-close-scint-scattering-coupling-design.md))
-- [x] Profile-component-count statistic: deferred for this submission (legacy A5)
+- [ ] ✋ Profile-component-count statistic: blocker or deferred (legacy A5)
   ([wf-05](wayfinder/tickets/05-profile-component-statistic-blocker-decision.md))
 - [ ] Extended-medium (uniform-LOS) PBF kernel, β-coupled, per band (legacy A2)
 - [ ] Per-sightline geometry model selection, thin vs extended,
@@ -91,10 +84,6 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   count adoption
   ([wf-15](wayfinder/tickets/15-count-audit-remediation-standing-method.md)),
   validation + ratification before manuscript use
-- [ ] Zach bounded-window C2D3/C2D4/C2D5 adjudication after the clean C2D4
-  rerun
-  ([ticket](wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md),
-  [GitHub #205](https://github.com/jakobtfaber/Faber2026/issues/205))
 - [ ] Per-band systematics pass on flagged sightlines (legacy C2)
 - [ ] Pipeline pin bump + table/figure regeneration from the campaign (legacy C3)
 
@@ -105,17 +94,11 @@ Feed multiple sections; section tasks reference them, never duplicate them.
   integration, SEFD/beam prior budget) (legacy V3 + review S20)
 
 ### Figures
-- [Visual scientific review workflow](visual-review-workflow.md): agents must
-  trace and exactly regenerate a figure before it reaches the owner.
 - [ ] Figure 1 twelve-burst gallery — **at owner-decide gate** (2026-07-18):
   observed-peak candidate merged + promotable
   (`2026-07-17-fig1-observed-peak-audit`); dmcorr variant refuted
   (marker-dependence); owner runs the two `figure_review.py decide` commands
   (handoff-2026-07-18-14-44), then any session runs the promotion PR
-- [ ] Expanded foreground catalog repair and staged Figure 3
-  ([map](wayfinder/map-expanded-foreground-catalog-repair.md),
-  [GitHub #206](https://github.com/jakobtfaber/Faber2026/issues/206)); current
-  frontier: host-redshift adjudication, then Figure 3 and release gates
 - [ ] Wishlist figures: (re)insert per `specs/figure-wishlist.md` as their
   gates clear; strip draft `\fbox` placeholders before circulation
 
@@ -169,20 +152,21 @@ Owner directive 2026-07-18: before section work, establish one reliable view
 of what results exist, where they originated (scripts, pipeline pin, external
 survey/catalog queries), and what is trusted — the repo + auxiliary worktrees
 are currently too dispersed to know what is current. Canonical artifact:
-[`results-registry.toml`](results-registry.toml) (skeleton landed) →
-generated `RESULTS.md` view. **This inventory is phase 1 of the trust-ledger
-overhaul** ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)):
-populate first, adjudicate row-by-row on top.
+[`results-registry.toml`](results-registry.toml), with the generated
+`RESULTS.md` view and independent
+[`results-registry-claim-owners.toml`](results-registry-claim-owners.toml).
+The exact inventory and row-level adjudication are complete; pending and
+revoked rows retain their explicit gates ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)).
 
-- [ ] Registry generator: `results-registry.toml` → `RESULTS.md`
-  (sync_state pattern); wire into `check-state`
+- [x] Registry generator: `results-registry.toml` → `RESULTS.md`; validation
+  and byte-drift checks are wired into `check-state`
 - [ ] Dispersion sweep: inventory artifacts across the repo, pipeline
   submodule, worktrees, `~/Data`, and h17; mark current vs superseded;
   quarantine stale products (PR #131 precedent)
-- [ ] Populate the registry: every manuscript-facing number/table/figure/
+- [x] Populate the registry: every manuscript-facing number/table/figure/
   verdict, with producing script, pipeline pin, external-source provenance
   (survey/DR/DOI/query date), and trust seeded from the `CONTEXT.md` ledger
-- [ ] Re-point the tier-2 prose-number parity gate at the registry (single
+- [x] Re-point the tier-2 prose-number parity gate at the registry (single
   source of truth for the CI check)
 
 ## Abstract
@@ -260,8 +244,9 @@ populate first, adjudicate row-by-row on top.
   - [ ] Robustness paragraph: positive-residual mean (+2.4 ms, ≈2.4σ) with
     verdict-stability statement; declination-conditioned rate sensitivity
     sentence; repeater/clustering statement (review S4/S5/S6)
-- 4.2 Per-sightline DM budget *(re-validated 2026-07-07; phantom-DM_int bug
-  fixed 2026-07-15, FLITS #183)*
+- 4.2 Per-sightline DM budget *(base lane re-validated 2026-07-07;
+  phantom-DM_int bug fixed 2026-07-15, FLITS #183; the probabilistic Phineas
+  update remains pending integrated producer/input/artifact receipts)*
   - [ ] ✋ Cluster-aperture sensitivity: recompute at 1.5·R_500 / R_200 with
     envelope (review S13; via wf-10)
   - [ ] ✋ Intervening-scattering column: document the DM→τ mapping or drop

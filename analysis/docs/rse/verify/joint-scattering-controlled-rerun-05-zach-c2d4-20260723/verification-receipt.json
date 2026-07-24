@@ -1,0 +1,82 @@
+{
+  "checks": {
+    "all_contract_file_hashes": true,
+    "arrival_width_fluence_guards_recorded": true,
+    "common_preprocessing": true,
+    "contract_c2d4_seed": true,
+    "crop_environment": true,
+    "diagnostic_c2d4": true,
+    "diagnostics_present": true,
+    "diagnostics_reproduced": true,
+    "diagnostics_run_b_raw_hash": true,
+    "fit_summary_present": true,
+    "fit_summary_reproduced": true,
+    "fit_summary_run_b_raw_hash": true,
+    "fit_values_and_count_evidence_untrusted": true,
+    "frozen_controls": true,
+    "model_grid_present": true,
+    "model_grid_reproduced": true,
+    "model_grid_run_b_raw_hash": true,
+    "panel_present": true,
+    "panel_reproduced": true,
+    "panel_run_b_raw_hash": true,
+    "prior_edge_diagnostics_present": true,
+    "residual_guards_recorded": true,
+    "run_a_gates": true,
+    "run_a_identity": true,
+    "run_b_gates": true,
+    "run_b_identity": true,
+    "source_revision": true,
+    "support_mode_guards_recorded": true,
+    "weighted_samples_present": true,
+    "weighted_samples_reproduced": true,
+    "weighted_samples_run_b_raw_hash": true
+  },
+  "component_count_evidence_trust": "pending",
+  "contract_sha256": "7440b643b5e8e0be320a534c950348eb30c5611070889e73ce95a1f29e676a5b",
+  "h17": {
+    "job_id": 207,
+    "run_root": "/home/ubuntu/flits-controlled/joint-scattering-2026-07-23-v4/zach",
+    "slurm_accounting": "disabled; COMPLETED marker and complete receipts present",
+    "source_worktree": "/home/ubuntu/Developer/worktrees/dsa110-FLITS-controlled-zach-20260723-v4"
+  },
+  "morphology": "C2D4",
+  "next_gate": "independent scientific and visual review through ticket 6",
+  "outputs": {
+    "diagnostics": {
+      "method": "exact_bytes",
+      "verified_sha256": "a69168c52cf274cdff5c2db3ddda3896e8bb1d16efafb3256914c43392fc0153"
+    },
+    "fit_summary": {
+      "method": "exact_bytes",
+      "verified_sha256": "3276ff97c056f63698c92d74041b8bbeb766e015ba743d20ab2bc15b62fcdffc"
+    },
+    "model_grid": {
+      "method": "canonical_scientific_arrays",
+      "verified_sha256": "788290300ced4720b21a55c21f325a89248ffa6c782ca24b753c35e76ad0ca8f"
+    },
+    "panel": {
+      "method": "exact_bytes",
+      "verified_sha256": "345fe7d01fd3b5bd350180d1cc3c0bcc3a85ee1d57550b674c2787604c21261f"
+    },
+    "weighted_samples": {
+      "method": "canonical_scientific_arrays",
+      "verified_sha256": "648d26801b959a8e118b09733bd778e682d45d1b9fc62395a7a27a4af3d2b4dc"
+    }
+  },
+  "panel_approved": false,
+  "panel_review_eligible": false,
+  "reproduction_receipt_sha256": "d8a24df4a12798db29f25e4ce873590ce7a8d95447359a6a4dcea32a78bb46da",
+  "run_a_receipt_sha256": "9074583693a3ba065ab9a6c33bad48f1d2689f56804930139c610ba8f5eecce8",
+  "run_b_receipt_sha256": "9074583693a3ba065ab9a6c33bad48f1d2689f56804930139c610ba8f5eecce8",
+  "schema": "faber2026-analysis-zach-c2d4-independent-verification/v1",
+  "scientific_trust": "pending",
+  "source_revision": "fba755ad7edbd69dece059c8c5f0868da41e3f2b",
+  "superseded_job_180_artifacts": {
+    "fit": "55bc7397ae1d100718bdb7b9cb9b2a7dd9c0ca70908c60ed684e8795e0e05590",
+    "model_grid": "8efa4f8dc6572cdd448dfcedebaf6c4e17a30da6f3bc8a37aba1cd5944836051",
+    "samples": "87681b33410cc60e42630c3cbc4e666f63c16c0976d14db9197dedbff39730be",
+    "stderr_log": "9d4d6c6f02bdabbd9c1841fc3bb6e73dd174561f4f4af7efe3cbfbaeff4cf04b",
+    "stdout_log": "ac90959e86a3a39308fb749b700f51afcbc8949ba68761171a344f6cd8bf8b1a"
+  }
+}

@@ -157,8 +157,18 @@ The twelve bursts seen by both CHIME/FRB and DSA-110 — the manuscript superset
 for association, DM budget, and foreground census.
 _Avoid_: treating any subset table as implicitly covering all twelve.
 
-**Trust reset** (owner decisions 2026-07-06, evening→night, three waves —
-supersedes every quoting carve-out below):
+**Historical trust reset** (owner decisions 2026-07-06, evening→night, three
+waves; retained only as the audit baseline):
+Current row-level authority is `docs/rse/control/results-registry.toml`,
+rendered in `RESULTS.md` and semantically fixed by
+`docs/rse/control/results-registry-claim-owners.toml`. Wayfinder ticket 13
+closed the re-audit; the registry's `trust` and `provenance_state` fields
+supersede this reset and every older quoting carve-out below. A trusted row is
+citable only within its named
+inputs, artifact, consumer, and open-decision boundaries; a pending or revoked
+row remains non-quotable. The compiled-manuscript coverage gate binds every
+active table, figure, and number-bearing prose line to this registry. The text
+below records why the reset occurred and must not be read as current status.
 *Wave 1 (fits):* trust is revoked for ALL burst-data fits performed to date —
 the joint scattering fits (every β, τ₁GHz, component multiplicity, and PPC
 verdict; interior posteriors included, so freya β=3.72 and phineas β=3.23 are

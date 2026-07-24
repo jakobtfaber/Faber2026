@@ -1,7 +1,7 @@
 # Disposition the technical-review robustness items for this submission
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: resolved (2026-07-23)
 - Assignee: Codex controller
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -39,3 +39,27 @@ defer-with-stated-caveat for each on scientific need:
 
 Resolution = a per-item disposition table; execution of the "in" items rides
 the lane system.
+
+- [Owner decision packet (ready for review)](../../specs/research-technical-review-robustness-dispositions-2026-07-22.md)
+
+## Decision — 2026-07-23
+
+Owner accepted the disposition table as a batch per `research-technical-review-robustness-dispositions-2026-07-22.md`.
+
+| Review item | Disposition |
+|---|---|
+| S14 intervening-scattering column | Out |
+| S16 modulation-index gate vs two-screen √3 bound | Defer into tickets 17 and 02 |
+| S17 pulsar positive control through CHIME chain | Defer |
+| S13 cluster-aperture sensitivity | In |
+| S4 positive timing-residual mean | In |
+| S5 declination-conditioned CHIME rate | In |
+| S6 repeater/clustering statement | In, wording-level |
+| S7 jackknife/masking specification | In |
+| S8 coverage-calibrated DM uncertainties | Defer with caveat |
+| S11 completeness/missing-halo systematic | In, through expanded-catalog repair |
+| S15b per-sightline disk-model comparison | In |
+| S19a effective-index sensitivity variant | Out |
+| S19b broad δDM prior | In, at next trusted refit |
+
+Execution follows the dependency-aware order in the decision packet.

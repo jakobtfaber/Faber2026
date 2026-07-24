@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
+import re
 import subprocess
 import sys
 from types import SimpleNamespace
@@ -79,6 +80,32 @@ def test_owner_queue_cli_regenerates_from_authoritative_frontier(tmp_path):
     assert "Not queried (`--offline`)" in rendered
 
 
+def test_owner_queue_canonical_render_is_date_independent():
+    from scripts.owner_queue import render_owner_queue
+
+    rendered = render_owner_queue(ROOT, include_github=False)
+    assert "_Generated from repository state." in rendered
+    assert re.search(r"_Generated \d{4}-\d{2}-\d{2}", rendered) is None
+
+
+def test_owner_queue_cli_defaults_to_repository_only(tmp_path):
+    output = tmp_path / "OWNER_QUEUE.md"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/owner_queue.py"),
+            "--output",
+            str(output),
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "Not queried (`--offline`)" in output.read_text(encoding="utf-8")
+
+
 def test_owner_queue_queries_analysis_repository(monkeypatch):
     from scripts import owner_queue
 
@@ -93,3 +120,35 @@ def test_owner_queue_queries_analysis_repository(monkeypatch):
 
     assert owner_queue.collect_open_prs() == []
     assert seen[seen.index("--repo") + 1] == "jakobtfaber/Faber2026-analysis"
+
+
+def test_figure_batch_disposition_controls_owner_queue(tmp_path):
+    from scripts.owner_queue import collect_undecided_figure_batches
+
+    batches = tmp_path / "figure_review/batches"
+    receipts = tmp_path / "figure_review/approval_receipts"
+    receipts.mkdir(parents=True)
+    for name in ("stale", "current"):
+        batch = batches / name
+        batch.mkdir(parents=True)
+        (batch / "manifest.json").write_text(
+            json.dumps({"candidates": [{"id": f"{name}-candidate"}]}),
+            encoding="utf-8",
+        )
+    (tmp_path / "figure_review/batch_dispositions.json").write_text(
+        json.dumps(
+            {
+                "batches": {
+                    "stale": {
+                        "owner_queue": False,
+                        "status": "superseded",
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert [path.name for path in collect_undecided_figure_batches(tmp_path)] == [
+        "current"
+    ]
