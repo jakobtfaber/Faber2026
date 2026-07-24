@@ -48,7 +48,8 @@ def test_successor_ticket_exists_and_is_non_blocking():
     assert "15-count-audit-remediation-standing-method.md" in text
     assert "known-truth-injection-calibrated" in text.lower().replace(" ", "-")
     t = _ticket(name)
-    assert t.is_open
+    assert t.status == "scientific"
+    assert "scientific gate pending" in text.lower()
     assert not t.is_owner_facing
     assert t.blockers == ()
 
@@ -78,12 +79,12 @@ def test_ticket_03_resolved_with_scoped_injection_policy(owner_frontier):
     assert "component-count-setting statistic" in text
 
 
-def test_ticket_10_unchanged_because_not_covered_by_receipt(owner_frontier):
+def test_ticket_10_records_accepted_batch_disposition(owner_frontier):
     t = _ticket("10-disposition-technical-review-robustness-items.md")
-    assert t.status == "open"
-    assert t in owner_frontier
+    assert t.status == "resolved"
+    assert t not in owner_frontier
     text = _ticket_text("10-disposition-technical-review-robustness-items.md")
-    assert "## Decision" not in text
+    assert "## Decision — 2026-07-23" in text
 
 
 def test_owner_queue_matches_canonical_ticket_state():
@@ -100,7 +101,7 @@ def test_owner_queue_excludes_resolved_and_successor_tickets(owner_frontier):
     assert "15-count-audit-remediation-standing-method.md" not in names
     assert "03-ratify-fit-retrust-contract.md" not in names
     assert "20-develop-injection-calibrated-profile-component-count-statistic.md" not in names
-    assert "10-disposition-technical-review-robustness-items.md" in names
+    assert "10-disposition-technical-review-robustness-items.md" not in names
 
 
 def test_map_and_board_reference_successor():
@@ -110,7 +111,7 @@ def test_map_and_board_reference_successor():
     assert "20-develop-injection-calibrated-profile-component-count-statistic" in map_text
     assert "non-blocking" in map_text.lower()
     board_text = (ROOT / "docs/rse/control/BOARD.md").read_text(encoding="utf-8")
-    assert "Profile-component-count statistic: deferred for this submission" in board_text
+    assert "Profile-component-count statistic deferred; not a submission blocker" in board_text
     assert "Fit re-validation contract ratification" in board_text
     assert "[x] Fit re-validation contract ratification" in board_text
 

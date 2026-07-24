@@ -66,8 +66,7 @@ entries:
     trust: diagnostic_only
     repo: external
     mode: link_only
-    result_ids:
-      - scattering.jointtf_v2_candidate_panels
+    result_ids: []
     sources: []
     external_paths:
       - env: FABER2026_RESULTS_LIBRARY
