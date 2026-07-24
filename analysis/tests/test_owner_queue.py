@@ -93,3 +93,35 @@ def test_owner_queue_queries_analysis_repository(monkeypatch):
 
     assert owner_queue.collect_open_prs() == []
     assert seen[seen.index("--repo") + 1] == "jakobtfaber/Faber2026-analysis"
+
+
+def test_figure_batch_disposition_controls_owner_queue(tmp_path):
+    from scripts.owner_queue import collect_undecided_figure_batches
+
+    batches = tmp_path / "figure_review/batches"
+    receipts = tmp_path / "figure_review/approval_receipts"
+    receipts.mkdir(parents=True)
+    for name in ("stale", "current"):
+        batch = batches / name
+        batch.mkdir(parents=True)
+        (batch / "manifest.json").write_text(
+            json.dumps({"candidates": [{"id": f"{name}-candidate"}]}),
+            encoding="utf-8",
+        )
+    (tmp_path / "figure_review/batch_dispositions.json").write_text(
+        json.dumps(
+            {
+                "batches": {
+                    "stale": {
+                        "owner_queue": False,
+                        "status": "superseded",
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert [path.name for path in collect_undecided_figure_batches(tmp_path)] == [
+        "current"
+    ]
