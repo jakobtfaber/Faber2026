@@ -1,7 +1,7 @@
 # Disposition the technical-review robustness items for this submission
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: resolved (2026-07-22)
+- Status: resolved (2026-07-23)
 - Assignee: Codex controller
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -42,7 +42,7 @@ the lane system.
 
 - [Owner decision packet (ready for review)](../../specs/research-technical-review-robustness-dispositions-2026-07-22.md)
 
-## Decision — 2026-07-22
+## Decision — 2026-07-23
 
 Owner accepted the disposition table as a batch per `research-technical-review-robustness-dispositions-2026-07-22.md`.
 

@@ -1,7 +1,7 @@
 # Technical-review robustness dispositions
 
 **Date:** 2026-07-22  
-**Status:** owner decision packet; human decision pending  
+**Status:** accepted by owner on 2026-07-23
 **Scope:** ApJ Wayfinder ticket 10 only  
 **Analysis base:** `dfcd1d5e76c48642a3cb83dc7dd7cbd6ca26fc15`
 
@@ -70,6 +70,12 @@ Any amendment that retains the intervening-scattering column must supply the
 missing physical mapping and priors before execution.
 
 Ticket 10 remains open until the owner records this decision.
+
+## Owner decision receipt
+
+Accepted as written by the owner on 2026-07-23. The table is authoritative for
+ticket 10. This authorizes the listed execution work but does not promote any
+revoked fit, scintillation result, figure, or manuscript claim.
 
 ## Evidence checked
 
