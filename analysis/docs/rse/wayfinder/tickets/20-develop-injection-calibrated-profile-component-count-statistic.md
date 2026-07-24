@@ -1,8 +1,8 @@
 # Develop an injection-calibrated profile-component-count statistic
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
-- Assignee: Codex controller
+- Status: scientific gate pending — implementation contract ready (2026-07-23)
+- Assignee: Codex
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
@@ -27,3 +27,21 @@ neighbor-count protocol from ticket 15 as a guard.
 
 - [Decide whether the profile-component-count statistic blocks submission](05-profile-component-statistic-blocker-decision.md) — resolved (2026-07-22)
 - [Adopt count-audit remediation as standing method](15-count-audit-remediation-standing-method.md) — resolved (2026-07-22)
+
+## Agent-delegable work completed
+
+The [implementation contract](../../specs/plan-profile-component-count-calibration.md)
+identifies the production profile-likelihood seam, required injection grid,
+comparison invariants, output schema, test slices, and fail-closed behavior.
+`scripts/profile_component_calibration.py` validates evidence packets and
+prevents calibration output from setting manuscript counts before ratification.
+
+The older autocorrelation-function trigger plan is explicitly not accepted as
+this statistic: it counts scattering scales, not temporal profile components.
+
+## Scientific gate
+
+After the full `dsa110-FLITS` injection campaign, the manuscript owner must
+ratify acceptable overcount and undercount rates, the supported injection
+domain, and out-of-domain behavior. This remains non-blocking for the current
+submission; current visual/heuristic counts and ticket 15 guards are unchanged.
