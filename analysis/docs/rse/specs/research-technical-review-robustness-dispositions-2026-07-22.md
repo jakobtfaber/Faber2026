@@ -1,16 +1,15 @@
 # Technical-review robustness dispositions
 
-**Date:** 2026-07-22  
-**Status:** accepted by owner on 2026-07-23
-**Scope:** ApJ Wayfinder ticket 10 only  
+**Date:** 2026-07-22
+**Status:** owner accepted 2026-07-23
+**Scope:** ApJ Wayfinder ticket 10 only
 **Analysis base:** `dfcd1d5e76c48642a3cb83dc7dd7cbd6ca26fc15`
 
-## Recommendation
+## Decision
 
-Accept the dispositions below as one decision. They preserve the trusted
-association, foreground-census, and dispersion-budget lanes; they do not
-promote any revoked fit or scintillation result. No ticket, map, table, figure,
-or manuscript claim changes in this packet.
+The owner accepted the dispositions below as one batch on 2026-07-23. They
+preserve the trusted association, foreground-census, and dispersion-budget
+lanes; they do not promote any revoked fit or scintillation result.
 
 `In` means required for this submission. `Out` means remove the unsupported
 surface instead of building new machinery. `Defer` means the submission may
@@ -58,24 +57,11 @@ proceed without the work only with the stated limitation.
 - Ticket 17 and the radio-frequency-interference validation chain own the
   product corrections required before S16 can be tested honestly.
 
-## Minimum owner decision
+## Decision receipt
 
-**Recommended:** accept the table as a batch. This creates no scientific or
-visual promotion. It authorizes the `In` work and the two removals, while the
-deferred items keep their stated manuscript limitations.
-
-To amend, name only the row and replacement disposition. Any amendment that
-revives a sample-wide CHIME instrument-limit claim also makes S17 required.
-Any amendment that retains the intervening-scattering column must supply the
-missing physical mapping and priors before execution.
-
-Ticket 10 remains open until the owner records this decision.
-
-## Owner decision receipt
-
-Accepted as written by the owner on 2026-07-23. The table is authoritative for
-ticket 10. This authorizes the listed execution work but does not promote any
-revoked fit, scintillation result, figure, or manuscript claim.
+Owner accepted the table as a batch on 2026-07-23, as recorded in
+[`10-disposition-technical-review-robustness-items.md`](../wayfinder/tickets/10-disposition-technical-review-robustness-items.md).
+Execution remains in the lane system and does not itself promote science claims.
 
 ## Evidence checked
 
