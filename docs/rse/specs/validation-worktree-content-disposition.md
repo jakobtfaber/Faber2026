@@ -300,9 +300,50 @@ separate-lane contamination.
 
 ---
 
+## Closure — the estate is fully adjudicated (2026-07-24, later same day)
+
+Everything above described the ten-row delta. The consolidation that followed it
+went considerably further, and this section records where it landed so the
+document is not read as a partial account.
+
+Five waves retired 107 worktrees with no failures, taking the estate from 116
+registered worktrees to 9 — five primaries and four locked preserves on the
+external drive. Thirty-five worktrees carrying unique commits were bundled to
+`ArtifexBackupDrive` first, and all thirty-five bundles were restore-verified.
+Nine of those were on detached HEADs, so a durable `refs/preserved/wave3/<slug>`
+ref was minted for each before bundling; without it the commits would have gone
+unreferenced the moment the worktree was removed. Free space on the internal
+volume went from 12 GiB to 34 GiB.
+
+Content disposition then split in two. Three agent-side sub-tickets (#242, #243,
+#244) sealed 21 of the 40 bundled worktrees. The remaining 16, holding 74
+commits, fell outside all three and were adjudicated separately: 41 commits
+PRESERVE (the rejected host-dispersion-measure and radio-frequency-interference
+prototype lanes, all on remote branches), 22 SUPERSEDED, 1 already landed via
+#240, 2 obsolete, 2 still live on an active working branch, and 6 escalated to
+the owner as #248. That last set — an independent revalidation of the JointTF
+version-2 harvest, on a branch that exists on no remote — was the only case
+where blob-level comparison could not settle the question, and it is science
+evidence, so it was not classified by an agent. Zero deletions were performed in
+the adjudication and no content was left at risk.
+
+Two process defects were found and recorded rather than omitted. A worktree
+removal ran without gating on its bundle succeeding, which it had not; the
+commit turned out to be on a remote branch and had a preservation ref, so
+nothing was lost, but the sequencing was wrong and the receipt says so. And a
+preserve-bag checksum comparison reported a pass over zero files, because a
+shell hook had broken the subshell directory change so the manifest walk found
+nothing. That false pass was caught before any internal copy was deleted and
+redone with an independent file walker: 21 files, 654 MiB, byte-identical.
+
+#229 and #233 are closed. #248 is the only open item, and it is an owner call,
+not remaining work.
+
+---
+
 ## References
 
 - [`handoff-2026-07-24-12-40-worktree-content-disposition.md`](handoff-2026-07-24-12-40-worktree-content-disposition.md) — primary handoff validated here
 - [`handoff-2026-07-24-12-33-worktree-content-disposition.md`](handoff-2026-07-24-12-33-worktree-content-disposition.md) — operational annex with the ten-row table and safety rules
-- Receipts: `~/Developer/scratch/receipts/Faber2026/worktree-retirement/post-estate-delta-20260724T195430Z/`
-- Issues: [#229](https://github.com/jakobtfaber/Faber2026/issues/229), [#233](https://github.com/jakobtfaber/Faber2026/issues/233), [#234](https://github.com/jakobtfaber/Faber2026/issues/234), [#242](https://github.com/jakobtfaber/Faber2026/issues/242), [#243](https://github.com/jakobtfaber/Faber2026/issues/243), [#244](https://github.com/jakobtfaber/Faber2026/issues/244)
+- Receipts: `~/Developer/scratch/receipts/Faber2026/worktree-retirement/` (five waves) and `~/Developer/scratch/receipts/Faber2026/worktree-content-disposition/` (bag preservation, sub-ticket triage, residual adjudication)
+- Issues: [#229](https://github.com/jakobtfaber/Faber2026/issues/229), [#233](https://github.com/jakobtfaber/Faber2026/issues/233), [#234](https://github.com/jakobtfaber/Faber2026/issues/234), [#242](https://github.com/jakobtfaber/Faber2026/issues/242), [#243](https://github.com/jakobtfaber/Faber2026/issues/243), [#244](https://github.com/jakobtfaber/Faber2026/issues/244), [#248](https://github.com/jakobtfaber/Faber2026/issues/248)
