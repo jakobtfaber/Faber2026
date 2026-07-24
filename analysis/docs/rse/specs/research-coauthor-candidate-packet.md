@@ -4,7 +4,7 @@
 
 **Ticket:** [Prune and typeset the co-author list](../wayfinder/tickets/11-prune-coauthor-list.md)
 
-**State:** ready for the consolidated owner review; no personnel decision made
+**State:** interim author block selected 2026-07-23; final roster pending
 
 ## Result
 
@@ -95,3 +95,17 @@ alter that result. No fuzzy identity match was attempted.
 | Circulation | Circulate immediately after roster confirmation; recommended date 2026-07-23, leaving eight calendar days before the 2026-07-31 target. | Coauthor reading window |
 
 No edit to manuscript `auth.tex` is authorized until these choices are made.
+
+## Owner decision receipt
+
+On 2026-07-23, the owner accepted the recommended authorship source rule,
+ordering, identity-field, contribution-statement, and circulation defaults.
+For the current draft, the owner selected this exact order:
+
+1. Jakob T. Faber
+2. The CHIME/FRB Collaboration
+3. The DSA-110 Collaboration
+
+The owner will finalize the roster later. This receipt does not authorize
+contacting either collaboration, assert collaboration approval, or finalize
+the manuscript author block.

@@ -26,7 +26,7 @@ intersection of the two named published author lists is empty, so it cannot
 produce a candidate roster. The packet records the source lists, deterministic
 comparison, identity gaps, recommended defaults, and exact owner choices.
 
-## Decision — 2026-07-22 (partial)
+## Decision — 2026-07-23 (interim)
 
 Owner accepted the contribution-based source rule and ordering policy in
 `research-coauthor-candidate-packet.md`:
@@ -36,5 +36,12 @@ Owner accepted the contribution-based source rule and ordering policy in
 - include a CRediT contribution statement if the journal uses one,
 - circulate immediately after roster confirmation.
 
-The actual roster and verified identity fields remain owner-pending. The ticket
-stays open until the roster is supplied and `auth.tex` is updated.
+For the current draft, the owner selected this author block, in order:
+
+1. Jakob T. Faber
+2. The CHIME/FRB Collaboration
+3. The DSA-110 Collaboration
+
+This is explicitly interim. The final roster, verified identity fields,
+affiliations, contribution statement, circulation date, and `auth.tex` update
+remain pending. The ticket stays open.
