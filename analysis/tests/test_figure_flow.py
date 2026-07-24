@@ -17,7 +17,7 @@ ROOT = manuscript_root()
 import figure_flow  # noqa: E402
 
 
-CATALOG = ROOT / "figures" / "catalog.yaml"
+CATALOG = ANALYSIS_ROOT / "figures" / "catalog.yaml"
 
 
 def test_catalog_loads():
@@ -230,6 +230,24 @@ def test_fig1_has_approval_slot():
     assert hint is not None
     assert "figure_review.py new-batch" in hint
     assert "fig1-gallery" in hint
+
+
+def test_figure3_is_staged_from_versioned_catalog_input():
+    figures = figure_flow.by_id(figure_flow.load_catalog(CATALOG))
+    figure = figures["sightline_halo_grid"]
+    assert figure["producer"]["argv"].count("--out-dir") == 1
+    assert "~/Data/frb-foreground-halos" not in " ".join(figure["producer"]["argv"])
+    assert figure["producer"]["argv"][
+        figure["producer"]["argv"].index("--halo-csv") + 1
+    ] == "galaxies/foreground/data/sightline_halo_grid.csv"
+    assert figure["approval_slot"] == "fig3-halo-grid"
+    assert figure["inputs"] == [
+        "pipeline/galaxies/foreground/data/sightline_halo_grid.csv"
+    ]
+    assert figure["outputs"] == [
+        "analysis/figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
+    ]
+    assert figure["manuscript_target"] == "figures/sightline_halo_grid.pdf"
 
 
 def test_skill_file_exists():
