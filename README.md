@@ -29,6 +29,36 @@ make watch
 make clean
 ```
 
+## Repository maintenance: special refs
+
+Treat these refs as infrastructure, not ordinary development branches:
+
+- `gh-pages` is the GitHub Pages deployment output. The `board/` deployment is
+  scoped to that subdirectory; the root contains a separate published deck.
+  Agents must not delete it or rewrite its history. Update it only through the
+  approved, path-scoped deployment workflow.
+- `entire/checkpoints/v1` is an Entire tracing metadata and checkpoint-retention
+  ref, not a feature branch. Agents must not delete it, force-push it, or move
+  its tip as routine cleanup. Any exceptional change needs separate owner
+  approval and a recorded preservation check.
+
+Audit either ref without checking it out or changing a local branch:
+
+```sh
+git fetch --no-tags origin \
+  refs/heads/gh-pages:refs/remotes/origin/gh-pages \
+  refs/heads/entire/checkpoints/v1:refs/remotes/origin/entire/checkpoints/v1
+git show --stat --summary refs/remotes/origin/<ref>
+git log --oneline --decorate --graph -20 refs/remotes/origin/<ref>
+git log --left-right --cherry-pick --oneline \
+  origin/main...refs/remotes/origin/<ref>
+```
+
+Record the remote tip from `git ls-remote --heads origin <ref>` before and
+after an approved operation. For `entire/checkpoints/v1`, also compare the tip
+with the Entire checkpoint ledger and do not treat unrelated ancestry as proof
+that retained metadata is disposable.
+
 ## Research workspace
 
 Clone both pins before running analysis or control tooling:
