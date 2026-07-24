@@ -4,35 +4,24 @@ _Generated 2026-07-23. Manual walkthrough ritual: see `docs/rse/control/owner-qu
 
 ## Decisions (wayfinder frontier, owner-facing)
 
-- **Disposition the technical-review robustness items for this submission** — open, unblocked, owner-facing
-  `docs/rse/wayfinder/tickets/10-disposition-technical-review-robustness-items.md`
 - **Prune and typeset the co-author list** — open, unblocked, owner-facing
   `docs/rse/wayfinder/tickets/11-prune-coauthor-list.md`
-- **Overhaul the trust assessment — re-audit what is trusted and what is not** — open, unblocked, owner-facing
-  `docs/rse/wayfinder/tickets/13-overhaul-trust-assessment.md`
-- **Review the RFI preservation limits on a controlled dynamic spectrum** — open, unblocked, owner-facing
-  `docs/rse/wayfinder/tickets/rfi-validation-01a-review-preservation-dynamic-spectrum.md`
+- **Define the CHIME RFI-cleaning acceptance contract** — open, unblocked, owner-facing
+  `docs/rse/wayfinder/tickets/rfi-validation-01-define-acceptance-contract.md`
 
 ## Approvals (figure review / data cards)
 
-- **2026-07-17-fig1-model-toa** — at least one candidate has no approval receipt
-  `figure_review/batches/2026-07-17-fig1-model-toa`
-- **2026-07-17-joint-scintillation-qualified-and-chime-acf** — at least one candidate has no approval receipt
-  `figure_review/batches/2026-07-17-joint-scintillation-qualified-and-chime-acf`
-- **2026-07-22-fig3-source-replay** — at least one candidate has no approval receipt
-  `figure_review/batches/2026-07-22-fig3-source-replay`
-- **2026-07-22-fig3-verdi-roster** — at least one candidate has no approval receipt
-  `figure_review/batches/2026-07-22-fig3-verdi-roster`
-- **2026-07-22-joint-scattering-current** — at least one candidate has no approval receipt
-  `figure_review/batches/2026-07-22-joint-scattering-current`
+- None.
 
 ## Owner-marked board tasks
 
-- **Trust-ledger overhaul — lane-by-lane re-audit of the revocation** — owner-marked board task
+- **Fit re-validation contract ratification (legacy V1) — bar for any** — owner-marked board task
   `docs/rse/control/BOARD.md`
 - **Ratify the qualifying CHIME-band method — **blocked on remediation**** — owner-marked board task
   `docs/rse/control/BOARD.md`
 - **Scintillation-to-scattering coupling design closure (legacy A1)** — owner-marked board task
+  `docs/rse/control/BOARD.md`
+- **Profile-component-count statistic: blocker or deferred (legacy A5)** — owner-marked board task
   `docs/rse/control/BOARD.md`
 - **Coverage-calibrated DM uncertainties: end-to-end injections into** — owner-marked board task
   `docs/rse/control/BOARD.md`
@@ -61,4 +50,19 @@ _Generated 2026-07-23. Manual walkthrough ritual: see `docs/rse/control/owner-qu
 
 ## Open PRs (review or delegate)
 
-- Not queried (`--offline`).
+- **#76 Record final author decision** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/76`
+- **#74 Define remaining CHIME RFI acceptance contract** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/74`
+- **#72 foreground: validate six source identity repairs** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/72`
+- **#67 Phase 0: reconcile owner queue accounting** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/67`
+- **#56 host-dm: deterministic PDF, generated appendix table, pending trust** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/56`
+- **#52 ms/checkout-advisory-triage: read-only checkout advisory classifier** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/52`
+- **#33 Converge analysis and owner-review frontiers** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/33`
+- **#31 Draft: overhaul manuscript result trust registry** — open
+  `https://github.com/jakobtfaber/Faber2026-analysis/pull/31`

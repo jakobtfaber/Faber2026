@@ -32,6 +32,11 @@ def collect_wayfinder_frontier(
 
 def collect_undecided_figure_batches(root: Path = ROOT) -> list[Path]:
     receipts = root / "figure_review/approval_receipts"
+    dispositions_path = root / "figure_review/batch_dispositions.json"
+    dispositions: dict[str, dict[str, object]] = {}
+    if dispositions_path.is_file():
+        payload = json.loads(dispositions_path.read_text(encoding="utf-8"))
+        dispositions = payload.get("batches", {})
     undecided: list[Path] = []
     for manifest_path in sorted(
         (root / "figure_review/batches").glob("*/manifest.json")
@@ -40,6 +45,9 @@ def collect_undecided_figure_batches(root: Path = ROOT) -> list[Path]:
         candidate_ids = [
             candidate["id"] for candidate in manifest.get("candidates", [])
         ]
+        disposition = dispositions.get(manifest_path.parent.name, {})
+        if disposition.get("owner_queue") is False:
+            continue
         if any(
             not (receipts / f"{candidate_id}.json").is_file()
             for candidate_id in candidate_ids
