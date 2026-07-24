@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: open
-- Assignee: —
+- Assignee: Codex controller
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)

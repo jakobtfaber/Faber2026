@@ -2,7 +2,7 @@
 
 - Type: `wayfinder:task` (AFK)
 - Status: open
-- Assignee: —
+- Assignee: Codex controller
 - Blocked by: [Build the seeded reproducible joint-fit runner](joint-scattering-controlled-rerun-02-build-seeded-runner.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Plan: [Controlled joint-scattering reruns](../../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md)
