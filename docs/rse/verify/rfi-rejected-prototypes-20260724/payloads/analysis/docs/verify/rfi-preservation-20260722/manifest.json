@@ -1,0 +1,24 @@
+{
+  "command": "python3 scripts/build_rfi_preservation_review.py",
+  "environment": {
+    "executable": "/opt/anaconda3/bin/python3",
+    "matplotlib": "3.10.6",
+    "numpy": "2.3.5",
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "python": "3.13.9 | packaged by Anaconda, Inc. | (main, Oct 21 2025, 19:11:29) [Clang 20.1.8 ]"
+  },
+  "injection": {
+    "contaminated_sha256": "290359611857a497d2f4dc06dde850b1c746fe7393baa3825e828bb39a2bb832",
+    "seed": 2026072201,
+    "truth_sha256": "4ba148aff28cb82df7a964ffb7c4edc6c593b64dfc6ffed14a73fa3c2d257465"
+  },
+  "outputs": {
+    "rfi_preservation_metrics.json": "ee5ada64517470c7b63bb1057e8ad951b6ecf65787e85ca32f128857195e8900",
+    "rfi_preservation_review.svg": "0b51659e4fd1172e34536538693f48bc950902cc7838a89768826dde25de3fc7"
+  },
+  "schema_version": 1,
+  "source": {
+    "path": "scripts/build_rfi_preservation_review.py",
+    "sha256": "b340e6bfbdf8d4f1269e2b25a0a2979f5c430cd5b626e8b59ee25739df111869"
+  }
+}
