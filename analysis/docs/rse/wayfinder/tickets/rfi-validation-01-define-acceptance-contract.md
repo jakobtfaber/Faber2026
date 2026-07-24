@@ -1,9 +1,9 @@
 # Define the CHIME RFI-cleaning acceptance contract
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: open — preservation limits accepted; remaining contract work pending
 - Assignee: —
-- Blocked by: [Review the RFI preservation limits on a controlled dynamic spectrum](rfi-validation-01a-review-preservation-dynamic-spectrum.md)
+- Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner request, 2026-07-21
 
@@ -53,11 +53,12 @@ explicit masks for missing or rejected samples, and forbid calling a product
   two-dimensional time-frequency morphology; scattering-tail timescale; and
   the frequency autocorrelation, modulation strength, and decorrelation
   bandwidth used for scintillation analysis.
-- **Signal-preservation limits tentatively accepted 2026-07-21:** on
+- **Signal-preservation limits accepted 2026-07-23:** on
   interference-free injections, median cleaner-induced shift no greater than
   0.25 measurement uncertainty, 95% no greater than 0.5, and none greater than
   1; on contaminated injections, at least 95% within 1 uncertainty of truth
   and median systematic offset no greater than 0.25. Detection status and
   component count must remain unchanged away from predeclared decision
-  boundaries. Final acceptance is blocked on the controlled dynamic-spectrum
-  review.
+  boundaries. Raw-unit thresholds are illustrative only. The accepted
+  controlled review closes the preservation-limit dependency but does not
+  validate a cleaner or admit science.

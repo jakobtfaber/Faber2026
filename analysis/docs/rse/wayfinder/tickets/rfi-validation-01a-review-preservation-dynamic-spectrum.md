@@ -55,3 +55,21 @@ cleaner, an autocorrelation measurement, scattering, scintillation, or a
 manuscript claim. Diagonal or time-local interference remains separate. The
 standardized post-dispersion-measure, post-burst-model product must be available
 before the approved map is tested in autocorrelation preprocessing.
+
+## Owner decision — 2026-07-23
+
+The owner ratified the manual row authority and fail-closed boundary above.
+The owner also accepted the uncertainty-normalized preservation limits from
+the controlled known-truth review as the provisional contract for the next
+cleaner:
+
+- interference-free injections: median cleaner-induced shift no greater than
+  0.25 measurement uncertainty, 95 percent no greater than 0.5, and none
+  greater than 1;
+- contaminated injections: at least 95 percent within 1 measurement
+  uncertainty of truth and median systematic shift no greater than 0.25;
+- detection status and component count unchanged away from predeclared
+  decision boundaries.
+
+Raw-unit thresholds remain illustrative only. The reviewed cleaner candidate
+failed multiple protected measurements and remains rejected.
