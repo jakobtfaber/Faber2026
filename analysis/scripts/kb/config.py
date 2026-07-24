@@ -14,6 +14,9 @@ MANUSCRIPT_ROOT = manuscript_root()
 
 # SQLite database (gitignored).
 DB_PATH = ANALYSIS_ROOT / ".kb" / "kb.sqlite3"
+# Keep model files out of the OS temporary directory: FastEmbed's default
+# cache can be partially evicted while its snapshot metadata survives.
+EMBED_CACHE_DIR = ANALYSIS_ROOT / ".kb" / "fastembed_cache"
 
 # ---------------------------------------------------------------------------
 # docs: manuscript + operational documentation
