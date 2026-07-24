@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import json
+import re
 import subprocess
 import sys
 from types import SimpleNamespace
@@ -77,6 +78,32 @@ def test_owner_queue_cli_regenerates_from_authoritative_frontier(tmp_path):
     assert "Decisions (wayfinder frontier, owner-facing)" in rendered
     assert "Obtain the authoritative host-redshift ledger" not in rendered
     assert "Not queried (`--offline`)" in rendered
+
+
+def test_owner_queue_canonical_render_is_date_independent():
+    from scripts.owner_queue import render_owner_queue
+
+    rendered = render_owner_queue(ROOT, include_github=False)
+    assert "_Generated from repository state." in rendered
+    assert re.search(r"_Generated \d{4}-\d{2}-\d{2}", rendered) is None
+
+
+def test_owner_queue_cli_defaults_to_repository_only(tmp_path):
+    output = tmp_path / "OWNER_QUEUE.md"
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts/owner_queue.py"),
+            "--output",
+            str(output),
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "Not queried (`--offline`)" in output.read_text(encoding="utf-8")
 
 
 def test_owner_queue_queries_analysis_repository(monkeypatch):
