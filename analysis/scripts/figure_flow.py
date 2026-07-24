@@ -25,7 +25,7 @@ from results_library import results_library_root
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-CATALOG_DEFAULT = ROOT / "figures" / "catalog.yaml"
+CATALOG_DEFAULT = ANALYSIS_ROOT / "figures" / "catalog.yaml"
 RECEIPTS_DIR = ANALYSIS_ROOT / "figure_receipts"
 
 
