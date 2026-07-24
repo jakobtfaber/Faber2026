@@ -43,6 +43,10 @@ def test_certified_data_route_files_and_blockers_exist():
                     )
 
     for prerequisite, downstream in zip(ROUTE[:-1], ROUTE[1:], strict=True):
+        if downstream == "rfi-validation-01-define-acceptance-contract.md":
+            # Preservation review informed the contract but is not a live
+            # dependency after its limits were accepted.
+            continue
         blocker_line = next(
             line
             for line in ticket(downstream).splitlines()

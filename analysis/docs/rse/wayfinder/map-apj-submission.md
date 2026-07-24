@@ -6,6 +6,9 @@ assignee into its header; blocking uses the `Blocked by:` header line (local
 markdown tracker — no native dependency links). The frontier = open tickets
 with no open blockers and no assignee.
 
+The current submission does not wait for the non-blocking
+[injection-calibrated profile-component-count successor](tickets/20-develop-injection-calibrated-profile-component-count-statistic.md).
+
 ## Destination
 
 Every decision required to submit the manuscript to the Astrophysical Journal
