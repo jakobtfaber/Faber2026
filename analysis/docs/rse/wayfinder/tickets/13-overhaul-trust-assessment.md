@@ -1,7 +1,7 @@
 # Overhaul the trust assessment — re-audit what is trusted and what is not
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: open — authority accepted; baseline integration pending
 - Assignee: Codex controller
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -40,3 +40,14 @@ trust-reset block, plus revised re-validation requirements per lane. This
 sets the evidence bar the re-fit and scintillation campaigns run against;
 the contract-ratification ticket then ratifies whatever bar emerges (and may
 be absorbed here if the overhaul settles it).
+
+## Owner decision — 2026-07-23
+
+The owner accepted the authority disposition in
+[`decision-packet-trust-2026-07-23.md`](../../specs/decision-packet-trust-2026-07-23.md).
+Exact commit `5292337ffc6c0bb918a763860d70c0575530ae61` is the baseline to
+integrate. The timing-offset figure, current cluster column, and host
+dispersion posteriors remain pending under the packet's named gates.
+
+This ticket remains open until that baseline is integrated onto current
+`main`, validated, and recorded as the revised trust ledger.
