@@ -32,7 +32,7 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 - [x] Trust-ledger overhaul — lane-by-lane re-audit of the revocation
   waves; sets the citability bar everywhere
   ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md))
-- [ ] ✋ Fit re-validation contract ratification (legacy V1) — bar for any
+- [x] Fit re-validation contract ratification (legacy V1) — bar for any
   re-fit to be citable ([wf-03](wayfinder/tickets/03-ratify-fit-retrust-contract.md))
 - [ ] CHIME scattering-input lineage check (legacy V2) — do the dynamic
   spectra feeding the scattering fits share the gen-1 de-chirp defect?
@@ -68,7 +68,7 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 ### Scattering re-fit campaign
 - [ ] ✋ Scintillation-to-scattering coupling design closure (legacy A1)
   ([wf-04](wayfinder/tickets/04-close-scint-scattering-coupling-design.md))
-- [ ] ✋ Profile-component-count statistic: blocker or deferred (legacy A5)
+- [x] Profile-component-count statistic deferred; not a submission blocker (legacy A5)
   ([wf-05](wayfinder/tickets/05-profile-component-statistic-blocker-decision.md))
 - [ ] Extended-medium (uniform-LOS) PBF kernel, β-coupled, per band (legacy A2)
 - [ ] Per-sightline geometry model selection, thin vs extended,
@@ -191,19 +191,19 @@ revoked rows retain their explicit gates ([wf-13](wayfinder/tickets/13-overhaul-
     vs masking, mask-threshold stability (review S7 — 3–4 sentences)
 - 2.2 Dispersion-measure measurements *(provenance re-validated 2026-07-07,
   shared DSA-DM convention)*
-  - [ ] ✋ Coverage-calibrated DM uncertainties: end-to-end injections into
-    real off-pulse waterfalls + coverage fraction — in or deferred?
+  - [x] Coverage-calibrated DM uncertainties deferred with a stated caveat:
+    end-to-end injections into real off-pulse waterfalls + coverage fraction
     (review S8; disposition via [wf-10](wayfinder/tickets/10-disposition-technical-review-robustness-items.md))
 - 2.3 Scattering fits
   - [ ] ⏳ Rewrite on the re-fit campaign's verified inputs/methods
 - 2.4 Milky Way foreground
   - [ ] NE2025 publication-status check at submission (referee MW4)
-  - [ ] ✋ Per-sightline disk-model comparison table (NE2025 vs
+  - [ ] Per-sightline disk-model comparison table (NE2025 vs
     NE2001/YMW16) — justifies the 30% disk prior (review S15b; via wf-10)
 - 2.5 Foreground-galaxy search *(census re-validated + remediated 2026-07-15)*
-  - [ ] ✋ Census-aperture wording: frozen census as-built vs live-replay
+  - [x] Census-aperture wording: frozen census as-built
     description ([wf-08](wayfinder/tickets/08-correct-census-aperture-description.md))
-  - [ ] ✋ Completeness / missing-halo systematic: limiting magnitude →
+  - [ ] Completeness / missing-halo systematic: limiting magnitude →
     P(missed group-scale halo) per corridor (review S11; via wf-10)
 
 ## §3 Methods
@@ -223,10 +223,10 @@ revoked rows retain their explicit gates ([wf-13](wayfinder/tickets/13-overhaul-
   - [x] Fiducial priors and host-DM headline accepted (2026-07-22)
     ([wf-07](wayfinder/tickets/07-sign-off-budget-priors-and-host-dm-headline.md))
 - 3.2b Intervening foreground galaxies & clusters
-  - [ ] ✋ Phineas halo-mass prescription conflict (census flags vs budget
+  - [x] Phineas halo-mass prescription conflict resolved (census flags vs budget
     chain; DM_int 241 vs ≈218)
     ([wf-06](wayfinder/tickets/06-adjudicate-phineas-halo-mass-prescriptions.md))
-  - [ ] ✋ Probabilistic b/R_vir mixture for borderline halos (review S12;
+  - [x] Probabilistic b/R_vir mixture for borderline halos (review S12;
     the machinery half of the phineas adjudication)
 - 3.3 Scattering attribution (joint two-band fit; sub-band cross-check;
   gain-marginalized likelihood; multiple temporal components)
@@ -247,16 +247,16 @@ revoked rows retain their explicit gates ([wf-13](wayfinder/tickets/13-overhaul-
 - 4.2 Per-sightline DM budget *(base lane re-validated 2026-07-07;
   phantom-DM_int bug fixed 2026-07-15, FLITS #183; the probabilistic Phineas
   update remains pending integrated producer/input/artifact receipts)*
-  - [ ] ✋ Cluster-aperture sensitivity: recompute at 1.5·R_500 / R_200 with
+  - [ ] Cluster-aperture sensitivity: recompute at 1.5·R_500 / R_200 with
     envelope (review S13; via wf-10)
-  - [ ] ✋ Intervening-scattering column: document the DM→τ mapping or drop
-    until the scattering framework lands (review S14; triage recommends drop)
+  - [x] Intervening-scattering column dropped until the scattering framework
+    lands (review S14)
 - 4.3 Scintillation & screen attribution
   - [ ] ⏳ Rebuild on the both-band campaign + two-screen rebuild
-  - [ ] ✋ Modulation-index gate (m ≤ 1.5) vs two-screen √3 bound: reframe or
-    raise + re-run guard matrix, report verdict changes (review S16; via wf-10)
-  - [ ] ✋ Pulsar positive control through the CHIME upchannelization chain:
-    needed, or does the injection battery suffice? (review S17; via wf-10)
+  - [x] Modulation-index gate (m ≤ 1.5) vs two-screen √3 bound deferred into
+    the input-remediation and CHIME-method tickets (review S16; via wf-10)
+  - [x] Pulsar positive control through the CHIME upchannelization chain
+    deferred (review S17; via wf-10)
 - 4.4 Turbulence spectrum & burst multiplicity
   - [ ] ⛔⏳ Refill from the re-fit campaign under geometry adjudication;
     β-table rework (geometry-adjudicated quoting; descriptive
@@ -296,13 +296,13 @@ revoked rows retain their explicit gates ([wf-13](wayfinder/tickets/13-overhaul-
 - E. Joint-model morphology audits — [ ] ⛔⏳ refill from the re-fit
   campaign; sightline-halo-grid caption states panel count/omissions
   (referee M15)
-- Parked EMG appendix — [ ] ✋ effective-index sensitivity variant vehicle:
-  revive or leave parked (review S19; via wf-10)
+- Parked EMG appendix — [x] effective-index sensitivity variant remains parked
+  (review S19; via wf-10)
 
 ## Front & back matter
 
-- [ ] ✋ Co-author list: draft from Law2024 + CHIME/FRB overlap, owner
-  prunes, typeset `auth.tex`
+- [x] Co-author list fixed to Jakob plus the CHIME/FRB and DSA-110
+  collaborations; `auth.tex` typeset
   ([wf-11](wayfinder/tickets/11-prune-coauthor-list.md))
 - [ ] Zenodo archival release + DOI mint; point `\software{}` pipeline entry
   at it (referee B5/M11; submission-time)
