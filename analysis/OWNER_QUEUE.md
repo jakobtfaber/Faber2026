@@ -1,6 +1,6 @@
 # OWNER QUEUE — regenerate with `python3 scripts/owner_queue.py`
 
-_Generated 2026-07-23. Manual walkthrough ritual: see `docs/rse/control/owner-queue-ritual.md`._
+_Generated from repository state. Manual walkthrough ritual: see `docs/rse/control/owner-queue-ritual.md`._
 
 ## Decisions (wayfinder frontier, owner-facing)
 
@@ -48,11 +48,4 @@ _Generated 2026-07-23. Manual walkthrough ritual: see `docs/rse/control/owner-qu
 
 ## Open PRs (review or delegate)
 
-- **#74 Define remaining CHIME RFI acceptance contract** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/74`
-- **#72 foreground: validate six source identity repairs** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/72`
-- **#56 host-dm: deterministic PDF, generated appendix table, pending trust** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/56`
-- **#52 ms/checkout-advisory-triage: read-only checkout advisory classifier** — open
-  `https://github.com/jakobtfaber/Faber2026-analysis/pull/52`
+- Not queried (`--offline`).
