@@ -56,6 +56,11 @@ existing lane system. The map does not carry the execution itself.
   is not a sequencing driver; scope follows scientific need. Superseded as
   head of the map by
   [Overhaul the trust assessment](tickets/13-overhaul-trust-assessment.md).
+- [Overhaul the trust assessment](tickets/13-overhaul-trust-assessment.md)
+  — replace the blanket reset with an exact 62-row authority: independently
+  fixed claim ownership, repository-specific provenance, and proportionate
+  re-entry gates; no result was promoted, and the TOA-offset figure remains
+  pending explicit authority and exact-byte review.
 - [Correct the census-aperture description to match the pipeline](tickets/08-correct-census-aperture-description.md)
   — describe the frozen census as built: eligible rows span 101.7–242.7 kpc,
   the retained envelope reaches 281.4 kpc, and eligibility is provenance-based.
@@ -83,17 +88,6 @@ existing lane system. The map does not carry the execution itself.
 - [Adjudicate the conflicting halo-mass prescriptions on the phineas sightline](tickets/06-adjudicate-phineas-halo-mass-prescriptions.md)
   — adopt a probabilistic crossing mixture tied to the modified-NFW gas
   truncation radius; retain `R200c` crossing as a reported geometry sensitivity.
-- [Ratify the fit re-trust validation contract](tickets/03-ratify-fit-retrust-contract.md)
-  — owner ratified the four-term checklist; synthetic-injection recovery is not a
-  standalone re-trust step, but known-truth injection remains required for new
-  estimators, changed likelihoods/forward models, model-selection procedures, and
-  component-count-setting statistics.
-- [Decide whether the profile-component-count statistic blocks submission](tickets/05-profile-component-statistic-blocker-decision.md)
-  — the statistic is not a circulation blocker for this submission; visual/heuristic
-  vetting with the temporary neighbor-count guard from ticket 15 suffices.
-- [Adopt count-audit remediation as standing method](tickets/15-count-audit-remediation-standing-method.md)
-  — the neighbor-count comparison is a temporary validation guard, not a count setter;
-  none of the proposed component-count changes are adopted.
 
 ## Not yet specified
 
@@ -114,10 +108,6 @@ Fog toward the destination — sharpens as the frontier advances:
   is execution QA, not a new decision).
 - **Submission mechanics** — Zenodo archive scope + DOI mint, abstract slot
   fills, NE2025 publication-status check, software/facility citations sweep.
-- **Injection-calibrated profile-component-count statistic** — chartered as a
-  non-blocking successor to the resolved tickets 05 and 15 decisions; required
-  before the statistic itself may set manuscript component counts in a future
-  campaign. [Develop an injection-calibrated profile-component-count statistic](tickets/20-develop-injection-calibrated-profile-component-count-statistic.md)
 
 ## Out of scope
 
