@@ -43,7 +43,7 @@ def test_manifest_has_analysis_specific_controller_roots():
         ).expanduser()
     )
     assert manifest.max_parallel == 4
-    assert len(wc.tasks_for_wave(manifest, "first")) == 2
+    assert len(wc.tasks_for_wave(manifest, "first")) == 1
 
 
 def test_manifest_represents_expanded_foreground_active_graph_and_history():
@@ -55,13 +55,13 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
     assert {Path(task.ticket).name for task in manifest.tasks} == {
         f"expanded-foreground-catalog-repair-{number:02d}-{slug}.md"
         for number, slug in [
-            (4, "set-figure-3-gate"),
             (5, "set-independent-validation-gate"),
         ]
     }
     assert {Path(item.ticket).name for item in manifest.history} == {
         f"expanded-foreground-catalog-repair-{number:02d}-{slug}.md"
         for number, slug in [
+            (4, "set-figure-3-gate"),
             (1, "fail-close-validation"),
             (2, "set-crossmatch-contract"),
             (3, "set-physics-authority"),
@@ -79,6 +79,7 @@ def test_manifest_represents_expanded_foreground_active_graph_and_history():
             (17, "obtain-authoritative-host-redshift-ledger"),
             (18, "source-zach-whitney-host-redshifts"),
             (19, "adjudicate-host-redshift-differences"),
+            (20, "freeze-six-redshiftless-identities"),
         ]
     }
     wc.validate_manifest_ticket_graph(manifest, ROOT)
@@ -94,7 +95,9 @@ def test_manifest_graph_rejects_coverage_dependency_and_execution_drift():
         )
 
     task = next(
-        item for item in manifest.tasks if item.id == "set-expanded-figure3-gate"
+        item
+        for item in manifest.tasks
+        if item.id == "set-expanded-independent-validation"
     )
     drifted = replace(task, depends_on=())
     tasks = tuple(drifted if item.id == task.id else item for item in manifest.tasks)
@@ -173,17 +176,19 @@ def test_dependency_plan_is_fail_closed(tmp_path):
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
     state = wc.empty_state(manifest)
     ready = {task.id for task in wc.ready_tasks(manifest, state, "first")}
-    assert ready == {"set-expanded-figure3-gate"}
+    assert ready == {"set-expanded-independent-validation"}
 
 
-def test_current_plan_accepts_resolved_ticket09_and_ticket19(capsys):
+def test_current_plan_accepts_resolved_ticket09_and_ticket19(capsys, tmp_path):
     wc = load_controller()
     manifest = wc.load_manifest(ROOT / "docs/rse/control/wayfinder-automation.toml")
+    manifest = replace(manifest, state_dir=tmp_path)
 
     assert wc.print_plan(manifest, "first") == 0
     output = capsys.readouterr().out
     assert "repeat-expanded-redshift-verification: queued" not in output
-    assert "set-expanded-figure3-gate: queued" in output
+    assert "set-expanded-figure3-gate: queued" not in output
+    assert "set-expanded-independent-validation: queued" in output
     assert "adjudicate-host-redshift-differences: queued" not in output
 
 
