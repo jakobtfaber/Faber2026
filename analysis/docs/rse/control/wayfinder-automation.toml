@@ -10,17 +10,6 @@ max_parallel = 4
 timeout_seconds = 14400
 
 [[task]]
-id = "set-expanded-figure3-gate"
-wave = "first"
-ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md"
-branch = "codex/auto-set-expanded-figure3-gate"
-mode = "resolve"
-execution = "afk"
-repo = "jakobtfaber/Faber2026-analysis"
-depends_on = ["set-expanded-physics-authority", "repeat-expanded-redshift-verification"]
-instructions = "Implement the Figure 3 regeneration gate only after physics authority and repeated redshift verification resolve. Do not promote Figure 3."
-
-[[task]]
 id = "set-expanded-independent-validation"
 wave = "first"
 ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md"
@@ -30,6 +19,20 @@ execution = "afk"
 repo = "jakobtfaber/Faber2026-analysis"
 depends_on = ["set-expanded-figure3-gate"]
 instructions = "Implement the independent-validation gate after the Figure 3 gate resolves. Do not self-certify or promote scientific trust."
+
+[[history]]
+id = "set-expanded-figure3-gate"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md"
+execution = "afk"
+depends_on = ["set-expanded-physics-authority", "repeat-expanded-redshift-verification"]
+status = "resolved"
+
+[[history]]
+id = "freeze-six-redshiftless-identities"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-20-freeze-six-redshiftless-identities.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
 
 [[history]]
 id = "repeat-expanded-redshift-verification"
