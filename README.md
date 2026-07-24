@@ -21,6 +21,13 @@ pipeline/         dsa110-FLITS submodule
 Overleaf compiles only the root TeX, bibliography, generated tables, and final
 figure assets. It does not need either submodule.
 
+## Start here
+
+After initializing the submodules, read the
+[repository and provenance map](analysis/docs/rse/ops/repository-map.md).
+It explains the three repositories, scientific data chain, authority roles,
+and how to trace a manuscript claim, figure, table, or fit to its sources.
+
 ## Build
 
 ```sh
@@ -38,6 +45,3 @@ git submodule update --init --recursive
 make test-science
 make kb-index
 ```
-
-The exact manuscript boundary is recorded in `manuscript-boundary.txt` and
-enforced by `tests/test_manuscript_boundary.py`.
