@@ -5,7 +5,7 @@
 **Author:** AI Assistant
 **Status:** Handoff
 **Branch:** `docs/handoff-worktree-disposition-20260724`
-**Commit:** `1dfb5c2a` baseline; handoff commit follows
+**Commit:** `1dfb5c2a` baseline; handoff introduced on this branch
 
 ---
 
