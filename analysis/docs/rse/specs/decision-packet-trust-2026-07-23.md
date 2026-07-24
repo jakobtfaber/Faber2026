@@ -1,8 +1,9 @@
 # Decision packet: trust-registry authority
 
 Date: 2026-07-23  
-Status: owner decision pending  
-Scope: agent comparison only; no variant adjudicated or landed
+Status: owner decision accepted 2026-07-23; implementation pending
+
+Scope: authority adjudicated; accepted baseline not yet landed
 
 ## Decision boundary
 
@@ -197,3 +198,23 @@ These are agent proposals, not decisions:
 
 No recommendation in this packet authorizes a merge, trust promotion, variant
 branch edit, or manuscript/pipeline gitlink change.
+
+## Owner decision receipt
+
+Accepted as written by the owner on 2026-07-23:
+
+- adopt exact commit `5292337ffc6c0bb918a763860d70c0575530ae61` as
+  the registry authority baseline;
+- keep `association.toa_offset_figure` pending until scientific and exact-byte
+  review;
+- keep `budget.cluster_column` pending until its current producer, inputs, and
+  artifact are receipted;
+- keep `budget.host_dm_posteriors` pending because the exact PDF named by the
+  proposed release receipt is absent from both live manuscript copies;
+- when host-posterior trust is later approved, limit it to the fiducial result
+  and keep the `1.5 R500` calculation sensitivity-only;
+- retain `75b9d5f` as supporting review evidence while marking its old host
+  release condition and cluster snapshot superseded.
+
+This decision authorizes integration and validation of the accepted baseline.
+It does not promote any pending or revoked result.
