@@ -1,7 +1,7 @@
 # Prune and typeset the co-author list
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open — review packet ready; owner choice pending
+- Status: **closed** (2026-07-23)
 - Assignee: Codex controller
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -9,39 +9,19 @@
 
 ## Question
 
-Approach decided 2026-07-06: draft the candidate core co-author list from the
-Law et al. 2024 (DSA-110) and CHIME/FRB author lists' overlap, then owner
-prunes. The draft-and-prune has not happened. Owner call: confirm the two
-source lists and ordering policy, prune the drafted candidates, settle
-affiliations/ORCIDs and any contribution statement, so `auth.tex` can be
-typeset. Under the end-of-July target this is also a circulation dependency —
-co-authors need reading time before submission; the resolution should record
-the circulation date the pruned list implies.
-
-## Review state
-
-The [candidate evidence packet](../../specs/research-coauthor-candidate-packet.md)
-is ready for the consolidated science and identity checkpoint. The strict
-intersection of the two named published author lists is empty, so it cannot
-produce a candidate roster. The packet records the source lists, deterministic
-comparison, identity gaps, recommended defaults, and exact owner choices.
-
-## Decision — 2026-07-23 (interim)
-
-Owner accepted the contribution-based source rule and ordering policy in
-`research-coauthor-candidate-packet.md`:
-- authorship follows verified contributions to this manuscript,
-- order: Jakob first, then by contribution (alphabetical only where equal),
-- identity fields (publication name, current affiliation, verified ORCID) collected per selected author,
-- include a CRediT contribution statement if the journal uses one,
-- circulate immediately after roster confirmation.
-
-For the current draft, the owner selected this author block, in order:
+Owner decision (2026-07-23): the final author block is exactly:
 
 1. Jakob T. Faber
 2. The CHIME/FRB Collaboration
 3. The DSA-110 Collaboration
 
-This is explicitly interim. The final roster, verified identity fields,
-affiliations, contribution statement, circulation date, and `auth.tex` update
-remain pending. The ticket stays open.
+No individual co-author expansion is required. No affiliation, ORCID,
+corresponding-author designation, contribution statement, collaboration
+approval, or circulation date was supplied or inferred. The manuscript uses
+the AASTeX collaboration commands for the two collaboration entries.
+
+## Resolution
+
+Closed by the owner's explicit decision and the corresponding typeset
+`auth.tex` update. Collaboration approval and manuscript circulation remain
+separate external processes; they do not reopen this author-list decision.
