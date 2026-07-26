@@ -78,10 +78,10 @@ claims = [
   { fingerprint = "2b1ce110ab69081a", occurrence = 1, line = 89, text = "--- Interstellar scattering (854) --- Intergalactic medium (813)", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
   { fingerprint = "2e4e073b3688582e", occurrence = 1, line = 90, text = "--- Circumgalactic medium (1879)}", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
   { fingerprint = "744dcfffab10066c", occurrence = 1, line = 103, text = "The authors thank the CHIME/FRB and DSA-110 collaborations.", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
-  { fingerprint = "2971236a2c81cfaf", occurrence = 1, line = 120, text = "per-burst DM catalog, the full CHIME/FRB and DSA-110 fit results, per-event", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
-  { fingerprint = "13ef7d3b3462d91d", occurrence = 1, line = 125, text = "\\facilities{CHIME, OVRO:DSA-110}", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
-  { fingerprint = "436ea786eac4a796", occurrence = 1, line = 130, text = "\\texttt{matplotlib} , \\texttt{pygedm}  (NE2001/YMW16),", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
-  { fingerprint = "70bec1b84a25429e", occurrence = 1, line = 131, text = "\\texttt{mwprop}  (NE2025), and the open-source co-detection", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
+  { fingerprint = "00e0946017b1a82d", occurrence = 1, line = 119, text = "full CHIME/FRB and DSA-110 fit results, per-event diagnostic figures, injection", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
+  { fingerprint = "13ef7d3b3462d91d", occurrence = 1, line = 123, text = "\\facilities{CHIME, OVRO:DSA-110}", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
+  { fingerprint = "436ea786eac4a796", occurrence = 1, line = 128, text = "\\texttt{matplotlib} , \\texttt{pygedm}  (NE2001/YMW16),", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
+  { fingerprint = "70bec1b84a25429e", occurrence = 1, line = 129, text = "\\texttt{mwprop}  (NE2025), and the open-source co-detection", exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
 ]
 
 [[prose_source]]
@@ -148,7 +148,7 @@ claims = [
   { fingerprint = "301f0ec497959542", occurrence = 1, line = 176, text = "The adopted NE2025 disk columns are bracketed by the older models on every", owner_result_id = "mw.foreground_characterization" },
   { fingerprint = "22ba78f05951ce8e", occurrence = 1, line = 177, text = "sightline. Evaluating NE2001 and YMW16 (via \\texttt{pygedm}, integrated to", owner_result_id = "mw.foreground_characterization" },
   { fingerprint = "814d2d0bbf308a7b", occurrence = 1, line = 178, text = "the same 30\\,kpc) at the twelve positions", owner_result_id = "mw.foreground_characterization" },
-  { fingerprint = "092aad83e03e60bc", occurrence = 1, line = 179, text = "(\\texttt{analysis/scripts/mw\\_model\\_comparison.py}), NE2001 exceeds the NE2025 disk", owner_result_id = "mw.foreground_characterization" },
+  { fingerprint = "eb6ae874d58c8cd4", occurrence = 1, line = 179, text = "(\\texttt{scripts/mw\\_model\\_comparison.py}), NE2001 exceeds the NE2025 disk", owner_result_id = "mw.foreground_characterization" },
   { fingerprint = "e31358d1505a9d12", occurrence = 1, line = 180, text = "column by $7$--$13\\%$ on the nine host-redshift-constrained sightlines", owner_result_id = "mw.foreground_characterization" },
   { fingerprint = "851ca89134dd56bd", occurrence = 1, line = 181, text = "(reaching $41\\%$ only on the lowest-latitude sightline, FRB~20240122A, which", owner_result_id = "mw.foreground_characterization" },
   { fingerprint = "b5d7a683e4fcfb9a", occurrence = 1, line = 183, text = "while YMW16 scatters from $-13\\%$ to $+39\\%$ about NE2025 on those nine.", owner_result_id = "mw.foreground_characterization" },

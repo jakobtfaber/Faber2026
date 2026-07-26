@@ -190,7 +190,7 @@
       "title": "Qualified Oran DSA-110 scintillation calibration",
       "family": "scintillation-qualification",
       "target": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png",
-      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/run_oran_dsa_measurement.py",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/validate_oran_dsa_measurement.py",
       "required_provenance": [
         "frozen real-background injection configuration",
         "injection recovery and off-pulse null results",

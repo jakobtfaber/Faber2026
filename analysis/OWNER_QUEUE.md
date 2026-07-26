@@ -4,8 +4,7 @@ _Generated from repository state. Manual walkthrough ritual: see `docs/rse/contr
 
 ## Decisions (wayfinder frontier, owner-facing)
 
-- **Define the CHIME RFI-cleaning acceptance contract** — open, unblocked, owner-facing
-  `docs/rse/wayfinder/tickets/rfi-validation-01-define-acceptance-contract.md`
+- None.
 
 ## Approvals (figure review / data cards)
 

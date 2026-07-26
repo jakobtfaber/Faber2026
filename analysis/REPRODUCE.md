@@ -99,10 +99,12 @@ both a `savefig` read and a return code.
   fresh machine.
 - **no_command** — nothing runnable is recorded.
 
-Result: of the manifest's 28 rows, **12 regenerate from a fresh clone** (5 as
-written, 7 only after correcting the command), **4 exit 0 while writing nothing
-at the declared path**, 10 are blocked on data outside both repos, and 2 have
-no command. The 2026-07-09 execution sweep ran the 25 rows then present. The
+Result: of the manifest's 39 rows, **15 have a reproduced-family verdict** (6
+as written, 8 after correcting the command, and 1 pin-dependent), **4 exit 0
+while writing nothing at the declared path**, 10 are blocked on data outside
+both repositories, and 2 have no command. The remaining 8 rows are archived,
+candidate, or superseded. The 2026-07-09 execution sweep ran the 25 rows then
+present. The
 compact archival gallery, the Figure 1 data overview, and the historical
 triptych family were added later with verdicts assigned
 by inspection rather than execution. The Figure 1 data grid draws every panel
@@ -117,9 +119,9 @@ the pre-PL-PBF triptych and joint-model-pair families were removed from the
 compiled manuscript.  Their bytes remain provenance records, not replacement
 candidates.
 
-Of the 17 rows currently marked `embedded_in_manuscript = yes`, 15 have a
-clone-verified reproduction status, one is a candidate, and the Figure 1 data
-grid remains blocked on external archival waterfalls (see hazard 6).  The
+Of the 13 rows currently marked `embedded_in_manuscript = yes`, 12 have a
+reproduced-family verdict and the Figure 1 data grid remains blocked on
+external archival waterfalls (see hazard 6). The
 pre-PL-PBF triptych and joint-model-pair rows are deliberately unembedded.
 Every other blocked or command-less row is a staged or historical output; it
 cannot be promoted until its inputs and scientific provenance are published
@@ -151,8 +153,8 @@ regeneration section below.)
 ## Status: what's embedded now vs. staged
 
 The manuscript is mid-draft. Of 39 tracked output rows (29 figures + 10
-tables), 17 are currently `\input`/`\includegraphics`'d (the
-`embedded_in_manuscript = yes` rows).  The other 22 are staged, historical, or
+tables), 13 are currently `\input`/`\includegraphics`'d (the
+`embedded_in_manuscript = yes` rows). The other 26 are staged, historical, or
 superseded outputs.  In particular, the triptych and joint-model-pair families
 are retained only as pre-PL-PBF provenance records while the post-PL-PBF
 production campaign remains outstanding. One
@@ -163,7 +165,7 @@ lost when a SLOT is filled.
 
 ## Regenerating the tables
 
-All five manuscript tables have an explicit provenance path. For the verified
+All six embedded table rows have an explicit provenance path. For the verified
 DM table, the reviewed source is
 `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` and parity is enforced by
 `tests/test_verified_dm_manuscript.py`. For the DM budget,
@@ -173,7 +175,7 @@ JSON, while `DM_obs` is overlaid from
 `scripts/dm_budget_uncertainty.csv`. Run the root renderer after regenerating
 the host posterior; do not edit `budget_table.tex` directly.
 
-Both are safe to regenerate at the currently pinned submodule (`0e0f58b`);
+Both are safe to regenerate at the currently pinned submodule (`1d5633c`);
 regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
 untrue — see hazard 1 for what went wrong and why the pin matters. (The pin
 reached `14e0d1f` in three steps: `6c87890 → 334cc74` as Faber2026 #68, then
@@ -290,12 +292,10 @@ earned their keep once: they are what caught the drift described in hazard 1.
    regenerated `budget_table_data.json`. Verified at pin `6c87890`: the parity
    test is 9/9 green, `--check` exits 0, and the emitter's output is
    byte-identical to the committed `budget_table.tex`. This still holds at the
-   current pin `0e0f58b` (verified 2026-07-13, by content diff across the
-   fork-history rewrite — see the pin narrative above): no
-   `budget_table_data.json` or table-emitter changes anywhere in
-   `6c87890 → fba48c6 → 0e0f58b`, so the 9/9
-   parity result carries over unchanged. The `parity` CI job re-ran the emitters
-   against the super-repo at each pin bump and was green on both.
+   current pin `1d5633c`: its only change from the preceding pin is
+   `DATA_LOCATIONS.md`, and the parent PR #241 parity job passed on 2026-07-24.
+   The earlier content check across `6c87890 → fba48c6 → 0e0f58b` remains the
+   historical verification across the fork rewrite.
 
    Closing it took two tries, and the misfire is the more useful half of the
    story. **`f9e1c24` — the pin this repo had carried since #39 — is not an
@@ -379,9 +379,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
    Overleaf path — and one of them was not saved by its `run_command`. FIXED at
    the current pin. (Code fix landed as FLITS #148, first reaching this repo at
    pin `334cc74` via the `6c87890 → 334cc74` bump, Faber2026 #68. The current
-   pin `0e0f58b` carries the fix unchanged (re-verified directly at `0e0f58b`,
-   since descendant-of-`334cc74` reasoning does not survive the 2026-07-13
-   fork-history rewrite).)**
+   pin `1d5633c` carries the fix unchanged, re-verified directly on 2026-07-24.)**
 
    Hazard 3 fixed `plot_association_cards.py`. It did not fix its neighbours:
 
@@ -399,9 +397,9 @@ earned their keep once: they are what caught the drift described in hazard 1.
    (restored). **FLITS PR #148** replaced both defaults with
    `os.path.join(os.path.dirname(_REPO), "figures")` — the same `_REPO`-derived
    form hazard 3 used — and that fix is now in the pinned submodule (present
-   since `334cc74`, verified again at the current pin `0e0f58b`:
+   since `334cc74`, verified again at the current pin `1d5633c`:
    `DEFAULT_OUT_DIR` is repo-derived at
-   `sightline_halo_grid.py:63` and `systems_figures.py:80`). A bare run therefore
+   `sightline_halo_grid.py:59` and `systems_figures.py:80`). A bare run therefore
    lands `clusters_icm.*` / `galaxies_cgm.*` inside the repository. The manifest's
    `run_command` still passes `--out-dir ../figures` explicitly, so the documented
    invocation was already safe and remains so. The undeclared ordering dependency
@@ -412,21 +410,23 @@ earned their keep once: they are what caught the drift described in hazard 1.
    the manifest produced before it. That CSV comes from `sightline_budget`, which
    in turn only runs in **module** form — as a script its direct-execution import
    fallback (`galaxies/foreground/sightline_budget.py:61-65`) imports
-   `MASS_PRIORITY` but drops `build_unified_records`, so line 494 raises
+   `MASS_PRIORITY` but drops `build_unified_records`, so line 528 raises
    `NameError`. Both are fixed in the manifest's commands and neither was
    detectable by reading a `savefig` line.
 
-6. **Seven staged figures are not reproducible from a clone by anyone.**
+6. **Ten figure rows are blocked on data outside a clone.**
    `chime_subband_compare.py`, `joint_ladder/_subband_tau_validation.py` and
    `plot_jointmodel_montage.py` read from `/central/scratch/jfaber/flits-runs/…`,
    an HPC scratch tree; `scint_census/figbank.py` reads
-   `scint_census/data/scint/…`, a directory with **zero tracked files**. All seven
-   are `embedded_in_manuscript = no`. Any of them that later enters the
+   `scint_census/data/scint/…`, a directory with **zero tracked files**.
+   The compact codetection gallery and DM sub-band tilt diagnostic also require
+   local `~/Data/Faber2026/` waterfall trees. These nine rows are unembedded.
+   Any of them that later enters the
    manuscript must have its inputs published — a committed data file, or a
    deposited archive — before the DA statement can cover it.
 
-   **2026-07-17 update: this class has one embedded member.** The codetection
-   Figure 1 data grid reads all 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls
+   The tenth row is embedded: the codetection Figure 1 data grid reads all 24
+   archival CHIME/DSA `_cntr_bpc.npy` waterfalls
    (near-native display grids) and has no fit-artifact dependency.  The
    pre-PL-PBF triptych family reads 11 fit-delivery NPZ artifacts plus
    Chromatica's two archival waterfalls, but it and the joint-model-pair family
@@ -437,7 +437,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
 7. **Scintillation-output manifest coverage. (CLOSED 2026-07-17.)**
 
    `repro_manifest.csv` now has explicit rows for both scintillation figure
-   families identified by the earlier audit. The twelve embedded
+   families identified by the earlier audit. The twelve unembedded
    `figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf` panels share a producer
    row and retain their candidate-level clone verdict. The owner-rejected
    DSA-only `figures/dsa_lorentzian_summary.pdf` is also recorded, but is no
@@ -462,10 +462,10 @@ earned their keep once: they are what caught the drift described in hazard 1.
 - **Hazard (5) is partly closed; (6) is open.** (5)'s `DEFAULT_OUT_DIR` half is
   **done** — FLITS #148 made it repo-relative in the two `galaxies/v2_0/` modules,
   in the pinned submodule since `334cc74` (Faber2026 #68) and still present at the
-  current pin `0e0f58b` (verified 2026-07-13). Still open in (5): add
+  current pin `1d5633c` (verified 2026-07-24). Still open in (5): add
   the missing `build_unified_records` to `sightline_budget.py`'s fallback import
   (the module now lives at `galaxies/foreground/sightline_budget.py` after the
-  `v2_0 → foreground` rename; confirmed still absent at `0e0f58b` — the
+  `v2_0 → foreground` rename; confirmed still absent at `1d5633c` — the
   `except ImportError` branch at line 65 imports only `MASS_PRIORITY`). (6) is a data-deposition decision,
   not a code fix.
 - **`make figures` is live.** It runs
