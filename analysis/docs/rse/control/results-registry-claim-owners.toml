@@ -44,8 +44,8 @@ claims = [
 [[source]]
 path = "auth.tex"
 claims = [
-  { fingerprint = "313ba6515fb8786d", occurrence = 1, exclusion_reason = "Author affiliation or identifier; no project measurement." },
-  { fingerprint = "58e76670b989781a", occurrence = 1, exclusion_reason = "Author affiliation or identifier; no project measurement." },
+  { fingerprint = "07cf89816fe23979", occurrence = 1, exclusion_reason = "Author affiliation or identifier; no project measurement." },
+  { fingerprint = "7afe51821b3222e1", occurrence = 1, exclusion_reason = "Author affiliation or identifier; no project measurement." },
 ]
 
 [[source]]

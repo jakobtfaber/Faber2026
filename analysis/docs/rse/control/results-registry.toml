@@ -87,8 +87,8 @@ claims = [
 [[prose_source]]
 source = "auth.tex"
 claims = [
-  { fingerprint = "313ba6515fb8786d", occurrence = 1, line = 2, text = "\\author[0000-0000-0000-0000]{Jakob T. Faber}", exclusion_reason = "Author affiliation or identifier; no project measurement." },
-  { fingerprint = "58e76670b989781a", occurrence = 1, line = 4, text = "of Technology, MC 249-17, 1200 East California Boulevard, Pasadena, CA 91125, USA}", exclusion_reason = "Author affiliation or identifier; no project measurement." },
+  { fingerprint = "07cf89816fe23979", occurrence = 1, line = 4, text = "\\collaboration{1}{The CHIME/FRB Collaboration}", exclusion_reason = "Author affiliation or identifier; no project measurement." },
+  { fingerprint = "7afe51821b3222e1", occurrence = 1, line = 5, text = "\\collaboration{0}{The DSA-110 Collaboration}", exclusion_reason = "Author affiliation or identifier; no project measurement." },
 ]
 
 [[prose_source]]
