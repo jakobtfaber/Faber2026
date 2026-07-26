@@ -39,7 +39,20 @@ Consequences:
 
 1. Raw-data inventory and provenance: enumerate the CHIME singlebeam and
    DSA-110 filterbank raw inputs on the h17 authority, with checksums.
-2. Dedispersion and DM policy per burst (one recorded convention).
+   **Complete 2026-07-26** — owner accepted the 24-file frozen set
+   (`../../specs/scint-redo-step1-raw-input-freeze-2026-07-26.md`).
+2. Dedispersion-measure determination, re-done from scratch (owner
+   direction 2026-07-26): the existing DM adjudication —
+   `dm-joint-phase-v2/manuscript_dm_catalog.csv` (adopted_dm, chime_primary)
+   and everything downstream of it — is reclassified **first-pass, not
+   final**, same standing as the first-pass scintillation campaign. The
+   re-do re-derives per-burst DMs from the frozen raw inputs interactively
+   (method, band roles, and uncertainty convention each an owner decision;
+   the marker-independence rule from the drift-estimator refutation still
+   governs). The first-pass catalog remains the manuscript's operative DM
+   source until the re-derived values are ratified; consumers (DM budget
+   tables, waterfall renders) are re-pointed only at ratification, as a
+   separately scoped step.
 3. Bad-channel policy: owner-reviewed manual maps (the resolved RFI route).
 4. Product generation: spectra at explicitly chosen resolutions, with the
    scalloping-comb treatment recorded.
