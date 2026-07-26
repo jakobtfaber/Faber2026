@@ -1,7 +1,16 @@
 # Remediate the scintillation inputs and rerun the campaign
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
+- Status: resolved — superseded 2026-07-26 by
+  [scint-redo-01](scint-redo-01-interactive-recampaign-from-raw-data.md):
+  the owner chartered a full interactive re-do from raw data, so this
+  ticket's remediate-and-rerun path for the old campaign is moot. Its seven
+  requirements carry forward as checklist inputs to the re-do. Its RFI
+  blocker also resolved differently: the owner-reviewed manual bad-channel
+  route is the bad-channel authority (see
+  [rfi-validation-01](rfi-validation-01-define-acceptance-contract.md)), and
+  no automated-cleaner ratification is planned, so the recorded owner review
+  of the route stands in for the `pass` this ticket originally required.
 - Assignee: —
 - Blocked by: [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md) (requires `pass`)
 - Map: [ApJ submission](../map-apj-submission.md)

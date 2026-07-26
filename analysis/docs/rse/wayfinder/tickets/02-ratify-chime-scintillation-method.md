@@ -1,7 +1,12 @@
 # Ratify the CHIME-band scintillation method and unblock the full-sample campaign
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open — **BLOCKED 2026-07-18 by owner data review** (input defects;
+- Status: resolved — superseded 2026-07-26 by
+  [scint-redo-01](scint-redo-01-interactive-recampaign-from-raw-data.md):
+  the owner reclassified the entire existing campaign (including the 2L
+  table this ticket's expanded scope covered) as a first pass; ratification
+  of the old campaign will not occur. Historical blocked-state record below.
+- Prior status: open — **BLOCKED 2026-07-18 by owner data review** (input defects;
   see `docs/rse/specs/owner-data-review-findings-2026-07-18.md`): RFI
   unexcised in CHIME upchan + DSA central channel; over-dedispersion in ≥9
   upchan products; per-burst DM inconsistency between CHIME products

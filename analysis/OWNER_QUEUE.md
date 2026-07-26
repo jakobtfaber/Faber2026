@@ -4,7 +4,10 @@ _Generated from repository state. Manual walkthrough ritual: see `docs/rse/contr
 
 ## Decisions (wayfinder frontier, owner-facing)
 
-- None.
+- **Close the scintillation-to-scattering coupling design** — open, unblocked, owner-facing
+  `docs/rse/wayfinder/tickets/04-close-scint-scattering-coupling-design.md`
+- **Re-do the scintillation analysis interactively from the raw data** — open, unblocked, owner-facing
+  `docs/rse/wayfinder/tickets/scint-redo-01-interactive-recampaign-from-raw-data.md`
 
 ## Approvals (figure review / data cards)
 

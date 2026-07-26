@@ -108,10 +108,9 @@ GUARDED_LINKS = [
         "rfi-validation-03-compare-and-choose-cleaner.md",
         "rfi-validation-04-blind-validate-cleaner.md",
     ),
-    (
-        "rfi-validation-05-ratify-cleaning-boundary.md",
-        "17-remediate-scintillation-inputs-and-rerun.md",
-    ),
+    # (rfi-validation-05 -> ticket 17) removed 2026-07-26: ticket 17 is
+    # resolved-superseded by scint-redo-01 (owner chartered a full interactive
+    # re-do from raw data), so it can no longer enter the frontier.
 ]
 
 
