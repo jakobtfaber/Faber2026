@@ -1,7 +1,8 @@
 # Define the CHIME RFI-cleaning acceptance contract
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open — owner ratification of the remaining contract pending
+- Status: resolved — owner disposition 2026-07-26: manual route sufficient;
+  automated-cleaner campaign not pursued
 - Assignee: Codex
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -28,6 +29,34 @@ Set the fail-closed contract before testing replacements. At minimum, decide:
 The contract must distinguish bandpass flattening from RFI removal, require
 explicit masks for missing or rejected samples, and forbid calling a product
 "clean" merely because its collapsed spectrum is smoother.
+
+## Resolution — 2026-07-26
+
+The owner reviewed the twelve-burst pre-ratification visual packet
+(`docs/rse/specs/notes/rfi-preratification-visual-packet-2026-07-26.md`;
+raw `_cntr_bpc` dynamic spectra, CHIME and DSA side by side, no
+contract-governed cleaning) and ruled that **additional RFI cleaning is not
+necessary** for the sample, with one exception in the Zach CHIME data. The
+exception was dispositioned through the existing owner-reviewed manual
+bad-channel route, not an automated cleaner:
+
+- unmasked sliver 727.54–729.49 MHz between upstream-masked blocks, and
+- the 707.50–710.79 MHz burst-window crossing of a 0.165 MHz/ms swept
+  narrowband tone (owner chose the crossing-only mask; the full-sweep
+  option was declined),
+
+both landed as an amendment to the owner-approved
+`rfi/manual-bad-channels/chime-frb/zach.json` (pull request #116, merged
+2026-07-26; before/after evidence under
+`docs/rse/verify/manual-bad-channel-review-20260726/zach-chime/`).
+
+Consequently the five-rule acceptance contract below is **not ratified and
+not rejected on its merits**: it remains the recorded standard should an
+automated-cleaner campaign ever be chartered, but no such campaign is
+planned. The manual owner-reviewed map route (this ticket's `index.json`
+policy) is the bad-channel authority for science processing. The accepted
+2026-07-21/23 vocabulary, sealing, and preservation-limit decisions remain
+in force as recorded.
 
 ## Decisions — in progress
 

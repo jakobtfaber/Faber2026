@@ -73,7 +73,11 @@ def test_completed_baseline_is_resolved_without_science_promotion():
 def test_rfi_contract_remains_owner_pending_and_fail_closed():
     contract = ticket("rfi-validation-01-define-acceptance-contract.md")
     normalized = " ".join(contract.split())
-    assert "Status: open — owner ratification" in normalized
+    assert (
+        "Status: resolved — owner disposition 2026-07-26: manual route sufficient"
+        in normalized
+    )
+    assert "not ratified and not rejected on its merits" in normalized
     assert "at least 90 percent of injected excess power" in normalized
     assert "no more than 1 percent overall" in normalized
     assert "95 percent for the relatively quiet test file" in normalized
