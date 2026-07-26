@@ -6,17 +6,24 @@ spine for the ApJ Data Availability statement.
 
 The machine-readable version is [`repro_manifest.csv`](repro_manifest.csv)
 (one row per output). This file is the prose companion: how to read it, how the
-two repos relate, and the caveats that a CSV cell can't carry.
+three repositories relate, and the caveats that a CSV cell can't carry.
 
-## The two-repository structure (read this first)
+## The three-repository structure (read this first)
 
-Faber2026 is **not** a monolith. `pipeline/` is a **git submodule** pointing at
-`https://github.com/dsa110/dsa110-FLITS.git` — a separate repository with
-its own history, remote, and lifecycle. Outputs therefore fall into two classes:
+Faber2026 is **not** a monolith. The parent manuscript pins two separate
+repositories as git submodules:
 
-- **Faber2026-local producers** live under `scripts/` in this repo. Edit and
+- `analysis/` points at
+  `https://github.com/jakobtfaber/Faber2026-analysis.git` — this research-control
+  repository.
+- `pipeline/` points at
+  `https://github.com/jakobtfaber/dsa110-FLITS.git` — the fitting library.
+
+Outputs fall into two producer classes:
+
+- **Analysis producers** live under `scripts/` in this repository. Edit and
   run them here.
-- **Submodule producers** live under `pipeline/…` (i.e. inside dsa110-FLITS).
+- **Pipeline producers** live under the sibling `pipeline/` submodule.
   Changing them is a commit to the *shared library*, not to the manuscript.
   Treat those edits with library-grade caution (other consumers inherit them).
 
@@ -24,10 +31,10 @@ The `run_command` column reflects this: `scripts/…` producers run from the rep
 root; `pipeline/…` producers run from inside `pipeline/` under the submodule's
 own environment.
 
-One wrinkle worth knowing before you go looking for a pipeline commit. The
-`.gitmodules` URL above is what a fresh `git submodule update --init` clones,
-and it resolves the pinned SHA. **Pipeline development happens on the
-`jakobtfaber/dsa110-FLITS` fork.** Since FLITS #151 merged the old divergent
+One wrinkle worth knowing before you go looking for a pipeline commit.
+`.gitmodules` resolves the pinned commit from the
+**`jakobtfaber/dsa110-FLITS` fork**, where pipeline development happens.
+Since FLITS #151 merged the old divergent
 line (`fix/budget-table-data-post-igm-lognormal`) into the fork's `main`, the
 pin base is an ancestor of fork `main`; the pin itself sits 1–2 replayed
 commits off it. The full pin lineage is published on the fork branch
@@ -43,30 +50,32 @@ pin.
 There are **two** environments, and which one you need depends on where the
 producer lives.
 
-**Submodule producers (`pipeline/…`)** use the `uv` lock
-(`pipeline/uv.lock`, `requires-python >=3.12`), invoked from within `pipeline/`:
+**Pipeline producers** use the `uv` lock
+(`../pipeline/uv.lock`, `requires-python >=3.12`), invoked from the sibling
+submodule:
 
 ```bash
-cd pipeline
+cd ../pipeline
 uv sync            # once, materializes the locked environment
 uv run python <producer.py> [args]
 ```
 
-**Faber2026-local producers (`scripts/…`)** have no lockfile of their own, and
+**Analysis producers (`scripts/…`)** have no lockfile of their own, and
 bare `python` is not a defined interpreter for them — on a clean shell it is
 simply `command not found`. They run under the conda env named **`flits`**,
-whose spec is `pipeline/environment.yml`:
+whose spec is `../pipeline/environment.yml`:
 
 ```bash
-conda env create -f pipeline/environment.yml   # once; creates `flits`
+conda env create -f ../pipeline/environment.yml   # once; creates `flits`
 conda run -n flits python scripts/<producer.py> [args]
 ```
 
 `flits` is required rather than merely convenient: `plot_ne2025_mw_properties.py`
-imports `healpy`, which is in `pipeline/environment.yml` but **not** in
-`pipeline/uv.lock`. The older campaign scripts under
-`analysis/scattering-refit-2026-06/` were also authored against `flits` and say
-so in their docstrings. Prefer `uv run` where the script is `uv`-clean; every
+imports `healpy`, which is in `../pipeline/environment.yml` but **not** in
+`../pipeline/uv.lock`. The older campaign scripts under
+`../pipeline/analysis/scattering-refit-2026-06/` were also authored against
+`flits` and say so in their docstrings. Prefer `uv run` where the script is
+`uv`-clean; every
 row's `run_command` names the environment it actually needs.
 
 ## How to read `clone_verified`
@@ -213,7 +222,7 @@ conda run -n flits python scripts/dm_budget_uncertainty.py
 conda run -n flits python scripts/render_budget_table.py
 conda run -n flits python scripts/render_budget_table.py --check
 
-cd pipeline
+cd ../pipeline
 # foreground census: values in galaxies/foreground/foreground_table_data.json
 uv run python -m galaxies.foreground.foreground_table_emitter --out ../foreground_table.tex
 # verify (byte-exact vs exports/ + value cross-checks against upstream products)
@@ -470,7 +479,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
   not a code fix.
 - **`make figures` is live.** It runs
   `python3 scripts/figure_flow.py regen --manuscript --clone-ok` against
-  [`figures/catalog.yaml`](figures/catalog.yaml) — the declarative regen graph
+  [`figures/catalog.yaml`](../figures/catalog.yaml) — the declarative regen graph
   for science-ready manuscript figures (topo-sorted deps, input checks, SHA
   receipts under `figures/.receipts/`). The clone-safe set matches the
   `clone_verified = reproduced*` figure rows that do not need `~/Data` or
@@ -480,5 +489,5 @@ earned their keep once: they are what caught the drift described in hazard 1.
   under `figure_review/staging/`, then `figure_review.py new-batch` — never
   silent promote). The Oran DSA qualification PNG is **not** a manuscript
   figure (`manuscript: false` / `embedded_in_manuscript=no`). Agent runbook:
-  [`figures/ax/SKILL.md`](figures/ax/SKILL.md). Broader inventory:
+  [`figures/ax/SKILL.md`](../figures/ax/SKILL.md). Broader inventory:
   [`repro_manifest.csv`](repro_manifest.csv).
