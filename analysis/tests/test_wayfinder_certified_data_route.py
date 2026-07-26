@@ -47,6 +47,10 @@ def test_certified_data_route_files_and_blockers_exist():
             # Preservation review informed the contract but is not a live
             # dependency after its limits were accepted.
             continue
+        if "Status: closed" in ticket(prerequisite) or "Status: resolved" in ticket(
+            prerequisite
+        ):
+            continue
         blocker_line = next(
             line
             for line in ticket(downstream).splitlines()
@@ -64,6 +68,23 @@ def test_completed_baseline_is_resolved_without_science_promotion():
     assert "Status: resolved" in zach
     assert "pre-bad-channel mask" in zach
     assert "no science fit or claim is admitted" in zach
+
+
+def test_rfi_contract_remains_owner_pending_and_fail_closed():
+    contract = ticket("rfi-validation-01-define-acceptance-contract.md")
+    normalized = " ".join(contract.split())
+    assert "Status: open — owner ratification" in normalized
+    assert "at least 90 percent of injected excess power" in normalized
+    assert "no more than 1 percent overall" in normalized
+    assert "95 percent for the relatively quiet test file" in normalized
+    assert "Each contiguous half" in normalized
+    assert "cluster bootstrap" in normalized
+    assert "Treating correlated pixels as independent" in normalized
+    assert "candidate-inflated uncertainty" in normalized
+    assert "Unlabelled native raw samples cannot establish" in normalized
+    assert "Pooled success cannot rescue" in normalized
+    assert "minimum sample and injection counts" in normalized
+    assert "will not validate a cleaner" in normalized
 
 
 def test_chime_ratification_waits_for_remediated_campaign_review():
