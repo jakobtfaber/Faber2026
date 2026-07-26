@@ -59,6 +59,20 @@ Consequences:
 5. Window selection, ACF estimation, and model choice — re-decided together.
 6. Per-burst review of fits and diagnostics; only then any sample-wide table.
 
+
+## Step-2 decisions recorded so far
+
+- **Estimator principle (owner, 2026-07-26): structure-maximizing** —
+  the DM re-derivation uses structure-maximizing estimation (coherent
+  power / phase sharpness), consistent with the marker-independence rule.
+  S/N-maximizing and marker/template alignment are rejected as the primary
+  principle.
+- **Lane paused (owner, 2026-07-26):** execution starts only after the
+  clean-slate closure of remaining worktrees and integrations, so the re-do
+  begins from a fully reconciled workspace. Remaining sub-decisions when it
+  resumes: DM reference data and band roles; uncertainty convention; then
+  the one-burst pilot.
+
 ## Resolution
 
 Open. This ticket closes when the owner ratifies the re-done campaign's
