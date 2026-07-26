@@ -4,7 +4,8 @@ _Generated from repository state. Manual walkthrough ritual: see `docs/rse/contr
 
 ## Decisions (wayfinder frontier, owner-facing)
 
-- None.
+- **Approve retirement of the three provenance-map branches** — open, unblocked, owner-facing
+  `docs/rse/wayfinder/tickets/closure-01-approve-provenance-map-branch-retirement.md`
 
 ## Approvals (figure review / data cards)
 
