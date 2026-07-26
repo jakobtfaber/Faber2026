@@ -73,8 +73,9 @@ for name in bursts:
         z, span = prep(path, inst)
         panel(ax, z, span, inst, dm)
     fig.suptitle(
-        f"{name} — raw _cntr_bpc dynamic spectra (no RFI cleaning applied); "
-        "per-channel robust z-score", fontsize=12,
+        f"{name} — _cntr_bpc dynamic spectra: no contract-governed cleaning; "
+        "upstream CHIME masking present; per-channel robust z-score",
+        fontsize=12,
     )
     fig.tight_layout()
     fig.savefig(OUT / f"{name}_rfi_packet.png", dpi=140)
