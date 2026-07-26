@@ -1,0 +1,6 @@
+A  docs/rse/specs/notes/owner-decision-rfi-preservation-limits-2026-07-22.md
+A  docs/verify/rfi-preservation-20260722/manifest.json
+A  docs/verify/rfi-preservation-20260722/rfi_preservation_metrics.json
+A  docs/verify/rfi-preservation-20260722/rfi_preservation_review.svg
+A  scripts/build_rfi_preservation_review.py
+A  tests/test_rfi_preservation_review.py

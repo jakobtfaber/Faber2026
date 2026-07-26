@@ -1,0 +1,271 @@
+{
+  "broad_frequency_sums": {
+    "combined_common": [
+      10.8107387167949,
+      13.4420515420201,
+      13.24110917096733,
+      10.313947839191345,
+      14.951244934093086,
+      14.13753263230598,
+      11.354699758397286,
+      6.507779852144064
+    ],
+    "labels": [
+      "400\u2013450",
+      "450\u2013500",
+      "500\u2013550",
+      "550\u2013600",
+      "600\u2013650",
+      "650\u2013700",
+      "700\u2013750",
+      "750\u2013800"
+    ],
+    "reference_common": [
+      11.018441124963525,
+      13.590189335319051,
+      13.294479030402908,
+      10.390269821688827,
+      15.292590474874618,
+      14.224949493715354,
+      12.3529596307692,
+      6.558546981429529
+    ],
+    "reference_full": [
+      11.000593757322566,
+      13.51830367847067,
+      13.233724891523352,
+      10.394269434350417,
+      14.593179299979978,
+      14.211792650192724,
+      10.018843223833647,
+      4.617260591116768
+    ]
+  },
+  "candidate_method": "offpulse_seed_rows",
+  "coherent_dedispersion_measure_pc_cm3": 262.4359033801,
+  "coherent_dm_source": "source H5 tiedbeam_power.DM_coherent",
+  "dedispersion_measure_status": "product-specific; not a manuscript adoption",
+  "event": "zach",
+  "instrument": "CHIME/FRB",
+  "method_comparison": {
+    "candidate_diagnostics": {
+      "excluded_broadband_columns": 0,
+      "group_size": 64,
+      "maximum_broadband_seed_fraction": 0.01,
+      "minimum_seed_rows_per_group": 4,
+      "offpulse_columns": 64,
+      "pixel_threshold": 6.0,
+      "protected": [
+        32,
+        76
+      ],
+      "qualifying_groups": 285,
+      "seed_rows": 2704,
+      "selected_rows": 1649,
+      "status": "development_only_horizontal_row_component"
+    },
+    "candidate_owner_marked_intervals": {
+      "600_650_mhz": {
+        "count": 5916,
+        "maximum": 84.82383753731847,
+        "maximum_frequency_mhz": 642.0989990234375,
+        "maximum_spread_units_above_median": 6.005618154817001,
+        "median": 14.073639871552587,
+        "median_based_spread": 11.780668674217722,
+        "rows_above_100": 0
+      },
+      "700_750_mhz": {
+        "count": 3822,
+        "maximum": 119.37149304151535,
+        "maximum_frequency_mhz": 739.0228271484375,
+        "maximum_spread_units_above_median": 10.39734573186991,
+        "median": 10.193636328913271,
+        "median_based_spread": 10.500550768255255,
+        "rows_above_100": 3
+      }
+    },
+    "common_support_values_equal": true,
+    "interpretation": "On retained pixels, the candidate leaves package-normalized values unchanged and changes only explicit support.",
+    "maximum_absolute_common_support_difference": 0.0,
+    "package_row_mask_owner_marked_intervals": {
+      "600_650_mhz": {
+        "count": 6266,
+        "maximum": 99.69961299747229,
+        "maximum_frequency_mhz": 617.8863525390625,
+        "maximum_spread_units_above_median": 7.089642646085782,
+        "median": 14.277441650629044,
+        "median_based_spread": 12.048868414264172,
+        "rows_above_100": 0
+      },
+      "700_750_mhz": {
+        "count": 4096,
+        "maximum": 206.21773527562618,
+        "maximum_frequency_mhz": 738.8763427734375,
+        "maximum_spread_units_above_median": 18.38962537191741,
+        "median": 10.301434147171676,
+        "median_based_spread": 10.653631989025511,
+        "rows_above_100": 20
+      }
+    }
+  },
+  "methods": {
+    "candidate": {
+      "group_size": 64,
+      "maximum_broadband_seed_fraction": 0.01,
+      "minimum_seed_rows_per_group": 4,
+      "name": "protected off-pulse seed-row component",
+      "operation": "promote absolute Pixel-6 seeds to whole fine-frequency rows only when their 64-row coarse group contains at least four distinct off-pulse seed rows",
+      "ordering": "after alignment, package row masks, and bandpass normalization",
+      "pixel_threshold": 6.0,
+      "protected_on_pulse": true,
+      "replacement": "none; selected rows are NaN",
+      "status": "development-only saturated-row component; not a complete RFI method"
+    },
+    "package_row_mask": [
+      "package RFI row mask on training",
+      "bandpass mean and sample standard deviation on surviving training rows",
+      "normalize",
+      "second package RFI row mask on normalized training"
+    ],
+    "package_threshold_mean": 5.0,
+    "package_threshold_standard_deviation": 3.0,
+    "reference": "bandpass mean and sample standard deviation learned on training without RFI mask"
+  },
+  "observed_sample_columns_loaded": [
+    [
+      55,
+      137
+    ],
+    [
+      149,
+      305
+    ]
+  ],
+  "observed_slices_half_open": {
+    "aligned_display": [
+      197,
+      305
+    ],
+    "alignment_source": [
+      149,
+      305
+    ],
+    "on_pulse_integration": [
+      229,
+      273
+    ],
+    "training": [
+      55,
+      137
+    ]
+  },
+  "provenance": {
+    "array_hashes": {
+      "additional_candidate_rows.npy": "3a0923b3cd65de06c580295d672582864d0d7112ad64d301b3d38371ef0c0ad6",
+      "alignment_offsets_s.npy": "2209d9d216eb9f4bfbee32ea3355aed8add652205ed27a2d3fc4fc65d8dc82b1",
+      "alignment_shifts.npy": "fb4513f68af3db45f890db3613224f932d2e4c1f026f6e706edb5657a687e73d",
+      "candidate_valid.npy": "d5e1d695e43cbc0c44586c3f51a3564e0f770cab4f7e24018576733f08dea8ea",
+      "combined_common_spectrum.npy": "aac798f3661e9206acffe35cc5e2118fccf501c2054161879c050b569f42dabf",
+      "combined_mean.npy": "ba7f6116c4ddb07139ff82ad20cbc1e665c413bf5af52785c34ed7245f7b71e1",
+      "combined_scale.npy": "12fcac1112407bf3e2c84d379c9e56956fc8cc933d455130a11f3e6b40e5f532",
+      "final_valid.npy": "ddf111fe47b91a19c2328850e79e7ed948998665f20b499e2602a46be2a8a033",
+      "initial_rfi_rows.npy": "4258a592f607374014adeb42f08cff414c3b1ec0fc11061237a448aa9ec65ed9",
+      "model_valid.npy": "2a1fe470dabcef7089176798044c415ce2c4d4318123fb376f0ce9881e9494d8",
+      "post_bandpass_rfi_rows.npy": "04190fb1310e65b09dfa0f75e83b08132bbc37faf31ff8bb36ca29bd9c222abf",
+      "reference_common_spectrum.npy": "f076732e933b5dec95ca9df5a4d9870bc351b66aa48f1289e83410feb25a8a67",
+      "reference_full_spectrum.npy": "1f997f3f749e6bff62443caa8b3fb80974497458ae247c15d13b752d90433208",
+      "reference_mean.npy": "f964d265fc17abe18a715484dedf99e2d608969d704934b3760b759cc25550e5",
+      "reference_scale.npy": "f5b66eb5efbf6e40c6cff1f16ed2b72c18f7ba233c5e91568bac03af4554c67b",
+      "reference_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e",
+      "robust_lag1_correlation.npy": "ddafe9168473317ab30c9d2d2e3900702ed3c95205e0cdc4ebd1ab83586fb80d",
+      "robust_standard_deviation.npy": "ddafe9168473317ab30c9d2d2e3900702ed3c95205e0cdc4ebd1ab83586fb80d",
+      "seed_count_by_group.npy": "64e5174bd70b7552f88c28580b573b15efa7c6474ceb953627776f83c85f5026",
+      "seed_hits_by_row.npy": "46f4bd70da5e514572f15d11792f81154e75e0deed1170b7b34ee11f91a165b2",
+      "time_frequency_mask_display.npy": "66fc965cae3dafe6da9a2736c10a52ca72328e7079ca8fe319126e571e69b2c0"
+    },
+    "baseband_analysis_revision": "e08df9dacc49e1007f28759b7edca71c7b8e5273",
+    "baseband_analysis_version": "1.9.0",
+    "candidate_module_sha256": "33c56a8031f240a0b18aefe88aab40ee7d041c012a3839c465dca10bfbbd8ec2",
+    "container_digest": "chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41",
+    "container_image_id": "sha256:8c903ec6a5a836e8a97fe3468fd3ee02177c220ead84e6d1d25e8f41b735db4b",
+    "input_hashes": {
+      "code/audit_chime_preprocessing_v2.py": "5df48f411c6d9f9ce59873b6ccb147de30e22fa8306b3543bb06632212340c83",
+      "code/upchannelize_chime.py": "1825746445782cb2f36b806668241cfcd7e03a9c11531457b903d43974007b4e",
+      "products/zach_chime_freq.npy": "02c794745bd79ca235d1d3e18d46b2f43f7529616a5747ccab2a5db094a9cba2",
+      "products/zach_chime_preprocessing_metadata.json": "badcba0e4a3152645b15a81c9f031a5c41c032b63a991d91240892f75c872f0e",
+      "products/zach_chime_source_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e",
+      "products/zach_chime_upchan.npy": "264f1e643f57012fce1385dcd7b6dfe6a12086f43eb1fa907be5540fb3359192"
+    },
+    "numpy": "1.26.4",
+    "pipeline_revision": "ab6af1f713496abd2ff2d71bf11edf4100871e94",
+    "python": "3.11.15",
+    "review_command": "python /review/code/review_real_zach_rfi_cleaner.py --input-root /evidence --output-dir /review/run-N --candidate offpulse_seed_rows",
+    "script_sha256": "52abd2af4f1e566ed1a30a43a118e027edfeaf65239d12e9bd6648e3eb734f35",
+    "source_h5": "/data/Faber2026/data/chime-frb/zach/singlebeam_210456524.h5",
+    "source_h5_sha256": "215079a689c18b50a4b2cd8003529e34d531a326be677a86187be02e47d0f1a9",
+    "upchannel_command": "python -c 'import staged worker; set TARGETS[\"zach\"][\"dm\"]=262.4359033801; recover_target(\"zach\", ..., time_shift=False)'"
+  },
+  "status": "diagnostic_only_real_event_method_comparison",
+  "supersedes": {
+    "commit": "bd149c00",
+    "reason": "The prior figure used a scintillation sub-window and treated column index as a shared time axis."
+  },
+  "support": {
+    "additional_candidate_rows": 1649,
+    "additional_candidate_rows_by_owner_marked_interval": {
+      "600_650_mhz": 350,
+      "700_750_mhz": 274
+    },
+    "additional_candidate_rows_overlapping_burst_bright_rows": 17,
+    "additional_measured_rows_removed": 5494,
+    "bandpass_only_valid_rows": 55744,
+    "burst_bright_rows": 20,
+    "candidate_final_valid_rows": 48601,
+    "candidate_retained_fraction_of_source": 0.8718606486796785,
+    "on_pulse_profile_peak_fractional_change": -0.004403238563960632,
+    "package_final_valid_rows": 50250,
+    "package_retained_fraction_of_source": 0.9014423076923077,
+    "source_valid_rows": 55744,
+    "time_frequency_rejected_display_pixels": 178092,
+    "time_frequency_retained_display_fraction": 0.96718407960199
+  },
+  "time_axis": {
+    "absolute_arrival_time_status": "uncertified",
+    "alignment_formula": "(fpga_count-fpga_ref)*2.56 us - K_DM*DM*(nu^-2-nu_ref^-2)",
+    "alignment_is_nonwrapping": true,
+    "alignment_offset_range_ms": [
+      0.0,
+      15.732988612470855
+    ],
+    "alignment_shift_range_bins": [
+      0,
+      48
+    ],
+    "cadence_ms": 0.32768,
+    "frame_center_formula": "(128*j + 63.5) * 2.56 microseconds",
+    "label": "aligned relative time",
+    "time0_schedule_dm_pc_cm3": 263.24755102523966,
+    "time0_schedule_fit_residual_max_us": 1.2983587882597902,
+    "time0_schedule_fit_residual_rms_us": 0.7545609655431753
+  },
+  "warning": "Observed event with no known truth; this does not validate a complete RFI method.",
+  "window_validation": {
+    "display_width_ms": 35.38944,
+    "documented_on_pulse_envelope_ms": 14.21,
+    "fixed_band_peak_bins_in_display": {
+      "400\u2013450": 46,
+      "450\u2013500": 42,
+      "500\u2013550": 42,
+      "550\u2013600": 42,
+      "600\u2013650": 41,
+      "650\u2013700": 41,
+      "700\u2013750": 41,
+      "750\u2013800": 41
+    },
+    "fixed_band_peak_spread_bins": 5,
+    "fixed_band_peak_spread_ms": 1.6384,
+    "left_padding_ms": 10.48576,
+    "right_padding_ms": 10.48576,
+    "selected_on_pulse_width_ms": 14.41792
+  }
+}

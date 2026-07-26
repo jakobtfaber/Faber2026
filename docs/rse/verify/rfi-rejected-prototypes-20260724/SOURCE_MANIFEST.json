@@ -1,0 +1,410 @@
+{
+  "created_utc": "2026-07-24T17:40:00Z",
+  "disposition": "rejected; evidence only; not science admissible",
+  "files": [
+    {
+      "archive_path": "payloads/analysis/docs/rse/specs/notes/owner-decision-rfi-preservation-limits-2026-07-22.md",
+      "sha256": "9cce83a14ba483f227fe97a036f4aa2047fe49e6f61e4775b912b8abf931617a",
+      "size": 2912
+    },
+    {
+      "archive_path": "payloads/analysis/docs/verify/rfi-preservation-20260722/manifest.json",
+      "sha256": "901b2e98c245ad1ab8249141ed5147457bb49feef97d98a11f1b716256c8ca7e",
+      "size": 977
+    },
+    {
+      "archive_path": "payloads/analysis/docs/verify/rfi-preservation-20260722/rfi_preservation_metrics.json",
+      "sha256": "ee5ada64517470c7b63bb1057e8ad951b6ecf65787e85ca32f128857195e8900",
+      "size": 3465
+    },
+    {
+      "archive_path": "payloads/analysis/docs/verify/rfi-preservation-20260722/rfi_preservation_review.svg",
+      "sha256": "0b51659e4fd1172e34536538693f48bc950902cc7838a89768826dde25de3fc7",
+      "size": 648295
+    },
+    {
+      "archive_path": "payloads/analysis/scripts/build_rfi_preservation_review.py",
+      "sha256": "b340e6bfbdf8d4f1269e2b25a0a2979f5c430cd5b626e8b59ee25739df111869",
+      "size": 15103
+    },
+    {
+      "archive_path": "payloads/analysis/tests/test_rfi_preservation_review.py",
+      "sha256": "ec62ab940f50a61db9ae6dffd3bbacb2fe2eb8f4b8ee5adf501de5f70f7714c4",
+      "size": 1687
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/candidate_experiment.py",
+      "sha256": "5636fade41c9fb95cf8033fcb299fca89d313f0b8a399fa2b00ac94f7525d4a5",
+      "size": 12834
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-aggressive-v3/SHA256SUMS.remote",
+      "sha256": "831fa5c4b9ed0df347f3a9b59e35ef281d11625a3fb6c34a9a8bcdea24a7dcd7",
+      "size": 3129
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-aggressive-v3/real_zach_rfi_700_750_mhz_review.svg",
+      "sha256": "c7ff682e1068e633b8e9233fcc45875316bfd19fd3c40dab8ee52fb4c97c6082",
+      "size": 285800
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-aggressive-v3/real_zach_rfi_method_comparison.json",
+      "sha256": "8f15647af8a960ff35d9f4c5490c44ce9cf52276be83fb5fc77994265062820e",
+      "size": 13738
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-aggressive-v3/real_zach_rfi_method_comparison.svg",
+      "sha256": "5f337d83b28c9c56deafa2f74b19beeea9a415ada69e8dc32612607e2018e476",
+      "size": 1175356
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-robust-row-v1/real_zach_rfi_method_comparison.png",
+      "sha256": "8e401aed86abc2a289951094bd72f92ae94c8a85113258dabd87ff660fe66ad6",
+      "size": 656012
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-robust-row-v1/real_zach_rfi_method_comparison.svg",
+      "sha256": "a03889213c19e0c70eefb058ea9ec19f57a3694bcbaf4943f70a835ba42f5fc2",
+      "size": 1085844
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-seed-row-v2/real_zach_rfi_method_comparison.json",
+      "sha256": "078a11ffaf7b1d6483995fbef46f3d76df74f82b2e657b7066c7f1d33b250786",
+      "size": 11093
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/failed-seed-row-v2/real_zach_rfi_method_comparison.svg",
+      "sha256": "28c58549cc39e52880192ba555c0a8aea62bbc2444b55f80ddf1601ec6b875df",
+      "size": 1145058
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/invalid-package-masked-atlas-v1/zach_chime_manual_zap_atlas.json",
+      "sha256": "d799cf34a5295ef4a573abd48508207b7559d685890d0325fba071ca9949a792",
+      "size": 3117
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/invalid-package-masked-atlas-v1/zach_chime_manual_zap_atlas.svg",
+      "sha256": "9b8c26701682650c9e131bced2bb962ed5c1af7e35039b05975d992248804ee9",
+      "size": 1000648
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/moderate_horizontal_probe.py",
+      "sha256": "6f8655fb46c3b2e8663ed7a8953df64c670635f6846fe6d7f761ea57bb6ddf6c",
+      "size": 6576
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/raw_voltage_kurtosis_probe.py",
+      "sha256": "6ac0421fa248dfc7ba1fdb9d09f9b7b252c3918abd6da1ca26a7179dcf5c67c0",
+      "size": 6721
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/real_display_offpulse_probe.py",
+      "sha256": "5ef90caa6063e65eb4b2c93176c49a2a418af5896a962486fe86b65f919bdb31",
+      "size": 9385
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/real_training_feature_probe.py",
+      "sha256": "0a3b92ef9dc42dc13822ba18ff4809179203f1dd1996854f6ab040564460b583",
+      "size": 4586
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/seed_promotion_experiment.py",
+      "sha256": "26da10cc05942b800585ebb7b9141a2c72c8cf2baeeae4cce94231c98f39ec88",
+      "size": 6874
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/voltage_kurtosis_experiment.py",
+      "sha256": "1ee821d70aa1e5fd00b31664657b71981d49a35dc2d2258dd2ead41b7638d471",
+      "size": 4023
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/zach-chime-manual-zap-atlas-bandpass-only.png",
+      "sha256": "ecb2aa38acc78d1de2b6f71c400682eef8848713cbb658c5387eaf04cbb5f204",
+      "size": 1978795
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/zach-chime-manual-zap-atlas.png",
+      "sha256": "19b99523272d955ac918230801cd83f6f5aa56742c495d9df41186c9b8d92bd3",
+      "size": 1890262
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/zach-seed-row-review.png",
+      "sha256": "cd320893eb50de0b410c27eaf9d388e49f7999b04e2ea8099a716808861cc4e4",
+      "size": 687903
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/zach-voltage-kurtosis-700-750-review.png",
+      "sha256": "5d1ca8d1c652ee073e403c787057835c23d444957c6f2eef5fe65fe582c1ce56",
+      "size": 236899
+    },
+    {
+      "archive_path": "payloads/dirty-parent/.experiments/rfi-horizontal-structure/zach-voltage-kurtosis-review.png",
+      "sha256": "64a99946054a6e4bb9166d0a643e8c1fc7defb21b557690ae8febf1cc94df85e",
+      "size": 681801
+    },
+    {
+      "archive_path": "payloads/dirty-parent/docs/rse/specs/experiment-rfi-horizontal-structure-capture.md",
+      "sha256": "9d599420e4a9257af6066383ee9801b2aef64c502d9e38e3a346c764274d39c3",
+      "size": 7895
+    },
+    {
+      "archive_path": "payloads/dirty-parent/docs/rse/specs/experiment-rfi-offpulse-seed-promotion.md",
+      "sha256": "5fc3ae8c7a4fd685646bf2dd278958217ec778e0835d4ddccc03762f64f657c5",
+      "size": 6054
+    },
+    {
+      "archive_path": "payloads/dirty-parent/docs/rse/specs/experiment-rfi-protected-voltage-kurtosis.md",
+      "sha256": "6b3b16019aa5ec149e9c4ebbac30049b198b90b105aa3b841f515b9a636cca2d",
+      "size": 3854
+    },
+    {
+      "archive_path": "payloads/dirty-parent/docs/rse/specs/implementation-rfi-horizontal-row-component.md",
+      "sha256": "1ce904cef18bd6bfd669514f595c98375a96b5cae266fe0733244dc108c7fccb",
+      "size": 4057
+    },
+    {
+      "archive_path": "payloads/dirty-parent/docs/rse/specs/plan-rfi-horizontal-row-component.md",
+      "sha256": "6d83fce3fc7aae717f687a6b74ea916b41eb10f030dc4d051206e550f7d19c27",
+      "size": 16746
+    },
+    {
+      "archive_path": "payloads/dirty-parent/docs/rse/specs/research-rfi-horizontal-structure-capture.md",
+      "sha256": "8ae012815407953b3faca958286f60f30e11162496726d431155662decee8b5c",
+      "size": 8082
+    },
+    {
+      "archive_path": "payloads/dirty-parent/docs/rse/specs/validation-rfi-horizontal-row-component.md",
+      "sha256": "87b66cf0ce7c2f1e7116806e898280670b912500a42b966725ed15ff602fcf02",
+      "size": 5302
+    },
+    {
+      "archive_path": "payloads/dirty-parent/scripts/review_real_zach_rfi_cleaner.py",
+      "sha256": "d94b6123e60aec3a17a9529d307a2ba8226d59807fdc098f5d7b1d68dfc6e445",
+      "size": 56064
+    },
+    {
+      "archive_path": "payloads/dirty-parent/scripts/rfi_offpulse_row_candidate.py",
+      "sha256": "dc4a987d5102fe42dbb9b4b0c888fb7e925be737b627bdb4ccc5baf651fc94a6",
+      "size": 9820
+    },
+    {
+      "archive_path": "payloads/dirty-parent/scripts/rfi_voltage_kurtosis_candidate.py",
+      "sha256": "3af7f126bfe38cb87d8a9faad053d5f6960c7d60f9b81563bf4d1dc074f5d4fd",
+      "size": 6963
+    },
+    {
+      "archive_path": "payloads/dirty-parent/tests/test_review_real_zach_rfi_cleaner.py",
+      "sha256": "a08814db3a52dc55fe06e889c91cd87ed7b180645fe6625cb078689c9ef1f240",
+      "size": 8705
+    },
+    {
+      "archive_path": "payloads/dirty-parent/tests/test_rfi_offpulse_row_candidate.py",
+      "sha256": "d9324f2985633a2c3e089e55e46973ff980847556e6892562a2f158c85e46621",
+      "size": 4922
+    },
+    {
+      "archive_path": "payloads/dirty-parent/tests/test_rfi_voltage_kurtosis_candidate.py",
+      "sha256": "568fe4361350746caab5ba1aaeb2ed4b19af33c6d04dee71593809dba424e5d1",
+      "size": 2901
+    },
+    {
+      "archive_path": "payloads/successor/.experiments/rfi-time-frequency/candidate_experiment.py",
+      "sha256": "b391ab701b5c920979516421fe13f25e8b9bc0ce82cb1e1caf7e3a03b7c166ea",
+      "size": 6710
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/experiment-rfi-preservation-dynamic-spectrum-prototype.md",
+      "sha256": "182aa431efeba554445f2bfd2c0cd32f5713c2fd6766907d376c30034bac12ba",
+      "size": 3699
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/experiment-rfi-time-frequency-candidate.md",
+      "sha256": "bfbffdc4e854cd76584c2d6c3355ea3e355e70acaba13deebc5e08766b7849d1",
+      "size": 5406
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/implement-real-zach-rfi-review-correction.md",
+      "sha256": "e8f89658ba762b665fef5a7dc1f904b28a9428c776b87aa1d69b66aaf2b3da29",
+      "size": 2664
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/implement-rfi-preservation-dynamic-spectrum-prototype.md",
+      "sha256": "cb012197ef27326024278cab080e12ead158f794035e633ffa1c4f0598d8fc5f",
+      "size": 2733
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/implement-rfi-time-frequency-candidate.md",
+      "sha256": "6fc0254d148aabc10be1a9a238b6c55135d06499d08b16c468256219433bdcf4",
+      "size": 3860
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/plan-real-zach-rfi-review-correction.md",
+      "sha256": "3e4f64f7384eefd2d71103770d092bab1023bb25e05423bc8a930c1fda18d8d3",
+      "size": 5160
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/plan-rfi-preservation-dynamic-spectrum-prototype.md",
+      "sha256": "ae2aeda9f014a03d2cee7db2bfe65f39284aa73e7c55373b73ee6252d7eb7a94",
+      "size": 9377
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/plan-rfi-time-frequency-candidate.md",
+      "sha256": "78584ea0a9844580b3239f652d363fd830d405e28380d7509d67c3d04f91deef",
+      "size": 7712
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/research-real-zach-rfi-review-correction.md",
+      "sha256": "95155a59761860eee7d0318bb47ec9bf72f66654896bfbbce229258548c1f6da",
+      "size": 5861
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/research-rfi-preservation-dynamic-spectrum-prototype.md",
+      "sha256": "9d6ca9697830576f088bcef22226af3e2ec36f60bff5ef54ece68892242b8048",
+      "size": 6367
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/research-rfi-time-frequency-candidate.md",
+      "sha256": "717de3d2fa1ca77d03f83691bcb9b32cfd0a1bcc11e2b17a9d012d623ac5cdf1",
+      "size": 5208
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/validation-real-zach-rfi-review-correction.md",
+      "sha256": "7a76cdabd19495a3946a8ba738fd5622e9923edfd454d407e0245c170e061209",
+      "size": 2964
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/specs/validation-rfi-time-frequency-candidate.md",
+      "sha256": "9e6f07beeaf355e4c8ffc164d84b95c0ffa1526660b444d9e1524da81ed15b96",
+      "size": 4164
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-preservation-prototype-20260721/prototype_rfi_preservation_review.py",
+      "sha256": "2516daee4159b85cb4c1eac80a890429688779e175158fe9ae65cb155cc14a80",
+      "size": 40142
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-preservation-prototype-20260721/rfi_preservation_review.json",
+      "sha256": "6fc04cbe69c60a454cf74b3e17e5146c9cf2c46a7fc3d6404610bec540553f6a",
+      "size": 22373
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-preservation-prototype-20260721/rfi_preservation_review.svg",
+      "sha256": "e08cda8020ada0307431994904bd52460d5214cc59e36309fef558fe9bbc0187",
+      "size": 1046818
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-preservation-prototype-20260721/run.log",
+      "sha256": "41a90ff654202922185d2d649ce5c1c8420731d5b86592ba9eb4d3da4b469c39",
+      "size": 478
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-real-event-review-20260721/real_zach_rfi_method_comparison.json",
+      "sha256": "ab7513078bc65000b5f8c73c1611cd85592ee1fcfeebc375518f9cfd873f0074",
+      "size": 7105
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-real-event-review-20260721/real_zach_rfi_method_comparison.svg",
+      "sha256": "5c6b11054e3b7d58abb0caa1794b74fa81a7ed16402d682b91b956843878d8bb",
+      "size": 1062232
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-time-frequency-candidate-20260721/synthetic/rfi_preservation_review.json",
+      "sha256": "ac44a98629801b91e32da8b0b3f9e7e9ac727927032714f0724de1943e575259",
+      "size": 22619
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-time-frequency-candidate-20260721/synthetic/rfi_preservation_review.svg",
+      "sha256": "2f31564167d11bf64b84a17375efcd1fed914a8d44543a7039888aedfd169523",
+      "size": 1065475
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-time-frequency-candidate-20260721/zach/real_zach_rfi_method_comparison.json",
+      "sha256": "f693e1f0c45f2bee8f65ac8d7ebe8cb0828f2068fe2002219cbead995a4ba42f",
+      "size": 8463
+    },
+    {
+      "archive_path": "payloads/successor/docs/rse/verify/rfi-time-frequency-candidate-20260721/zach/real_zach_rfi_method_comparison.svg",
+      "sha256": "da5a6c9a3f3cd04b51e13d0205324e2becf87fd8796c2c4530a68517a4675064",
+      "size": 1120026
+    },
+    {
+      "archive_path": "payloads/successor/scripts/prototype_rfi_preservation_review.py",
+      "sha256": "e283a66d089e738de0839e00660bcde3224efb98abb2e4c8e38dc318987a26cc",
+      "size": 42577
+    },
+    {
+      "archive_path": "payloads/successor/scripts/review_real_zach_rfi_cleaner.py",
+      "sha256": "76f573c29410b8057bd1079829071bb40f7fa11b8eeeb1575dd5f9c7e5f1f7b1",
+      "size": 32466
+    },
+    {
+      "archive_path": "payloads/successor/scripts/rfi_time_frequency_candidate.py",
+      "sha256": "ca947385262e72e354c43681f6cf8bc3103ca152cbf2d6d800fbb54eb9873e73",
+      "size": 1478
+    },
+    {
+      "archive_path": "payloads/successor/tests/test_prototype_rfi_preservation_review.py",
+      "sha256": "1ee5d2e0bdf14df8f2873809ed0103180fd14aefc316627ce2c8e25f8d11e613",
+      "size": 4186
+    },
+    {
+      "archive_path": "payloads/successor/tests/test_review_real_zach_rfi_cleaner.py",
+      "sha256": "1d979e139f6ddabae4c45952e6dd9cc9e6eea011e4881a99905c389bb4a9b7b3",
+      "size": 5551
+    },
+    {
+      "archive_path": "payloads/successor/tests/test_rfi_time_frequency_candidate.py",
+      "sha256": "907392a7585e94f235afc9cadd9effa9dc811d7eff3945254a85dc324388b10d",
+      "size": 1739
+    },
+    {
+      "archive_path": "recovery/analysis/index.patch",
+      "sha256": "c10fdd8437b911d62e09abfd78b58f4c8b7299b25ae3623ca31c2e1ac3b9d264",
+      "size": 679257
+    },
+    {
+      "archive_path": "recovery/analysis/status.txt",
+      "sha256": "e14950c831ad31209ffd897df42a6602d46152a0f04508d93ccc6ef075dcfcfc",
+      "size": 357
+    },
+    {
+      "archive_path": "recovery/dirty-parent/status.txt",
+      "sha256": "559cab53afa486278c5feaea47d0658a27b9fc10f104b3bb31eb81e4b12bad32",
+      "size": 2780
+    },
+    {
+      "archive_path": "recovery/dirty-parent/working-tree.patch",
+      "sha256": "3ce76e1ba91e67a49ea8e46a735f7af5141cf1004a278527663eb610c61c7318",
+      "size": 43029
+    },
+    {
+      "archive_path": "recovery/successor/status.txt",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "size": 1
+    }
+  ],
+  "schema": "rfi-rejected-prototype-archive-v1",
+  "sources": [
+    {
+      "branch": "codex/chime-rfi-preservation-gates-successor-20260722",
+      "head": "724f6311841eda513466f6a6159e07fbb5afd3da",
+      "label": "successor",
+      "source_path": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-chime-rfi-successor",
+      "status_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "branch": "codex/prototype-chime-rfi-preservation-gates",
+      "head": "cd5b67bd782608064cb1a2f6a164a52b12a43dbf",
+      "label": "dirty-parent",
+      "source_path": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-rfi-preservation-prototype",
+      "status_sha256": "559cab53afa486278c5feaea47d0658a27b9fc10f104b3bb31eb81e4b12bad32"
+    },
+    {
+      "branch": "codex/auto-rfi-preservation",
+      "head": "b6023c198cfc870eae618dd4c8f38a35f5ca0963",
+      "label": "analysis",
+      "source_path": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-analysis-rfi-preservation",
+      "status_sha256": "e14950c831ad31209ffd897df42a6602d46152a0f04508d93ccc6ef075dcfcfc"
+    }
+  ]
+}

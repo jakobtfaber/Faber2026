@@ -1,0 +1,127 @@
+{
+  "candidate": "rejected iterative frequency-row mean/std outlier cleaner",
+  "geometry": {
+    "frequency_channels": 256,
+    "frequency_range_mhz": [
+      400.0,
+      800.0
+    ],
+    "time_bins": 192,
+    "time_cadence_ms": 0.32768
+  },
+  "hashes": {
+    "clean_observation": "8605887d14be228af56ff2f797a74eebe4075d163f347b46adefa0c50566c764",
+    "cleaner_output_nan_canonicalized": "7fb744466f1790e3bbc5f3c21385ab6ef5d783a3a926fe373354cdcc1f2b835d",
+    "contaminated": "290359611857a497d2f4dc06dde850b1c746fe7393baa3825e828bb39a2bb832",
+    "mask": "04c8d58309b18805b2e3390030c41281e40d05d2ccd30d401dd65fa137030873",
+    "truth": "4ba148aff28cb82df7a964ffb7c4edc6c593b64dfc6ffed14a73fa3c2d257465"
+  },
+  "interpretation": "Checks describe this one controlled example only. They cannot estimate blind-test performance or validate the rejected cleaner.",
+  "masked_fraction": 0.078125,
+  "masked_frequency_rows": [
+    0,
+    17,
+    22,
+    34,
+    51,
+    68,
+    85,
+    91,
+    102,
+    119,
+    136,
+    153,
+    170,
+    174,
+    187,
+    204,
+    219,
+    221,
+    238,
+    255
+  ],
+  "measurement_shifts": {
+    "arrival_time_ms": {
+      "candidate": 0.7455523500332077,
+      "reference": 0.7443127139076348,
+      "shift_sigma": 0.09182612543921718,
+      "uncertainty": 0.013499819573608624
+    },
+    "fluence_400_500_mhz": {
+      "candidate": 1676.0214563720278,
+      "reference": 1800.102338309467,
+      "shift_sigma": -2.9972623664678872,
+      "uncertainty": 41.39807156210416
+    },
+    "fluence_500_600_mhz": {
+      "candidate": 3378.4809603451067,
+      "reference": 3671.3313113604963,
+      "shift_sigma": -6.691528556054291,
+      "uncertainty": 43.76434301403788
+    },
+    "fluence_600_700_mhz": {
+      "candidate": 3506.3595439525166,
+      "reference": 3832.3556513303542,
+      "shift_sigma": -7.7866845987028945,
+      "uncertainty": 41.86584203399507
+    },
+    "fluence_700_800_mhz": {
+      "candidate": 2076.1390256037407,
+      "reference": 2243.426142933607,
+      "shift_sigma": -4.129545596201429,
+      "uncertainty": 40.50981238317012
+    },
+    "total_fluence": {
+      "candidate": 10637.000986273391,
+      "reference": 11547.215443933925,
+      "shift_sigma": -11.302059300084357,
+      "uncertainty": 80.53527534170163
+    },
+    "width_ms": {
+      "candidate": 1.3140044586064619,
+      "reference": 1.3197059542625564,
+      "shift_sigma": -0.4897319590611549,
+      "uncertainty": 0.011642073894921362
+    }
+  },
+  "proposed_limit_checks": {
+    "all_shifts_le_1_sigma": {
+      "limit": 1.0,
+      "pass": false,
+      "value": 11.302059300084357
+    },
+    "at_least_95_percent_within_1_sigma": {
+      "limit": 0.95,
+      "pass": false,
+      "value": 0.2857142857142857
+    },
+    "component_count_unchanged": {
+      "candidate": 2,
+      "pass": true,
+      "reference": 2
+    },
+    "detection_unchanged": {
+      "pass": true,
+      "value": true
+    },
+    "median_shift_le_0.25_sigma": {
+      "limit": 0.25,
+      "pass": false,
+      "value": 4.129545596201429
+    },
+    "median_systematic_le_0.25_sigma": {
+      "limit": 0.25,
+      "pass": false,
+      "value": 4.129545596201429
+    },
+    "p95_shift_le_0.5_sigma": {
+      "limit": 0.5,
+      "pass": false,
+      "value": 10.247446889669916
+    }
+  },
+  "schema_version": 1,
+  "scope": "diagnostic-only controlled synthetic Zach-geometry example",
+  "seed": 2026072201,
+  "verdict": "not cleaner validation; not science admissible"
+}

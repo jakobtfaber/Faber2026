@@ -1,0 +1,1024 @@
+diff --git a/scripts/review_real_zach_rfi_cleaner.py b/scripts/review_real_zach_rfi_cleaner.py
+index 33097592..1f2c3951 100755
+--- a/scripts/review_real_zach_rfi_cleaner.py
++++ b/scripts/review_real_zach_rfi_cleaner.py
+@@ -28,6 +28,25 @@ from rfi_time_frequency_candidate import (  # noqa: E402
+     ABSOLUTE_PIXEL_THRESHOLD,
+     apply_pixel_mask,
+ )
++from rfi_offpulse_row_candidate import (  # noqa: E402
++    MAXIMUM_BROADBAND_SEED_FRACTION,
++    MINIMUM_SEED_ROWS_PER_GROUP,
++    ROBUST_ITERATIONS,
++    ROBUST_SIGMA,
++    SEED_GROUP_SIZE,
++    SEED_PIXEL_THRESHOLD,
++    apply_row_mask,
++    offpulse_seed_row_mask,
++    robust_offpulse_row_mask,
++)
++from rfi_voltage_kurtosis_candidate import (  # noqa: E402
++    BROADBAND_VOLTAGE_SIGMA,
++    KURTOSIS_ITERATIONS,
++    KURTOSIS_SIGMA,
++    MAXIMUM_BROADBAND_CHANNEL_FRACTION,
++    map_coarse_mask_to_fine_rows,
++    select_voltage_kurtosis_channels,
++)
+ 
+ 
+ STATUS = "diagnostic_only_real_event_method_comparison"
+@@ -44,6 +63,7 @@ COHERENT_DM = 262.4359033801
+ UPCHANNEL_FACTOR = 64
+ CHIME_TOP_EDGE_MHZ = 800.1953125
+ CHIME_COARSE_WIDTH_MHZ = 0.390625
++UPCHANNEL_FFT_SAMPLES = 128
+ EXPECTED = {
+     "products/zach_chime_upchan.npy": "264f1e643f57012fce1385dcd7b6dfe6a12086f43eb1fa907be5540fb3359192",
+     "products/zach_chime_freq.npy": "02c794745bd79ca235d1d3e18d46b2f43f7529616a5747ccab2a5db094a9cba2",
+@@ -52,6 +72,7 @@ EXPECTED = {
+     "code/audit_chime_preprocessing_v2.py": "5df48f411c6d9f9ce59873b6ccb147de30e22fa8306b3543bb06632212340c83",
+     "code/upchannelize_chime.py": "1825746445782cb2f36b806668241cfcd7e03a9c11531457b903d43974007b4e",
+ }
++SOURCE_H5_SHA256 = "215079a689c18b50a4b2cd8003529e34d531a326be677a86187be02e47d0f1a9"
+ 
+ 
+ def sha256(path: Path) -> str:
+@@ -73,6 +94,148 @@ def verify_inputs(root: Path) -> dict[str, str]:
+     return found
+ 
+ 
++def candidate_labels(candidate_method: str) -> dict[str, str]:
++    """Return claim-safe labels for a candidate method."""
++    if candidate_method == "pixel6":
++        return {
++            "short": "Pixel 6 — rejected",
++            "panel": "Pixel-6 candidate output — rejected",
++            "mask": "Pixel-6 rejected fine-row fraction",
++            "warning": (
++                "REJECTED DEVELOPMENT CANDIDATE — failed synthetic preservation "
++                "limits; not valid for science use"
++            ),
++        }
++    if candidate_method == "robust_rows":
++        return {
++            "short": "robust off-pulse rows",
++            "panel": "Robust off-pulse row component",
++            "mask": "Added full-row veto fraction",
++            "warning": (
++                "DEVELOPMENT-ONLY HORIZONTAL-ROW COMPONENT — not a complete "
++                "method; not valid for science use"
++            ),
++        }
++    if candidate_method == "offpulse_seed_rows":
++        return {
++            "short": "protected off-pulse seed rows",
++            "panel": "Protected off-pulse seed-row component",
++            "mask": "Promoted full-row veto fraction",
++            "warning": (
++                "DEVELOPMENT-ONLY SATURATED-ROW COMPONENT — not a complete "
++                "method; not valid for science use"
++            ),
++        }
++    if candidate_method == "offpulse_seed_plus_voltage_kurtosis":
++        return {
++            "short": "off-pulse rows + voltage tails",
++            "panel": "Protected row and raw-voltage components",
++            "mask": "Combined full-row veto fraction",
++            "warning": (
++                "DEVELOPMENT-ONLY ROW COMPONENTS — not a complete method; "
++                "not valid for science use"
++            ),
++        }
++    raise ValueError(f"unknown candidate method: {candidate_method}")
++
++
++def candidate_method_description(candidate_method: str) -> dict[str, Any]:
++    """Return the exact configured operation for provenance."""
++    candidate_labels(candidate_method)
++    if candidate_method == "pixel6":
++        return {
++            "name": "Pixel 6",
++            "operation": "mask finite normalized pixels with absolute value at least threshold",
++            "threshold": ABSOLUTE_PIXEL_THRESHOLD,
++            "ordering": "after package row masks and bandpass normalization",
++            "replacement": "none; rejected pixels are NaN",
++            "status": "development-only; fails some synthetic preservation limits",
++        }
++    if candidate_method == "robust_rows":
++        return {
++            "name": "robust off-pulse horizontal-row component",
++            "operation": "mask whole fine-frequency rows selected from off-pulse standard deviation and lag-one correlation",
++            "threshold": ROBUST_SIGMA,
++            "iterations": ROBUST_ITERATIONS,
++            "training_only": True,
++            "ordering": "after package row masks and bandpass normalization",
++            "replacement": "none; rejected samples are NaN",
++            "status": "development-only component; not a complete RFI method",
++        }
++    if candidate_method == "offpulse_seed_rows":
++        return {
++            "name": "protected off-pulse seed-row component",
++        "operation": (
++            "promote absolute Pixel-6 seeds to whole fine-frequency rows only "
++            "when their 64-row coarse group contains at least four distinct "
++            "off-pulse seed rows"
++            ),
++            "pixel_threshold": SEED_PIXEL_THRESHOLD,
++            "group_size": SEED_GROUP_SIZE,
++            "minimum_seed_rows_per_group": MINIMUM_SEED_ROWS_PER_GROUP,
++            "maximum_broadband_seed_fraction": MAXIMUM_BROADBAND_SEED_FRACTION,
++            "protected_on_pulse": True,
++            "ordering": "after alignment, package row masks, and bandpass normalization",
++            "replacement": "none; selected rows are NaN",
++            "status": "development-only saturated-row component; not a complete RFI method",
++        }
++    return {
++        "name": "protected off-pulse seed rows plus raw-voltage amplitude tails",
++        "operation": (
++            "union of protected off-pulse seed-row promotion and full coarse "
++            "channels selected by one-sided voltage-amplitude kurtosis"
++        ),
++        "seed_row_component": candidate_method_description("offpulse_seed_rows"),
++        "voltage_kurtosis_sigma": KURTOSIS_SIGMA,
++        "voltage_kurtosis_iterations": KURTOSIS_ITERATIONS,
++        "broadband_voltage_sigma": BROADBAND_VOLTAGE_SIGMA,
++        "maximum_broadband_channel_fraction": MAXIMUM_BROADBAND_CHANNEL_FRACTION,
++        "protected_on_pulse": True,
++        "replacement": "none; selected rows are NaN",
++        "status": "development-only components; not a complete RFI method",
++    }
++
++
++def apply_candidate(
++    combined: np.ndarray,
++    final_valid: np.ndarray,
++    training: tuple[int, int],
++    candidate_method: str,
++    *,
++    robust_mask_function=robust_offpulse_row_mask,
++) -> tuple[np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
++    """Apply one explicit-support candidate after package row masking."""
++    candidate_labels(candidate_method)
++    if candidate_method == "pixel6":
++        candidate, pixel_mask = apply_pixel_mask(combined, final_valid)
++        return (
++            candidate,
++            pixel_mask,
++            np.any(pixel_mask, axis=1),
++            {"absolute_pixel_threshold": ABSOLUTE_PIXEL_THRESHOLD},
++        )
++    if candidate_method in (
++        "offpulse_seed_rows",
++        "offpulse_seed_plus_voltage_kurtosis",
++    ):
++        unchanged = np.array(combined, copy=True)
++        return (
++            unchanged,
++            np.zeros(combined.shape, dtype=bool),
++            np.zeros(final_valid.shape, dtype=bool),
++            {"status": "deferred_until_aligned_display"},
++        )
++    selected_rows, diagnostics = robust_mask_function(
++        combined,
++        final_valid,
++        training,
++        sigma=ROBUST_SIGMA,
++        iterations=ROBUST_ITERATIONS,
++    )
++    candidate, pixel_mask = apply_row_mask(combined, selected_rows)
++    return candidate, pixel_mask, selected_rows, diagnostics
++
++
+ def load_allowed_slices(array: Any) -> tuple[np.ndarray, np.ndarray]:
+     """Read exactly the approved training and alignment-context columns."""
+     if tuple(array.shape) != (65536, 437):
+@@ -168,6 +331,49 @@ def align_nonwrapping(values: np.ndarray, shifts: np.ndarray) -> np.ndarray:
+     return output
+ 
+ 
++def voltage_allowed_support(
++    sample_count: int,
++    coarse_shifts: np.ndarray,
++) -> np.ndarray:
++    """Map allowed upchannel blocks to raw-voltage samples per coarse channel."""
++    if not isinstance(sample_count, (int, np.integer)) or sample_count <= 0:
++        raise ValueError("sample count must be a positive integer")
++    shifts_by_row = np.asarray(coarse_shifts, dtype=np.int64)
++    if shifts_by_row.ndim != 1:
++        raise ValueError("coarse shifts must be one-dimensional")
++    allowed = np.zeros((shifts_by_row.size, int(sample_count)), dtype=bool)
++    for row, shift in enumerate(shifts_by_row):
++        protected = (ON_PULSE[0] - int(shift), ON_PULSE[1] - int(shift))
++        blocks = np.concatenate(
++            (
++                np.arange(*TRAINING),
++                np.arange(*SOURCE_CONTEXT),
++            )
++        )
++        blocks = blocks[
++            (blocks < protected[0]) | (blocks >= protected[1])
++        ]
++        for block in blocks:
++            start = int(block) * UPCHANNEL_FFT_SAMPLES
++            stop = min(start + UPCHANNEL_FFT_SAMPLES, int(sample_count))
++            if start < sample_count:
++                allowed[row, start:stop] = True
++    return allowed
++
++
++def scalar_diagnostics(value: Any) -> Any:
++    """Remove array payloads while retaining nested scalar diagnostics."""
++    if isinstance(value, dict):
++        return {
++            key: scalar_diagnostics(item)
++            for key, item in value.items()
++            if not isinstance(item, np.ndarray)
++        }
++    if isinstance(value, (np.integer, np.floating, np.bool_)):
++        return value.item()
++    return value
++
++
+ def restrict_to_finite_support(values: np.ndarray, support_values: np.ndarray) -> np.ndarray:
+     """Copy values and retain only pixels finite in the support array."""
+     data = np.asarray(values)
+@@ -193,7 +399,8 @@ def apply_methods(
+     context: np.ndarray,
+     source_valid: np.ndarray,
+     audit_path: Path,
+-) -> dict[str, np.ndarray]:
++    candidate_method: str = "pixel6",
++) -> dict[str, Any]:
+     """Learn both methods on training only, then apply them to display context."""
+     audit = _load_audit(audit_path)
+     compact = np.concatenate((training, context), axis=1)
+@@ -227,7 +434,21 @@ def apply_methods(
+     )
+     final_valid = model_valid & ~post
+     combined[~final_valid] = np.nan
+-    candidate, time_frequency_mask = apply_pixel_mask(combined, final_valid)
++    candidate, time_frequency_mask, additional_rows, diagnostics = apply_candidate(
++        combined,
++        final_valid,
++        compact_training,
++        candidate_method,
++    )
++    candidate_valid = final_valid & ~additional_rows
++    robust_standard_deviation = np.asarray(
++        diagnostics.get("standard_deviation", np.full(compact.shape[0], np.nan)),
++        dtype=np.float64,
++    )
++    robust_lag1_correlation = np.asarray(
++        diagnostics.get("lag1_correlation", np.full(compact.shape[0], np.nan)),
++        dtype=np.float64,
++    )
+ 
+     context_start = training.shape[1]
+     return {
+@@ -246,7 +467,75 @@ def apply_methods(
+         "model_valid": model_valid,
+         "post_bandpass_rfi_rows": post,
+         "final_valid": final_valid,
++        "candidate_valid": candidate_valid,
++        "additional_candidate_rows": additional_rows,
++        "candidate_diagnostics": diagnostics,
++        "candidate_method": candidate_method,
++        "robust_standard_deviation": robust_standard_deviation,
++        "robust_lag1_correlation": robust_lag1_correlation,
++    }
++
++
++def protected_voltage_kurtosis_rows(
++    source_h5: Path,
++    fine_frequency_mhz: np.ndarray,
++    fine_valid: np.ndarray,
++) -> tuple[np.ndarray, dict[str, Any], dict[str, np.ndarray]]:
++    """Select fine rows from protected coarse-channel raw-voltage tails."""
++    if sha256(source_h5) != SOURCE_H5_SHA256:
++        raise ValueError("source H5 hash mismatch")
++    from baseband_analysis.core.bbdata import BBData
++    from baseband_analysis.core.dedispersion import coherent_dedisp
++
++    data = BBData.from_file(str(source_h5))
++    coarse_frequency = np.asarray(data.index_map["freq"]["centre"], dtype=np.float64)
++    coarse_ids = np.asarray(data.index_map["freq"]["id"], dtype=np.int64)
++    fpga = np.asarray(data["time0"]["fpga_count"], dtype=np.float64)
++    coarse_shifts, _ = alignment_shifts(
++        coarse_frequency,
++        coarse_ids,
++        {int(cid): float(count) for cid, count in zip(coarse_ids, fpga, strict=True)},
++        target_dm=COHERENT_DM,
++        native_dt_s=NATIVE_DT_S,
++        output_dt_s=DT_MS * 1e-3,
++    )
++    voltage = coherent_dedisp(data, COHERENT_DM, time_shift=False)
++    allowed = voltage_allowed_support(voltage.shape[-1], coarse_shifts)
++    fine_coarse_ids, _ = nominal_coarse_ids(fine_frequency_mhz)
++    coarse_valid = np.isin(coarse_ids, fine_coarse_ids[np.asarray(fine_valid, dtype=bool)])
++    selected_coarse, diagnostics = select_voltage_kurtosis_channels(
++        voltage,
++        coarse_valid,
++        allowed,
++        sigma=KURTOSIS_SIGMA,
++        iterations=KURTOSIS_ITERATIONS,
++        broadband_voltage_sigma=BROADBAND_VOLTAGE_SIGMA,
++        maximum_broadband_channel_fraction=MAXIMUM_BROADBAND_CHANNEL_FRACTION,
++    )
++    selected_fine = map_coarse_mask_to_fine_rows(
++        fine_coarse_ids, coarse_ids, selected_coarse
++    ) & np.asarray(fine_valid, dtype=bool)
++    arrays = {
++        "voltage_coarse_ids": coarse_ids,
++        "voltage_coarse_frequency_mhz": coarse_frequency,
++        "voltage_coarse_shifts": coarse_shifts,
++        "voltage_coarse_selected": selected_coarse,
++        "voltage_kurtosis": diagnostics["kurtosis"],
++        "voltage_kurtosis_robust_z": diagnostics["robust_z"],
++        "voltage_sample_count": diagnostics["sample_count"],
+     }
++    diagnostics = {
++        **diagnostics,
++        "source_h5_sha256": SOURCE_H5_SHA256,
++        "selected_fine_rows": int(selected_fine.sum()),
++        "allowed_blocks": {
++            "training": list(TRAINING),
++            "source_context": list(SOURCE_CONTEXT),
++            "protected_on_pulse_aligned": list(ON_PULSE),
++            "sealed_intervals_opened": False,
++        },
++    }
++    return selected_fine, diagnostics, arrays
+ 
+ 
+ def coarsen(
+@@ -324,6 +613,22 @@ def median_spread_outlier(
+     }
+ 
+ 
++def owner_marked_interval_summaries(
++    spectrum: np.ndarray,
++    frequency_mhz: np.ndarray,
++    valid_rows: np.ndarray,
++) -> dict[str, dict[str, float | int]]:
++    """Report, but never configure from, the two owner-marked intervals."""
++    return {
++        "600_650_mhz": median_spread_outlier(
++            spectrum, frequency_mhz, valid_rows, (600.0, 650.0)
++        ),
++        "700_750_mhz": median_spread_outlier(
++            spectrum, frequency_mhz, valid_rows, (700.0, 750.0)
++        ),
++    }
++
++
+ def coarsen_mask_fraction(
+     mask: np.ndarray,
+     row_valid: np.ndarray,
+@@ -342,6 +647,16 @@ def coarsen_mask_fraction(
+     return np.sum(grouped & valid_group[:, :, None], axis=1) / denominator
+ 
+ 
++def nominal_coarse_frequency(
++    frequency_mhz: np.ndarray, factor: int = 64
++) -> np.ndarray:
++    """Keep a physical coordinate for every coarse group, even if fully masked."""
++    frequency = np.asarray(frequency_mhz, dtype=float)
++    if frequency.ndim != 1 or frequency.size % factor:
++        raise ValueError("frequency must be one-dimensional and divisible by factor")
++    return np.mean(frequency.reshape(-1, factor), axis=1)
++
++
+ def broad_band_summary(
+     spectrum: np.ndarray, frequency_mhz: np.ndarray, valid_rows: np.ndarray
+ ) -> tuple[list[str], list[float | None]]:
+@@ -372,7 +687,7 @@ def make_figure(
+     path: Path,
+     frequency_mhz: np.ndarray,
+     source_valid: np.ndarray,
+-    result: dict[str, np.ndarray],
++    result: dict[str, Any],
+ ) -> None:
+     import matplotlib as mpl
+     import matplotlib.pyplot as plt
+@@ -387,13 +702,15 @@ def make_figure(
+         }
+     )
+     final_valid = result["final_valid"]
++    candidate_valid = result["candidate_valid"]
++    labels = candidate_labels(result["candidate_method"])
+     reference = result["reference_display"]
+     row_only = result["row_only_display"]
+     candidate = result["combined_display"]
+ 
+     ref_coarse, coarse_frequency, _ = coarsen(reference, frequency_mhz, source_valid)
+     row_only_coarse, _, _ = coarsen(row_only, frequency_mhz, final_valid)
+-    candidate_coarse, _, _ = coarsen(candidate, frequency_mhz, final_valid)
++    candidate_coarse, _, _ = coarsen(candidate, frequency_mhz, candidate_valid)
+     time_centers = (np.arange(reference.shape[1]) + 0.5) * DT_MS
+     extent = [
+         0.0,
+@@ -412,7 +729,7 @@ def make_figure(
+ 
+     fig = plt.figure(figsize=(15, 8.2), constrained_layout=True)
+     fig.suptitle(
+-        "REJECTED DEVELOPMENT CANDIDATE — failed synthetic preservation limits; not valid for science use",
++        labels["warning"],
+         color="#9c1c1c",
+         fontsize=10,
+     )
+@@ -420,7 +737,7 @@ def make_figure(
+     top = [
+         (ref_coarse, "Bandpass only — full measured support"),
+         (row_only_coarse, "Package row-mask output"),
+-        (candidate_coarse, "Pixel-6 candidate output — rejected"),
++        (candidate_coarse, labels["panel"]),
+     ]
+     images = []
+     top_axes = []
+@@ -450,8 +767,8 @@ def make_figure(
+     ax_profile.plot(time_centers, time_profile(row_only, final_valid), label="package row mask", lw=1.2)
+     ax_profile.plot(
+         time_centers,
+-        time_profile(candidate, final_valid),
+-        label="Pixel 6 — rejected",
++        time_profile(candidate, candidate_valid),
++        label=labels["short"],
+         lw=1.2,
+     )
+     ax_profile.axvspan(*on_span, color="gold", alpha=0.12, lw=0)
+@@ -477,7 +794,7 @@ def make_figure(
+     ax_spectrum.plot(
+         frequency_mhz,
+         result["combined_common_spectrum"],
+-        label="Pixel 6 — rejected",
++        label=labels["short"],
+         lw=0.55,
+         alpha=0.8,
+     )
+@@ -502,12 +819,147 @@ def make_figure(
+         interpolation="nearest",
+     )
+     ax_mask.axvspan(*on_span, color="cyan", alpha=0.08, lw=0)
+-    ax_mask.set_title("Pixel-6 rejected fine-row fraction")
++    ax_mask.set_title(labels["mask"])
++    ax_mask.set_xlabel("Aligned relative time (ms)")
++    ax_mask.set_ylabel("Frequency (MHz)")
++    fig.colorbar(mask_image, ax=ax_mask, label="Rejected fraction")
++
++    fig.savefig(
++        path,
++        format="svg",
++        metadata={"Date": None, "Creator": "Faber2026"},
++        bbox_inches="tight",
++        pad_inches=0.05,
++    )
++    plt.close(fig)
++    path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
++
++
++def make_owner_interval_figure(
++    path: Path,
++    frequency_mhz: np.ndarray,
++    result: dict[str, Any],
++    interval_mhz: tuple[float, float] = (700.0, 750.0),
++) -> None:
++    """Render the owner-marked interval without full-band compression."""
++    import matplotlib as mpl
++    import matplotlib.pyplot as plt
++
++    mpl.rcParams.update(
++        {
++            "font.size": 9,
++            "axes.titlesize": 10,
++            "axes.labelsize": 9,
++            "legend.fontsize": 8,
++            "svg.hashsalt": "faber2026-real-zach-rfi-owner-interval",
++        }
++    )
++    final_valid = result["final_valid"]
++    candidate_valid = result["candidate_valid"]
++    labels = candidate_labels(result["candidate_method"])
++    row_only = result["row_only_display"]
++    candidate = result["combined_display"]
++    row_coarse, _, _ = coarsen(row_only, frequency_mhz, final_valid)
++    candidate_coarse, _, _ = coarsen(candidate, frequency_mhz, candidate_valid)
++    coarse_frequency = nominal_coarse_frequency(frequency_mhz)
++    coarse_use = (coarse_frequency >= interval_mhz[0]) & (
++        coarse_frequency < interval_mhz[1]
++    )
++    fine_use = (frequency_mhz >= interval_mhz[0]) & (
++        frequency_mhz < interval_mhz[1]
++    )
++    comparable = np.concatenate(
++        [
++            row_coarse[coarse_use][np.isfinite(row_coarse[coarse_use])],
++            candidate_coarse[coarse_use][np.isfinite(candidate_coarse[coarse_use])],
++        ]
++    )
++    limit = max(0.5, float(np.percentile(np.abs(comparable), 99.5)))
++    extent = [
++        0.0,
++        row_only.shape[1] * DT_MS,
++        interval_mhz[0],
++        interval_mhz[1],
++    ]
++    on_local = (ON_PULSE[0] - DISPLAY[0], ON_PULSE[1] - DISPLAY[0])
++    on_span = (on_local[0] * DT_MS, on_local[1] * DT_MS)
++    cmap = mpl.colormaps["RdBu_r"].copy()
++    cmap.set_bad("0.76")
++
++    fig = plt.figure(figsize=(12, 7.5), constrained_layout=True)
++    fig.suptitle(labels["warning"], color="#9c1c1c", fontsize=10)
++    grid = fig.add_gridspec(2, 2)
++    image_axes = []
++    for column, (values, title) in enumerate(
++        (
++            (row_coarse[coarse_use], "Package row-mask output"),
++            (candidate_coarse[coarse_use], labels["panel"]),
++        )
++    ):
++        ax = fig.add_subplot(grid[0, column])
++        image_axes.append(ax)
++        image = ax.imshow(
++            np.ma.masked_invalid(values),
++            origin="lower",
++            aspect="auto",
++            extent=extent,
++            cmap=cmap,
++            vmin=-limit,
++            vmax=limit,
++            interpolation="nearest",
++        )
++        ax.axvspan(*on_span, color="gold", alpha=0.08, lw=0)
++        ax.set_title(title)
++        ax.set_xlabel("Aligned relative time (ms)")
++        ax.set_ylabel("Frequency (MHz)")
++    fig.colorbar(image, ax=image_axes, label="Standardized intensity", shrink=0.8)
++
++    ax_spectrum = fig.add_subplot(grid[1, 0])
++    ax_spectrum.plot(
++        frequency_mhz[fine_use],
++        result["reference_common_spectrum"][fine_use],
++        label="package row mask",
++        lw=0.7,
++    )
++    ax_spectrum.plot(
++        frequency_mhz[fine_use],
++        result["combined_common_spectrum"][fine_use],
++        label=labels["short"],
++        lw=0.7,
++    )
++    ax_spectrum.set_xlim(*interval_mhz)
++    ax_spectrum.set_title("Time-integrated on-pulse spectrum")
++    ax_spectrum.set_xlabel("Frequency (MHz)")
++    ax_spectrum.set_ylabel("Standardized intensity sum")
++    ax_spectrum.legend(frameon=False)
++
++    ax_mask = fig.add_subplot(grid[1, 1])
++    mask_fraction = coarsen_mask_fraction(
++        result["time_frequency_mask_display"], final_valid
++    )[coarse_use]
++    mask_image = ax_mask.imshow(
++        mask_fraction,
++        origin="lower",
++        aspect="auto",
++        extent=extent,
++        cmap="magma_r",
++        vmin=0.0,
++        vmax=1.0,
++        interpolation="nearest",
++    )
++    ax_mask.axvspan(*on_span, color="cyan", alpha=0.08, lw=0)
++    ax_mask.set_title("Combined full-row veto fraction")
+     ax_mask.set_xlabel("Aligned relative time (ms)")
+     ax_mask.set_ylabel("Frequency (MHz)")
+     fig.colorbar(mask_image, ax=ax_mask, label="Rejected fraction")
+ 
+-    fig.savefig(path, format="svg", metadata={"Date": None, "Creator": "Faber2026"})
++    fig.savefig(
++        path,
++        format="svg",
++        metadata={"Date": None, "Creator": "Faber2026"},
++        bbox_inches="tight",
++        pad_inches=0.05,
++    )
+     plt.close(fig)
+     path.write_text("\n".join(line.rstrip() for line in path.read_text().splitlines()) + "\n")
+ 
+@@ -524,6 +976,19 @@ def _save_arrays(output_dir: Path, result: dict[str, np.ndarray]) -> dict[str, s
+         "model_valid",
+         "post_bandpass_rfi_rows",
+         "final_valid",
++        "candidate_valid",
++        "additional_candidate_rows",
++        "robust_standard_deviation",
++        "robust_lag1_correlation",
++        "seed_hits_by_row",
++        "seed_count_by_group",
++        "voltage_coarse_ids",
++        "voltage_coarse_frequency_mhz",
++        "voltage_coarse_shifts",
++        "voltage_coarse_selected",
++        "voltage_kurtosis",
++        "voltage_kurtosis_robust_z",
++        "voltage_sample_count",
+         "alignment_shifts",
+         "alignment_offsets_s",
+         "time_frequency_mask_display",
+@@ -560,6 +1025,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+         context,
+         source_valid,
+         root / "code/audit_chime_preprocessing_v2.py",
++        args.candidate,
+     )
+ 
+     coarse_ids, coarse_frequency = nominal_coarse_ids(frequency)
+@@ -597,16 +1063,70 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+     result["reference_display"] = align_and_crop(result["reference_context"])
+     result["row_only_display"] = align_and_crop(result["row_only_context"])
+     result["combined_display"] = align_and_crop(result["combined_context"])
+-    result["time_frequency_mask_display"] = (
+-        np.isfinite(result["row_only_display"])
+-        & ~np.isfinite(result["combined_display"])
+-    )
++    on_local = (ON_PULSE[0] - DISPLAY[0], ON_PULSE[1] - DISPLAY[0])
++    empty_voltage_arrays = {
++        "voltage_coarse_ids": np.array([], dtype=np.int64),
++        "voltage_coarse_frequency_mhz": np.array([], dtype=np.float64),
++        "voltage_coarse_shifts": np.array([], dtype=np.int64),
++        "voltage_coarse_selected": np.array([], dtype=bool),
++        "voltage_kurtosis": np.array([], dtype=np.float64),
++        "voltage_kurtosis_robust_z": np.array([], dtype=np.float64),
++        "voltage_sample_count": np.array([], dtype=np.int64),
++    }
++    if args.candidate in (
++        "offpulse_seed_rows",
++        "offpulse_seed_plus_voltage_kurtosis",
++    ):
++        seed_rows, seed_diagnostics = offpulse_seed_row_mask(
++            result["row_only_display"],
++            result["final_valid"],
++            on_local,
++            pixel_threshold=SEED_PIXEL_THRESHOLD,
++            group_size=SEED_GROUP_SIZE,
++            minimum_seed_rows_per_group=MINIMUM_SEED_ROWS_PER_GROUP,
++            maximum_broadband_seed_fraction=MAXIMUM_BROADBAND_SEED_FRACTION,
++        )
++        selected_rows = seed_rows
++        voltage_diagnostics: dict[str, Any] | None = None
++        voltage_arrays = empty_voltage_arrays
++        if args.candidate == "offpulse_seed_plus_voltage_kurtosis":
++            if args.source_h5 is None:
++                raise ValueError("composite candidate requires --source-h5")
++            voltage_rows, voltage_diagnostics, voltage_arrays = (
++                protected_voltage_kurtosis_rows(
++                    args.source_h5.resolve(), frequency, result["final_valid"]
++                )
++            )
++            selected_rows = seed_rows | voltage_rows
++        candidate_display, display_mask = apply_row_mask(
++            result["row_only_display"], selected_rows
++        )
++        result["combined_display"] = candidate_display
++        result["time_frequency_mask_display"] = display_mask
++        result["additional_candidate_rows"] = selected_rows
++        result["candidate_valid"] = result["final_valid"] & ~selected_rows
++        result["candidate_diagnostics"] = {
++            "seed_rows": seed_diagnostics,
++            "voltage_kurtosis": voltage_diagnostics,
++        }
++        result["seed_hits_by_row"] = seed_diagnostics["seed_hits_by_row"]
++        result["seed_count_by_group"] = seed_diagnostics["seed_count_by_group"]
++        result.update(voltage_arrays)
++    else:
++        result["time_frequency_mask_display"] = (
++            np.isfinite(result["row_only_display"])
++            & ~np.isfinite(result["combined_display"])
++        )
++        result["seed_hits_by_row"] = np.zeros(frequency.size, dtype=np.int64)
++        result["seed_count_by_group"] = np.zeros(
++            frequency.size // SEED_GROUP_SIZE, dtype=np.int64
++        )
++        result.update(empty_voltage_arrays)
+     result["alignment_shifts"] = shifts
+     result["alignment_offsets_s"] = offsets
+     reference = result["reference_display"]
+     row_only = result["row_only_display"]
+     candidate = result["combined_display"]
+-    on_local = (ON_PULSE[0] - DISPLAY[0], ON_PULSE[1] - DISPLAY[0])
+     result["reference_full_spectrum"] = integrated_spectrum(
+         reference, source_valid, on_local
+     )
+@@ -614,7 +1134,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+         row_only, result["final_valid"], on_local
+     )
+     result["combined_common_spectrum"] = integrated_spectrum(
+-        candidate, result["final_valid"], on_local
++        candidate, result["candidate_valid"], on_local
+     )
+     labels, reference_full_bands = broad_band_summary(
+         result["reference_full_spectrum"], frequency, source_valid
+@@ -623,7 +1143,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+         result["reference_common_spectrum"], frequency, result["final_valid"]
+     )
+     _, combined_common_bands = broad_band_summary(
+-        result["combined_common_spectrum"], frequency, result["final_valid"]
++        result["combined_common_spectrum"], frequency, result["candidate_valid"]
+     )
+     bands = {
+         "labels": labels,
+@@ -631,19 +1151,45 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+         "reference_common": reference_common_bands,
+         "combined_common": combined_common_bands,
+     }
+-    common = result["final_valid"][:, None] & np.isfinite(candidate)
++    common = result["candidate_valid"][:, None] & np.isfinite(candidate)
+     row_only_common = restrict_to_finite_support(row_only, candidate)
+     common_difference = candidate[common] - row_only_common[common]
+-    row_outlier = median_spread_outlier(
++    row_outliers = owner_marked_interval_summaries(
+         result["reference_common_spectrum"],
+         frequency,
+         result["final_valid"],
+     )
+-    candidate_outlier = median_spread_outlier(
++    candidate_outliers = owner_marked_interval_summaries(
+         result["combined_common_spectrum"],
+         frequency,
+-        result["final_valid"],
++        result["candidate_valid"],
+     )
++    selected_rows = result["additional_candidate_rows"]
++    selected_by_interval = {
++        "600_650_mhz": int(
++            np.sum(selected_rows & (frequency >= 600.0) & (frequency < 650.0))
++        ),
++        "700_750_mhz": int(
++            np.sum(selected_rows & (frequency >= 700.0) & (frequency < 750.0))
++        ),
++    }
++    row_spectrum = result["reference_common_spectrum"]
++    retained_spectrum = row_spectrum[result["final_valid"] & np.isfinite(row_spectrum)]
++    burst_center = float(np.median(retained_spectrum))
++    burst_spread = float(
++        1.4826 * np.median(np.abs(retained_spectrum - burst_center))
++    )
++    burst_bright = np.zeros(frequency.size, dtype=bool)
++    if burst_spread > 0:
++        burst_bright = (
++            result["final_valid"]
++            & np.isfinite(row_spectrum)
++            & (np.abs(row_spectrum - burst_center) / burst_spread > 8.0)
++        )
++    row_profile = time_profile(row_only, result["final_valid"])
++    candidate_profile = time_profile(candidate, result["candidate_valid"])
++    row_peak = float(np.nanmax(row_profile[on_local[0] : on_local[1]]))
++    candidate_peak = float(np.nanmax(candidate_profile[on_local[0] : on_local[1]]))
+     peak_bins = fixed_band_peak_bins(reference, frequency, source_valid)
+     finite_peaks = [value for value in peak_bins.values() if value is not None]
+     schedule_dm, schedule_rms_us, schedule_max_us = infer_time0_schedule_dm(
+@@ -654,15 +1200,34 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+ 
+     figure = output / "real_zach_rfi_method_comparison.svg"
+     make_figure(figure, frequency, source_valid, result)
++    owner_interval_figure = output / "real_zach_rfi_700_750_mhz_review.svg"
++    make_owner_interval_figure(owner_interval_figure, frequency, result)
+     array_hashes = _save_arrays(output, result)
+     script_copy = output / Path(__file__).name
+     shutil.copy2(Path(__file__).resolve(), script_copy)
+-    candidate_source = Path(apply_pixel_mask.__code__.co_filename).resolve()
+-    candidate_copy = output / candidate_source.name
+-    shutil.copy2(candidate_source, candidate_copy)
++    candidate_sources = [
++        Path(
++            apply_pixel_mask.__code__.co_filename
++            if args.candidate == "pixel6"
++            else apply_row_mask.__code__.co_filename
++        ).resolve()
++    ]
++    if args.candidate == "offpulse_seed_plus_voltage_kurtosis":
++        candidate_sources.append(
++            Path(select_voltage_kurtosis_channels.__code__.co_filename).resolve()
++        )
++    candidate_module_hashes = {}
++    for candidate_source in candidate_sources:
++        candidate_copy = output / candidate_source.name
++        shutil.copy2(candidate_source, candidate_copy)
++        candidate_module_hashes[candidate_source.name] = sha256(candidate_copy)
+     record = {
+         "status": STATUS,
+-        "warning": "Observed event with no known truth; this does not validate the cleaner.",
++        "warning": (
++            "Observed event with no known truth; this does not validate a complete "
++            "RFI method."
++        ),
++        "candidate_method": args.candidate,
+         "supersedes": {
+             "commit": "bd149c00",
+             "reason": "The prior figure used a scintillation sub-window and treated column index as a shared time axis.",
+@@ -717,26 +1282,42 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+                 "normalize",
+                 "second package RFI row mask on normalized training",
+             ],
+-            "time_frequency_candidate": {
+-                "operation": "mask finite normalized pixels with absolute value at least threshold",
+-                "threshold": ABSOLUTE_PIXEL_THRESHOLD,
+-                "ordering": "after package row masks and bandpass normalization",
+-                "replacement": "none; rejected pixels are NaN",
+-                "status": "development-only; fails some synthetic preservation limits",
+-            },
++            "candidate": candidate_method_description(args.candidate),
+             "package_threshold_mean": 5.0,
+             "package_threshold_standard_deviation": 3.0,
+         },
+         "support": {
+             "source_valid_rows": int(source_valid.sum()),
+             "bandpass_only_valid_rows": int(result["reference_valid"].sum()),
+-            "cleaner_final_valid_rows": int(result["final_valid"].sum()),
++            "package_final_valid_rows": int(result["final_valid"].sum()),
++            "candidate_final_valid_rows": int(result["candidate_valid"].sum()),
+             "additional_measured_rows_removed": int(
+                 np.sum(source_valid & ~result["final_valid"])
+             ),
+-            "cleaner_retained_fraction_of_source": float(
++            "package_retained_fraction_of_source": float(
+                 result["final_valid"].sum() / source_valid.sum()
+             ),
++            "candidate_retained_fraction_of_source": float(
++                result["candidate_valid"].sum() / source_valid.sum()
++            ),
++            "additional_candidate_rows": int(selected_rows.sum()),
++            "additional_candidate_rows_by_owner_marked_interval": selected_by_interval,
++            "voltage_selected_coarse_channels": int(
++                result["voltage_coarse_selected"].sum()
++            ),
++            "voltage_739_0625_mhz_parent_selected": bool(
++                np.any(
++                    (result["voltage_coarse_ids"] == 156)
++                    & result["voltage_coarse_selected"]
++                )
++            ),
++            "burst_bright_rows": int(burst_bright.sum()),
++            "additional_candidate_rows_overlapping_burst_bright_rows": int(
++                np.sum(selected_rows & burst_bright)
++            ),
++            "on_pulse_profile_peak_fractional_change": (
++                float(candidate_peak / row_peak - 1.0) if row_peak != 0 else None
++            ),
+             "time_frequency_rejected_display_pixels": int(
+                 result["time_frequency_mask_display"].sum()
+             ),
+@@ -753,9 +1334,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+             "maximum_absolute_common_support_difference": float(
+                 np.max(np.abs(common_difference))
+             ),
+-            "interpretation": "On retained pixels, Pixel 6 leaves package-normalized values unchanged and changes only explicit support.",
+-            "row_only_700_750_mhz_outlier": row_outlier,
+-            "pixel6_700_750_mhz_outlier": candidate_outlier,
++            "interpretation": "On retained pixels, the candidate leaves package-normalized values unchanged and changes only explicit support.",
++            "package_row_mask_owner_marked_intervals": row_outliers,
++            "candidate_owner_marked_intervals": candidate_outliers,
++            "candidate_diagnostics": scalar_diagnostics(
++                result["candidate_diagnostics"]
++            ),
+         },
+         "broad_frequency_sums": bands,
+         "provenance": {
+@@ -766,7 +1350,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+             "container_image_id": args.container_image_id,
+             "pipeline_revision": args.pipeline_revision,
+             "script_sha256": sha256(script_copy),
+-            "candidate_module_sha256": sha256(candidate_copy),
++            "candidate_module_hashes": candidate_module_hashes,
+             "python": platform.python_version(),
+             "numpy": np.__version__,
+             "array_hashes": array_hashes,
+@@ -778,7 +1362,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
+             ),
+             "review_command": (
+                 "python /review/code/review_real_zach_rfi_cleaner.py "
+-                "--input-root /evidence --output-dir /review/run-N"
++                f"--input-root /evidence --output-dir /review/run-N --candidate {args.candidate}"
++                + (
++                    " --source-h5 /source/singlebeam_210456524.h5"
++                    if args.candidate == "offpulse_seed_plus_voltage_kurtosis"
++                    else ""
++                )
+             ),
+         },
+     }
+@@ -794,6 +1383,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+     parser = argparse.ArgumentParser()
+     parser.add_argument("--input-root", type=Path, required=True)
+     parser.add_argument("--output-dir", type=Path, required=True)
++    parser.add_argument("--source-h5", type=Path)
++    parser.add_argument(
++        "--candidate",
++        choices=(
++            "pixel6",
++            "robust_rows",
++            "offpulse_seed_rows",
++            "offpulse_seed_plus_voltage_kurtosis",
++        ),
++        default="pixel6",
++    )
+     parser.add_argument(
+         "--container-digest",
+         default="chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41",
+diff --git a/tests/test_review_real_zach_rfi_cleaner.py b/tests/test_review_real_zach_rfi_cleaner.py
+index b50d4652..18dab2f5 100644
+--- a/tests/test_review_real_zach_rfi_cleaner.py
++++ b/tests/test_review_real_zach_rfi_cleaner.py
+@@ -59,6 +59,14 @@ def test_coarsening_uses_nan_for_missing_support_not_zero():
+     np.testing.assert_allclose(coarse[1], np.mean(values[4:], axis=0))
+ 
+ 
++def test_nominal_coarse_frequency_keeps_fully_masked_group_coordinates():
++    frequency = np.arange(8, dtype=float)
++
++    coarse_frequency = MODULE.nominal_coarse_frequency(frequency, factor=4)
++
++    np.testing.assert_allclose(coarse_frequency, [1.5, 5.5])
++
++
+ def test_status_forbids_cleaner_validation_claim():
+     assert MODULE.STATUS == "diagnostic_only_real_event_method_comparison"
+ 
+@@ -178,3 +186,76 @@ def test_coarsened_mask_fraction_counts_only_valid_fine_rows():
+ 
+     np.testing.assert_allclose(fraction[0], [0.5, 0.5])
+     np.testing.assert_allclose(fraction[1], [0.0, 0.0])
++
++
++def test_robust_row_labels_call_it_a_component_not_a_cleaner():
++    labels = MODULE.candidate_labels("robust_rows")
++
++    assert "component" in labels["warning"].lower()
++    assert "cleaner" not in labels["warning"].lower()
++    assert "robust" in labels["short"].lower()
++
++    seed_labels = MODULE.candidate_labels("offpulse_seed_rows")
++    assert "component" in seed_labels["warning"].lower()
++    assert "cleaner" not in seed_labels["warning"].lower()
++    description = MODULE.candidate_method_description("offpulse_seed_rows")
++    assert description["protected_on_pulse"] is True
++    assert description["minimum_seed_rows_per_group"] == 4
++
++    voltage_labels = MODULE.candidate_labels(
++        "offpulse_seed_plus_voltage_kurtosis"
++    )
++    assert "voltage" in voltage_labels["short"].lower()
++    voltage_description = MODULE.candidate_method_description(
++        "offpulse_seed_plus_voltage_kurtosis"
++    )
++    assert voltage_description["protected_on_pulse"] is True
++    assert voltage_description["voltage_kurtosis_sigma"] == 5.0
++
++
++def test_owner_marked_intervals_are_summarized_without_becoming_configuration():
++    frequency = np.array([610.0, 620.0, 710.0, 720.0])
++    spectrum = np.array([1.0, 9.0, 2.0, 12.0])
++    summaries = MODULE.owner_marked_interval_summaries(
++        spectrum, frequency, np.ones(4, dtype=bool)
++    )
++
++    assert set(summaries) == {"600_650_mhz", "700_750_mhz"}
++    assert summaries["600_650_mhz"]["maximum"] == 9.0
++    assert summaries["700_750_mhz"]["maximum"] == 12.0
++
++
++def test_robust_row_candidate_broadcasts_only_selected_rows(monkeypatch):
++    training = np.zeros((3, 2), dtype=np.float32)
++    context = np.arange(12, dtype=np.float32).reshape(3, 4)
++    combined = np.concatenate((training, context), axis=1)
++    selected = np.array([False, True, False])
++
++    def fake_row_mask(values, row_valid, interval, **kwargs):
++        assert interval == (0, training.shape[1])
++        np.testing.assert_array_equal(values, combined)
++        return selected, {"standard_deviation": np.arange(3), "lag1_correlation": np.arange(3)}
++
++    candidate, mask, rows, _ = MODULE.apply_candidate(
++        combined,
++        np.ones(3, dtype=bool),
++        (0, training.shape[1]),
++        "robust_rows",
++        robust_mask_function=fake_row_mask,
++    )
++
++    np.testing.assert_array_equal(rows, selected)
++    np.testing.assert_array_equal(mask, selected[:, None] & np.isfinite(combined))
++    assert np.isnan(candidate[1]).all()
++    np.testing.assert_array_equal(candidate[[0, 2]], combined[[0, 2]])
++
++
++def test_voltage_allowed_support_uses_only_approved_blocks_and_excludes_burst():
++    allowed = MODULE.voltage_allowed_support(305 * 128, np.array([0, 48]))
++
++    assert allowed[:, 60 * 128].all()
++    assert not allowed[:, 140 * 128].any()
++    assert not allowed[0, 230 * 128]
++    assert allowed[1, 230 * 128]
++    assert allowed[0, 200 * 128]
++    assert not allowed[1, 200 * 128]

@@ -1,0 +1,6 @@
+/opt/pysetup/baseband_analysis/core/flagging.py:103: RuntimeWarning: Mean of empty slice
+  spect = get_spect(np.nanmean(power_beam, axis=-1), thres=thres_mean)
+/opt/pysetup/.venv/lib/python3.11/site-packages/numpy/lib/nanfunctions.py:1879: RuntimeWarning: Degrees of freedom <= 0 for slice.
+  var = nanvar(a, axis=axis, dtype=dtype, out=out, ddof=ddof,
+/evidence/code/audit_chime_preprocessing_v2.py:77: RuntimeWarning: Mean of empty slice
+  mean = np.nanmean(training, axis=1)

@@ -1,0 +1,211 @@
+{
+  "broad_frequency_sums": {
+    "combined_common": [
+      10.132190048670838,
+      12.211296994789786,
+      11.557697722275865,
+      8.986841411755998,
+      11.861323438470723,
+      10.898339227842646,
+      8.514272913327895,
+      5.52545222544825
+    ],
+    "labels": [
+      "400\u2013450",
+      "450\u2013500",
+      "500\u2013550",
+      "550\u2013600",
+      "600\u2013650",
+      "650\u2013700",
+      "700\u2013750",
+      "750\u2013800"
+    ],
+    "reference_common": [
+      11.018441124963525,
+      13.590189335319051,
+      13.294479030402908,
+      10.390269821688827,
+      15.292590474874618,
+      14.224949493715354,
+      12.3529596307692,
+      6.558546981429529
+    ],
+    "reference_full": [
+      11.000593757322566,
+      13.51830367847067,
+      13.233724891523352,
+      10.394269434350417,
+      14.593179299979978,
+      14.211792650192724,
+      10.018843223833647,
+      4.617260591116768
+    ]
+  },
+  "coherent_dedispersion_measure_pc_cm3": 262.4359033801,
+  "coherent_dm_source": "source H5 tiedbeam_power.DM_coherent",
+  "dedispersion_measure_status": "product-specific; not a manuscript adoption",
+  "event": "zach",
+  "instrument": "CHIME/FRB",
+  "method_comparison": {
+    "common_support_values_equal": true,
+    "interpretation": "On retained pixels, Pixel 6 leaves package-normalized values unchanged and changes only explicit support.",
+    "maximum_absolute_common_support_difference": 0.0,
+    "pixel6_700_750_mhz_outlier": {
+      "count": 4096,
+      "maximum": 67.97009037435055,
+      "maximum_frequency_mhz": 738.8763427734375,
+      "maximum_spread_units_above_median": 6.361008559987087,
+      "median": 7.878235223237425,
+      "median_based_spread": 9.446906820580526,
+      "rows_above_100": 0
+    },
+    "row_only_700_750_mhz_outlier": {
+      "count": 4096,
+      "maximum": 206.21773527562618,
+      "maximum_frequency_mhz": 738.8763427734375,
+      "maximum_spread_units_above_median": 18.38962537191741,
+      "median": 10.301434147171676,
+      "median_based_spread": 10.653631989025511,
+      "rows_above_100": 20
+    }
+  },
+  "methods": {
+    "package_row_mask": [
+      "package RFI row mask on training",
+      "bandpass mean and sample standard deviation on surviving training rows",
+      "normalize",
+      "second package RFI row mask on normalized training"
+    ],
+    "package_threshold_mean": 5.0,
+    "package_threshold_standard_deviation": 3.0,
+    "reference": "bandpass mean and sample standard deviation learned on training without RFI mask",
+    "time_frequency_candidate": {
+      "operation": "mask finite normalized pixels with absolute value at least threshold",
+      "ordering": "after package row masks and bandpass normalization",
+      "replacement": "none; rejected pixels are NaN",
+      "status": "development-only; fails some synthetic preservation limits",
+      "threshold": 6.0
+    }
+  },
+  "observed_sample_columns_loaded": [
+    [
+      55,
+      137
+    ],
+    [
+      149,
+      305
+    ]
+  ],
+  "observed_slices_half_open": {
+    "aligned_display": [
+      197,
+      305
+    ],
+    "alignment_source": [
+      149,
+      305
+    ],
+    "on_pulse_integration": [
+      229,
+      273
+    ],
+    "training": [
+      55,
+      137
+    ]
+  },
+  "provenance": {
+    "array_hashes": {
+      "alignment_offsets_s.npy": "2209d9d216eb9f4bfbee32ea3355aed8add652205ed27a2d3fc4fc65d8dc82b1",
+      "alignment_shifts.npy": "fb4513f68af3db45f890db3613224f932d2e4c1f026f6e706edb5657a687e73d",
+      "combined_common_spectrum.npy": "5c2d4e51785f389b256af53da7c225c2a656bbec1c825c2150ce5d0fa6d2d8eb",
+      "combined_mean.npy": "ba7f6116c4ddb07139ff82ad20cbc1e665c413bf5af52785c34ed7245f7b71e1",
+      "combined_scale.npy": "12fcac1112407bf3e2c84d379c9e56956fc8cc933d455130a11f3e6b40e5f532",
+      "final_valid.npy": "ddf111fe47b91a19c2328850e79e7ed948998665f20b499e2602a46be2a8a033",
+      "initial_rfi_rows.npy": "4258a592f607374014adeb42f08cff414c3b1ec0fc11061237a448aa9ec65ed9",
+      "model_valid.npy": "2a1fe470dabcef7089176798044c415ce2c4d4318123fb376f0ce9881e9494d8",
+      "post_bandpass_rfi_rows.npy": "04190fb1310e65b09dfa0f75e83b08132bbc37faf31ff8bb36ca29bd9c222abf",
+      "reference_common_spectrum.npy": "f076732e933b5dec95ca9df5a4d9870bc351b66aa48f1289e83410feb25a8a67",
+      "reference_full_spectrum.npy": "1f997f3f749e6bff62443caa8b3fb80974497458ae247c15d13b752d90433208",
+      "reference_mean.npy": "f964d265fc17abe18a715484dedf99e2d608969d704934b3760b759cc25550e5",
+      "reference_scale.npy": "f5b66eb5efbf6e40c6cff1f16ed2b72c18f7ba233c5e91568bac03af4554c67b",
+      "reference_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e",
+      "time_frequency_mask_display.npy": "4478f60ba5dec65f1303768f7dc138ab3c86643a69ec206f8b0899202f7bc2a4"
+    },
+    "baseband_analysis_revision": "e08df9dacc49e1007f28759b7edca71c7b8e5273",
+    "baseband_analysis_version": "1.9.0",
+    "candidate_module_sha256": "ca947385262e72e354c43681f6cf8bc3103ca152cbf2d6d800fbb54eb9873e73",
+    "container_digest": "chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41",
+    "container_image_id": "sha256:8c903ec6a5a836e8a97fe3468fd3ee02177c220ead84e6d1d25e8f41b735db4b",
+    "input_hashes": {
+      "code/audit_chime_preprocessing_v2.py": "5df48f411c6d9f9ce59873b6ccb147de30e22fa8306b3543bb06632212340c83",
+      "code/upchannelize_chime.py": "1825746445782cb2f36b806668241cfcd7e03a9c11531457b903d43974007b4e",
+      "products/zach_chime_freq.npy": "02c794745bd79ca235d1d3e18d46b2f43f7529616a5747ccab2a5db094a9cba2",
+      "products/zach_chime_preprocessing_metadata.json": "badcba0e4a3152645b15a81c9f031a5c41c032b63a991d91240892f75c872f0e",
+      "products/zach_chime_source_valid.npy": "b183f4aaed375ae78da8000cd5cb8bc3b8c4500c9ff23e56bb9555b0b85ba39e",
+      "products/zach_chime_upchan.npy": "264f1e643f57012fce1385dcd7b6dfe6a12086f43eb1fa907be5540fb3359192"
+    },
+    "numpy": "1.26.4",
+    "pipeline_revision": "ab6af1f713496abd2ff2d71bf11edf4100871e94",
+    "python": "3.11.15",
+    "review_command": "python /review/code/review_real_zach_rfi_cleaner.py --input-root /evidence --output-dir /review/run-N",
+    "script_sha256": "76f573c29410b8057bd1079829071bb40f7fa11b8eeeb1575dd5f9c7e5f1f7b1",
+    "source_h5": "/data/Faber2026/data/chime-frb/zach/singlebeam_210456524.h5",
+    "source_h5_sha256": "215079a689c18b50a4b2cd8003529e34d531a326be677a86187be02e47d0f1a9",
+    "upchannel_command": "python -c 'import staged worker; set TARGETS[\"zach\"][\"dm\"]=262.4359033801; recover_target(\"zach\", ..., time_shift=False)'"
+  },
+  "status": "diagnostic_only_real_event_method_comparison",
+  "supersedes": {
+    "commit": "bd149c00",
+    "reason": "The prior figure used a scintillation sub-window and treated column index as a shared time axis."
+  },
+  "support": {
+    "additional_measured_rows_removed": 5494,
+    "bandpass_only_valid_rows": 55744,
+    "cleaner_final_valid_rows": 50250,
+    "cleaner_retained_fraction_of_source": 0.9014423076923077,
+    "source_valid_rows": 55744,
+    "time_frequency_rejected_display_pixels": 16121,
+    "time_frequency_retained_display_fraction": 0.9970294822185369
+  },
+  "time_axis": {
+    "absolute_arrival_time_status": "uncertified",
+    "alignment_formula": "(fpga_count-fpga_ref)*2.56 us - K_DM*DM*(nu^-2-nu_ref^-2)",
+    "alignment_is_nonwrapping": true,
+    "alignment_offset_range_ms": [
+      0.0,
+      15.732988612470855
+    ],
+    "alignment_shift_range_bins": [
+      0,
+      48
+    ],
+    "cadence_ms": 0.32768,
+    "frame_center_formula": "(128*j + 63.5) * 2.56 microseconds",
+    "label": "aligned relative time",
+    "time0_schedule_dm_pc_cm3": 263.24755102523966,
+    "time0_schedule_fit_residual_max_us": 1.2983587882597902,
+    "time0_schedule_fit_residual_rms_us": 0.7545609655431753
+  },
+  "warning": "Observed event with no known truth; this does not validate the cleaner.",
+  "window_validation": {
+    "display_width_ms": 35.38944,
+    "documented_on_pulse_envelope_ms": 14.21,
+    "fixed_band_peak_bins_in_display": {
+      "400\u2013450": 46,
+      "450\u2013500": 42,
+      "500\u2013550": 42,
+      "550\u2013600": 42,
+      "600\u2013650": 41,
+      "650\u2013700": 41,
+      "700\u2013750": 41,
+      "750\u2013800": 41
+    },
+    "fixed_band_peak_spread_bins": 5,
+    "fixed_band_peak_spread_ms": 1.6384,
+    "left_padding_ms": 10.48576,
+    "right_padding_ms": 10.48576,
+    "selected_on_pulse_width_ms": 14.41792
+  }
+}

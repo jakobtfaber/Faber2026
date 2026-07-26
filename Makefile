@@ -24,7 +24,7 @@ check-state:
 test-science: check-state
 	FABER2026_ROOT="$(FABER2026_ROOT)" \
 		PYTHONPATH="$(FABER2026_ROOT)/analysis:$(FABER2026_ROOT)/analysis/scripts" \
-		$(UV) run --project pipeline --group test --frozen python -m pytest -q -ra \
+		$(UV) run --project pipeline --group test --frozen --with jsonschema python -m pytest -q -ra \
 		--strict-config --strict-markers analysis/tests
 	FABER2026_ROOT="$(FABER2026_ROOT)" \
 		python3 analysis/scripts/figure_review.py verify
