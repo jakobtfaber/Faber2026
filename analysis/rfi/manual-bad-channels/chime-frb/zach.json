@@ -1,6 +1,14 @@
 {
   "bad_row_ranges": [
     {
+      "evidence": "docs/rse/verify/manual-bad-channel-review-20260726/zach-chime/zach_chime_amendment_before_after.png",
+      "frequency_max_mhz": 710.7940673828125,
+      "frequency_min_mhz": 707.5042724609375,
+      "reason": "owner manual selection 2026-07-26: swept narrowband tone (0.165 MHz/ms) burst-window crossing, option B of fitted-track packet",
+      "start": 50349,
+      "stop": 50889
+    },
+    {
       "evidence": "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
       "frequency_max_mhz": 722.4578857421875,
       "frequency_min_mhz": 721.8231201171875,
@@ -15,6 +23,14 @@
       "reason": "owner manual selection",
       "start": 52864,
       "stop": 52993
+    },
+    {
+      "evidence": "docs/rse/verify/manual-bad-channel-review-20260726/zach-chime/zach_chime_amendment_before_after.png",
+      "frequency_max_mhz": 729.4891357421875,
+      "frequency_min_mhz": 727.5421142578125,
+      "reason": "owner manual selection 2026-07-26: unmasked sliver between upstream-masked blocks, confirmed on coarse-product dynamic spectrum",
+      "start": 53632,
+      "stop": 53952
     },
     {
       "evidence": "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
@@ -66,11 +82,12 @@
       "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_700_750.svg",
       "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_atlas_750_800.svg",
       "docs/rse/verify/manual-bad-channel-review-20260721/zach-chime/zach_chime_manual_zap_review_700_750.svg",
-      "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz"
+      "/Users/jakobfaber/Data/Faber2026/review/manual-bad-channels/zach-chime/zach_chime_manual_review_bundle.npz",
+      "docs/rse/verify/manual-bad-channel-review-20260726/zach-chime/zach_chime_amendment_before_after.png"
     ],
     "gui_interface_sha256": "67da7c68b5e631ab8e442aae470aa4aca387c2753bae5b99aba4448145e1674d",
-    "notes": "Owner approved the five exact manual ranges after reviewing the regenerated 700-750 MHz before/after dynamic spectrum and time-integrated spectrum; approval instruction recorded in the Codex session on 2026-07-22.",
-    "reviewed_at": "2026-07-22T10:21:28Z",
+    "notes": "Owner approved the five exact manual ranges after reviewing the regenerated 700-750 MHz before/after dynamic spectrum and time-integrated spectrum; approval instruction recorded in the Codex session on 2026-07-22. Amended 2026-07-26: owner reviewed the twelve-burst pre-ratification packet and a fitted-track diagnostic, then approved two additional ranges - the unmasked 727.54-729.49 MHz sliver between upstream-masked blocks, and the 707.5-710.8 MHz crossing of a 0.165 MHz/ms swept tone through the burst window (option B; full-sweep option A declined). Approval recorded in the Claude session on 2026-07-26.",
+    "reviewed_at": "2026-07-26T18:24:00Z",
     "reviewer": "Jakob Faber"
   },
   "schema_version": 1,
