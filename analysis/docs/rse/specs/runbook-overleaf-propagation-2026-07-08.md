@@ -1,5 +1,10 @@
 # Runbook: Overleaf propagation — mirror / pull / merge ordering
 
+> **RETIRED ROUTE — banner added 2026-07-25.** The local checkout
+> `~/Developer/overleaf/Faber2026` this runbook operates on is retired;
+> Overleaf now pulls from GitHub in the browser. Kept verbatim below as a
+> historical record of the 2026-07-08 propagation. Do not execute.
+
 **Date:** 2026-07-08
 **Purpose:** Land the three 2026-07-08 lanes (nside=32 skymaps, referee impl, DSA subband figures) + CM-serif association cards into the compiled Overleaf manuscript, in an order that does **not** let Overleaf's prose-sync revert git-only edits.
 
