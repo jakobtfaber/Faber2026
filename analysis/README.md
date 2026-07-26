@@ -20,6 +20,13 @@ Faber2026/
 The parent pins the exact analysis and pipeline commits used by the manuscript.
 Overleaf synchronizes the parent but does not need either submodule to compile.
 
+## Start here
+
+Read the
+[repository and provenance map](docs/rse/ops/repository-map.md)
+for the three-repository structure, data chain, authority roles, and recipes
+for tracing a manuscript claim, figure, table, or fit back to its sources.
+
 ## Layout
 
 - `docs/` — research control, decisions, verification, and handoffs.
