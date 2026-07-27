@@ -11,7 +11,8 @@ _Generated from repository state. Manual walkthrough ritual: see `docs/rse/contr
 
 ## Approvals (figure review / data cards)
 
-- None.
+- **2026-07-26-fig3-name-repair** — at least one candidate has no approval receipt
+  `figure_review/batches/2026-07-26-fig3-name-repair`
 
 ## Owner-marked board tasks
 
