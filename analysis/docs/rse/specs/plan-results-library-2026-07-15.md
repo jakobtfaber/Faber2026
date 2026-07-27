@@ -26,7 +26,6 @@
 
 - [ ] Parent PR: scripts + docs + gitignore + delete tracked `analysis/dm-joint…/results` + `provisional_propagation` from git index
 - [ ] FLITS PR: gitignore + stubs + `tau_consistency` path resolve + delete tracked fit JSON from index (do **not** bump parent gitlink casually)
-- [ ] Optional: Drive mirror of library inventory slice
 - [ ] Do **not** move Overleaf-bound `figures/` out of Faber2026 git
 
 ## Trust

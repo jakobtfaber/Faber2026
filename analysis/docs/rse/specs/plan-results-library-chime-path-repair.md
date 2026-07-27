@@ -55,7 +55,7 @@ CHIME/FRB cubes.
 
 - [ ] Move or delete real bytes.
 - [ ] Adjudicate either both-real conflict.
-- [ ] Change JointTF, historical diagnostic, Drive, CANFAR, or h17 bytes.
+- [ ] Change JointTF, historical diagnostic, CANFAR, or h17 bytes.
 - [ ] Rewrite the provenance-pinned joint-DM snapshot or its receipt.
 - [ ] Promote trust, change manuscript claims, restart services, or regenerate
       manuscript figures.

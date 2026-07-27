@@ -49,9 +49,8 @@ untouched.
 - `~/Developer/repos/github.com/jakobtfaber/` no longer contains any
   `Faber2026-*worktrees*` or `*.qjhnHz` leftovers — only the canonical
   clones (plus unrelated repos).
-- Drive `Faber2026-*` remaining: `preserved-bags`, `preserved-bundles`,
-  `rescue-20260725-v2` (all byte-covered at
-  `~/Data/Faber2026/preservation/` since Phase 4 — Track B candidates),
+- Remote preservation leftovers are byte-covered at
+  `~/Data/Faber2026/preservation/` since Phase 4 (Track B candidates),
   and the emptied `Faber2026-worktrees/` dir (its `parent/`+`analysis/`
   subdirs emptied in batch 1).
 - Deletion of anything in `_trash/` remains a separate explicit owner

@@ -28,9 +28,9 @@ does not thereby lose its role.
 The GitHub-main ledger that settles which manuscript-facing result is current,
 trusted, and consumed. It governs claims, not bulk result bytes.
 
-**Result object authority**:
-The exact receipted Google Drive scope that settles byte conflicts for accepted
-bulk result artifacts. Byte authority does not grant scientific trust.
+**Result object location**:
+Accepted bulk result artifacts remain on h17 or in the local results library
+with tracked identities. Byte custody does not grant scientific trust.
 
 **Results view**:
 The local materialized `results-library` that combines verified byte replicas

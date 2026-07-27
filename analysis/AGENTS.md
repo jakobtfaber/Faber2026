@@ -88,7 +88,7 @@ Scope and guardrails — this authorization is not a licence to be careless:
 ## Learned Workspace Facts
 
 - The local Overleaf working copy is retired (2026-07-25); Overleaf pulls from GitHub in the browser. Land manuscript changes through the normal branch → PR flow in the canonical repos, and still respect Overleaf/GitHub merge order so prose sync does not revert git-only edits.
-- Project data and provenance span jakob-mbp, iacobus, h17, CANFAR/arc, and Google Drive; treat machine inventory as part of provenance, not only “active data stores.”
+- Project data and provenance span jakob-mbp, h17, and CANFAR/arc; treat machine inventory as part of provenance, not only “active data stores.”
 - Session handoffs, science-gate plans, and RSE specs live under `docs/rse/specs/` as markdown-only workflow artifacts; PNGs and other binaries belong elsewhere (e.g. decks, figures, verify trees).
 - Raw CHIME data means only the twelve singlebeam voltage `.h5` files on h17; intensity and upchannelized `.npy` products are derived, not raw.
 - Dispersion measures are not frozen in those raw voltage `.h5` files; they are applied when dynamic-spectrum products are built, so derived CANFAR vs h17 arrays can disagree on dispersion measure without the raw archive being wrong.

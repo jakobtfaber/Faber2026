@@ -49,7 +49,7 @@
 
 - `scintillation.dsa-lorentzian-2026-07-07` and
   `dispersion.pipeline-results-root` remain both-real conflicts.
-- JointTF, historical diagnostic, Drive, CANFAR, h17, and scientific trust
+- JointTF, historical diagnostic, CANFAR, h17, and scientific trust
   surfaces were not changed.
 - Jupyter, MkDocs, and other services remain stopped/unmodified.
 

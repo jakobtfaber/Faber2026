@@ -255,10 +255,10 @@
     },
     {
       "id": "frequency-axis-and-inputs",
-      "repository": "parent",
-      "sha256": "d87d9da635dccb1ff9612e825d3c63604af7ab736f69c4d7829546741b375b34",
+      "repository": "analysis",
+      "sha256": "ca70ee73c24c6675e3caf862d1085849424fddadb99ca8d551d71b6eae7dc3e9",
       "source_path": "scripts/audit_fig1_frequency_axes.py",
-      "source_revision": "cf2f875cef57012bc0209411cf09bddec16cbfbf",
+      "source_revision": "2e642dd0a1098450d9aea303e2a6549f7f0cde1f",
       "stored_path": "provenance/frequency-axis-and-inputs.json"
     },
     {

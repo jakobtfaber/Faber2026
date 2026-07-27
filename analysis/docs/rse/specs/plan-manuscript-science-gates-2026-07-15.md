@@ -285,7 +285,7 @@ rows; certify DSA components used in any screen product.
 **Tasks:**
 
 - [ ] Stage eight CHIME `.npy` under `pipeline/data/chime/` per §6 of
-  `validation-v3-energetics-2026-07-15.md` (h17/iacobus paths).
+  `validation-v3-energetics-2026-07-15.md` (h17 paths).
 - [ ] Implement `chime_band_fluence_jy_ms_hz(nick)` mirroring DSA; emit
   `chime_fluences.csv`.
 - [ ] Independent data-driven verifier (extend or sibling of
@@ -468,7 +468,7 @@ Rollback: leave catalog cells pending; generator remains fail-closed.
 
 *(None blocking plan approval — owner decisions already recorded.)*
 
-- CHIME `.npy` staging host (h17 vs iacobus): follow V3 §6 paths at execution time.
+- CHIME `.npy` staging host: use h17 paths from V3 §6.
 - Whether to durable-publish the superseded clarify handoff: docs-only preference, not a science gate.
 
 ---

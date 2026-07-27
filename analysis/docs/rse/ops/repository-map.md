@@ -167,9 +167,10 @@ by [`materialize_results_library.py`](../../../scripts/materialize_results_libra
 Its links and replicas aid access; they do not confer authority or scientific
 trust.
 
-The exact receipted Google Drive scope settles conflicts for accepted bulk
-result bytes. The [results registry](../control/results-registry.toml) separately
-settles which results are current and trusted for manuscript consumption.
+Tracked object identities settle conflicts for accepted bulk result bytes on
+h17 or in the local results library. The
+[results registry](../control/results-registry.toml) separately settles which
+results are current and trusted for manuscript consumption.
 
 ### Manuscript claims
 
@@ -198,7 +199,7 @@ fail-closed:
 | Fitting code history | Accepted `jakobtfaber/dsa110-FLITS` history | Parent pipeline gitlink selects the code actually paired with the manuscript |
 | Raw CHIME/FRB voltage archive | h17 scope named in project provenance | Derived arrays are not raw |
 | Fit-input cubes | Checksum-manifested CANFAR VOSpace set | Mac files are replicas |
-| Accepted bulk result bytes | Receipted Google Drive result-object scope | Byte authority does not imply scientific trust |
+| Accepted bulk result bytes | Tracked h17 or local results-library objects | Byte custody does not imply scientific trust |
 | Manuscript-facing scientific trust | `results-registry.toml` plus clearing evidence | A trusted claim may point to bytes outside Git |
 | Local results navigation | `~/Data/Faber2026/results-library/` | A view, not an authority |
 

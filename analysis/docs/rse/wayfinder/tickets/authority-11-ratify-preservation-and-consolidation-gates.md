@@ -79,8 +79,8 @@ excluded.
    pipeline-pin decisions, and Overleaf reconciliation. Scientifically
    unresolved JointTF material remains preserved and unmerged.
 4. **Repair data/results navigation:** execute the separately approved
-   results-library and current CHIME-path repair; establish stable IDs, Drive
-   byte authority, and verified local replicas.
+   results-library and current CHIME-path repair; establish stable IDs and
+   verified object locations.
 5. **Archive or retire superseded sources:** only after references point to
    verified successors and restoration succeeds.
 6. **Remove approved remnants:** smallest, lowest-risk targets first, beginning

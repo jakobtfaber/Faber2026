@@ -61,8 +61,7 @@ named approval remains the required pattern.
 
 ## Remaining Track A queue (untouched, next batches)
 
-Drive `Faber2026-preserved-checkouts/` (5 entries), local
-`Faber2026-worktrees/special-refs-20260724` (786 MB), stale
+Local `Faber2026-worktrees/special-refs-20260724` (786 MB), stale
 `codex/nine-sightline-search-contract` local branch, 25+ analysis ticket
 worktrees under scratch — each still needs its own gate run and named
 approval; the authority-status waiver above covered only this batch.

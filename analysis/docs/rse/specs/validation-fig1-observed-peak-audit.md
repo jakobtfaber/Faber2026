@@ -123,7 +123,7 @@ PR #121's automated review raised four findings; disposition:
   seeded the finding is corrected.
 - **P2 (fixture posing as raw header):** `audit_fig1_frequency_axes.py` now
   takes `--raw-header-host`; the committed evidence was regenerated with
-  `--raw-header-host iacobus`, reading every DSA filterbank's SIGPROC header
+  `--raw-header-host h17`, reading every DSA filterbank's SIGPROC header
   remotely (12/12 `raw_header_read: true`, all matching the tracked fixture,
   mismatch fails closed). Per-instrument `header_validation` fields state the
   lineage explicitly; CHIME remains hash-pinned extracted-metadata lineage.

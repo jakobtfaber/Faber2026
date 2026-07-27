@@ -45,7 +45,6 @@
 > | `wave3/05-Faber2026-analysis-trust-5292337` | commit `5292337` present (merge of `origin/main` into trust lane, 2026-07-22) |
 > | `wave3/06-Faber2026-analysis-trust-a9ac20c-diff` | commit `a9ac20c` present ("docs: resolve trust assessment registry", 2026-07-22) |
 > | `wave3/07-Faber2026-analysis-trust-ef3211b-diff` | commit `ef3211b` present ("fix: enforce fail-closed trust registry coverage", 2026-07-22) |
-> | `wave3/39-dsa110-FLITS-pr72-source.v2ifuj` | `jakobtfaber/dsa110-FLITS` PR **#72, MERGED** ("D3: h17 arc archive hash-map audit and iacobus copy") |
 > | `wave3/02-.codex-analysis-review-pr36`, `wave3b/01-.codex-analysis-review-pr36` | **UNRESOLVED** — no surviving local ref; `gh pr view 36 --repo jakobtfaber/Faber2026-analysis` lookup failed. Needs a decision before those commit objects are ever garbage-collected. |
 >
 > The four bare commit objects are unreferenced — they survive only until a `gc`
@@ -227,4 +226,3 @@
 | `/home/ubuntu/worktrees/t0audit-pr` | `ms/audit-standing-line-toa-note-20260719` |
 | `/home/ubuntu/worktrees/flits-window-tuning` | `(detached HEAD)` |
 | `/home/ubuntu/worktrees/joint-tf-fits` | `(detached HEAD)` |
-

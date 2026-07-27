@@ -133,7 +133,7 @@ column in the validation artifact (not the manuscript table).
 DSA side: exists (`dsa_fluences.csv`, `dsa_band_fluence_jy_ms_hz`).
 CHIME side (compute host, data staged):
 
-1. Stage the 8 CHIME .npy under `pipeline/data/chime/` (h17/iacobus per
+1. Stage the 8 CHIME .npy under `pipeline/data/chime/` (h17 per
    `DATA_LOCATIONS.md`); verify gen-2 lineage + md5 against
    `scintillation/DATA_PROVENANCE.md` conventions (V2 cross-cut: confirm the
    energies inputs do NOT share the gen-1 de-chirp defect lineage — the

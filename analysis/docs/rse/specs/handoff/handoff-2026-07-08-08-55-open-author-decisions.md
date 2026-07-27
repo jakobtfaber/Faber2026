@@ -136,8 +136,7 @@ Checked surfaces included:
 - `pipeline/analysis/chance-coincidence/{bursts.json,inputs.py,run.py}` — only
   the 12 reported pairs; `run.py` reports `sum_mu` across those 12, not the full
   trial set.
-- Local data and Drive/iCloud mirrors under `~/Data/Faber2026/dsa110/` and
-  `~/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections/`.
+- Local data under `~/Data/Faber2026/dsa110/`.
 - Imported co-detection sheets in `~/Developer/scratch/2026-06/_downloads-import/`.
   These give 12 accepted pairs plus near-miss rows, but they are **not** the full
   DSA trigger denominator requested here.

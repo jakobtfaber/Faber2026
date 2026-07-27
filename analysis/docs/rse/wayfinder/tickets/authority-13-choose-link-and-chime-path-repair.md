@@ -148,8 +148,8 @@ row; they remain listed as exceptions until a complete manifest exists.
 - Do not rewrite dated handoffs, protocol journal entries, Claude execution
   records, figure-review evidence, stored result provenance, archived refit
   configurations, migration audits, or other executed historical receipts.
-- Do not alter `historical/2026-07-20-pipeline-diagnostics`, Drive objects,
-  CANFAR objects, h17 outputs, or the live external FLITS-runs link.
+- Do not alter `historical/2026-07-20-pipeline-diagnostics`, CANFAR objects,
+  h17 outputs, or the live external FLITS-runs link.
 - No byte deletion, cross-authority move, trust promotion, manuscript claim
   change, service restart, or science adoption is part of this repair.
 

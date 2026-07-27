@@ -30,8 +30,6 @@
 - [plan-trust-reset-revalidation.md](../plan/plan-trust-reset-revalidation.md) — the seven-phase §V re-validation plan (V1–V6); governs all research lanes
 - [research-trust-reset-revalidation.md](../research/research-trust-reset-revalidation.md) — explorer inventories backing the plan
 - [plan-circulation-readiness.md](../plan/plan-circulation-readiness.md) — master lane ledger (A/B/C/D/E/F/G + V), decisions ledger (all re-opened as working choices)
-- [handoff-2026-07-06-22-30-provenance-p0-p2-machine-verification.md](../handoff/handoff-2026-07-06-22-30-provenance-p0-p2-machine-verification.md) — the concurrent provenance session's handoff (P0.1/P2.1/P2.2 closed) — read for research-lane state
-- [machine-inventory-verification-2026-07-06.md](../notes/machine-inventory-verification-2026-07-06.md) — live-verified machine inventory
 - [implement-route-a-crosscheck.md](../implement/implement-route-a-crosscheck.md) — in-flight Codex P2.3 work (cube integrity crosscheck)
 
 ## Critical References

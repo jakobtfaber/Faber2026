@@ -196,8 +196,8 @@ directory overlay would silently mix generations.
 | dispersion library directory | exact local replica of `af78543` historical snapshot | mixed; no claim promotion |
 | canonical dispersion source | tracked README/tombstone plus unreceipted ignored working products | unclassified working output; not an authority or coherent replica |
 
-Per the ratified data/results policy, Git governs claims and Drive governs
-receipted bulk bytes. The local results library is a navigation replica. Byte
+Per the ratified data/results policy, Git governs claims and tracked object
+identities govern bulk bytes on h17 or in the local results library. Byte
 identity proves recoverability, not scientific validity.
 
 ## Non-overwriting disposition

@@ -40,14 +40,13 @@ can proceed without losing science, provenance, or concurrent work.
   directly relevant to the fitting audit and remain fail-closed.
 - GitHub, the canonical Mac checkout, `pipeline/`, and the independent Overleaf
   checkout are separate truth surfaces until their relationship is ratified.
-- Google Drive is the recorded processed-data authority; iacobus holds a dated
-  recovery copy. Full MD5 comparison passes for all 5,437 project-data paths.
-  Strict object parity still fails because Drive has one identical same-name
-  duplicate and iacobus has one local recovery receipt.
+- h17 holds the project source inputs and compute products; CANFAR/arc and the
+  Mac hold the checksum-manifested fit-input cubes.
 - CANFAR is authority for the 24 derived fit-input cubes. The twelve raw CHIME
   HDF5 files on h17 remain unclassified pending a checksum-manifested archive.
-- GitHub `main` governs result claims; Drive governs receipted bulk result
-  bytes. The local `results-library` becomes their replica/navigation view only
+- GitHub `main` governs result claims; tracked identities govern bulk result
+  bytes on h17 or in the local results library. The local `results-library`
+  becomes their navigation view only
   after its eight broken links and other inventory conflicts are repaired.
 - h17 has grown and drifted; h23's recorded quarantine is unexpectedly missing;
   CANFAR read-only VOSpace access is live and verified through 2026-08-20.
@@ -88,25 +87,13 @@ can proceed without losing science, provenance, or concurrent work.
   — GitHub commit and manuscript pin authority were precise at observation,
   but distributed dirt/commits remain; Overleaf is a clean, history-orphaned
   content source with 89 changed common paths, not a behind replica.
-- [Reverify remote and institutional custody](tickets/authority-06-reverify-remote-custody.md)
-  — Drive and the dated iacobus recovery quarantine agree in size/count and a
-  sentinel but lack current full parity; h17 growth is compute drift, HPCC is
-  intact, h23's recorded quarantine is missing, and CANFAR is unverified.
 - [Inventory operational and publication surfaces](tickets/authority-07-inventory-operational-surfaces.md)
   — Jupyter and MkDocs are stopped and lack pinned/reproducible runtime
   ownership; Running Notes remains live on port 18765 under its tracked launch
   agent, while the public Cloudflare edge remains unverified.
-- [Trace the missing h23 quarantine](tickets/authority-14-trace-missing-h23-quarantine.md)
-  — last verified July 6, then absent without a move/deletion receipt; migrated
-  classes largely survive downstream, but exact-byte custody of the vanished
-  137 GB tree remains unproved.
-- [Complete Drive-to-iacobus parity and duplicate adjudication](tickets/authority-15-complete-drive-iacobus-parity.md)
-  — all 5,437 project-data paths match by MD5; the local recovery receipt and
-  byte-identical duplicate Drive object explain why content parity passes while
-  strict one-to-one object parity fails.
 - [Choose the data and results authority policy](tickets/authority-09-choose-data-results-authority.md)
-  — Git governs claims, Drive governs receipted bulk bytes, CANFAR governs the
-  24 fit-input cubes, and local/h17 surfaces remain replicas, working copies,
+  — Git governs claims, tracked identities govern bulk bytes, CANFAR governs
+  the 24 fit-input cubes, and local/h17 surfaces remain replicas, working copies,
   staging, or unclassified until explicit promotion gates pass.
 - [Ratify preservation gates and the consolidation sequence](tickets/authority-11-ratify-preservation-and-consolidation-gates.md)
   — every action requires an exact packet, recovery and rollback proof, an

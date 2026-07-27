@@ -62,8 +62,8 @@ All physical data under `~/Data/Faber2026/dsa110/` (symlinked into
   CHIME 400.19–800.19 MHz (df 0.390625 MHz, dt 2.56 µs).
 - Loader convention (`pipeline/CLAUDE.md` "Data & metadata"): frequency flipped
   to ascending on load.
-- CHIME baseband (raw voltages) and DSA full-Stokes are NOT local (CANFAR arc /
-  host iacobus) — not needed for a Stokes-I gallery.
+- CHIME baseband (raw voltages) and DSA full-Stokes are not local (h17 /
+  CANFAR arc) — not needed for a Stokes-I gallery.
 
 ### 3. Figure infrastructure: strong precedents, no existing gallery
 

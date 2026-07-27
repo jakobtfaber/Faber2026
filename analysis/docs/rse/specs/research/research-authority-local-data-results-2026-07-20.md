@@ -214,7 +214,7 @@ applies specifically to the full-resolution CHIME cubes.
 - No large-array hash was recomputed. Recorded SHA-256/MD5 values remain claims
   from the registry and receipts.
 - No deep semantic audit of all 777 `dsa110/` files or 331 library files.
-- No remote h17/CANFAR/Drive custody verification; separate authority tickets
+- No remote h17/CANFAR custody verification; separate authority tickets
   cover those surfaces.
 - No proof that every historical result-library materialization was complete.
   The current dry-run conflicts prevent that inference.

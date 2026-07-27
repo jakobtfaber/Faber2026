@@ -10,7 +10,7 @@ trust_legend:
   pending-refits: Fail-closed until α=4 consistency clears
   diagnostic_only: Must not enter screen/α claims
   revoked-2026-07-06: Pre-reset; archival only
-  external: Lives on HPC/scratch/Drive, not git
+  external: Lives on h17 or another named compute/data store, not git
   mixed: Mixed trust within tree; inspect before citing
   partial: Incomplete campaign products
   archive: Archived; not for new claims

@@ -615,7 +615,7 @@ def write_index(library: Path, inventory: dict[str, Any], catalog: Catalog) -> N
             "- Small live catalogs (`tau_consistency_catalog.csv`, TeX `exports/`).",
             "- Mixed analysis trees without a results-only carve-out.",
             "- Analysis **driver scripts** stay under `pipeline/analysis/<campaign>/`.",
-            "- Raw `.npy` bursts under Drive / `~/Data/Faber2026/dsa110/` (see `DATA_LOCATIONS.md`).",
+            "- Raw `.npy` bursts under h17 / `~/Data/Faber2026/dsa110/` (see `DATA_LOCATIONS.md`).",
             "",
         ]
     )

@@ -14,7 +14,7 @@
 | Task | Status | Notes |
 |------|--------|-------|
 | Fig1 re-render per owner needs_revision spec (observed-peak + DM-provenance + freq-axis audits) | ✅ Complete | Executed concurrently by two lanes; reconciled. Candidate PR #121 merged (`341e2200`) |
-| Codex auto-review on PR #121 (1×P1 + 3×P2) | ✅ Complete | Fixes stranded by a merge race, landed via PR #128 (`33ecbb66`). P1 was stale post-rebase; raw DSA SIGPROC headers now actually read over ssh from iacobus (12/12 match fixture) |
+| Codex auto-review on PR #121 (1×P1 + 3×P2) | ✅ Complete | Fixes stranded by a merge race, landed via PR #128 (`33ecbb66`). P1 was stale post-rebase; raw DSA SIGPROC headers now read over SSH from h17 (12/12 match fixture) |
 | DM-drift "stem misstatement" corrections (isha +0.234, phineas +0.300) | ✅ Complete — **REFUTED** | Corrected candidate landed via PR #129 (`51aaa3da`), then the interpretation was refuted by marker dependence; refutation record landed via PR #132 (`aed901f0`). Corrected candidate must NOT be promoted |
 | Decided model-toa rejection record (`2026-07-17-fig1-model-toa`) | ✅ Complete | Tracked via PR #130 (`711672bd`) — the decision receipt both fig1 lanes executed |
 | Owner `decide` on the two staged fig1 candidates | 📋 Planned — **owner-gated** | Recommendation: approve `2026-07-17-fig1-observed-peak-audit` (uncorrected); mark `…-dmcorr` needs_revision citing the refutation |
@@ -50,7 +50,7 @@
 
 - **Environment:** `uv run --project pipeline --frozen` (pipeline submodule pin `17d9d266` = FLITS #192 merge)
 - **Seeds:** sharpness-scan and onset tests use seed 20260707
-- **Data:** archival products `~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` (hash-pinned in `pipeline/data-manifest.csv`); CHIME extracted metadata `~/Data/Faber2026/dsa110/upchan_codetections/*_time0_metadata.json`; raw DSA filterbanks on `iacobus:` (ssh reachable)
+- **Data:** archival products `~/Data/Faber2026/dsa110/DSA_bursts/*_cntr_bpc.npy` (hash-pinned in `pipeline/data-manifest.csv`); CHIME extracted metadata `~/Data/Faber2026/dsa110/upchan_codetections/*_time0_metadata.json`; raw DSA filterbanks under `h17:/data/Faber2026/data/dsa-110/`
 - **DM diagnostics archive:** the original power-vs-DM diagnostic panels live in `~/Data/Faber2026/results-library/dispersion/dm-joint-phase-v2/diagnostics/` (results-library Phase B, commit `c8e5639b`); curve data is committed in `analysis/dm-joint-phase-v2/results/fits.json` and regenerable via `python -m scripts.render_joint_dm_diagnostics` from `analysis/dm-joint-phase-v2/code/`
 
 ## Verification State / Known-Broken

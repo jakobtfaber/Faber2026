@@ -57,9 +57,8 @@ Phase 5 Track B, per candidate, with owner approval naming each path.
 
 ## Scope notes
 
-- Drive trees *not* copied (not preservation material): `Faber2026-worktrees/`
-  (live registered worktrees), `Faber2026-preserved-checkouts/` (working
-  checkouts — Track A candidates, not bundle archives). The
+- Live registered worktrees and working checkouts were not copied as
+  preservation material. The
   preserved-checkouts tree's disposition belongs to Phase 5 Track A after
   reconciliation assigns authority statuses.
 - The 10 known-empty slots inside `Faber2026-preserved-bundles` moved

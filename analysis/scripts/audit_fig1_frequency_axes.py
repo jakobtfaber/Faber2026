@@ -217,10 +217,14 @@ def audit(
             }
         )
         records.append({"nick": nick, "instruments": instruments})
+    pipeline_root = subprocess.check_output(
+        ["git", "-C", str(fixture_path.parent), "rev-parse", "--show-toplevel"],
+        text=True,
+    ).strip()
     return {
         "schema_version": 1,
         "pipeline_revision": subprocess.check_output(
-            ["git", "-C", str(ROOT / "pipeline"), "rev-parse", "HEAD"], text=True
+            ["git", "-C", pipeline_root, "rev-parse", "HEAD"], text=True
         ).strip(),
         "audit_passed": len(records) == 12,
         "display_transform": "plot_codetection_gallery.load_band flips stored descending rows",

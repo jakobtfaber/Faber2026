@@ -27,7 +27,7 @@ and residual frequency-time drift for all 12 bursts and both instruments.
   pipeline revision is `17d9d26675702e9f8917da655621bef3231f0ddb`.
 - All 24 local archival products match the byte counts and SHA-256 values in the
   pinned pipeline `data-manifest.csv`.
-- Live reads of the 12 DSA filterbank headers on `iacobus` agree with the tracked
+- Live reads of the 12 DSA filterbank headers on `h17` agree with the tracked
   reproduction fixture: 6144 channels, `fch1=1498.75 MHz`,
   `foff=-0.03051757812 MHz`, and `tsamp=32.768 us`. Raw channels descend.
 - Live reads of the 12 CHIME single-beam HDF5 files on `h17` agree with the local
