@@ -29,10 +29,10 @@ from typing import Any
 ANON = Path("docs/rse/specs/evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22")
 PROTECTED = Path("docs/rse/specs/evidence/protected-nine-sightline-2026-07-22")
 CADC = Path("docs/rse/specs/evidence/cadc-cfis-access-2026-07-22")
-EXPECTED_PIPELINE_COMMIT = "78b448f05946923ef1c0acc19068fed313911ec6"
+EXPECTED_PIPELINE_COMMIT = "f5c1d1f3e5f955e84080a932b6c2d377b73c4336"
 EXPECTED_REGISTRY_INPUT_SHA256 = {
     "intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
-    "candidate_redshift_provenance.csv": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+    "candidate_redshift_provenance.csv": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
     "census_duplicates.csv": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
     "ps1_strm_resolution.csv": "18947acafc02b9781c4ac9612b9570d02eedd46c0115c9f73b5f3d79ec2c354e",
 }

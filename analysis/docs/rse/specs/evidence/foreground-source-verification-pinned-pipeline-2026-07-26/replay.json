@@ -6,7 +6,7 @@
     "verified": 46,
     "verified_identity_only_no_redshift": 6
   },
-  "disposition": "fail_closed",
+  "disposition": "pass",
   "duplicate_checks": [
     {
       "canonical_obj": "192821699728654764",
@@ -59,7 +59,7 @@
     }
   ],
   "errors": [],
-  "gate_pass": false,
+  "gate_pass": true,
   "host_status_counts": {
     "verified": 51,
     "verified_rounded_to_registry_precision": 1
@@ -70,8 +70,8 @@
     "duplicates": "6f51e95a33995eeb2dcb2e57326381e748d0baf1",
     "extensions": "165e530ae11a51c4e264925e04cda621a5f6ba48",
     "law": "216d3ee46ff57a070f1dd71284770f4a399c1985",
-    "payloads": "016565a0f78bc0ae6e323657176a93356df69a0c",
-    "provenance": "c47f3d54bfd26d5cb28f8eb930ddfb4214e6c727",
+    "payloads": "47d7df1e5776e3ad7aefce587bec1214dc699cb9",
+    "provenance": "8ef919a75206d0818117c2861d6f0f272bf32be0",
     "registry": "43877ac264d3b4800723c0bf3fc18bd9c2621e1d",
     "strm": "c3d2c613bdbb41b270c5ab68b81d432db9af5ec7",
     "verdi": "50bfea1d567c273aee41ea3203c49cd103824ddf"
@@ -81,13 +81,13 @@
     "duplicates": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
     "extensions": "c3284c954040cfa0d9363944336118b30f33249ab30e81eeac010d7d7e3817ed",
     "law": "4b21e87b31dbd5aec7b709d757e829bca9b346d2ae7c8502d04a61b63b9d1bbb",
-    "payloads": "f1c21a95f174bd1ec0bbbf4bb4e82e15a0cac2442d3a529000eeb26787e75dd7",
-    "provenance": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+    "payloads": "814845249e0acae8091f7177a56a08015ace03bfdf5786c75198f3e34f4b6cee",
+    "provenance": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
     "registry": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
     "strm": "42e576a234ac9ab471b695e89b6f25c3ad6875e1914c8ccb3ee518739fd04870",
     "verdi": "c4cb63e385837d547f03d6c398c3bb7b371e91f5673e5754af09bc10cf6161f7"
   },
-  "pipeline_commit": "78b448f05946923ef1c0acc19068fed313911ec6",
+  "pipeline_commit": "f5c1d1f3e5f955e84080a932b6c2d377b73c4336",
   "row_results": [
     {
       "authoritative_host_replayed_verdict": "inconclusive",
@@ -213,17 +213,14 @@
       "authoritative_host_replayed_verdict": "inconclusive",
       "candidate_coordinate_separation_arcsec": 0.09840307668526561,
       "candidate_source_status": "verified_identity_only_no_redshift",
-      "discrepancies": [
-        "redshiftless PS1-STRM ledger semantics mismatch",
-        "redshiftless PS1-STRM payload row missing"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.3005",
       "host_status": "verified",
       "key": "oran/halo/195393180643665627",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -231,17 +228,14 @@
       "authoritative_host_replayed_verdict": null,
       "candidate_coordinate_separation_arcsec": 0.035151419668498565,
       "candidate_source_status": "verified_identity_only_no_redshift",
-      "discrepancies": [
-        "redshiftless PS1-STRM ledger semantics mismatch",
-        "redshiftless PS1-STRM payload row missing"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "",
       "host_status": "verified",
       "key": "wilhelm/halo/194453151328186646",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -564,17 +558,14 @@
       "authoritative_host_replayed_verdict": "inconclusive",
       "candidate_coordinate_separation_arcsec": 0.04983368337277263,
       "candidate_source_status": "verified_identity_only_no_redshift",
-      "discrepancies": [
-        "redshiftless PS1-STRM ledger semantics mismatch",
-        "redshiftless PS1-STRM payload row missing"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.3024",
       "host_status": "verified",
       "key": "hamilton/halo/192943050854547067",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -597,17 +588,14 @@
       "authoritative_host_replayed_verdict": "inconclusive",
       "candidate_coordinate_separation_arcsec": 0.09547640918088406,
       "candidate_source_status": "verified_identity_only_no_redshift",
-      "discrepancies": [
-        "redshiftless PS1-STRM ledger semantics mismatch",
-        "redshiftless PS1-STRM payload row missing"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.0740",
       "host_status": "verified",
       "key": "chromatica/halo/196673126794497004",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -838,35 +826,31 @@
     },
     {
       "authoritative_host_replayed_verdict": "inconclusive",
-      "candidate_coordinate_separation_arcsec": null,
+      "candidate_coordinate_separation_arcsec": 0.00043409474480779573,
       "candidate_source_status": "verified_identity_only_no_redshift",
-      "discrepancies": [
-        "manual extension lacks frozen authoritative source rows"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.2505",
       "host_status": "verified",
       "key": "isha/halo/WISEA J044538.83+701843.3",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
     {
       "authoritative_host_replayed_verdict": "inconclusive",
-      "candidate_coordinate_separation_arcsec": null,
+      "candidate_coordinate_separation_arcsec": 0.04636825088150054,
       "candidate_source_status": "verified_identity_only_no_redshift",
-      "discrepancies": [
-        "manual extension lacks frozen authoritative source rows"
-      ],
+      "discrepancies": [],
       "host_source": "approved Verdi current table",
       "host_source_redshift": "0.3005",
       "host_status": "verified",
       "key": "oran/halo/WISEA J211150.32+724807.8",
       "replayed_budget_eligible": false,
       "replayed_verdict": "inconclusive",
-      "source_verified": false,
+      "source_verified": true,
       "stored_budget_eligible": false,
       "stored_verdict": "inconclusive"
     },
@@ -887,8 +871,8 @@
     }
   ],
   "rows": 52,
-  "rows_with_discrepancies": 6,
+  "rows_with_discrepancies": 0,
   "schema_version": 1,
-  "source_verified_rows": 46,
+  "source_verified_rows": 52,
   "verdict_mismatches": []
 }
