@@ -142,3 +142,28 @@ test still hard-coded the removed ladder tickets; fixed there.
 Companion machine scope: the h17 inventory recorded at
 [`h17-inventory-2026-07-27.md`](h17-inventory-2026-07-27.md) — untouched by
 this consolidation; any h17 retirement is a separately chartered lane.
+
+## Addendum 3 — results-registry orphan repair (2026-07-27)
+
+The pin-bump run of the root-science tests failed again: the results
+registry (`docs/rse/control/results-registry.toml`) pins provenance
+commits by SHA, and the sweep had orphaned two of them. A full sweep of
+every 40-character SHA in the registry and its claim-owners file against
+the surviving refs of all three remotes found exactly these two; all other
+cited commits remain reachable.
+
+- dsa110-FLITS `9175b92529b3` (association sample_roster / sample_table /
+  pcc_sum provenance; was the tip of swept branch
+  `codex/provenance-dm-associations-9175b925`) → restored from the local
+  clone as `archive/provenance-dm-associations-9175b925`.
+- Faber2026 `8d492feaa426` (budget_table.tex artifact provenance; was on
+  swept branches `codex/scintillation-notebook-wayfinder` /
+  `pewter-maxwell`) → restored as `archive/registry-budget-table-8d492fea`.
+  This one was not flagged by CI (the validator only resolves pipeline
+  pins) but is a registry citation all the same.
+
+Both verified reachable by `branch -r --contains` after a pruning fetch.
+Re-runnable check: extract `[0-9a-f]{40}` from the two registry TOML files
+and assert each is contained in some `origin/*` ref of the repository its
+entry names. These archive refs join the frozen-evidence carve-out of
+Addendum 2.
