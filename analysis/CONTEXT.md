@@ -3,7 +3,7 @@
 Overleaf-synced LaTeX for the CHIME/FRB–DSA-110 co-detection dispersion- and
 scattering-budget paper. Numbers and figures are produced by **dsa110-FLITS**
 (`pipeline/` submodule); fit-domain jargon lives in
-[`pipeline/CONTEXT.md`](pipeline/CONTEXT.md).
+[`pipeline/CONTEXT.md`](../pipeline/CONTEXT.md).
 
 ## Language
 
@@ -469,10 +469,11 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 - **Operational state** is generated, not hand-maintained: canonical source
   is `docs/rse/control/program-state.toml` (its `[owner_view]` block is the board
   summary), evidence tracked in `docs/rse/control/evidence-ledger.toml`;
-  `scripts/sync_state.py` regenerates `docs/rse/control/ACTIVE_LANES.md` and the
-  `owner-view.json` the readiness board renders. **ACTIVE_LANES / program-state
+  `scripts/sync_state.py` regenerates `docs/rse/control/ACTIVE_LANES.md` and
+  `docs/rse/control/board/owner-view.json`, which the readiness board renders.
+  **ACTIVE_LANES / program-state
   lane views are frozen history — not the decision frontier** (frontier =
-  BOARD + wayfinder tickets). Design: `docs/rse/specs/plan/plan-hybrid-control-system.md`
+  BOARD + wayfinder tickets). Design: `docs/rse/specs/plan-hybrid-control-system.md`
   (landed PR #59).
 - **Geometry-adjudicated β** governs what `tab:beta` (**unified β roster**) may
   quote, while **explicit pending** governs population prose;

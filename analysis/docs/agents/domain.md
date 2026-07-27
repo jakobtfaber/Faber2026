@@ -6,9 +6,8 @@ This repo has two linked contexts.
 
 - Read root `CONTEXT.md` for manuscript claims, trust state, and project
   language.
-- Read `pipeline/CONTEXT.md` for fitting, data-product, or pipeline work.
-- Read relevant decision records under root `docs/adr/` and pipeline-local
-  decision directories when present.
+- Read `../pipeline/CONTEXT.md` for fitting, data-product, or pipeline work.
+- Read relevant decision records under `../pipeline/docs/adr/` when present.
 - If a file is absent, proceed silently.
 
 ## Use the glossaries
