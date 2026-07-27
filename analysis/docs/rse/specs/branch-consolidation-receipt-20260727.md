@@ -105,3 +105,22 @@ Detailed per-branch evidence: `branch-disposition-receipt-20260726.json`
 
 Complete once Faber2026 #259 and dsa110-FLITS #236 merge and their branches
 are deleted locally (remote branch auto-delete not used).
+
+## Addendum — remote branch sweep (2026-07-27, owner-authorized)
+
+Owner authorization (verbatim): "delete the old remote branches in all three
+repos, keep main/gh-pages/entire/overleaf-*".
+
+Before deleting, every live remote head was fetched and captured in three
+additional complete-history bundles in `analysis/archive/`:
+`parent-remote-refs-20260727.bundle`, `analysis-remote-refs-20260727.bundle`,
+`flits-remote-refs-20260727.bundle`.
+
+29 live remote branches deleted (2 parent, 17 analysis, 10 FLITS; exact list
+in the session deletion log; every tip bundle-preserved). Kept:
+`main`, `gh-pages`, `entire/*`, `overleaf-2026-07-11-2125` (Overleaf sync),
+and `chore/ignore-codacy-instructions` (open PR #260 — delete after merge).
+Verified post-sweep via `ls-remote`: Faber2026 = {chore/ignore-codacy-instructions,
+entire/checkpoints/v1, gh-pages, main, overleaf-2026-07-11-2125};
+Faber2026-analysis = {main}; dsa110-FLITS = {entire/checkpoints/v1, main}.
+This supersedes the "Remote branches were not touched" line above.
