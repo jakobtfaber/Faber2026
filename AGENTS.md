@@ -91,7 +91,7 @@ Scope and guardrails — this authorization is not a licence to be careless:
 ## Learned Workspace Facts
 
 - The former separate Overleaf working copy at `~/Developer/overleaf/Faber2026` was retired 2026-07-25 and deleted 2026-07-26 (history bundled at `~/Data/Faber2026/preservation/Faber2026-overleaf-20260725/`); Overleaf now pulls from GitHub via its browser GitHub Sync integration. `AGENTS.md` and `CLAUDE.md` are tracked; `GEMINI.md` and `CODEX.md` are gitignored — `.olignore` keeps agent briefs out of Overleaf sync.
-- Project data and provenance span jakob-mbp, iacobus, h17, CANFAR/arc, and Google Drive; treat machine inventory as part of provenance, not only “active data stores.”
+- Project data and provenance span jakob-mbp, h17, and CANFAR/arc; treat machine inventory as part of provenance, not only “active data stores.”
 - Session handoffs, science-gate plans, and RSE specs live under `analysis/docs/rse/specs/` as markdown-only workflow artifacts; PNGs and other binaries belong elsewhere (e.g. decks, figures, verify trees).
 - Raw CHIME data means only the twelve singlebeam voltage `.h5` files on h17; intensity and upchannelized `.npy` products are derived, not raw.
 - Dispersion measures are not frozen in those raw voltage `.h5` files; they are applied when dynamic-spectrum products are built, so derived CANFAR vs h17 arrays can disagree on dispersion measure without the raw archive being wrong.

@@ -1,3 +1,0 @@
-local_root=/Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713
-remote_root=gdrive-jakob:Research/CHIME_DSA_Codetections
-rclone check <local_root> <remote_root> --checkers 8 --combined combined.txt --match matches.txt --differ different.txt --missing-on-dst local-only.txt --missing-on-src drive-only.txt --error errors.txt --log-file rclone.log --log-level INFO
