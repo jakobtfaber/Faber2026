@@ -162,8 +162,16 @@ cited commits remain reachable.
   This one was not flagged by CI (the validator only resolves pipeline
   pins) but is a registry citation all the same.
 
-Both verified reachable by `branch -r --contains` after a pruning fetch.
-Re-runnable check: extract `[0-9a-f]{40}` from the two registry TOML files
-and assert each is contained in some `origin/*` ref of the repository its
-entry names. These archive refs join the frozen-evidence carve-out of
-Addendum 2.
+Correction (same day): the first sweep counted a commit as reachable if
+*any* remote's refs contained it, so it missed a third orphan reachable
+only from the `upstream` org remote — which the fork-cloning CI cannot
+see. The corrected, re-runnable check restricts containment to `origin/*`
+of the repository each registry entry names (strict per-repository sweep:
+0 unreachable after the restorations).
+
+- dsa110-FLITS `6c878906156d` (association cards_figures and
+  mw.foreground_characterization pins; reachable only via
+  `upstream/dm-campaign-2026-07` / `upstream/pin/faber2026`) → restored to
+  the fork as `archive/registry-cards-mw-6c878906`.
+
+All three archive refs join the frozen-evidence carve-out of Addendum 2.

@@ -5,7 +5,8 @@ set -euo pipefail
 
 ROOT=$(git rev-parse --show-toplevel)
 BOARD="$ROOT/docs/rse/control/board/readiness.html"
-REMOTE=origin
+# gh-pages lives on the parent manuscript repo, not this repo's origin.
+REMOTE=${BOARD_PAGES_REMOTE:-git@github.com:jakobtfaber/Faber2026.git}
 BRANCH=gh-pages
 TMP=$(mktemp -d /tmp/faber2026-ghpages.XXXXXX)
 
@@ -24,7 +25,7 @@ if ! python3 "$ROOT/scripts/sync_state.py" --check --offline; then
 fi
 
 git -C "$ROOT" fetch "$REMOTE" "$BRANCH"
-git -C "$ROOT" worktree add --detach "$TMP" "$REMOTE/$BRANCH"
+git -C "$ROOT" worktree add --detach "$TMP" FETCH_HEAD
 
 # The page is self-contained. Preserve every other gh-pages artifact and replace
 # only the board entry point; .nojekyll keeps GitHub Pages from invoking Jekyll.
