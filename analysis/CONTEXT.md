@@ -216,7 +216,22 @@ the factor-of-two column systematics). Budget outcome: DM_int nonzero on four si
 (phineas 243, casey 117, chromatica 26, whitney 6); footnote m retired;
 7 of 9 physical confirmed halos pierce R_vir (b/R_vir 0.46–0.96). `tab:foreground`, the census verdicts/impact
 parameters, the two-phase mNFW `DM_int` columns, and `fig:clusters_icm` are
-restored for manuscript use. **Still revoked** (not unlocked by V4/V5): the
+restored for manuscript use.
+**Census extension (2026-07-15, provenance tag `v4-extension-2026-07-15`;
+current as of 2026-07-27):** a completeness audit recovered three cataloged
+systems the original 49-row validation set never evaluated (two inconclusive
+WISEA galaxy candidates and the WHL12 cluster WHL J115048.0+714428 toward
+FRB 20230307A — catalog-confirmed foreground but absent from Wen & Han 2024,
+so budget-ineligible). The extended census the manuscript now states
+(`sections/observations.tex` §2) evaluates **38 catalog rows → 31 physical
+systems; 26 retained for interpretation: 11 confirmed foreground (9 halos +
+2 cataloged clusters, 10 of 11 budget-eligible) + 15 inconclusive; 5 refuted
+as background**, with 14 further spectroscopic clusters outside R_500. The
+pipeline registry (`galaxies/foreground/data/intervening_census_registry.csv`)
+carries 52 catalog rows (29 confirmed / 16 inconclusive / 7 refuted before
+deduplication and aperture cuts). The 2026-07-07 "35 systems / 28 physical /
+9 halos + 1 cluster" numbers above describe the pre-extension census and are
+superseded for manuscript use. **Still revoked** (not unlocked by V4/V5): the
 measured-scattering side of fig:budget and its measured-vs-predicted overlay
 (wave-1 τ fits, V1 / plan D1), the τ·Δν_d two-screen test and scintillation
 excess (the closed CHIME-band campaign qualifies only FRB 20240203A, while the
@@ -431,6 +446,15 @@ cluster analyses, scint excess, τ·Δν_d test), results §4.1, and conclusions
 items 1–3/5–6 carry census/budget claims now unsupported. Reconciliation is
 scheduled on the manuscript board (`docs/rse/control/BOARD.md`) and wayfinder
 tickets, not the frozen circulation megaplan.
+**Wave-1 reconciliation status (verified 2026-07-27):** the manuscript no
+longer carries any of the wave-1 revoked artifacts actively — no `tab:beta`
+label or reference, no `fig:jointmodel_montage` or `fig:scint_screens`, and
+rail-class/α-limit language survives only inside comments;
+`sections/results.tex` (§"No scattering τ, α, or β value is reported…")
+explicitly withholds all scattering values until the production refit clears
+the fit-validation ladder at a reviewed pin. The wave-1 list above is
+historical. Wave-2 census/budget reconciliation is reflected in the extended
+census now stated in §2 (see census extension note above).
 The measured-versus-predicted budget overlay exists in the draft, but both
 sides are now revoked (measured diamonds = wave-1 τ fits; predicted bars =
 wave-2 census/budget products) — re-derived after certified census/budget redo.
@@ -461,9 +485,11 @@ interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
   are still required; the earlier rejected-candidate `fig1-gallery` stays
   `needs_revision` and must not be promoted.
 - **Figure wishlist** (`docs/rse/specs/notes/figure-wishlist.md`) lists other
-  intended figures not yet (re)inserted; live draft `\fbox` floats with
-  `\label{fig:…}` sit in `sections/observations.tex` and
-  `sections/results.tex`. Do not `\includegraphics` revoked campaign PDFs
+  intended figures not yet (re)inserted; as of 2026-07-27 the live draft
+  `\fbox` placeholder floats sit only in `sections/results.tex` (two:
+  association summary and joint scintillation summary) —
+  `sections/observations.tex` now `\includegraphics` the approved
+  twelve-burst gallery PDF directly. Do not `\includegraphics` revoked campaign PDFs
   until the listed gate clears; strip draft boxes before circulation
   (referee M9).
 - **Operational state** is generated, not hand-maintained: canonical source
