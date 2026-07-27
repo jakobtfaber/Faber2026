@@ -230,7 +230,12 @@ Never, without explicit owner approval naming the exact paths or references:
 
 - delete or move a source folder;
 - remove, prune, or unlock a worktree;
-- delete a branch or tag;
+- delete an unmerged branch, or any tag (standing exception, owner-granted
+  2026-07-27: a branch whose pull request is merged MAY be deleted by default,
+  remote and local, once patch equivalence with the base is proven — for
+  squash merges via `git cherry`/`range-diff` or content diff, never
+  `branch -d`'s complaint alone; `overleaf-*` sync branches are excluded and
+  are never deleted);
 - force-push; hard-reset a shared checkout; rewrite shared history;
 - run garbage collection where unreferenced work may exist;
 - drop, apply, pop, or clear parked changes during preservation work;

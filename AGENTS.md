@@ -49,6 +49,10 @@ Scope and guardrails — this authorization is not a licence to be careless:
   not a divergent-branch merge that drags in unrelated submodule-pointer bumps.
 - **Never delete or rewrite shared history** (`push --force`, branch deletion on
   `main`, `reset --hard` on a shared ref) without an explicit, separate request.
+  Standing exception (owner, 2026-07-27): a merged-PR head branch may be
+  deleted by default once patch equivalence with the base is proven
+  (`git cherry`/`range-diff` for squash merges); `overleaf-*` sync branches
+  are never deleted.
 - **The `pipeline/` submodule pin is deliberate** — do not bump the gitlink as a
   side effect of a manuscript change; that is its own reviewed step.
 
