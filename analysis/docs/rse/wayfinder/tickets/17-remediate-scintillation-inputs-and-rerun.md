@@ -12,7 +12,9 @@
   no automated-cleaner ratification is planned, so the recorded owner review
   of the route stands in for the `pass` this ticket originally required.
 - Assignee: —
-- Blocked by: [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md) (requires `pass`)
+- Blocked by: — (originally the automated-cleaner ratification ticket,
+  removed 2026-07-26 after the manual-route disposition in
+  [rfi-validation-01](rfi-validation-01-define-acceptance-contract.md))
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner data-review findings, 2026-07-18
 

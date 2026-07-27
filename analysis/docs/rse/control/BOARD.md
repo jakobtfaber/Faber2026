@@ -39,6 +39,13 @@ Feed multiple sections; section tasks reference them, never duplicate them.
 
 ### Both-band scintillation campaign
 
+**SUPERSEDED AS A LANE (owner charter 2026-07-26):** the first-pass campaign
+(window tuning, two-component ACF runs, `window_campaign_2L` table) is not
+final; manuscript numbers come from the interactive from-raw re-do,
+[scint-redo-01](wayfinder/tickets/scint-redo-01-interactive-recampaign-from-raw-data.md).
+The items below stand as checklist inputs to the re-do, not as an
+independent execution path.
+
 **⛔ INPUT REMEDIATION FIRST (owner adjudication 2026-07-18,
 [findings](specs/owner-data-review-findings-2026-07-18.md)):**
 
@@ -137,16 +144,19 @@ Consensus.)
 
 ## §0 — Results provenance & organization (pre-manuscript)
 
-**CURRENT CHIME INPUT ROUTE (owner, 2026-07-22):** the Zach preprocessing
-baseline passes nominal-grid restoration and source-mask handling. The owner
-clarified that the accepted diagnostic is before the bad-channel mask, so it
-does not approve final science inputs. Continue through controlled-spectrum
-review → acceptance contract → stable bandpass → frozen benchmark → cleaner
-comparison → blind validation → cleaning-boundary ratification → complete
-input remediation and campaign rerun → CHIME-method ratification. See
-[the resolved baseline](../wayfinder/tickets/16-build-verified-zach-chime-preprocessing-baseline.md)
-and [the remediation ticket](../wayfinder/tickets/17-remediate-scintillation-inputs-and-rerun.md).
-No science fit or claim is admitted before the linked gates pass.
+**CURRENT CHIME INPUT ROUTE (owner, 2026-07-26):** additional RFI cleaning is
+not necessary for the sample; the owner-reviewed **manual bad-channel maps**
+are the bad-channel authority
+([rfi-validation-01](../wayfinder/tickets/rfi-validation-01-define-acceptance-contract.md)
+disposition; Zach CHIME amendment merged as analysis PR #116). The
+automated-cleaner ladder (stable bandpass → frozen benchmark → cleaner
+comparison → blind validation → cleaning-boundary ratification) is **not
+pursued**; its tickets were removed 2026-07-26 (Git history preserves them).
+Manuscript scintillation numbers come from the interactive re-do
+([scint-redo-01](../wayfinder/tickets/scint-redo-01-interactive-recampaign-from-raw-data.md)),
+which supersedes the remediate-and-rerun path
+([wf-17](../wayfinder/tickets/17-remediate-scintillation-inputs-and-rerun.md), resolved-superseded).
+No science fit or claim is admitted before the re-do's owner checkpoints pass.
 
 Owner directive 2026-07-18: before section work, establish one reliable view
 of what results exist, where they originated (scripts, pipeline pin, external

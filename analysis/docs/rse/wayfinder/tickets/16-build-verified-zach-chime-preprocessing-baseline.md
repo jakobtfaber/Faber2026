@@ -51,12 +51,15 @@ with the owner's 2026-07-22 clarification that the reviewed diagnostic is
 The resulting validation route is:
 
 1. [Review the preservation limits on a controlled dynamic spectrum](rfi-validation-01a-review-preservation-dynamic-spectrum.md);
-2. [Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md);
-3. [Stabilize and qualify the CHIME bandpass model](rfi-validation-01b-stabilize-bandpass-model.md);
-4. [Build the frozen CHIME RFI-validation benchmark](rfi-validation-02-build-frozen-benchmark.md);
-5. [Compare and choose the CHIME RFI cleaner](rfi-validation-03-compare-and-choose-cleaner.md);
-6. [Blind-validate the selected CHIME RFI cleaner](rfi-validation-04-blind-validate-cleaner.md); and
-7. [Ratify CHIME RFI cleaning and its science-use boundary](rfi-validation-05-ratify-cleaning-boundary.md).
+2. [Define the CHIME RFI-cleaning acceptance contract](rfi-validation-01-define-acceptance-contract.md).
+
+Steps 3–7 of the original route (bandpass stabilization, frozen benchmark,
+cleaner comparison, blind validation, cleaning-boundary ratification) were
+the automated-cleaner campaign. The owner's 2026-07-26 disposition in
+[rfi-validation-01](rfi-validation-01-define-acceptance-contract.md) made the
+manual owner-reviewed bad-channel map route the authority and did not pursue
+that campaign; those five tickets were removed 2026-07-26 (recoverable from
+Git history).
 
 Ticket 02 remains blocked by the complete input-remediation and campaign-rerun
 ticket, not only by radio-frequency-interference validation.
