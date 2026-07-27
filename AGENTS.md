@@ -29,7 +29,7 @@ On "walk me through my queue": follow
 regenerate via `python3 analysis/scripts/owner_queue.py`, verify heuristics, present
 one item at a time with its evidence, record every decision at its source.
 Never scheduled; owner-triggered only. Science/domain context and the
-trust-reset state live in [`CONTEXT.md`](CONTEXT.md) (and
+trust-reset state live in [`analysis/CONTEXT.md`](analysis/CONTEXT.md) (and
 [`pipeline/CONTEXT.md`](pipeline/CONTEXT.md)); this file carries operational
 standing instructions only.
 
@@ -85,12 +85,12 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - Prefer separating analysis results from fitting code across Faber2026 and `pipeline/`, funneling products into a clear navigable results inventory; put analysis/diagnostic review under `analysis/docs/analysis/` as MkDocs/HTML prose plus SVG plot panels — not PNG assets or matplotlib text sidebars.
 - For heavy parallel work, orchestrate via headless Codex/Claude CLI so ChatGPT and Claude Max subscriptions are used, then guide and merge locally; route author Running Notes sorting through headless Claude Code (`claude -p`), not a Cursor agent.
 - When scrubbing `analysis/docs/`, prioritize accuracy and concision over historical record; prefer deleting obsolete or misleading material over archiving it.
-- Structure in-manuscript figure production as a declarative catalog/workflow (`figures/catalog.yaml` / ax) so regeneration does not require agents to rediscover plot scripts.
+- Structure in-manuscript figure production as a declarative catalog/workflow (`figures/catalog.yaml` driving `scripts/figure_flow.py` / `make figures`) so regeneration does not require agents to rediscover plot scripts.
 - For dual-band dispersion-measure fits: use band-specific on-pulse envelopes (owner eye-set is fine when automated widths under-cut); multi-component events span first through last component (not only the brightest); before DM-phase, center the burst with band-specific off-pulse padding and visually check crops on the dynamic spectra.
 
 ## Learned Workspace Facts
 
-- A separate Overleaf working copy lives at `~/Developer/overleaf/Faber2026` and can sync independently of this checkout — respect Overleaf/GitHub merge order so prose sync does not revert git-only edits; keep root agent briefs (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `CODEX.md`) gitignored/untracked so GitHub→Overleaf sync never pulls them.
+- The former separate Overleaf working copy at `~/Developer/overleaf/Faber2026` was retired 2026-07-25 and deleted 2026-07-26 (history bundled at `~/Data/Faber2026/preservation/Faber2026-overleaf-20260725/`); Overleaf now pulls from GitHub via its browser GitHub Sync integration. `AGENTS.md` and `CLAUDE.md` are tracked; `GEMINI.md` and `CODEX.md` are gitignored — `.olignore` keeps agent briefs out of Overleaf sync.
 - Project data and provenance span jakob-mbp, iacobus, h17, CANFAR/arc, and Google Drive; treat machine inventory as part of provenance, not only “active data stores.”
 - Session handoffs, science-gate plans, and RSE specs live under `analysis/docs/rse/specs/` as markdown-only workflow artifacts; PNGs and other binaries belong elsewhere (e.g. decks, figures, verify trees).
 - Raw CHIME data means only the twelve singlebeam voltage `.h5` files on h17; intensity and upchannelized `.npy` products are derived, not raw.
