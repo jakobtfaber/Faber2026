@@ -11,15 +11,13 @@ from scripts.owner_queue import collect_wayfinder_frontier
 ROOT = Path(__file__).resolve().parents[1]
 TICKETS = ROOT / "docs/rse/wayfinder/tickets"
 
+# Post-disposition route (owner, 2026-07-26): the automated-cleaner ladder
+# (rfi-validation-01b/02/03/04/05) was not pursued — the owner-reviewed manual
+# bad-channel maps are the authority — and those five tickets were removed.
 ROUTE = [
     "16-build-verified-zach-chime-preprocessing-baseline.md",
     "rfi-validation-01a-review-preservation-dynamic-spectrum.md",
     "rfi-validation-01-define-acceptance-contract.md",
-    "rfi-validation-01b-stabilize-bandpass-model.md",
-    "rfi-validation-02-build-frozen-benchmark.md",
-    "rfi-validation-03-compare-and-choose-cleaner.md",
-    "rfi-validation-04-blind-validate-cleaner.md",
-    "rfi-validation-05-ratify-cleaning-boundary.md",
     "17-remediate-scintillation-inputs-and-rerun.md",
     "02-ratify-chime-scintillation-method.md",
 ]
@@ -95,26 +93,48 @@ def test_chime_ratification_waits_for_remediated_campaign_review():
     ratification = ticket("02-ratify-chime-scintillation-method.md")
     remediation = ticket("17-remediate-scintillation-inputs-and-rerun.md")
     assert "17-remediate-scintillation-inputs-and-rerun.md" in ratification
-    assert "rfi-validation-05-ratify-cleaning-boundary.md" in remediation
+    # The remediation ticket's RFI dependency resolved via the manual
+    # bad-channel route, not the removed automated-cleaner ratification.
+    assert "rfi-validation-01-define-acceptance-contract.md" in remediation
     assert "owner review" in remediation.lower()
 
 
-GUARDED_LINKS = [
-    (
-        "rfi-validation-01b-stabilize-bandpass-model.md",
-        "rfi-validation-02-build-frozen-benchmark.md",
-    ),
-    (
-        "rfi-validation-03-compare-and-choose-cleaner.md",
-        "rfi-validation-04-blind-validate-cleaner.md",
-    ),
-    # (rfi-validation-05 -> ticket 17) removed 2026-07-26: ticket 17 is
-    # resolved-superseded by scint-redo-01 (owner chartered a full interactive
-    # re-do from raw data), so it can no longer enter the frontier.
-]
+# The live automated-cleaner ladder pairs were removed 2026-07-26 (manual
+# bad-channel route ratified; ticket 17 resolved-superseded by scint-redo-01).
+# The pass-only gate mechanism itself is still exercised, on synthetic tickets
+# with the same header structure the removed pairs used.
+UPSTREAM_TICKET = "gate-upstream.md"
+DOWNSTREAM_TICKET = "gate-downstream.md"
+
+UPSTREAM_TEMPLATE = """# Synthetic upstream gate ticket
+
+- Type: `wayfinder:task` (AFK)
+- Status: open
+- Resolution gate: pass-only
+- Gate outcome: pending
+- Assignee: —
+- Blocked by: —
+- Map: [ApJ submission](../map-apj-submission.md)
+
+## Question
+
+Synthetic upstream for the frontier-transition test.
+"""
+
+DOWNSTREAM_TEMPLATE = f"""# Synthetic downstream ticket
+
+- Type: `wayfinder:task` (AFK)
+- Status: open
+- Assignee: —
+- Blocked by: [Synthetic upstream]({UPSTREAM_TICKET}) (requires `pass`)
+- Map: [ApJ submission](../map-apj-submission.md)
+
+## Question
+
+Synthetic downstream for the frontier-transition test.
+"""
 
 
-@pytest.mark.parametrize("upstream,downstream", GUARDED_LINKS)
 @pytest.mark.parametrize(
     "status,outcome,clears",
     [
@@ -125,25 +145,23 @@ GUARDED_LINKS = [
     ],
 )
 def test_authoritative_frontier_enforces_exact_route_transitions(
-    tmp_path, upstream, downstream, status, outcome, clears
+    tmp_path, status, outcome, clears
 ):
     tickets = tmp_path / "tickets"
     tickets.mkdir()
-    for name in {upstream, downstream}:
-        shutil.copy2(TICKETS / name, tickets / name)
+    (tickets / DOWNSTREAM_TICKET).write_text(DOWNSTREAM_TEMPLATE, encoding="utf-8")
 
-    upstream_path = tickets / upstream
-    upstream_text = upstream_path.read_text(encoding="utf-8")
+    upstream_text = UPSTREAM_TEMPLATE
     upstream_text = re.sub(
         r"^- Status:.*$", f"- Status: {status}", upstream_text, flags=re.M
     )
     upstream_text = re.sub(
         r"^- Gate outcome:.*$", f"- Gate outcome: {outcome}", upstream_text, flags=re.M
     )
-    upstream_path.write_text(upstream_text, encoding="utf-8")
+    (tickets / UPSTREAM_TICKET).write_text(upstream_text, encoding="utf-8")
 
     frontier = {item.path.name for item in collect_wayfinder_frontier(tickets)}
-    assert (downstream in frontier) is clears
+    assert (DOWNSTREAM_TICKET in frontier) is clears
 
 
 def test_recovered_cluster_redshifts_have_deterministic_classification():
