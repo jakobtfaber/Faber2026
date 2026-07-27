@@ -124,3 +124,21 @@ Verified post-sweep via `ls-remote`: Faber2026 = {chore/ignore-codacy-instructio
 entire/checkpoints/v1, gh-pages, main, overleaf-2026-07-11-2125};
 Faber2026-analysis = {main}; dsa110-FLITS = {entire/checkpoints/v1, main}.
 This supersedes the "Remote branches were not touched" line above.
+
+## Addendum 2 — frozen-evidence carve-out (2026-07-27)
+
+The sweep deleted dsa110-FLITS `archive/foreground-source-freeze-pr231`
+(tip `c913175e567d`), which is the **frozen-evidence anchor** for the
+Figure 3 source-verification binding: the root-science tests resolve
+`c913175e:galaxies/foreground/data/intervening_census_registry.csv`, and
+that commit is deliberately *not* an ancestor of pipeline `main`. Parent CI
+failed; the branch was restored from the pre-sweep bundle and verified back
+on the remote at the same tip. Standing rule: **branches named as
+frozen-source bindings in tests, the results registry, or gate tickets are
+CI dependencies, not clutter — exempt from any branch keep-list.** The
+second CI failure had the same root as analysis #140: the certified-route
+test still hard-coded the removed ladder tickets; fixed there.
+
+Companion machine scope: the h17 inventory recorded at
+[`h17-inventory-2026-07-27.md`](h17-inventory-2026-07-27.md) — untouched by
+this consolidation; any h17 retirement is a separately chartered lane.
