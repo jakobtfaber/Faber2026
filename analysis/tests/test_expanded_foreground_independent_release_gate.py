@@ -74,7 +74,7 @@ def test_release_gate_accepts_only_a_figure_built_from_the_pinned_registry():
     module = _module()
     gate = json.loads(GATE.read_text(encoding="utf-8"))
     build = json.loads(
-        (ROOT / "figure_review/batches/2026-07-26-fig3-name-repair"
+        (ROOT / "figure_review/batches/2026-07-26-fig3-no-diamonds"
               "/provenance/expanded-catalog-build.json").read_text(encoding="utf-8")
     )
     # The corrected candidate is built from the pinned registry snapshot, so
