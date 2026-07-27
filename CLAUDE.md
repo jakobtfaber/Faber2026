@@ -316,6 +316,19 @@ session ends:
 - an owner-marked board line;
 - a pull request.
 
+Queue quietly (owner, 2026-07-27): record owner-facing requests in a queue
+source and move on — do not restate them as standing asks at the end of
+chat replies. The reply says only how many items were queued (for example,
+"1 item queued"). The owner reviews the queue in batches, on their own
+schedule, through the queue walkthrough — not one item at a time as they
+arrive. A steady drip of open items in chat creates decision fatigue and
+makes finished work feel unfinished.
+
+A queued low-stakes item may carry a stated default and deadline (for
+example, "merges 48 hours after queue entry unless the owner objects").
+After the deadline, apply the default and note it in the queue record, so
+silence resolves the item instead of leaving it open indefinitely.
+
 ## Standing authorization: branches and pull requests
 
 Granted 2026-07-08, cross-session, for focused Git branch and pull-request
@@ -338,12 +351,21 @@ Merge without a further prompt only when all hold:
 Otherwise open or update a draft pull request and stop at a verified
 checkpoint.
 
+Land by default (owner, 2026-07-27): when the conditions above hold and the
+change is mechanical, narrowly scoped, and cheaply reversible (`git revert`
+restores the previous state; no scientific judgment, no data change, no
+submodule-pin change), merge immediately rather than leaving the pull
+request open for review. Leaving small reversible pull requests open does
+not add safety; it only accumulates open decisions for the owner. Reserve
+an open pull request for changes that genuinely need the owner's eyes.
+
 Guardrails:
 
 - Prefer focused branches matching repository precedent.
 - Never force-push a shared branch.
-- Never delete branches or tags, or remove, prune, unlock, move, or retire a
-  worktree, under this authorization.
+- Never delete tags or unmerged branches, or remove, prune, unlock, move,
+  or retire a worktree, under this authorization (merged branches follow
+  the standing exception in "Destructive and retirement operations").
 - Never hard-reset a shared checkout or rewrite shared history.
 - Verify a branch is current with its base before landing.
 - Do not merge a divergent branch to avoid resolving its scope.

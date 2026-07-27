@@ -55,6 +55,15 @@ Scope and guardrails — this authorization is not a licence to be careless:
   are never deleted.
 - **The `pipeline/` submodule pin is deliberate** — do not bump the gitlink as a
   side effect of a manuscript change; that is its own reviewed step.
+- **Land by default** (owner, 2026-07-27): a mechanical, narrowly scoped,
+  cheaply reversible pull request (revert restores the previous state; no
+  scientific judgment, no data or pin change) merges immediately — do not
+  leave it open for review.
+- **Queue quietly** (owner, 2026-07-27): owner-facing requests go into a
+  queue source (ticket, figure-review batch, board line, pull request), not
+  into chat as standing asks; the reply states only how many items were
+  queued. Low-stakes items may carry a stated default and deadline, after
+  which the default applies.
 
 > Note: a repo file records the *preference* so future sessions inherit it. The
 > platform's enforced no-approval **gate** is understood to live in the agent's
