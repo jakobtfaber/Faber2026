@@ -2,7 +2,7 @@
   "audit_passed": true,
   "display_transform": "plot_codetection_gallery.load_band flips stored descending rows",
   "lineage_limit": "final _cntr_bpc builder is unverified; byte-pinned products and loader behavior are audited. DSA header lineage: raw SIGPROC headers read remotely and matched to the tracked fixture. CHIME header lineage: hash-pinned metadata extracted from the raw h5.",
-  "pipeline_revision": "342da530b695f0d73738d58f6d8dfb17b0b143ac",
+  "pipeline_revision": "d4147ed5e392d5b4d932b1960579f169d07960bf",
   "records": [
     {
       "instruments": {

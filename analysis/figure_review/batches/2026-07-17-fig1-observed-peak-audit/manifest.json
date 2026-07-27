@@ -256,9 +256,9 @@
     {
       "id": "frequency-axis-and-inputs",
       "repository": "analysis",
-      "sha256": "ca70ee73c24c6675e3caf862d1085849424fddadb99ca8d551d71b6eae7dc3e9",
+      "sha256": "36e3d618b1fc0a3e9baa8d270c697d863304d846437493e6eb9f4a5c692e6db0",
       "source_path": "scripts/audit_fig1_frequency_axes.py",
-      "source_revision": "2e642dd0a1098450d9aea303e2a6549f7f0cde1f",
+      "source_revision": "466ba516cd1ef5855f93b9c0b0c084b8f0bcb55e",
       "stored_path": "provenance/frequency-axis-and-inputs.json"
     },
     {
