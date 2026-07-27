@@ -1,4 +1,11 @@
 <!-- wayfinder:map -->
+
+> **CLOSED — destination reached (2026-07-27).** Authority roles were ratified
+> on this map's tickets; the custody/consolidation execution completed with
+> the local- and remote-branch consolidation (receipt:
+> [`branch-consolidation-receipt-20260727.md`](../specs/branch-consolidation-receipt-20260727.md)).
+> No open tickets remain on this map. Frozen as history; the single active
+> map is [ApJ submission](map-apj-submission.md).
 # Map: Establish project authority and custody before consolidation
 
 Tickets live in [`tickets/`](tickets/). This is a planning-only map. It does

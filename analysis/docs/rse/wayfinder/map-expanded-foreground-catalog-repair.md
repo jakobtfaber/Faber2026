@@ -1,4 +1,10 @@
 <!-- wayfinder:map -->
+
+> **FOLDED into the ApJ-submission map (2026-07-27).** All tickets on this
+> map are resolved except
+> [set the independent validation gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md),
+> which now carries the ApJ-submission map. Frozen as history; the single
+> active map is [ApJ submission](map-apj-submission.md).
 # Map: Repair and independently validate the expanded foreground catalog
 
 Tickets live in [`tickets/`](tickets/). This map plans the route. It does not

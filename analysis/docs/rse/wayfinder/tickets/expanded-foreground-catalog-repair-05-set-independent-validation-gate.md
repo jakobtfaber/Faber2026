@@ -4,7 +4,7 @@
 - Status: open
 - Assignee: Independent reviewer
 - Blocked by: [Set the Figure 3 regeneration and promotion gate](expanded-foreground-catalog-repair-04-set-figure-3-gate.md)
-- Map: [Expanded foreground catalog repair](../map-expanded-foreground-catalog-repair.md)
+- Map: [ApJ submission](../map-apj-submission.md) (folded from the expanded-foreground-catalog-repair map, 2026-07-27)
 - Delegation: [Standing delegated decision authority](../standing-delegation-2026-07-20.md)
 - Triage: `blocked`
 

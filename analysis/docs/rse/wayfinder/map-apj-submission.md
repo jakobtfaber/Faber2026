@@ -20,6 +20,16 @@ existing lane system. The map does not carry the execution itself.
 
 ## Notes
 
+- **Single active map (owner, 2026-07-27):** the
+  [project-authority-and-custody map](map-project-authority-and-custody.md)
+  is closed (destination reached) and the
+  [expanded-foreground-catalog-repair map](map-expanded-foreground-catalog-repair.md)
+  is folded into this one — its surviving open ticket is
+  [the Figure 3 independent validation gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
+  Open frontier at this writing: that gate, plus
+  [scint-redo-01](tickets/scint-redo-01-interactive-recampaign-from-raw-data.md),
+  [the scint-scattering coupling design closure](tickets/04-close-scint-scattering-coupling-design.md), and
+  [the zach component-count adjudication](tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md).
 - **Standing delegation (owner, 2026-07-20):** [delegated decision authority](standing-delegation-2026-07-20.md)
   covers only tickets recorded open at `main` commit `33e9e1ce3570`; it permits
   evidence-backed recommendations to be accepted by default. Covered
