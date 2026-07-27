@@ -29,7 +29,7 @@ from typing import Any
 ANON = Path("docs/rse/specs/evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22")
 PROTECTED = Path("docs/rse/specs/evidence/protected-nine-sightline-2026-07-22")
 CADC = Path("docs/rse/specs/evidence/cadc-cfis-access-2026-07-22")
-EXPECTED_PIPELINE_COMMIT = "f5c1d1f3e5f955e84080a932b6c2d377b73c4336"
+EXPECTED_PIPELINE_COMMIT = "2463289015a8ffe0d6934e1c2206c9b49eeda345"
 EXPECTED_REGISTRY_INPUT_SHA256 = {
     "intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
     "candidate_redshift_provenance.csv": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",

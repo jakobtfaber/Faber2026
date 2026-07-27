@@ -4,7 +4,7 @@
 #   state: working | done | blocked | info
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-J="$ROOT/docs/rse/journal.jsonl"
+J="$ROOT/docs/rse/protocols/journal.jsonl"
 agent="$1"; lane="$2"; state="$3"; shift 3; note="$*"
 case "$state" in
   working|done|blocked|info) ;;

@@ -3,47 +3,48 @@
   "artifact": "expanded_foreground_independent_release_gate",
   "status": "failed",
   "disposition": "fail_closed",
-  "summary": "FAILED - independent release gate rebound to the current parent commit and pipeline pin; do not promote scientific trust or Figure 3",
+  "summary": "FAILED - gate rebound to the corrected Figure 3 candidate at pipeline pin 2463289; do not promote scientific trust or Figure 3 until the expanded-catalog gate passes and the owner approves the candidate",
   "analysis_base_commit": "fe73689cad723db5d68427c61e301157a39cc101",
-  "parent_commit": "ac004ece8f22bce3b117099a2f23e05b5abe6528",
-  "pipeline_commit": "f5c1d1f3e5f955e84080a932b6c2d377b73c4336",
-  "figure3_candidate_pipeline_commit": "f3c8d22a9088914e0179cfecf1ee4086777dc927",
+  "parent_commit": "bbda80255bff3f0b6da28ae399e100ccad71cf89",
+  "pipeline_commit": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+  "figure3_candidate_pipeline_commit": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
   "scientific_trust_promoted": false,
   "figure3_promoted": false,
   "binding_notes": {
-    "parent_commit": "Faber2026 main at verification time; the pin-bump pull request moves its pipeline gitlink to f5c1d1f3. Re-verified at each gate run against the live checkout.",
+    "parent_commit": "Faber2026 main at verification time (bbda8025, pipeline gitlink f5c1d1f3); the follow-up pin-bump pull request moves the gitlink to 2463289. Re-verified at each gate run against the live checkout.",
     "analysis_base_commit": "Verified ancestor of this branch. The three analysis-side host-redshift inputs are byte-identical between fe73689c and the branch head, so the replay binding is content-stable.",
     "superseded_pipeline_commit": "c913175e567db70980e5f2745dcdf8f7f3ad9fb4 is not an ancestor of the pipeline main line. It is a pre-landing form of the change that landed as f5c1d1f3 (pipeline #231). The previous gate bound its source-verification evidence to that unreachable commit.",
-    "pipeline_pin_bump_2026_07_26": "Pin bumped 78b448f0 -> f5c1d1f3 (owner approval 2026-07-26). Both replays re-executed at the new pin: source verification 52/52 with zero discrepancy rows; nine-sightline registry replay clean. The candidate_redshift_provenance.csv frozen input hash advanced with pipeline #231."
+    "pipeline_pin_bump_2026_07_26": "Pin bumped 78b448f0 -> f5c1d1f3 (owner approval 2026-07-26). Both replays re-executed at the new pin: source verification 52/52 with zero discrepancy rows; nine-sightline registry replay clean. The candidate_redshift_provenance.csv frozen input hash advanced with pipeline #231.",
+    "fig3_name_repair_2026_07_26": "Pin bumped f5c1d1f3 -> 2463289 (dsa110-FLITS #234): frozen-census roster tns names corrected to the burst_metadata TNS authority (FRB 20230325C, FRB 20230913G, FRB 20240203D); halo-grid input and expanded catalog regenerated with only the seven name cells changed; registry snapshot unchanged (96bfd323). Both replays re-executed cleanly at the new pin (source verification 52/52, zero discrepancies; registry replay validated). A corrected Figure 3 candidate is staged in figure_review/batches/2026-07-26-fig3-name-repair and built from the pinned registry snapshot, discharging blocker figure3-registry-snapshot-stale. Owner approval remains outstanding."
   },
   "inputs": {
     "expanded_catalog_gate": "docs/rse/specs/validation-expanded-foreground-catalog.json",
     "source_verification_replay": "docs/rse/specs/evidence/foreground-source-verification-pinned-pipeline-2026-07-26/replay.json",
     "superseded_source_verification_replay": "docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json",
     "registry_replay": "docs/rse/specs/evidence/nine-sightline-registry-replay-2026-07-23/replay.json",
-    "figure3_review_manifest": "figure_review/batches/2026-07-22-fig3-source-replay/manifest.json",
+    "figure3_review_manifest": "figure_review/batches/2026-07-26-fig3-name-repair/manifest.json",
     "figure_approval_inventory": "docs/rse/specs/decision/decision-2026-07-23-figure-approval-inventory.md",
     "figure3_disposition": "docs/rse/specs/validation-figure3-disposition-2026-07-22.md"
   },
   "expected": {
     "artifact_sha256": {
       "docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json": "ef3c5e011b07f634a187bd8fa364668d7ce396c2e64560d33e2c364e3b986913",
-      "docs/rse/specs/evidence/foreground-source-verification-pinned-pipeline-2026-07-26/replay.json": "a50319ce7deb11eefcb85c3cd4e8411dfb1f72facc228c7bf99381e2360d900b",
-      "docs/rse/specs/evidence/nine-sightline-registry-replay-2026-07-23/replay.json": "a6217a300b7e7e00e0aa060f4b3b1bcbb59a9a5f0ba6d23c7a0a0f24e152d752",
+      "docs/rse/specs/evidence/foreground-source-verification-pinned-pipeline-2026-07-26/replay.json": "3b0817e793d742063636720959a550c654974ace8c85a875112b70f3be44f4f9",
+      "docs/rse/specs/evidence/nine-sightline-registry-replay-2026-07-23/replay.json": "98890f861629deee7c3b6decc565ba5c63eae12c19247cacc869e4ad2e155829",
       "docs/rse/specs/decision/decision-2026-07-23-figure-approval-inventory.md": "b12443b4bd2e86b2102a0cf644071d3991fc1e21b016e86ef3950ea94b63d291",
-      "figure_review/batches/2026-07-22-fig3-source-replay/candidates/fig3-halo-grid.pdf": "45017274a7e3d60cf6918d72c3e89558c0e9d50e27427d39a216547c4999fa6c",
-      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/candidate-redshift-ledger.csv": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
-      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/candidate-redshift-payloads.json": "f1c21a95f174bd1ec0bbbf4bb4e82e15a0cac2442d3a529000eeb26787e75dd7",
-      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/candidate-redshift-replay.json": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
-      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/expanded-catalog-build.json": "6d7881c243613149b436de53e69b02d575041b84918f801a9c03a6d927329aef",
-      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/figure3-input.csv": "ce0179a27fd2d4f18b7599cea9f8d56f98874d9c4c6a7a654e84395ff163acc3",
-      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/law-host-redshifts.csv": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
-      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/verdi-host-redshifts.csv": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa"
+      "figure_review/batches/2026-07-26-fig3-name-repair/candidates/fig3-halo-grid.pdf": "a56d43ccffa31189e27573969d34dacec9b0223e058a545dff6fc1c19cfcf191",
+      "figure_review/batches/2026-07-26-fig3-name-repair/provenance/candidate-redshift-ledger.csv": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
+      "figure_review/batches/2026-07-26-fig3-name-repair/provenance/candidate-redshift-payloads.json": "814845249e0acae8091f7177a56a08015ace03bfdf5786c75198f3e34f4b6cee",
+      "figure_review/batches/2026-07-26-fig3-name-repair/provenance/candidate-redshift-replay.json": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
+      "figure_review/batches/2026-07-26-fig3-name-repair/provenance/expanded-catalog-build.json": "fcb27985f4b914f7b3a904bfe80ab55643a277ef5ed1d3458d3f3cd2509b1521",
+      "figure_review/batches/2026-07-26-fig3-name-repair/provenance/figure3-input.csv": "2a59fb28bfe196fde63f2335548030ff911dfbeda9e07e133823ca511fdf79e9",
+      "figure_review/batches/2026-07-26-fig3-name-repair/provenance/law-host-redshifts.csv": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
+      "figure_review/batches/2026-07-26-fig3-name-repair/provenance/verdi-host-redshifts.csv": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa"
     },
     "source_verified_rows": 52,
     "source_discrepancy_rows": 0,
-    "source_verification_pipeline_commit": "f5c1d1f3e5f955e84080a932b6c2d377b73c4336",
-    "registry_replay_pipeline_commit": "f5c1d1f3e5f955e84080a932b6c2d377b73c4336",
+    "source_verification_pipeline_commit": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+    "registry_replay_pipeline_commit": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
     "registry_rows": 52,
     "finite_host_rows": 49,
     "duplicate_checks_passed": 7,
@@ -55,20 +56,20 @@
     },
     "pinned_registry_path": "galaxies/foreground/data/intervening_census_registry.csv",
     "pinned_registry_sha256": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
-    "figure3_build_registry_sha256": "f35dd8beb733b08dbb38894e5df6fc04af13fc731fd57c3f61dfc8441afd6fbc",
+    "figure3_build_registry_sha256": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
     "figure3_candidate_id": "fig3-halo-grid",
-    "figure3_candidate": "figure_review/batches/2026-07-22-fig3-source-replay/candidates/fig3-halo-grid.pdf",
+    "figure3_candidate": "figure_review/batches/2026-07-26-fig3-name-repair/candidates/fig3-halo-grid.pdf",
     "figure3_target": "figures/sightline_halo_grid.pdf",
     "installed_figure3_sha256": "cd719ef203b5f17709db1a9229d7f8fa74b26ee693090bb252632846a29edc00",
-    "figure3_candidate_sha256": "45017274a7e3d60cf6918d72c3e89558c0e9d50e27427d39a216547c4999fa6c",
-    "figure3_candidate_parent_commit": "afa9cc7d59f3f64b5098acd6cf8dca842ca86661",
-    "figure3_candidate_pipeline_commit": "f3c8d22a9088914e0179cfecf1ee4086777dc927",
+    "figure3_candidate_sha256": "a56d43ccffa31189e27573969d34dacec9b0223e058a545dff6fc1c19cfcf191",
+    "figure3_candidate_parent_commit": "7b41c0f13eae492483e83f8e48511aedff423e12",
+    "figure3_candidate_pipeline_commit": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
     "figure3_evidence_sha256": {
-      "candidate-redshift-ledger": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
-      "candidate-redshift-payloads": "f1c21a95f174bd1ec0bbbf4bb4e82e15a0cac2442d3a529000eeb26787e75dd7",
+      "candidate-redshift-ledger": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
+      "candidate-redshift-payloads": "814845249e0acae8091f7177a56a08015ace03bfdf5786c75198f3e34f4b6cee",
       "candidate-redshift-replay": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
-      "expanded-catalog-build": "6d7881c243613149b436de53e69b02d575041b84918f801a9c03a6d927329aef",
-      "figure3-input": "ce0179a27fd2d4f18b7599cea9f8d56f98874d9c4c6a7a654e84395ff163acc3",
+      "expanded-catalog-build": "fcb27985f4b914f7b3a904bfe80ab55643a277ef5ed1d3458d3f3cd2509b1521",
+      "figure3-input": "2a59fb28bfe196fde63f2335548030ff911dfbeda9e07e133823ca511fdf79e9",
       "law-host-redshifts": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
       "verdi-host-redshifts": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa"
     }
@@ -81,16 +82,10 @@
       "reason": "The existing expanded-catalog validation gate is still failed and superseded, with all eight recorded defects failed. It has not been replaced by a passing independent catalog validation report."
     },
     {
-      "id": "figure3-registry-snapshot-stale",
-      "status": "failed",
-      "evidence": "figure_review/batches/2026-07-22-fig3-source-replay/provenance/expanded-catalog-build.json",
-      "reason": "The Figure 3 candidate was built from registry snapshot f35dd8be at pipeline f3c8d22a. The pinned registry at 78b448f0 is 96bfd323. The two snapshots differ only in the transient-name field for seven rows across chromatica and freya and hamilton, adopted in pipeline #225. The rendered candidate and the installed manuscript figure both still print FRB 20230913A and FRB 20240203A, which the pinned registry supersedes with FRB 20230913G and FRB 20240203D."
-    },
-    {
       "id": "figure3-owner-approval-missing",
       "status": "failed",
-      "evidence": "figure_review/batches/2026-07-22-fig3-source-replay/manifest.json",
-      "reason": "The Figure 3 candidate is hash-pinned but its manuscript-owner decision remains pending, with no reviewer, timestamp, note, or approval receipt, and protect_in_manuscript is false."
+      "evidence": "figure_review/batches/2026-07-26-fig3-name-repair/manifest.json",
+      "reason": "The corrected Figure 3 candidate (built from the pinned registry snapshot at pipeline 2463289) is hash-pinned but its manuscript-owner decision remains pending, with no reviewer, timestamp, or approval receipt, and protect_in_manuscript is false."
     }
   ],
   "release_rule": {

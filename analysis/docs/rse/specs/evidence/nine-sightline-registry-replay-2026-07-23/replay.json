@@ -8,7 +8,7 @@
     "intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
     "ps1_strm_resolution.csv": "18947acafc02b9781c4ac9612b9570d02eedd46c0115c9f73b5f3d79ec2c354e"
   },
-  "pipeline_commit": "f5c1d1f3e5f955e84080a932b6c2d377b73c4336",
+  "pipeline_commit": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
   "rows": 52,
   "schema_version": 1,
   "source_verification_base_commit": "6057501da2db1eba09d002dd7846ffca7ded250c",
