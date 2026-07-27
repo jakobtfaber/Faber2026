@@ -2,7 +2,7 @@
   "audit_passed": true,
   "display_transform": "plot_codetection_gallery.load_band flips stored descending rows",
   "lineage_limit": "final _cntr_bpc builder is unverified; byte-pinned products and loader behavior are audited. DSA header lineage: raw SIGPROC headers read remotely and matched to the tracked fixture. CHIME header lineage: hash-pinned metadata extracted from the raw h5.",
-  "pipeline_revision": "17d9d26675702e9f8917da655621bef3231f0ddb",
+  "pipeline_revision": "342da530b695f0d73738d58f6d8dfb17b0b143ac",
   "records": [
     {
       "instruments": {
@@ -42,7 +42,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -64,7 +64,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/zach_240203aacl_210456524/220207aabh_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/zach/220207aabh_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -109,7 +109,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -131,7 +131,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/whitney_220310aaam_215063905/220310aaam_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/whitney/220310aaam_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -176,7 +176,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -198,7 +198,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/oran_220506aabd_224263996/220506aabd_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/oran/220506aabd_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -243,7 +243,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -265,7 +265,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/isha_221113aaao_252069198/221113aaao_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/isha/221113aaao_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -310,7 +310,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -332,7 +332,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/wilhelm_221203aaaa_253635173/221203aaaa_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/wilhelm/221203aaaa_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -377,7 +377,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -399,7 +399,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/phineas_230307aaao_274819243/230307aaao_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/phineas/230307aaao_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -444,7 +444,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -466,7 +466,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/freya_230325aaag_278720455/230325aaag_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/freya/230325aaag_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -511,7 +511,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -533,7 +533,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/johndoeII_230814aaas_311723353/230814aaas_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/johndoeii/230814aaas_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -578,7 +578,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -600,7 +600,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/hamilton_230913aaao_318353610/230913aaao_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/hamilton/230913aaao_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -645,7 +645,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -667,7 +667,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/mahi_240122aaag_354049284/240122aaag_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/mahi/240122aaag_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -712,7 +712,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -734,7 +734,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/chromatica_240203aacl_356959136/240203aacl_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/chromatica/240203aacl_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
@@ -779,7 +779,7 @@
           "channel_width_mhz": 0.03051757812,
           "display_channel_order": "ascending",
           "first_channel_mhz": 1498.75,
-          "header_validation": "raw SIGPROC header read over ssh from iacobus",
+          "header_validation": "raw SIGPROC header read over ssh from h17",
           "last_channel_mhz": 1311.28051760884,
           "manifest_status": "ARC_BYTE_MATCH",
           "nchans": 6144,
@@ -801,7 +801,7 @@
           "raw_header_foff_mhz": -0.03051757812,
           "raw_header_nchans": 6144,
           "raw_header_read": true,
-          "raw_header_source": "iacobus:/Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Archives/Migrations/Dropbox-Migration/Codetections_DSA_Filterbanks/casey_240229aaad_362593221/240229aaad_dev_polcal_I.fil",
+          "raw_header_source": "h17:/data/Faber2026/data/dsa-110/casey/240229aaad_dev_polcal_I.fil",
           "raw_header_tsamp_s": 3.2768e-05,
           "tsamp_s": 3.2768e-05
         }
