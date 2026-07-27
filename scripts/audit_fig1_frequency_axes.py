@@ -15,7 +15,8 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
+CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
+DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 CHIME_METADATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/upchan_codetections"
 FIXTURE_DEFAULT = ROOT / "pipeline/crossmatching/notebook_reproduction_fixture.json"
 MANIFEST_DEFAULT = ROOT / "pipeline/data-manifest.csv"
@@ -35,6 +36,18 @@ def order(first: float, last: float) -> str:
     if first < last:
         return "ascending"
     return "constant"
+
+
+def root_for_telescope(
+    telescope: str,
+    chime_full_root: Path,
+    dsa_full_root: Path,
+) -> Path:
+    roots = {"chime": Path(chime_full_root), "dsa": Path(dsa_full_root)}
+    try:
+        return roots[telescope]
+    except KeyError as exc:
+        raise ValueError(f"unknown telescope: {telescope!r}") from exc
 
 
 def parse_sigproc_header(blob: bytes) -> dict:
@@ -101,7 +114,8 @@ def mask_summary(product: Path) -> dict:
 
 
 def audit(
-    data_root: Path,
+    chime_full_root: Path,
+    dsa_full_root: Path,
     metadata_root: Path,
     fixture_path: Path,
     manifest_path: Path,
@@ -127,7 +141,9 @@ def audit(
         instruments = {}
         for telescope in ("chime", "dsa"):
             row = manifest_by_key[(file_nick.casefold(), telescope)]
-            product = data_root / row["filename"]
+            product = root_for_telescope(
+                telescope, chime_full_root, dsa_full_root
+            ) / row["filename"]
             actual_hash = sha256(product)
             if actual_hash != row["sha256"] or product.stat().st_size != int(row["bytes"]):
                 raise ValueError(f"{nick}/{telescope}: local product differs from manifest")
@@ -199,10 +215,14 @@ def audit(
             }
         )
         records.append({"nick": nick, "instruments": instruments})
+    pipeline_root = subprocess.check_output(
+        ["git", "-C", str(fixture_path.parent), "rev-parse", "--show-toplevel"],
+        text=True,
+    ).strip()
     return {
         "schema_version": 1,
         "pipeline_revision": subprocess.check_output(
-            ["git", "-C", str(ROOT / "pipeline"), "rev-parse", "HEAD"], text=True
+            ["git", "-C", pipeline_root, "rev-parse", "HEAD"], text=True
         ).strip(),
         "audit_passed": len(records) == 12,
         "display_transform": "plot_codetection_gallery.load_band flips stored descending rows",
@@ -222,7 +242,10 @@ def audit(
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-root", type=Path, default=DATA_DEFAULT)
+    parser.add_argument(
+        "--chime-full-root", type=Path, default=CHIME_FULL_ROOT_DEFAULT
+    )
+    parser.add_argument("--dsa-full-root", type=Path, default=DSA_FULL_ROOT_DEFAULT)
     parser.add_argument("--metadata-root", type=Path, default=CHIME_METADATA_DEFAULT)
     parser.add_argument("--fixture", type=Path, default=FIXTURE_DEFAULT)
     parser.add_argument("--manifest", type=Path, default=MANIFEST_DEFAULT)
@@ -235,7 +258,8 @@ def main() -> int:
     args = parser.parse_args()
     payload = json.dumps(
         audit(
-            args.data_root,
+            args.chime_full_root,
+            args.dsa_full_root,
             args.metadata_root,
             args.fixture,
             args.manifest,
