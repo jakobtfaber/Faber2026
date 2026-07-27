@@ -121,6 +121,18 @@ independent numerical, provenance, and owner visual checks.
   the candidate to the `fig3-halo-grid` approval slot, and left installed
   manuscript bytes unpromoted pending independent validation and owner visual
   approval.
+- [Set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md)
+  — installed a machine-readable release gate and validator, then rebound both
+  to the current parent commit and pipeline pin after an independent discharge
+  of the 2026-07-24 adversarial blockers. The gate is deliberately fail-closed
+  on four blockers: the expanded-catalog gate is still failed; source
+  verification is 46 of 52 rows at the pinned pipeline commit `78b448f0` and
+  only reaches 52/52 at pipeline main `f5c1d1f3`; the Figure 3 candidate was
+  built from a superseded registry snapshot and prints two stale transient
+  identifiers; and the hash-pinned candidate still lacks manuscript-owner
+  visual approval. Verdict and budget replays are clean at every binding
+  tested. No scientific trust, Figure 3 bytes, redshift verdicts, or budgets
+  changed.
 
 ## Open route
 
@@ -138,8 +150,10 @@ now has a separate adversarial pass: all six pinned identities, coordinates,
 blank-redshift semantics, and provenance hashes agree, while verdicts, budgets,
 and current Figure 3 inputs remain unchanged. Next:
 
-1. With the identity repair and Figure 3 regeneration gate now resolved,
-   [set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md).
+1. Replace the failed expanded-catalog validation with a passing independent
+   replay only after every row-level blocker is cleared.
+2. Obtain manuscript-owner visual approval for the exact `fig3-halo-grid`
+   candidate before any Figure 3 promotion.
 
 ## Out of scope
 

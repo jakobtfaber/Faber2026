@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "artifact": "expanded_foreground_independent_release_gate",
+  "status": "failed",
+  "disposition": "fail_closed",
+  "summary": "FAILED - independent release gate rebound to the current parent commit and pipeline pin; do not promote scientific trust or Figure 3",
+  "analysis_base_commit": "fe73689cad723db5d68427c61e301157a39cc101",
+  "parent_commit": "ac004ece8f22bce3b117099a2f23e05b5abe6528",
+  "pipeline_commit": "78b448f05946923ef1c0acc19068fed313911ec6",
+  "figure3_candidate_pipeline_commit": "f3c8d22a9088914e0179cfecf1ee4086777dc927",
+  "scientific_trust_promoted": false,
+  "figure3_promoted": false,
+  "binding_notes": {
+    "parent_commit": "Faber2026 main at verification time; its pipeline gitlink is 78b448f0.",
+    "analysis_base_commit": "Verified ancestor of this branch. The three analysis-side host-redshift inputs are byte-identical between fe73689c and the branch head, so the replay binding is content-stable.",
+    "superseded_pipeline_commit": "c913175e567db70980e5f2745dcdf8f7f3ad9fb4 is not an ancestor of the pipeline main line. It is a pre-landing form of the change that landed as f5c1d1f3 (pipeline #231). The previous gate bound its source-verification evidence to that unreachable commit."
+  },
+  "inputs": {
+    "expanded_catalog_gate": "docs/rse/specs/validation-expanded-foreground-catalog.json",
+    "source_verification_replay": "docs/rse/specs/evidence/foreground-source-verification-pinned-pipeline-2026-07-26/replay.json",
+    "superseded_source_verification_replay": "docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json",
+    "registry_replay": "docs/rse/specs/evidence/nine-sightline-registry-replay-2026-07-23/replay.json",
+    "figure3_review_manifest": "figure_review/batches/2026-07-22-fig3-source-replay/manifest.json",
+    "figure_approval_inventory": "docs/rse/specs/decision/decision-2026-07-23-figure-approval-inventory.md",
+    "figure3_disposition": "docs/rse/specs/validation-figure3-disposition-2026-07-22.md"
+  },
+  "expected": {
+    "artifact_sha256": {
+      "docs/rse/specs/evidence/foreground-source-verification-2026-07-22/replay.json": "ef3c5e011b07f634a187bd8fa364668d7ce396c2e64560d33e2c364e3b986913",
+      "docs/rse/specs/evidence/foreground-source-verification-pinned-pipeline-2026-07-26/replay.json": "6a5c3df4a808fdc8ff855432ff42e5df53976513846e4c8e353f5542dee66f2d",
+      "docs/rse/specs/evidence/nine-sightline-registry-replay-2026-07-23/replay.json": "f6b5d7bfad216a3386b8bec9d08c63d798a42d691c2f0707b84dbc0edfa0cec5",
+      "docs/rse/specs/decision/decision-2026-07-23-figure-approval-inventory.md": "b12443b4bd2e86b2102a0cf644071d3991fc1e21b016e86ef3950ea94b63d291",
+      "figure_review/batches/2026-07-22-fig3-source-replay/candidates/fig3-halo-grid.pdf": "45017274a7e3d60cf6918d72c3e89558c0e9d50e27427d39a216547c4999fa6c",
+      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/candidate-redshift-ledger.csv": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/candidate-redshift-payloads.json": "f1c21a95f174bd1ec0bbbf4bb4e82e15a0cac2442d3a529000eeb26787e75dd7",
+      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/candidate-redshift-replay.json": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
+      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/expanded-catalog-build.json": "6d7881c243613149b436de53e69b02d575041b84918f801a9c03a6d927329aef",
+      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/figure3-input.csv": "ce0179a27fd2d4f18b7599cea9f8d56f98874d9c4c6a7a654e84395ff163acc3",
+      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/law-host-redshifts.csv": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
+      "figure_review/batches/2026-07-22-fig3-source-replay/provenance/verdi-host-redshifts.csv": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa"
+    },
+    "source_verified_rows": 52,
+    "source_discrepancy_rows": 0,
+    "source_verification_pipeline_commit": "78b448f05946923ef1c0acc19068fed313911ec6",
+    "registry_replay_pipeline_commit": "78b448f05946923ef1c0acc19068fed313911ec6",
+    "registry_rows": 52,
+    "finite_host_rows": 49,
+    "duplicate_checks_passed": 7,
+    "registry_replay_input_sha256": {
+      "candidate_redshift_provenance.csv": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+      "census_duplicates.csv": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
+      "intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+      "ps1_strm_resolution.csv": "18947acafc02b9781c4ac9612b9570d02eedd46c0115c9f73b5f3d79ec2c354e"
+    },
+    "pinned_registry_path": "galaxies/foreground/data/intervening_census_registry.csv",
+    "pinned_registry_sha256": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+    "figure3_build_registry_sha256": "f35dd8beb733b08dbb38894e5df6fc04af13fc731fd57c3f61dfc8441afd6fbc",
+    "figure3_candidate_id": "fig3-halo-grid",
+    "figure3_candidate": "figure_review/batches/2026-07-22-fig3-source-replay/candidates/fig3-halo-grid.pdf",
+    "figure3_target": "figures/sightline_halo_grid.pdf",
+    "installed_figure3_sha256": "cd719ef203b5f17709db1a9229d7f8fa74b26ee693090bb252632846a29edc00",
+    "figure3_candidate_sha256": "45017274a7e3d60cf6918d72c3e89558c0e9d50e27427d39a216547c4999fa6c",
+    "figure3_candidate_parent_commit": "afa9cc7d59f3f64b5098acd6cf8dca842ca86661",
+    "figure3_candidate_pipeline_commit": "f3c8d22a9088914e0179cfecf1ee4086777dc927",
+    "figure3_evidence_sha256": {
+      "candidate-redshift-ledger": "7235219a0dee7e2dd0be2f10fd524f2739fcce51eed6f0fe0af484d6c79026cf",
+      "candidate-redshift-payloads": "f1c21a95f174bd1ec0bbbf4bb4e82e15a0cac2442d3a529000eeb26787e75dd7",
+      "candidate-redshift-replay": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
+      "expanded-catalog-build": "6d7881c243613149b436de53e69b02d575041b84918f801a9c03a6d927329aef",
+      "figure3-input": "ce0179a27fd2d4f18b7599cea9f8d56f98874d9c4c6a7a654e84395ff163acc3",
+      "law-host-redshifts": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
+      "verdi-host-redshifts": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa"
+    }
+  },
+  "blockers": [
+    {
+      "id": "expanded-catalog-gate-not-passed",
+      "status": "failed",
+      "evidence": "docs/rse/specs/validation-expanded-foreground-catalog.json",
+      "reason": "The existing expanded-catalog validation gate is still failed and superseded, with all eight recorded defects failed. It has not been replaced by a passing independent catalog validation report."
+    },
+    {
+      "id": "source-verification-incomplete",
+      "status": "failed",
+      "evidence": "docs/rse/specs/evidence/foreground-source-verification-pinned-pipeline-2026-07-26/replay.json",
+      "reason": "Replayed independently at the pinned pipeline commit 78b448f0, source verification is 46 of 52 rows with 6 discrepancy rows. The six identity-only rows (oran and wilhelm and hamilton and chromatica PS1-STRM halos, and the isha and oran AllWISE manual extensions) have no frozen authoritative source rows at that commit. The same replay is 52 of 52 with zero discrepancies at pipeline main f5c1d1f3, which the parent does not pin. Verdict and budget replays are clean at both commits."
+    },
+    {
+      "id": "figure3-registry-snapshot-stale",
+      "status": "failed",
+      "evidence": "figure_review/batches/2026-07-22-fig3-source-replay/provenance/expanded-catalog-build.json",
+      "reason": "The Figure 3 candidate was built from registry snapshot f35dd8be at pipeline f3c8d22a. The pinned registry at 78b448f0 is 96bfd323. The two snapshots differ only in the transient-name field for seven rows across chromatica and freya and hamilton, adopted in pipeline #225. The rendered candidate and the installed manuscript figure both still print FRB 20230913A and FRB 20240203A, which the pinned registry supersedes with FRB 20230913G and FRB 20240203D."
+    },
+    {
+      "id": "figure3-owner-approval-missing",
+      "status": "failed",
+      "evidence": "figure_review/batches/2026-07-22-fig3-source-replay/manifest.json",
+      "reason": "The Figure 3 candidate is hash-pinned but its manuscript-owner decision remains pending, with no reviewer, timestamp, note, or approval receipt, and protect_in_manuscript is false."
+    }
+  ],
+  "release_rule": {
+    "may_say_verified": false,
+    "may_promote_figure3": false,
+    "may_promote_scientific_trust": false,
+    "required_for_pass": [
+      "the blocker list is empty",
+      "the manuscript checkout is at the recorded parent commit and its pipeline gitlink is the recorded pipeline commit",
+      "expanded catalog gate status is passed",
+      "an independent source replay at the recorded pipeline commit reproduces the pinned receipt and verifies 52 of 52 rows with zero discrepancies",
+      "registry replay remains validated with zero verdict and budget mismatches at the recorded pipeline commit",
+      "the Figure 3 candidate was built from the pinned registry snapshot",
+      "fig3-halo-grid candidate has a manuscript-owner approved decision",
+      "approved Figure 3 bytes match the pinned candidate SHA-256"
+    ]
+  }
+}

@@ -459,9 +459,16 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pipeline-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--pipeline-commit", default=EXPECTED_PIPELINE_COMMIT)
+    parser.add_argument("--analysis-commit", default=EXPECTED_ANALYSIS_COMMIT)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    result = verify(root, args.pipeline_dir.resolve())
+    result = verify(
+        root,
+        args.pipeline_dir.resolve(),
+        analysis_commit=args.analysis_commit,
+        pipeline_commit=args.pipeline_commit,
+    )
     text = json.dumps(result, indent=2, sort_keys=True) + "\n"
     print(text, end="")
     if args.output:
