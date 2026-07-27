@@ -11,7 +11,7 @@
 On 2026-07-06 two writers committed to main interleaved for over an hour
 with no mutual visibility, and git authorship (`Jakob Faber`) cannot
 distinguish agents from the owner. The journal is the shared activity log;
-the readiness board renders it.
+the readiness board (now `board/readiness.md`, markdown) records it.
 
 ## The store
 
@@ -77,7 +77,7 @@ the readiness board renders it.
    scintillation · energies · synthesis · mechanics), each on an
    inputs→method→measured→validated→written lifecycle; owner-view.json
    components are strand-keyed, and a lane-state change must also update
-   the matching strand swimlane stage in `readiness.html` (the V…G
+   the matching strand swimlane stage in `readiness.md` (the V…G
    recovery map and lane detail live in its agent fold). Journal `lane`
    values stay the canonical task IDs — strands are presentation only. Plain English only — no lane
    IDs without a gloss. Items are `{"h": headline, "d": detail}`: `h`

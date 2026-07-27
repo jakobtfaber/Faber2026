@@ -29,7 +29,7 @@ shared CSV inputs under repo-root `data/`.
 | `ACTIVE_LANES.md` | **GENERATED** by `scripts/sync_state.py` — do not hand-edit |
 | `BOARD.md` | Faber execution dashboard (markdown) |
 | `owner-queue-ritual.md` | Owner-queue operating ritual |
-| `board/` | `readiness.html`, `owner-view.json`, `claims-audit.md` |
+| `board/` | `readiness.md` (markdown board; HTML + deploy scripts archived 2026-07-27), `owner-view.json`, `claims-audit.md` |
 
 ## `protocols/`
 
