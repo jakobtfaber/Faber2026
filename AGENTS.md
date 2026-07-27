@@ -10,6 +10,12 @@ Agent brief for the **Faber2026** manuscript repo.
   acronym or project codename; expand any unavoidable acronym at first use.
   Explain domain statistics (e.g. confidence bounds, order statistics) in
   plain English when they appear.
+- Do not use internal process jargon in user-facing prose. Avoid words and
+  phrases such as “receipt,” “producing script,” “science check,” “truth
+  surface,” “lane,” “gate,” and “fail-closed” unless naming an actual file,
+  command, or established scientific term. Prefer “record,” “script that
+  generated the figure,” “scientific validation,” “source of record,” “task,”
+  “required check,” and “not approved.”
 
 ## Orient with the knowledge base before grepping
 
