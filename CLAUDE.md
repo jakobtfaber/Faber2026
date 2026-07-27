@@ -38,6 +38,12 @@ For multi-step or high-risk work, establish the boundary before acting:
   "prior art". Prefer the vocabulary working scientists use — ideally
   physicists or astrophysicists — such as "adversarial review", "fixing a
   version", or "previous work".
+- Do not use internal process jargon in user-facing prose. Avoid words and
+  phrases such as "receipt", "producing script", "science check", "truth
+  surface", "lane", "gate", and "fail-closed" unless naming an actual file,
+  command, or established scientific term. Prefer "record", "script that
+  generated the figure", "scientific validation", "source of record", "task",
+  "required check", and "not approved".
 - Use exact paths, branches, commits, and commands only where they aid a
   decision or reproducibility; put detailed inventories and audit output in a
   durable receipt file.
