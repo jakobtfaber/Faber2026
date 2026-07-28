@@ -145,9 +145,10 @@ measurements.
 A small timing residual shows that a CHIME and a DSA trigger are \emph{consistent}
 with being the same burst; it does not by itself show that they \emph{are}. The
 complementary question is how often an \emph{unrelated} CHIME burst would fall
-close enough to a given DSA burst---in arrival time, sky position, and dispersion
-measure simultaneously---to mimic the association by chance. We quantify this with
-a chance-coincidence (false-alarm) probability $P_{\rm cc}$.
+inside the pre-specified association window in arrival time and sky position,
+and, for the eight events with an independent CHIME-side DM constraint, in
+dispersion measure as well. We quantify this with a chance-coincidence
+(false-alarm) probability $P_{\rm cc}$.
 
 We model unrelated CHIME bursts as a Poisson point process on the sky. For DSA
 burst $i$, the expected number of unrelated CHIME bursts that land inside the joint
@@ -180,19 +181,24 @@ false-alarm expectation is the sum $\sum_j \mu_j$ over the \emph{trial set}: the
 complete list of DSA-110 triggers searched for a CHIME/FRB counterpart over the
 2022~February--2024~February overlap, not merely the twelve that matched. The
 look-elsewhere penalty is therefore carried explicitly by that sum. Under the
-conservative windows defined below, the eight pairs whose pre-specified
+broad windows defined below, the eight pairs whose pre-specified
 association statistic included a DM constraint have
 $\mu_j\sim2$--$6\times10^{-9}$, while the four position-and-time-only pairs use
 $f_{\rm DM}=1$ and have $\mu_j=4.4\times10^{-7}$. The twelve reported pairs sum
-to $\sum_i\mu_i\approx1.8\times10^{-6}$. Even the conservative extension to the
-entire 64-burst DSA-110 trial set, obtained by scaling by the searched-to-matched
-ratio $64/12$, remains below $10^{-5}$ and leaves the conclusion unchanged.
+to $\sum_i\mu_i\approx1.8\times10^{-6}$. For a class-independent bound within
+the adopted rate, timing, and positional model, we assign every trial the larger
+position-and-time-only value. This gives
+$\sum_j\mu_j < 64(4.41\times10^{-7})=2.9\times10^{-5}$ and leaves the
+conclusion unchanged.
 
-We evaluate Eq.~\eqref{eq:pcc_mu} with deliberately conservative,
-chance-\emph{maximizing} inputs, so the reported $P_{\rm cc}$ is an upper bound on
-the true false-alarm rate: an all-sky CHIME rate rounded up to
+We evaluate Eq.~\eqref{eq:pcc_mu} with deliberately broad rate, positional,
+timing, and DM windows. The window choices increase the estimated chance rate,
+while the eight DM-conditioned values retain dependence on the stated model for
+the CHIME DM distribution. We use an all-sky CHIME rate rounded up to
 $R = 10^{3}\,\mathrm{sky^{-1}\,day^{-1}}$ (above the Catalog~1 value of
-$\simeq525\,\mathrm{sky^{-1}\,day^{-1}}$; \citealt{CHIME2021Catalog}), a
+$525\pm30^{+140}_{-130}\,\mathrm{sky^{-1}\,day^{-1}}$ above 5\,Jy\,ms at
+600\,MHz for $\mathrm{DM}>100\,\mathrm{pc\,cm^{-3}}$ and scattering time below
+10\,ms; \citealt{CHIME2021Catalog}), a
 $0.5^{\circ}$-radius positional disk ($\Omega_{\rm win}=0.785\,\mathrm{deg^2}$,
 i.e.\ $\Omega_{\rm win}/\Omega_{\rm sky}=1.90\times10^{-5}$),
 $\Delta t = \pm1\,\mathrm{s}$ ($2\,\Delta t = 2.31\times10^{-5}$\,day), and
@@ -201,12 +207,12 @@ $f_{\rm DM}=1$, Eq.~\eqref{eq:pcc_mu} evaluates directly to
 $\mu = 10^{3}\times1.90\times10^{-5}\times2.31\times10^{-5}
 = 4.4\times10^{-7}$, the position-and-time-only value quoted below and in
 Table~\ref{tab:sample}.
-These windows are far wider than the actual per-event tolerances (millisecond
-timing, arcsecond-scale DSA localization, and the measured DM agreement), so using
-each event's true tolerances can only lower $P_{\rm cc}$. As an independent check,
-a direct Monte-Carlo of the background point process reproduces the closed-form
-$P_{\rm cc}$ to $0.3\%$ in a regime where both are measurable, and the result is
-stable across several orders of magnitude of variation in each window and in $R$.
+The adopted timing and positional windows are far wider than the millisecond
+timing residuals and arcsecond-scale DSA localizations. A direct Monte Carlo,
+using the same assumed DM distribution, reproduces the closed-form calculation
+to $0.3\%$ in a regime where both are measurable; this checks the numerical
+implementation, not the astrophysical DM model. The analytic result is stable
+across several orders of magnitude of variation in each window and in $R$.
 
 Two idealizations of the Poisson background deserve explicit sensitivity
 statements. First, the model takes $R$ as an isotropic all-sky rate, whereas
@@ -218,8 +224,8 @@ declinations also receive lower-transit coverage. The adopted
 $R=10^{3}\,\mathrm{sky^{-1}\,day^{-1}}$ already doubles the Catalog~1 rate;
 even inflating the \emph{local} rate density by a further factor of ten
 raises the sample-summed expectation only to
-$\sum_i\mu_i\approx1.8\times10^{-5}$ (and the conservative 64-trigger
-extension to $\lesssim10^{-4}$), leaving the association verdict unchanged.
+$\sum_i\mu_i\approx1.8\times10^{-5}$ (and the class-independent 64-trigger
+bound to $<2.9\times10^{-4}$), leaving the association verdict unchanged.
 Second, the model assumes non-repeating background sources, while repeaters
 make close-time coincidences more likely than Poisson within the $\pm1$\,s
 gate. The DSA-110 detection list over the overlap window includes two bursts
