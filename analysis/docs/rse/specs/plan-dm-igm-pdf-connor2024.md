@@ -482,7 +482,7 @@ calls the live budget code, so Phase 2's swap must land first.
       (0.043,0.479,0.300,0.251,0.510,0.271,0.302,0.074,0.287)]"` — expected
       **32, 384, 232, 193, 410, 209, 234, 56, 222** (verified this session);
       any deviation from these exact ints is an abort-and-investigate.
-- [ ] **Edit `pipeline/galaxies/foreground/budget_table_data.json`:**
+- [ ] **Edit `campaigns/foregrounds/budget_table_data.json`:**
       the 9 non-null `dm_cos` row values → the recomputed ints; update the
       `_comment` (`:2`) to name the new provenance: `dm_cos = median of the
       TNG-300 log-normal IGM column at f_IGM=0.76

@@ -42,7 +42,7 @@ natural numerical reference.
   including exact observed DMs and rounded foreground columns.
 - `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv:1-13` is the
   authoritative exact adopted-DM catalog.
-- `pipeline/galaxies/foreground/budget_table_data.json` is the pinned budget
+- `campaigns/foregrounds/budget_table_data.json` is the pinned budget
   SSOT for redshift, MW, cosmic comparator, and total intervening columns.
 - `scripts/dm_budget_intervening_systems.csv` is the versioned per-system
   decomposition used by the figure. Its grouped point columns reproduce the
@@ -108,7 +108,7 @@ in a separate submodule commit, then pinned by the manuscript PR.
 
 - `scripts/dm_budget_uncertainty.py:43-46,64-65,70-101,215-227,240-263,418-435`
 - `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv`
-- `pipeline/galaxies/foreground/budget_table_data.json`
+- `campaigns/foregrounds/budget_table_data.json`
 - `scripts/dm_budget_intervening_systems.csv`
 - `scripts/render_budget_table.py:27-64`
 - `pipeline/galaxies/foreground/attribution_matrix.py:167-205`

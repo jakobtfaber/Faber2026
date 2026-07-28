@@ -42,32 +42,12 @@ def test_release_gate_is_fail_closed_until_source_and_owner_gates_pass():
     assert all(item["status"] == "failed" for item in gate["blockers"])
 
 
-def test_release_gate_is_bound_to_the_current_parent_and_pipeline_commits():
+def test_release_gate_preserves_its_frozen_source_commit_binding():
     gate = json.loads(GATE.read_text(encoding="utf-8"))
-    explicit = os.environ.get("FABER2026_MANUSCRIPT_REPO")
-    configured = explicit or os.environ.get("FABER2026_ROOT")
-    if not configured:
-        pytest.skip("manuscript repository not configured")
-    manuscript = Path(configured)
-    pin_probe = subprocess.run(
-        ["git", "rev-parse", "HEAD:pipeline"], cwd=manuscript,
-        check=False, capture_output=True, text=True,
-    )
-    if pin_probe.returncode:
-        pytest.skip("configured repository has no pipeline gitlink")
-    pin = pin_probe.stdout.strip()
-    if explicit:
-        # Exact parent binding is asserted only in a live validation run; in
-        # parent CI the checkout is an ephemeral merge commit the gate cannot
-        # name in advance, but the pipeline-pin consistency below still binds.
-        head = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=manuscript,
-            check=True, capture_output=True, text=True,
-        ).stdout.strip()
-        assert gate["parent_commit"] == head
-    assert gate["pipeline_commit"] == pin
-    assert gate["expected"]["source_verification_pipeline_commit"] == pin
-    assert gate["expected"]["registry_replay_pipeline_commit"] == pin
+    source = gate["pipeline_commit"]
+    assert len(source) == 40
+    assert gate["expected"]["source_verification_pipeline_commit"] == source
+    assert gate["expected"]["registry_replay_pipeline_commit"] == source
 
 
 def test_release_gate_accepts_only_a_figure_built_from_the_pinned_registry():

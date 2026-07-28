@@ -141,6 +141,13 @@ def consumer_graph(
 
 def destination(path: str) -> tuple[str, str, str, str]:
     """Return repository, destination path, class, and disposition."""
+    if path.startswith(".archive/"):
+        return (
+            "Faber2026-analysis",
+            f".archive/flits/{path.removeprefix('.archive/')}",
+            "project-archive",
+            "move",
+        )
     if path.startswith("analysis/"):
         relative = path.removeprefix("analysis/")
         return "Faber2026-analysis", f"campaigns/{relative}", "project-campaign", "move"
@@ -174,7 +181,15 @@ def destination(path: str) -> tuple[str, str, str, str]:
     for prefix, destination_prefix in project_prefixes.items():
         if path.startswith(prefix):
             relative = path.removeprefix(prefix)
-            if prefix == "crossmatching/" and path.endswith(".py"):
+            project_plotters = {
+                "crossmatching/plot_association_cards.py",
+                "crossmatching/plotting.py",
+            }
+            if (
+                prefix == "crossmatching/"
+                and path.endswith(".py")
+                and path not in project_plotters
+            ):
                 return "dsa110-FLITS", path, "reusable-code", "keep-reusable"
             return (
                 "Faber2026-analysis",
@@ -188,6 +203,12 @@ def destination(path: str) -> tuple[str, str, str, str]:
         "machine_inventory.yaml": "data/catalog/machine_inventory.yaml",
         "docs/codetection-science-plan.md": "campaigns/codetections/codetection-science-plan.md",
         "docs/freya_evidence.html": "campaigns/scintillation/freya_evidence.html",
+        "galaxies/foreground/budget_table_data.json": (
+            "campaigns/foregrounds/budget_table_data.json"
+        ),
+        "galaxies/foreground/foreground_table_data.json": (
+            "campaigns/foregrounds/foreground_table_data.json"
+        ),
         "scintillation/freya_analysis_results.json": (
             "campaigns/scintillation/freya_analysis_results.json"
         ),

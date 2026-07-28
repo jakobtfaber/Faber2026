@@ -561,7 +561,7 @@ def write_index(library: Path, inventory: dict[str, Any], catalog: Catalog) -> N
         f"**Pipeline:** `{inventory['pipeline_root']}`",
         "",
         "This tree is the **navigable inventory** of scientific results.",
-        "Fitting / analysis *code* stays in `Faber2026` and `pipeline/` (FLITS).",
+        "Reusable fitting code stays in the pinned FLITS package; project analysis stays here.",
         "`mode: materialize` slots hold real bytes here; repo paths are symlinks back.",
         "`mode: link_only` slots stay as library → repo (Overleaf / small live catalogs).",
         "Trust tags follow the 2026-07-06 trust reset + later provisional gates.",
@@ -614,7 +614,7 @@ def write_index(library: Path, inventory: dict[str, Any], catalog: Catalog) -> N
             "- Overleaf `figures/`, `figure_review/`, `repro_manifest.csv`.",
             "- Small live catalogs (`tau_consistency_catalog.csv`, TeX `exports/`).",
             "- Mixed analysis trees without a results-only carve-out.",
-            "- Analysis **driver scripts** stay under `pipeline/analysis/<campaign>/`.",
+            "- Analysis **driver scripts** stay under `campaigns/<campaign>/`.",
             "- Raw `.npy` bursts under h17 / `~/Data/Faber2026/dsa110/` (see `DATA_LOCATIONS.md`).",
             "",
         ]

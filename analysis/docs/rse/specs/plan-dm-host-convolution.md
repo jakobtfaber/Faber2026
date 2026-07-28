@@ -154,7 +154,7 @@ authoritative products.
   each nonzero budget `dm_int`.
 - [x] Implement loaders for
   `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv`,
-  `pipeline/galaxies/foreground/budget_table_data.json`, and
+  `campaigns/foregrounds/budget_table_data.json`, and
   `scripts/dm_budget_intervening_systems.csv`.
 - [x] Replace `host_posterior()` with `host_distribution()` that convolves disk,
   halo, IGM, and every individual intervening system.

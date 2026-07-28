@@ -74,7 +74,7 @@ REPO = manuscript_root()
 OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
 OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf"
 OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png"
-BUDGET_DATA = REPO / "pipeline" / "galaxies" / "foreground" / "budget_table_data.json"
+BUDGET_DATA = ANALYSIS_ROOT / "campaigns" / "foregrounds" / "budget_table_data.json"
 DM_CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 SYSTEMS_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_intervening_systems.csv"
 
@@ -815,17 +815,12 @@ def _apply_manuscript_style() -> None:
     """Same style stack as scripts/plot_codetection_gallery.py / flits.plotting.
 
     SciencePlots ``["science", "notebook"]`` plus the FLITS Computer-Modern
-    overrides (no TeX binary required). Falls back to ``pipeline/matplotlibrc``
+    overrides (no TeX binary required). Falls back to the installed FLITS style
     if SciencePlots is unavailable.
     """
     import matplotlib.pyplot as plt
 
     try:
-        import sys
-
-        pipe = str(REPO / "pipeline")
-        if pipe not in sys.path:
-            sys.path.insert(0, pipe)
         from flits.plotting import use_flits_style
 
         use_flits_style()
@@ -839,7 +834,9 @@ def _apply_manuscript_style() -> None:
     except Exception:
         import matplotlib
 
-        rc = REPO / "pipeline" / "matplotlibrc"
+        from flits.resources import path as resource_path
+
+        rc = resource_path("matplotlibrc")
         if rc.exists():
             matplotlib.rc_file(str(rc))
     plt.rcParams["text.usetex"] = False

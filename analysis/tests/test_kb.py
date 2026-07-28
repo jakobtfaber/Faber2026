@@ -106,10 +106,10 @@ def test_bib_parser_roundtrip():
         assert "title" in fields or "author" in fields
 
 
-def test_sources_span_analysis_manuscript_and_pipeline():
+def test_sources_span_analysis_and_manuscript():
     assert config.ANALYSIS_ROOT == REPO
     assert config.MANUSCRIPT_ROOT == manuscript_root()
     assert any(doc[1] == "main.tex" for doc in adapters.iter_docs())
     assert any(doc[1].startswith("analysis/docs/") for doc in adapters.iter_docs())
-    assert next(adapters.iter_config())[1].startswith("pipeline/")
+    assert next(adapters.iter_config())[1].startswith("analysis/")
     assert any(doc[1] == "Macquart2020" for doc in adapters.iter_refs())

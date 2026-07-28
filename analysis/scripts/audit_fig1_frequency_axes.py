@@ -23,7 +23,7 @@ CHIME_METADATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/upchan_codetection
 FIXTURE_DEFAULT = (
     ANALYSIS_ROOT / "campaigns" / "crossmatching" / "notebook_reproduction_fixture.json"
 )
-MANIFEST_DEFAULT = ROOT / "pipeline/data-manifest.csv"
+MANIFEST_DEFAULT = ROOT / "data/catalog/data-manifest.csv"
 
 
 def sha256(path: Path) -> str:

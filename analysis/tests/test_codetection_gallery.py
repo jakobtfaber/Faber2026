@@ -131,9 +131,8 @@ def test_load_band_applies_native_residual_dm_before_averaging(monkeypatch, tmp_
     assert calls == [((8, 20), (8,), 1e-5, 0.125, "zero_fill")]
 
 
-def test_nick_tns_matches_pipeline():
-    sys.path.insert(0, str(ROOT / "pipeline" / "scattering"))
-    from scat_analysis.burst_metadata import _FALLBACK_TNS
+def test_nick_tns_matches_installed_flits():
+    from scattering.scat_analysis.burst_metadata import _FALLBACK_TNS
 
     canon = {k.lower(): v for k, v in _FALLBACK_TNS.items()}
     assert {k.lower(): v for k, v in NICK_TNS.items()} == canon

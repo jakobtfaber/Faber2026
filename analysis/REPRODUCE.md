@@ -261,7 +261,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
   CSV from a submodule test, so it is only meaningful for a matched
   (super-repo commit, submodule pin) pair.
 - **foreground** — every numeric object ID's verdict is cross-checked against
-  the census registry `pipeline/galaxies/foreground/data/intervening_census_registry.csv`
+  the census registry `campaigns/foregrounds/data/intervening_census_registry.csv`
   (27/27 registry-resident rows). The table is a curated subset of the registry's
   confirmed+inconclusive systems (refuted candidates omitted; the cluster row's
   ID comes from the WenHan2024 catalog, not the registry).

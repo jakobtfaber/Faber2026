@@ -57,6 +57,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
+from flits.resources import path as resource_path
 
 from plot_codetection_data_grid import DM_CATALOG_DEFAULT, load_adopted_dms
 from plot_codetection_gallery import BANDS, discover_products, load_band
@@ -71,7 +72,7 @@ from plot_codetection_triptych import (
 
 K_DM_MS = 4.148808e6  # dispersion constant, ms MHz^2 (pc cm^-3)^-1
 LTE_MHZ = (729.0, 756.0)  # persistent CHIME excision window used as the anchor
-TELESCOPES_YAML = ROOT / "pipeline" / "scattering" / "configs" / "telescopes.yaml"
+TELESCOPES_YAML = resource_path("scattering_telescopes.yaml")
 
 
 def _flagged_rows_raw(path: Path, n_cols: int = 1500) -> np.ndarray:

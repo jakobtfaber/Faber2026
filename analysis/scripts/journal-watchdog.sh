@@ -16,7 +16,6 @@ age=$(( ($(date +%s) - last_s) / 60 ))
 [ "$age" -lt 10 ] && exit 0
 recent=$(find "$REPO" -type f -mmin -10 \
   -not -path "$REPO/.git/*" \
-  -not -path "$REPO/pipeline/*" \
   -not -path "$REPO/docs/rse/board/*" \
   -not -name "journal.jsonl" -not -name "*.swp" -not -name ".DS_Store" \
   2>/dev/null | head -6)

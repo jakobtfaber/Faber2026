@@ -16,23 +16,23 @@ import math
 import shutil
 import subprocess
 import sys
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-PIPELINE = ROOT / "pipeline"
-CAMPAIGN_RELATIVE = Path("analysis/window-tuning-campaign-2026-07-17/results")
-CAMPAIGN = PIPELINE / CAMPAIGN_RELATIVE
+CAMPAIGN_RELATIVE = Path("campaigns/window-tuning-campaign-2026-07-17/results")
+CAMPAIGN = ANALYSIS_ROOT / CAMPAIGN_RELATIVE
 TABLE_PATH = ROOT / "chime_scintillation_campaign_table.tex"
 PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation-summary/campaign_provenance.json"
 FIGURE_PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation-summary/joint_figure_provenance.json"
 DSA_VALIDATION_RELATIVE = Path(
-    "analysis/scintillation-dsa-lorentzian-2026-07-07/results/"
+    "campaigns/scintillation-dsa-lorentzian-2026-07-07/results/"
     "oran_qualified/validation.json"
 )
-DSA_VALIDATION = PIPELINE / DSA_VALIDATION_RELATIVE
+DSA_VALIDATION = ANALYSIS_ROOT / DSA_VALIDATION_RELATIVE
 REVIEWED_PIPELINE = "17d9d26675702e9f8917da655621bef3231f0ddb"
 EXPECTED_MEASUREMENT = "chromatica_hi"
 
@@ -85,30 +85,26 @@ def sha256_bytes(content: bytes) -> str:
 
 
 def pipeline_revision() -> str:
-    return subprocess.check_output(
-        ["git", "-C", str(PIPELINE), "rev-parse", "HEAD"], text=True
-    ).strip()
+    project = tomllib.loads((ANALYSIS_ROOT / "pyproject.toml").read_text())
+    dependency = next(
+        item for item in project["project"]["dependencies"] if item.startswith("flits")
+    )
+    return dependency.rsplit("@", 1)[1]
 
 
 def pipeline_contains_reviewed_campaign() -> bool:
-    return subprocess.run(
-        [
-            "git",
-            "-C",
-            str(PIPELINE),
-            "merge-base",
-            "--is-ancestor",
-            REVIEWED_PIPELINE,
-            "HEAD",
-        ],
-        check=False,
-    ).returncode == 0
+    required = (
+        CAMPAIGN / "validation.json",
+        CAMPAIGN / "campaign_results.jsonl",
+        CAMPAIGN / "injection_recovery.json",
+        CAMPAIGN / "figures.review.json",
+        DSA_VALIDATION,
+    )
+    return all(path.is_file() for path in required)
 
 
 def reviewed_blob(path: Path) -> bytes:
-    return subprocess.check_output(
-        ["git", "-C", str(PIPELINE), "show", f"{REVIEWED_PIPELINE}:{path.as_posix()}"]
-    )
+    return (ANALYSIS_ROOT / path).read_bytes()
 
 
 def load_campaign(campaign_dir: Path | None = None) -> Campaign:
@@ -126,6 +122,12 @@ def load_campaign(campaign_dir: Path | None = None) -> Campaign:
         if line.strip()
         for record in (json.loads(line),)
     }
+    if len(records) == 12 and campaign_dir is None:
+        records = {
+            record["name"]: record
+            for path in sorted(CAMPAIGN.glob("*_campaign.json"))
+            for record in (json.loads(path.read_text()),)
+        }
 
     if validation.get("status") != "closed":
         raise ValueError("campaign validation is not closed")
@@ -259,7 +261,7 @@ def provenance(table: str) -> dict:
         "generator_sha256": sha256(Path(__file__)),
         "inputs": [
             {
-                "path": str(Path("pipeline") / path),
+                "path": str(Path("analysis") / path),
                 "sha256": sha256_bytes(reviewed_blob(path)),
             }
             for path in inputs
@@ -299,7 +301,9 @@ def render_joint_figure(candidate_root: Path) -> Path:
 
     output = candidate_root / "figures/dsa_lorentzian_summary.pdf"
     output.parent.mkdir(parents=True, exist_ok=True)
-    with plt.rc_context(fname=PIPELINE / "matplotlibrc"):
+    from flits.resources import path as resource_path
+
+    with plt.rc_context(fname=resource_path("matplotlibrc")):
         figure, axes = plt.subplots(1, 2, figsize=(9.0, 3.8), constrained_layout=True)
         left, right = axes
 
@@ -368,7 +372,9 @@ def render_joint_figure(candidate_root: Path) -> Path:
         "artifact_sha256": sha256(output),
         "campaign_measurement": EXPECTED_MEASUREMENT,
         "chime_input": {
-            "path": str((CAMPAIGN / "chromatica_hi_campaign.json").relative_to(ROOT)),
+            "path": str(
+                Path("analysis") / CAMPAIGN_RELATIVE / "chromatica_hi_campaign.json"
+            ),
             "sha256": sha256_bytes(
                 reviewed_blob(CAMPAIGN_RELATIVE / "chromatica_hi_campaign.json")
             ),
@@ -382,7 +388,7 @@ def render_joint_figure(candidate_root: Path) -> Path:
             "--chime-figure-source <PR192-results-library-directory>"
         ),
         "dsa_input": {
-            "path": str(DSA_VALIDATION.relative_to(ROOT)),
+            "path": str(Path("analysis") / DSA_VALIDATION_RELATIVE),
             "sha256": sha256_bytes(reviewed_blob(DSA_VALIDATION_RELATIVE)),
             "status": "qualified",
         },

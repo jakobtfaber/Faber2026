@@ -52,7 +52,7 @@ git submodule update --init pipeline
 export PYTHONPATH="$PWD/analysis/dm-joint-phase-v2/code:$PWD/pipeline"
 
 python analysis/dm-joint-phase-v2/code/scripts/run_joint_dm_phase.py \
-  --manifest pipeline/data-manifest.csv \
+  --manifest data/catalog/data-manifest.csv \
   --output analysis/dm-joint-phase-v2/results/fits.json
 
 python analysis/dm-joint-phase-v2/code/scripts/validate_joint_dm_phase.py \
@@ -84,7 +84,7 @@ runs must name the CHIME/FRB and DSA-110 product roots separately:
 export PYTHONPATH="$PWD/pipeline"
 
 python scripts/run_joint_dm_phase.py \
-  --manifest pipeline/data-manifest.csv \
+  --manifest data/catalog/data-manifest.csv \
   --chime-full-root ~/Data/Faber2026/chimefrb/CHIME_bursts \
   --dsa-full-root ~/Data/Faber2026/dsa110/DSA_bursts \
   --output analysis/dm-joint-phase-v2/results/fits.json

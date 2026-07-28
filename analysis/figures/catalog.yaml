@@ -20,7 +20,7 @@ figures:
         - analysis/scripts/dm_budget_uncertainty.py
       cwd: .
     inputs:
-      - pipeline/galaxies/foreground/budget_table_data.json
+      - analysis/campaigns/foregrounds/budget_table_data.json
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
       - analysis/scripts/dm_budget_intervening_systems.csv
       - analysis/scripts/phineas_halo_crossing_inputs.csv
@@ -67,15 +67,19 @@ figures:
       argv:
         - uv
         - run
+        - --project
+        - .
+        - --frozen
         - python
-        - galaxies/v2_0/sightline_halo_grid.py
+        - -m
+        - galaxies.v2_0.sightline_halo_grid
         - --halo-csv
-        - galaxies/foreground/data/sightline_halo_grid.csv
+        - campaigns/foregrounds/data/sightline_halo_grid.csv
         - --out-dir
-        - ../analysis/figure_review/staging/fig3_halo_grid/figures
-      cwd: pipeline
+        - figure_review/staging/fig3_halo_grid/figures
+      cwd: analysis
     inputs:
-      - pipeline/galaxies/foreground/data/sightline_halo_grid.csv
+      - analysis/campaigns/foregrounds/data/sightline_halo_grid.csv
     outputs:
       - analysis/figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf
     manuscript_target: figures/sightline_halo_grid.pdf
@@ -90,18 +94,27 @@ figures:
     repro_output: figures/sightline_dm_scattering_budget.pdf
     notes: >-
       Intermediate node. systems_figures.py reads
-      pipeline/results/sightline_dm_scattering_budget.csv written by this module.
+      campaigns/results/sightline_dm_scattering_budget.csv written by this module.
     producer:
       argv:
         - uv
         - run
+        - --project
+        - .
+        - --frozen
         - python
         - -m
         - galaxies.foreground.sightline_budget
-      cwd: pipeline
+        - --results-dir
+        - campaigns/results
+        - --configs-dir
+        - config/fits/scattering/bursts/chime
+        - --census-data-dir
+        - campaigns/foregrounds/data
+      cwd: analysis
     inputs: []
     outputs:
-      - pipeline/results/sightline_dm_scattering_budget.csv
+      - analysis/campaigns/results/sightline_dm_scattering_budget.csv
     depends_on: []
     approval_slot: null
 
@@ -114,13 +127,21 @@ figures:
       argv:
         - uv
         - run
+        - --project
+        - .
+        - --frozen
         - python
-        - galaxies/v2_0/systems_figures.py
+        - -m
+        - galaxies.v2_0.systems_figures
+        - --results-dir
+        - campaigns/results
+        - --census-data-dir
+        - campaigns/foregrounds/data
         - --out-dir
         - ../figures
-      cwd: pipeline
+      cwd: analysis
     inputs:
-      - pipeline/results/sightline_dm_scattering_budget.csv
+      - analysis/campaigns/results/sightline_dm_scattering_budget.csv
     outputs:
       - figures/clusters_icm.pdf
     depends_on:
@@ -136,9 +157,14 @@ figures:
       argv:
         - uv
         - run
+        - --project
+        - .
+        - --frozen
         - python
-        - crossmatching/plot_association_cards.py
-      cwd: pipeline
+        - campaigns/crossmatching/plot_association_cards.py
+        - --manuscript-dir
+        - ../figures/association_cards
+      cwd: analysis
     inputs: []
     outputs:
       - figures/association_cards/association_card_*.pdf
@@ -161,7 +187,7 @@ figures:
         - analysis/scripts/plot_toa_offset_decomposition.py
       cwd: .
     inputs:
-      - campaigns/crossmatching/toa_crossmatch_results.json
+      - analysis/campaigns/crossmatching/toa_crossmatch_results.json
     outputs:
       - figures/toa_offset_decomposition.pdf
     depends_on: []
@@ -205,7 +231,7 @@ figures:
     manuscript: false
     clone_ok: false
     repro_output: >-
-      pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png
+      analysis/campaigns/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png
     notes: >-
       Pipeline qualification product only — not a dedicated manuscript figure.
       Certified DSA bandwidth evidence lives under oran_qualified/; do not
@@ -216,11 +242,13 @@ figures:
         - run
         - --frozen
         - python
-        - analysis/scintillation-dsa-lorentzian-2026-07-07/run_oran_dsa_measurement.py
-      cwd: pipeline
+        - campaigns/scintillation-dsa-lorentzian-2026-07-07/validate_oran_dsa_measurement.py
+        - --output-dir
+        - campaigns/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified
+      cwd: analysis
     inputs: []
     outputs:
-      - pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png
+      - analysis/campaigns/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png
     depends_on: []
     approval_slot: oran-qualified-scintillation
 
@@ -259,10 +287,12 @@ figures:
       argv:
         - uv
         - run
+        - --project
+        - .
         - --frozen
         - python
-        - analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py
-      cwd: pipeline
+        - campaigns/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py
+      cwd: analysis
     inputs: []
     outputs:
       - figures/dsa_lorentzian_summary.pdf
@@ -283,10 +313,10 @@ figures:
         - flits
         - --no-capture-output
         - python
-        - analysis/scattering-refit-2026-06/plot_jointmodel_pair.py
+        - campaigns/scattering-refit-2026-06/plot_jointmodel_pair.py
         - --out-dir
         - ../figures/jointmodel_pair
-      cwd: pipeline
+      cwd: analysis
     inputs: []
     outputs:
       - figures/jointmodel_pair/*_jointmodel_pair.pdf
@@ -303,10 +333,12 @@ figures:
       argv:
         - uv
         - run
+        - --project
+        - .
         - --frozen
         - python
-        - analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py
-      cwd: pipeline
+        - campaigns/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py
+      cwd: analysis
     inputs: []
     outputs:
       - figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf

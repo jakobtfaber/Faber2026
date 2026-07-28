@@ -956,7 +956,7 @@ def parser() -> argparse.ArgumentParser:
     new.add_argument(
         "--pipeline-repo",
         type=Path,
-        default=MANUSCRIPT_ROOT / "pipeline",
+        default=ANALYSIS_ROOT,
         help="FLITS checkout used to read submodule artifacts",
     )
     new.add_argument(

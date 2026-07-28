@@ -8,10 +8,10 @@ relationship along any of the twelve co-detection sightlines?
 
 ## Sources and trust boundary
 
-- `pipeline/galaxies/foreground/budget_table_data.json:1-18` is the
+- `campaigns/foregrounds/budget_table_data.json:1-18` is the
   registry-authoritative V4 budget source. Its `u` flag means the absence of an
   eligible system is coverage-limited, not a foreground exclusion.
-- `pipeline/galaxies/foreground/foreground_table_data.json:1-15` is the
+- `campaigns/foregrounds/foreground_table_data.json:1-15` is the
   deduplicated confirmed/inconclusive census used by the manuscript.
 - `scripts/dm_budget_intervening_systems.csv` lists the budget-eligible systems
   individually and prevents a count of cross-listed candidates from being

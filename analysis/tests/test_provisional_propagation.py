@@ -46,7 +46,7 @@ def test_foreground_alignment_classification_is_cautious_and_coverage_aware():
 
 
 def test_frozen_result_roster_and_status_are_explicit():
-    result = json.loads(Path("analysis/provisional_propagation/results.json").read_text())
+    result = json.loads(Path("provisional_propagation/results.json").read_text())
     assert result["status"] == "SCREEN_ANALYSIS_PENDING"
     assert result["screen_analysis_status"] == "PENDING_ALPHA4_CONSISTENCY_REFITS"
     assert len(result["screen_rows"]) == 7

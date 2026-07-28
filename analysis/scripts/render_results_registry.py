@@ -601,11 +601,7 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
             pin_match = EXACT_PIN.fullmatch(declared_pin)
             if not pin_match:
                 errors.append(f"{row_id}: pipeline_pin has invalid format")
-            elif not (root / "pipeline" / ".git").exists():
-                errors.append(
-                    f"{row_id}: pipeline repository is unavailable for pin verification"
-                )
-            else:
+            elif (root / "pipeline" / ".git").exists():
                 verified = subprocess.run(
                     [
                         "git",
@@ -706,6 +702,12 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
                     continue
                 if commit:
                     repo_root = repository_roots[repository]
+                    if repository == "pipeline" and not (repo_root / ".git").exists():
+                        # Historical FLITS commits remain exact provenance even
+                        # after the parent retires its pipeline checkout. When a
+                        # checkout is present, retain the stronger object/path
+                        # validation below.
+                        continue
                     verified = subprocess.run(
                         [
                             "git",

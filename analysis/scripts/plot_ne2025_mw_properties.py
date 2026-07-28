@@ -1,5 +1,4 @@
 import os
-import sys
 import argparse
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -11,14 +10,11 @@ from multiprocessing import Pool
 # Ignore all warnings to keep stdout clean
 warnings.filterwarnings("ignore")
 
-# Add pipeline directory to sys.path
-sys.path.append(str(Path(__file__).resolve().parent.parent / "pipeline"))
-
 # Load matplotlib rc file
 import matplotlib
-rc_path = Path(__file__).resolve().parent.parent / "pipeline/matplotlibrc"
-if rc_path.exists():
-    matplotlib.rc_file(str(rc_path))
+from flits.resources import path as flits_resource
+
+matplotlib.rc_file(str(flits_resource("matplotlibrc")))
 
 import healpy as hp
 from mwprop.nemod.NE2025 import ne2025

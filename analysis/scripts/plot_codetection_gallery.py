@@ -39,10 +39,10 @@ from pathlib import Path
 
 import numpy as np
 
-from workspace import manuscript_root
+from flits.resources import path as resource_path
+from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-sys.path.append(str(ROOT / "pipeline"))
 
 CHIME_FULL_ROOT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
@@ -207,7 +207,7 @@ def _apply_style() -> None:
     except Exception:
         import matplotlib
 
-        rc = ROOT / "pipeline" / "matplotlibrc"
+        rc = resource_path("matplotlibrc")
         if rc.exists():
             matplotlib.rc_file(str(rc))
     plt.rcParams["text.usetex"] = False
@@ -282,7 +282,7 @@ def render(
         }
     )
 
-    with open(ROOT / "pipeline" / "configs" / "bursts.yaml") as fh:
+    with (ANALYSIS_ROOT / "config" / "bursts.yaml").open() as fh:
         catalog = yaml.safe_load(fh)["bursts"]
     order = sorted(catalog, key=lambda k: catalog[k]["mjd"])
     if set(order) != set(NICK_TNS):

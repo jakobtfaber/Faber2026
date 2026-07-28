@@ -37,7 +37,7 @@ CHIME_FULL_ROOT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 UPCHAN_ROOT = Path.home() / "Data/Faber2026/dsa110/upchan_codetections"
 DECK = ROOT / "docs/rse/decks/scintillation/waterfall-review-2026-07-18"
-MANIFEST = ROOT / "pipeline/data-manifest.csv"
+MANIFEST = ROOT / "data/catalog/data-manifest.csv"
 OUT_JSON = ROOT / "docs/rse/certificates/l0-certificates.json"
 REGISTRY = ROOT / "docs/rse/control/results-registry.toml"
 

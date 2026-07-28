@@ -203,13 +203,16 @@ def check_toa_correction_gate(findings: list[str]) -> None:
 
 def check_foreground_census_wording(findings: list[str]) -> None:
     """Keep the observations prose aligned to the frozen census registry."""
-    registry_path = ROOT / "pipeline/galaxies/foreground/data/intervening_census_registry.csv"
+    registry_path = (
+        ANALYSIS_ROOT / "campaigns/foregrounds/data/intervening_census_registry.csv"
+    )
     try:
         with registry_path.open(newline="", encoding="utf-8") as fh:
             rows = list(csv.DictReader(fh))
     except OSError as exc:
         findings.append(
-            f"{registry_path.relative_to(ROOT)}: cannot audit foreground census wording: {exc}"
+            f"{registry_path.relative_to(ANALYSIS_ROOT)}: "
+            f"cannot audit foreground census wording: {exc}"
         )
         return
 

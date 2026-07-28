@@ -8,8 +8,6 @@ UV ?= uv
 check-mount:
 	@test -f "$(MANUSCRIPT_ROOT_ABS)/main.tex" || \
 		(echo "Faber2026 parent not found at $(MANUSCRIPT_ROOT_ABS)" >&2; exit 1)
-	@test -d "$(MANUSCRIPT_ROOT_ABS)/pipeline" || \
-		(echo "pipeline submodule not found at $(MANUSCRIPT_ROOT_ABS)/pipeline" >&2; exit 1)
 
 check-state: check-mount
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/sync_state.py --check --offline
@@ -20,7 +18,7 @@ test: check-state
 	cd "$(MANUSCRIPT_ROOT_ABS)" && \
 		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
 		PYTHONPATH="$(MANUSCRIPT_ROOT_ABS)/analysis:$(MANUSCRIPT_ROOT_ABS)/analysis/scripts" \
-		$(UV) run --project pipeline --group test --frozen python -m pytest -q -ra \
+		$(UV) run --project analysis --group test --frozen python -m pytest -q -ra \
 		--strict-config --strict-markers analysis/tests
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/figure_review.py verify
 	bash tests/test_journal_append.sh

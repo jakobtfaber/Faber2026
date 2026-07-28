@@ -28,7 +28,7 @@ second galaxy candidate plus a second cluster-scale crossing.
   frozen 49-row registry.
 - `pipeline/galaxies/foreground/census_registry.py:76-82` already has the
   correct budget gate for these verdicts.
-- `pipeline/galaxies/foreground/foreground_table_data.json` is the table SSOT.
+- `campaigns/foregrounds/foreground_table_data.json` is the table SSOT.
 - `sections/observations.tex:298-335` states the pre-extension counts.
 - `sections/appendix.tex:33-68` documents the adopted cluster model.
 
@@ -75,7 +75,7 @@ and zero budget effect before implementation.
 - [x] Run
   `uv run pytest galaxies/foreground/test_census_registry.py -q`; expect the
   new assertions to fail against the 49-row registry.
-- [x] Add `pipeline/galaxies/foreground/data/census_extensions/v4_extension.csv`
+- [x] Add `campaigns/foregrounds/data/census_extensions/v4_extension.csv`
   with the three adjudicated rows.
 - [x] Add `load_census_extensions()` and append/validation logic in
   `pipeline/galaxies/foreground/census_registry.py:85-163`; reject duplicate

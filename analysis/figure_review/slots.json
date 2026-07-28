@@ -35,7 +35,7 @@
       "family": "foreground-halo-grid",
       "target": "figures/sightline_halo_grid.pdf",
       "protect_in_manuscript": false,
-      "generator": "pipeline/galaxies/v2_0/sightline_halo_grid.py --halo-csv pipeline/galaxies/foreground/data/sightline_halo_grid.csv",
+      "generator": "cd analysis && uv run --frozen python -m galaxies.v2_0.sightline_halo_grid --halo-csv campaigns/foregrounds/data/sightline_halo_grid.csv",
       "required_provenance": [
         "expanded-catalog build manifest and SHA-256",
         "versioned Figure 3 input and SHA-256",
@@ -64,7 +64,7 @@
       "title_pattern": "DSA-110 scintillation ACF: {tns}",
       "family": "scintillation-acf",
       "target_pattern": "figures/dsa_scint_acf/{nick}_dsa_acf_lorentzian_fits.pdf",
-      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "generator": "analysis/campaigns/scintillation-dsa-lorentzian-2026-07-07",
       "required_provenance": [
         "sub-band edges and center frequencies",
         "symmetric-lag ACF samples, errors, and lag exclusions",
@@ -132,7 +132,7 @@
       "title_pattern": "DM-locked joint-model audit: {tns}",
       "family": "joint-model",
       "target_pattern": "figures/jointmodel_pair/{nick}_jointmodel_pair.pdf",
-      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "generator": "analysis/campaigns/scattering-dm-locked-2026-07-14",
       "required_provenance": [
         "adopted DM and input-product DM for both telescopes",
         "exact fit artifact and configuration SHA-256",
@@ -189,8 +189,8 @@
       "id": "oran-qualified-scintillation",
       "title": "Qualified Oran DSA-110 scintillation calibration",
       "family": "scintillation-qualification",
-      "target": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png",
-      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/validate_oran_dsa_measurement.py",
+      "target": "campaigns/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png",
+      "generator": "campaigns/scintillation-dsa-lorentzian-2026-07-07/validate_oran_dsa_measurement.py",
       "required_provenance": [
         "frozen real-background injection configuration",
         "injection recovery and off-pulse null results",

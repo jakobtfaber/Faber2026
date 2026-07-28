@@ -504,6 +504,13 @@ def test_pipeline_pin_is_anchored_and_verified_in_pipeline_repo(tmp_path: Path) 
     )
 
 
+def test_historical_pipeline_pin_remains_valid_without_checkout(tmp_path: Path) -> None:
+    registry, row = _minimal_registry(tmp_path)
+    row["pipeline_pin"] = "a" * 40
+    errors = validate_registry(registry, tmp_path)
+    assert not any("pipeline repository is unavailable" in error for error in errors)
+
+
 def test_provenance_path_must_exist_at_declared_commit(tmp_path: Path) -> None:
     registry, row = _minimal_registry(tmp_path)
     pipeline = tmp_path / "pipeline"

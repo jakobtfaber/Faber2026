@@ -27,10 +27,8 @@ DOCS_GLOBS = [
     (MANUSCRIPT_ROOT, "*.md"),
     (MANUSCRIPT_ROOT, "sections/*.tex"),
     (MANUSCRIPT_ROOT, "main.tex"),
-    (MANUSCRIPT_ROOT, "pipeline/*.md"),
-    (MANUSCRIPT_ROOT, "pipeline/docs/**/*.md"),
-    (MANUSCRIPT_ROOT, "pipeline/external/**/*.md"),
-    (MANUSCRIPT_ROOT, "pipeline/exports/*.tex"),
+    (ANALYSIS_ROOT, "campaigns/**/*.md"),
+    (ANALYSIS_ROOT, "campaigns/**/*.tex"),
 ]
 # Paths never indexed by the docs adapter (tickets have their own adapter).
 DOCS_EXCLUDE_PARTS = {
@@ -45,18 +43,7 @@ CODE_DIRS = [
     ANALYSIS_ROOT / "scripts",
     ANALYSIS_ROOT / "tests",
     MANUSCRIPT_ROOT / "figures" / "ax",
-    MANUSCRIPT_ROOT / "pipeline" / "analysis",
-    MANUSCRIPT_ROOT / "pipeline" / "galaxies",
-    MANUSCRIPT_ROOT / "pipeline" / "scintillation",
-    MANUSCRIPT_ROOT / "pipeline" / "scattering",
-    MANUSCRIPT_ROOT / "pipeline" / "flits",
-    MANUSCRIPT_ROOT / "pipeline" / "simulation",
-    MANUSCRIPT_ROOT / "pipeline" / "dispersion",
-    MANUSCRIPT_ROOT / "pipeline" / "crossmatching",
-    MANUSCRIPT_ROOT / "pipeline" / "scripts",
-    MANUSCRIPT_ROOT / "pipeline" / "tests",
-    MANUSCRIPT_ROOT / "pipeline" / "notebooks",
-    MANUSCRIPT_ROOT / "pipeline" / "external",
+    ANALYSIS_ROOT / "campaigns",
 ]
 CODE_MAX_FILE_BYTES = 200_000
 NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are skipped
@@ -65,18 +52,19 @@ NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are 
 # config: pipeline YAML (telescopes, samplers, bursts, manifests, envs)
 # ---------------------------------------------------------------------------
 CONFIG_GLOBS = [
-    (MANUSCRIPT_ROOT, "pipeline/**/*.yaml"),
-    (MANUSCRIPT_ROOT, "pipeline/**/*.yml"),
+    (ANALYSIS_ROOT, "config/**/*.yaml"),
+    (ANALYSIS_ROOT, "config/**/*.yml"),
+    (ANALYSIS_ROOT, "campaigns/**/*.yaml"),
+    (ANALYSIS_ROOT, "campaigns/**/*.yml"),
 ]
 
 # ---------------------------------------------------------------------------
-# git: commit history (parent repo + pipeline/ submodule). PRs via `gh`.
+# git: commit history (analysis + parent). FLITS is pinned by uv.lock.
 # ---------------------------------------------------------------------------
 GIT_MAX_COMMITS = 2000
 GIT_REPOS = [
     (ANALYSIS_ROOT, "analysis@"),
     (MANUSCRIPT_ROOT, ""),
-    (MANUSCRIPT_ROOT / "pipeline", "pipeline@"),
 ]
 
 # ---------------------------------------------------------------------------

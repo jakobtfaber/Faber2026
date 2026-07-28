@@ -15,11 +15,14 @@ import numpy as np
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-PIPELINE = ROOT / "pipeline"
-sys.path.insert(0, str(PIPELINE))
+DM_ARCHIVE = (
+    ANALYSIS_ROOT
+    / ".archive/flits/outdated-science/dm-battery-2026-07"
+)
+sys.path.insert(0, str(DM_ARCHIVE))
 
 from dispersion.chime_dm import K_DM, measure_dm  # noqa: E402
-from dispersion.dm_campaign.render_dm_zoom_comparison import (  # noqa: E402
+from dm_campaign.render_dm_zoom_comparison import (  # noqa: E402
     _subband_arrival_times,
 )
 from dispersion.dm_power_analysis import (  # noqa: E402

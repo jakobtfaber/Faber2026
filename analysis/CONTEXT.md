@@ -490,7 +490,7 @@ et al. 2025). `tab:alpha` → `tab:beta`; `fig:alpha_pbf` dropped. The
 β-coherent thin-screen campaign (pipeline PRs #133/#134) re-fit all 12
 co-detections with PPC verification: freya β=3.72 and phineas β=3.23
 interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
-`pipeline/analysis/beta_campaign/CAMPAIGN_REPORT.md`.
+`campaigns/beta_campaign/CAMPAIGN_REPORT.md`.
 
 ## Relationships
 

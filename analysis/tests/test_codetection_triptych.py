@@ -23,7 +23,6 @@ sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
 from workspace import manuscript_root  # noqa: E402
 
 ROOT = manuscript_root()
-sys.path.insert(0, str(ROOT / "pipeline"))
 
 import plot_codetection_triptych as triptych  # noqa: E402
 from flits.batch.codetection_plots import BandSpectrum  # noqa: E402

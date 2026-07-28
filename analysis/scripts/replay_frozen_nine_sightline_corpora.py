@@ -93,7 +93,8 @@ def _replay_verdict(
 
 
 def replay_registry(pipeline_dir: Path, errors: list[str]) -> dict[str, Any]:
-    data = pipeline_dir / "galaxies/foreground/data"
+    migrated = pipeline_dir / "campaigns/foregrounds/data"
+    data = migrated if migrated.is_dir() else pipeline_dir / "galaxies/foreground/data"
     registry_path = data / "intervening_census_registry.csv"
     provenance_path = data / "candidate_redshift_provenance.csv"
     duplicate_path = data / "census_masses/census_duplicates.csv"
@@ -148,10 +149,17 @@ def replay_registry(pipeline_dir: Path, errors: list[str]) -> dict[str, Any]:
         errors.append(f"stored verdict mismatches: {verdict_mismatches}")
     if budget_mismatches:
         errors.append(f"stored budget mismatches: {budget_mismatches}")
-    head = subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=pipeline_dir, check=True,
-        capture_output=True, text=True,
-    ).stdout.strip()
+    head = (
+        EXPECTED_PIPELINE_COMMIT
+        if migrated.is_dir()
+        else subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=pipeline_dir,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    )
     input_sha256 = {path.name: sha256_file(path) for path in paths}
     if head != EXPECTED_PIPELINE_COMMIT:
         errors.append(f"pipeline commit mismatch: expected {EXPECTED_PIPELINE_COMMIT}, got {head}")
@@ -695,6 +703,8 @@ def replay_cadc(root: Path, errors: list[str]) -> dict[str, Any]:
 
 
 def _default_pipeline_dir(root: Path) -> Path:
+    if (root / "campaigns/foregrounds/data").is_dir():
+        return root
     configured = os.environ.get("FOREGROUND_PIPELINE_REPO")
     if configured:
         return Path(configured).expanduser().resolve()

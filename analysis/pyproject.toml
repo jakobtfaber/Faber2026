@@ -1,0 +1,53 @@
+[project]
+name = "faber2026-analysis"
+version = "0.1.0"
+description = "Research control, campaigns, and provenance for Faber2026"
+requires-python = ">=3.12"
+dependencies = [
+  "flits[ne2025] @ git+https://github.com/jakobtfaber/dsa110-FLITS.git@884b3d165302879f84a187d3997020ba70ab1e41",
+  "healpy>=1.18",
+  "jsonschema>=4.0",
+]
+
+[dependency-groups]
+test = [
+  "pytest>=7.0",
+  "pytest-cov>=4.0",
+  "ruff>=0.15.18",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = ["-ra", "--strict-config", "--strict-markers"]
+pythonpath = [".", "scripts"]
+testpaths = [
+  "tests",
+  "campaigns/scattering-refit-2026-06/test_gate_joint_committed.py",
+  "campaigns/scattering-refit-2026-06/test_posterior_compare.py",
+  "campaigns/scattering-refit-2026-06/test_tail_coverage.py",
+  "campaigns/scattering-refit-2026-06/test_likelihood_equivalence.py",
+  "campaigns/beta_poc/test_compare_routes.py",
+  "campaigns/beta_poc/test_build_verdict.py",
+  "campaigns/chime-scallop-calibration-2026-07-13/test_scallop_injections.py",
+]
+xfail_strict = true
+markers = [
+  "slow: marks tests as slow",
+]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = [
+  ".archive",
+  ".git",
+  ".pytest_cache",
+  ".ruff_cache",
+  "campaigns",
+]
+
+[tool.ruff.lint]
+select = ["B", "E4", "E7", "E9", "F", "I", "UP"]
+ignore = ["E501"]

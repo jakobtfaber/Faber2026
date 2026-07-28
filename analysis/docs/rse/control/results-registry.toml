@@ -907,11 +907,11 @@ kind = "verdict"
 description = "Twelve-burst co-detection sample membership (association verdicts, all pairs)"
 value = "12/12 associated"
 units = ""
-producing_script = "pipeline/analysis/chance-coincidence/run.py"
+producing_script = "campaigns/chance-coincidence/run.py"
 pipeline_pin = "9175b92529b33980503490bccf58491baf7d6a1f"
-inputs = ["pipeline/crossmatching/toa_crossmatch_results.json"]
+inputs = ["campaigns/crossmatching/toa_crossmatch_results.json"]
 external_sources = []
-artifact = "pipeline/crossmatching/association_report.json"
+artifact = "campaigns/crossmatching/association_report.json"
 consumed_by = ["sections/observations.tex", "sections/toa.tex", "sections/results.tex"]
 trust = "trusted"
 provenance_state = "complete"
@@ -920,9 +920,9 @@ cleared_by = "association + DM_obs re-validation 2026-07-07 (legacy V6); shared 
 current = true
 notes = "Producer and V6 association-report artifact resolved from the V6 report; exact trial-denominator wording remains a separate decision."
 provenance_refs = [
-    {role = "producer",path = "pipeline/analysis/chance-coincidence/run.py",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
-    {role = "input",path = "pipeline/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
-    {role = "artifact",path = "pipeline/crossmatching/association_report.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
+    {role = "producer",path = "campaigns/chance-coincidence/run.py",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
+    {role = "input",path = "campaigns/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
+    {role = "artifact",path = "campaigns/crossmatching/association_report.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
 ]
 
 [[result]]
@@ -935,7 +935,7 @@ value = ""
 units = ""
 producing_script = "scripts/make_sample_table.py"
 pipeline_pin = "9175b92529b33980503490bccf58491baf7d6a1f"
-inputs = ["pipeline/crossmatching/toa_crossmatch_results.json"]
+inputs = ["campaigns/crossmatching/toa_crossmatch_results.json"]
 external_sources = []
 artifact = "sample_table.tex md5:5e8b8f04"
 consumed_by = ["sections/observations.tex"]
@@ -947,7 +947,7 @@ current = true
 notes = "Generator resolved from the reproducibility manifest."
 provenance_refs = [
     {role = "producer",path = "scripts/make_sample_table.py",repository = "analysis",commit = "83746e11fb0248980560c161cedfcf6df984a163"},
-    {role = "input",path = "pipeline/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
+    {role = "input",path = "campaigns/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
     {role = "artifact",path = "sample_table.tex md5:5e8b8f04",repository = "manuscript",commit = "6077cb55bb3ecb9c257b407c0b5e8bc664c31786"},
 ]
 
@@ -959,11 +959,11 @@ kind = "number"
 description = "Summed chance-coincidence expectation over the 64-trigger DSA-110 trial set"
 value = "~3e-7"
 units = ""
-producing_script = "pipeline/analysis/chance-coincidence/run.py"
+producing_script = "campaigns/chance-coincidence/run.py"
 pipeline_pin = "9175b92529b33980503490bccf58491baf7d6a1f"
-inputs = ["pipeline/crossmatching/toa_crossmatch_results.json"]
+inputs = ["campaigns/crossmatching/toa_crossmatch_results.json"]
 external_sources = []
-artifact = "pipeline/crossmatching/association_report.json"
+artifact = "campaigns/crossmatching/association_report.json"
 consumed_by = ["sections/toa.tex"]
 trust = "trusted"
 provenance_state = "complete"
@@ -972,9 +972,9 @@ cleared_by = "legacy V6; rate-definition rewrite (review S2) landed 2026-07-15"
 current = true
 notes = "exact trial denominator still order-of-magnitude in prose — wf-09"
 provenance_refs = [
-    {role = "producer",path = "pipeline/analysis/chance-coincidence/run.py",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
-    {role = "input",path = "pipeline/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
-    {role = "artifact",path = "pipeline/crossmatching/association_report.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
+    {role = "producer",path = "campaigns/chance-coincidence/run.py",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
+    {role = "input",path = "campaigns/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
+    {role = "artifact",path = "campaigns/crossmatching/association_report.json",repository = "pipeline",commit = "9175b92529b33980503490bccf58491baf7d6a1f"},
 ]
 
 [[result]]
@@ -985,9 +985,9 @@ kind = "figure_set"
 description = "Twelve per-burst association cards (fig:assoc-cards-grid)"
 value = ""
 units = ""
-producing_script = "pipeline/crossmatching/plot_association_cards.py"
+producing_script = "campaigns/crossmatching/plot_association_cards.py"
 pipeline_pin = "6c878906156d6593da762f5e7b1156a0623b8db0"
-inputs = ["pipeline/crossmatching/association_report.json", "pipeline/configs/bursts.yaml"]
+inputs = ["campaigns/crossmatching/association_report.json", "config/bursts.yaml"]
 external_sources = []
 artifact = "figures/association_cards/ dirhash:9ef0fc2d (12 files)"
 consumed_by = ["sections/appendix.tex"]
@@ -998,9 +998,9 @@ cleared_by = "legacy V6"
 current = true
 notes = "Generator and twelve-card replay resolved from the reproducibility manifest."
 provenance_refs = [
-    {role = "producer",path = "pipeline/crossmatching/plot_association_cards.py",repository = "pipeline",commit = "6c878906156d6593da762f5e7b1156a0623b8db0"},
-    {role = "input",path = "pipeline/crossmatching/association_report.json",repository = "pipeline",commit = "6c878906156d6593da762f5e7b1156a0623b8db0"},
-    {role = "input",path = "pipeline/configs/bursts.yaml",repository = "pipeline",commit = "6c878906156d6593da762f5e7b1156a0623b8db0"},
+    {role = "producer",path = "campaigns/crossmatching/plot_association_cards.py",repository = "pipeline",commit = "6c878906156d6593da762f5e7b1156a0623b8db0"},
+    {role = "input",path = "campaigns/crossmatching/association_report.json",repository = "pipeline",commit = "6c878906156d6593da762f5e7b1156a0623b8db0"},
+    {role = "input",path = "config/bursts.yaml",repository = "pipeline",commit = "6c878906156d6593da762f5e7b1156a0623b8db0"},
     {role = "artifact",path = "figures/association_cards/ dirhash:9ef0fc2d (12 files)",repository = "manuscript",commit = "da0ebfbe62b08e31c6bc348ef72ed91e63d07809"},
 ]
 
@@ -1014,7 +1014,7 @@ value = ""
 units = ""
 producing_script = "scripts/render_dm_measurements_table.py"
 pipeline_pin = "9175b92529b33980503490bccf58491baf7d6a1f"
-inputs = ["dm-joint-phase-v2/manuscript_dm_catalog.csv", "pipeline/crossmatching/dm_provenance.csv"]
+inputs = ["dm-joint-phase-v2/manuscript_dm_catalog.csv", "campaigns/crossmatching/dm_provenance.csv"]
 external_sources = []
 artifact = "dm_measurements_table.tex md5:3ec40784"
 consumed_by = ["sections/observations.tex"]
@@ -1027,7 +1027,7 @@ notes = "Generator resolved; upstream CHIME extraction hashes remain the targete
 provenance_refs = [
     {role = "producer",path = "scripts/render_dm_measurements_table.py",repository = "analysis",commit = ""},
     {role = "input",path = "dm-joint-phase-v2/manuscript_dm_catalog.csv",repository = "analysis",commit = ""},
-    {role = "input",path = "pipeline/crossmatching/dm_provenance.csv",repository = "pipeline",commit = ""},
+    {role = "input",path = "campaigns/crossmatching/dm_provenance.csv",repository = "pipeline",commit = ""},
     {role = "artifact",path = "dm_measurements_table.tex md5:3ec40784",repository = "manuscript",commit = ""},
 ]
 
@@ -1039,9 +1039,9 @@ kind = "figure"
 description = "Timing-offset decomposition (fig:toa-offset-decomposition)"
 value = ""
 units = ""
-producing_script = "pipeline/analysis/chance-coincidence/run.py"
+producing_script = "campaigns/chance-coincidence/run.py"
 pipeline_pin = "9175b92529b33980503490bccf58491baf7d6a1f"
-inputs = ["pipeline/crossmatching/toa_crossmatch_results.json"]
+inputs = ["campaigns/crossmatching/toa_crossmatch_results.json"]
 external_sources = []
 artifact = "figures/toa_offset_decomposition.pdf"
 consumed_by = ["sections/toa.tex"]
@@ -1054,8 +1054,8 @@ notes = "Rendered timing diagnostic remains pending explicit scientific authorit
 
 # ── Figure 1 ──────────────────────────────────────────────────────────────
 provenance_refs = [
-    {role = "producer",path = "pipeline/analysis/chance-coincidence/run.py",repository = "pipeline",commit = ""},
-    {role = "input",path = "pipeline/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = ""},
+    {role = "producer",path = "campaigns/chance-coincidence/run.py",repository = "pipeline",commit = ""},
+    {role = "input",path = "campaigns/crossmatching/toa_crossmatch_results.json",repository = "pipeline",commit = ""},
     {role = "artifact",path = "figures/toa_offset_decomposition.pdf",repository = "manuscript",commit = ""},
 ]
 
@@ -1126,7 +1126,7 @@ value = "disk per-sightline; halo median 40"
 units = "pc cm^-3"
 producing_script = "scripts/dm_budget_uncertainty.py"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
-inputs = ["pipeline/galaxies/foreground/budget_table_data.json", "dm-joint-phase-v2/manuscript_dm_catalog.csv"]
+inputs = ["campaigns/foregrounds/budget_table_data.json", "dm-joint-phase-v2/manuscript_dm_catalog.csv"]
 external_sources = ["NE2025", "NE2001", "YMW16"]
 artifact = "scripts/dm_budget_uncertainty.csv md5:60c063de"
 consumed_by = ["sections/observations.tex", "sections/budget.tex"]
@@ -1140,7 +1140,7 @@ notes = "halo prior width is a fiducial awaiting sign-off (wf-07)"
 # ── Foreground census (re-validated 2026-07-07 + remediated 2026-07-15) ───
 provenance_refs = [
     {role = "producer",path = "scripts/dm_budget_uncertainty.py",repository = "analysis",commit = ""},
-    {role = "input",path = "pipeline/galaxies/foreground/budget_table_data.json",repository = "pipeline",commit = ""},
+    {role = "input",path = "campaigns/foregrounds/budget_table_data.json",repository = "pipeline",commit = ""},
     {role = "input",path = "dm-joint-phase-v2/manuscript_dm_catalog.csv",repository = "analysis",commit = ""},
     {role = "artifact",path = "scripts/dm_budget_uncertainty.csv md5:60c063de",repository = "analysis",commit = ""},
 ]
@@ -1155,7 +1155,7 @@ value = ""
 units = ""
 producing_script = "pipeline/galaxies/foreground/"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
-inputs = ["pipeline/galaxies/foreground/data/intervening_census_registry.csv", "foreground_table_data.json"]
+inputs = ["campaigns/foregrounds/data/intervening_census_registry.csv", "foreground_table_data.json"]
 external_sources = [
   "Legacy Survey DR9 photo-z — re-validation queries 2026-07-06..07 (git-bound; no per-query timestamp logged)",
   "DESI DR1 TAP — re-validation queries 2026-07-06..07 (git-bound)",
@@ -1173,7 +1173,7 @@ current = true
 notes = "35 catalog rows dedupe to 28 physical systems; per-sightline no-candidate rows still to add (review S9 action); per-query timestamps remain the explicit provenance gap."
 provenance_refs = [
     {role = "producer",path = "pipeline/galaxies/foreground/",repository = "pipeline",commit = ""},
-    {role = "input",path = "pipeline/galaxies/foreground/data/intervening_census_registry.csv",repository = "pipeline",commit = ""},
+    {role = "input",path = "campaigns/foregrounds/data/intervening_census_registry.csv",repository = "pipeline",commit = ""},
     {role = "input",path = "foreground_table_data.json",repository = "unresolved",commit = ""},
     {role = "artifact",path = "foreground_table.tex md5:d8d052b4",repository = "manuscript",commit = ""},
 ]
@@ -1190,7 +1190,7 @@ producing_script = "pipeline/galaxies/foreground/"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
 inputs = ["intervening_census_registry.csv"]
 external_sources = []
-artifact = "pipeline/galaxies/foreground/data/intervening_census_registry.csv"
+artifact = "campaigns/foregrounds/data/intervening_census_registry.csv"
 consumed_by = ["sections/observations.tex", "sections/results.tex"]
 trust = "trusted"
 provenance_state = "pending"
@@ -1201,7 +1201,7 @@ notes = ""
 provenance_refs = [
     {role = "producer",path = "pipeline/galaxies/foreground/",repository = "pipeline",commit = ""},
     {role = "input",path = "intervening_census_registry.csv",repository = "unresolved",commit = ""},
-    {role = "artifact",path = "pipeline/galaxies/foreground/data/intervening_census_registry.csv",repository = "pipeline",commit = ""},
+    {role = "artifact",path = "campaigns/foregrounds/data/intervening_census_registry.csv",repository = "pipeline",commit = ""},
 ]
 
 [[result]]
@@ -1456,7 +1456,7 @@ kind = "figure_set"
 description = "Per-burst DSA-band ACF Lorentzian fits (12 panels, dsa_scint_acf/)"
 value = ""
 units = ""
-producing_script = "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py"
+producing_script = "campaigns/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py"
 pipeline_pin = "17d9d26675702e9f8917da655621bef3231f0ddb"
 inputs = ["pipeline scintillation configs", "external DSA-110 dynamic spectra"]
 external_sources = []
@@ -1469,7 +1469,7 @@ cleared_by = ""
 current = false
 notes = "wave-1 (ACF fits / decorrelation bandwidths revoked); re-run under ratified contract in both-band campaign"
 provenance_refs = [
-    {role = "producer",path = "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py",repository = "pipeline",commit = ""},
+    {role = "producer",path = "campaigns/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py",repository = "pipeline",commit = ""},
     {role = "input",path = "pipeline scintillation configs",repository = "manuscript",commit = ""},
     {role = "input",path = "external DSA-110 dynamic spectra",repository = "external",commit = ""},
     {role = "artifact",path = "figures/dsa_scint_acf/ dirhash:073cf663 (12 files)",repository = "manuscript",commit = ""},
@@ -1485,7 +1485,7 @@ value = ""
 units = ""
 producing_script = "scripts/build_scintillation_campaign_summary.py"
 pipeline_pin = "17d9d26675702e9f8917da655621bef3231f0ddb"
-inputs = ["pipeline/analysis/window-tuning-campaign-2026-07-17/results/validation.json", "pipeline/analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl", "pipeline/analysis/window-tuning-campaign-2026-07-17/results/injection_recovery.json", "pipeline/analysis/window-tuning-campaign-2026-07-17/results/figures.review.json"]
+inputs = ["campaigns/window-tuning-campaign-2026-07-17/results/validation.json", "campaigns/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl", "campaigns/window-tuning-campaign-2026-07-17/results/injection_recovery.json", "campaigns/window-tuning-campaign-2026-07-17/results/figures.review.json"]
 external_sources = []
 artifact = "chime_scintillation_campaign_table.tex md5:f1e73860"
 consumed_by = ["sections/results.tex"]
@@ -1497,10 +1497,10 @@ current = true
 notes = "Campaign-QA product, not a sky claim; modulation-gate vs sqrt(3) inconsistency open (review S16). The later R5/R6 candidate was blocked and never merged, so this row remains the reproducible PR #192 table without promoting its science status."
 provenance_refs = [
     {role = "producer",path = "scripts/build_scintillation_campaign_summary.py",repository = "analysis",commit = "84da698cc88394aa07b5dcecf2cf218d6e58089e"},
-    {role = "input",path = "pipeline/analysis/window-tuning-campaign-2026-07-17/results/validation.json",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
-    {role = "input",path = "pipeline/analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
-    {role = "input",path = "pipeline/analysis/window-tuning-campaign-2026-07-17/results/injection_recovery.json",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
-    {role = "input",path = "pipeline/analysis/window-tuning-campaign-2026-07-17/results/figures.review.json",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
+    {role = "input",path = "campaigns/window-tuning-campaign-2026-07-17/results/validation.json",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
+    {role = "input",path = "campaigns/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
+    {role = "input",path = "campaigns/window-tuning-campaign-2026-07-17/results/injection_recovery.json",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
+    {role = "input",path = "campaigns/window-tuning-campaign-2026-07-17/results/figures.review.json",repository = "pipeline",commit = "17d9d26675702e9f8917da655621bef3231f0ddb"},
     {role = "artifact",path = "chime_scintillation_campaign_table.tex md5:f1e73860",repository = "manuscript",commit = "6077cb55bb3ecb9c257b407c0b5e8bc664c31786"},
 ]
 
@@ -1514,7 +1514,7 @@ value = ""
 units = ""
 producing_script = "scripts/build_provisional_propagation_tables.py"
 pipeline_pin = "17d9d26675702e9f8917da655621bef3231f0ddb"
-inputs = ["pipeline/galaxies/foreground/data/tau_consistency_catalog.csv", "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv"]
+inputs = ["campaigns/foregrounds/data/tau_consistency_catalog.csv", "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv"]
 external_sources = []
 artifact = "twoscreen_provisional_table.tex md5:7a8a1042"
 consumed_by = ["sections/discussion.tex"]
@@ -1528,7 +1528,7 @@ notes = "rests on revoked DSA-band ACF + tau fits; rebuild on joint CHIME+DSA pr
 # ── Energies (wave-1 revoked) ─────────────────────────────────────────────
 provenance_refs = [
     {role = "producer",path = "scripts/build_provisional_propagation_tables.py",repository = "analysis",commit = ""},
-    {role = "input",path = "pipeline/galaxies/foreground/data/tau_consistency_catalog.csv",repository = "pipeline",commit = ""},
+    {role = "input",path = "campaigns/foregrounds/data/tau_consistency_catalog.csv",repository = "pipeline",commit = ""},
     {role = "input",path = "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv",repository = "pipeline",commit = ""},
     {role = "artifact",path = "twoscreen_provisional_table.tex md5:7a8a1042",repository = "manuscript",commit = ""},
 ]

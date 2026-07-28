@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import subprocess
 import sys
 from pathlib import Path
 
@@ -28,7 +29,19 @@ from materialize_results_library import materialize_one  # noqa: E402
 def test_default_repo_root_is_the_mounted_manuscript() -> None:
     root = _repo_root(None)
     assert (root / "main.tex").is_file()
-    assert (root / "analysis").resolve() == ROOT.resolve()
+    mounted_common_dir = subprocess.run(
+        ["git", "-C", str(root / "analysis"), "rev-parse", "--git-common-dir"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    worktree_common_dir = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "--git-common-dir"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert Path(mounted_common_dir).resolve() == Path(worktree_common_dir).resolve()
 
 
 def _catalog(tmp_path: Path) -> Path:

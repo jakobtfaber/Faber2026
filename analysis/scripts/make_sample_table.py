@@ -14,15 +14,12 @@ Analysis sources:
   - campaigns/crossmatching/association_report.json -> association verdict inputs
 
 Regenerate with: python scripts/make_sample_table.py
-For an isolated FLITS worktree, set FABER2026_PIPELINE_SOURCE=/path/to/worktree.
 """
 from __future__ import annotations
 
-import importlib.util
 import json
 import math
-import os
-import subprocess
+import tomllib
 from pathlib import Path
 
 import yaml
@@ -31,10 +28,7 @@ from association_diagnostics import reported_chance_probability
 from workspace import ANALYSIS_ROOT
 
 REPO = Path(__file__).resolve().parent.parent
-PIPELINE = REPO / "pipeline"
-PIPELINE_SOURCE = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", PIPELINE))
-REGISTRY = PIPELINE_SOURCE / "configs" / "bursts.yaml"
-META = PIPELINE_SOURCE / "scattering" / "scat_analysis" / "burst_metadata.py"
+REGISTRY = ANALYSIS_ROOT / "config" / "bursts.yaml"
 TOA_RESULTS = ANALYSIS_ROOT / "campaigns" / "crossmatching" / "toa_crossmatch_results.json"
 ASSOCIATION_REPORT = (
     ANALYSIS_ROOT / "campaigns" / "crossmatching" / "association_report.json"
@@ -51,25 +45,17 @@ N_SIGMA_ACCEPT = 3.0
 
 
 def _source_commit() -> str:
-    try:
-        if PIPELINE_SOURCE.resolve() == PIPELINE.resolve():
-            return subprocess.check_output(
-                ["git", "-C", str(REPO), "rev-parse", "--short", "HEAD:pipeline"],
-                text=True,
-            ).strip()
-        return subprocess.check_output(
-            ["git", "-C", str(PIPELINE_SOURCE), "rev-parse", "--short", "HEAD"],
-            text=True,
-        ).strip()
-    except Exception:
-        return "unknown"
+    project = tomllib.loads((ANALYSIS_ROOT / "pyproject.toml").read_text())
+    dependency = next(
+        item for item in project["project"]["dependencies"] if item.startswith("flits")
+    )
+    return dependency.rsplit("@", 1)[1][:8]
 
 
 def _load_tns_map() -> dict[str, str]:
-    spec = importlib.util.spec_from_file_location("burst_metadata", META)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return {k.lower(): v for k, v in mod._FALLBACK_TNS.items()}
+    from scattering.scat_analysis.burst_metadata import _FALLBACK_TNS
+
+    return {k.lower(): v for k, v in _FALLBACK_TNS.items()}
 
 
 def _tex_scientific(value: float) -> str:

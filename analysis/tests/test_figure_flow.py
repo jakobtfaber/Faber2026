@@ -239,15 +239,36 @@ def test_figure3_is_staged_from_versioned_catalog_input():
     assert "~/Data/frb-foreground-halos" not in " ".join(figure["producer"]["argv"])
     assert figure["producer"]["argv"][
         figure["producer"]["argv"].index("--halo-csv") + 1
-    ] == "galaxies/foreground/data/sightline_halo_grid.csv"
+    ] == "campaigns/foregrounds/data/sightline_halo_grid.csv"
     assert figure["approval_slot"] == "fig3-halo-grid"
     assert figure["inputs"] == [
-        "pipeline/galaxies/foreground/data/sightline_halo_grid.csv"
+        "analysis/campaigns/foregrounds/data/sightline_halo_grid.csv"
     ]
     assert figure["outputs"] == [
         "analysis/figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
     ]
     assert figure["manuscript_target"] == "figures/sightline_halo_grid.pdf"
+
+
+def test_all_catalog_python_producers_exist():
+    for figure in figure_flow.load_catalog(CATALOG):
+        argv = figure["producer"]["argv"]
+        if "python" not in argv:
+            continue
+        script = argv[argv.index("python") + 1]
+        if script == "-m":
+            continue
+        cwd = figure["producer"].get("cwd", ".")
+        if cwd == "analysis":
+            producer_root = ANALYSIS_ROOT
+        elif script.startswith("analysis/"):
+            producer_root = ANALYSIS_ROOT
+            script = script.removeprefix("analysis/")
+        else:
+            producer_root = ROOT / cwd
+        assert (producer_root / script).is_file(), (
+            f"{figure['id']}: missing producer script {cwd}/{script}"
+        )
 
 
 def test_skill_file_exists():

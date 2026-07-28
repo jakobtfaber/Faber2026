@@ -1,13 +1,15 @@
 # Domain Docs
 
-This repo has two linked contexts.
+This repository owns the Faber2026 research context and uses FLITS as an
+installed fitting package.
 
 ## Before exploring
 
 - Read root `CONTEXT.md` for manuscript claims, trust state, and project
   language.
-- Read `../pipeline/CONTEXT.md` for fitting, data-product, or pipeline work.
-- Read relevant decision records under `../pipeline/docs/adr/` when present.
+- Read root `CONTEXT.md` for fitting campaigns and data products too.
+- For reusable fitting implementation, consult the pinned FLITS source
+  revision recorded in `pyproject.toml` and `uv.lock`.
 - If a file is absent, proceed silently.
 
 ## Use the glossaries

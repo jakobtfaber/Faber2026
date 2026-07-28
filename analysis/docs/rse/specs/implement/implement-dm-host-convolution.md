@@ -31,7 +31,7 @@
 | Input | SHA-256 |
 |---|---|
 | `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` | `86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8` |
-| `pipeline/galaxies/foreground/budget_table_data.json` | `d5dd5e2a2959be55773f69ef54be4eb494346c6868e316f91e02e7218b10a272` |
+| `campaigns/foregrounds/budget_table_data.json` | `d5dd5e2a2959be55773f69ef54be4eb494346c6868e316f91e02e7218b10a272` |
 | `scripts/dm_budget_intervening_systems.csv` | `8a50fd78c48c61c0ba08ca348710100e7c1840893c68318b186de7e915ec4376` |
 
 The loader requires exactly nine redshift-constrained sightlines, exact adopted

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import csv
+import hashlib
 import importlib.util
 from copy import deepcopy
 import subprocess
@@ -130,7 +132,7 @@ def test_consumer_graph_records_literal_pipeline_reference(tmp_path: Path) -> No
     run(analysis, "init")
     consumer = analysis / "consumer.py"
     consumer.write_text(
-        'SOURCE = "pipeline/crossmatching/association_report.json"\n'
+        'SOURCE = "campaigns/crossmatching/association_report.json"\n'
     )
     rows = MODULE.build_rows(
         repo, analysis, "HEAD", consumer_roots=[analysis]
@@ -140,3 +142,20 @@ def test_consumer_graph_records_literal_pipeline_reference(tmp_path: Path) -> No
         by_path["crossmatching/association_report.json"]["consumers"]
         == "analysis:consumer.py"
     )
+
+
+def test_declared_migration_adjustments_match_destination_bytes() -> None:
+    receipt = (
+        ROOT
+        / "docs/rse/specs/evidence/single-submodule-migration"
+        / "migration-adjustments.csv"
+    )
+    rows = list(csv.DictReader(receipt.open(encoding="utf-8")))
+    assert rows
+    for row in rows:
+        destination = ROOT / row["new_path"]
+        assert destination.is_file()
+        assert (
+            hashlib.sha256(destination.read_bytes()).hexdigest()
+            == row["destination_sha256"]
+        )
