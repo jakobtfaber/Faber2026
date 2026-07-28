@@ -42,7 +42,27 @@ directly through Eq.~\eqref{eq:geodelay}. The CHIME TOA estimator is the peak
 sample of the incoherently dedispersed, frequency-collapsed Stokes-I profile
 after Savitzky--Golay smoothing, with the timestamp reconstructed from the
 baseband frame time; the DSA-110 TOA is the catalog arrival time (MJD, UTC)
-at the native band reference. Each is translated to the common
+at the native band reference. The provenance of the underlying timestamps is
+stated explicitly, and four layers are kept separate throughout: (i) the raw
+time coordinate of each data product, (ii) the reconstruction of the trigger
+or frame time from it, (iii) the statistical uncertainty of the profile fit
+that defines a burst's arrival time, and (iv) the cross-observatory
+absolute-clock systematic. On the DSA-110 side, the archived trigger MJD
+combines an exact integer spectrum counter with a text-serialized elapsed-time
+record whose six-significant-digit precision introduces a rounding of up to
+$\pm5$\,ms at hour-scale acquisition times; a counter-based reconstruction,
+validated against the surviving raw trigger records, removes this rounding to
+a numerical floor of about $1\,\mu$s for all twelve bursts. The residuals
+tabulated here use the archived catalog timestamps and therefore inherit that
+rounding. On the CHIME side, the timestamp is reconstructed from
+the baseband file's internal time coordinate (native $2.56\,\mu$s sampling),
+which defines a precise time coordinate on the UTC scale \emph{as kept by the
+station clock}, not an independently calibrated absolute UTC epoch; the absolute
+accuracy of the CHIME station clock is not independently quantified here, and
+we deliberately assign it no numerical value---in particular, the native
+sample interval is not a clock-accuracy statement. Consequently, the residuals
+below are consistency diagnostics, not measurements with a certified absolute
+timing uncertainty. Each TOA is translated to the common
 $\nu_{\rm ref}=400$\,MHz through Eq.~\eqref{eq:dmdelay} with the shared
 DSA-DM convention of Section~\ref{sec:toa}. The geometric delay is evaluated
 with \texttt{astropy}: observatory \texttt{EarthLocation}s (DRAO and OVRO)
@@ -52,8 +72,8 @@ Peak-sample TOAs on asymmetric (scattered) profiles are
 morphology-dependent, and---because the scattering timescale is strongly
 frequency-dependent---this bias does not cancel between the two bands. We
 therefore compute a candidate model-based correction to the differential
-scattering bias, as described next. Promotion of that correction is fail-closed:
-the fit must pass the numerical quality gate and its diagnostic figure must be
+scattering bias, as described next. Adopting that correction requires the fit
+to pass the numerical quality check and its diagnostic figure to be
 reviewed. The current pinned products satisfy neither condition for any burst,
 so the association analysis retains the observed peak-sample TOAs.
 
@@ -105,7 +125,7 @@ inter-site offset is
 The diagnostic correction is required to be non-negative and to grow with the
 fitted scattering timescale. The model path also carries a posterior width on
 $t_0$, the uncertainty on $\Delta_{\rm scat}$, and a component-choice ambiguity
-for multi-component bursts; if the model gate is cleared, those terms are folded
+for multi-component bursts; if the model checks pass, those terms are folded
 into the per-band arrival uncertainty together with the DM-referral term and the
 source-position contribution to the geometric delay. At the current pin all
 twelve model fits are marked \texttt{MARGINAL} and their figures are unreviewed.
@@ -113,9 +133,11 @@ Consequently, \texttt{model\_corrected\_offset\_ms} and its extended error
 budget remain diagnostic-only, while the canonical
 \texttt{measured\_offset\_ms} remains byte-identical to the observed-peak field
 \texttt{peak\_measured\_offset\_ms}. The manuscript-facing residuals use that
-peak offset and the V6 timing budget---the combined shared-DM referral error,
-intrinsic pulse width, and inter-site clock term---rather than the unvalidated
-model extension.
+peak offset rather than the unvalidated model extension. Their legacy
+normalized values use a nominal timing budget; because the inter-site
+absolute-clock contribution is not independently quantified, those normalized
+values are conditional diagnostics rather than certified significance
+measurements.
 
 \subsubsection{Chance-coincidence probability}
 \label{sec:toa-pcc}
@@ -233,35 +255,30 @@ baseline, $|\tau_{\rm geo}| \le |\mathbf{p}_2-\mathbf{p}_1|/c \approx 4.5\,$ms f
 any source direction. For the twelve source directions here,
 $\tau_{\rm geo}=-2.30$ to $-2.03\,$ms: the wavefront reaches CHIME first and
 DSA-110 $2.03$--$2.30\,$ms later. The residual is therefore not error-free but carries a
-per-burst systematic of order the inter-site clock/timestamp alignment
-($\sigma_{\rm clock}\sim1$\,ms) plus, for the eight originally DM-conditioned
-pairs, the residual dispersive delay left by the CHIME--DSA DM offset. With the
-new phase-coherence measurements, the largest band offset is
+per-burst systematic from the unquantified inter-site clock/timestamp
+alignment, the archived DSA trigger-time rounding described above, and, for
+the eight originally DM-conditioned pairs, the residual dispersive delay left
+by the CHIME--DSA DM offset. With the new phase-coherence measurements, the
+largest band offset is
 $0.117\,\mathrm{pc\,cm^{-3}}$ (FRB~20221113A), corresponding to approximately
 $2.8$\,ms when re-referenced between 1.5\,GHz and 400\,MHz,
-a convention-dependent term reported separately rather than folded in. We
-assign each pair a $1\sigma$ timing budget $\sigma_i$ by combining, in
-quadrature, the shared-DM combined CHIME+DSA arrival error, the intrinsic pulse
-width, and the $\sigma_{\rm clock}\sim1$\,ms term, and accept a pair when its
-residual is consistent with the geometric delay to within $|\Delta t_i| \le
-3\sigma_i$. The budget is dominated by the pulse width for the two broadest
-bursts, so the largest raw residual---$+8.4$\,ms for FRB~20220506D, a $74$\,ms-wide
-burst---is only $0.1\sigma$. All twelve residuals ($-2.7$ to $+8.4$\,ms,
-tabulated with their $\sigma_i$ in Table~\ref{tab:sample}) satisfy the criterion;
-the largest normalized residual is $2.6\sigma$ (FRB~20221203A). A residual of several tens of ms
-for a narrow, well-localized burst---inconsistent with both its few-ms budget and
-the $\lesssim\!4.5$\,ms geometric delay---would fail.
+a convention-dependent term reported separately rather than folded in. The
+legacy table combines the shared-DM CHIME+DSA arrival error, intrinsic pulse
+width, and a nominal $1$\,ms clock term. Under that assumption all twelve
+residuals ($-2.7$ to $+8.4$\,ms) fall within the displayed $3\sigma_i$ range,
+with a largest normalized residual of $2.6\sigma$ (FRB~20221203A). These
+normalized values do not include a measured CHIME absolute-clock uncertainty
+and therefore must not be interpreted as formal absolute-timing
+significances.
 Because nine of the twelve residuals are positive, we also test for a
 constant inter-site timing offset: the inverse-variance-weighted mean
-residual is $+2.1\pm0.9$\,ms ($2.4\sigma$ from zero), a network-level shift
-comparable to the $\sigma_{\rm clock}\sim1$\,ms per-site timestamp systematic
-already carried in the budget, and a constant-offset model is only mildly
-preferred over zero offset ($\chi^{2}=8.9/11$ versus $14.7/12$). Subtracting
-the fitted offset leaves every pair within $1.8\sigma$ of the geometric
-prediction (maximum $2.6\sigma$ without subtraction), so the acceptance
-verdicts are unchanged in either convention; we retain the unsubtracted
-residuals in Table~\ref{tab:sample} and flag the weighted mean as a candidate
-inter-site calibration term for the archival release. We stress
+residual is $+2.1\pm0.9$\,ms under that same nominal budget. The quoted
+$2.4\sigma$ displacement from zero excludes the unquantified absolute-clock
+systematic and is therefore not evidence for a measured clock offset. A
+constant-offset model is only mildly preferred over zero offset
+($\chi^{2}=8.9/11$ versus $14.7/12$); we retain the unsubtracted residuals in
+Table~\ref{tab:sample} and treat the weighted mean only as a candidate
+inter-site calibration term for future investigation. We stress
 that the association verdict does not rest on the timing residual alone: the
 decisive tests are the chance-coincidence probability, positional coincidence,
 and (for the eight bursts with a pre-specified DM-conditioned association
