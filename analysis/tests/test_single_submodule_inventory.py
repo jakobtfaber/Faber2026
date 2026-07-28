@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+from copy import deepcopy
 import subprocess
 import sys
 from pathlib import Path
@@ -48,6 +49,7 @@ def test_inventory_is_complete_and_routes_project_paths(tmp_path: Path) -> None:
     repo = fixture_repo(tmp_path)
     analysis = tmp_path / "analysis"
     analysis.mkdir()
+    run(analysis, "init")
     commit, rows = MODULE.build_rows(repo, analysis, "HEAD")
     MODULE.verify_rows(repo, commit, rows)
 
@@ -81,10 +83,60 @@ def test_inventory_is_complete_and_routes_project_paths(tmp_path: Path) -> None:
 def test_destination_collision_is_recorded(tmp_path: Path) -> None:
     repo = fixture_repo(tmp_path)
     analysis = tmp_path / "analysis"
+    analysis.mkdir()
+    run(analysis, "init")
+    run(analysis, "config", "user.name", "Test")
+    run(analysis, "config", "user.email", "test@example.invalid")
     collision = analysis / "campaigns/demo/result.json"
     collision.parent.mkdir(parents=True)
     collision.write_text("existing\n")
+    run(analysis, "add", ".")
+    run(analysis, "commit", "-m", "baseline")
 
     _commit, rows = MODULE.build_rows(repo, analysis, "HEAD")
     by_path = {row["old_path"]: row for row in rows}
     assert by_path["analysis/demo/result.json"]["destination_collision"] == "yes"
+
+
+def test_verifier_rejects_duplicate_rows_and_forged_hashes(tmp_path: Path) -> None:
+    repo = fixture_repo(tmp_path)
+    analysis = tmp_path / "analysis"
+    analysis.mkdir()
+    run(analysis, "init")
+    commit, rows = MODULE.build_rows(repo, analysis, "HEAD")
+
+    duplicated = rows + [deepcopy(rows[0])]
+    try:
+        MODULE.verify_rows(repo, commit, duplicated)
+    except ValueError as exc:
+        assert "complement mismatch" in str(exc)
+    else:
+        raise AssertionError("duplicate path-map row was accepted")
+
+    forged = deepcopy(rows)
+    forged[0]["sha256"] = "0" * 64
+    try:
+        MODULE.verify_rows(repo, commit, forged)
+    except ValueError as exc:
+        assert "SHA-256 mismatch" in str(exc)
+    else:
+        raise AssertionError("forged SHA-256 was accepted")
+
+
+def test_consumer_graph_records_literal_pipeline_reference(tmp_path: Path) -> None:
+    repo = fixture_repo(tmp_path)
+    analysis = tmp_path / "analysis"
+    analysis.mkdir()
+    run(analysis, "init")
+    consumer = analysis / "consumer.py"
+    consumer.write_text(
+        'SOURCE = "pipeline/crossmatching/association_report.json"\n'
+    )
+    rows = MODULE.build_rows(
+        repo, analysis, "HEAD", consumer_roots=[analysis]
+    )[1]
+    by_path = {row["old_path"]: row for row in rows}
+    assert (
+        by_path["crossmatching/association_report.json"]["consumers"]
+        == "analysis:consumer.py"
+    )

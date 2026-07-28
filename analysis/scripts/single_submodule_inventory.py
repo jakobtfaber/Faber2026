@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from collections import Counter
 import hashlib
 import subprocess
 from dataclasses import dataclass
@@ -91,6 +92,53 @@ def blob_hashes(repo: Path, entries: list[TreeEntry]) -> dict[str, str]:
     return hashes
 
 
+def commit_is_reachable(repo: Path, commit: str) -> bool:
+    refs = git(repo, "for-each-ref", "--contains", commit, "--format=%(refname)")
+    return bool(refs.strip())
+
+
+def tracked_text(repo: Path) -> dict[str, str]:
+    """Read tracked and untracked text so dirty consumers are not omitted."""
+    raw = git(
+        repo,
+        "ls-files",
+        "-z",
+        "--cached",
+        "--others",
+        "--exclude-standard",
+    )
+    contents: dict[str, str] = {}
+    for raw_path in raw.split(b"\0"):
+        if not raw_path:
+            continue
+        relative = raw_path.decode("utf-8", errors="surrogateescape")
+        if relative.endswith(
+            "docs/rse/specs/evidence/single-submodule-migration/path-map.csv"
+        ):
+            continue
+        try:
+            contents[relative] = (repo / relative).read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+    return contents
+
+
+def consumer_graph(
+    entries: list[TreeEntry], consumer_roots: list[Path]
+) -> dict[str, list[str]]:
+    corpora = {root: tracked_text(root) for root in consumer_roots}
+    graph: dict[str, list[str]] = {}
+    for entry in entries:
+        needles = (f"pipeline/{entry.path}", entry.path)
+        matches: list[str] = []
+        for root, files in corpora.items():
+            for relative, text in files.items():
+                if any(needle in text for needle in needles):
+                    matches.append(f"{root.name}:{relative}")
+        graph[entry.path] = sorted(set(matches))
+    return graph
+
+
 def destination(path: str) -> tuple[str, str, str, str]:
     """Return repository, destination path, class, and disposition."""
     if path.startswith("analysis/"):
@@ -158,19 +206,36 @@ def destination(path: str) -> tuple[str, str, str, str]:
 
 
 def build_rows(
-    flits: Path, analysis: Path, revision: str
+    flits: Path,
+    analysis: Path,
+    revision: str,
+    *,
+    analysis_revision: str = "HEAD",
+    consumer_roots: list[Path] | None = None,
 ) -> tuple[str, list[dict[str, str]]]:
     commit = resolve_commit(flits, revision)
     entries = tracked_entries(flits, commit)
     hashes = blob_hashes(flits, entries)
+    reachable = commit_is_reachable(flits, commit)
+    consumers = consumer_graph(entries, consumer_roots or [analysis])
     rows: list[dict[str, str]] = []
     for entry in entries:
         repository, new_path, path_class, disposition = destination(entry.path)
-        collision = (
-            "yes"
-            if repository == "Faber2026-analysis" and (analysis / new_path).exists()
-            else "no"
-        )
+        collision = "no"
+        if repository == "Faber2026-analysis":
+            collision_check = subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(analysis),
+                    "cat-file",
+                    "-e",
+                    f"{analysis_revision}:{new_path}",
+                ],
+                capture_output=True,
+                check=False,
+            )
+            collision = "yes" if collision_check.returncode == 0 else "no"
         rows.append(
             {
                 "source_commit": commit,
@@ -182,9 +247,9 @@ def build_rows(
                 "new_path": new_path,
                 "class": path_class,
                 "sha256": hashes.get(entry.oid, ""),
-                "consumers": "",
+                "consumers": ";".join(consumers[entry.path]),
                 "destination_collision": collision,
-                "history_reachable": "yes",
+                "history_reachable": "yes" if reachable else "no",
                 "split_manifest": "",
                 "disposition": disposition,
             }
@@ -202,28 +267,35 @@ def write_rows(path: Path, rows: list[dict[str, str]]) -> None:
 
 def verify_rows(flits: Path, revision: str, rows: list[dict[str, str]]) -> None:
     commit = resolve_commit(flits, revision)
-    expected = {
+    entries = tracked_entries(flits, commit)
+    expected = [
         (entry.path, entry.mode, entry.kind, entry.oid)
-        for entry in tracked_entries(flits, commit)
-    }
-    observed = {
+        for entry in entries
+    ]
+    observed = [
         (row["old_path"], row["file_mode"], row["file_type"], row["source_blob"])
         for row in rows
-    }
-    if expected != observed:
-        missing = sorted(expected - observed)
-        extra = sorted(observed - expected)
+    ]
+    expected_counts = Counter(expected)
+    observed_counts = Counter(observed)
+    if expected_counts != observed_counts:
+        missing = sorted((expected_counts - observed_counts).elements())
+        extra = sorted((observed_counts - expected_counts).elements())
         raise ValueError(f"path-map complement mismatch: missing={missing}, extra={extra}")
     if any(row["source_commit"] != commit for row in rows):
         raise ValueError("path map contains more than one source commit")
-    if any(not row["sha256"] and row["file_type"] == "blob" for row in rows):
-        raise ValueError("blob row lacks SHA-256")
+    hashes = blob_hashes(flits, entries)
+    for row in rows:
+        if row["file_type"] == "blob" and row["sha256"] != hashes[row["source_blob"]]:
+            raise ValueError(f"blob SHA-256 mismatch: {row['old_path']}")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--flits", type=Path, required=True)
     parser.add_argument("--analysis", type=Path, default=Path.cwd())
+    parser.add_argument("--analysis-revision", default="HEAD")
+    parser.add_argument("--consumer-root", action="append", type=Path, default=[])
     parser.add_argument("--revision", default="HEAD")
     parser.add_argument("--output", type=Path, required=True)
     return parser.parse_args()
@@ -231,7 +303,13 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    _commit, rows = build_rows(args.flits, args.analysis, args.revision)
+    _commit, rows = build_rows(
+        args.flits,
+        args.analysis,
+        args.revision,
+        analysis_revision=args.analysis_revision,
+        consumer_roots=args.consumer_root or [args.analysis],
+    )
     verify_rows(args.flits, args.revision, rows)
     write_rows(args.output, rows)
     print(f"wrote {len(rows)} rows to {args.output}")

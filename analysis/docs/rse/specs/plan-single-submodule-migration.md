@@ -7,10 +7,13 @@ started 2026-07-28
 
 The frozen working base is FLITS commit
 `8b87a1a494a9951d230e79bfdd6037f514d6abd1`. The generated path map contains
-all 1,407 tracked paths at that commit. The first moved slice copies nine
+all 1,407 tracked paths at that commit. The first migration step copies nine
 project-specific crossmatching inputs and outputs byte-for-byte into
 `campaigns/crossmatching/`; reusable crossmatching Python code remains in
-FLITS. Historical provenance references keep their original repository paths.
+FLITS. This is not yet a deletion-eligible completed slice: the generated
+consumer graph records remaining old-path consumers that must be rewritten
+before the crossmatching sources can be removed. Historical provenance
+references keep their original repository paths.
 
 The temporary worktree
 `/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-analysis-single-submodule-20260728`

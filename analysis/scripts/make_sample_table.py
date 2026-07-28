@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 """Generate sample_table.tex (Table 1: the co-detection sample roster).
 
-Reads trust-safe raw observational inputs plus V6-revalidated association
-diagnostics from the pinned dsa110-FLITS submodule and emits an AASTeX
-deluxetable.
+Reads trust-safe raw observational inputs from the pinned dsa110-FLITS source
+and project-specific association records copied into this analysis repository,
+then emits an AASTeX deluxetable.
 
-Sources (pinned submodule pipeline/):
+FLITS sources:
   - configs/bursts.yaml                       -> MJD, UTC, RA/Dec
   - scattering/scat_analysis/burst_metadata.py::_FALLBACK_TNS -> nickname -> TNS
-  - crossmatching/toa_crossmatch_results.json -> shared-DM timing residuals
-  - crossmatching/association_report.json     -> P_cc and association verdict inputs
+
+Analysis sources:
+  - campaigns/crossmatching/toa_crossmatch_results.json -> timing residuals
+  - campaigns/crossmatching/association_report.json -> association verdict inputs
 
 Regenerate with: python scripts/make_sample_table.py
 For an isolated FLITS worktree, set FABER2026_PIPELINE_SOURCE=/path/to/worktree.
@@ -26,14 +28,17 @@ from pathlib import Path
 import yaml
 
 from association_diagnostics import reported_chance_probability
+from workspace import ANALYSIS_ROOT
 
 REPO = Path(__file__).resolve().parent.parent
 PIPELINE = REPO / "pipeline"
 PIPELINE_SOURCE = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", PIPELINE))
 REGISTRY = PIPELINE_SOURCE / "configs" / "bursts.yaml"
 META = PIPELINE_SOURCE / "scattering" / "scat_analysis" / "burst_metadata.py"
-TOA_RESULTS = PIPELINE_SOURCE / "crossmatching" / "toa_crossmatch_results.json"
-ASSOCIATION_REPORT = PIPELINE_SOURCE / "crossmatching" / "association_report.json"
+TOA_RESULTS = ANALYSIS_ROOT / "campaigns" / "crossmatching" / "toa_crossmatch_results.json"
+ASSOCIATION_REPORT = (
+    ANALYSIS_ROOT / "campaigns" / "crossmatching" / "association_report.json"
+)
 OUT = REPO / "sample_table.tex"
 
 # Inter-site clock/timestamp alignment term (ms), added in quadrature to the
