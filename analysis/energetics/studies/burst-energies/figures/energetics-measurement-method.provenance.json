@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "figure": [
+    "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/figures/energetics-measurement-method.svg",
+    "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/figures/energetics-measurement-method.pdf"
+  ],
+  "status": "candidate_method_illustration_not_manuscript_admitted",
+  "nickname": "zach",
+  "receipt": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/data_fluences.candidate.csv",
+  "receipt_sha256": "bbfa0b0e1204b49c19b3e309a6fcdb7315f524b6be86b51c7b90bffad1ed290a",
+  "producer": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/plot_measurement_method.py",
+  "producer_sha256": "281c04ab7388b4c0fbf150333fa9bc58470467080225a19e383e3ced18d96743",
+  "dsa_beam_cube": "/Users/jakobfaber/Documents/DSA110_beam_1.h5",
+  "dsa_beam_cube_sha256": "11d38a60f79db35c2552b06ad36659f5e99fa96246bbdc40e0c80505411281ab",
+  "bands": {
+    "CHIME": {
+      "input_path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
+      "input_sha256": "bf317648879936ce4d019f116c17e0c33a22042610e37bddceef0ba48fe40deb",
+      "window_status": "candidate",
+      "window_sensitivity_frac": 0.016942549,
+      "reconstructed_fluence_jy_ms_hz": 4524913552.083295,
+      "receipt_fluence_jy_ms_hz": 4524913552.083295,
+      "calibration_status": "pending_review",
+      "noise_status": "pending_validation",
+      "review_status": "pending"
+    },
+    "DSA": {
+      "input_path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
+      "input_sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01",
+      "window_status": "candidate",
+      "window_sensitivity_frac": 0.003260338,
+      "reconstructed_fluence_jy_ms_hz": 6581625907.071651,
+      "receipt_fluence_jy_ms_hz": 6581625907.071651,
+      "calibration_status": "pending_review",
+      "noise_status": "pending_validation",
+      "review_status": "pending"
+    }
+  }
+}
