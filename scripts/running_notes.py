@@ -29,15 +29,16 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-OPS = ROOT / "docs/rse/ops/running-notes"
+ANALYSIS = ROOT / "analysis"
+OPS = ANALYSIS / "docs/rse/ops/running-notes"
 INBOX = OPS / "inbox"
 NOTES_JSONL = INBOX / "notes.jsonl"
 DISPOSITIONS = OPS / "dispositions"
 STATUS_PATH = OPS / "status.json"
 HTML_PATH = OPS / "index.html"
 PULSE_PATH = OPS / "pulse.json"
-BOARD = ROOT / "docs/rse/control/BOARD.md"
-MAP = ROOT / "docs/rse/wayfinder/map-apj-submission.md"
+BOARD = ANALYSIS / "docs/rse/control/BOARD.md"
+MAP = ANALYSIS / "docs/rse/wayfinder/map-apj-submission.md"
 
 # 8765 is often taken by Claude Code local helpers on this machine.
 DEFAULT_PORT = 18765
