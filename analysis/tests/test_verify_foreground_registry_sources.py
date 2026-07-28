@@ -83,12 +83,12 @@ def test_spherical_separation_handles_high_declination():
 
 
 PIPELINE_PATHS = [
-    "galaxies/foreground/data/intervening_census_registry.csv",
-    "galaxies/foreground/data/candidate_redshift_provenance.csv",
-    "galaxies/foreground/data/candidate_redshift_source_payloads_2026-07-22.json",
-    "galaxies/foreground/data/frozen_census/strm_catalog_rows.csv",
-    "galaxies/foreground/data/census_masses/census_duplicates.csv",
-    "galaxies/foreground/data/census_extensions/v4_extension.csv",
+    "foregrounds/studies/census/data/intervening_census_registry.csv",
+    "foregrounds/studies/census/data/candidate_redshift_provenance.csv",
+    "foregrounds/studies/census/data/candidate_redshift_source_payloads_2026-07-22.json",
+    "foregrounds/studies/census/data/frozen_census/strm_catalog_rows.csv",
+    "foregrounds/studies/census/data/census_masses/census_duplicates.csv",
+    "foregrounds/studies/census/data/census_extensions/v4_extension.csv",
 ]
 ANALYSIS_PATHS = [
     "docs/rse/specs/evidence/verdi-host-redshifts-2026-07-22/verdi_host_redshift_comparison.csv",
@@ -122,7 +122,7 @@ def mutable_repos(tmp_path):
     analysis_commit = _make_repo(
         analysis, ROOT, "fe73689cad723db5d68427c61e301157a39cc101", ANALYSIS_PATHS
     )
-    pipeline_commit = _make_repo(pipeline, PIPELINE_SOURCE, "c913175", PIPELINE_PATHS)
+    pipeline_commit = _make_repo(pipeline, PIPELINE_SOURCE, "HEAD", PIPELINE_PATHS)
     return analysis, pipeline, analysis_commit, pipeline_commit
 
 

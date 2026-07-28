@@ -127,14 +127,14 @@ def replay_verdict(row: dict[str, str], source: dict[str, str], strm: dict[str, 
 def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYSIS_COMMIT,
            pipeline_commit: str = EXPECTED_PIPELINE_COMMIT) -> dict[str, Any]:
     errors: list[str] = []
-    data = pipeline / "galaxies/foreground/data"
+    data = pipeline / "foregrounds/studies/census/data"
     specs = {
-        "registry": (pipeline, "galaxies/foreground/data/intervening_census_registry.csv"),
-        "provenance": (pipeline, "galaxies/foreground/data/candidate_redshift_provenance.csv"),
-        "payloads": (pipeline, "galaxies/foreground/data/candidate_redshift_source_payloads_2026-07-22.json"),
-        "strm": (pipeline, "galaxies/foreground/data/frozen_census/strm_catalog_rows.csv"),
-        "duplicates": (pipeline, "galaxies/foreground/data/census_masses/census_duplicates.csv"),
-        "extensions": (pipeline, "galaxies/foreground/data/census_extensions/v4_extension.csv"),
+        "registry": (pipeline, "foregrounds/studies/census/data/intervening_census_registry.csv"),
+        "provenance": (pipeline, "foregrounds/studies/census/data/candidate_redshift_provenance.csv"),
+        "payloads": (pipeline, "foregrounds/studies/census/data/candidate_redshift_source_payloads_2026-07-22.json"),
+        "strm": (pipeline, "foregrounds/studies/census/data/frozen_census/strm_catalog_rows.csv"),
+        "duplicates": (pipeline, "foregrounds/studies/census/data/census_masses/census_duplicates.csv"),
+        "extensions": (pipeline, "foregrounds/studies/census/data/census_extensions/v4_extension.csv"),
         "verdi": (root, "docs/rse/specs/evidence/verdi-host-redshifts-2026-07-22/verdi_host_redshift_comparison.csv"),
         "law": (root, "docs/rse/specs/evidence/law2024-zach-whitney-host-redshifts-2026-07-22/host_redshift_rows.csv"),
         "connor": (root, "docs/rse/specs/evidence/connor2025-whitney-host-redshift-2026-07-22/host_redshift_row.csv"),

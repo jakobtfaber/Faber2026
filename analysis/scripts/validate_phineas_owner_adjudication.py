@@ -43,7 +43,7 @@ EXPECTED_INPUT_SHA256 = {
     "duplicates": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
     "overrides": "108a9ed842ec10c76ed281e87b58aca2c32bb2785fdcf2d2ef5082c809c76748",
     "method": "3df502e9244f8603f06336262e15d0f23aa6d52c858d4c4934fc1bbe741567bc",
-    "budget": "bd4eddac7a1a82d4c79540ae1d443a818c5dd3f88f4a1ac5984e2cbb0cbbae3e",
+    "budget": "27d3404fa2c73fc98ac89651b71250137dc2aee9d8f72f117f8659a8fee01654",
 }
 
 
