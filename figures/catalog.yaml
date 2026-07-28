@@ -24,6 +24,7 @@ figures:
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
       - analysis/scripts/dm_budget_intervening_systems.csv
       - analysis/scripts/phineas_halo_crossing_inputs.csv
+      - analysis/scripts/phineas_halo_crossing_probability.json
     outputs:
       - figures/dm_host_posteriors.pdf
     depends_on: []
