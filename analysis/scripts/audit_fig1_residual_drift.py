@@ -19,9 +19,6 @@ PIPELINE = ROOT / "pipeline"
 sys.path.insert(0, str(PIPELINE))
 
 from dispersion.chime_dm import K_DM, measure_dm  # noqa: E402
-from dispersion.dm_campaign.render_dm_zoom_comparison import (  # noqa: E402
-    _subband_arrival_times,
-)
 from dispersion.dm_power_analysis import (  # noqa: E402
     CHIME_DT_S,
     DSA_DT_S,
@@ -82,6 +79,12 @@ def products(
 
 
 def peak_slope(path: Path, telescope: str, target_dm: float) -> dict:
+    # Optional Figure-1 rendering helpers are not present in every analysis
+    # installation. Import only when this data-dependent measurement is run.
+    from dispersion.dm_campaign.render_dm_zoom_comparison import (
+        _subband_arrival_times,
+    )
+
     band = {
         "telescope": telescope,
         "input_path": str(path),
