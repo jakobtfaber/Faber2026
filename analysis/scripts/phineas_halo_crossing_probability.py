@@ -278,7 +278,7 @@ def modified_nfw_dm(
     impact_kpc: np.ndarray,
     profile_factor: np.ndarray,
 ) -> np.ndarray:
-    rvir = _bryan_norman_rvir_kpc(log_mhalo, z)
+    rvir = r200c_kpc(log_mhalo, z)
     u = impact_kpc / rvir
     if np.any(u >= 1.0):
         raise ValueError("R200c crossing draw unexpectedly lies outside mNFW radius")
@@ -391,7 +391,7 @@ def simulate_halo(
     b_over_rvir = impact / rvir
     foreground = valid_z & (z < HOST_Z)
     r200c_crossing = foreground & model_domain & (b_over_r200 <= 1.0)
-    crossing = foreground & model_domain & (b_over_rvir <= 1.0)
+    crossing = r200c_crossing
 
     dm = np.zeros(n, dtype=float)
     profile_factor = np.exp(CGM_PROFILE_SIGMA_LN * normal[crossing, 5])
@@ -496,8 +496,8 @@ def build_result(*, power: int = SOBOL_POWER) -> dict:
             "halo_mass": "redshift-dependent Moster et al. 2013 Table 1",
             "moster_intrinsic_sigma_dex_in_log_mstar": MOSTER_INTRINSIC_SIGMA_DEX,
             "cgm_profile_sigma_ln": CGM_PROFILE_SIGMA_LN,
-            "crossing_definition": "foreground z < host z and b <= the Bryan-Norman virial truncation radius used by the modified-NFW gas model",
-            "r200c_definition": "reported as a census-geometry sensitivity, not used to truncate the gas column",
+            "crossing_definition": "foreground z < host z and b <= R200c",
+            "r200c_definition": "M200c = (4 pi / 3) 200 rho_critical(z) R200c^3; also truncates the gas column",
             "dm_definition": "zero outside crossing; modified-NFW hot plus cool prior inside",
         },
         "input_csv": f"scripts/{INPUTS.name}",

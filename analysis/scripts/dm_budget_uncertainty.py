@@ -1,13 +1,14 @@
 #!/usr/bin/env python
-"""Forward-model the per-sightline DM_host posteriors and the FRB 20230307A
+"""Forward-model per-sightline induced host-DM residuals and the FRB 20230307A
 intracluster column, with physically motivated uncertainty propagation.
 
 Referee blocking items B1 and B2. The point-estimate budget in
 ``budget_table.tex`` subtracts the *mean* of the highly skewed cosmological
-DM distribution, which biases every host residual (Macquart et al. 2020; James
-et al. 2022). Here we instead convolve the full P(DM_cosmic | z) and the nuisance
-priors on the Galactic disk, Galactic halo, and intervening columns, and report
-DM_host as a posterior (p16/p50/p84) together with P(DM_host < 0) per sightline.
+DM distribution. Here we convolve foreground predictive distributions and
+reflect their sum about the observed DM. This is an induced host-DM residual
+distribution, not a physical Bayesian posterior: no host likelihood or
+nonnegative-host prior is imposed. P(DM_host < 0) is a foreground-budget tension
+diagnostic.
 
 The diffuse cosmic term is modeled as the IGM column DM_IGM ~ LogNormal(mu(z),
 sigma(z)), with mu(z) and sigma(z) the redshift-dependent log-normal parameters
@@ -65,7 +66,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from numpy.polynomial.legendre import leggauss
-from scipy import integrate, interpolate, signal, stats
+from scipy import integrate, interpolate, optimize, signal, stats
 
 import phineas_halo_crossing_probability as phineas_crossing
 from workspace import ANALYSIS_ROOT, manuscript_root
@@ -152,8 +153,8 @@ UPPER_LIMIT = {
     "FRB 20220506D",
     "FRB 20221113A",
     "FRB 20230814B",
-    "FRB 20230913A",
-    "FRB 20240203A",
+    "FRB 20230913G",
+    "FRB 20240203D",
 }
 
 # --- Nuisance priors -----------------------------------------------------------
@@ -417,6 +418,8 @@ def system_pdf(system: InterveningSystem, *, dx: float) -> DiscretePDF:
     if system.model == "fixed_lognormal":
         if system.dm_point is None:
             raise ValueError("fixed-lognormal system lacks a point column")
+        if system.mass_source == "cluster_catalog":
+            return cluster_profile_pdf(system.dm_point, dx=dx)
         return lognormal_pdf(system.dm_point, _system_sigma(system.mass_source), dx=dx)
     if system.model == "probabilistic_crossing":
         if not system.object:
@@ -512,7 +515,7 @@ def load_sightlines() -> tuple[Sightline, ...]:
 
 
 def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
-    """Build a host-DM PDF by deterministic convolution of independent terms."""
+    """Build an induced host-residual distribution from independent foreground terms."""
     dm_disk = row.dm_mw - DM_MW_HALO
     if dm_disk <= 0:
         raise ValueError(f"{row.name}: non-positive MW disk column")
@@ -594,7 +597,13 @@ def sample_host_for_validation(
     for index, system in enumerate(row.intervening_systems):
         if system.model == "fixed_lognormal":
             assert system.dm_point is not None
-            intervening += lognormal(system.dm_point, _system_sigma(system.mass_source))
+            if system.mass_source == "cluster_catalog":
+                beta = cluster_column_samples(n=n, seed=seed + 20_000 + index)
+                mnfw = lognormal(system.dm_point, INT_SIGMA_LN["cluster"])
+                choose_beta = rng.random(n) < 0.5
+                intervening += np.where(choose_beta, beta, mnfw)
+            else:
+                intervening += lognormal(system.dm_point, _system_sigma(system.mass_source))
         elif system.model == "probabilistic_crossing":
             halo_input = phineas_crossing.load_inputs()[system.object]
             draws = phineas_crossing.simulate_halo(
@@ -625,13 +634,30 @@ CL_B_KPC = 603.6  # impact parameter (b/R500 = 0.83)
 # L500-M500 relation. Truncates the richness-mass prior's upper tail.
 # docs/rse/specs/experiment-cluster-xray-sz-mass-bound-2026-07-17.md
 CL_M500_XRAY_UL = 1.67e14  # Msun
+CL_C200 = 4.0
+
+
+def nfw_r500_over_r200(concentration_200: float = CL_C200) -> float:
+    """R500c/R200c for an NFW halo with the declared c200."""
+    c200 = float(concentration_200)
+
+    def enclosed(x: float) -> float:
+        return math.log1p(x) - x / (1.0 + x)
+
+    return float(
+        optimize.brentq(
+            lambda x: enclosed(c200 * x) / enclosed(c200) - 2.5 * x**3,
+            0.1,
+            0.99,
+        )
+    )
 
 
 def beta_model_dm(m500, r500_kpc, b_kpc, z, f_gas, rc_over_r500, beta):
     """Observer-frame intracluster DM from an isothermal beta-model.
 
     n_e(r) = n_e0 [1+(r/rc)^2]^{-3 beta/2}; n_e0 fixed by requiring the gas mass
-    within R500 equal f_gas * M500. Chord integral at impact b, out to 3 R500.
+    within R500 equal f_gas * M500. Chord integral at impact b, out to R200c.
     """
     KPC_M = 3.0856775814913673e19
     rc = rc_over_r500 * r500_kpc
@@ -645,9 +671,8 @@ def beta_model_dm(m500, r500_kpc, b_kpc, z, f_gas, rc_over_r500, beta):
     rho0 = m_gas_kg / (mass_integral_kpc3 * KPC_M**3)  # kg / m^3 at r=0
     ne0 = rho0 / (MU_E * M_P) / 1e6  # electrons / cm^3
     # Chord integral: n_e (cm^-3) over path length; dl in kpc -> pc via KPC_PC.
-    # Truncate the LOS at the virial radius R200 ~ 1.48 R500, matching the mNFW
-    # truncation, so the cross-check compares profile shape, not path length.
-    r_max = 1.48 * r500_kpc
+    # Truncate at the same R200c convention as the mNFW calculation.
+    r_max = r500_kpc / nfw_r500_over_r200()
     l_max = math.sqrt(max(r_max**2 - b_kpc**2, 0.0))
 
     def ne_los(los_kpc):
@@ -659,7 +684,7 @@ def beta_model_dm(m500, r500_kpc, b_kpc, z, f_gas, rc_over_r500, beta):
     return dm_rest / (1.0 + z)  # observer frame
 
 
-def cluster_column_range(n=40_000):
+def cluster_column_samples(n: int = 40_000, seed: int = 20260707) -> np.ndarray:
     """MC the beta-model column over M500, f_gas, and shape; report the range.
 
     The 0.2 dex richness-mass prior is truncated above at the RASS X-ray
@@ -667,17 +692,21 @@ def cluster_column_range(n=40_000):
     tail, so masses above the cap are redrawn from the allowed range
     (one-sided truncated lognormal).
     """
+    rng = np.random.default_rng(seed)
     log_cap = math.log10(CL_M500_XRAY_UL)
-    log_m500 = RNG.normal(math.log10(CL_M500), 0.20, n)  # 0.2 dex richness-mass scatter
+    log_m500 = rng.normal(math.log10(CL_M500), 0.20, n)  # 0.2 dex richness-mass scatter
     over = log_m500 > log_cap
     while over.any():
-        log_m500[over] = RNG.normal(math.log10(CL_M500), 0.20, int(over.sum()))
+        log_m500[over] = rng.normal(math.log10(CL_M500), 0.20, int(over.sum()))
         over = log_m500 > log_cap
     m500 = 10.0**log_m500
-    r500 = CL_R500_KPC * (m500 / CL_M500) ** (1.0 / 3.0)  # R500 ~ M500^{1/3}
-    f_gas = RNG.uniform(0.10, 0.16, n)  # X-ray/SZ cluster gas fractions
-    rc_over = RNG.uniform(0.10, 0.30, n)  # core radius / R500
-    beta = RNG.uniform(0.60, 0.75, n)  # beta-model slope
+    h_km_s_kpc = 67.66 * math.sqrt(OMEGA_M * (1.0 + CL_Z) ** 3 + OMEGA_LAMBDA) / 1000.0
+    g_kpc_km2_s2_msun = 4.30091e-6
+    rho_critical = 3.0 * h_km_s_kpc**2 / (8.0 * math.pi * g_kpc_km2_s2_msun)
+    r500 = (3.0 * m500 / (4.0 * math.pi * 500.0 * rho_critical)) ** (1.0 / 3.0)
+    f_gas = rng.uniform(0.10, 0.16, n)  # X-ray/SZ cluster gas fractions
+    rc_over = rng.uniform(0.10, 0.30, n)  # core radius / R500
+    beta = rng.uniform(0.60, 0.75, n)  # beta-model slope
     dm = np.array(
         [
             beta_model_dm(
@@ -687,6 +716,29 @@ def cluster_column_range(n=40_000):
         ]
     )
     return dm
+
+
+def cluster_column_range(n: int = 40_000, seed: int = 20260707) -> np.ndarray:
+    """Backward-compatible sample surface with explicit deterministic seed."""
+    return cluster_column_samples(n=n, seed=seed)
+
+
+def cluster_profile_pdf(
+    mnfw_point: float,
+    *,
+    dx: float,
+    n: int = 40_000,
+    seed: int = 20260707,
+) -> DiscretePDF:
+    """Equal-weight mNFW/beta profile mixture for the Phineas cluster."""
+    beta = cluster_column_samples(n=n, seed=seed)
+    rng = np.random.default_rng(seed + 1)
+    mnfw = rng.lognormal(math.log(mnfw_point), INT_SIGMA_LN["cluster"], n)
+    samples = np.concatenate((beta, mnfw))
+    upper = math.ceil(np.quantile(samples, 1.0 - TAIL_MASS) / dx) * dx
+    edges = np.arange(-0.5 * dx, upper + 1.5 * dx, dx)
+    density, _ = np.histogram(samples, bins=edges, density=True)
+    return DiscretePDF(x0=0.0, dx=dx, density=density)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -700,7 +752,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"validated {len(sightlines)} sightlines and their per-system columns")
         return 0
 
-    print("=== B1: DM_host posteriors (deterministic convolution) ===")
+    print("=== B1: induced DM_host residuals (deterministic convolution) ===")
     print(
         f"{'burst':16s} {'z':>5s} {'arith':>7s} {'p16':>6s} {'p50':>6s} {'p84':>6s} {'P(<0)':>6s}"
     )
