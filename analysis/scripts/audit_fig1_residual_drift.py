@@ -85,6 +85,12 @@ def products(
 
 
 def peak_slope(path: Path, telescope: str, target_dm: float) -> dict:
+    # Optional Figure-1 rendering helpers are not present in every analysis
+    # installation. Import only when this data-dependent measurement is run.
+    from dispersion.dm_campaign.render_dm_zoom_comparison import (
+        _subband_arrival_times,
+    )
+
     band = {
         "telescope": telescope,
         "input_path": str(path),

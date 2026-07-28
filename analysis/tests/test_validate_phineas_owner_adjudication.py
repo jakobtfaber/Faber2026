@@ -53,7 +53,10 @@ def test_distance_duality_identity():
 def test_modified_nfw_column_is_positive_inside_and_zero_outside():
     mass = 1e12
     z = 0.2
-    radius = validation._bryan_norman_rvir_kpc(mass, z)
+    h_km_s_kpc = validation.H0_KM_S_MPC * validation.efunc(z) / 1000.0
+    radius = (
+        validation.G_KPC_KM2_S2_MSUN * mass / (100.0 * h_km_s_kpc**2)
+    ) ** (1.0 / 3.0)
     assert validation.modified_nfw_dm(mass, z, 0.5 * radius) > 0.0
     assert validation.modified_nfw_dm(mass, z, radius) == 0.0
 

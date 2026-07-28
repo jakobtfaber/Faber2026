@@ -160,7 +160,8 @@ def modified_nfw_dm(mhalo_msun: float, z: float, b_kpc: float) -> float:
     alpha = 2.0
     y0 = 2.0
     hot_fraction = 0.75
-    rvir = _bryan_norman_rvir_kpc(mhalo_msun, z)
+    h_km_s_kpc = H0_KM_S_MPC * efunc(z) / 1000.0
+    rvir = (G_KPC_KM2_S2_MSUN * mhalo_msun / (100.0 * h_km_s_kpc**2)) ** (1.0 / 3.0)
     if b_kpc >= rvir:
         return 0.0
 

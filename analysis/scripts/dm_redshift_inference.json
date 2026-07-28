@@ -1,0 +1,117 @@
+{
+  "model": {
+    "foreground_halos": "zero floor; missing halos bias inferred z high",
+    "host_rest_dm": "lognormal sigma_ln=0.8",
+    "host_rest_medians": [
+      50.0,
+      100.0,
+      200.0
+    ],
+    "igm": "TNG-300 IGM marginal with f_IGM uncertainty",
+    "redshift_prior": "comoving volume / (1+z) times exp(-z/1.5)",
+    "z_grid": [
+      0.01,
+      2.5,
+      250
+    ]
+  },
+  "rows": [
+    {
+      "burst": "FRB 20221203A",
+      "dm_mw": 117.0,
+      "dm_obs": 602.377821,
+      "fiducial": {
+        "host_rest_median": 100.0,
+        "z16": 0.41015091062287634,
+        "z50": 0.549201900352667,
+        "z84": 0.7047773404700971
+      },
+      "host_prior_sensitivity": [
+        {
+          "host_rest_median": 50.0,
+          "z16": 0.45665015879232124,
+          "z50": 0.5866340772964979,
+          "z84": 0.7391332191041755
+        },
+        {
+          "host_rest_median": 100.0,
+          "z16": 0.41015091062287634,
+          "z50": 0.549201900352667,
+          "z84": 0.7047773404700971
+        },
+        {
+          "host_rest_median": 200.0,
+          "z16": 0.34625302445897144,
+          "z50": 0.49756534970109345,
+          "z84": 0.6582289364400327
+        }
+      ],
+      "nickname": "wilhelm"
+    },
+    {
+      "burst": "FRB 20230325C",
+      "dm_mw": 100.0,
+      "dm_obs": 912.407552,
+      "fiducial": {
+        "host_rest_median": 100.0,
+        "z16": 0.7255791151652305,
+        "z50": 0.9172987700284441,
+        "z84": 1.1441180905627628
+      },
+      "host_prior_sensitivity": [
+        {
+          "host_rest_median": 50.0,
+          "z16": 0.7733475674729071,
+          "z50": 0.9565382942542793,
+          "z84": 1.1804840595303103
+        },
+        {
+          "host_rest_median": 100.0,
+          "z16": 0.7255791151652305,
+          "z50": 0.9172987700284441,
+          "z84": 1.1441180905627628
+        },
+        {
+          "host_rest_median": 200.0,
+          "z16": 0.6347686764452288,
+          "z50": 0.8494897170108876,
+          "z84": 1.0843435770421979
+        }
+      ],
+      "nickname": "freya"
+    },
+    {
+      "burst": "FRB 20240122A",
+      "dm_mw": 133.0,
+      "dm_obs": 960.131611,
+      "fiducial": {
+        "host_rest_median": 100.0,
+        "z16": 0.7364597841723493,
+        "z50": 0.9317268825487911,
+        "z84": 1.1630559977349617
+      },
+      "host_prior_sensitivity": [
+        {
+          "host_rest_median": 50.0,
+          "z16": 0.7839865330215204,
+          "z50": 0.9708368603956331,
+          "z84": 1.1993250488100677
+        },
+        {
+          "host_rest_median": 100.0,
+          "z16": 0.7364597841723493,
+          "z50": 0.9317268825487911,
+          "z84": 1.1630559977349617
+        },
+        {
+          "host_rest_median": 200.0,
+          "z16": 0.6454006930356404,
+          "z50": 0.8636872032934269,
+          "z84": 1.1030722674562878
+        }
+      ],
+      "nickname": "mahi"
+    }
+  ],
+  "status": "diagnostic_dm_redshift_estimate_not_established_redshift"
+}
