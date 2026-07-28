@@ -36,5 +36,5 @@ jobs:
 
       - name: Run root scientific and provenance tests
         env:
-          FOREGROUND_PIPELINE_REPO: ${{ github.workspace }}/pipeline
+          FOREGROUND_PIPELINE_REPO: ${{ github.workspace }}/analysis
         run: make test-science
