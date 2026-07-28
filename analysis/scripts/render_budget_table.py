@@ -21,6 +21,7 @@ ROOT = manuscript_root()
 PIPELINE = ROOT / "pipeline"
 CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 HOST_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
+DM_Z_JSON = ANALYSIS_ROOT / "scripts" / "dm_redshift_inference.json"
 BASE_DATA = PIPELINE / "galaxies" / "foreground" / "budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 
@@ -61,6 +62,10 @@ def _csv_by(path: Path, key: str) -> dict[str, dict[str, str]]:
 def render() -> str:
     dm = _csv_by(CATALOG, "tns")
     host = _csv_by(HOST_CSV, "burst")
+    dm_z = {
+        row["burst"]: row["fiducial"]
+        for row in json.loads(DM_Z_JSON.read_text())["rows"]
+    }
     rows = json.loads(BASE_DATA.read_text())["rows"]
     if {row["burst"] for row in rows} != set(dm):
         raise ValueError("budget and adopted-DM rosters differ")
@@ -90,6 +95,13 @@ def render() -> str:
     rendered_rows = []
     for row in rows:
         cells = base.render_cells(row)
+        if row["burst"] in dm_z:
+            estimate = dm_z[row["burst"]]
+            z16, z50, z84 = (float(estimate[key]) for key in ("z16", "z50", "z84"))
+            cells[1] = (
+                rf"${z50:.2f}^{{+{z84 - z50:.2f}}}_{{-{z50 - z16:.2f}}}$"
+                r"\tablenotemark{p}"
+            )
         if row["burst"] == "FRB 20230307A":
             h = host[row["burst"]]
             p16, p50, p84 = (
@@ -104,6 +116,14 @@ def render() -> str:
     # qualifications, and attribute the central-value offset correctly.
     tail = (
         base._TAIL.replace(  # noqa: SLF001
+            "\\tablenotetext{p}{Host redshift unknown (placeholder); the cosmological and host\n"
+            "terms cannot be computed, so this sightline is excluded from any distance-dependent\n"
+            "quantity.}",
+            "\\tablenotetext{p}{Diagnostic dispersion-measure--redshift estimate "
+            "(median and 16th--84th percentiles), not an established host redshift. "
+            "It is excluded from the foreground and host-DM point budgets; "
+            "Appendix~\\ref{app:host-forward-model}.}",
+        ).replace(
             "\\tablecomments{Because the diffuse cosmic term follows a skewed log-normal,\n"
             "the induced host residuals are asymmetric and their medians exceed the naive\n"
             "mean-subtracted residuals. One high-redshift sightline",
@@ -120,8 +140,8 @@ def render() -> str:
             "(Section~\\ref{sec:obs-fg}).}",
             "not\nexcluded---absence of coverage is not absence of foreground\n"
             "(Section~\\ref{sec:obs-fg}). On the one such sightline with a\n"
-            "shallow-layer confirmed system, the tabulated column is a lower bound\n"
-            "rather than a complete census.}",
+            "shallow-layer confirmed system (FRB~20240203D), the tabulated column\n"
+            "is a lower bound rather than a complete census.}",
         )
         .replace(
             "\\tablenotetext{u}{Position lies outside",
