@@ -338,17 +338,12 @@ def make_figure(
         )
 
     output_stem.parent.mkdir(parents=True, exist_ok=True)
-    for suffix in (".svg", ".pdf"):
-        fig.savefig(output_stem.with_suffix(suffix), dpi=300)
+    fig.savefig(output_stem.with_suffix(".pdf"), dpi=300)
     plt.close(fig)
-    svg_path = output_stem.with_suffix(".svg")
-    svg_path.write_text(
-        "\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n"
-    )
 
     provenance = {
         "schema_version": 1,
-        "figure": [str(output_stem.with_suffix(".svg")), str(output_stem.with_suffix(".pdf"))],
+        "figure": [str(output_stem.with_suffix(".pdf"))],
         "status": "candidate_method_illustration_not_manuscript_admitted",
         "nickname": nickname,
         "receipt": str(receipt),

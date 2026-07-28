@@ -1,7 +1,6 @@
 {
   "schema_version": 1,
   "figure": [
-    "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/figures/energetics-measurement-method.svg",
     "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/figures/energetics-measurement-method.pdf"
   ],
   "status": "candidate_method_illustration_not_manuscript_admitted",
@@ -9,7 +8,7 @@
   "receipt": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/data_fluences.candidate.csv",
   "receipt_sha256": "bbfa0b0e1204b49c19b3e309a6fcdb7315f524b6be86b51c7b90bffad1ed290a",
   "producer": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/energetics/studies/burst-energies/plot_measurement_method.py",
-  "producer_sha256": "281c04ab7388b4c0fbf150333fa9bc58470467080225a19e383e3ced18d96743",
+  "producer_sha256": "676f456ed3e10cc27829a83e11b7eef6eb5d1f0de1eebf9fff64862dced5b73b",
   "dsa_beam_cube": "/Users/jakobfaber/Documents/DSA110_beam_1.h5",
   "dsa_beam_cube_sha256": "11d38a60f79db35c2552b06ad36659f5e99fa96246bbdc40e0c80505411281ab",
   "bands": {
