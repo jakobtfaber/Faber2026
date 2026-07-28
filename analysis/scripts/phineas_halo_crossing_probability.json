@@ -13,22 +13,22 @@
       },
       "central_log_mstar": 10.210534146391637,
       "dm_given_crossing": {
-        "mean": 13.184149078136693,
-        "p16": 6.187165345069524,
-        "p50": 10.982513438774028,
-        "p84": 19.4995695722018
+        "mean": 12.01266887848385,
+        "p16": 4.512438395573162,
+        "p50": 9.45326621792719,
+        "p84": 18.57974616380356
       },
       "dm_mixture": {
-        "mean": 13.109764936265952,
-        "p16": 6.113340212538407,
-        "p50": 10.939036902956875,
-        "p84": 19.452506506052085
+        "mean": 10.37961421836373,
+        "p16": 1.87909045516212,
+        "p50": 8.214688076874019,
+        "p84": 17.348705017302606
       },
       "legacy_obj": "832",
       "n_draws": 262144,
       "object": "194021777634832653",
-      "p_crossing": 0.9943580627441406,
-      "p_crossing_given_foreground": 0.9972034767173178,
+      "p_crossing": 0.8640556335449219,
+      "p_crossing_given_foreground": 0.8665281794671685,
       "p_foreground": 0.9971466064453125,
       "p_model_domain": 1.0,
       "p_r200c_crossing": 0.8640556335449219
@@ -46,22 +46,22 @@
       },
       "central_log_mstar": 8.94412504704216,
       "dm_given_crossing": {
-        "mean": 4.652799227358527,
-        "p16": 1.6983920097354654,
-        "p50": 3.7664449292105195,
-        "p84": 7.501920819680166
+        "mean": 6.057216555306197,
+        "p16": 2.0227731965473112,
+        "p50": 4.693222721511338,
+        "p84": 9.9099494738629
       },
       "dm_mixture": {
-        "mean": 2.3749786827606854,
+        "mean": 1.314664433024221,
         "p16": 0.0,
-        "p50": 0.5626548206412763,
-        "p84": 5.310246571812873
+        "p50": 0.0,
+        "p84": 2.790748025523533
       },
       "legacy_obj": null,
       "n_draws": 262144,
       "object": "983",
-      "p_crossing": 0.5104408264160156,
-      "p_crossing_given_foreground": 0.530205411059864,
+      "p_crossing": 0.217041015625,
+      "p_crossing_given_foreground": 0.22544497804827793,
       "p_foreground": 0.9627227783203125,
       "p_model_domain": 0.9971046447753906,
       "p_r200c_crossing": 0.217041015625
@@ -126,14 +126,14 @@
   ],
   "model": {
     "cgm_profile_sigma_ln": 0.4,
-    "crossing_definition": "foreground z < host z and b <= the Bryan-Norman virial truncation radius used by the modified-NFW gas model",
+    "crossing_definition": "foreground z < host z and b <= R200c",
     "dm_definition": "zero outside crossing; modified-NFW hot plus cool prior inside",
     "draws_per_object": 262144,
     "halo_mass": "redshift-dependent Moster et al. 2013 Table 1",
     "host_z": 0.271,
     "moster_intrinsic_sigma_dex_in_log_mstar": 0.15,
     "power": 18,
-    "r200c_definition": "reported as a census-geometry sensitivity, not used to truncate the gas column",
+    "r200c_definition": "M200c = (4 pi / 3) 200 rho_critical(z) R200c^3; also truncates the gas column",
     "sampler": "deterministic scrambled Sobol",
     "seed": 20260722,
     "stellar_mass": "Taylor et al. 2011 Eq. 8 from Pan-STARRS Kron g/i",

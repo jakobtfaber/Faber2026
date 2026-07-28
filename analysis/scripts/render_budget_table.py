@@ -105,9 +105,9 @@ def render() -> str:
     tail = (
         base._TAIL.replace(  # noqa: SLF001
             "\\tablecomments{Because the diffuse cosmic term follows a skewed log-normal,\n"
-            "the host posteriors are asymmetric and their medians exceed the naive\n"
+            "the induced host residuals are asymmetric and their medians exceed the naive\n"
             "mean-subtracted residuals. One high-redshift sightline",
-            "\\tablecomments{The host posteriors are asymmetric because the diffuse cosmic\n"
+            "\\tablecomments{The induced host residuals are asymmetric because the diffuse cosmic\n"
             "term follows a skewed log-normal. Their medians sit above the naive\n"
             "mean-subtracted residuals, but that offset is driven mainly by the lower IGM\n"
             "normalization adopted here ($f_{\\rm IGM}=0.76$ versus $0.84$), not by the\n"

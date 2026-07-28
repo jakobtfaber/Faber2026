@@ -291,8 +291,8 @@ def test_incomplete_census_upper_limit_roster_is_explicit():
         "FRB 20220506D",
         "FRB 20221113A",
         "FRB 20230814B",
-        "FRB 20230913A",
-        "FRB 20240203A",
+        "FRB 20230913G",
+        "FRB 20240203D",
     }
 
 
@@ -345,3 +345,9 @@ def test_committed_host_csv_matches_deterministic_summaries():
         assert float(actual["p_host_negative"]) == pytest.approx(
             expected["p_host_neg"], abs=5e-4
         )
+
+
+def test_cluster_profile_sampling_is_seed_reproducible():
+    first = dbu.cluster_column_samples(n=128, seed=314159)
+    second = dbu.cluster_column_samples(n=128, seed=314159)
+    assert np.array_equal(first, second)
