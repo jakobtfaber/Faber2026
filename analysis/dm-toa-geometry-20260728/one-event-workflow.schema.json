@@ -1,0 +1,490 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://faber2026.jakobfaber.com/schemas/one-event-absolute-dm-v1.json",
+  "title": "Faber2026 one-event anchored-hybrid absolute-DM workflow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event",
+    "result_status",
+    "identity",
+    "paths",
+    "input_sha256",
+    "chime",
+    "dsa",
+    "geometry",
+    "workflow",
+    "event_binding_sha256"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "event": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$"
+    },
+    "result_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewed_event",
+        "input_basenames",
+        "output_root_basename",
+        "disallowed_event_tokens"
+      ],
+      "properties": {
+        "reviewed_event": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "input_basenames": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "raw_chime_h5",
+            "accepted_chime_reference",
+            "raw_dsa_filterbank",
+            "accepted_dsa_reference",
+            "timing_results",
+            "trigger_recovery",
+            "reproduction_fixture"
+          ],
+          "properties": {
+            "raw_chime_h5": {"$ref": "#/$defs/basename"},
+            "accepted_chime_reference": {"$ref": "#/$defs/basename"},
+            "raw_dsa_filterbank": {"$ref": "#/$defs/basename"},
+            "accepted_dsa_reference": {"$ref": "#/$defs/basename"},
+            "timing_results": {"$ref": "#/$defs/basename"},
+            "trigger_recovery": {"$ref": "#/$defs/basename"},
+            "reproduction_fixture": {"$ref": "#/$defs/basename"}
+          }
+        },
+        "output_root_basename": {
+          "$ref": "#/$defs/basename"
+        },
+        "disallowed_event_tokens": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          }
+        }
+      }
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_chime_h5",
+        "accepted_chime_reference",
+        "raw_dsa_filterbank",
+        "accepted_dsa_reference",
+        "timing_results",
+        "trigger_recovery",
+        "reproduction_fixture",
+        "output_root"
+      ],
+      "properties": {
+        "raw_chime_h5": {
+          "$ref": "#/$defs/path"
+        },
+        "accepted_chime_reference": {
+          "$ref": "#/$defs/path"
+        },
+        "raw_dsa_filterbank": {
+          "$ref": "#/$defs/path"
+        },
+        "accepted_dsa_reference": {
+          "$ref": "#/$defs/path"
+        },
+        "timing_results": {
+          "$ref": "#/$defs/path"
+        },
+        "trigger_recovery": {
+          "$ref": "#/$defs/path"
+        },
+        "reproduction_fixture": {
+          "$ref": "#/$defs/path"
+        },
+        "output_root": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_chime_h5",
+        "accepted_chime_reference",
+        "raw_dsa_filterbank",
+        "accepted_dsa_reference",
+        "timing_results",
+        "trigger_recovery",
+        "reproduction_fixture"
+      ],
+      "properties": {
+        "raw_chime_h5": {
+          "$ref": "#/$defs/sha256"
+        },
+        "accepted_chime_reference": {
+          "$ref": "#/$defs/sha256"
+        },
+        "raw_dsa_filterbank": {
+          "$ref": "#/$defs/sha256"
+        },
+        "accepted_dsa_reference": {
+          "$ref": "#/$defs/sha256"
+        },
+        "timing_results": {
+          "$ref": "#/$defs/sha256"
+        },
+        "trigger_recovery": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reproduction_fixture": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "chime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_reference_dm_pc_cm3",
+        "anchor_dm_pc_cm3",
+        "reference_pulse_fwhm_s",
+        "upchannel_factor",
+        "window_s",
+        "grid",
+        "gates",
+        "accepted_support"
+      ],
+      "properties": {
+        "accepted_reference_dm_pc_cm3": {
+          "type": "number"
+        },
+        "anchor_dm_pc_cm3": {
+          "type": "number"
+        },
+        "reference_pulse_fwhm_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "upchannel_factor": {
+          "const": 16
+        },
+        "window_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "grid": {
+          "$ref": "#/$defs/chime_grid"
+        },
+        "gates": {
+          "$ref": "#/$defs/chime_gates"
+        },
+        "accepted_support": {
+          "$ref": "#/$defs/chime_support"
+        }
+      }
+    },
+    "dsa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_reference_dm_pc_cm3",
+        "raw_crop_start_sample",
+        "crop_samples",
+        "padding_samples",
+        "audit_sample_rows",
+        "accepted_support",
+        "gates"
+      ],
+      "properties": {
+        "accepted_reference_dm_pc_cm3": {
+          "type": "number"
+        },
+        "raw_crop_start_sample": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "crop_samples": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "padding_samples": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "audit_sample_rows": {
+          "type": "integer",
+          "minimum": 8
+        },
+        "accepted_support": {
+          "$ref": "#/$defs/dsa_support"
+        },
+        "gates": {
+          "$ref": "#/$defs/dsa_gates"
+        }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "geometry_dm_pc_cm3",
+        "reference_frequency_mhz",
+        "dsa_native_frequency_mhz"
+      ],
+      "properties": {
+        "geometry_dm_pc_cm3": {
+          "type": "number"
+        },
+        "reference_frequency_mhz": {
+          "const": 400.0
+        },
+        "dsa_native_frequency_mhz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_authorized",
+        "regression_fixture",
+        "chime_container_image",
+        "container_data_mount",
+        "stages"
+      ],
+      "properties": {
+        "execution_authorized": {
+          "type": "boolean"
+        },
+        "regression_fixture": {
+          "type": "boolean"
+        },
+        "chime_container_image": {
+          "type": "string",
+          "pattern": "@sha256:[0-9a-f]{64}$"
+        },
+        "container_data_mount": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "stages": {
+          "const": [
+            "preflight",
+            "dsa_audit",
+            "chime_hybrid",
+            "dsa_products",
+            "geometry",
+            "packet",
+            "manifests"
+          ]
+        }
+      }
+    },
+    "event_binding_sha256": {
+      "$ref": "#/$defs/sha256"
+    }
+  },
+  "$defs": {
+    "basename": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^/]+$"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "positive_number": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "chime_grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coarse_half_width_pc_cm3",
+        "coarse_step_pc_cm3",
+        "fine_half_width_pc_cm3",
+        "fine_step_pc_cm3"
+      ],
+      "properties": {
+        "coarse_half_width_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "coarse_step_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "fine_half_width_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "fine_step_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        }
+      }
+    },
+    "chime_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "oracle_half_width_pc_cm3",
+        "oracle_material_threshold_pc_cm3",
+        "oracle_normalised_curve_max_abs_difference",
+        "oracle_center_score_ratio_tolerance",
+        "smearing_max_fraction_of_upchannel_sample",
+        "smearing_max_fraction_of_reference_pulse_fwhm",
+        "injection_max_error_pc_cm3"
+      ],
+      "properties": {
+        "oracle_half_width_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "oracle_material_threshold_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "oracle_normalised_curve_max_abs_difference": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "oracle_center_score_ratio_tolerance": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "smearing_max_fraction_of_upchannel_sample": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "smearing_max_fraction_of_reference_pulse_fwhm": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "injection_max_error_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        }
+      }
+    },
+    "chime_support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "full_grid_rows",
+        "all_nan_count",
+        "finite_flat_count",
+        "live_count",
+        "h5_present_count",
+        "h5_missing_count",
+        "h5_present_accepted_dead_ids",
+        "manual_bad_channel_ids",
+        "historical_row_sum_replay"
+      ],
+      "properties": {
+        "full_grid_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "all_nan_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finite_flat_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "live_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "h5_present_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "h5_missing_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "h5_present_accepted_dead_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "manual_bad_channel_ids": {
+          "const": []
+        },
+        "historical_row_sum_replay": {
+          "const": false
+        }
+      }
+    },
+    "dsa_support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "full_grid_rows",
+        "live_count",
+        "dead_count",
+        "manual_bad_channel_ids"
+      ],
+      "properties": {
+        "full_grid_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "live_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dead_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "manual_bad_channel_ids": {
+          "const": []
+        }
+      }
+    },
+    "dsa_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "direct_correlation_min",
+        "reversed_correlation_max",
+        "reference_minus_raw_dm_abs_max_pc_cm3",
+        "edge_fail_closed"
+      ],
+      "properties": {
+        "direct_correlation_min": {
+          "type": "number"
+        },
+        "reversed_correlation_max": {
+          "type": "number"
+        },
+        "reference_minus_raw_dm_abs_max_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "edge_fail_closed": {
+          "const": true
+        }
+      }
+    }
+  }
+}
