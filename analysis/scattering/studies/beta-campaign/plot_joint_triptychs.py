@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
 
-RUNS = os.environ.get("FLITS_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs")
+RUNS = os.environ.get("FABER2026_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs")
 JDIR = os.path.join(RUNS, "data/joint")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "triptychs")
 os.makedirs(OUT, exist_ok=True)

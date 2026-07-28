@@ -187,7 +187,7 @@ def fig_pbf_shapes():
     """Illustrative exp vs power-law PBF kernel shapes."""
     import sys
 
-    sys.path.insert(0, os.environ["FLITS_REPO"] + "/scattering")
+    sys.path.insert(0, os.environ["FABER2026_ANALYSIS"] + "/scattering")
     from scattering.scat_analysis.burstfit import analytic_gaussian_exp_convolution as ex
     from scattering.scat_analysis.burstfit import gaussian_powerlaw_convolution as pl
 

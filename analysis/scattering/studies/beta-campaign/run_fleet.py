@@ -29,7 +29,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[3]
 
 
-RUNS = Path(os.environ.get("FLITS_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
+RUNS = Path(os.environ.get("FABER2026_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
 RUNNER = REPO / "analysis/scattering/studies/joint-refits/local_runs/run_joint_fit.py"
 PPC = REPO / "analysis/scattering/studies/joint-refits/joint_ppc_multi.py"
 LOGDIR = RUNS / "logs"
@@ -63,7 +63,7 @@ FREYA_STOP_TOL = 0.05
 
 
 def run_one(burst: str, nlive: int, flags: list[str], suffix: str, nproc: int) -> dict:
-    env = {**os.environ, "FLITS_REPO": str(REPO), "FLITS_RUNS": str(RUNS)}
+    env = {**os.environ, "FABER2026_ANALYSIS": str(REPO), "FABER2026_RUNS": str(RUNS)}
     log = LOGDIR / f"{burst}_beta.log"
     t0 = time.time()
     with open(log, "w") as fh:

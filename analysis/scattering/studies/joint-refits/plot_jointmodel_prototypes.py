@@ -27,7 +27,7 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 TOA_JSON = REPO / "crossmatching" / "toa_crossmatch_results.json"
 TEL_CFG = REPO / "scattering/configs/telescopes.yaml"
-RUNS = Path(os.environ.get("FLITS_RUNS", Path.home() / "Developer/dsa110-local-data/flits-runs"))
+RUNS = Path(os.environ.get("FABER2026_RUNS", Path.home() / "Developer/dsa110-local-data/flits-runs"))
 
 # DSA native voltage sample (telescopes.yaml dsa.dt_ms_raw)
 TARGET_DT_MS = float(yaml.safe_load(TEL_CFG.read_text())["dsa"]["dt_ms_raw"])
@@ -105,8 +105,8 @@ def _t_factor_for(telescope: str) -> int:
 def _dump_module():
     spec = importlib.util.spec_from_file_location("dump_jointmodel", HERE / "dump_jointmodel.py")
     mod = importlib.util.module_from_spec(spec)
-    os.environ.setdefault("FLITS_REPO", str(REPO))
-    os.environ.setdefault("FLITS_RUNS", str(RUNS))
+    os.environ.setdefault("FABER2026_ANALYSIS", str(REPO))
+    os.environ.setdefault("FABER2026_RUNS", str(RUNS))
     sys.path.insert(0, str(REPO / "scattering"))
     spec.loader.exec_module(mod)
     return mod

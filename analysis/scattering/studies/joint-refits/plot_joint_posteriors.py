@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 from _figsave import save_fig
 from dynesty.utils import resample_equal
 
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 OUT = f"{RUNS}/data/joint"
 BURSTS = sys.argv[1:] or ["johndoeII", "wilhelm", "phineas", "oran"]
 

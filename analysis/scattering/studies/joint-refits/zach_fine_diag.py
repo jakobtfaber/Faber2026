@@ -8,15 +8,15 @@ import os, sys, tempfile
 import numpy as np
 
 WT = "/home/ubuntu/worktrees/joint-tf-fits"
-os.environ.setdefault("FLITS_REPO", WT)
-os.environ.setdefault("FLITS_RUNS", "/home/ubuntu/flits-runs")
+os.environ.setdefault("FABER2026_ANALYSIS", WT)
+os.environ.setdefault("FABER2026_RUNS", "/home/ubuntu/flits-runs")
 os.environ["MPLBACKEND"] = "Agg"
 sys.path.insert(0, f"{WT}/scattering")
 sys.path.insert(0, f"{WT}/analysis/scattering/studies/joint-refits")
 
 import joint_tf_prep as jtp
 
-RUNS = os.environ["FLITS_RUNS"]
+RUNS = os.environ["FABER2026_RUNS"]
 cC = f"{RUNS}/configs/zach_chime_run.yaml"
 cD = f"{RUNS}/configs/zach_dsa_run.yaml"
 td = tempfile.mkdtemp(prefix="zachdiag_")

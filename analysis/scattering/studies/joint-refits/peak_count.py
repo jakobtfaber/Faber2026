@@ -13,7 +13,7 @@ from scipy.signal import find_peaks
 from scipy.ndimage import gaussian_filter1d
 import yaml
 
-REPO = "/home/jfaber/flits/dsa110-FLITS"
+REPO = next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 RUNS = "/central/scratch/jfaber/flits-runs"
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.config_utils import load_telescope_block

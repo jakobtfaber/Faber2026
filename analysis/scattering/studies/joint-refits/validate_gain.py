@@ -23,8 +23,8 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 sys.path.insert(0, f"{REPO}/scattering")
 import yaml
 from scattering.scat_analysis.burstfit import FRBParams

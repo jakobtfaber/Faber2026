@@ -18,8 +18,8 @@ import sys
 import numpy as np
 import yaml
 
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 sys.path.insert(0, f"{REPO}/scattering")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # so joint_tf_prep imports
 import joint_tf_prep
@@ -39,8 +39,8 @@ def prepare(cfg_path, name, outdir):
         f_factor=int(cfg["f_factor"]),
         t_factor=int(cfg["t_factor"]),
         outer_trim=float(cfg.get("outer_trim", 0.15)),
-        onpulse_crop=os.environ.get("FLITS_ONPULSE_CROP", "1") == "1",
-        onpulse_pad_factor=float(os.environ.get("FLITS_ONPULSE_PAD", "0.5")),
+        onpulse_crop=os.environ.get("FABER2026_ONPULSE_CROP", "1") == "1",
+        onpulse_pad_factor=float(os.environ.get("FABER2026_ONPULSE_PAD", "0.5")),
     )
     m = ds.model
     m.dm_init = float(cfg.get("dm_init", 0.0))

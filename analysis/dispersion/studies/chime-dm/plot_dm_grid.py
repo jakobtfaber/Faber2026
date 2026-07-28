@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from scipy.ndimage import uniform_filter1d  # noqa: E402
 
-K_DM = 4.148808e3  # s MHz^2 pc^-1 cm^3 (== flits.common.constants.K_DM)
+K_DM = 4.148808e3  # s MHz^2 pc^-1 cm^3 (== radio_pipeline.common.constants.K_DM)
 
 OUT = Path(os.environ.get("CHIME_DM_OUT", str(REPO / "analysis" / "chime_dm")))
 SUFFIX = os.environ.get("CHIME_DM_SUFFIX", "")  # output filename suffix (for comparison renders)

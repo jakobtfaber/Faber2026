@@ -11,7 +11,7 @@ DRIVER_DIR = REPO / "scattering" / "studies" / "joint-refits"
 
 def _run(script: str, runs: Path, *extra: str) -> subprocess.CompletedProcess[str]:
     environment = os.environ.copy()
-    environment.update({"FLITS_REPO": str(REPO), "FLITS_RUNS": str(runs)})
+    environment.update({"FABER2026_ANALYSIS": str(REPO), "FABER2026_RUNS": str(runs)})
     return subprocess.run(
         [sys.executable, str(DRIVER_DIR / script), "test", "20", "1", *extra],
         capture_output=True,

@@ -11,7 +11,7 @@ Unlike joint_ladder/_s2verdict.py this does NOT filter by PBF family: the beta-n
 share ONE sampled beta across both bands, so the PBF is coherent by construction (ADR-0006)
 — the pbf_C/pbf_D incomparability of the alpha-era ladder does not apply.
 
-  FLITS_RUNS=~/Developer/scratch/flits-local-runs python s2_ladder_verdict.py
+  FABER2026_RUNS=~/Developer/scratch/flits-local-runs python s2_ladder_verdict.py
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-RUNS = Path(os.environ.get("FLITS_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
+RUNS = Path(os.environ.get("FABER2026_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
 JOINT = RUNS / "data/joint"
 THRESH = 5.0
 

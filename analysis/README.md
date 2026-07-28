@@ -2,8 +2,10 @@
 
 Scientific analysis and research-control workspace for the Faber2026
 manuscript. The parent manuscript repository mounts this repository at
-`analysis/` and pins one exact commit. Shared fitting code is supplied by the
-exact FLITS dependency recorded in `pyproject.toml` and `uv.lock`.
+`analysis/` and pins one exact commit. All project analysis and reusable
+fitting code are housed here and locked by `pyproject.toml` and `uv.lock`.
+The retired `dsa110-FLITS` repository is provenance only, never a runtime
+dependency.
 
 ## Scientific subjects
 

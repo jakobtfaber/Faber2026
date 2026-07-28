@@ -11,11 +11,9 @@ Checks:
       (i.e. the (tau,alpha) MLE under the scintillated data sits at the truth).
   (3) Cross-check: scattering goodness still discriminates wrong tau/alpha.
 """
-import sys
 import numpy as np
 from dataclasses import replace
 
-sys.path.insert(0, "/home/jfaber/flits/dsa110-FLITS/scattering")
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams, _gp_amplitude_logL
 from scattering.scat_analysis.burstfit_joint import _JointLogLikelihoodGainGP
 

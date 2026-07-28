@@ -26,7 +26,7 @@ Writes <burst>_fullband_unified.png AND figures.manifest.json into the gated dir
 (data/joint/gated_figures/<burst>/) so the repo figure-review Stop gate enforces
 a visual review.
 
-  FLITS_RUNS=... FLITS_REPO=... python fullband_aligned.py <burst>
+  FABER2026_RUNS=... FABER2026_ANALYSIS=... python fullband_aligned.py <burst>
 """
 
 import json
@@ -40,8 +40,8 @@ import numpy.ma as ma
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 sys.path.insert(0, f"{REPO}/scattering")
 import yaml
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams

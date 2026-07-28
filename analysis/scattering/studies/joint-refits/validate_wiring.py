@@ -2,10 +2,10 @@
 using oran's already-computed results json — no full re-fit."""
 import sys, json, pathlib
 import numpy as np
-from flits.scattering.scat_analysis.config_utils import load_config
-from flits.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
-from flits.scattering.scat_analysis.burstfit import FRBParams
-from flits.scattering.scat_analysis.visualization import plot_fit_quality   # the wired fn
+from radio_pipeline.scattering.scat_analysis.config_utils import load_config
+from radio_pipeline.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
+from radio_pipeline.scattering.scat_analysis.burstfit import FRBParams
+from radio_pipeline.scattering.scat_analysis.visualization import plot_fit_quality   # the wired fn
 
 CFG, JSON, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 cfg = load_config(CFG)

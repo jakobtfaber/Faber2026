@@ -20,7 +20,7 @@ import pytest
 
 from dispersion.dm_phase_analysis import measure_dm_phase
 from dispersion.dmphasev2 import DMPhaseEstimator, dmphase_trial_to_physical_residual_dm
-from flits.common.constants import K_DM
+from radio_pipeline.common.constants import K_DM
 
 
 def _disperse(n_t, freqs, dt, dm, comps):

@@ -17,10 +17,9 @@ ADVERSARIAL_REVIEW = (
     / "docs/rse/specs/evidence/foreground-source-verification-2026-07-22"
     / "adversarial-review.json"
 )
-PIPELINE_SOURCE = Path(os.environ.get(
-    "FOREGROUND_PIPELINE_REPO",
-    str(Path.home() / "Developer/repos/github.com/jakobtfaber/dsa110-FLITS"),
-))
+PIPELINE_SOURCE = Path(
+    os.environ.get("FOREGROUND_ANALYSIS_REPO", str(ROOT))
+)
 
 
 def _module():

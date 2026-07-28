@@ -5,7 +5,7 @@ plot_jointmodel_pair layout but resolves each burst's dump by its actual tag
 (the beta-campaign suffix naming and the run_joint_fit tag naming differ), so it
 plots exactly what the campaign produced.
 
-  FLITS_RUNS=~/Developer/scratch/flits-local-runs conda run -n flits \
+  FABER2026_RUNS=~/Developer/scratch/flits-local-runs conda run -n flits \
     python plot_triptychs_new.py --burst whitney_fine:_C2D2 --burst freya:''
 """
 from __future__ import annotations
@@ -30,9 +30,9 @@ sys.path.insert(0, str(REPO / "scattering"))
 sys.path.insert(0, str(HERE))
 
 from plot_jointmodel_pair import _aligned_bands  # noqa: E402
-from flits.batch.codetection_plots import plot_codetection  # noqa: E402
+from radio_pipeline.batch.codetection_plots import plot_codetection  # noqa: E402
 
-RUNS = Path(os.environ.get("FLITS_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
+RUNS = Path(os.environ.get("FABER2026_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
 
 # Evidence-selected component counts (joint_ladder/_figs.py chosen map; whitney base->C2D2,
 # beta-native re-fit). tag matches run_joint_fit's output suffix.

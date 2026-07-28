@@ -14,8 +14,8 @@ import glob, json, os, sys
 from dataclasses import replace
 import numpy as np
 import yaml
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.config_utils import load_telescope_block
 from scattering.scat_analysis.pipeline.io import BurstDataset

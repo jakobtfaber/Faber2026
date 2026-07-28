@@ -25,8 +25,8 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 sys.path.insert(0, f"{REPO}/analysis/scattering/studies/joint-refits")  # _figsave, joint_ppc
 sys.path.insert(0, f"{REPO}/scattering")
 from _figsave import save_fig
@@ -36,8 +36,8 @@ from scattering.scat_analysis.burstfit_joint import _gain_marginal_multi_band
 
 OUT = f"{RUNS}/data/joint"
 FIG_OUT = os.environ.get("DSA_FIGS", OUT)
-ONPULSE_CROP = os.environ.get("FLITS_ONPULSE_CROP", "1") == "1"
-ONPULSE_PAD = float(os.environ.get("FLITS_ONPULSE_PAD", "0.5"))
+ONPULSE_CROP = os.environ.get("FABER2026_ONPULSE_CROP", "1") == "1"
+ONPULSE_PAD = float(os.environ.get("FABER2026_ONPULSE_PAD", "0.5"))
 
 # canonical all-exp model per burst (ALLEXP_PBF_RUN.md); whitney (C2D2, local) absent on HPCC
 SPEC = {

@@ -12,7 +12,7 @@ successfully" is backed by evidence, not assumed.
 import json
 import os
 
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 J = f"{RUNS}/data/joint"
 BURSTS = (
     "casey chromatica freya hamilton isha johndoeII mahi oran phineas whitney wilhelm zach".split()

@@ -31,18 +31,19 @@ OMEGA_B = 0.04897
 MSUN_G = 1.988409870698051e33
 KPC_CM = 3.085677581491367e21
 PROTON_G = 1.67262192369e-24
+CLUSTER_C200 = 4.0
 
 # Inputs independently reviewed on 2026-07-22.  The validator must fail closed
 # if a later pipeline checkout changes any source while preserving the same
 # rounded budget total.
 EXPECTED_INPUT_SHA256 = {
-    "bursts": "204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644",
-    "registry": "b45d698cde155427b272d0ead4c1a248303ef8c839ddcb84a0393adcdd1ae222",
-    "masses": "3cea6b099d8238bea971e6289dfe5c729ac0da20470ae0678c9de558783d12a9",
+    "bursts": "6610aabb1527137c647149b86f6f65a3a1c4782680d618dd5c5f712b9f3c4536",
+    "registry": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+    "masses": "bc59a5c3edea72ff64f18caeda61daa296a14c00964bea21c5b1e383e04c3097",
     "duplicates": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
     "overrides": "108a9ed842ec10c76ed281e87b58aca2c32bb2785fdcf2d2ef5082c809c76748",
     "method": "3df502e9244f8603f06336262e15d0f23aa6d52c858d4c4934fc1bbe741567bc",
-    "budget": "e8ca970d48c06709ddc141182f5c61729f99ed1fa1f33cfbb00fdcd95111a90b",
+    "budget": "bd4eddac7a1a82d4c79540ae1d443a818c5dd3f88f4a1ac5984e2cbb0cbbae3e",
 }
 
 
@@ -57,6 +58,25 @@ def simpson(func, lo: float, hi: float, intervals: int = 8000) -> float:
     for index in range(1, intervals):
         total += (4.0 if index % 2 else 2.0) * func(lo + index * step)
     return total * step / 3.0
+
+
+def m200_from_m500_nfw(m500_msun: float, concentration_200: float = CLUSTER_C200) -> float:
+    """Independent standard-library NFW M500c-to-M200c conversion."""
+    c200 = float(concentration_200)
+
+    def enclosed(x: float) -> float:
+        return math.log1p(x) - x / (1.0 + x)
+
+    lo, hi = 0.1, 0.99
+    for _ in range(80):
+        mid = 0.5 * (lo + hi)
+        residual = enclosed(c200 * mid) / enclosed(c200) - 2.5 * mid**3
+        if residual > 0.0:
+            lo = mid
+        else:
+            hi = mid
+    radius_ratio = 0.5 * (lo + hi)
+    return float(m500_msun) / (2.5 * radius_ratio**3)
 
 
 def efunc(z: float) -> float:
@@ -224,8 +244,8 @@ def input_hash_status(paths: dict[str, Path]) -> tuple[dict[str, str], dict[str,
     return observed, mismatches
 
 
-def validate(pipeline_root: Path) -> dict:
-    data = pipeline_root / "galaxies" / "foreground" / "data"
+def validate(analysis_root: Path) -> dict:
+    data = analysis_root / "foregrounds" / "studies" / "census" / "data"
     paths = {
         "bursts": data / "frozen_census" / "bursts.csv",
         "registry": data / "intervening_census_registry.csv",
@@ -233,7 +253,7 @@ def validate(pipeline_root: Path) -> dict:
         "duplicates": data / "census_masses" / "census_duplicates.csv",
         "overrides": data / "census_masses" / "mass_overrides.csv",
         "method": data / "census_masses" / "CGM_intersection_census_METHOD.md",
-        "budget": pipeline_root / "galaxies" / "foreground" / "budget_table_data.json",
+        "budget": analysis_root / "foregrounds" / "studies" / "census" / "budget_table_data.json",
     }
     missing = [str(path) for path in paths.values() if not path.is_file()]
     if missing:
@@ -358,7 +378,7 @@ def validate(pipeline_root: Path) -> dict:
     if len(clusters) != 1:
         raise ValueError(f"expected one eligible Phineas cluster, found {len(clusters)}")
     cluster = clusters[0]
-    cluster_m200 = 1.3 * float(cluster["m500_1e14msun"]) * 1e14
+    cluster_m200 = m200_from_m500_nfw(float(cluster["m500_1e14msun"]) * 1e14)
     cluster_hot_dm = modified_nfw_dm(cluster_m200, float(cluster["best_z"]), float(cluster["impact_kpc"]))
     total_hot += cluster_hot_dm
     total_dm = total_hot + total_cool
@@ -383,8 +403,8 @@ def validate(pipeline_root: Path) -> dict:
     fragile = next(row for row in halo_results if row["object"] == "194021777634832653")
 
     return {
-        "validator": "standard-library clean-room implementation; no pipeline imports",
-        "pipeline_root": str(pipeline_root.resolve()),
+        "validator": "standard-library clean-room implementation; no retired repository imports",
+        "analysis_root": str(analysis_root.resolve()),
         "input_sha256": input_sha256,
         "expected_input_sha256": EXPECTED_INPUT_SHA256,
         "input_hashes_match": input_hashes_match,
@@ -434,12 +454,16 @@ def validate(pipeline_root: Path) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--pipeline-root", type=Path, required=True)
+    parser.add_argument(
+        "--analysis-root",
+        type=Path,
+        default=Path(__file__).resolve().parents[1],
+    )
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--expect-rounded-dm", type=int, default=243)
+    parser.add_argument("--expect-rounded-dm", type=int, default=284)
     args = parser.parse_args()
 
-    result = validate(args.pipeline_root)
+    result = validate(args.analysis_root)
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.write_text(rendered, encoding="utf-8")

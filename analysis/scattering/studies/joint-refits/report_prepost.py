@@ -5,7 +5,7 @@ import json
 import os
 import sys
 
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 J = f"{RUNS}/data/joint"
 for b in sys.argv[1:]:
     n = json.load(open(f"{J}/{b}_joint_fit.json"))

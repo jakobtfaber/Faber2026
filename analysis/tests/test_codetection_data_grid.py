@@ -15,7 +15,7 @@ from workspace import manuscript_root  # noqa: E402
 ROOT = manuscript_root()
 
 import plot_codetection_data_grid as grid  # noqa: E402
-from flits.batch.codetection_plots import BandSpectrum  # noqa: E402
+from radio_pipeline.batch.codetection_plots import BandSpectrum  # noqa: E402
 
 
 def _band(
@@ -233,7 +233,7 @@ def test_pad_cap_bounds_window_for_scattered_bursts():
         data = np.zeros((8, time.size))
         on = (time >= 0.0) & (time <= width)
         data[:, on] = 100.0
-        from flits.batch.codetection_plots import BandSpectrum
+        from radio_pipeline.batch.codetection_plots import BandSpectrum
 
         return BandSpectrum(
             freq_mhz=np.linspace(400.0, 800.0, 8)

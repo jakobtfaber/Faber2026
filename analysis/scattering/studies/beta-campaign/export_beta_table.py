@@ -28,7 +28,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[3]
 
 
-RUNS = Path(os.environ.get("FLITS_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
+RUNS = Path(os.environ.get("FABER2026_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
 sys.path.insert(0, str(REPO))
 
 from scattering.scat_analysis.burst_metadata import load_tns_name  # noqa: E402

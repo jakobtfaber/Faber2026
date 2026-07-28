@@ -14,9 +14,9 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from flits.scattering.scat_analysis.config_utils import load_config
-from flits.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
-from flits.scattering.scat_analysis.burstfit import FRBParams
+from radio_pipeline.scattering.scat_analysis.config_utils import load_config
+from radio_pipeline.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
+from radio_pipeline.scattering.scat_analysis.burstfit import FRBParams
 
 CFG, JSON, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 cfg = load_config(CFG)

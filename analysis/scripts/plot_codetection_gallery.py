@@ -39,7 +39,7 @@ from pathlib import Path
 
 import numpy as np
 
-from flits.resources import path as resource_path
+from radio_pipeline.resources import path as resource_path
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
@@ -188,13 +188,13 @@ def discover_products(
 
 
 def _apply_style() -> None:
-    """flits.plotting.use_flits_style() (the repo standard), with a fallback
+    """radio_pipeline.plotting.use_flits_style() (the repo standard), with a fallback
     that replicates its rcParams (pipeline/flits/plotting.py:50-55) if the
     flits import chain (scattering.burstfit) is unavailable."""
     import matplotlib.pyplot as plt
 
     try:
-        from flits.plotting import use_flits_style  # applies on import too
+        from radio_pipeline.plotting import use_flits_style  # applies on import too
 
         use_flits_style()
         return

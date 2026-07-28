@@ -15,7 +15,7 @@ import sys
 
 import numpy as np
 
-REPO = "/Users/jakobfaber/Developer/repos/github.com/dsa110/dsa110-FLITS"
+REPO = next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams
 from scattering.scat_analysis.burstfit_init import data_driven_initial_guess

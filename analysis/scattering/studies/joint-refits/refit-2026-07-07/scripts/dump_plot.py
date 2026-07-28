@@ -30,12 +30,12 @@ sys.path.insert(0, str(SCRIPT_DIR))
 
 import refit_runner as R  # noqa: E402
 from scattering.scat_analysis.burstfit import FRBParams  # noqa: E402
-from flits.batch.codetection_data import (  # noqa: E402
+from radio_pipeline.batch.codetection_data import (  # noqa: E402
     chime_toa_shift_ms,
     crop_bands_to_subburst_window,
     toa_offset_ms,
 )
-from flits.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
+from radio_pipeline.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
 
 
 def recover(model, params_list):

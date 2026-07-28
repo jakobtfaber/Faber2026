@@ -6,7 +6,7 @@ profiling (baseline, on-pulse, w_rms / w_tail) is reused verbatim from
 within_chime_test.py so this figure and that diagnostic cannot drift. Vector
 output (PDF for LaTeX + SVG, plus a PNG for the gallery/review gate) via _figsave,
 written into the ``chime_subband/`` manuscript section (build_manuscript.py picks
-it up). Input configs/data resolve under ``$FLITS_RUNS``; override the figure
+it up). Input configs/data resolve under ``$FABER2026_RUNS``; override the figure
 output dir with ``$FLITS_FIGOUT``.
 
   python analysis/scattering/studies/joint-refits/chime_subband_compare.py [burst1 burst2 ...] [--nsub N]

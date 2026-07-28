@@ -8,7 +8,7 @@ nproc 8). Writes <burst>_chime_run.yaml into the configs dir.
 """
 import glob, os, yaml
 
-REPO = "/home/jfaber/flits/dsa110-FLITS"
+REPO = next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 RUNS = "/central/scratch/jfaber/flits-runs"
 DATA = f"{RUNS}/data"
 CFG = f"{RUNS}/configs"

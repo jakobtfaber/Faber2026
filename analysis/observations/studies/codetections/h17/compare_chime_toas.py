@@ -16,7 +16,11 @@ import json
 from pathlib import Path
 
 ROOT = Path("/data/research/astrophysics/frbs/chime-dsa-codetections")
-REPO = Path("/home/ubuntu/Developer/repos/github.com/jakobtfaber/dsa110-FLITS")
+REPO = next(
+    parent
+    for parent in Path(__file__).resolve().parents
+    if (parent / "pyproject.toml").exists()
+)
 REEXTRACT = ROOT / "results" / "chime_singlebeam_toa_reextract.json"
 FIXTURE = REPO / "crossmatching" / "notebook_reproduction_fixture.json"
 GOLDEN = REPO / "crossmatching" / "toa_crossmatch_results.json"
