@@ -49,9 +49,9 @@ from dataclasses import dataclass
 
 import numpy as np
 import yaml
-from scat_analysis.burstfit import FRBModel
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.burstfit import FRBModel
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
 from scipy.ndimage import gaussian_filter1d
 
 # --- S/N-driven resolution knobs (stated, not tuned per burst) --------------

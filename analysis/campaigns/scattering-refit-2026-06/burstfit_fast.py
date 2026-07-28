@@ -91,7 +91,7 @@ def gaussian_powerlaw_convolution(t, mu, sig, tau, beta):
 def patch():
     """Monkeypatch scat_analysis.burstfit to use the accelerated kernels. Returns the
     originals so a caller can restore them (used by the validation harness)."""
-    from scat_analysis import burstfit as bf
+    from scattering.scat_analysis import burstfit as bf
     orig = (bf.analytic_gaussian_exp_convolution, bf.gaussian_powerlaw_convolution)
     bf.analytic_gaussian_exp_convolution = analytic_gaussian_exp_convolution
     bf.gaussian_powerlaw_convolution = gaussian_powerlaw_convolution

@@ -31,7 +31,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
-from scat_analysis.burstfit import FRBModel, FRBParams
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams
 
 
 @dataclass

@@ -18,7 +18,7 @@ from __future__ import annotations
 import numpy as np
 from numpy.typing import NDArray
 
-from scat_analysis.burstfit import FRBModel
+from scattering.scat_analysis.burstfit import FRBModel
 
 from twoscreen import FRBModelTwoScreen, FRBParamsTwoScreen
 

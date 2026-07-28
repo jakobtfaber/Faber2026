@@ -20,7 +20,7 @@ sys.path.insert(0, "/sessions/youthful-amazing-pasteur/mnt/outputs")
 import refit_runner as R  # noqa: E402
 
 from dynesty import NestedSampler  # noqa: E402
-from scat_analysis.burstfit_joint import (  # noqa: E402
+from scattering.scat_analysis.burstfit_joint import (  # noqa: E402
     _JointLogLikelihoodGainMulti,
     _append_derived_alpha_percentiles,
     _weighted_percentiles,

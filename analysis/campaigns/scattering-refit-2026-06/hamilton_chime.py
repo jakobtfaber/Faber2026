@@ -10,8 +10,8 @@ import yaml
 REPO = "/home/jfaber/flits/dsa110-FLITS"
 RUNS = "/central/scratch/jfaber/flits-runs"
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
 
 cfg = yaml.safe_load(open(f"{RUNS}/configs/hamilton_chime_run.yaml"))
 telb = load_telescope_block(cfg["telcfg_path"], cfg["telescope"])

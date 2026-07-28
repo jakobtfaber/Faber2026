@@ -221,8 +221,8 @@ def _prepare_chime():
     import yaml
 
     sys.path.insert(0, str(REPO / "scattering"))
-    from scat_analysis.config_utils import load_telescope_block
-    from scat_analysis.pipeline.io import BurstDataset
+    from scattering.scat_analysis.config_utils import load_telescope_block
+    from scattering.scat_analysis.pipeline.io import BurstDataset
 
     cfg = yaml.safe_load(CHIME_CFG.read_text())
     tel = load_telescope_block(cfg["telcfg_path"], cfg["telescope"])

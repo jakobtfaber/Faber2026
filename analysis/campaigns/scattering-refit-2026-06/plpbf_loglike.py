@@ -37,7 +37,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
-from scat_analysis.burstfit import (
+from scattering.scat_analysis.burstfit import (
     BETA_EXP_EPS,
     BETA_THIN_SCREEN_MAX,
     BETA_THIN_SCREEN_MIN,

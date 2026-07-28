@@ -8,8 +8,8 @@ from dataclasses import replace
 import numpy as np
 
 sys.path.insert(0, "/Users/jakobfaber/Developer/repos/github.com/dsa110/dsa110-FLITS/scattering")
-from scat_analysis.burstfit import FRBModel, FRBParams  # noqa: E402
-from scat_analysis.burstfit_joint import _gain_marginal_multi_band  # noqa: E402
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams  # noqa: E402
+from scattering.scat_analysis.burstfit_joint import _gain_marginal_multi_band  # noqa: E402
 
 TAU, ALPHA, ZETA = 0.5, 4.0, 0.18
 

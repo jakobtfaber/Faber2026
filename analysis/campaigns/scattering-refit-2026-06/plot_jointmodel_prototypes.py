@@ -177,7 +177,7 @@ def _reload_fine_bands(z, npz_fp: Path, burst: str, shift_c: float) -> dict[str,
     p["t0_C"] = p["t0_C"] - dC
     p["t0_D"] = p["t0_D"] - dD
     if fit.get("shared_zeta"):
-        from scat_analysis.burstfit import FRBParams
+        from scattering.scat_analysis.burstfit import FRBParams
 
         zC = p["zeta_1ghz"] * np.asarray(mC.freq, float) ** p["x_zeta"]
         zD = p["zeta_1ghz"] * np.asarray(mD.freq, float) ** p["x_zeta"]

@@ -26,16 +26,16 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # so joint_tf_pr
 
 import joint_tf_prep
 import numpy as np
-import scat_analysis.burstfit_joint as burstfit_joint_module
-import scat_analysis.controlled_run as controlled_run_module
-import scat_analysis.joint_fit_diagnostics as diagnostics_module
-import scat_analysis.joint_model_grid as model_grid_module
+import scattering.scat_analysis.burstfit_joint as burstfit_joint_module
+import scattering.scat_analysis.controlled_run as controlled_run_module
+import scattering.scat_analysis.joint_fit_diagnostics as diagnostics_module
+import scattering.scat_analysis.joint_model_grid as model_grid_module
 import yaml
-from scat_analysis.burstfit import FRBParams
-from scat_analysis.burstfit_init import data_driven_initial_guess
-from scat_analysis.burstfit_joint import fit_joint_scattering
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.controlled_run import (
+from scattering.scat_analysis.burstfit import FRBParams
+from scattering.scat_analysis.burstfit_init import data_driven_initial_guess
+from scattering.scat_analysis.burstfit_joint import fit_joint_scattering
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.controlled_run import (
     DEPRECATED_ZACH_GUARDS,
     ControlledRunError,
     controlled_python_argv,
@@ -45,8 +45,8 @@ from scat_analysis.controlled_run import (
     processing_environment_identity,
     reverify_preflight,
 )
-from scat_analysis.pipeline.io import BurstDataset
-from scat_analysis.pipeline.optimization import refine_initial_guess_mle
+from scattering.scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.pipeline.optimization import refine_initial_guess_mle
 
 
 def prepare(cfg_path, name, outdir):

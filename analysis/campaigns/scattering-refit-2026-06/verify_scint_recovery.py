@@ -16,8 +16,8 @@ import numpy as np
 from dataclasses import replace
 
 sys.path.insert(0, "/home/jfaber/flits/dsa110-FLITS/scattering")
-from scat_analysis.burstfit import FRBModel, FRBParams, _gp_amplitude_logL
-from scat_analysis.burstfit_joint import _JointLogLikelihoodGainGP
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams, _gp_amplitude_logL
+from scattering.scat_analysis.burstfit_joint import _JointLogLikelihoodGainGP
 
 RNG = np.random.default_rng(20260619)
 

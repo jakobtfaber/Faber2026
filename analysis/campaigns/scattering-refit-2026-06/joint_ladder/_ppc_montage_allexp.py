@@ -31,8 +31,8 @@ sys.path.insert(0, f"{REPO}/analysis/scattering-refit-2026-06")  # _figsave, joi
 sys.path.insert(0, f"{REPO}/scattering")
 from _figsave import save_fig
 from joint_ppc import band_chi2, prepare  # fit-consistent prep + sharedzeta chi2
-from scat_analysis.burstfit import FRBParams
-from scat_analysis.burstfit_joint import _gain_marginal_multi_band
+from scattering.scat_analysis.burstfit import FRBParams
+from scattering.scat_analysis.burstfit_joint import _gain_marginal_multi_band
 
 OUT = f"{RUNS}/data/joint"
 FIG_OUT = os.environ.get("DSA_FIGS", OUT)

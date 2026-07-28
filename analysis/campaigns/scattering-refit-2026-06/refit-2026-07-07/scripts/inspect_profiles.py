@@ -21,8 +21,8 @@ OUT = Path(os.environ.get("FABER2026_REFIT_RUNS", RUN_DIR))
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scattering"))
 
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
 
 BURSTS = {
     "hamilton": dict(dm=518.799),

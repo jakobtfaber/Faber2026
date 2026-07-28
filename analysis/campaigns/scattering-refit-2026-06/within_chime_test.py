@@ -28,8 +28,8 @@ import yaml
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from _figsave import save_fig
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
 
 
 def prepare(cfg_path, name, outdir):

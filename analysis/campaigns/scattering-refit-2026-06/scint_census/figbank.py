@@ -188,8 +188,8 @@ def fig_pbf_shapes():
     import sys
 
     sys.path.insert(0, os.environ["FLITS_REPO"] + "/scattering")
-    from scat_analysis.burstfit import analytic_gaussian_exp_convolution as ex
-    from scat_analysis.burstfit import gaussian_powerlaw_convolution as pl
+    from scattering.scat_analysis.burstfit import analytic_gaussian_exp_convolution as ex
+    from scattering.scat_analysis.burstfit import gaussian_powerlaw_convolution as pl
 
     t = (np.arange(800) * 0.01)[None, :]
     mu = np.array([[1.5]])

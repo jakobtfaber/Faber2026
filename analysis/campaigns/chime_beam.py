@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from analysis.flux_cal import radiometer_sigma_jy
+from campaigns.flux_cal import radiometer_sigma_jy
 
 CHIME_LAT_DEG = 49.3207  # 49 deg 19' 14.52" N (Amiri+2018 Table 1)
 FWHM_EW_400 = 2.5  # E-W primary-beam FWHM at 400 MHz [deg] (Table 1 "E-W FoV" 2.5->1.3)
@@ -95,7 +95,7 @@ def load_chime_sefd(nick=None):
     import csv
     from pathlib import Path
 
-    p = Path(__file__).resolve().parents[1] / "analysis" / "burst_energies" / "chime_sefd.csv"
+    p = Path(__file__).resolve().parent / "burst_energies" / "chime_sefd.csv"
     if not p.exists():
         raise FileNotFoundError(f"{p} missing -- run the Phase 6 derivation")
     return float(next(csv.DictReader(p.open()))["sefd_jy"])

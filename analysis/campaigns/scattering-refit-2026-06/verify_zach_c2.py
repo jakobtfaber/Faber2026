@@ -33,8 +33,8 @@ sys.path.insert(0, "/central/scratch/jfaber/flits-runs")
 REPO = "/home/jfaber/flits/dsa110-FLITS"
 sys.path.insert(0, f"{REPO}/scattering")
 from run_joint_fit import prepare
-from scat_analysis.burstfit import FRBParams
-from scat_analysis.burstfit_joint import _gain_marginal_multi_band
+from scattering.scat_analysis.burstfit import FRBParams
+from scattering.scat_analysis.burstfit_joint import _gain_marginal_multi_band
 
 RUNS = "/central/scratch/jfaber/flits-runs"
 JD = f"{RUNS}/data/joint"

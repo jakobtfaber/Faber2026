@@ -56,7 +56,7 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.special import erfcx
 
-from scat_analysis.burstfit import (
+from scattering.scat_analysis.burstfit import (
     FRBModel,
     FRBParams,
     analytic_gaussian_exp_convolution,

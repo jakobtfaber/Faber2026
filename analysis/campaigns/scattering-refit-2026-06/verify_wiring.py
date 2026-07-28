@@ -5,9 +5,9 @@ likelihood evaluates finite on in-prior samples -- without the slow nested loop.
 import os, sys, time, numpy as np
 REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.burstfit import FRBModel, FRBParams
-import scat_analysis.burstfit_joint as bj
-from scat_analysis.burstfit_joint import (
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams
+import scattering.scat_analysis.burstfit_joint as bj
+from scattering.scat_analysis.burstfit_joint import (
     _JointPriorTransform, _JointLogLikelihood, _JointLogLikelihoodGain,
     _JointLogLikelihoodGainGP, _joint_prior_spec, _joint_prior_spec_gain,
     _joint_prior_spec_gain_gp,

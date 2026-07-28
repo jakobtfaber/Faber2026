@@ -23,9 +23,9 @@ RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
 sys.path.insert(0, f"{REPO}/scattering")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # so joint_tf_prep imports
 import joint_tf_prep
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.joint_model_grid import build_model_grid_arrays
-from scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.joint_model_grid import build_model_grid_arrays
+from scattering.scat_analysis.pipeline.io import BurstDataset
 
 
 def prepare(cfg_path, name, outdir):

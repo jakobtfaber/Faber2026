@@ -16,7 +16,7 @@ import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.burstfit import _gp_amplitude_logL
+from scattering.scat_analysis.burstfit import _gp_amplitude_logL
 
 
 def lorentz_field(freq_MHz, dnud, rng, sigma=0.6):

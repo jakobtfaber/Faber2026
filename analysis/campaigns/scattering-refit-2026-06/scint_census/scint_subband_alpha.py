@@ -28,8 +28,8 @@ OUT = os.environ.get("FLITS_RUNS", ".") + "/data/scint"
 os.makedirs(OUT, exist_ok=True)
 sys.path.insert(0, f"{REPO}/scattering")
 sys.path.insert(0, f"{REPO}/scintillation")
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
 from scint_analysis.analysis import calculate_acf
 
 DATA = "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts"

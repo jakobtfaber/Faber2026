@@ -35,7 +35,7 @@ sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from plpbf import gaussian_pbf_innerscale_convolution
 
 # alpha tie (thin-screen); clamps to 4 for beta>=3.98 exactly like the production map
-from scat_analysis.turbulence import alpha_from_beta
+from scattering.scat_analysis.turbulence import alpha_from_beta
 
 # Joint band setup mirroring the real fit (GHz); coarse channelization for speed.
 FREQ_C = np.linspace(0.40, 0.80, 32)   # CHIME

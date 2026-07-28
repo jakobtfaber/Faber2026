@@ -25,12 +25,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # so joint_tf_pr
 
 import numpy as np
 import yaml
-from scat_analysis.burstfit import FRBParams
-from scat_analysis.burstfit_init import data_driven_initial_guess
-from scat_analysis.burstfit_joint import fit_joint_scattering
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
-from scat_analysis.pipeline.optimization import refine_initial_guess_mle
+from scattering.scat_analysis.burstfit import FRBParams
+from scattering.scat_analysis.burstfit_init import data_driven_initial_guess
+from scattering.scat_analysis.burstfit_joint import fit_joint_scattering
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.pipeline.optimization import refine_initial_guess_mle
 
 import joint_tf_prep
 

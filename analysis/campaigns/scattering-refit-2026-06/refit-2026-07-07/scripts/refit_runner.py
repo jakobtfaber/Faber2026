@@ -32,7 +32,7 @@ sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scattering"))
 
 from dynesty import NestedSampler  # noqa: E402
-from scat_analysis.burstfit_joint import (  # noqa: E402
+from scattering.scat_analysis.burstfit_joint import (  # noqa: E402
     _JointLogLikelihoodGainMulti,
     _JointPriorTransform,
     _JointPriorTransformOrdered,
@@ -40,8 +40,8 @@ from scat_analysis.burstfit_joint import (  # noqa: E402
     _weighted_percentiles,
     alpha_from_beta,
 )
-from scat_analysis.config_utils import load_telescope_block  # noqa: E402
-from scat_analysis.pipeline.io import BurstDataset  # noqa: E402
+from scattering.scat_analysis.config_utils import load_telescope_block  # noqa: E402
+from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Per-burst spec. t0 windows are on the BurstDataset-cropped time axis with the

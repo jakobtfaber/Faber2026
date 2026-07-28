@@ -37,10 +37,10 @@ import numpy as np
 
 REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.burstfit import (  # noqa: E402
+from scattering.scat_analysis.burstfit import (  # noqa: E402
     FRBModel, FRBParams, _gp_amplitude_logL,
 )
-from scat_analysis.burstfit_joint import (  # noqa: E402
+from scattering.scat_analysis.burstfit_joint import (  # noqa: E402
     _JointLogLikelihoodGainGP, _dnu_d_bounds,
 )
 

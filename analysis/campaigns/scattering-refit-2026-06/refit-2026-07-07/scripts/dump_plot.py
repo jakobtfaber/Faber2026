@@ -29,7 +29,7 @@ sys.path.insert(0, str(REPO / "scattering"))
 sys.path.insert(0, str(SCRIPT_DIR))
 
 import refit_runner as R  # noqa: E402
-from scat_analysis.burstfit import FRBParams  # noqa: E402
+from scattering.scat_analysis.burstfit import FRBParams  # noqa: E402
 from flits.batch.codetection_data import (  # noqa: E402
     chime_toa_shift_ms,
     crop_bands_to_subburst_window,

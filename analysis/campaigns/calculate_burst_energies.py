@@ -60,12 +60,13 @@ sys.path.insert(0, str(REPO))
 
 import astropy.units as u  # noqa: E402
 
-from analysis.flux_cal import joint_band_fluence_jy_ms_hz, joint_c0_gamma  # noqa: E402
+from campaigns.flux_cal import joint_band_fluence_jy_ms_hz, joint_c0_gamma  # noqa: E402
+from flits.resources import path as resource_path  # noqa: E402
 from galaxies.foreground.config import COSMO, TARGETS  # noqa: E402
 
-JOINT_DIR = REPO / "analysis" / "scattering-refit-2026-06" / "joint_json"
-TEL_CFG = REPO / "configs" / "telescopes.yaml"
-OUT_DIR = REPO / "analysis" / "burst_energies"
+JOINT_DIR = REPO / "campaigns" / "scattering-refit-2026-06" / "joint_json"
+TEL_CFG = resource_path("scattering_telescopes.yaml")
+OUT_DIR = REPO / "campaigns" / "burst_energies"
 
 JY_MS_HZ_TO_SI = 1e-29  # 1 Jy*ms*Hz = 1e-29 J*m^-2
 J_TO_ERG = 1e7

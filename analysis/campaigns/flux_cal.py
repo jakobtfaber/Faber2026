@@ -49,15 +49,11 @@ def sn_spectrum_from_npy(inpath, telescope, f_factor=1, t_factor=1, onpulse_thre
     S/N; dividing by the full-window per-channel noise makes the unit explicit and robust to the
     downsample rescaling.
     """
-    import sys
-    from pathlib import Path
+    from flits.resources import path as resource_path
+    from scattering.scat_analysis.config_utils import load_telescope_block
+    from scattering.scat_analysis.pipeline.io import BurstDataset
 
-    repo = Path(__file__).resolve().parents[1]
-    sys.path.insert(0, str(repo / "scattering"))  # io.py uses package-relative imports (..burstfit)
-    from scat_analysis.config_utils import load_telescope_block
-    from scat_analysis.pipeline.io import BurstDataset
-
-    tel = load_telescope_block(str(repo / "scattering" / "configs" / "telescopes.yaml"), telescope)
+    tel = load_telescope_block(str(resource_path("scattering_telescopes.yaml")), telescope)
     ds = BurstDataset(
         inpath,
         inpath,
@@ -101,7 +97,7 @@ def burst_epoch_position(nick):
     import yaml
 
     b = yaml.safe_load(
-        (Path(__file__).resolve().parents[1] / "configs" / "bursts.yaml").read_text()
+        (Path(__file__).resolve().parents[1] / "config" / "bursts.yaml").read_text()
     )
     e = b["bursts"][nick]
     return float(e["mjd"]), float(e["ra_deg"]), float(e["dec_deg"])
@@ -111,7 +107,7 @@ def _csv_lookup(filename, key, key_col="burst", val_col=None):
     import csv
     from pathlib import Path
 
-    p = Path(__file__).resolve().parents[1] / "analysis" / "burst_energies" / filename
+    p = Path(__file__).resolve().parent / "burst_energies" / filename
     if not p.exists():
         raise FileNotFoundError(f"{p} missing -- run the Phase 4 acquisition")
     for row in csv.DictReader(p.open()):
@@ -152,7 +148,7 @@ def _dsa_burst_config(nick):
 
     root = Path(__file__).resolve().parents[1]
     fname = "johndoeII" if nick == "johndoeii" else nick
-    cfg = root / "scattering" / "configs" / "bursts" / "dsa" / f"{fname}_dsa.yaml"
+    cfg = root / "config" / "fits" / "scattering" / "bursts" / "dsa" / f"{fname}_dsa.yaml"
     if not cfg.exists():
         raise FileNotFoundError(f"{cfg} missing -- no DSA burst config for {nick}")
     c = yaml.safe_load(cfg.read_text())
@@ -170,7 +166,7 @@ def dsa_band_fluence_jy_ms_hz(nick):
     using the per-element SEFD directly over-estimates the fluence by ~N_ant. Raises
     FileNotFoundError if the external .npy is not staged under data/dsa/.
     """
-    from analysis.dsa_beam import beam_gain
+    from campaigns.dsa_beam import beam_gain
 
     npy, f_factor, t_factor = _dsa_burst_config(nick)
     if not npy.exists():
@@ -195,7 +191,7 @@ def _band_burst_config(nick, band):
     tel = {"C": "chime", "D": "dsa"}[band]
     root = Path(__file__).resolve().parents[1]
     fname = "johndoeII" if nick == "johndoeii" else nick
-    cfg = root / "scattering" / "configs" / "bursts" / tel / f"{fname}_{tel}.yaml"
+    cfg = root / "config" / "fits" / "scattering" / "bursts" / tel / f"{fname}_{tel}.yaml"
     if not cfg.exists():
         raise FileNotFoundError(f"{cfg} missing -- no {tel} burst config for {nick}")
     c = yaml.safe_load(cfg.read_text())
@@ -215,7 +211,7 @@ def joint_c0_gamma(nick, band):
 
     p = (
         Path(__file__).resolve().parents[1]
-        / "analysis"
+        / "campaigns"
         / "scattering-refit-2026-06"
         / "joint_json"
         / f"{nick}_joint_fit.json"
@@ -242,8 +238,8 @@ def _band_noise_grid(npy, telescope, f_factor, t_factor):
 
     repo = Path(__file__).resolve().parents[1]
     sys.path.insert(0, str(repo / "scattering"))
-    from scat_analysis.config_utils import load_telescope_block
-    from scat_analysis.pipeline.io import BurstDataset
+    from scattering.scat_analysis.config_utils import load_telescope_block
+    from scattering.scat_analysis.pipeline.io import BurstDataset
 
     tel = load_telescope_block(str(repo / "scattering" / "configs" / "telescopes.yaml"), telescope)
     ds = BurstDataset(
@@ -287,7 +283,7 @@ def joint_band_fluence_jy_ms_hz(nick, band):
     fz, ns = freq_hz[valid], noise_std[valid]  # integrate over the channels the fit used
     amp_sn = c0 * (fz / ref) ** gamma / ns  # int(S/N) dt per valid channel [S/N*ms]
     if band == "D":
-        from analysis.dsa_beam import beam_gain
+        from campaigns.dsa_beam import beam_gain
 
         _mjd, _ra, dec = burst_epoch_position(nick)
         theta, phi = dsa_beam_offset(dec, dsa_pointing_dec(nick))
@@ -295,7 +291,7 @@ def joint_band_fluence_jy_ms_hz(nick, band):
             fz, dnu_hz, load_dsa_sefd_beam(nick), dt_ms / 1e3, theta, phi, beam_gain
         )
     else:  # CHIME baseband: beam formed at the source -> G ~ 1
-        from analysis.chime_beam import chime_sigma_jy, load_chime_sefd
+        from campaigns.chime_beam import chime_sigma_jy, load_chime_sefd
 
         sigma_jy = chime_sigma_jy(fz, dnu_hz, load_chime_sefd(), dt_ms / 1e3, g=1.0)
     return float(np.trapezoid(sigma_jy * amp_sn, fz))

@@ -17,7 +17,7 @@ import sys
 
 import numpy as np
 
-from scat_analysis.burstfit import _next_fast_len, analytic_gaussian_exp_convolution
+from scattering.scat_analysis.burstfit import _next_fast_len, analytic_gaussian_exp_convolution
 from twoscreen import two_screen_perchan, _dtau_tau_emg, R_UNIT_EPS
 
 T, dt = 2048, 0.02

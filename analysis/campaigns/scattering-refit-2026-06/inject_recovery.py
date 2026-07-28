@@ -17,9 +17,9 @@ import numpy as np
 
 REPO = "/Users/jakobfaber/Developer/repos/github.com/dsa110/dsa110-FLITS"
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.burstfit import FRBModel, FRBParams
-from scat_analysis.burstfit_init import data_driven_initial_guess
-from scat_analysis.burstfit_joint import fit_joint_scattering
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams
+from scattering.scat_analysis.burstfit_init import data_driven_initial_guess
+from scattering.scat_analysis.burstfit_joint import fit_joint_scattering
 
 # ---- truth ----
 TAU_TRUE, ALPHA_TRUE = 0.20, 3.5          # interior alpha (prior (1.5,6))

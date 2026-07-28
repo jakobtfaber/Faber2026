@@ -26,12 +26,12 @@ sys.path.insert(0, f"{REPO}/scattering")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import numpy as np
-from scat_analysis.burstfit_joint import (
+from scattering.scat_analysis.burstfit_joint import (
     _JointPriorTransform,
     _joint_prior_spec_gain_shared_zeta,
     _weighted_percentiles,
 )
-from scat_analysis.turbulence import default_joint_beta_bounds
+from scattering.scat_analysis.turbulence import default_joint_beta_bounds
 from dynesty import NestedSampler
 
 from relaxalpha_loglike import JointLogLikelihoodSharedZetaFreeAlpha

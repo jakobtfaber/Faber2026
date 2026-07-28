@@ -4,8 +4,8 @@ signature integrity + well-formed posterior shape, NOT convergence."""
 import os, sys, numpy as np
 REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.burstfit import FRBModel, FRBParams
-from scat_analysis.burstfit_joint import (
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams
+from scattering.scat_analysis.burstfit_joint import (
     fit_joint_scattering,
     JOINT_PARAM_NAMES, JOINT_PARAM_NAMES_GAIN, JOINT_PARAM_NAMES_GAIN_GP,
 )

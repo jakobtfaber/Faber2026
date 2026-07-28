@@ -38,12 +38,12 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scattering"))  # io.py uses package-relative imports
 
-from scat_analysis.burstfit import FRBFitter, FRBModel, FRBParams, build_priors  # noqa: E402
-from scat_analysis.config_utils import load_telescope_block  # noqa: E402
-from scat_analysis.pipeline.io import BurstDataset  # noqa: E402
+from scattering.scat_analysis.burstfit import FRBFitter, FRBModel, FRBParams, build_priors  # noqa: E402
+from scattering.scat_analysis.config_utils import load_telescope_block  # noqa: E402
+from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
 
-from analysis.dsa_beam import beam_gain  # noqa: E402
-from analysis.flux_cal import (  # noqa: E402
+from campaigns.dsa_beam import beam_gain  # noqa: E402
+from campaigns.flux_cal import (  # noqa: E402
     _dsa_burst_config,
     burst_epoch_position,
     dsa_beam_offset,

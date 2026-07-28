@@ -2,7 +2,7 @@ import sys, numpy as np
 from dataclasses import replace
 from scipy.linalg import eigh
 sys.path.insert(0,"/home/jfaber/flits/dsa110-FLITS/scattering")
-from scat_analysis.burstfit import FRBModel, FRBParams
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams
 
 rng=np.random.default_rng(7)
 nf,nt=48,256; freq=np.linspace(1.30,1.50,nf); time=np.linspace(-5.0,20.0,nt)

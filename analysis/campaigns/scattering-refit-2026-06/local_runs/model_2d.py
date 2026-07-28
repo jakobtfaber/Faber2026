@@ -25,8 +25,8 @@ RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
 sys.path.insert(0, RUNS)
 sys.path.insert(0, f"{REPO}/scattering")
 from run_joint_fit import prepare
-from scat_analysis.burstfit import FRBParams
-from scat_analysis.burstfit_joint import _gain_marginal_multi_band
+from scattering.scat_analysis.burstfit import FRBParams
+from scattering.scat_analysis.burstfit_joint import _gain_marginal_multi_band
 
 burst, tag = sys.argv[1], sys.argv[2]
 mt = re.match(r"C(\d+)D(\d+)", tag)

@@ -34,8 +34,8 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(REPO / "scattering"))
 sys.path.insert(0, str(HERE))
 
-from scat_analysis.config_utils import load_telescope_block  # noqa: E402
-from scat_analysis.pipeline.io import BurstDataset  # noqa: E402
+from scattering.scat_analysis.config_utils import load_telescope_block  # noqa: E402
+from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
 
 import joint_tf_prep as J  # noqa: E402
 

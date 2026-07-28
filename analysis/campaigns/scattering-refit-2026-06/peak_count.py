@@ -16,8 +16,8 @@ import yaml
 REPO = "/home/jfaber/flits/dsa110-FLITS"
 RUNS = "/central/scratch/jfaber/flits-runs"
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
 
 BURSTS = ["oran", "hamilton", "chromatica", "isha", "mahi", "phineas",
           "whitney", "zach", "freya", "johndoeII"]

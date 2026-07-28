@@ -22,8 +22,8 @@ import sys
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "scattering"))
-from scat_analysis.burstfit import FRBModel, FRBParams
-from scat_analysis.burstfit_joint import JOINT_PARAM_NAMES_GAIN_SHARED_ZETA, fit_joint_scattering
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams
+from scattering.scat_analysis.burstfit_joint import JOINT_PARAM_NAMES_GAIN_SHARED_ZETA, fit_joint_scattering
 
 TRUTH = dict(tau_1ghz=0.8, alpha=4.0, zeta_1ghz=0.30, x_zeta=-0.6)
 

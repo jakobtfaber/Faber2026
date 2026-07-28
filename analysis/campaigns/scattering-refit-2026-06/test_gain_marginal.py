@@ -14,8 +14,8 @@ import os, sys
 import numpy as np
 REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.burstfit import FRBModel, FRBParams
-from scat_analysis.burstfit_joint import _JointLogLikelihoodGain, _JointLogLikelihood
+from scattering.scat_analysis.burstfit import FRBModel, FRBParams
+from scattering.scat_analysis.burstfit_joint import _JointLogLikelihoodGain, _JointLogLikelihood
 
 rng = np.random.default_rng(1)
 tau_true, alpha_true = 1.0, 3.0

@@ -27,9 +27,9 @@ import yaml
 REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
 RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
 sys.path.insert(0, f"{REPO}/scattering")
-from scat_analysis.burstfit import FRBParams  # noqa: E402
-from scat_analysis.config_utils import load_telescope_block  # noqa: E402
-from scat_analysis.pipeline.io import BurstDataset  # noqa: E402
+from scattering.scat_analysis.burstfit import FRBParams  # noqa: E402
+from scattering.scat_analysis.config_utils import load_telescope_block  # noqa: E402
+from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
 
 
 def prepare(cfg_path, name, outdir):

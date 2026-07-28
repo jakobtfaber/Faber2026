@@ -26,10 +26,10 @@ import yaml
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from _figsave import save_fig
-from scat_analysis.burstfit import FRBParams
-from scat_analysis.config_utils import load_telescope_block
-from scat_analysis.pipeline.io import BurstDataset
-from scat_analysis.turbulence import beta_from_alpha_thin_screen
+from scattering.scat_analysis.burstfit import FRBParams
+from scattering.scat_analysis.config_utils import load_telescope_block
+from scattering.scat_analysis.pipeline.io import BurstDataset
+from scattering.scat_analysis.turbulence import beta_from_alpha_thin_screen
 
 
 def prepare(cfg_path, name, outdir):
