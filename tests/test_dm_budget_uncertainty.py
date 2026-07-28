@@ -34,8 +34,9 @@ not in a separate fixture; that ``.npy`` is not vendored in this repo.
 
 from __future__ import annotations
 
-import math
 import csv
+import json
+import math
 import sys
 from pathlib import Path
 
@@ -208,8 +209,8 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
         "FRB 20221113A",
         "FRB 20230307A",
         "FRB 20230814B",
-        "FRB 20230913A",
-        "FRB 20240203A",
+        "FRB 20230913G",
+        "FRB 20240203D",
         "FRB 20240229A",
     }
     phineas = next(row for row in sightlines if row.name == "FRB 20230307A")
@@ -224,14 +225,31 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
         "194021777634832653",
         "983",
     }
-    assert sum(s.dm_point for s in phineas.intervening_systems) == pytest.approx(
-        phineas.dm_int, abs=0.5
-    )
+    assert all(system.dm_point is None for system in probabilistic)
     for row in sightlines:
         if row.dm_int == 0:
             assert row.intervening_systems == ()
         else:
-            assert round(sum(s.dm_point for s in row.intervening_systems)) == row.dm_int
+            fixed = [
+                system.dm_point
+                for system in row.intervening_systems
+                if system.model == "fixed_lognormal"
+            ]
+            if len(fixed) == len(row.intervening_systems):
+                assert round(sum(point for point in fixed if point is not None)) == row.dm_int
+
+
+def test_current_inputs_reject_a_stale_probabilistic_record(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+):
+    record = json.loads(dbu.phineas_crossing.DEFAULT_OUTPUT.read_text(encoding="utf-8"))
+    record["input_sha256"] = "0" * 64
+    stale = tmp_path / "stale-phineas-record.json"
+    stale.write_text(json.dumps(record), encoding="utf-8")
+    monkeypatch.setattr(dbu.phineas_crossing, "DEFAULT_OUTPUT", stale)
+
+    with pytest.raises(ValueError, match="does not match its frozen inputs"):
+        dbu.load_sightlines()
 
 
 @pytest.mark.parametrize(
@@ -273,8 +291,8 @@ def test_incomplete_census_upper_limit_roster_is_explicit():
         "FRB 20220506D",
         "FRB 20221113A",
         "FRB 20230814B",
-        "FRB 20230913A",
-        "FRB 20240203A",
+        "FRB 20230913G",
+        "FRB 20240203D",
     }
 
 
@@ -302,7 +320,10 @@ def test_convolution_matches_independent_monte_carlo_oracle():
 def test_committed_host_csv_matches_deterministic_summaries():
     """Artifact criterion: the nine committed host rows match the live engine."""
     path = (
-        Path(__file__).resolve().parent.parent / "scripts" / "dm_budget_uncertainty.csv"
+        Path(__file__).resolve().parent.parent
+        / "analysis"
+        / "scripts"
+        / "dm_budget_uncertainty.csv"
     )
     with path.open(newline="") as handle:
         committed = {
@@ -327,3 +348,17 @@ def test_committed_host_csv_matches_deterministic_summaries():
         assert float(actual["p_host_negative"]) == pytest.approx(
             expected["p_host_neg"], abs=5e-4
         )
+
+
+def test_cluster_profile_sampling_is_seed_reproducible():
+    first = dbu.cluster_column_samples(n=128, seed=314159)
+    second = dbu.cluster_column_samples(n=128, seed=314159)
+    assert np.array_equal(first, second)
+
+
+def test_budget_table_labels_dm_redshifts_as_diagnostic():
+    table = (Path(__file__).resolve().parent.parent / "budget_table.tex").read_text()
+    assert r"FRB 20221203A\tablenotemark{u} & $0.55^{+0.16}_{-0.14}$" in table
+    assert r"FRB 20230325C\tablenotemark{u} & $0.92^{+0.23}_{-0.19}$" in table
+    assert r"FRB 20240122A\tablenotemark{u} & $0.93^{+0.23}_{-0.20}$" in table
+    assert "not an established host redshift" in table

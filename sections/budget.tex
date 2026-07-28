@@ -46,7 +46,7 @@ sightlines \citep{Ocker2021}, although an individual quiescent halo may instead
 yield only an upper limit on its scattering contribution \citep{Prochaska2019}.
 
 Rather than attribute the arithmetic residual of the mean-subtracted budget to
-the host, we forward-model $\mathrm{DM_{host}}$ as a posterior. The diffuse
+the host, we forward-model an induced $\mathrm{DM_{host}}$ residual distribution. The diffuse
 cosmic term is represented by the intergalactic-column distribution
 $\mathrm{DM_{IGM}}\sim\mathrm{LogNormal}(\mu(z),\sigma(z))$, with $\mu(z)$ and
 $\sigma(z)$ the redshift-dependent parameters of the bivariate (IGM, halo)
@@ -68,7 +68,7 @@ host column $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{MW}}-
 \mathrm{DM_{cosmic}}-\mathrm{DM_{int}}$ by reflecting the convolved foreground
 PDF about the exact observed DM; the rest-frame host contribution is
 $(1+z)\,\mathrm{DM_{host}}$. Propagating the full $P(\mathrm{DM_{cosmic}}\,|\,z)$
-rather than subtracting a single number returns an asymmetric posterior with a
+rather than subtracting a single number returns an asymmetric residual distribution with a
 well-defined $P(\mathrm{DM_{host}}<0)$ per sightline; that interval, not a
 shift in the central value, is what the forward model adds. The host medians
 do sit above the simple mean-subtracted residuals, but the offset is driven
@@ -102,7 +102,7 @@ converted through the \citet{Moster2013} stellar-to-halo-mass relation, so
 the geometric census flags and the budget's intersection verdicts derive
 from the same masses. Seven of the nine physical confirmed foreground galaxy
 halos satisfy $b\le R_{\rm vir}$ and contribute: the single halos toward
-FRB~20220310F and FRB~20240203A, two toward FRB~20240229A, and three of the
+FRB~20220310F and FRB~20240203D, two toward FRB~20240229A, and three of the
 five toward FRB~20230307A, whose remaining two graze just outside their
 virial radii ($b/R_{\rm vir}\approx1.3$--$1.4$), beyond the $R_{\rm vir}$
 truncation of the modelled circumgalactic profile, and are excluded.
