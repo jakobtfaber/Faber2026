@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 import yaml
@@ -29,9 +28,9 @@ def test_catalog_analysis_commands_resolve_project_from_analysis_cwd():
             assert argv[argv.index("--project") + 1] == "."
 
 
-def test_lock_resolves_the_declared_flits_commit():
+def test_dependency_metadata_excludes_retired_flits():
     project = (ROOT / "pyproject.toml").read_text()
     lock = (ROOT / "uv.lock").read_text()
-    match = re.search(r"dsa110-FLITS\.git@([0-9a-f]{40})", project)
-    assert match
-    assert match.group(1) in lock
+    metadata = project + "\n" + lock
+    assert "dsa110-FLITS" not in metadata
+    assert '\nname = "flits"' not in metadata

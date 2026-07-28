@@ -6,7 +6,7 @@ not the verifier for the adopted CHIME+DSA data-driven estimator: that verifier
 must use the regenerated artifact's data-fluence statistical uncertainties and
 must not read joint-fit c0/gamma posterior widths.
 
-Independent of pipeline code (only reads its pinned artifacts):
+Independent of fitting code (only reads its pinned artifacts):
   1. Re-derive E_iso for all 8 rows from the stored calibrated band integrals
      (I_*_jy_ms_hz), Planck18 D_L, and the (1+z) k-correction; compare against
      the stored E_iso_* columns.
@@ -21,8 +21,8 @@ Independent of pipeline code (only reads its pinned artifacts):
         uses NO fitted parameters.
   5. gamma_D pile-up census across all 12 joint fits (prior-bound check).
 
-Run: python3 recompute_energies.py   (from anywhere; paths resolved relative
-to this file: ../../pipeline)
+Run: python3 recompute_energies.py (from anywhere; paths resolve relative to
+this file).
 """
 
 import csv

@@ -25,7 +25,7 @@ from workspace import manuscript_root  # noqa: E402
 ROOT = manuscript_root()
 
 import plot_codetection_triptych as triptych  # noqa: E402
-from flits.batch.codetection_plots import BandSpectrum  # noqa: E402
+from radio_pipeline.batch.codetection_plots import BandSpectrum  # noqa: E402
 
 from plot_codetection_triptych import (  # noqa: E402
     BANDS,

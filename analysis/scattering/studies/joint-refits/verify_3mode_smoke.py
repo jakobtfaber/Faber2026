@@ -9,7 +9,7 @@ import os
 import sys
 import numpy as np
 
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams, _gp_amplitude_logL
 from scattering.scat_analysis.burstfit_joint import (

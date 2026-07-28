@@ -14,7 +14,7 @@ are not absolute or cross-telescope TOAs. Reduces exactly to t0 +/- err for a si
 vs OLD, and bursts where CHIME and DSA resolve DIFFERENT counts (matched reference
 most delicate), are flagged explicitly.
 
-  FLITS_RUNS=~/Developer/scratch/flits-local-runs \
+  FABER2026_RUNS=~/Developer/scratch/flits-local-runs \
   CAMPAIGN_LOGS=<...>/campaign_A1 python build_toa_table.py
 """
 from __future__ import annotations
@@ -28,7 +28,7 @@ from pathlib import Path
 import numpy as np
 from dynesty.utils import resample_equal
 
-RUNS = Path(os.environ.get("FLITS_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
+RUNS = Path(os.environ.get("FABER2026_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
 JOINT = RUNS / "data/joint"
 OLD = Path(os.environ.get("OLD_FITS", "/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-Faber2026/a573656f-9ea8-4ebd-aab6-58332c63c659/scratchpad/fits_OLD_campaign"))
 LOGS = Path(os.environ.get("CAMPAIGN_LOGS", "/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-Faber2026/a573656f-9ea8-4ebd-aab6-58332c63c659/scratchpad/campaign_A1"))

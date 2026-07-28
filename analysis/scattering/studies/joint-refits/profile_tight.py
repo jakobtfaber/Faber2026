@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import yaml
 
-REPO = "/home/jfaber/flits/dsa110-FLITS"
+REPO = next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 RUNS = "/central/scratch/jfaber/flits-runs"
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.config_utils import load_telescope_block

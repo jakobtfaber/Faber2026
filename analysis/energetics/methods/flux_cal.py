@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Radiometer flux calibration: per-channel S/N -> Jy for FLITS dynamic spectra.
+"""Radiometer flux calibration: per-channel S/N -> Jy for local dynamic spectra.
 
-FLITS data is per-channel z-scored S/N (scattering/scat_analysis/pipeline/io.py:131-146:
+The data are per-channel z-scored S/N (scattering/scat_analysis/pipeline/io.py:
 _bandpass_correct divides each channel by its own off-pulse mean/std and the loader keeps
 "units as S/N"). Physical flux density is therefore one radiometer multiply away:
 
@@ -49,7 +49,7 @@ def sn_spectrum_from_npy(inpath, telescope, f_factor=1, t_factor=1, onpulse_thre
     S/N; dividing by the full-window per-channel noise makes the unit explicit and robust to the
     downsample rescaling.
     """
-    from flits.resources import path as resource_path
+    from radio_pipeline.resources import path as resource_path
     from scattering.scat_analysis.config_utils import load_telescope_block
     from scattering.scat_analysis.pipeline.io import BurstDataset
 

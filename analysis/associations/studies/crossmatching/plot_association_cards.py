@@ -15,7 +15,7 @@ import numpy as np
 from astropy.coordinates import SkyCoord
 from scipy.interpolate import RegularGridInterpolator
 
-from flits.plotting import use_flits_style
+from radio_pipeline.plotting import use_flits_style
 
 # Adopt the shared FLITS style (Computer Modern serif, cmr10) so these cards
 # match every other manuscript figure and the paper body font; then re-pin the

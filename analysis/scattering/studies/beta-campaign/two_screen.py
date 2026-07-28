@@ -23,7 +23,7 @@ DSA-band only; CHIME ACFs (4 bursts) would need a fresh ACF pass.
 Writes two_screen_consistency.{json,md} to the dated archive. Bursts without
 a campaign fit are listed missing.
 
-  FLITS_RUNS=... conda run -n flits python analysis/beta_campaign/two_screen.py
+  FABER2026_RUNS=... conda run -n flits python analysis/beta_campaign/two_screen.py
 """
 
 from __future__ import annotations
@@ -45,10 +45,10 @@ ARCHIVE_DIR = (
     REPO / ".archive" / "outdated-science" / "2026-07-17" / "regenerated" /
     "analysis" / "beta_campaign"
 )
-RUNS = Path(os.environ.get("FLITS_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
+RUNS = Path(os.environ.get("FABER2026_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
 sys.path.insert(0, str(REPO))
 
-from flits.batch.analysis_logic import check_tau_deltanu_consistency  # noqa: E402
+from radio_pipeline.batch.analysis_logic import check_tau_deltanu_consistency  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location(
     "grade_beta_campaign", Path(__file__).parent / "grade_beta_campaign.py"

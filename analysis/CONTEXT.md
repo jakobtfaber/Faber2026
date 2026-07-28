@@ -1,9 +1,9 @@
 # Faber2026 manuscript context
 
 Overleaf-synced LaTeX for the CHIME/FRB–DSA-110 co-detection dispersion- and
-scattering-budget paper. Numbers and figures are produced by **dsa110-FLITS**
-(`pipeline/` submodule); fit-domain jargon lives in
-[`pipeline/CONTEXT.md`](../pipeline/CONTEXT.md).
+scattering-budget paper. All active scientific code and producers live in this
+repository. The former `dsa110-FLITS` repository and `pipeline/` submodule are
+retired provenance, not dependencies.
 
 ## Language
 
@@ -131,13 +131,12 @@ tracked figure outputs committed on Faber2026 GitHub `main`. Overleaf and Mac
 checkouts are working copies, not competing authorities.
 
 **Fitting-code authority**:
-The accepted code history on the `jakobtfaber/dsa110-FLITS` fork's `main`
-branch. The organization repository is upstream, not this project's authority.
+The accepted code committed in this `Faber2026-analysis` repository and pinned
+by the parent manuscript's `analysis/` gitlink.
 
-**Manuscript pipeline pin**:
-The `pipeline` gitlink committed on Faber2026 GitHub `main`, identifying the
-exact FLITS state used by the manuscript. Fork advancement never changes this
-pin implicitly.
+**Analysis pin**:
+The `analysis` gitlink committed on Faber2026 GitHub `main`, identifying the
+exact scientific-code and analysis state used by the manuscript.
 
 **Operational source authority**:
 The reviewed repository code, configuration template, authored content, and

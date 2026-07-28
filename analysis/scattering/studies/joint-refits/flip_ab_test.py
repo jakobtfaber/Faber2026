@@ -2,10 +2,10 @@
 to ascending to match the freq axis). If flip materially changes logZ/tau/chi2,
 the current CHIME fits are corrupted, not just the plots."""
 import sys, pathlib, numpy as np
-from flits.scattering.scat_analysis.config_utils import load_config
-from flits.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
-from flits.scattering.scat_analysis.burstfit import FRBParams
-from flits.scattering.scat_analysis.burstfit_nested import fit_single_model_nested
+from radio_pipeline.scattering.scat_analysis.config_utils import load_config
+from radio_pipeline.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
+from radio_pipeline.scattering.scat_analysis.burstfit import FRBParams
+from radio_pipeline.scattering.scat_analysis.burstfit_nested import fit_single_model_nested
 
 CFG = sys.argv[1]
 cfg = load_config(CFG)
@@ -29,7 +29,7 @@ def tail_dir(m):
     return off(slice(0, n // 4)), off(slice(3 * n // 4, n))
 
 def fit_and_chi2(m):
-    res = fit_single_model_nested(model=m, init=__import__("flits.scattering.scat_analysis.burstfit_init",
+    res = fit_single_model_nested(model=m, init=__import__("radio_pipeline.scattering.scat_analysis.burstfit_init",
         fromlist=["data_driven_initial_guess"]).data_driven_initial_guess(
         m.data, m.freq, m.time, dm=0.0, verbose=False).params,
         model_key="M3", nlive=400, dlogz=0.5, alpha_fixed=4.0, nproc=8, verbose=False)

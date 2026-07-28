@@ -42,10 +42,10 @@ matplotlib.rcParams["svg.hashsalt"] = "Faber2026-codetection-triptych-v2"
 ROOT = manuscript_root()
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from flits.batch.codetection_data import (  # noqa: E402
+from radio_pipeline.batch.codetection_data import (  # noqa: E402
     chime_toa_shift_ms,
 )
-from flits.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
+from radio_pipeline.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
 
 from plot_codetection_gallery import (  # noqa: E402
     BANDS,

@@ -14,6 +14,10 @@ import json
 import sys
 from pathlib import Path
 
+ANALYSIS_PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+if str(ANALYSIS_PACKAGE_ROOT) not in sys.path:
+    sys.path.insert(0, str(ANALYSIS_PACKAGE_ROOT))
+
 from galaxies.foreground import budget_table_emitter as base
 
 from workspace import ANALYSIS_ROOT, manuscript_root

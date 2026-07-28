@@ -8,13 +8,13 @@ fit + ACF), and contrasts the ACF of a RESOLVED case vs an UNRESOLVED case (Delt
 clear Lorentzian of finite width; unresolved ACF collapses at lag 1 -- the SAME
 signature freya shows.
 
-  python scint_framework_proof.py            (local; FLITS_REPO -> local repo)
+  python scint_framework_proof.py            (local; FABER2026_ANALYSIS -> local repo)
 """
 import os, sys
 import numpy as np
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.burstfit import _gp_amplitude_logL
 

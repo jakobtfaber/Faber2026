@@ -21,7 +21,7 @@ import os
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIG = os.path.join(HERE, "dsa_figs")
 JSN = os.path.join(HERE, "joint_json")
-OUT = "/Users/jakobfaber/Developer/repos/github.com/dsa110/dsa110-FLITS/docs/joint_scattering_deck.html"
+OUT = os.path.join(HERE, "joint_scattering_deck.html")
 
 ALO, AHI = 1.0, 6.0
 # co-detected sample order (CHIME alphabetical-ish); casey last (non-standard binning)

@@ -544,7 +544,7 @@ def build(
         "catalog_path": str(CATALOG_PATH),
         "env": {
             "FABER2026_RESULTS_LIBRARY": str(library),
-            "FLITS_RUNS": os.environ.get("FLITS_RUNS", ""),
+            "FABER2026_RUNS": os.environ.get("FABER2026_RUNS", ""),
         },
         "entries": records,
     }

@@ -18,8 +18,22 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-REPO = Path(os.environ.get("FLITS_REPO", "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/pipeline"))
-RUNS = Path(os.environ.get("FLITS_RUNS", "/Users/jakobfaber/Developer/scratch/flits-whitney-c2d2-cwin-20260707"))
+REPO = Path(
+    os.environ.get(
+        "FABER2026_ANALYSIS",
+        next(
+            str(parent)
+            for parent in Path(__file__).resolve().parents
+            if (parent / "pyproject.toml").is_file()
+        ),
+    )
+)
+RUNS = Path(
+    os.environ.get(
+        "FABER2026_RUNS",
+        "/Users/jakobfaber/Developer/scratch/Faber2026-whitney-c2d2-cwin-20260707",
+    )
+)
 sys.path.insert(0, str(REPO / "scattering"))
 
 from dynesty import NestedSampler  # noqa: E402

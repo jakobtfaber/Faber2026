@@ -1,8 +1,6 @@
-import sys
 import numpy as np
 from dataclasses import replace
 
-sys.path.insert(0, "/home/jfaber/flits/dsa110-FLITS/scattering")
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams
 
 rng = np.random.default_rng(7)

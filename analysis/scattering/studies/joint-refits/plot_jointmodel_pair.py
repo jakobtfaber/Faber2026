@@ -10,7 +10,7 @@ Outputs default to the manuscript repo under
 gitignored as a local prototype area; promote selected finals into ``figures/``
 when they should be tracked.
 
-  FLITS_RUNS=~/Developer/scratch/flits-local-runs \\
+  FABER2026_RUNS=~/Developer/scratch/flits-local-runs \\
     conda run -n flits python plot_jointmodel_pair.py
 """
 from __future__ import annotations
@@ -30,7 +30,7 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 MS_ROOT = REPO.parent
-DEFAULT_RUNS = Path(os.environ.get("FLITS_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
+DEFAULT_RUNS = Path(os.environ.get("FABER2026_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
 
 KNOWN_MULTIPLICITY_FLAGS = {
     "hamilton": "CHIME data show two components; current sharedzeta fit is C1D1 and misses the leading CHIME component.",
@@ -40,12 +40,12 @@ KNOWN_MULTIPLICITY_FLAGS = {
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scattering"))
 
-from flits.batch.codetection_data import (  # noqa: E402
+from radio_pipeline.batch.codetection_data import (  # noqa: E402
     chime_toa_shift_ms,
     crop_bands_to_subburst_window,
     toa_offset_ms,
 )
-from flits.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
+from radio_pipeline.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
 
 
 def citable_rows() -> list[dict]:
@@ -95,7 +95,7 @@ def plot_pair(row: dict, runs: Path, out_dir: Path, *, dpi: int = 200) -> Path:
     fp = jointmodel_npz(runs, burst, suffix)
     if not fp.exists():
         raise FileNotFoundError(
-            f"missing {fp}; run: FLITS_REPO={REPO} FLITS_RUNS={runs} "
+            f"missing {fp}; run: FABER2026_ANALYSIS={REPO} FABER2026_RUNS={runs} "
             f"python {HERE / 'dump_jointmodel.py'} {burst} {suffix}"
         )
 

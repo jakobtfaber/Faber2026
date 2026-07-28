@@ -24,8 +24,8 @@ MS_ROOT = REPO.parent
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scattering"))
 
-from flits.batch.codetection_data import BURST_ORDER, load_codetection_bands  # noqa: E402
-from flits.batch.codetection_plots import plot_codetection_observations  # noqa: E402
+from radio_pipeline.batch.codetection_data import BURST_ORDER, load_codetection_bands  # noqa: E402
+from radio_pipeline.batch.codetection_plots import plot_codetection_observations  # noqa: E402
 
 
 def _save(fig, out_dir: Path, stem: str) -> None:

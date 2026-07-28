@@ -396,15 +396,15 @@ def patterns_overlap(a: str, b: str) -> bool:
     return a == b or fnmatch.fnmatch(a, b) or fnmatch.fnmatch(b, a)
 
 
-def flits_is_pinned() -> bool:
-    """Return whether analysis pins FLITS to one exact Git commit."""
+def retired_dependencies_absent() -> bool:
+    """Return whether active dependency metadata excludes retired repositories."""
     project = read_text(ANALYSIS_ROOT / "pyproject.toml")
     lock = read_text(ANALYSIS_ROOT / "uv.lock")
-    match = re.search(
-        r"dsa110-FLITS\.git@([0-9a-f]{40})",
-        project,
+    return not re.search(
+        r"dsa110-FLITS(?:\.git)?|(?:^|\n)name = \"flits\"",
+        project + "\n" + lock,
+        flags=re.IGNORECASE,
     )
-    return bool(match and match.group(1) in lock)
 
 
 def figure_assets(pattern: str) -> list[Path]:
@@ -416,7 +416,6 @@ def check_figures_and_provenance(
     """Require every compiled graphic to exist and have an embedded manifest row."""
     entries = manifest_entries("figure")
     included: list[tuple[Path, str]] = []
-    needs_pipeline_pin = False
     for path in files:
         text = strip_comments(read_text(path))
         included.extend((path, normalize_figure_path(m.group(1)))
@@ -429,10 +428,6 @@ def check_figures_and_provenance(
             findings.append(
                 f"{source.relative_to(ROOT)}: compiled figure '{figure}' has no "
                 "embedded figure row in repro_manifest.csv")
-        else:
-            needs_pipeline_pin |= any(
-                entry.get("producer", "").startswith("pipeline/")
-                for entry in matches)
         assets = figure_assets(figure)
         if not assets:
             findings.append(
@@ -445,16 +440,10 @@ def check_figures_and_provenance(
                     f"'{figure}' has {len(assets)} assets; expected {expected} "
                     "from the canonical sample roster")
 
-    if needs_pipeline_pin and not flits_is_pinned():
-        findings.append(
-            "FLITS: expected an exact analysis lockfile pin for figure provenance")
-
-
 def check_inputs_and_provenance(files: Iterable[Path], findings: list[str]) -> None:
     r"""Check that \input{} table/card files carry provenance comments."""
     generated_suffixes = ("_table.tex", "_cards.tex", "_data.tex")
     table_entries = manifest_entries("table")
-    needs_pipeline_pin = False
     for path in files:
         text = read_text(path)
         for match in INPUT_RE.finditer(text):
@@ -484,14 +473,6 @@ def check_inputs_and_provenance(files: Iterable[Path], findings: list[str]) -> N
                     findings.append(
                         f"{output}: generated table has no embedded table row "
                         "in repro_manifest.csv")
-                else:
-                    needs_pipeline_pin |= any(
-                        entry.get("producer", "").startswith("pipeline/")
-                        for entry in matches)
-
-    if needs_pipeline_pin and not flits_is_pinned():
-        findings.append(
-            "FLITS: expected an exact analysis lockfile pin for table provenance")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -512,6 +493,9 @@ def main(argv: list[str] | None = None) -> int:
     check_cross_refs(files, findings)
     check_inputs_and_provenance(files, findings)
     check_figures_and_provenance(files, findings)
+    if not retired_dependencies_absent():
+        findings.append(
+            "dependency metadata still references the retired FLITS repository/package")
 
     if args.write_report:
         lines = ["# F3 manuscript consistency audit findings", ""]

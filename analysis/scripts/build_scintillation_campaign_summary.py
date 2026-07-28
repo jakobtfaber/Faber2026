@@ -301,7 +301,7 @@ def render_joint_figure(candidate_root: Path) -> Path:
 
     output = candidate_root / "figures/dsa_lorentzian_summary.pdf"
     output.parent.mkdir(parents=True, exist_ok=True)
-    from flits.resources import path as resource_path
+    from radio_pipeline.resources import path as resource_path
 
     with plt.rc_context(fname=resource_path("matplotlibrc")):
         figure, axes = plt.subplots(1, 2, figsize=(9.0, 3.8), constrained_layout=True)

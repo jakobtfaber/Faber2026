@@ -57,7 +57,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
-from flits.resources import path as resource_path
+from radio_pipeline.resources import path as resource_path
 
 from plot_codetection_data_grid import DM_CATALOG_DEFAULT, load_adopted_dms
 from plot_codetection_gallery import BANDS, discover_products, load_band

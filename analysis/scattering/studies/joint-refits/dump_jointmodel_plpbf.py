@@ -13,8 +13,8 @@ import sys
 import numpy as np
 import yaml
 
-REPO = os.environ.get("FLITS_REPO", "/home/ubuntu/worktrees/joint-tf-fits")
-RUNS = os.environ.get("FLITS_RUNS", "/home/ubuntu/flits-runs")
+REPO = os.environ.get("FABER2026_ANALYSIS", "/home/ubuntu/worktrees/joint-tf-fits")
+RUNS = os.environ.get("FABER2026_RUNS", "/home/ubuntu/flits-runs")
 sys.path.insert(0, f"{REPO}/scattering")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 

@@ -5,78 +5,31 @@ graphic — back to the command that regenerates it. It is the reproducibility
 spine for the ApJ Data Availability statement.
 
 The machine-readable version is [`repro_manifest.csv`](repro_manifest.csv)
-(one row per output). This file is the prose companion: how to read it, how the
-three repositories relate, and the caveats that a CSV cell can't carry.
+(one row per output). This file is the prose companion: how to read it and the
+caveats that a CSV cell cannot carry.
 
-## The three-repository structure (read this first)
+## Repository structure
 
-Faber2026 is **not** a monolith. The parent manuscript pins two separate
-repositories as git submodules:
+The parent manuscript pins this repository at `analysis/`. All active
+producers and reusable scientific code live here. Historical references to
+`pipeline/` or `dsa110-FLITS` identify retired provenance; they are not
+runnable dependencies and must not be used to regenerate current products.
 
-- `analysis/` points at
-  `https://github.com/jakobtfaber/Faber2026-analysis.git` — this research-control
-  repository.
-- `pipeline/` points at
-  `https://github.com/jakobtfaber/dsa110-FLITS.git` — the fitting library.
-
-Outputs fall into two producer classes:
-
-- **Analysis producers** live under `scripts/` in this repository. Edit and
-  run them here.
-- **Pipeline producers** live under the sibling `pipeline/` submodule.
-  Changing them is a commit to the *shared library*, not to the manuscript.
-  Treat those edits with library-grade caution (other consumers inherit them).
-
-The `run_command` column reflects this: `scripts/…` producers run from the repo
-root; `pipeline/…` producers run from inside `pipeline/` under the submodule's
-own environment.
-
-One wrinkle worth knowing before you go looking for a pipeline commit.
-`.gitmodules` resolves the pinned commit from the
-**`jakobtfaber/dsa110-FLITS` fork**, where pipeline development happens.
-Since FLITS #151 merged the old divergent
-line (`fix/budget-table-data-post-igm-lognormal`) into the fork's `main`, the
-pin base is an ancestor of fork `main`; the pin itself sits 1–2 replayed
-commits off it. The full pin lineage is published on the fork branch
-**`pin/faber2026`** (since 2026-07-09), so pinned SHAs are reachable by ref,
-not just as fork-network dangling objects. A pipeline fix is PR'd against fork
-`main`, then replayed onto the pin (see FLITS #149 → Faber2026 #71, and
-FLITS #156 → the guards pin bump, for the pattern); advance `pin/faber2026` on
-every bump, and check `git merge-base --is-ancestor` before ever bumping the
-pin.
+Current producer paths are repository-relative to this checkout. Entries that
+still name a retired producer are historical records requiring explicit
+migration before they can claim current reproducibility.
 
 ## Environment
 
-There are **two** environments, and which one you need depends on where the
-producer lives.
-
-**Pipeline producers** use the `uv` lock
-(`../pipeline/uv.lock`, `requires-python >=3.12`), invoked from the sibling
-submodule:
+Python is owned by this repository's `uv` lock:
 
 ```bash
-cd ../pipeline
-uv sync            # once, materializes the locked environment
-uv run python <producer.py> [args]
+uv sync --group test --frozen
+uv run --group test --frozen python scripts/<producer.py> [args]
 ```
 
-**Analysis producers (`scripts/…`)** have no lockfile of their own, and
-bare `python` is not a defined interpreter for them — on a clean shell it is
-simply `command not found`. They run under the conda env named **`flits`**,
-whose spec is `../pipeline/environment.yml`:
-
-```bash
-conda env create -f ../pipeline/environment.yml   # once; creates `flits`
-conda run -n flits python scripts/<producer.py> [args]
-```
-
-`flits` is required rather than merely convenient: `plot_ne2025_mw_properties.py`
-imports `healpy`, which is in `../pipeline/environment.yml` but **not** in
-`../pipeline/uv.lock`. The older campaign scripts under
-`../pipeline/analysis/scattering/studies/joint-refits/` were also authored against
-`flits` and say so in their docstrings. Prefer `uv run` where the script is
-`uv`-clean; every
-row's `run_command` names the environment it actually needs.
+No sibling checkout, submodule, installed FLITS package, or Conda environment
+is part of the current reproduction contract.
 
 ## How to read `clone_verified`
 

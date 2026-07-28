@@ -126,8 +126,8 @@ def _summary(shared):
 def _run_main(script, b, runs):
     """Import the script fresh and call main() for burst b; return built FRBParams."""
     _Params.instances = []
-    os.environ["FLITS_REPO"] = str(REPO)
-    os.environ["FLITS_RUNS"] = str(runs)
+    os.environ["FABER2026_ANALYSIS"] = str(REPO)
+    os.environ["FABER2026_RUNS"] = str(runs)
     spec = importlib.util.spec_from_file_location(f"_chk_{script.stem}", script)
     mod = importlib.util.module_from_spec(spec)
     sys.argv = [str(script), b]
@@ -172,7 +172,7 @@ def main():
         # pure-json top-level scripts: run as subprocesses on a shared-zeta json, expect no crash
         import subprocess
 
-        env = {**os.environ, "FLITS_RUNS": str(runs), "FLITS_REPO": str(REPO)}
+        env = {**os.environ, "FABER2026_RUNS": str(runs), "FABER2026_ANALYSIS": str(REPO)}
         (joint / f"{b}_joint_fit.json").write_text(json.dumps(_summary(True)))
         r = subprocess.run(
             [sys.executable, str(HERE / "verify_joint_fits.py")],

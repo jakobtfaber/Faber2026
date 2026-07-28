@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """List every co-detected burst's joint-fit quality metrics -> why 3 of 12 pass."""
 import glob, json, os
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 rows = []
 for fp in sorted(glob.glob(f"{RUNS}/data/joint/*_joint_fit.json")):
     b = os.path.basename(fp).replace("_joint_fit.json", "")

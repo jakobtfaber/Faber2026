@@ -10,7 +10,7 @@ flagged. The fix should (a) leave both bands covering the same time span (no
 spurious hatch), and (b) show honest per-cell S/N (neither noise-mush nor
 over-averaged).
 
-  FLITS_RUNS=~/Developer/scratch/flits-local-runs conda run -n flits \
+  FABER2026_RUNS=~/Developer/scratch/flits-local-runs conda run -n flits \
     python plot_window_resolution_ba.py --burst whitney_fine --burst oran ...
 """
 from __future__ import annotations
@@ -39,7 +39,7 @@ from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
 
 import joint_tf_prep as J  # noqa: E402
 
-RUNS = Path(os.environ.get("FLITS_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
+RUNS = Path(os.environ.get("FABER2026_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
 
 # CHIME 400-800, gap, DSA ~1311-1499 (MHz). Fixed frequency frame for both cols.
 F_LO, F_HI = 380.0, 1520.0

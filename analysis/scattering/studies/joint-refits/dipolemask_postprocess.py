@@ -32,7 +32,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-RUNS = os.environ.get("FLITS_RUNS", "/home/ubuntu/flits-runs")
+RUNS = os.environ.get("FABER2026_RUNS", "/home/ubuntu/flits-runs")
 JOINT = f"{RUNS}/data/joint"
 OUT_PNG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dipolemask_wedge.png")
 

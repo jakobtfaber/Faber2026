@@ -21,7 +21,7 @@ import numpy as np
 from scipy.optimize import minimize, minimize_scalar
 from scipy.special import erfc, erfcx
 
-K_DM = 4.148808e3  # s MHz^2 pc^-1 cm^3 (== flits.common.constants.K_DM; inlined for docker)
+K_DM = 4.148808e3  # s MHz^2 pc^-1 cm^3 (== radio_pipeline.common.constants.K_DM; inlined for docker)
 _SQRT2 = np.sqrt(2.0)
 
 

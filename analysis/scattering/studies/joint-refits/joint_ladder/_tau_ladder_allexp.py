@@ -27,7 +27,7 @@ from dynesty.utils import resample_equal
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # _figsave
 from _figsave import save_fig
 
-RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
 OUT = f"{RUNS}/data/joint"
 FIG_OUT = os.environ.get("DSA_FIGS", OUT)
 

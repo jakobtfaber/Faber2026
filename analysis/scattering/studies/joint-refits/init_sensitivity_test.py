@@ -2,11 +2,11 @@
 posterior vs a trivial coarse guess? If not, the ~930-line estimator is moot.
 Same model (M3), same priors (built from init), same nlive/pool/alpha_fixed."""
 import pathlib, numpy as np
-from flits.scattering.scat_analysis.config_utils import load_config
-from flits.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
-from flits.scattering.scat_analysis.burstfit import FRBParams
-from flits.scattering.scat_analysis.burstfit_init import data_driven_initial_guess
-from flits.scattering.scat_analysis.burstfit_nested import fit_single_model_nested
+from radio_pipeline.scattering.scat_analysis.config_utils import load_config
+from radio_pipeline.scattering.scat_analysis.pipeline import BurstPipeline, BurstDataset
+from radio_pipeline.scattering.scat_analysis.burstfit import FRBParams
+from radio_pipeline.scattering.scat_analysis.burstfit_init import data_driven_initial_guess
+from radio_pipeline.scattering.scat_analysis.burstfit_nested import fit_single_model_nested
 
 CFG = "/Users/jakobfaber/Developer/scratch/2026-06/flits-refit/wilhelm_chime_refit.yaml"
 

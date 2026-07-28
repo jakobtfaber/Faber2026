@@ -33,7 +33,7 @@ if not hasattr(_si, "simps") and hasattr(_si, "simpson"):
 import pygedm  # noqa: E402
 from mwprop.nemod.NE2025 import ne2025  # noqa: E402
 
-REPO = os.environ.get("FLITS_REPO") or os.path.abspath(f"{os.path.dirname(__file__)}/../../..")
+REPO = os.environ.get("FABER2026_ANALYSIS") or os.path.abspath(f"{os.path.dirname(__file__)}/../../..")
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = f"{HERE}/data/scint"
 CATALOG = f"{REPO}/configs/bursts.yaml"

@@ -8,7 +8,7 @@ freq_descending flip applies), and the corrected sampler knobs.
 """
 import glob, os, yaml
 
-REPO = "/home/jfaber/flits/dsa110-FLITS"
+REPO = next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 RUNS = "/central/scratch/jfaber/flits-runs"
 DATA = f"{RUNS}/data/dsa"
 CFG = f"{RUNS}/configs"

@@ -144,8 +144,8 @@ def tail_coverage(
 
 def _load_driver():
     # Same loading pattern as tests/test_freya_local_runs_smoke.py: the driver
-    # resolves its repo from FLITS_REPO at import time (HPCC default otherwise).
-    os.environ["FLITS_REPO"] = str(REPO)
+    # resolves its repo from FABER2026_ANALYSIS at import time (HPCC default otherwise).
+    os.environ["FABER2026_ANALYSIS"] = str(REPO)
     path = REPO / "scattering" / "studies" / "joint-refits" / "local_runs" / "run_joint_fit.py"
     spec = importlib.util.spec_from_file_location("run_joint_fit", path)
     mod = importlib.util.module_from_spec(spec)

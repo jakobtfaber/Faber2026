@@ -4,7 +4,7 @@
 Uses canonical all-exp fits from _a1_fits/ (grade_allexp CANON map) plus joint_json/
 base fits for hamilton and whitney. Writes per-burst PNG/SVG/PDF and optional montage.
 
-  FLITS_REPO=... FLITS_RUNS=... python batch_jointmodel.py [--montage OUT]
+  FABER2026_ANALYSIS=... FABER2026_RUNS=... python batch_jointmodel.py [--montage OUT]
 """
 from __future__ import annotations
 
@@ -19,8 +19,8 @@ from pathlib import Path
 import yaml
 
 HERE = Path(__file__).resolve().parent
-REPO = Path(os.environ.get("FLITS_REPO", HERE.parents[1]))
-RUNS = Path(os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs"))
+REPO = Path(os.environ.get("FABER2026_ANALYSIS", HERE.parents[1]))
+RUNS = Path(os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs"))
 A1 = HERE / "_a1_fits"
 JOINT_JSON = HERE / "joint_json"
 DATA = RUNS / "data"
@@ -123,8 +123,8 @@ def stage_fits() -> list[tuple[str, str]]:
 def dump_all(staged: list[tuple[str, str]]) -> None:
     dump_py = HERE / "dump_jointmodel.py"
     env = os.environ.copy()
-    env["FLITS_REPO"] = str(REPO)
-    env["FLITS_RUNS"] = str(RUNS)
+    env["FABER2026_ANALYSIS"] = str(REPO)
+    env["FABER2026_RUNS"] = str(RUNS)
     for burst, sfx in staged:
         r = subprocess.run(
             [sys.executable, str(dump_py), burst, sfx],

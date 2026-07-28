@@ -869,7 +869,7 @@ _DARK_BLUE = "#1B365D"
 
 
 def _apply_manuscript_style() -> None:
-    """Same style stack as scripts/plot_codetection_gallery.py / flits.plotting.
+    """Same style stack as scripts/plot_codetection_gallery.py / radio_pipeline.plotting.
 
     SciencePlots ``["science", "notebook"]`` plus the FLITS Computer-Modern
     overrides (no TeX binary required). Falls back to the installed FLITS style
@@ -878,7 +878,7 @@ def _apply_manuscript_style() -> None:
     import matplotlib.pyplot as plt
 
     try:
-        from flits.plotting import use_flits_style
+        from radio_pipeline.plotting import use_flits_style
 
         use_flits_style()
         return
@@ -891,7 +891,7 @@ def _apply_manuscript_style() -> None:
     except Exception:
         import matplotlib
 
-        from flits.resources import path as resource_path
+        from radio_pipeline.resources import path as resource_path
 
         rc = resource_path("matplotlibrc")
         if rc.exists():

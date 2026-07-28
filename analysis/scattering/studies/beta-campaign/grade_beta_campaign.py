@@ -2,7 +2,7 @@
 """Grade the beta-coherent thin-screen campaign fits (Phase 6).
 
 For each fleet output {burst}_joint_fit{suffix}.json (+ paired
-{burst}_joint_ppc_multi{suffix}.json) under $FLITS_RUNS/data/joint:
+{burst}_joint_ppc_multi{suffix}.json) under $FABER2026_RUNS/data/joint:
 
 - gate_one (gate_joint_committed.py) -- the runtime 3-level verdict,
   beta-native (rails on beta_bounds, alpha derived);
@@ -18,7 +18,7 @@ For each fleet output {burst}_joint_fit{suffix}.json (+ paired
 Writes beta_campaign_verdicts.{json,md} beside this script (committed
 artifacts; the npz posteriors stay in scratch).
 
-  FLITS_RUNS=... conda run -n flits python analysis/beta_campaign/grade_beta_campaign.py
+  FABER2026_RUNS=... conda run -n flits python analysis/beta_campaign/grade_beta_campaign.py
 """
 
 from __future__ import annotations
@@ -33,7 +33,7 @@ REPO = Path(__file__).resolve().parents[3]
 import numpy as np
 
 
-RUNS = Path(os.environ.get("FLITS_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
+RUNS = Path(os.environ.get("FABER2026_RUNS", "/Users/jakobfaber/Developer/scratch/flits-local-runs"))
 sys.path.insert(0, str(REPO))
 
 _spec = importlib.util.spec_from_file_location(

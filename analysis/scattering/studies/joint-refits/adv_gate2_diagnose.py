@@ -3,11 +3,9 @@
 or an artifact? Compare to the OLD flat improper prior to ground the magnitude,
 and check the eigenvalue guard + ML-profiled production behavior at the SAME points.
 """
-import sys
 from dataclasses import replace
 import numpy as np
 
-sys.path.insert(0, "/Users/jakobfaber/Developer/repos/github.com/dsa110/dsa110-FLITS/scattering")
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams  # noqa: E402
 from scattering.scat_analysis.burstfit_joint import _gain_marginal_multi_band  # noqa: E402
 

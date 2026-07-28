@@ -20,7 +20,7 @@ not. Clusters are excluded as screens when b/R500 > 1 (the sightline misses them
 import json
 import os
 
-REPO = os.environ.get("FLITS_REPO") or os.path.abspath(f"{os.path.dirname(__file__)}/../../..")
+REPO = os.environ.get("FABER2026_ANALYSIS") or os.path.abspath(f"{os.path.dirname(__file__)}/../../..")
 HERE = os.path.dirname(os.path.abspath(__file__))
 FG = f"{REPO}/docs-analysis/foreground.md"
 FINAL = f"{HERE}/data/scint/scint_mw_final.json"

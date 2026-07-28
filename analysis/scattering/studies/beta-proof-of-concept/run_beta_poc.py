@@ -223,7 +223,7 @@ def _validate(med: dict, gof_C: dict, gof_D: dict) -> dict:
     """3-level PASS/MARGINAL/FAIL. Level 2 delegates to the kernel's
     classify_fit_quality: chi2_red is the gate; R^2 and Durbin-Watson are
     informational only (low-S/N rationale in its docstring) -- issue #111."""
-    from flits.fitting import VALIDATION_THRESHOLDS as T
+    from radio_pipeline.fitting import VALIDATION_THRESHOLDS as T
     from scattering.scat_analysis.burstfit import classify_fit_quality
 
     fails, marginals, notes = [], [], []
@@ -296,7 +296,7 @@ def _prepare_real_bands():
     import yaml
 
     local_runs = REPO / "scattering" / "studies" / "joint-refits" / "local_runs"
-    os.environ["FLITS_REPO"] = str(REPO)
+    os.environ["FABER2026_ANALYSIS"] = str(REPO)
     spec = importlib.util.spec_from_file_location("run_joint_fit", local_runs / "run_joint_fit.py")
     driver = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(driver)

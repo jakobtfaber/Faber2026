@@ -530,7 +530,7 @@ def plot_burst_acf_diagnostic(
     import matplotlib.pyplot as plt  # noqa: PLC0415
     from matplotlib.ticker import FuncFormatter, MaxNLocator, NullFormatter  # noqa: PLC0415
 
-    from flits.plotting import use_flits_style  # noqa: PLC0415
+    from radio_pipeline.plotting import use_flits_style  # noqa: PLC0415
 
     use_flits_style()
     plt.rcParams.update(
@@ -987,7 +987,7 @@ def _plot_sample_summary(results: list[dict[str, Any]], *, figure_dir: Path) -> 
     from matplotlib.lines import Line2D  # noqa: PLC0415
     from matplotlib.ticker import FuncFormatter, NullFormatter  # noqa: PLC0415
 
-    from flits.plotting import use_flits_style  # noqa: PLC0415
+    from radio_pipeline.plotting import use_flits_style  # noqa: PLC0415
 
     rows = _summary_component_rows(results)
     clean_rows = [row for row in rows if row["usable"]]

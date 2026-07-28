@@ -70,3 +70,11 @@ def test_validation_fails_closed_when_a_frozen_input_drifts(tmp_path: Path):
     observed, mismatches = validation.input_hash_status(paths)
     assert set(observed) == set(validation.EXPECTED_INPUT_SHA256)
     assert set(mismatches) == set(validation.EXPECTED_INPUT_SHA256)
+
+
+def test_current_analysis_passes_clean_room_validator():
+    analysis_root = SCRIPT.parents[1]
+    result = validation.validate(analysis_root)
+    assert result["input_hashes_match"]
+    assert result["budget"]["rounded_total_matches"]
+    assert result["reproducibility"]["owner_arithmetic_reproduced"]

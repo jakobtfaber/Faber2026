@@ -23,8 +23,8 @@ import numpy as np
 from scipy import odr
 from scipy.optimize import curve_fit
 
-REPO = os.environ["FLITS_REPO"]
-OUT = os.environ.get("FLITS_RUNS", ".") + "/data/scint"
+REPO = os.environ["FABER2026_ANALYSIS"]
+OUT = os.environ.get("FABER2026_RUNS", ".") + "/data/scint"
 os.makedirs(OUT, exist_ok=True)
 sys.path.insert(0, f"{REPO}/scattering")
 sys.path.insert(0, f"{REPO}/scintillation")

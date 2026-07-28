@@ -18,8 +18,8 @@ import numpy as np
 import yaml
 from astropy.coordinates import SkyCoord
 
-REPO = os.environ["FLITS_REPO"]
-OUT = os.environ.get("FLITS_RUNS", ".") + "/data/scint"
+REPO = os.environ["FABER2026_ANALYSIS"]
+OUT = os.environ.get("FABER2026_RUNS", ".") + "/data/scint"
 sys.path.insert(0, f"{REPO}/scintillation/ne2025")
 from query_ne2025_scint import galactic_floor
 

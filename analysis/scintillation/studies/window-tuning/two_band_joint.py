@@ -8,7 +8,7 @@ Dual-track per burst (owner directive 2026-07-17):
 One-screen gate: a single power law across the 3.8x lever assumes ONE dominant screen.
 Test = does the joint fit reproduce BOTH (i) the DSA/CHIME dnu ratio at band centers and
 (ii) the single-screen product tau*dnu_d = C1/2pi, within propagated errors. The C-constants
-and verdict come from the committed flits.batch.analysis_logic.check_tau_deltanu_consistency
+and verdict come from the committed radio_pipeline.batch.analysis_logic.check_tau_deltanu_consistency
 (single source of truth); we do not reimplement them.
 
 CHIME points: campaign_final (config-path rerun, grid-reg ON, core-boxcar primary,
@@ -94,7 +94,7 @@ def dsa_dnu_at_ref(dsa_pts, alpha, nu_ref=DNU_REF_MHZ):
 
 def tau_dnu_consistency(taus_json, tracks, nu_ref=DNU_REF_MHZ):
     """Programmatic tau*dnu_d = C1/2pi test at the PINNED dnu_d values, via the committed
-    flits.batch.analysis_logic.check_tau_deltanu_consistency (single source of truth for
+    radio_pipeline.batch.analysis_logic.check_tau_deltanu_consistency (single source of truth for
     the C-constants and the same_screen/different_screens verdict). tau comes from the
     committed two_screen_consistency.json (beta-campaign joint scattering fits); dnu_d is
     recomputed from this campaign's plotted DSA components. Returns per-burst dict."""
@@ -103,7 +103,7 @@ def tau_dnu_consistency(taus_json, tracks, nu_ref=DNU_REF_MHZ):
     repo = str(Path(__file__).resolve().parents[3])
     if repo not in sys.path: sys.path.insert(0, repo)
     import pandas as pd
-    from flits.batch.analysis_logic import check_tau_deltanu_consistency
+    from radio_pipeline.batch.analysis_logic import check_tau_deltanu_consistency
     taus={r["burst_name"]: r for r in json.load(open(taus_json)).get("rows",[]) if r.get("telescope")=="dsa"}
     rows=[]; keys=[]
     for nm,t in tracks.items():

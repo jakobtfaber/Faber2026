@@ -12,7 +12,7 @@ warnings.filterwarnings("ignore")
 
 # Load matplotlib rc file
 import matplotlib
-from flits.resources import path as flits_resource
+from radio_pipeline.resources import path as flits_resource
 
 matplotlib.rc_file(str(flits_resource("matplotlibrc")))
 
@@ -86,11 +86,11 @@ if __name__ == '__main__':
         inputs = list(zip(gls, gbs))
         with Pool(args.nproc) as pool:
             results = pool.map(run_pixel, inputs)
-        
+
         dm_map = np.array([r[0] for r in results])
         tau_map = np.array([r[1] for r in results])
         sbw_map = np.array([r[2] for r in results])
-        
+
         np.savez_compressed(cache_path, dm_map=dm_map, tau_map=tau_map, sbw_map=sbw_map)
         print(f"Saved precomputed maps to cache: {cache_path}")
 
@@ -229,7 +229,7 @@ if __name__ == '__main__':
     for idx, row in df_sorted.iterrows():
         name = row["burst"]
         disp_name = name.capitalize()
-        
+
         texts0.append(ax0.text(row["abs_b"], row["dm_mw_pc_cm3"], f" {disp_name}", fontsize=10, zorder=4))
         texts1.append(ax1.text(row["abs_b"], row["tau_chime_us"], f" {disp_name}", fontsize=10, zorder=4))
         texts2.append(ax2.text(row["abs_b"], row["sbw_chime_khz"], f" {disp_name}", fontsize=10, zorder=4))

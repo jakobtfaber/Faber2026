@@ -19,8 +19,8 @@ matplotlib.use("Agg")
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from flits.batch.codetection_joint import spectra_from_joint_bands
-from flits.batch.codetection_plots import plot_codetection
+from radio_pipeline.batch.codetection_joint import spectra_from_joint_bands
+from radio_pipeline.batch.codetection_plots import plot_codetection
 from plot_jointmodel_prototypes import _bands, _load, _suptitle
 
 

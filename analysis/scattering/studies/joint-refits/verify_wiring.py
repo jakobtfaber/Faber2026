@@ -3,7 +3,7 @@ loglike that fit_joint_scattering constructs, then push 5 unit-cube draws
 through ptform->loglike. Proves no import/signature breakage and each mode's
 likelihood evaluates finite on in-prior samples -- without the slow nested loop."""
 import os, sys, time, numpy as np
-REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
+REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams
 import scattering.scat_analysis.burstfit_joint as bj
