@@ -534,7 +534,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "flits", extras = ["ne2025"], git = "https://github.com/jakobtfaber/dsa110-FLITS.git?rev=a3d1812fbc3d0fe7dc823d5e453227c7ab88f8e0" },
+    { name = "flits", extras = ["ne2025"], git = "https://github.com/jakobtfaber/dsa110-FLITS.git?rev=fa5b78848160930620e3f226e58a139785616d79" },
     { name = "healpy", specifier = ">=1.18" },
     { name = "jsonschema", specifier = ">=4.0" },
 ]
@@ -549,7 +549,7 @@ test = [
 [[package]]
 name = "flits"
 version = "0.1.0"
-source = { git = "https://github.com/jakobtfaber/dsa110-FLITS.git?rev=a3d1812fbc3d0fe7dc823d5e453227c7ab88f8e0#a3d1812fbc3d0fe7dc823d5e453227c7ab88f8e0" }
+source = { git = "https://github.com/jakobtfaber/dsa110-FLITS.git?rev=fa5b78848160930620e3f226e58a139785616d79#fa5b78848160930620e3f226e58a139785616d79" }
 dependencies = [
     { name = "adjusttext" },
     { name = "astropy" },

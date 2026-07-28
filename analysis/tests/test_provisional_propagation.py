@@ -8,6 +8,8 @@ from scripts.build_provisional_propagation_tables import (
     screen_product,
 )
 
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
+
 
 def test_screen_product_reproduces_thin_screen_identity():
     dnu_mhz = 1.0 / (2.0 * math.pi * 1000.0)
@@ -46,7 +48,9 @@ def test_foreground_alignment_classification_is_cautious_and_coverage_aware():
 
 
 def test_frozen_result_roster_and_status_are_explicit():
-    result = json.loads(Path("provisional_propagation/results.json").read_text())
+    result = json.loads(
+        (ANALYSIS_ROOT / "provisional_propagation/results.json").read_text()
+    )
     assert result["status"] == "SCREEN_ANALYSIS_PENDING"
     assert result["screen_analysis_status"] == "PENDING_ALPHA4_CONSISTENCY_REFITS"
     assert len(result["screen_rows"]) == 7

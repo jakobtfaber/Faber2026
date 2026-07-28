@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Research control, campaigns, and provenance for Faber2026"
 requires-python = ">=3.12"
 dependencies = [
-  "flits[ne2025] @ git+https://github.com/jakobtfaber/dsa110-FLITS.git@a3d1812fbc3d0fe7dc823d5e453227c7ab88f8e0",
+  "flits[ne2025] @ git+https://github.com/jakobtfaber/dsa110-FLITS.git@fa5b78848160930620e3f226e58a139785616d79",
   "healpy>=1.18",
   "jsonschema>=4.0",
 ]
