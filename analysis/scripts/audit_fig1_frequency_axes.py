@@ -21,7 +21,7 @@ CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 CHIME_METADATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/upchan_codetections"
 FIXTURE_DEFAULT = (
-    ANALYSIS_ROOT / "campaigns" / "crossmatching" / "notebook_reproduction_fixture.json"
+    ANALYSIS_ROOT / "associations" / "studies" / "crossmatching" / "notebook_reproduction_fixture.json"
 )
 MANIFEST_DEFAULT = ROOT / "data/catalog/data-manifest.csv"
 

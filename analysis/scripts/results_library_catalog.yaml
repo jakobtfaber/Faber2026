@@ -29,11 +29,11 @@ entries:
     mode: materialize
     result_ids: []
     sources:
-      - analysis/campaigns/scattering-dm-locked-2026-07-14/results/fit_summaries
-      - analysis/campaigns/scattering-dm-locked-2026-07-14/results/ppc
+      - analysis/dispersion/studies/scattering-dm-locked/results/fit_summaries
+      - analysis/dispersion/studies/scattering-dm-locked/results/ppc
     destinations:
-      analysis/campaigns/scattering-dm-locked-2026-07-14/results/fit_summaries: fit_summaries
-      analysis/campaigns/scattering-dm-locked-2026-07-14/results/ppc: ppc
+      analysis/dispersion/studies/scattering-dm-locked/results/fit_summaries: fit_summaries
+      analysis/dispersion/studies/scattering-dm-locked/results/ppc: ppc
     notes: DM-locked scattering refit campaign (2026-07-14). Bulk fit_summaries/ppc in library; fit_adjudication.csv stays git-tracked for CI.
 
   - id: scattering.refit-superseded
@@ -44,8 +44,8 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/campaigns/scattering-refit-2026-06/_a1_fits
-      - analysis/campaigns/scattering-refit-2026-06/joint_json
+      - analysis/scattering/studies/joint-refits/_a1_fits
+      - analysis/scattering/studies/joint-refits/joint_json
     notes: 2026-06 scattering refit, superseded at the 2026-07-06 trust reset. Small JSON stays git-tracked for FLITS CI; library link_only for nav.
 
   - id: scattering.beta-campaign
@@ -56,8 +56,8 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/campaigns/beta_campaign/fits
-      - analysis/campaigns/beta_campaign/beta_campaign_verdicts.json
+      - analysis/scattering/studies/beta-campaign/fits
+      - analysis/scattering/studies/beta-campaign/beta_campaign_verdicts.json
     notes: 2026-07 beta (free spectral index) scattering campaign, revoked at the 2026-07-06 trust reset. Small JSON stays git-tracked for FLITS CI; full posteriors under $FLITS_RUNS.
 
   - id: scattering.jointmodel-latest
@@ -82,7 +82,7 @@ entries:
     mode: materialize
     result_ids: []
     sources:
-      - analysis/campaigns/scintillation-dsa-lorentzian-2026-07-07/results
+      - analysis/scintillation/studies/dsa-lorentzian/results
     notes: DSA Lorentzian ACF first-pass campaign (2026-07-07; demoted to first-pass 2026-07-26, from-raw re-do chartered as scint-redo-01). Library holds full results/; oran_qualified/ stays git-tracked for figure approval CI.
 
   - id: scintillation.chime
@@ -93,7 +93,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/campaigns/chime-scintillation
+      - analysis/scintillation/studies/chime-scintillation
     notes: Archival mixed experiments/docs predating the finalized objective-window campaign.
 
   - id: scintillation.window-tuning-first-pass
@@ -104,7 +104,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/campaigns/window-tuning-campaign-2026-07-17/results
+      - analysis/scintillation/studies/window-tuning/results
     notes: "Objective-window ACF tuning campaign (2026-07-17; demoted to first-pass 2026-07-26). PR #192 closed the 24-product campaign; chromatica_hi is a measurement and the other 23 records remain diagnostic only. The compact result tree is git-tracked."
 
   # --- dispersion ---
@@ -144,17 +144,17 @@ entries:
       - path: ~/Data/Faber2026/results-library/dispersion/pipeline-results-root
     notes: Residual of the 2026-07-15 FLITS results/ snapshot after the 2026-07-28 split (README.md and joint_fit_summary.md only; the live git-tracked copies remain in FLITS results/). DM-phase runs moved to dispersion/dm-phase; sightline/budget products moved to dispersion/dm-budget-sightlines; figure manifests moved to review-ledger/dispersion-figure-manifests.
 
-  - id: dispersion.dm-joint-phase-v2-parent
+  - id: dispersion.dispersion/results/joint-phase-parent
     domain: dispersion
-    slot: dispersion/dm-joint-phase-v2
+    slot: dispersion/dispersion/results/joint-phase
     trust: provisional
     repo: parent
     mode: materialize
     result_ids: []
     sources:
-      - analysis/dm-joint-phase-v2/results/diagnostics
+      - analysis/dispersion/results/joint-phase/results/diagnostics
     destinations:
-      analysis/dm-joint-phase-v2/results/diagnostics: diagnostics
+      analysis/dispersion/results/joint-phase/results/diagnostics: diagnostics
     notes: Bulk diagnostics in library; fits.json + validation stay git-tracked for CI.
 
   - id: dispersion.chime-dm
@@ -165,7 +165,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/campaigns/chime_dm
+      - analysis/dispersion/studies/chime-dm
     notes: Mixed plot script + products; link-only for now.
 
   # --- foreground ---
@@ -177,7 +177,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/campaigns/foregrounds/data/tau_consistency_catalog.csv
+      - analysis/foregrounds/studies/census/data/tau_consistency_catalog.csv
     notes: Keep tracked in FLITS (small; code-coupled). Library links for navigation.
 
   - id: foreground.budget-exports
@@ -188,7 +188,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/campaigns/exports
+      - analysis/foregrounds/results/manuscript-tables
     notes: Generated TeX for manuscript — stay in FLITS git.
 
   - id: foreground.provisional-propagation
@@ -199,7 +199,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/provisional_propagation
+      - analysis/foregrounds/results/provisional-propagation
     notes: Active ledger is screen-readiness only and fails closed pending fixed-index refits.
 
   - id: archive.outdated-science
@@ -245,7 +245,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/v3_energetics
+      - analysis/energetics/studies/legacy-v3
     notes: Driver script + small outputs stay in parent git (not bulk results).
 
   # --- manuscript (Overleaf-coupled — never materialize) ---

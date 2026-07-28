@@ -7,7 +7,7 @@ from pathlib import Path
 def _load_driver():
     path = (
         Path(__file__).resolve().parents[1]
-        / "campaigns/scintillation-dsa-lorentzian-2026-07-07/run_dsa_lorentzian_fits.py"
+        / "scintillation/studies/dsa-lorentzian/run_dsa_lorentzian_fits.py"
     )
     spec = importlib.util.spec_from_file_location("dsa_lorentzian_driver", path)
     assert spec is not None

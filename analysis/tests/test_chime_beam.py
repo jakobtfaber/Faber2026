@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from campaigns.chime_beam import (
+from energetics.methods.chime_beam import (
     FWHM_NS_400,
     beam_gain,
     chime_sigma_jy,

@@ -10,13 +10,13 @@ import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-JOINT = ROOT / "campaigns/scattering-dm-locked-2026-07-14/results"
-SCINT = ROOT / "campaigns/scintillation-dsa-lorentzian-2026-07-07/results"
-OUT = ROOT / "analysis/provisional_propagation"
+JOINT = ROOT / "dispersion/studies/scattering-dm-locked/results"
+SCINT = ROOT / "scintillation/studies/dsa-lorentzian/results"
+OUT = ROOT / "analysis/foregrounds/results/provisional-propagation"
 ARCHIVE = ROOT / ".archive" / "outdated-science" / "2026-07-17"
 ARCHIVE_REGENERATED = ARCHIVE / "regenerated"
 SINGLE_SCREEN_MAX = 2.0
-FOREGROUND = ROOT / "campaigns/foregrounds"
+FOREGROUND = ROOT / "foregrounds/studies/census"
 BUDGET_PATH = FOREGROUND / "budget_table_data.json"
 FOREGROUND_PATH = FOREGROUND / "foreground_table_data.json"
 CONTRIBUTORS_PATH = ROOT / "scripts/dm_budget_intervening_systems.csv"
@@ -304,7 +304,7 @@ def main():
         "foreground_alignment_rows": foreground_json,
     }
     regenerated_ledger = (
-        ARCHIVE_REGENERATED / "analysis" / "provisional_propagation" /
+        ARCHIVE_REGENERATED / "analysis" / "foregrounds/results/provisional-propagation" /
         "results.json"
     )
     regenerated_ledger.parent.mkdir(parents=True, exist_ok=True)

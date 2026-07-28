@@ -23,13 +23,13 @@ from pathlib import Path
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-CAMPAIGN_RELATIVE = Path("campaigns/window-tuning-campaign-2026-07-17/results")
+CAMPAIGN_RELATIVE = Path("scintillation/studies/window-tuning/results")
 CAMPAIGN = ANALYSIS_ROOT / CAMPAIGN_RELATIVE
 TABLE_PATH = ROOT / "chime_scintillation_campaign_table.tex"
-PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation-summary/campaign_provenance.json"
-FIGURE_PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation-summary/joint_figure_provenance.json"
+PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation/results/summary/campaign_provenance.json"
+FIGURE_PROVENANCE_PATH = ANALYSIS_ROOT / "scintillation/results/summary/joint_figure_provenance.json"
 DSA_VALIDATION_RELATIVE = Path(
-    "campaigns/scintillation-dsa-lorentzian-2026-07-07/results/"
+    "scintillation/studies/dsa-lorentzian/results/"
     "oran_qualified/validation.json"
 )
 DSA_VALIDATION = ANALYSIS_ROOT / DSA_VALIDATION_RELATIVE

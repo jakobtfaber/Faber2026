@@ -265,9 +265,9 @@ single undifferentiated DM_obs as if CHIME and DSA agree.
 
 **DM provenance — current vs historical** (adoption record
 `docs/rse/specs/verified-dm-adoption-2026-07-13.md`): the sole authority for
-every manuscript DM is the phase-coherence campaign `dm-joint-phase-v2/`
+every manuscript DM is the phase-coherence campaign `dispersion/results/joint-phase/`
 (`manuscript_dm_catalog.csv`, full fits `results/fits.json`, diagnostics in
-the results library under `dispersion/dm-joint-phase-v2/`). The uniform rule:
+the results library under `dispersion/dispersion/results/joint-phase/`). The uniform rule:
 the CHIME phase-coherence DM is the measurement, the DSA fit the independent
 cross-check; the inverse-variance and random-effects CHIME+DSA combinations
 are retained as sensitivity diagnostics only. Figure 1 displays both bands at
@@ -490,7 +490,7 @@ et al. 2025). `tab:alpha` → `tab:beta`; `fig:alpha_pbf` dropped. The
 β-coherent thin-screen campaign (pipeline PRs #133/#134) re-fit all 12
 co-detections with PPC verification: freya β=3.72 and phineas β=3.23
 interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
-`campaigns/beta_campaign/CAMPAIGN_REPORT.md`.
+`scattering/studies/beta-campaign/CAMPAIGN_REPORT.md`.
 
 ## Relationships
 

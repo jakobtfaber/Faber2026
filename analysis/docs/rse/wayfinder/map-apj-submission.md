@@ -124,7 +124,7 @@ Fog toward the destination — sharpens as the frontier advances:
 
 ## Out of scope
 
-- **Companion polarization paper** (`codetections_polarization/`) — owner
+- **Companion polarization paper** (`polarization/studies/codetections/`) — owner
   decision 2026-07-06: parked as companion-paper materials; not on this route.
 - **Post-submission work** — response to the actual ApJ referee, proofs,
   press. A fresh effort if/when it arrives.

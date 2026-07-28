@@ -19,7 +19,7 @@ ADVERSARIAL_REVIEW = (
 )
 PIPELINE_SOURCE = Path(os.environ.get(
     "FOREGROUND_PIPELINE_REPO",
-    str(Path.home() / "Developer/repos/github.com/jakobtfaber/Faber2026/pipeline"),
+    str(Path.home() / "Developer/repos/github.com/jakobtfaber/dsa110-FLITS"),
 ))
 
 

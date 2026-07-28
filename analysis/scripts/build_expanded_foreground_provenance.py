@@ -25,7 +25,7 @@ sys.path.insert(0, REPO_ROOT)
 
 from galaxies.foreground.generate_galaxy_plots import estimate_halo_mass, get_rvir_and_rs
 
-REGISTRY_PATH = os.path.join(REPO_ROOT, "campaigns/foregrounds/data/intervening_census_registry.csv")
+REGISTRY_PATH = os.path.join(REPO_ROOT, "foregrounds/studies/census/data/intervening_census_registry.csv")
 
 def cluver_w1_stellar_mass(w1_mag, w2_mag, z):
     """Estimate stellar mass log10(M*/Msun) using Cluver et al. 2014 Eq. 2 (color-dependent M/L_W1)."""
@@ -196,7 +196,7 @@ def main():
     out_df = pd.DataFrame(records)
     
     # Save CSV
-    csv_out = os.path.join(REPO_ROOT, "campaigns/foregrounds/data/expanded_catalog_cross_references.csv")
+    csv_out = os.path.join(REPO_ROOT, "foregrounds/studies/census/data/expanded_catalog_cross_references.csv")
     out_df.to_csv(csv_out, index=False)
     print(f"\nSaved CSV database to: {csv_out}")
     

@@ -20,7 +20,7 @@ import render_dm_measurements_table  # noqa: E402
 
 
 def _catalog() -> list[dict[str, str]]:
-    path = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+    path = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
     with path.open(newline="") as fh:
         return list(csv.DictReader(fh))
 
@@ -30,7 +30,7 @@ def test_catalog_matches_full_fit_results_and_uniform_adoption():
     fits = {
         row["burst"].lower(): row
         for row in json.loads(
-            (ANALYSIS_ROOT / "dm-joint-phase-v2" / "results" / "fits.json").read_text()
+            (ANALYSIS_ROOT / "dispersion/results/joint-phase" / "results" / "fits.json").read_text()
         )
     }
     assert len(rows) == len(fits) == 12

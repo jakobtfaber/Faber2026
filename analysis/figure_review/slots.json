@@ -35,7 +35,7 @@
       "family": "foreground-halo-grid",
       "target": "figures/sightline_halo_grid.pdf",
       "protect_in_manuscript": false,
-      "generator": "cd analysis && uv run --frozen python -m galaxies.v2_0.sightline_halo_grid --halo-csv campaigns/foregrounds/data/sightline_halo_grid.csv",
+      "generator": "cd analysis && uv run --frozen python -m galaxies.v2_0.sightline_halo_grid --halo-csv foregrounds/studies/census/data/sightline_halo_grid.csv",
       "required_provenance": [
         "expanded-catalog build manifest and SHA-256",
         "versioned Figure 3 input and SHA-256",
@@ -49,7 +49,7 @@
     {
       "id": "fig6-scint-summary",
       "title": "Joint qualified DSA-110 and CHIME/FRB scintillation summary",
-      "family": "scintillation-summary",
+      "family": "scintillation/results/summary",
       "target": "figures/dsa_lorentzian_summary.pdf",
       "generator": "scripts/build_scintillation_campaign_summary.py --figure-root <candidate-root>",
       "required_provenance": [
@@ -64,7 +64,7 @@
       "title_pattern": "DSA-110 scintillation ACF: {tns}",
       "family": "scintillation-acf",
       "target_pattern": "figures/dsa_scint_acf/{nick}_dsa_acf_lorentzian_fits.pdf",
-      "generator": "analysis/campaigns/scintillation-dsa-lorentzian-2026-07-07",
+      "generator": "analysis/scintillation/studies/dsa-lorentzian",
       "required_provenance": [
         "sub-band edges and center frequencies",
         "symmetric-lag ACF samples, errors, and lag exclusions",
@@ -132,7 +132,7 @@
       "title_pattern": "DM-locked joint-model audit: {tns}",
       "family": "joint-model",
       "target_pattern": "figures/jointmodel_pair/{nick}_jointmodel_pair.pdf",
-      "generator": "analysis/campaigns/scattering-dm-locked-2026-07-14",
+      "generator": "analysis/dispersion/studies/scattering-dm-locked",
       "required_provenance": [
         "adopted DM and input-product DM for both telescopes",
         "exact fit artifact and configuration SHA-256",
@@ -189,8 +189,8 @@
       "id": "oran-qualified-scintillation",
       "title": "Qualified Oran DSA-110 scintillation calibration",
       "family": "scintillation-qualification",
-      "target": "campaigns/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png",
-      "generator": "campaigns/scintillation-dsa-lorentzian-2026-07-07/validate_oran_dsa_measurement.py",
+      "target": "scintillation/studies/dsa-lorentzian/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png",
+      "generator": "scintillation/studies/dsa-lorentzian/validate_oran_dsa_measurement.py",
       "required_provenance": [
         "frozen real-background injection configuration",
         "injection recovery and off-pulse null results",

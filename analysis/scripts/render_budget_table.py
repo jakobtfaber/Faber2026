@@ -19,10 +19,10 @@ from galaxies.foreground import budget_table_emitter as base
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 HOST_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
 DM_Z_JSON = ANALYSIS_ROOT / "scripts" / "dm_redshift_inference.json"
-BASE_DATA = ANALYSIS_ROOT / "campaigns" / "foregrounds" / "budget_table_data.json"
+BASE_DATA = ANALYSIS_ROOT / "foregrounds" / "studies" / "census" / "budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 
 # These are usable project redshifts but do not yet have a citable published
@@ -64,7 +64,7 @@ def render() -> str:
         "%    Regenerate: python -m galaxies.foreground.budget_table_emitter --out <this file>\n",
         "% !! GENERATED FILE -- do not edit by hand.\n"
         "%    Regenerate: python analysis/scripts/render_budget_table.py\n"
-        "% Foreground columns come from analysis/campaigns/foregrounds/budget_table_data.json;\n"
+        "% Foreground columns come from analysis/foregrounds/studies/census/budget_table_data.json;\n"
         "% DM_obs and DM_host come from the verified super-repository products.\n",
     ).replace(
         "DSA-110 catalog dispersion measure under the shared DSA-DM reference\n"

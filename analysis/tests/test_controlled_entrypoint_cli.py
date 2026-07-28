@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-DRIVER_DIR = REPO / "campaigns" / "scattering-refit-2026-06"
+DRIVER_DIR = REPO / "scattering" / "studies" / "joint-refits"
 
 
 def _run(script: str, runs: Path, *extra: str) -> subprocess.CompletedProcess[str]:

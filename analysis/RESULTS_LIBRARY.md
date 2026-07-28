@@ -2,9 +2,9 @@
 
 | Path | Library slot | Mode |
 |------|--------------|------|
-| `dm-joint-phase-v2/results` | `dispersion/dm-joint-phase-v2` | materialized |
-| `provisional_propagation` | `foreground/provisional-propagation` | materialized |
-| `v3_energetics` | `foreground/v3-energetics` | link_only (code stays here) |
+| `dispersion/results/joint-phase/results` | `dispersion/dispersion/results/joint-phase` | materialized |
+| `foregrounds/results/provisional-propagation` | `foreground/provisional-propagation` | materialized |
+| `energetics/studies/legacy-v3` | `foreground/v3-energetics` | link_only (code stays here) |
 
 ```bash
 python3 scripts/materialize_results_library.py

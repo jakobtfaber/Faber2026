@@ -76,7 +76,7 @@ def test_committed_report_has_eight_dm_filtered_and_four_position_time_rows():
     report = json.loads(
         (
             Path(__file__).resolve().parents[1]
-            / "campaigns/crossmatching/association_report.json"
+            / "associations/studies/crossmatching/association_report.json"
         ).read_text()
     )
     constrained_rows = [

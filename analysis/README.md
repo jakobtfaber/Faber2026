@@ -1,57 +1,67 @@
-# Faber2026-analysis
+# Faber2026 analysis
 
-Research-control workspace for the Faber2026 manuscript.
+Scientific analysis and research-control workspace for the Faber2026
+manuscript. The parent manuscript repository mounts this repository at
+`analysis/` and pins one exact commit. Shared fitting code is supplied by the
+exact FLITS dependency recorded in `pyproject.toml` and `uv.lock`.
 
-This repository owns analysis products, scientific tests, figure-generation
-sources, provenance, review material, and operational documentation. It is
-mounted as the public `analysis/` submodule of
-[`jakobtfaber/Faber2026`](https://github.com/jakobtfaber/Faber2026).
+## Scientific subjects
 
-## Expected checkout
+| Directory | Manuscript subject |
+|---|---|
+| `observations/` | data products, calibration, recovery, and integrity |
+| `associations/` | event association, timing comparison, and chance coincidence |
+| `dispersion/` | dispersion measure and arrival-time alignment |
+| `scattering/` | pulse broadening, model comparison, and joint fits |
+| `scintillation/` | scintillation measurement and interpretation |
+| `foregrounds/` | foreground systems, hosts, and propagation budgets |
+| `energetics/` | flux calibration, fluence, and burst energy |
+| `polarization/` | polarization and rotation-measure interpretation |
+
+Every subject presents the same small interface:
 
 ```text
-Faber2026/
-├── main.tex             manuscript authority
-├── figures/             final embedded assets
-├── pipeline/            dsa110-FLITS submodule
-└── analysis/            this repository
+subject/
+├── README.md
+├── data/
+├── methods/
+├── results/
+├── figures/
+├── tests/
+└── studies/
 ```
 
-The parent pins the exact analysis and pipeline commits used by the manuscript.
-Overleaf synchronizes the parent but does not need either submodule to compile.
+The first five directories hold current canonical material. `studies/` hides
+dated, focused, or superseded investigations without making their names part of
+the repository’s top-level interface.
+
+## Shared repository machinery
+
+- `docs/` — scientific narratives, research control, decisions, and protocols.
+- `scripts/` — shared producers, renderers, audits, and control tools.
+- `tests/` — repository-wide scientific, provenance, and contract checks.
+- `figure_review/` — fail-closed figure review records.
+- `figures/` — shared diagnostic and historical figure material.
+- `config/` — shared configuration.
+- `schemas/` — structured-record schemas.
+- `.archive/` — preserved material that is not part of the active interface.
+
+Final manuscript TeX and embedded figure bytes remain in the parent repository.
+Large scientific data remain external and are referenced through manifests and
+provenance records.
 
 ## Start here
 
-Read the
-[repository and provenance map](docs/rse/ops/repository-map.md)
-for the three-repository structure, data chain, authority roles, and recipes
-for tracing a manuscript claim, figure, table, or fit back to its sources.
+1. Read `CONTEXT.md` for current science and custody state.
+2. Read `docs/rse/ops/repository-map.md` for authority and provenance.
+3. Search before reconstructing history:
 
-## Layout
+   ```sh
+   python3 scripts/kb search "<topic>"
+   ```
 
-- `docs/` — research control, decisions, verification, and handoffs.
-- `dm-joint-phase-v2/` and related top-level directories — analysis products.
-- `scripts/` — manuscript analysis and control tooling.
-- `tests/` — scientific and provenance checks.
-- `figure_review/` — fail-closed figure review state.
-- `figures/` — noncompiled sources, diagnostics, and historical assets.
+4. Run the repository gate:
 
-Final manuscript TeX, generated tables, and embedded figures remain in the
-parent repository.
-
-## Commands
-
-From the parent checkout:
-
-```sh
-make test-science
-make figures
-make kb-index
-```
-
-Or from this submodule:
-
-```sh
-make test MANUSCRIPT_ROOT=..
-make kb-index
-```
+   ```sh
+   make test MANUSCRIPT_ROOT=..
+   ```

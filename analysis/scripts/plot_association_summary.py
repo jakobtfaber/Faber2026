@@ -29,10 +29,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from association_diagnostics import class_aware_chance_probability  # noqa: E402
 
 REGISTRY = ANALYSIS_ROOT / "config" / "bursts.yaml"
-TOA_RESULTS = ANALYSIS_ROOT / "campaigns" / "crossmatching" / "toa_crossmatch_results.json"
-ASSOCIATION_REPORT = ANALYSIS_ROOT / "campaigns" / "crossmatching" / "association_report.json"
+TOA_RESULTS = ANALYSIS_ROOT / "associations" / "studies" / "crossmatching" / "toa_crossmatch_results.json"
+ASSOCIATION_REPORT = ANALYSIS_ROOT / "associations" / "studies" / "crossmatching" / "association_report.json"
 OUT = ROOT / "figures" / "association_summary.pdf"
-DM_CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+DM_CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 
 CLOCK_MS = 1.0
 DM_COLOR = "#0072B2"  # Okabe--Ito blue

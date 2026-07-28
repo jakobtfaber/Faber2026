@@ -18,12 +18,12 @@ _No errors or warnings: every consumed evidence row is consumable and every cons
 Only rows with manuscript consumers appear here.
 
 ### zach · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### zach · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -38,12 +38,12 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### whitney · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### whitney · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -58,12 +58,12 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### oran · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### oran · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -83,12 +83,12 @@ Only rows with manuscript consumers appear here.
 - claim: Oran has a qualified DSA-band scintillation-bandwidth measurement
 
 ### isha · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### isha · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -103,12 +103,12 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### wilhelm · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### wilhelm · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -123,12 +123,12 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### phineas · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### phineas · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -143,12 +143,12 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### freya · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### freya · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -168,12 +168,12 @@ Only rows with manuscript consumers appear here.
 - claim: the retained Freya CHIME products remain unqualified for a scintillation bandwidth after both the C1/P1 negative-result routes and the PR #192 objective-window campaign
 
 ### johndoeII · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### johndoeII · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -183,12 +183,12 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### hamilton · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### hamilton · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -203,12 +203,12 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### mahi · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### mahi · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -223,12 +223,12 @@ Only rows with manuscript consumers appear here.
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
 ### chromatica · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### chromatica · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 
@@ -248,12 +248,12 @@ Only rows with manuscript consumers appear here.
 - claim: FRB 20240203A has a qualified CHIME-band decorrelation-bandwidth measurement in four high-resolution subbands
 
 ### casey · association — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:results-association`, `sec:toa`, `sec:toa-pcc`, `fig:association-summary`
 - claim: co-detection association verified via P_cc and TOA residual under the shared-DSA-DM convention
 
 ### casey · dm_obs — `trusted`
-- artifact: `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` @ `2242124`
+- artifact: `analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` @ `2242124`
 - consumers: `sec:dm-measurement`, `sec:dm`
 - claim: adopted DM_obs is the phase-coherent CHIME-primary value with documented CHIME-DSA agreement
 

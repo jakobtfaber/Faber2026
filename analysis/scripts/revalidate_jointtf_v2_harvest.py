@@ -42,9 +42,9 @@ JOBS = {
 }
 
 CODE_PATHS = [
-    WORKTREE / "analysis/scattering-refit-2026-06/run_joint_fit.py",
-    WORKTREE / "analysis/scattering-refit-2026-06/run_joint_fit_zachfine.py",
-    WORKTREE / "analysis/scattering-refit-2026-06/joint_tf_prep.py",
+    WORKTREE / "analysis/scattering/studies/joint-refits/run_joint_fit.py",
+    WORKTREE / "analysis/scattering/studies/joint-refits/run_joint_fit_zachfine.py",
+    WORKTREE / "analysis/scattering/studies/joint-refits/joint_tf_prep.py",
     WORKTREE / "scattering/scat_analysis/burstfit_joint.py",
     RUNS / "jobs/fit.sbatch",
     RUNS / "jobs/fit_zachfine.sbatch",

@@ -2253,7 +2253,7 @@ def acquire_corpus(output_dir: Path, timeout: float, workers: int, resume: bool)
     cells.sort(key=lambda cell: (cell["sightline"], cell["service"]))
     manifest = {
         "schema_version": SCHEMA_VERSION,
-        "input_path": "campaigns/foregrounds/data/frozen_census/bursts.csv",
+        "input_path": "foregrounds/studies/census/data/frozen_census/bursts.csv",
         "input_sha256": FROZEN_INPUT_SHA256,
         "roster_authority_path": ROSTER_AUTHORITY_PATH,
         "roster_authority_sha256": ROSTER_AUTHORITY_SHA256,

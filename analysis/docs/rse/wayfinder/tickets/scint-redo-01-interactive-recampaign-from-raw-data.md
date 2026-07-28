@@ -43,7 +43,7 @@ Consequences:
    (`../../specs/scint-redo-step1-raw-input-freeze-2026-07-26.md`).
 2. Dedispersion-measure determination, re-done from scratch (owner
    direction 2026-07-26): the existing DM adjudication —
-   `dm-joint-phase-v2/manuscript_dm_catalog.csv` (adopted_dm, chime_primary)
+   `dispersion/results/joint-phase/manuscript_dm_catalog.csv` (adopted_dm, chime_primary)
    and everything downstream of it — is reclassified **first-pass, not
    final**, same standing as the first-pass scintillation campaign. The
    re-do re-derives per-burst DMs from the frozen raw inputs interactively

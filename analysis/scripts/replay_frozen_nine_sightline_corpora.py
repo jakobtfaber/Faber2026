@@ -93,7 +93,7 @@ def _replay_verdict(
 
 
 def replay_registry(pipeline_dir: Path, errors: list[str]) -> dict[str, Any]:
-    migrated = pipeline_dir / "campaigns/foregrounds/data"
+    migrated = pipeline_dir / "foregrounds/studies/census/data"
     data = migrated if migrated.is_dir() else pipeline_dir / "galaxies/foreground/data"
     registry_path = data / "intervening_census_registry.csv"
     provenance_path = data / "candidate_redshift_provenance.csv"
@@ -703,7 +703,7 @@ def replay_cadc(root: Path, errors: list[str]) -> dict[str, Any]:
 
 
 def _default_pipeline_dir(root: Path) -> Path:
-    if (root / "campaigns/foregrounds/data").is_dir():
+    if (root / "foregrounds/studies/census/data").is_dir():
         return root
     configured = os.environ.get("FOREGROUND_PIPELINE_REPO")
     if configured:

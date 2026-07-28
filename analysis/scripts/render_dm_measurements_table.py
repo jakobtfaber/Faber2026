@@ -10,10 +10,10 @@ from pathlib import Path
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 OUT = ROOT / "dm_measurements_table.tex"
 
-HEAD = r"""% Generated from analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
+HEAD = r"""% Generated from analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv
 % Do not hand-edit without updating the catalog and the DM decision record.
 \begin{deluxetable*}{lrrrr}
 \tabletypesize{\scriptsize}

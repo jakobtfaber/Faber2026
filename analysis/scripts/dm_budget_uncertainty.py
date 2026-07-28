@@ -75,8 +75,8 @@ REPO = manuscript_root()
 OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
 OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf"
 OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png"
-BUDGET_DATA = ANALYSIS_ROOT / "campaigns" / "foregrounds" / "budget_table_data.json"
-DM_CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "studies" / "census" / "budget_table_data.json"
+DM_CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 SYSTEMS_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_intervening_systems.csv"
 
 RNG = np.random.default_rng(20260707)

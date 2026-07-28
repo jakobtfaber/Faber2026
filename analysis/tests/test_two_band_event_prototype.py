@@ -10,7 +10,7 @@ import numpy as np
 def _load_prototype():
     path = (
         Path(__file__).resolve().parents[1]
-        / "campaigns/scintillation-dsa-lorentzian-2026-07-07/prototype_two_band_event.py"
+        / "scintillation/studies/dsa-lorentzian/prototype_two_band_event.py"
     )
     spec = importlib.util.spec_from_file_location("two_band_event_prototype", path)
     assert spec is not None

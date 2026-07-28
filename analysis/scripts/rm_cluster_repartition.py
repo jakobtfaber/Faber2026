@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # --- Pinned inputs (every value machine-verified by tests/test_rm_cluster_repartition.py) ---
 PINNED = {
-    # campaigns/foregrounds/data/intervening_census_registry.csv:23
+    # foregrounds/studies/census/data/intervening_census_registry.csv:23
     # (J115120.4+714435 / Wen+ 1254337, the phineas cluster row)
     "m500_1e14": 1.48,
     "b_kpc": 603.6,
@@ -43,7 +43,7 @@ PINNED = {
     "dm_cl_95ci": (91.0, 327.0),
     # sections/appendix.tex fig:clusters_icm caption (carried mNFW central)
     "dm_cl_mnfw_central": 184.0,
-    # codetections_polarization/main.tex:165 (tb:host_props, 2026-07-17 draft)
+    # polarization/studies/codetections/main.tex:165 (tb:host_props, 2026-07-17 draft)
     "rm_obs": -473.49,
     "rm_obs_err": 0.09,
     "rm_host": -756.0,
@@ -52,7 +52,7 @@ PINNED = {
     "dm_host_err_hi": 56.0,
     "dm_host_err_lo": 130.0,
     "b_host_mug": -2.0,
-    # codetections_polarization/main.tex:146 (their MC prior)
+    # polarization/studies/codetections/main.tex:146 (their MC prior)
     "rm_igm_sigma": 6.0,
 }
 

@@ -43,7 +43,7 @@ def test_unvalidated_toa_cannot_replace_peak_offset(monkeypatch):
         text = original_read_text(path)
         if path == (
             audit.ANALYSIS_ROOT
-            / "campaigns/crossmatching/toa_crossmatch_results.json"
+            / "associations/studies/crossmatching/toa_crossmatch_results.json"
         ):
             import json
 

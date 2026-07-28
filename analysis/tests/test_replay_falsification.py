@@ -1,11 +1,26 @@
 from __future__ import annotations
 
+import importlib.util
+from pathlib import Path
+import sys
+
 import numpy as np
 
-from campaigns.scintillation.reference_arc.replay_falsification import (
-    legacy_positive_acf,
-    matched_off_windows,
+MODULE_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "scintillation"
+    / "studies"
+    / "reference_analysis"
+    / "reference_arc"
+    / "replay_falsification.py"
 )
+SPEC = importlib.util.spec_from_file_location("replay_falsification", MODULE_PATH)
+assert SPEC is not None and SPEC.loader is not None
+MODULE = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = MODULE
+SPEC.loader.exec_module(MODULE)
+legacy_positive_acf = MODULE.legacy_positive_acf
+matched_off_windows = MODULE.matched_off_windows
 
 
 def _slow_old_helper(x: np.ndarray, max_lag: int) -> tuple[np.ndarray, np.ndarray]:

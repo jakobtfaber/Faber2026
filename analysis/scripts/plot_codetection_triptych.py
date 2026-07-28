@@ -61,9 +61,9 @@ OUT_DEFAULT = ROOT / "figures" / "codetection_triptych"
 CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 PAD_FLOOR_MS = 1.5
-TOA_RESULTS = ANALYSIS_ROOT / "campaigns" / "crossmatching" / "toa_crossmatch_results.json"
+TOA_RESULTS = ANALYSIS_ROOT / "associations" / "studies" / "crossmatching" / "toa_crossmatch_results.json"
 TOA_FIXTURE = (
-    ANALYSIS_ROOT / "campaigns" / "crossmatching" / "notebook_reproduction_fixture.json"
+    ANALYSIS_ROOT / "associations" / "studies" / "crossmatching" / "notebook_reproduction_fixture.json"
 )
 K_DM_S_MHZ2 = 4.148808e3
 

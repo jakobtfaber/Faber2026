@@ -40,7 +40,7 @@ import rm_cluster_repartition as rcr  # noqa: E402
 from workspace import manuscript_root  # noqa: E402
 
 ROOT = manuscript_root()
-REGISTRY = ANALYSIS_ROOT / "campaigns/foregrounds/data/intervening_census_registry.csv"
+REGISTRY = ANALYSIS_ROOT / "foregrounds/studies/census/data/intervening_census_registry.csv"
 
 
 def test_registry_row_matches_pins():

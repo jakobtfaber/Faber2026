@@ -79,8 +79,8 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function main() {
   // Load 12 FRB co-detection sightline definitions
-  const burstsCsvPath = path.join(__dirname, '../campaigns/foregrounds/data/frozen_census/bursts.csv');
-  const registryCsvPath = path.join(__dirname, '../campaigns/foregrounds/data/intervening_census_registry.csv');
+  const burstsCsvPath = path.join(__dirname, '../foregrounds/studies/census/data/frozen_census/bursts.csv');
+  const registryCsvPath = path.join(__dirname, '../foregrounds/studies/census/data/intervening_census_registry.csv');
 
   const burstsLines = fs.readFileSync(burstsCsvPath, 'utf-8').trim().split('\n');
   const bursts = burstsLines.slice(1).map(l => {

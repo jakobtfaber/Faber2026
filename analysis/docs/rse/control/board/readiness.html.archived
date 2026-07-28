@@ -597,7 +597,7 @@
     <li><span class="dot d-ready"></span><span class="tid">F4</span><span class="desc">Referee-mode full read-through <small>structural pass on intro/observations/toa/budget can run now; full pass after F1</small></span><span class="st s-ready">partial now</span></li>
     <li><span class="dot d-blocked"></span><span class="tid">F5</span><span class="desc">Line-level prose polish <small>after F3/F4 triage</small></span><span class="st s-blocked">after F3/F4</span></li>
     <li><span class="dot d-ready"></span><span class="tid">F6</span><span class="desc">Co-author list draft <small>from Law2024 (DSA-110) + CHIME/FRB 2018 author overlap, for your pruning; then typeset auth.tex</small></span><span class="st s-ready">startable</span></li>
-    <li><span class="dot d-good"></span><span class="tid">F7</span><span class="desc">codetections_polarization/ <small>working choice: companion-paper materials, intentionally parked, no action — revisable</small></span><span class="st s-good">working choice</span></li>
+    <li><span class="dot d-good"></span><span class="tid">F7</span><span class="desc">polarization/studies/codetections/ <small>working choice: companion-paper materials, intentionally parked, no action — revisable</small></span><span class="st s-good">working choice</span></li>
   </ul>
 </div>
 

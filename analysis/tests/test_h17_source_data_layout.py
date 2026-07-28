@@ -5,8 +5,9 @@ import sys
 
 SCRIPT = (
     Path(__file__).parents[1]
-    / "campaigns"
-    / "scattering-refit-2026-06"
+    / "scattering"
+    / "studies"
+    / "joint-refits"
     / "baseband_recovery"
     / "upchannelize_chime.py"
 )

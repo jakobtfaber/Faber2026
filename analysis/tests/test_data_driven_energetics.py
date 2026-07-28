@@ -6,11 +6,12 @@ from pathlib import Path
 import pytest
 
 HERE = Path(__file__).resolve().parents[1]
-CORE_PATH = HERE / "campaigns" / "burst_energies" / "energetics_core.py"
+STUDY_ROOT = HERE / "energetics" / "studies" / "burst-energies"
+CORE_PATH = STUDY_ROOT / "energetics_core.py"
 SPEC = importlib.util.spec_from_file_location("energetics_core", CORE_PATH)
 CORE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(CORE)
-VERIFY_PATH = HERE / "campaigns" / "burst_energies" / "verify_data_driven_energies.py"
+VERIFY_PATH = STUDY_ROOT / "verify_data_driven_energies.py"
 VERIFY_SPEC = importlib.util.spec_from_file_location("verify_data_driven_energies", VERIFY_PATH)
 VERIFY = importlib.util.module_from_spec(VERIFY_SPEC)
 VERIFY_SPEC.loader.exec_module(VERIFY)

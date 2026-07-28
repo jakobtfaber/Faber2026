@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from campaigns.flux_cal import calibrated_band_integral_jy_ms_hz, radiometer_sigma_jy
+from energetics.methods.flux_cal import calibrated_band_integral_jy_ms_hz, radiometer_sigma_jy
 
 
 def test_sigma_jy_analytic():
@@ -28,7 +28,7 @@ def test_band_integral_flat_oracle():
 
 def test_sn_spectrum_synthetic(tmp_path):
     # synthetic (n_freq, n_time) S/N data: unit noise + a centred Gaussian pulse on every channel
-    from campaigns.flux_cal import sn_spectrum_from_npy
+    from energetics.methods.flux_cal import sn_spectrum_from_npy
 
     rng = np.random.default_rng(0)
     nf, nt = 64, 512
@@ -47,7 +47,7 @@ def test_sn_spectrum_synthetic(tmp_path):
 
 
 def test_dsa_sigma_jy_constant_at_boresight():
-    from campaigns.flux_cal import dsa_sigma_jy
+    from energetics.methods.flux_cal import dsa_sigma_jy
 
     freq_hz = np.linspace(1.311e9, 1.499e9, 32)
     dnu_hz, dt_s = 30517.578, 1.31072e-4
@@ -65,7 +65,7 @@ def test_dsa_sigma_jy_constant_at_boresight():
 
 
 def test_dsa_beam_offset_is_dec_difference():
-    from campaigns.flux_cal import dsa_beam_offset
+    from energetics.methods.flux_cal import dsa_beam_offset
 
     # transit geometry: same-RA boresight -> separation is exactly the dec difference
     theta, phi = dsa_beam_offset(dec_src=70.31, dec_pointing=72.0)
@@ -73,7 +73,7 @@ def test_dsa_beam_offset_is_dec_difference():
 
 
 def test_burst_epoch_position_from_yaml():
-    from campaigns.flux_cal import burst_epoch_position
+    from energetics.methods.flux_cal import burst_epoch_position
 
     mjd, ra, dec = burst_epoch_position("casey")
     assert abs(mjd - 60369.371) < 1e-3
@@ -98,7 +98,7 @@ SAMPLE = [
 
 def test_dsa_pointing_csv_and_offsets():
     # every sample burst has a pointing Dec near the DSA survey strip; offset is within the beam
-    from campaigns.flux_cal import burst_epoch_position, dsa_beam_offset, dsa_pointing_dec
+    from energetics.methods.flux_cal import burst_epoch_position, dsa_beam_offset, dsa_pointing_dec
 
     for n in SAMPLE:
         pdec = dsa_pointing_dec(n)
@@ -116,7 +116,7 @@ def test_dsa_fluence_matches_catalog_scale():
     # not equality. Guards against re-introducing the per-element-SEFD ~100x error.
     import pytest
 
-    from campaigns.flux_cal import _dsa_burst_config, dsa_band_fluence_jy_ms_hz
+    from energetics.methods.flux_cal import _dsa_burst_config, dsa_band_fluence_jy_ms_hz
 
     CATALOG = {"zach": 16.2, "whitney": 26.2, "oran": 13.2}  # Law+2024 (arXiv:2307.03344) Table 1
     band_hz = 1.499e9 - 1.311e9
@@ -136,7 +136,7 @@ def test_joint_band_fluence_matches_catalog_scale():
     # noise_std~0 blow the integral up by orders of magnitude).
     import pytest
 
-    from campaigns.flux_cal import _band_burst_config, joint_band_fluence_jy_ms_hz
+    from energetics.methods.flux_cal import _band_burst_config, joint_band_fluence_jy_ms_hz
 
     CATALOG = {"zach": 16.2, "whitney": 26.2, "oran": 13.2}  # Law+2024 (arXiv:2307.03344) Table 1
     band_hz = 1.499e9 - 1.311e9
@@ -152,10 +152,16 @@ def test_dsa_sefd_csv_present_and_sane():
     import csv
     from pathlib import Path
 
-    from campaigns.flux_cal import load_dsa_sefd
+    from energetics.methods.flux_cal import load_dsa_sefd
 
-    p = Path(__file__).parents[1] / "campaigns" / "burst_energies" / "dsa_sefd.csv"
-    assert p.exists(), "run campaigns/burst_energies/fetch_dsa_sefd.py"
+    p = (
+        Path(__file__).parents[1]
+        / "energetics"
+        / "studies"
+        / "burst-energies"
+        / "dsa_sefd.csv"
+    )
+    assert p.exists(), "run energetics/studies/burst-energies/fetch_dsa_sefd.py"
     rows = list(csv.DictReader(p.open()))
     assert rows and {"burst", "mjd", "sefd_jy", "source"} <= set(rows[0])
     for r in rows:

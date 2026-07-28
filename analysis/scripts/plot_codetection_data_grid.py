@@ -13,7 +13,7 @@ on-pulse spectrum marginal on the right; RFI-excised (zapped/flat) channels are
 NaN-masked and render in a uniform gray in every panel. No model or residual
 values are drawn. Before display averaging, both native-resolution products
 are re-dedispersed from their filename-stem DMs to the adopted CHIME
-phase-coherence DM in ``analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv``.
+phase-coherence DM in ``analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv``.
 The time axes retain the measured-profile convention supplied by
 ``bands_archival``: DSA-110's observed peak is at zero and CHIME/FRB is placed
 with the recorded measured peak offset. No scattering-model correction or
@@ -54,7 +54,7 @@ from plot_codetection_triptych import (
 from workspace import ANALYSIS_ROOT
 
 OUT_DEFAULT = ROOT / "figures" / "codetection_data_grid"
-DM_CATALOG_DEFAULT = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+DM_CATALOG_DEFAULT = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 
 # Block-averaging factors of the native archival grids (f_factor, t_factor):
 # DSA 6144ch/32.768us -> 512ch at native time (1024ch buries the faintest DSA

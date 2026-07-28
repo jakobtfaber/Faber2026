@@ -46,7 +46,7 @@ def test_compiled_tex_has_no_archived_labels_or_inputs():
 
 def test_active_propagation_ledger_is_fail_closed_only():
     active = json.loads(
-        (ANALYSIS_ROOT / "provisional_propagation/results.json").read_text()
+        (ANALYSIS_ROOT / "foregrounds/results/provisional-propagation/results.json").read_text()
     )
     assert active["screen_analysis_status"] == "PENDING_ALPHA4_CONSISTENCY_REFITS"
     assert "foreground_alignment_rows" not in active

@@ -7,7 +7,7 @@ The both-bands-or-nothing gate only emits a summed E_iso when both bands carry a
 
 import numpy as np
 
-import campaigns.calculate_burst_energies as E
+import energetics.methods.calculate_burst_energies as E
 
 
 def test_dsa_calibrated_but_gate_closed(monkeypatch):
@@ -49,7 +49,7 @@ def test_mixed_scalar_and_fluxcal_opens_gate(monkeypatch):
 
 def test_dsa_burst_config_resolves():
     # data-independent: the batch config maps nick -> the canonical .npy name + the fit's binning
-    from campaigns.flux_cal import _dsa_burst_config
+    from energetics.methods.flux_cal import _dsa_burst_config
 
     npy, f_factor, t_factor = _dsa_burst_config("chromatica")
     assert npy.name == "chromatica_dsa_I_272_368_2500b_cntr_bpc.npy"

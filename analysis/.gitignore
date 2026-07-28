@@ -55,7 +55,7 @@ graphify-out/
 # (see scripts/results_library_catalog.yaml). Recreate local symlinks with:
 #   python3 scripts/materialize_results_library.py
 # CI/manuscript-coupled curated files stay tracked; bulk diagnostics do not.
-/dm-joint-phase-v2/results/diagnostics
+/dispersion/results/joint-phase/results/diagnostics
 
 # Knowledge-base SQLite index (rebuild with: make kb-index)
 /.kb/

@@ -25,8 +25,8 @@ import dm_budget_uncertainty as budget
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-BUDGET_DATA = ANALYSIS_ROOT / "campaigns" / "foregrounds" / "budget_table_data.json"
-DM_CATALOG = ANALYSIS_ROOT / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "studies" / "census" / "budget_table_data.json"
+DM_CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 OUT_JSON = ANALYSIS_ROOT / "scripts" / "dm_redshift_inference.json"
 OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_redshift_inference.csv"
 

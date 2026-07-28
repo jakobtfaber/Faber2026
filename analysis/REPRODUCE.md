@@ -73,7 +73,7 @@ conda run -n flits python scripts/<producer.py> [args]
 `flits` is required rather than merely convenient: `plot_ne2025_mw_properties.py`
 imports `healpy`, which is in `../pipeline/environment.yml` but **not** in
 `../pipeline/uv.lock`. The older campaign scripts under
-`../pipeline/analysis/scattering-refit-2026-06/` were also authored against
+`../pipeline/analysis/scattering/studies/joint-refits/` were also authored against
 `flits` and say so in their docstrings. Prefer `uv run` where the script is
 `uv`-clean; every
 row's `run_command` names the environment it actually needs.
@@ -176,11 +176,11 @@ lost when a SLOT is filled.
 
 All six embedded table rows have an explicit provenance path. For the verified
 DM table, the reviewed source is
-`analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` and parity is enforced by
+`analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` and parity is enforced by
 `tests/test_verified_dm_manuscript.py`. For the DM budget,
 the foreground/cosmological columns remain sourced from the pinned pipeline
 JSON, while `DM_obs` is overlaid from
-`analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv` and `DM_host` from
+`analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` and `DM_host` from
 `scripts/dm_budget_uncertainty.csv`. Run the root renderer after regenerating
 the host posterior; do not edit `budget_table.tex` directly.
 
@@ -261,7 +261,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
   CSV from a submodule test, so it is only meaningful for a matched
   (super-repo commit, submodule pin) pair.
 - **foreground** — every numeric object ID's verdict is cross-checked against
-  the census registry `campaigns/foregrounds/data/intervening_census_registry.csv`
+  the census registry `foregrounds/studies/census/data/intervening_census_registry.csv`
   (27/27 registry-resident rows). The table is a curated subset of the registry's
   confirmed+inconclusive systems (refuted candidates omitted; the cluster row's
   ID comes from the WenHan2024 catalog, not the registry).

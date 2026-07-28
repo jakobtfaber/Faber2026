@@ -33,7 +33,7 @@ def test_review_slots_are_unique_and_cover_requested_families() -> None:
     assert families == {
         "gallery",
         "association",
-        "scintillation-summary",
+        "scintillation/results/summary",
         "scintillation-acf",
         "chime-scintillation-acf",
         "joint-model",

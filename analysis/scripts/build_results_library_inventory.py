@@ -614,7 +614,7 @@ def write_index(library: Path, inventory: dict[str, Any], catalog: Catalog) -> N
             "- Overleaf `figures/`, `figure_review/`, `repro_manifest.csv`.",
             "- Small live catalogs (`tau_consistency_catalog.csv`, TeX `exports/`).",
             "- Mixed analysis trees without a results-only carve-out.",
-            "- Analysis **driver scripts** stay under `campaigns/<campaign>/`.",
+            "- Analysis drivers live under the matching scientific subject.",
             "- Raw `.npy` bursts under h17 / `~/Data/Faber2026/dsa110/` (see `DATA_LOCATIONS.md`).",
             "",
         ]

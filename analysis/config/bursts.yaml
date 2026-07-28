@@ -5,7 +5,7 @@
 # DM PROVENANCE (2026-07-13 catalog adoption):
 # This file is NOT the DM source of truth. The dm/dm_err values below mirror the
 # ratified manuscript DM catalog:
-#   Faber2026 analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
+#   Faber2026 analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv
 # (adopted 2026-07-13; CHIME phase-coherence measurements are primary for all 12
 # bursts: dm = adopted_dm, dm_err = adopted_sigma). Update that catalog first,
 # then mirror here.

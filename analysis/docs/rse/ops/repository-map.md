@@ -8,17 +8,16 @@ that every result is currently science-ready. For current trust, consult
 
 ## Ten-minute tour
 
-1. Initialize the two pinned repositories:
+1. Initialize the pinned analysis repository:
 
    ```sh
    git submodule update --init --recursive
    git submodule status
    ```
 
-2. Read the three repository summaries:
+2. Read the repository summaries:
    [manuscript README](../../../../README.md),
-   [analysis README](../../../README.md), and
-   [pipeline context](../../../../pipeline/CONTEXT.md).
+   and [analysis README](../../../README.md).
 3. Read the [current science and custody context](../../../CONTEXT.md).
 4. Find a manuscript-facing product in the
    [results registry](../control/results-registry.toml).
@@ -31,19 +30,19 @@ that every result is currently science-ready. For current trust, consult
    python3 analysis/scripts/kb search "<topic>"
    ```
 
-## Three repositories, one pinned workspace
+## One manuscript repository, one pinned analysis repository
 
 ```mermaid
 flowchart LR
     parentRepo["Faber2026<br/>manuscript authority"]
     analysisRepo["Faber2026-analysis<br/>analysis and research control"]
-    pipelineRepo["dsa110-FLITS<br/>fitting and science code"]
+    flits["dsa110-FLITS<br/>exact package dependency"]
     overleaf["Overleaf<br/>manuscript working copy"]
 
     parentRepo -->|"gitlink pins exact commit"| analysisRepo
-    parentRepo -->|"gitlink pins exact commit"| pipelineRepo
+    analysisRepo -->|"lockfile pins exact commit"| flits
     parentRepo -->|"root TeX and approved assets sync"| overleaf
-    pipelineRepo -->|"fits and structured products"| analysisRepo
+    flits -->|"shared fitting modules"| analysisRepo
     analysisRepo -->|"reviewed tables, figures, claims"| parentRepo
 ```
 
@@ -57,8 +56,7 @@ Authority for manuscript content committed on GitHub `main`:
 - [`figures/`](../../../../figures/): approved embedded assets and the
   declarative figure catalog.
 - [`.gitmodules`](../../../../.gitmodules): repository locations.
-- The `analysis` and `pipeline` gitlinks: exact commits paired with the
-  manuscript.
+- The `analysis` gitlink: the exact analysis commit paired with the manuscript.
 
 Overleaf can compile this layer without either submodule. It is a working copy,
 not a second manuscript authority.
@@ -78,7 +76,7 @@ repository owns:
 - [`tests/`](../../../tests/): scientific, provenance, and state checks.
 - [`figure_review/`](../../../figure_review/): fail-closed figure review state.
 - Top-level result trees such as
-  [`dm-joint-phase-v2/`](../../../dm-joint-phase-v2/): small, tracked analysis
+  [`dispersion/results/joint-phase/`](../../../dispersion/results/joint-phase/): small, tracked analysis
   products.
 - [`repro_manifest.csv`](../../../repro_manifest.csv): broad output-to-producer
   inventory.
@@ -86,32 +84,18 @@ repository owns:
 This layer decides what is understood, reviewed, and eligible for manuscript
 use. Final TeX and embedded figure bytes remain in the parent.
 
-### Pipeline submodule: `pipeline/`
+### Shared fitting dependency: FLITS
 
 The
 [`dsa110-FLITS`](https://github.com/jakobtfaber/dsa110-FLITS)
-repository supplies shared fitting and science code:
-
-- [`scattering/scat_analysis/`](../../../../pipeline/scattering/scat_analysis/):
-  canonical scattering physics and joint fitting.
-- [`scintillation/scint_analysis/`](../../../../pipeline/scintillation/scint_analysis/):
-  autocorrelation and scintillation analysis.
-- [`flits/`](../../../../pipeline/flits/): package wrappers, batch execution,
-  diagnostics, and result storage.
-- [`galaxies/foreground/`](../../../../pipeline/galaxies/foreground/):
-  foreground census and dispersion/scattering budgets.
-- [`crossmatching/`](../../../../pipeline/crossmatching/) and
-  [`dispersion/`](../../../../pipeline/dispersion/): timing association and
-  dispersion-measure workflows.
-- [`simulation/`](../../../../pipeline/simulation/): known-truth simulations.
-- [`analysis/`](../../../../pipeline/analysis/): dated campaigns and their
-  compact tracked outputs; not the shared physics kernel.
-- [`docs/adr/`](../../../../pipeline/docs/adr/): architecture decision records.
+repository supplies shared fitting and science modules. It is not mounted as a
+second submodule. The exact accepted commit is declared and locked by this
+analysis repository. Project-specific methods, configurations, studies, and
+results live under the matching scientific subject here.
 
 FLITS means *Fitting Likelihoods In Time-Frequency Spectra*. Development
-authority is the fork's accepted history; manuscript provenance uses the
-parent's pinned gitlink, which may deliberately lag or differ from the fork's
-current `main`.
+authority is the fork's accepted history; manuscript provenance uses the exact
+analysis lockfile pin, which may deliberately lag the fork's current `main`.
 
 ## Scientific data and claim flow
 
@@ -142,24 +126,22 @@ plot looking plausible does not establish the next layer.
   `~/Data/Faber2026/chimefrb/CHIME_bursts/` and
   `~/Data/Faber2026/dsa110/DSA_bursts/` are replicas. CANFAR is not the
   fit-input authority.
-- Pipeline input locations, hashes, and host roles are described by
-  [`DATA_LOCATIONS.md`](../../../../pipeline/DATA_LOCATIONS.md),
-  [`DATA_SOURCES.md`](../../../../pipeline/DATA_SOURCES.md),
-  [`data-manifest.csv`](../../../../pipeline/data-manifest.csv),
-  [`codetections_manifest.yaml`](../../../../pipeline/codetections_manifest.yaml),
-  and [`machine_inventory.yaml`](../../../../pipeline/machine_inventory.yaml).
-- [`configs/bursts.yaml`](../../../../pipeline/configs/bursts.yaml) is the
-  canonical burst metadata registry used by the pipeline.
+- Input locations, hashes, and host roles are described by
+  [`data/catalog/data-manifest.csv`](../../../data/catalog/data-manifest.csv)
+  and
+  [`data/catalog/machine_inventory.yaml`](../../../data/catalog/machine_inventory.yaml).
+- [`config/bursts.yaml`](../../../config/bursts.yaml) is the canonical burst
+  metadata registry.
 
 Dispersion measure values embedded in derived filenames describe those products;
 they are not values frozen into the raw voltage archive.
 
 ### Measurements, fits, and analyses
 
-Pipeline code and per-run configuration produce fit artifacts. Dated campaign
-drivers belong under [`pipeline/analysis/`](../../../../pipeline/analysis/);
-small manuscript-local transformations and diagnostic products belong in
-`analysis/`.
+FLITS code and subject-local configuration produce fit artifacts. Focused or
+dated runs belong in the relevant subject's `studies/` directory. Current
+canonical inputs, methods, results, figures, and tests use the matching
+subject-level directory.
 
 Bulk campaign bytes do not belong in Git. The local navigable view is
 `~/Data/Faber2026/results-library/`, built from
@@ -197,7 +179,7 @@ fail-closed:
 |---|---|---|
 | Manuscript text, generated tables, approved figures | Faber2026 GitHub `main` | Overleaf and local clones are working copies |
 | Analysis and research-control history | Pinned `Faber2026-analysis` commit | Parent gitlink selects the manuscript pair |
-| Fitting code history | Accepted `jakobtfaber/dsa110-FLITS` history | Parent pipeline gitlink selects the code actually paired with the manuscript |
+| Fitting code history | Exact `dsa110-FLITS` commit in `pyproject.toml` and `uv.lock` | The analysis lock selects the code paired with the manuscript |
 | Raw data | h17: 12 `.h5` + 12 `.fil` | Derived arrays are not raw |
 | Fit-input cubes (24) | h17 intensity cubes | jakob-mbp copies are replicas; not CANFAR |
 | Accepted bulk result bytes | Tracked h17 or local results-library objects | Byte custody does not imply scientific trust |
@@ -236,7 +218,7 @@ flowchart RL
 2. Find the matching `consumed_by` entry in `results-registry.toml`.
 3. Check `current`, `trust`, and `cleared_by`; do not infer trust from prose.
 4. Follow `producing_script`, `inputs`, `artifact`, `external_sources`, and
-   `pipeline_pin`.
+   dependency pin.
 5. Resolve missing or provisional lineage through the named certificate,
    exception, ticket, or clearing record.
 
@@ -258,13 +240,13 @@ flowchart RL
 3. Find its results-registry row and repro-manifest row.
 4. Run the named renderer and cross-repository parity check. A generator checked
    only against its own output cannot detect stale upstream inputs.
-5. Record both the parent commit and any pipeline pin used by the check.
+5. Record the parent, analysis, and FLITS commits used by the check.
 
 ### Fit or campaign product
 
 1. Identify the campaign artifact and its configuration.
-2. Resolve burst identity through `pipeline/configs/bursts.yaml`.
-3. Record the parent pipeline gitlink, not merely the pipeline branch tip.
+2. Resolve burst identity through `config/bursts.yaml`.
+3. Record the locked FLITS commit, not merely the dependency branch tip.
 4. Resolve input hashes through the data manifests and certificates.
 5. Apply the mandatory model/fit and diagnostic review gates.
 6. Promote the result to manuscript use only through the results registry.
@@ -276,11 +258,11 @@ flowchart RL
 | Understand the paper | [`main.tex`](../../../../main.tex), then [`sections/`](../../../../sections/) |
 | Know what is currently citable | [`analysis/CONTEXT.md`](../../../CONTEXT.md), then [`results-registry.toml`](../control/results-registry.toml) |
 | Find current work or open decisions | [Wayfinder map](../wayfinder/map-apj-submission.md), then [`BOARD.md`](../control/BOARD.md) |
-| Understand fitting assumptions | [`pipeline/CONTEXT.md`](../../../../pipeline/CONTEXT.md), then [`pipeline/docs/adr/`](../../../../pipeline/docs/adr/) |
-| Change model physics | [`burstfit.py`](../../../../pipeline/scattering/scat_analysis/burstfit.py) |
+| Understand fitting assumptions | [`CONTEXT.md`](../../../CONTEXT.md), then the relevant subject README and locked FLITS source |
+| Change model physics | The locked `dsa110-FLITS` source, with a reviewed dependency update |
 | Regenerate a manuscript figure | [`figures/catalog.yaml`](../../../../figures/catalog.yaml), then [`figure_flow.py`](../../../scripts/figure_flow.py) |
 | Trace a table or figure | [`repro_manifest.csv`](../../../repro_manifest.csv) and [`REPRODUCE.md`](../../../REPRODUCE.md) |
-| Locate data | [`pipeline/DATA_LOCATIONS.md`](../../../../pipeline/DATA_LOCATIONS.md) and the results-library catalog |
+| Locate data | [`data/catalog/`](../../../data/catalog/) and the results-library catalog |
 | Browse analysis diagnostics | [`analysis/docs/analysis/`](../../analysis/) |
 | Search across code, docs, tickets, history, and references | [`knowledge-base.md`](knowledge-base.md) |
 
@@ -295,19 +277,18 @@ make figures                 # clone-safe manuscript figure set
 make kb-index                # refresh project knowledge base
 ```
 
-Pipeline producers use the lock in `pipeline/uv.lock`:
+Analysis and FLITS producers use this repository's lock:
 
 ```sh
-cd pipeline
+cd analysis
 uv sync
 uv run python <producer.py>
 ```
 
 Analysis producers that require the broader scientific stack use the Conda
-environment specified by `pipeline/environment.yml`:
+environment documented by the producer:
 
 ```sh
-conda env create -f pipeline/environment.yml
 conda run -n flits python analysis/scripts/<producer.py>
 ```
 
@@ -326,9 +307,10 @@ blocks and command/output-path hazards.
 
 ## Common wrong turns
 
-- Do not treat the repository as a monolith. Changes inside either submodule
-  require a commit there and a deliberate parent gitlink update.
-- Do not bump `pipeline/` as a side effect of a manuscript or analysis edit.
+- Changes inside the analysis submodule require a commit there and a deliberate
+  parent gitlink update.
+- Do not change the locked FLITS commit as a side effect of manuscript or
+  analysis work.
 - Do not cite a result because its file exists. Check registry trust and
   clearing evidence.
 - Do not equate a verified byte copy with scientific approval.
@@ -336,8 +318,8 @@ blocks and command/output-path hazards.
 - Do not hand-edit generated state views, generated tables, or promoted figures.
 - Do not assume a successful command wrote the declared output; verify the
   output path and receipt.
-- Do not assume the current pipeline branch is the manuscript pipeline. Read the
-  parent gitlink.
+- Do not assume the current FLITS branch is the manuscript dependency. Read the
+  analysis lock.
 - Do not mix CHIME/FRB products into the DSA-110 local data tree.
 
 ## Keeping this map current

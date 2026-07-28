@@ -25,13 +25,13 @@ addopts = ["-ra", "--strict-config", "--strict-markers"]
 pythonpath = [".", "scripts"]
 testpaths = [
   "tests",
-  "campaigns/scattering-refit-2026-06/test_gate_joint_committed.py",
-  "campaigns/scattering-refit-2026-06/test_posterior_compare.py",
-  "campaigns/scattering-refit-2026-06/test_tail_coverage.py",
-  "campaigns/scattering-refit-2026-06/test_likelihood_equivalence.py",
-  "campaigns/beta_poc/test_compare_routes.py",
-  "campaigns/beta_poc/test_build_verdict.py",
-  "campaigns/chime-scallop-calibration-2026-07-13/test_scallop_injections.py",
+  "scattering/studies/joint-refits/test_gate_joint_committed.py",
+  "scattering/studies/joint-refits/test_posterior_compare.py",
+  "scattering/studies/joint-refits/test_tail_coverage.py",
+  "scattering/studies/joint-refits/test_likelihood_equivalence.py",
+  "scattering/studies/beta-proof-of-concept/test_compare_routes.py",
+  "scattering/studies/beta-proof-of-concept/test_build_verdict.py",
+  "observations/studies/chime-scallop-calibration/test_scallop_injections.py",
 ]
 xfail_strict = true
 markers = [
@@ -45,7 +45,7 @@ extend-exclude = [
   ".git",
   ".pytest_cache",
   ".ruff_cache",
-  "campaigns",
+  "*/studies/*",
 ]
 
 [tool.ruff.lint]

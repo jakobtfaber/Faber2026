@@ -2,7 +2,7 @@
 """Current reference-parity independent and joint CHIME/DSA DM fits.
 
 The provenance-pinned v2 source snapshot remains immutable under
-analysis/dm-joint-phase-v2/code. This current producer requires separate
+analysis/dispersion/results/joint-phase/code. This current producer requires separate
 full-resolution roots for CHIME/FRB and DSA-110.
 """
 
@@ -19,7 +19,7 @@ import numpy as np
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-sys.path.insert(0, str(ANALYSIS_ROOT / "dm-joint-phase-v2/code"))
+sys.path.insert(0, str(ANALYSIS_ROOT / "dispersion/results/joint-phase/code"))
 
 from dispersion.dm_joint_phase import (
     block_average,

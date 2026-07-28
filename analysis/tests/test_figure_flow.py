@@ -239,10 +239,10 @@ def test_figure3_is_staged_from_versioned_catalog_input():
     assert "~/Data/frb-foreground-halos" not in " ".join(figure["producer"]["argv"])
     assert figure["producer"]["argv"][
         figure["producer"]["argv"].index("--halo-csv") + 1
-    ] == "campaigns/foregrounds/data/sightline_halo_grid.csv"
+    ] == "foregrounds/studies/census/data/sightline_halo_grid.csv"
     assert figure["approval_slot"] == "fig3-halo-grid"
     assert figure["inputs"] == [
-        "analysis/campaigns/foregrounds/data/sightline_halo_grid.csv"
+        "analysis/foregrounds/studies/census/data/sightline_halo_grid.csv"
     ]
     assert figure["outputs"] == [
         "analysis/figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"

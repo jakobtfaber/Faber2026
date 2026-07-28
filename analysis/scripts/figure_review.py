@@ -204,7 +204,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
     source_revision = subprocess.check_output(
         ["git", "rev-parse", args.source_revision], cwd=ROOT, text=True
     ).strip()
-    dm_catalog = ROOT / "dm-joint-phase-v2/manuscript_dm_catalog.csv"
+    dm_catalog = ROOT / "dispersion/results/joint-phase/manuscript_dm_catalog.csv"
     with dm_catalog.open(newline="", encoding="utf-8") as stream:
         dm_rows = list(csv.DictReader(stream))
     dm_by_nick = {row["nick"].casefold(): row for row in dm_rows}
@@ -225,7 +225,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
             "joint-fit-roster",
             "joint-fit-adjudication",
         ],
-        "scintillation-summary": [
+        "scintillation/results/summary": [
             "oran-qualification",
             "chime-campaign-validation",
             "chromatica-hi-campaign",
@@ -259,7 +259,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
     provenance_dir = destination / "provenance"
     provenance_dir.mkdir()
     evidence_specs = [
-        ("dm-catalog", "analysis", "dm-joint-phase-v2/manuscript_dm_catalog.csv"),
+        ("dm-catalog", "analysis", "dispersion/results/joint-phase/manuscript_dm_catalog.csv"),
         (
             "joint-render-manifest",
             "analysis",
@@ -318,7 +318,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
         (
             "joint-scint-figure-provenance",
             "analysis",
-            "scintillation-summary/joint_figure_provenance.json",
+            "scintillation/results/summary/joint_figure_provenance.json",
         ),
         (
             "expanded-catalog-build",

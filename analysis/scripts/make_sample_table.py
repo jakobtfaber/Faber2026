@@ -10,8 +10,8 @@ FLITS sources:
   - scattering/scat_analysis/burst_metadata.py::_FALLBACK_TNS -> nickname -> TNS
 
 Analysis sources:
-  - campaigns/crossmatching/toa_crossmatch_results.json -> timing residuals
-  - campaigns/crossmatching/association_report.json -> association verdict inputs
+  - associations/studies/crossmatching/toa_crossmatch_results.json -> timing residuals
+  - associations/studies/crossmatching/association_report.json -> association verdict inputs
 
 Regenerate with: python scripts/make_sample_table.py
 """
@@ -29,9 +29,9 @@ from workspace import ANALYSIS_ROOT
 
 REPO = Path(__file__).resolve().parent.parent
 REGISTRY = ANALYSIS_ROOT / "config" / "bursts.yaml"
-TOA_RESULTS = ANALYSIS_ROOT / "campaigns" / "crossmatching" / "toa_crossmatch_results.json"
+TOA_RESULTS = ANALYSIS_ROOT / "associations" / "studies" / "crossmatching" / "toa_crossmatch_results.json"
 ASSOCIATION_REPORT = (
-    ANALYSIS_ROOT / "campaigns" / "crossmatching" / "association_report.json"
+    ANALYSIS_ROOT / "associations" / "studies" / "crossmatching" / "association_report.json"
 )
 OUT = REPO / "sample_table.tex"
 

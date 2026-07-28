@@ -666,7 +666,7 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
                 if path.startswith("pipeline/") and repository != "pipeline":
                     errors.append(f"{row_id}: {path} must declare repository pipeline")
                 if (
-                    path.startswith(("scripts/", "dm-joint-phase-v2/"))
+                    path.startswith(("scripts/", "dispersion/results/joint-phase/"))
                     and role != "artifact"
                     and repository != "analysis"
                 ):

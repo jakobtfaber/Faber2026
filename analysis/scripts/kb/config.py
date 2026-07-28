@@ -27,8 +27,14 @@ DOCS_GLOBS = [
     (MANUSCRIPT_ROOT, "*.md"),
     (MANUSCRIPT_ROOT, "sections/*.tex"),
     (MANUSCRIPT_ROOT, "main.tex"),
-    (ANALYSIS_ROOT, "campaigns/**/*.md"),
-    (ANALYSIS_ROOT, "campaigns/**/*.tex"),
+    (ANALYSIS_ROOT, "observations/**/*.md"),
+    (ANALYSIS_ROOT, "associations/**/*.md"),
+    (ANALYSIS_ROOT, "dispersion/**/*.md"),
+    (ANALYSIS_ROOT, "scattering/**/*.md"),
+    (ANALYSIS_ROOT, "scintillation/**/*.md"),
+    (ANALYSIS_ROOT, "foregrounds/**/*.md"),
+    (ANALYSIS_ROOT, "energetics/**/*.md"),
+    (ANALYSIS_ROOT, "polarization/**/*.md"),
 ]
 # Paths never indexed by the docs adapter (tickets have their own adapter).
 DOCS_EXCLUDE_PARTS = {
@@ -43,7 +49,6 @@ CODE_DIRS = [
     ANALYSIS_ROOT / "scripts",
     ANALYSIS_ROOT / "tests",
     MANUSCRIPT_ROOT / "figures" / "ax",
-    ANALYSIS_ROOT / "campaigns",
 ]
 CODE_MAX_FILE_BYTES = 200_000
 NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are skipped
@@ -54,8 +59,14 @@ NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are 
 CONFIG_GLOBS = [
     (ANALYSIS_ROOT, "config/**/*.yaml"),
     (ANALYSIS_ROOT, "config/**/*.yml"),
-    (ANALYSIS_ROOT, "campaigns/**/*.yaml"),
-    (ANALYSIS_ROOT, "campaigns/**/*.yml"),
+    (ANALYSIS_ROOT, "observations/**/*.yaml"),
+    (ANALYSIS_ROOT, "associations/**/*.yaml"),
+    (ANALYSIS_ROOT, "dispersion/**/*.yaml"),
+    (ANALYSIS_ROOT, "scattering/**/*.yaml"),
+    (ANALYSIS_ROOT, "scintillation/**/*.yaml"),
+    (ANALYSIS_ROOT, "foregrounds/**/*.yaml"),
+    (ANALYSIS_ROOT, "energetics/**/*.yaml"),
+    (ANALYSIS_ROOT, "polarization/**/*.yaml"),
 ]
 
 # ---------------------------------------------------------------------------

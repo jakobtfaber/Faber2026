@@ -80,7 +80,7 @@ after full tree-manifest comparison:
 
 - `scattering.dm-locked-2026-07-14`: `fit_summaries`
 - `scattering.dm-locked-2026-07-14`: `ppc`
-- `dispersion.dm-joint-phase-v2-parent`: `diagnostics`
+- `dispersion.dispersion/results/joint-phase-parent`: `diagnostics`
 
 ### Exact current authority set
 
@@ -95,7 +95,7 @@ Parent producers and configuration in scope:
 - `scripts/plot_codetection_data_grid.py`
 - `scripts/audit_fig1_frequency_axes.py`
 - `scripts/audit_fig1_residual_drift.py`
-- `analysis/dm-joint-phase-v2/code/scripts/run_joint_dm_phase.py`
+- `analysis/dispersion/results/joint-phase/code/scripts/run_joint_dm_phase.py`
 - `figures/catalog.yaml`
 
 Parent registry and current documents in scope:

@@ -310,7 +310,7 @@ FManuscript reconciliation & polishF1 needs D/E; F3/F4/F6 anytime
 - F5Line-level prose polish after F3/F4 triageafter F3/F4
 - F6Co-author list draft from Law2024 (DSA-110) + CHIME/FRB 2018 author
   overlap, for your pruning; then typeset auth.texstartable
-- F7codetections_polarization/ working choice: companion-paper
+- F7polarization/studies/codetections/ working choice: companion-paper
   materials, intentionally parked, no action — revisableworking choice
 
 GRelease mechanics — lastneeds everything

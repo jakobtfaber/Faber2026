@@ -36,7 +36,7 @@ from dispersion.dm_power_analysis import (  # noqa: E402
 
 CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
-CATALOG_DEFAULT = ANALYSIS_ROOT / "dm-joint-phase-v2/manuscript_dm_catalog.csv"
+CATALOG_DEFAULT = ANALYSIS_ROOT / "dispersion/results/joint-phase/manuscript_dm_catalog.csv"
 ROSTER_DEFAULT = ANALYSIS_ROOT / "scripts/jointmodel_triptych_manifest.yaml"
 
 
