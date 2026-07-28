@@ -47,7 +47,7 @@ def test_r500_convention_reproduces_registry():
 def test_z_vectors_pinned_to_targets():
     from galaxies.foreground.config import TARGETS
 
-    targets_z = sorted(z for (_, _, _, z) in TARGETS if z < 1.0)
+    targets_z = sorted(z for (_, _, _, z) in TARGETS if z is not None and z < 1.0)
     assert sorted(ccp.Z_PRIMARY) == targets_z
     assert len(ccp.Z_PRIMARY) == len(ccp.Z_CONTROL) == 9
     assert max(ccp.Z_PRIMARY) == 0.5535 and 0.510 not in ccp.Z_PRIMARY

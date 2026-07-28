@@ -38,9 +38,9 @@ PINNED = {
     "r500_mpc": 0.729,
     "z_cl": 0.200,
     "z_host": 0.271,
-    # scripts/dm_budget_uncertainty.csv:12-13 (origin/main e8c08cc8; observer frame)
-    "dm_cl_beta_p16_p50_p84": (137.0, 200.0, 265.0),
-    "dm_cl_95ci": (84.0, 328.0),
+    # scripts/dm_budget_uncertainty.csv:12-13 (origin/main fc7c35e; observer frame)
+    "dm_cl_beta_p16_p50_p84": (141.0, 203.0, 266.0),
+    "dm_cl_95ci": (91.0, 327.0),
     # sections/appendix.tex fig:clusters_icm caption (carried mNFW central)
     "dm_cl_mnfw_central": 184.0,
     # codetections_polarization/main.tex:165 (tb:host_props, 2026-07-17 draft)
