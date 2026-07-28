@@ -86,9 +86,9 @@ def test_toa_claims_have_semantic_owners() -> None:
     )
     owners = {claim["line"]: claim["owner_result_id"] for claim in source["claims"]}
     assert owners[22] == "association.sample_table"  # dispersion constant
-    assert owners[150] == "association.pcc_sum"  # P_cc equation
-    assert owners[240] == "association.toa_offset_figure"  # residual diagnostic
-    assert owners[322] == "association.pcc_sum"  # post-figure P_cc claim
+    assert owners[172] == "association.pcc_sum"  # P_cc equation
+    assert owners[268] == "association.toa_offset_figure"  # residual diagnostic
+    assert owners[337] == "association.pcc_sum"  # post-figure P_cc claim
 
 
 def test_association_cards_and_pending_toa_have_disjoint_scope() -> None:
@@ -135,7 +135,7 @@ def test_unrelated_known_claim_owner_fails_semantic_review() -> None:
         for item in registry["prose_source"]
         if item["source"] == "sections/toa.tex"
     )
-    claim = next(item for item in source["claims"] if item["line"] == 150)
+    claim = next(item for item in source["claims"] if item["line"] == 172)
     claim["owner_result_id"] = "energies.burst_energies_table"
     errors = validate_registry(registry, _manuscript_root())
     assert "claim ownership differs from independent semantic review" in errors
