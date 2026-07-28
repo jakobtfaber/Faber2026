@@ -37,8 +37,9 @@ The local materialized `results-library` that combines verified byte replicas
 with navigation links to Git-governed sources. Links never prove custody.
 
 **Fit-input authority**:
-The checksum-manifested 24 derived CHIME/FRB and DSA-110 intensity cubes in
-CANFAR VOSpace. Instrument-specific Mac copies are replicas.
+The 24 derived CHIME/FRB and DSA-110 intensity cubes on h17. Instrument-specific
+copies on jakob-mbp (`~/Data/Faber2026/…`) are replicas. CANFAR is not the
+fit-input authority for this project.
 
 **Byte promotion**:
 The receipted change from working or staging bytes to an authoritative object
@@ -261,6 +262,23 @@ number from the current tables in new prose unless its lane has passed the
 corresponding V ladder and the table/prose states the relevant convention;
 treating a PPC pass under the old campaign as evidence of trust; quoting a
 single undifferentiated DM_obs as if CHIME and DSA agree.
+
+**DM provenance — current vs historical** (adoption record
+`docs/rse/specs/verified-dm-adoption-2026-07-13.md`): the sole authority for
+every manuscript DM is the phase-coherence campaign `dm-joint-phase-v2/`
+(`manuscript_dm_catalog.csv`, full fits `results/fits.json`, diagnostics in
+the results library under `dispersion/dm-joint-phase-v2/`). The uniform rule:
+the CHIME phase-coherence DM is the measurement, the DSA fit the independent
+cross-check; the inverse-variance and random-effects CHIME+DSA combinations
+are retained as sensitivity diagnostics only. Figure 1 displays both bands at
+the adopted DM via a native-resolution residual-DM shift
+(ΔDM = adopted − filename DM). Everything else is **historical** and lives in
+`docs/rse/archive/dm/` (see its README): the inherited DSA catalog DMs and
+their ±0.1 placeholders (the earlier V6 shared-DSA-DM convention referenced
+above predates this adoption), the multi-method battery campaign and its
+memos/decks, the retracted phase-suite v1, and the removed adaptive-arrival
+producer. Rule of thumb: a DM number not traceable to
+`manuscript_dm_catalog.csv` is historical.
 
 **Geometry-adjudicated β** (supersedes "rail-aware citable", owner decision
 2026-07-06; quoting provisions suspended by the fit-trust reset above):
