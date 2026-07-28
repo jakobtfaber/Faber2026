@@ -31,11 +31,11 @@ jobs:
 
       - name: Parity tests
         run: |
-          uv run --project analysis --frozen pytest -q \
+          uv run --project analysis --group test --frozen python -m pytest -q \
             analysis/tests/test_verified_dm_manuscript.py \
             analysis/tests/test_provisional_propagation.py
 
       - name: Emitter output matches the manuscript's committed table
         run: |
-          python analysis/scripts/render_dm_measurements_table.py --check
-          python analysis/scripts/render_budget_table.py --check
+          uv run --project analysis --group test --frozen python analysis/scripts/render_dm_measurements_table.py --check
+          uv run --project analysis --group test --frozen python analysis/scripts/render_budget_table.py --check
