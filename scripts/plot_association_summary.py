@@ -29,10 +29,10 @@ from association_diagnostics import class_aware_chance_probability  # noqa: E402
 
 ANALYSIS = ROOT / "analysis"
 REGISTRY = ANALYSIS / "config" / "bursts.yaml"
-TOA_RESULTS = ANALYSIS / "campaigns/crossmatching/toa_crossmatch_results.json"
-ASSOCIATION_REPORT = ANALYSIS / "campaigns/crossmatching/association_report.json"
+TOA_RESULTS = ANALYSIS / "associations/studies/crossmatching/toa_crossmatch_results.json"
+ASSOCIATION_REPORT = ANALYSIS / "associations/studies/crossmatching/association_report.json"
 OUT = ROOT / "figures" / "association_summary.pdf"
-DM_CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
+DM_CATALOG = ANALYSIS / "dispersion/results/joint-phase/manuscript_dm_catalog.csv"
 
 CLOCK_MS = 1.0
 DM_COLOR = "#0072B2"  # Okabe--Ito blue

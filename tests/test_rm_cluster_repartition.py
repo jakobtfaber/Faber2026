@@ -40,7 +40,7 @@ import rm_cluster_repartition as rcr  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = (
     ROOT
-    / "analysis/campaigns/foregrounds/data/intervening_census_registry.csv"
+    / "analysis/foregrounds/studies/census/data/intervening_census_registry.csv"
 )
 
 
@@ -68,7 +68,9 @@ def test_registry_row_matches_pins():
 def test_budget_csv_bracket_matches_pins():
     rows = {
         row[0]: row[1:]
-        for row in csv.reader((ROOT / "scripts/dm_budget_uncertainty.csv").open())
+        for row in csv.reader(
+            (ROOT / "analysis/scripts/dm_budget_uncertainty.csv").open()
+        )
         if row
     }
     assert tuple(float(x) for x in rows["cluster_95CI_lo_hi"]) == rcr.PINNED["dm_cl_95ci"]

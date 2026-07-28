@@ -27,6 +27,7 @@ figures:
       - analysis/scripts/phineas_halo_crossing_probability.json
     outputs:
       - figures/dm_host_posteriors.pdf
+      - figures/dm_host_posteriors.png
     depends_on: []
     approval_slot: null
 

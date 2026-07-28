@@ -1,5 +1,4 @@
 import json
-import os
 from pathlib import Path
 
 import pytest
@@ -74,9 +73,11 @@ def test_figure_five_uses_verified_dms_without_reclassifying_associations():
 
 def test_committed_report_has_eight_dm_filtered_and_four_position_time_rows():
     root = Path(__file__).resolve().parents[1]
-    pipeline = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", root / "pipeline"))
     report = json.loads(
-        (pipeline / "crossmatching/association_report.json").read_text()
+        (
+            root
+            / "analysis/associations/studies/crossmatching/association_report.json"
+        ).read_text()
     )
     constrained_rows = [
         row
@@ -94,8 +95,8 @@ def test_committed_report_has_eight_dm_filtered_and_four_position_time_rows():
     provenance_fields = {"chance_coincidence_class", "chance_coincidence_f_DM"}
     if any(not provenance_fields <= row.keys() for row in report["bursts"]):
         pytest.xfail(
-            "the rewritten FLITS pin does not yet contain the class-aware "
-            "association lane; re-landing it remains an explicit owner decision"
+            "the canonical analysis report does not yet contain the class-aware "
+            "association fields"
         )
     constrained = [reported_chance_probability(row) for row in constrained_rows]
     unconstrained = [reported_chance_probability(row) for row in unconstrained_rows]
