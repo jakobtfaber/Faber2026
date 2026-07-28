@@ -38,6 +38,25 @@ Reaching CANFAR requires a current CADC proxy certificate at `~/.ssl/cadcproxy.p
 (`cadc-get-cert` to refresh). This is only needed to re-derive provenance, never
 for normal analysis.
 
+## Retired path form — do not reintroduce
+
+Earlier records addressed DSA filterbanks as
+`iacobus:/Users/iacobus/Library/Mobile Documents/…/Codetections_DSA_Filterbanks/…`.
+**That form is retired**, though not for the reason it first appears. `iacobus`
+is a real machine — `iacobus-bkp-mbp`, a macOS host on the tailnet at
+100.93.229.114, offline as of 2026-07-24 with a last-seen of three days. The
+paths are dead for two other reasons. First, that staging tree was drained on
+2026-07-13 and moved to `~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/`,
+so nothing sits at the recorded location any more. Second, and more durably: a
+single laptop that is usually asleep is not an acceptable point of access for
+project raw data, whatever its uptime on a given day.
+
+The form must not appear in new provenance records, manifests, fixtures, or
+figure metadata. Where it survives in historical handoffs, journals, migration
+scripts, and machine inventories it is left alone — those describe a migration
+in which that host genuinely participated, and rewriting them would falsify the
+record rather than correct it.
+
 ## Migration ledger
 
 `/data/Faber2026/provenance/h17-source-data-migration-20260721.json`
