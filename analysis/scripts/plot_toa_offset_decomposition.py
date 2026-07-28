@@ -19,21 +19,20 @@ At the current pin every model correction is diagnostic-only, so the canonical
 field is the observed-peak offset and must equal ``peak_measured_offset_ms``.
 The producer enforces that fail-closed invariant rather than reading the
 diagnostic ``model_corrected_offset_ms`` directly. Reads
-pipeline/crossmatching/toa_crossmatch_results.json; deterministic; no external
+campaigns/crossmatching/toa_crossmatch_results.json; deterministic; no external
 data. Run:  conda run -n flits python scripts/plot_toa_offset_decomposition.py
 """
 from __future__ import annotations
 
 import json
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from workspace import manuscript_root
+from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-TOA_RESULTS = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
+TOA_RESULTS = ANALYSIS_ROOT / "campaigns" / "crossmatching" / "toa_crossmatch_results.json"
 OUT = ROOT / "figures" / "toa_offset_decomposition.pdf"
 
 # d(offset)/dDM for a shared DM referred to 400 MHz (ms per pc cm^-3). K_DM in

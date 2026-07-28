@@ -41,7 +41,10 @@ def test_unvalidated_toa_cannot_replace_peak_offset(monkeypatch):
 
     def read_with_promoted_unvalidated_model(path):
         text = original_read_text(path)
-        if path == audit.ROOT / "pipeline/crossmatching/toa_crossmatch_results.json":
+        if path == (
+            audit.ANALYSIS_ROOT
+            / "campaigns/crossmatching/toa_crossmatch_results.json"
+        ):
             import json
 
             rows = json.loads(text)

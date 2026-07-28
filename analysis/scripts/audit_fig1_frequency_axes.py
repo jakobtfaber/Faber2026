@@ -14,13 +14,15 @@ from pathlib import Path
 
 import numpy as np
 
-from workspace import manuscript_root
+from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
 CHIME_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/chimefrb/CHIME_bursts"
 DSA_FULL_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 CHIME_METADATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/upchan_codetections"
-FIXTURE_DEFAULT = ROOT / "pipeline/crossmatching/notebook_reproduction_fixture.json"
+FIXTURE_DEFAULT = (
+    ANALYSIS_ROOT / "campaigns" / "crossmatching" / "notebook_reproduction_fixture.json"
+)
 MANIFEST_DEFAULT = ROOT / "pipeline/data-manifest.csv"
 
 

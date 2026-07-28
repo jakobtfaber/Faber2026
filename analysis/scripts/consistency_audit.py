@@ -127,15 +127,19 @@ def check_toa_correction_gate(findings: list[str]) -> None:
     unvalidated, manuscript-facing timing products must remain on the observed
     peak convention and must not claim that the model offset is primary.
     """
-    results_path = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
+    results_path = (
+        ANALYSIS_ROOT / "campaigns" / "crossmatching" / "toa_crossmatch_results.json"
+    )
     try:
         rows = json.loads(read_text(results_path))
     except (OSError, json.JSONDecodeError) as exc:
-        findings.append(f"{results_path.relative_to(ROOT)}: cannot audit ToA gate: {exc}")
+        findings.append(
+            f"{results_path.relative_to(ANALYSIS_ROOT)}: cannot audit ToA gate: {exc}"
+        )
         return
     if not isinstance(rows, dict) or not rows:
         findings.append(
-            "pipeline/crossmatching/toa_crossmatch_results.json: "
+            "campaigns/crossmatching/toa_crossmatch_results.json: "
             "expected a non-empty object for the ToA gate audit"
         )
         return
@@ -150,12 +154,14 @@ def check_toa_correction_gate(findings: list[str]) -> None:
         peak = row.get("peak_measured_offset_ms")
         if measured is None or peak is None:
             findings.append(
-                f"{results_path.relative_to(ROOT)}: {name} is {status or 'unvalidated'} "
+                f"{results_path.relative_to(ANALYSIS_ROOT)}: "
+                f"{name} is {status or 'unvalidated'} "
                 "but lacks measured_offset_ms or peak_measured_offset_ms"
             )
         elif measured != peak:
             findings.append(
-                f"{results_path.relative_to(ROOT)}: {name} is {status or 'unvalidated'} "
+                f"{results_path.relative_to(ANALYSIS_ROOT)}: "
+                f"{name} is {status or 'unvalidated'} "
                 "but measured_offset_ms does not preserve the observed-peak offset"
             )
 

@@ -1,8 +1,21 @@
 # Plan: one Faber2026 submodule
 
-**Status:** proposed; migration not started
+**Status:** in progress; Phase 0 inventory and the crossmatching artifact move
+started 2026-07-28
 **Decision:** `Faber2026-analysis` becomes the sole submodule of `Faber2026`.
 `dsa110-FLITS` remains a separate reusable package, not a submodule.
+
+The frozen working base is FLITS commit
+`8b87a1a494a9951d230e79bfdd6037f514d6abd1`. The generated path map contains
+all 1,407 tracked paths at that commit. The first moved slice copies nine
+project-specific crossmatching inputs and outputs byte-for-byte into
+`campaigns/crossmatching/`; reusable crossmatching Python code remains in
+FLITS. Historical provenance references keep their original repository paths.
+
+The temporary worktree
+`/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-analysis-single-submodule-20260728`
+must be removed immediately after its contents merge and patch equivalence is
+verified.
 
 ## Desired repository roles
 

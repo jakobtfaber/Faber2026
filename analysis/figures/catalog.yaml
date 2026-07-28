@@ -161,7 +161,7 @@ figures:
         - analysis/scripts/plot_toa_offset_decomposition.py
       cwd: .
     inputs:
-      - pipeline/crossmatching/toa_crossmatch_results.json
+      - campaigns/crossmatching/toa_crossmatch_results.json
     outputs:
       - figures/toa_offset_decomposition.pdf
     depends_on: []
