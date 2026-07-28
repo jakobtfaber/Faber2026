@@ -37,8 +37,9 @@ The local materialized `results-library` that combines verified byte replicas
 with navigation links to Git-governed sources. Links never prove custody.
 
 **Fit-input authority**:
-The checksum-manifested 24 derived CHIME/FRB and DSA-110 intensity cubes in
-CANFAR VOSpace. Instrument-specific Mac copies are replicas.
+The 24 derived CHIME/FRB and DSA-110 intensity cubes on h17. Instrument-specific
+copies on jakob-mbp (`~/Data/Faber2026/…`) are replicas. CANFAR is not the
+fit-input authority for this project.
 
 **Byte promotion**:
 The receipted change from working or staging bytes to an authoritative object
