@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Offline, source-level replay of the 52-row foreground registry.
 
-This verifier intentionally imports no pipeline producer or adjudication code.
+This verifier intentionally imports no census producer or adjudication code.
 It reads only frozen source payloads, owner-approved host evidence, and the
-production CSV files at the pinned pipeline commit.
+production CSV files at the pinned consolidated-analysis commit.
 """
 
 from __future__ import annotations
@@ -21,8 +21,8 @@ from pathlib import Path
 from typing import Any
 
 
-EXPECTED_ANALYSIS_COMMIT = "fe73689cad723db5d68427c61e301157a39cc101"
-EXPECTED_PIPELINE_COMMIT = "c913175e567db70980e5f2745dcdf8f7f3ad9fb4"
+EXPECTED_ANALYSIS_COMMIT = "1512b15ed1403d42fd12962e77690c18dd3eab09"
+EXPECTED_PIPELINE_COMMIT = EXPECTED_ANALYSIS_COMMIT
 
 
 def read_csv_text(text: str) -> list[dict[str, str]]:
@@ -127,14 +127,14 @@ def replay_verdict(row: dict[str, str], source: dict[str, str], strm: dict[str, 
 def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYSIS_COMMIT,
            pipeline_commit: str = EXPECTED_PIPELINE_COMMIT) -> dict[str, Any]:
     errors: list[str] = []
-    data = pipeline / "foregrounds/studies/census/data"
+    census = "foregrounds/studies/census/data"
     specs = {
-        "registry": (pipeline, "foregrounds/studies/census/data/intervening_census_registry.csv"),
-        "provenance": (pipeline, "foregrounds/studies/census/data/candidate_redshift_provenance.csv"),
-        "payloads": (pipeline, "foregrounds/studies/census/data/candidate_redshift_source_payloads_2026-07-22.json"),
-        "strm": (pipeline, "foregrounds/studies/census/data/frozen_census/strm_catalog_rows.csv"),
-        "duplicates": (pipeline, "foregrounds/studies/census/data/census_masses/census_duplicates.csv"),
-        "extensions": (pipeline, "foregrounds/studies/census/data/census_extensions/v4_extension.csv"),
+        "registry": (pipeline, f"{census}/intervening_census_registry.csv"),
+        "provenance": (pipeline, f"{census}/candidate_redshift_provenance.csv"),
+        "payloads": (pipeline, f"{census}/candidate_redshift_source_payloads_2026-07-22.json"),
+        "strm": (pipeline, f"{census}/frozen_census/strm_catalog_rows.csv"),
+        "duplicates": (pipeline, f"{census}/census_masses/census_duplicates.csv"),
+        "extensions": (pipeline, f"{census}/census_extensions/v4_extension.csv"),
         "verdi": (root, "docs/rse/specs/evidence/verdi-host-redshifts-2026-07-22/verdi_host_redshift_comparison.csv"),
         "law": (root, "docs/rse/specs/evidence/law2024-zach-whitney-host-redshifts-2026-07-22/host_redshift_rows.csv"),
         "connor": (root, "docs/rse/specs/evidence/connor2025-whitney-host-redshift-2026-07-22/host_redshift_row.csv"),

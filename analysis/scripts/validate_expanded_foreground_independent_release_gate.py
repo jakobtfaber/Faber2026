@@ -298,14 +298,18 @@ def main(argv: list[str] | None = None) -> int:
         description="Fail-closed independent release gate for expanded foreground catalog and Figure 3."
     )
     parser.add_argument("--gate", type=Path, default=DEFAULT_GATE)
-    parser.add_argument("--pipeline-repo", type=Path, required=True)
-    parser.add_argument("--manuscript-repo", type=Path, required=True)
+    parser.add_argument(
+        "--pipeline-repo",
+        type=Path,
+        help="optional retired-repository replay; omitted for self-contained validation",
+    )
+    parser.add_argument("--manuscript-repo", type=Path)
     args = parser.parse_args(argv)
 
     failures = gate_failures(
         load_gate(args.gate),
-        pipeline_repo=args.pipeline_repo.resolve(),
-        manuscript_repo=args.manuscript_repo.resolve(),
+        pipeline_repo=args.pipeline_repo.resolve() if args.pipeline_repo else None,
+        manuscript_repo=args.manuscript_repo.resolve() if args.manuscript_repo else None,
     )
     if failures:
         print("expanded foreground independent release gate failed:", file=sys.stderr)

@@ -120,9 +120,11 @@ def mutable_repos(tmp_path):
     analysis = tmp_path / "analysis"
     pipeline = tmp_path / "pipeline"
     analysis_commit = _make_repo(
-        analysis, ROOT, "fe73689cad723db5d68427c61e301157a39cc101", ANALYSIS_PATHS
+        analysis, ROOT, "1512b15ed1403d42fd12962e77690c18dd3eab09", ANALYSIS_PATHS
     )
-    pipeline_commit = _make_repo(pipeline, PIPELINE_SOURCE, "HEAD", PIPELINE_PATHS)
+    pipeline_commit = _make_repo(
+        pipeline, PIPELINE_SOURCE, "1512b15ed1403d42fd12962e77690c18dd3eab09", PIPELINE_PATHS
+    )
     return analysis, pipeline, analysis_commit, pipeline_commit
 
 
