@@ -50,9 +50,9 @@ that defines a burst's arrival time, and (iv) the cross-observatory
 absolute-clock systematic. On the DSA-110 side, the archived trigger MJD
 combines an exact integer spectrum counter with a text-serialized elapsed-time
 record whose six-significant-digit precision introduces a rounding of up to
-$\pm5$\,ms at hour-scale acquisition times; a counter-based reconstruction,
-validated against the surviving raw trigger records, removes this rounding to
-a numerical floor of about $1\,\mu$s for all twelve bursts. The residuals
+$\pm5$\,ms at hour-scale acquisition times; the counter arithmetic was
+validated against the surviving-row corpus and then applied to all twelve
+bursts, removing this rounding to a numerical floor of about $1\,\mu$s. The residuals
 tabulated here use the archived catalog timestamps and therefore inherit that
 rounding. On the CHIME side, the timestamp is reconstructed from
 the baseband file's internal time coordinate (native $2.56\,\mu$s sampling),

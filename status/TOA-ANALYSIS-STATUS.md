@@ -1,4 +1,4 @@
-# TOA analysis status
+# Time-of-arrival analysis status
 
 Last updated: July 27, 2026. This is a temporary working summary, not a
 manuscript source or a scientific approval record.
@@ -29,7 +29,7 @@ used in the trigger arithmetic):
 ```text
 counter tick (specnum unit)  = 65.536 microseconds
 search-sample interval       = 4 ticks = 262.144 microseconds
-itime                        = specnum / 4 + 1907
+itime                        = specnum // 4 + 1907
 elapsed time (exact)         = itime * 262.144 microseconds
 ```
 
@@ -37,8 +37,8 @@ The recovery replaces the rounded serialized elapsed-time term with the exact
 integer-counter value, replicating the producer's single-precision
 serialization bit-exactly. It was validated against 150,627 surviving raw
 trigger rows spanning 2022-03 to 2024-02 with zero mismatches, and confirmed
-inside zach's and whitney's own observing runs. The former open gate (runtime
-sample-interval evidence) is closed; the authoritative statement is
+inside zach's and whitney's own observing runs. The former required check
+(runtime sample-interval evidence) is satisfied; the authoritative statement is
 `docs/rse/specs/dsa-trigger-mjd-timing.md` on the Faber2026-analysis `main`
 branch (merged as pull request #154, commit `b34e16c`). Note the local
 `analysis/` checkout currently sits on another work branch
@@ -46,10 +46,10 @@ branch (merged as pull request #154, commit `b34e16c`). Note the local
 tree until the checkout or submodule pin advances; retrieve it meanwhile with
 `git -C analysis show origin/main:docs/rse/specs/dsa-trigger-mjd-timing.md`,
 or read the labeled exported copy at `status/dsa-trigger-mjd-timing.md`.
-Evidence receipts (including the in-run token resolution
+Evidence records (including the in-run token resolution
 `token-ambiguity-inrun-resolution-20260727.md`) live under
 `~/Data/Faber2026/review/dsa-origin-metadata-20260727/`; a labeled exported
-copy of that receipt is at `status/token-ambiguity-inrun-resolution-20260727.md`.
+copy of that record is at `status/token-ambiguity-inrun-resolution-20260727.md`.
 
 **Interpretation:** the trigger-to-raw-data time mapping is accurate at
 roughly the microsecond level (numerical floor about 1 microsecond). A fitted
@@ -117,32 +117,43 @@ Do not run or publish a new cross-match until every event has:
 
 The cross-match output must report the geometric correction, dispersion
 referral, model-fit uncertainty, trigger/frame reconstruction status, and
-absolute-clock status separately. Until the CHIME clock term is quantified,
-report the CHIME–DSA residual as a consistency diagnostic without a fully
-numerical absolute uncertainty or formal significance.
+absolute-clock status separately. Until both observatory-clock ties are
+quantified, or the relative inter-site clock contribution is independently
+bounded, report the CHIME–DSA residual as a consistency diagnostic without a
+fully numerical absolute uncertainty or formal significance.
 
 Current implementation check:
 
 | Requirement | Current state |
 | --- | --- |
-| CHIME H5 identity and checksum | All twelve H5 identities and internal timing records were inspected; the cross-match input schema does not yet carry a file checksum. |
+| CHIME H5 identity and checksum | All twelve canonical H17 paths, byte sizes, and SHA-256 checksums are frozen in `status/chime-dsa-crossmatch-input-readiness.csv`; the current code input schema does not yet carry a checksum. |
 | Dispersion measure | `pipeline/crossmatching/chime_side_inputs.json` carries a DSA value for all twelve events and an independently constrained CHIME value for eight; the run must freeze the selected value and source explicitly. |
 | 400 MHz convention | Implemented as the default in `pipeline/crossmatching/chime_singlebeam.py`. |
 | Formal arrival-time fit uncertainty | Missing from the current CHIME extractor, which returns a smoothed peak sample and native sample interval rather than a model-fit uncertainty. |
 | Recovered DSA trigger time | Verified for all twelve events, but the pinned cross-match inputs still carry the archived rounded values. |
-| Absolute-clock status | Unquantified for CHIME and not represented separately in the current cross-match input or output schema. |
+| Absolute-clock status | The observatory-clock tie is unquantified for both CHIME and DSA and is not represented separately in the current cross-match input or output schema. |
 
 Therefore the next safe work is schema and input-manifest preparation. Running
 the current extractor would reproduce a peak-sample diagnostic, not the
 paper-ready paired arrival-time measurement.
 
+The readiness CSV is an input inventory, not a run file. Its shared DSA
+dispersion measures are labeled as current candidates; every row remains
+`crossmatch_ready=false` until the dispersion-measure source is approved, both
+model fits exist with statistical uncertainties, and the separate clock
+systematics are carried.
+
 ## Remaining required checks
 
-- **DSA (closed 2026-07-27):** the time-step convention is confirmed from the
+- **DSA trigger reconstruction (complete 2026-07-27):** the time-step convention is confirmed from the
   surviving raw trigger rows and in-run records; the microsecond trigger-MJD
   recovery is verified for all twelve bursts. Remaining DSA item: the pinned
   cross-match products still use the archived (uncorrected) trigger MJDs;
   re-pointing them at the recovered values is a separate analysis step.
-- **CHIME:** recover and match the CANFAR acquisition/timing provenance before
-  quoting a certified absolute clock uncertainty. Never substitute the native
-  2.56-microsecond sample interval (or zero) for that unquantified systematic.
+- **CHIME event timing:** recover and match the CANFAR acquisition/timing
+  provenance to the archived event and processing version.
+- **Cross-observatory clock calibration:** neither observatory clock's tie to
+  UTC is independently quantified here. Before quoting a fully numerical
+  absolute cross-match uncertainty, quantify both ties or independently bound
+  their relative contribution. Never substitute a native sample interval (or
+  zero) for an unquantified clock systematic.
