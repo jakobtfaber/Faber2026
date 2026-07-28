@@ -90,7 +90,10 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - The local Overleaf working copy is retired (2026-07-25); Overleaf pulls from GitHub in the browser. Land manuscript changes through the normal branch → PR flow in the canonical repos, and still respect Overleaf/GitHub merge order so prose sync does not revert git-only edits.
 - Project data and provenance span jakob-mbp, h17, and CANFAR/arc; treat machine inventory as part of provenance, not only “active data stores.”
 - Session handoffs, science-gate plans, and RSE specs live under `docs/rse/specs/` as markdown-only workflow artifacts; PNGs and other binaries belong elsewhere (e.g. decks, figures, verify trees).
-- Raw CHIME data means only the twelve singlebeam voltage `.h5` files on h17; intensity and upchannelized `.npy` products are derived, not raw.
+- Raw data on h17 are twelve CHIME/FRB singlebeam voltage `.h5` files plus
+  twelve DSA-110 Stokes-I `.fil` files; intensity cubes are derived input
+  products (authority on h17; jakob-mbp copies under `~/Data/Faber2026/`),
+  not raw. CANFAR is not the fit-input authority.
 - Dispersion measures are not frozen in those raw voltage `.h5` files; they are applied when dynamic-spectrum products are built, so derived CANFAR vs h17 arrays can disagree on dispersion measure without the raw archive being wrong.
 - Dual-band codetection / dynamic-spectrum figures label the bands as CHIME/FRB and DSA-110; CHIME–DSA time alignment depends on measured ToA offsets (e.g. `geometric_delay_ms`), not arbitrary visual spacing.
 - Author-facing manuscript pulse / Running Notes live as standalone local HTML under `docs/rse/ops/running-notes/` (also at `https://faber2026.jakobtfaber.com`; not a Cursor canvas).

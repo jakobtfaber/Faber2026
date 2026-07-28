@@ -134,13 +134,14 @@ plot looking plausible does not establish the next layer.
 
 ### Raw and derived inputs
 
-- Raw CHIME/FRB data for this project are the twelve single-beam voltage HDF5
-  files on h17. Intensity and upchannelized NumPy products are derived.
-- The fit-input authority is the checksum-manifested set of 24 derived
-  CHIME/FRB and DSA-110 intensity cubes in CANFAR VOSpace.
-- Local fit copies live under
+- Raw data on h17 are twelve CHIME/FRB single-beam voltage HDF5 (`.h5`) files
+  plus twelve DSA-110 Stokes-I filterbank (`.fil`) files. Intensity and
+  upchannelized NumPy products are derived, not raw.
+- Input data products (fit inputs) are the 24 derived CHIME/FRB and DSA-110
+  intensity cubes on h17. Copies on jakob-mbp under
   `~/Data/Faber2026/chimefrb/CHIME_bursts/` and
-  `~/Data/Faber2026/dsa110/DSA_bursts/`. They are replicas.
+  `~/Data/Faber2026/dsa110/DSA_bursts/` are replicas. CANFAR is not the
+  fit-input authority.
 - Pipeline input locations, hashes, and host roles are described by
   [`DATA_LOCATIONS.md`](../../../../pipeline/DATA_LOCATIONS.md),
   [`DATA_SOURCES.md`](../../../../pipeline/DATA_SOURCES.md),
@@ -197,8 +198,8 @@ fail-closed:
 | Manuscript text, generated tables, approved figures | Faber2026 GitHub `main` | Overleaf and local clones are working copies |
 | Analysis and research-control history | Pinned `Faber2026-analysis` commit | Parent gitlink selects the manuscript pair |
 | Fitting code history | Accepted `jakobtfaber/dsa110-FLITS` history | Parent pipeline gitlink selects the code actually paired with the manuscript |
-| Raw CHIME/FRB voltage archive | h17 scope named in project provenance | Derived arrays are not raw |
-| Fit-input cubes | Checksum-manifested CANFAR VOSpace set | Mac files are replicas |
+| Raw data | h17: 12 `.h5` + 12 `.fil` | Derived arrays are not raw |
+| Fit-input cubes (24) | h17 intensity cubes | jakob-mbp copies are replicas; not CANFAR |
 | Accepted bulk result bytes | Tracked h17 or local results-library objects | Byte custody does not imply scientific trust |
 | Manuscript-facing scientific trust | `results-registry.toml` plus clearing evidence | A trusted claim may point to bytes outside Git |
 | Local results navigation | `~/Data/Faber2026/results-library/` | A view, not an authority |
