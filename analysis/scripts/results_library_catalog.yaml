@@ -21,9 +21,9 @@ trust_legend:
 
 entries:
   # --- scattering ---
-  - id: scattering.dm-locked-2026-07-14
+  - id: scattering.dm-locked-refit
     domain: scattering
-    slot: scattering/2026-07-14_dm-locked
+    slot: scattering/dm-locked-refit
     trust: provisional
     repo: pipeline
     mode: materialize
@@ -34,11 +34,11 @@ entries:
     destinations:
       analysis/scattering-dm-locked-2026-07-14/results/fit_summaries: fit_summaries
       analysis/scattering-dm-locked-2026-07-14/results/ppc: ppc
-    notes: Bulk fit_summaries/ppc in library; fit_adjudication.csv stays git-tracked for CI.
+    notes: DM-locked scattering refit campaign (2026-07-14). Bulk fit_summaries/ppc in library; fit_adjudication.csv stays git-tracked for CI.
 
-  - id: scattering.refit-2026-06
+  - id: scattering.refit-superseded
     domain: scattering
-    slot: scattering/2026-06_refit
+    slot: scattering/refit-superseded
     trust: revoked-2026-07-06
     repo: pipeline
     mode: link_only
@@ -46,11 +46,11 @@ entries:
     sources:
       - analysis/scattering-refit-2026-06/_a1_fits
       - analysis/scattering-refit-2026-06/joint_json
-    notes: Small JSON stays git-tracked for FLITS CI; library link_only for nav.
+    notes: 2026-06 scattering refit, superseded at the 2026-07-06 trust reset. Small JSON stays git-tracked for FLITS CI; library link_only for nav.
 
-  - id: scattering.beta-campaign-2026-07
+  - id: scattering.beta-campaign
     domain: scattering
-    slot: scattering/2026-07_beta-campaign
+    slot: scattering/beta-campaign
     trust: revoked-2026-07-06
     repo: pipeline
     mode: link_only
@@ -58,7 +58,7 @@ entries:
     sources:
       - analysis/beta_campaign/fits
       - analysis/beta_campaign/beta_campaign_verdicts.json
-    notes: Small JSON stays git-tracked for FLITS CI; full posteriors under $FLITS_RUNS.
+    notes: 2026-07 beta (free spectral index) scattering campaign, revoked at the 2026-07-06 trust reset. Small JSON stays git-tracked for FLITS CI; full posteriors under $FLITS_RUNS.
 
   - id: scattering.jointmodel-latest
     domain: scattering
@@ -74,16 +74,16 @@ entries:
     notes: Three current morphology-audit candidates; latest is not fit acceptance or manuscript adoption.
 
   # --- scintillation ---
-  - id: scintillation.dsa-lorentzian-2026-07-07
+  - id: scintillation.dsa-lorentzian-first-pass
     domain: scintillation
-    slot: scintillation/2026-07-07_dsa-lorentzian
+    slot: scintillation/dsa-lorentzian-first-pass
     trust: provisional
     repo: pipeline
     mode: materialize
     result_ids: []
     sources:
       - analysis/scintillation-dsa-lorentzian-2026-07-07/results
-    notes: Library holds full results/; oran_qualified/ stays git-tracked for figure approval CI.
+    notes: DSA Lorentzian ACF first-pass campaign (2026-07-07; demoted to first-pass 2026-07-26, from-raw re-do chartered as scint-redo-01). Library holds full results/; oran_qualified/ stays git-tracked for figure approval CI.
 
   - id: scintillation.chime
     domain: scintillation
@@ -96,28 +96,53 @@ entries:
       - analysis/chime-scintillation
     notes: Archival mixed experiments/docs predating the finalized objective-window campaign.
 
-  - id: scintillation.chime-window-2026-07-17
+  - id: scintillation.window-tuning-first-pass
     domain: scintillation
-    slot: scintillation/2026-07-17_window-tuning
+    slot: scintillation/window-tuning-first-pass
     trust: mixed
     repo: pipeline
     mode: link_only
     result_ids: []
     sources:
       - analysis/window-tuning-campaign-2026-07-17/results
-    notes: "PR #192 closed the 24-product campaign; chromatica_hi is a measurement and the other 23 records remain diagnostic only. The compact result tree is git-tracked."
+    notes: "Objective-window ACF tuning campaign (2026-07-17; demoted to first-pass 2026-07-26). PR #192 closed the 24-product campaign; chromatica_hi is a measurement and the other 23 records remain diagnostic only. The compact result tree is git-tracked."
 
   # --- dispersion ---
+  - id: dispersion.dm-phase
+    domain: dispersion
+    slot: dispersion/dm-phase
+    trust: mixed
+    repo: external
+    mode: link_only
+    result_ids: []
+    sources: []
+    external_paths:
+      - path: ~/Data/Faber2026/results-library/dispersion/dm-phase
+    notes: Phase-coherent DM runs (dm_phase_* run dirs) plus dm_power result JSONs. Split 2026-07-28 from the former dispersion/pipeline-results-root slot (a 2026-07-15 snapshot of FLITS results/; the live repo results/ has since diverged). Smoke runs are diagnostic; dm_power products are campaign outputs — inspect before citing.
+
+  - id: dispersion.dm-budget-sightlines
+    domain: dispersion
+    slot: dispersion/dm-budget-sightlines
+    trust: mixed
+    repo: external
+    mode: link_only
+    result_ids: []
+    sources: []
+    external_paths:
+      - path: ~/Data/Faber2026/results-library/dispersion/dm-budget-sightlines
+    notes: Per-burst foreground-galaxy sightline products (*_galaxies.csv, *_mass_profile.png, *_sightline.png), galaxy_mass_profiles.png, galaxy_sightlines_report.html, dmhost_posterior/, sightline DM/scattering budget summaries, and survey/search coverage tables. Split 2026-07-28 from the former dispersion/pipeline-results-root slot (2026-07-15 FLITS results/ snapshot).
+
   - id: dispersion.pipeline-results-root
     domain: dispersion
     slot: dispersion/pipeline-results-root
     trust: mixed
-    repo: pipeline
-    mode: materialize
+    repo: external
+    mode: link_only
     result_ids: []
-    sources:
-      - results
-    notes: Bulk dm_phase/etc in library; joint_fit_summary.md stays git-tracked for CI.
+    sources: []
+    external_paths:
+      - path: ~/Data/Faber2026/results-library/dispersion/pipeline-results-root
+    notes: Residual of the 2026-07-15 FLITS results/ snapshot after the 2026-07-28 split (README.md and joint_fit_summary.md only; the live git-tracked copies remain in FLITS results/). DM-phase runs moved to dispersion/dm-phase; sightline/budget products moved to dispersion/dm-budget-sightlines; figure manifests moved to review-ledger/dispersion-figure-manifests.
 
   - id: dispersion.dm-joint-phase-v2-parent
     domain: dispersion
@@ -177,16 +202,40 @@ entries:
       - analysis/provisional_propagation
     notes: Active ledger is screen-readiness only and fails closed pending fixed-index refits.
 
-  - id: archive.outdated-science-2026-07-17
+  - id: archive.outdated-science
     domain: archive
-    slot: archive/2026-07-17-outdated-science
+    slot: archive/outdated-science
     trust: archive
     repo: parent
     mode: link_only
     result_ids: []
     sources:
       - analysis/.archive/outdated-science/2026-07-17
-    notes: Exact obsolete science bytes retained for re-examination; never a current claim source.
+    notes: Exact obsolete science bytes (archived 2026-07-17) retained for re-examination; never a current claim source.
+
+  - id: archive.scintillation-acf-review
+    domain: archive
+    slot: archive/scintillation-acf-review
+    trust: archive
+    repo: external
+    mode: link_only
+    result_ids: []
+    sources: []
+    external_paths:
+      - path: ~/Data/Faber2026/results-library/archive/scintillation-acf-review
+    notes: Scintillation ACF review materials (2026-07-13) predating the objective-window campaign; library-resident bytes, cataloged 2026-07-28.
+
+  - id: historical.pipeline-diagnostics
+    domain: historical
+    slot: historical/pipeline-diagnostics
+    trust: diagnostic_only
+    repo: external
+    mode: link_only
+    result_ids: []
+    sources: []
+    external_paths:
+      - path: ~/Data/Faber2026/results-library/historical/pipeline-diagnostics
+    notes: Pipeline diagnostic captures (2026-07-20); library-resident bytes, cataloged 2026-07-28. Diagnostics only, never claim inputs.
 
   - id: foreground.v3-energetics
     domain: foreground
@@ -234,6 +283,18 @@ entries:
     sources:
       - figure_review
     notes: Approval receipts + slots.
+
+  - id: review.dispersion-figure-manifests
+    domain: review-ledger
+    slot: review-ledger/dispersion-figure-manifests
+    trust: archive
+    repo: external
+    mode: link_only
+    result_ids: []
+    sources: []
+    external_paths:
+      - path: ~/Data/Faber2026/results-library/review-ledger/dispersion-figure-manifests
+    notes: figures.manifest.json + figures.review.json from the 2026-07-15 FLITS results/ snapshot, moved here in the 2026-07-28 pipeline-results-root split. Historical copies; the live figure-approval ledger is review-ledger/figure_review.
 
   # --- compute scratch (external) ---
   - id: compute.flits-runs-default

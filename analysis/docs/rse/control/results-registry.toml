@@ -44,9 +44,6 @@ updated = "2026-07-22"  # pass 7: exact nested schemas, commit-path proof, check
 # Numeric claims are owned individually. New claims receive the deliberate
 # __SELECT_OWNER__ sentinel and fail validation until reviewed.
 
-# Numeric claims are owned individually. New claims receive the deliberate
-# __SELECT_OWNER__ sentinel and fail validation until reviewed.
-
 [[prose_source]]
 source = "main.tex"
 claims = [
@@ -265,9 +262,9 @@ claims = [
   { fingerprint = "d1e065d504da86cb", occurrence = 1, line = 28, text = "where $\\mathbf{p}_1$ and $\\mathbf{p}_2$ are the GCRS position vectors of CHIME", owner_result_id = "association.sample_table" },
   { fingerprint = "8779e7e306cbe3f9", occurrence = 1, line = 29, text = "and DSA-110, respectively, and $\\hat{\\mathbf{s}}$ is the unit vector from Earth", owner_result_id = "association.sample_table" },
   { fingerprint = "db58c144ae8177b4", occurrence = 1, line = 44, text = "baseband frame time; the DSA-110 TOA is the catalog arrival time (MJD, UTC)", owner_result_id = "association.sample_table" },
-  { fingerprint = "7d55cdc72cc4c317", occurrence = 1, line = 50, text = "absolute-clock systematic. On the DSA-110 side, the archived trigger MJD", owner_result_id = "association.sample_table" },
-  { fingerprint = "c1055f68b8e221ee", occurrence = 1, line = 55, text = "bursts, removing this rounding to a numerical floor of about $1\\,\\mu$s. The residuals", owner_result_id = "association.sample_table" },
-  { fingerprint = "92404a0406810e10", occurrence = 1, line = 58, text = "the baseband file's internal time coordinate (native $2.56\\,\\mu$s sampling),", owner_result_id = "association.sample_table" },
+  { fingerprint = "7d55cdc72cc4c317", occurrence = 1, line = 50, text = "absolute-clock systematic. On the DSA-110 side, the archived trigger MJD", owner_result_id = "association.toa_offset_figure" },
+  { fingerprint = "c1055f68b8e221ee", occurrence = 1, line = 55, text = "bursts, removing this rounding to a numerical floor of about $1\\,\\mu$s. The residuals", owner_result_id = "association.toa_offset_figure" },
+  { fingerprint = "92404a0406810e10", occurrence = 1, line = 58, text = "the baseband file's internal time coordinate (native $2.56\\,\\mu$s sampling),", owner_result_id = "association.toa_offset_figure" },
   { fingerprint = "94fa0062c0b48c25", occurrence = 1, line = 66, text = "$\\nu_{\\rm ref}=400$\\,MHz through Eq.~ with the shared", owner_result_id = "association.sample_table" },
   { fingerprint = "02423b645bbe3ddf", occurrence = 1, line = 80, text = "\\subsubsection{Time-of-arrival definition: peak sample versus model \\texorpdfstring{$t_0$}{t0}}", owner_result_id = "association.sample_table" },
   { fingerprint = "d2cb5878b70b255f", occurrence = 1, line = 89, text = "$\\sim0.6$\\,GHz) is broadened far more than DSA-110 ($\\sim1.4$\\,GHz), so the two", owner_result_id = "association.sample_table" },
