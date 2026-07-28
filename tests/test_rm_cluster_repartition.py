@@ -40,7 +40,7 @@ import rm_cluster_repartition as rcr  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = (
     ROOT
-    / "analysis/campaigns/foregrounds/data/intervening_census_registry.csv"
+    / "analysis/foregrounds/studies/census/data/intervening_census_registry.csv"
 )
 
 
