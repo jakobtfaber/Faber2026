@@ -86,7 +86,7 @@ catalog entries represent distinct gas halos.
 \section{Forward-modeled host dispersion measure}
 \label{app:host-forward-model}
 
-The host term of Table~\ref{tab:budget} is a forward-modeled posterior rather
+The host term of Table~\ref{tab:budget} is an induced residual distribution rather
 than an arithmetic residual (Section~\ref{sec:dm}). For each redshift-constrained
 sightline we evaluate the foreground probability densities on a uniform
 $0.1\,\mathrm{pc\,cm^{-3}}$ grid and compute
@@ -113,7 +113,7 @@ the \citet{Macquart2020} $p(\Delta)$ form with $\sigma_{\rm DM}=F\,z^{-1/2}$:
 intersection of IGM filaments and sheets rather than by halo Poisson statistics,
 and does not follow the $z^{-1/2}$ scaling \citep{McQuinn2014, James2022}. The
 TNG-300 calibration is tabulated for $z\ge0.1$; for the two sightlines below
-that redshift (FRB~20220207C, FRB~20240203A) we continue $\mu(z)$ along the
+that redshift (FRB~20220207C, FRB~20240203D) we continue $\mu(z)$ along the
 \citet{Macquart2020} redshift dependence,
 $\langle\mathrm{DM_{IGM}}\rangle\propto\int_0^z(1+z')/E(z')\,\mathrm{d}z'$,
 rather than extrapolating the spline, and hold $\sigma$ at its grid-edge value.
@@ -137,10 +137,10 @@ or $30\%$ (cluster) lognormal prior; the individual PDFs are convolved to form
 the Table~\ref{tab:budget} $\mathrm{DM_{int}}$ term. After the census remediation every contributing halo
 carries a vetted empirical mass, so the galaxy columns use the $40\%$ family
 and the assumed-mass factor-$2$ family is currently unexercised. The tabulated
-host posterior uses that convolution directly rather than applying one
+host residual distribution uses that convolution directly rather than applying one
 lognormal smear to the sightline-summed point estimate.
 \end{itemize}
-The resulting posteriors are asymmetric, dominated at higher redshift by the
+The resulting residual distributions are asymmetric, dominated at higher redshift by the
 diffuse cosmic scatter (Figure~\ref{fig:dm_host_posteriors},
 Table~\ref{tab:host-forward-model}). The tabulated $\mathrm{DM_{host}}$ is the
 \emph{observer-frame} residual; the host-frame column is $(1+z)$ times larger and
@@ -160,7 +160,9 @@ sightlines, these host DMs are correspondingly sensitive to that normalization.
 The component PDFs are convolved with FFTs, normalized after each operation,
 and the foreground-sum PDF is reflected about the exact adopted
 $\mathrm{DM_{obs}}$; no Monte-Carlo sampling or kernel-density estimate enters
-the reported posteriors.
+the reported residual distributions. They impose no nonnegative host prior;
+$P(\mathrm{DM_{host}}<0)$ is therefore a foreground-budget tension diagnostic,
+not a literal probability of negative physical host plasma.
 
 For the six sightlines flagged \tablenotemark{u} in Table~\ref{tab:budget} the
 line of sight lies outside the deep-imaging footprints, so the intervening census
@@ -168,17 +170,17 @@ is incomplete and their $\mathrm{DM_{int}}$ is a floor. The cosmic term used her
 is the IGM marginal, which by construction excludes virialized halos; any
 undetected foreground halo on those sightlines is then subtracted by neither the
 cosmic nor the intervening term and is absorbed into the host residual. Their
-tabulated $\mathrm{DM_{host}}$---including the two largest, FRB~20230913A
+tabulated $\mathrm{DM_{host}}$---including the two largest, FRB~20230913G
 ($171\,\mathrm{pc\,cm^{-3}}$) and FRB~20220207C
 ($115\,\mathrm{pc\,cm^{-3}}$)---are therefore \emph{upper limits} on the true host
 contribution, and are marked as such in Table~\ref{tab:host-forward-model} and
 Figure~\ref{fig:dm_host_posteriors}. The three sightlines with deep imaging
 (FRB~20220310F, FRB~20230307A, FRB~20240229A) carry a census complete enough that
 the IGM-marginal cosmic term and $\mathrm{DM_{int}}$ are mutually consistent, and
-their host posteriors are two-sided.
+their host residual distributions are two-sided.
 
 One sightline, FRB~20220310F, carries a median
-posterior marginally below zero with $P(\mathrm{DM_{host}}<0)\simeq0.54$; it
+residual median marginally below zero with $P(\mathrm{DM_{host}}<0)\simeq0.54$; it
 is consistent with a vanishing host contribution, and a small downward shift
 of $f_{\rm IGM}$ within its quoted uncertainty places the median at zero. The
 highest-redshift sightline,
@@ -190,7 +192,7 @@ reproduced by \texttt{scripts/dm\_budget\_uncertainty.py}.
 
 \begin{deluxetable}{lcccc}
 \tabletypesize{\footnotesize}
-\tablecaption{Forward-modeled host-DM posteriors for the nine
+\tablecaption{Induced host-DM residual distributions for the nine
 redshift-constrained sightlines: observer-frame and rest-frame
 [$(1+z)\,\mathrm{DM_{host}}$] median with $16$th--$84$th-percentile interval, and
 $P(\mathrm{DM_{host}}<0)$. Sightlines marked \tablenotemark{u} lie outside the
@@ -207,10 +209,10 @@ FRB 20220207C\tablenotemark{u} & $0.043$ & $115^{+26}_{-32}$ & $120^{+27}_{-34}$
 FRB 20220310F & $0.479$ & $-10^{+87}_{-106}$ & $-14^{+129}_{-158}$ & $0.54$ \\
 FRB 20220506D\tablenotemark{u} & $0.300$ & $42^{+66}_{-81}$ & $55^{+85}_{-106}$ & $0.29$ \\
 FRB 20221113A\tablenotemark{u} & $0.251$ & $90^{+59}_{-74}$ & $113^{+74}_{-93}$ & $0.12$ \\
-FRB 20230307A & $0.271$ & $69^{+81}_{-98}$ & $87^{+104}_{-124}$ & $0.24$ \\
+FRB 20230307A & $0.271$ & $59^{+85}_{-99}$ & $74^{+109}_{-125}$ & $0.27$ \\
 FRB 20230814B\tablenotemark{u} & $0.553$\tablenotemark{r} & $108^{+102}_{-121}$ & $168^{+158}_{-188}$ & $0.19$ \\
-FRB 20230913A\tablenotemark{u} & $0.302$\tablenotemark{r} & $171^{+65}_{-81}$ & $223^{+84}_{-106}$ & $0.03$ \\
-FRB 20240203A\tablenotemark{u} & $0.074$\tablenotemark{r} & $72^{+33}_{-39}$ & $78^{+35}_{-43}$ & $0.04$ \\
+FRB 20230913G\tablenotemark{u} & $0.302$\tablenotemark{r} & $171^{+65}_{-81}$ & $223^{+84}_{-106}$ & $0.03$ \\
+FRB 20240203D\tablenotemark{u} & $0.074$\tablenotemark{r} & $101^{+30}_{-38}$ & $108^{+33}_{-40}$ & $0.01$ \\
 FRB 20240229A & $0.287$ & $66^{+70}_{-86}$ & $85^{+91}_{-111}$ & $0.22$ \\
 \enddata
 \tablenotetext{r}{Provisional internal host redshift; no citable published
@@ -220,10 +222,27 @@ census is incomplete and $\mathrm{DM_{int}}$ is a floor, so the tabulated host D
 (both frames) is an upper limit on the true host contribution.}
 \end{deluxetable}
 
+The remaining three events have no established host redshift. We therefore do
+not insert a point redshift into the foreground census or host-DM budget.
+As a diagnostic only, we invert the same TNG-calibrated IGM distribution using
+the measured excess DM, the Milky-Way priors above, a broad source-rate prior,
+and a rest-frame host-DM log-normal with median
+$100\,\mathrm{pc\,cm^{-3}}$. This gives median and 16th--84th percentile
+estimates $z=0.55^{+0.16}_{-0.14}$ for FRB~20221203A,
+$0.92^{+0.23}_{-0.19}$ for FRB~20230325C, and
+$0.93^{+0.23}_{-0.20}$ for FRB~20240122A. Varying the host-DM prior median from
+$50$ to $200\,\mathrm{pc\,cm^{-3}}$ moves the respective redshift medians over
+$0.50$--$0.59$, $0.85$--$0.96$, and $0.86$--$0.97$. Because the foreground-halo
+census is incomplete on these sightlines, unmodeled intervening DM biases these
+DM-derived redshifts high. They are probability distributions for candidate
+triage, not replacements for spectroscopic or photometric host redshifts. The
+calculation and machine-readable results are reproduced by
+\texttt{analysis/scripts/dm\_redshift\_inference.py}.
+
 \begin{figure*}
     \centering
     \includegraphics[width=\textwidth]{figures/dm_host_posteriors.pdf}
-    \caption{Forward-modeled dispersion-budget components and host posteriors
+    \caption{Forward-modeled dispersion-budget components and induced host residuals
     for the nine redshift-constrained sightlines, arranged in a $3\times3$
     grid. Each panel overlays $\hat{p}(x)=p(x)/\max p$ for the terms entering
     $\mathrm{DM_{host}}=\mathrm{DM_{obs}}-\mathrm{DM_{disk}}-\mathrm{DM_{halo}}
@@ -235,12 +254,12 @@ census is incomplete and $\mathrm{DM_{int}}$ is a floor, so the tabulated host D
     used in the host calculation; the
     bold red curve is the resulting $P(\mathrm{DM_{host}})$ (observer frame;
     the host-frame column is $(1+z)$ times larger), with a dashed
-    vertical mark at the posterior median and a dotted line at zero.
+    vertical mark at the residual median and a dotted line at zero.
     Peak-normalization makes shapes (not absolute heights) comparable across
     terms of very different scale. Panel titles carry a dagger ($\dagger$) for
     the six sightlines outside the deep-imaging footprints, whose incomplete
     intervening census makes $P(\mathrm{DM_{host}})$ an upper limit rather than a
-    two-sided posterior (Table~\ref{tab:host-forward-model}). Numerical details and
+    two-sided residual distribution (Table~\ref{tab:host-forward-model}). Numerical details and
     fiducial priors are given in Appendix~\ref{app:host-forward-model}.}
     \label{fig:dm_host_posteriors}
 \end{figure*}
