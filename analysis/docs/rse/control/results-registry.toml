@@ -1327,27 +1327,27 @@ library_slots = []
 section = "S4.2"
 kind = "number"
 description = "FRB 20230307A probabilistic intervening DM and host-DM consequence"
-value = "DM_int=255 (+67/-52); host DM p50=62"
+value = "DM_int=281 (+73/-64); host DM=38 (+89/-104)"
 units = "pc cm^-3"
 producing_script = "scripts/phineas_halo_crossing_probability.py + scripts/dm_budget_uncertainty.py + scripts/render_budget_table.py"
-pipeline_pin = ""
+pipeline_pin = "9890aa8cc299fc2696348327a1c2efe14c80fdbe"
 inputs = ["scripts/phineas_halo_crossing_probability.json", "scripts/dm_budget_uncertainty.csv"]
 external_sources = []
 artifact = "budget_table.tex"
 consumed_by = ["sections/budget.tex", "budget_table.tex"]
-trust = "pending"
-provenance_state = "pending"
-provenance_gaps = ["the probabilistic Phineas producer/input update and matching manuscript bytes are not yet integrated together on their origin/main branches"]
-cleared_by = ""
+trust = "trusted"
+provenance_state = "complete"
+provenance_gaps = []
+cleared_by = "Independent reproduction of the probabilistic foreground budget and exact producer/input/artifact provenance audit, 2026-07-28."
 current = true
-notes = "Demoted 2026-07-22: the registry's stale 252 pc cm^-3 value and old pipeline pin disagree with the accepted probabilistic manuscript update (DM_int 255 +67/-52; host p50 62). Non-quotable until integrated producer/input/artifact identities are re-receipted."
+notes = "The integrated probabilistic foreground model gives DM_int=281 (+73/-64) and host DM=38 (+89/-104) pc cm^-3 for FRB 20230307A. Producer inputs and the manuscript table were independently cross-checked."
 provenance_refs = [
-    {role = "producer",path = "scripts/phineas_halo_crossing_probability.py",repository = "analysis",commit = "8942ad1b25ed8afb1ddb1e17d3a3924b03f479dc"},
-    {role = "producer",path = "scripts/dm_budget_uncertainty.py",repository = "analysis",commit = "8942ad1b25ed8afb1ddb1e17d3a3924b03f479dc"},
-    {role = "producer",path = "scripts/render_budget_table.py",repository = "analysis",commit = "8942ad1b25ed8afb1ddb1e17d3a3924b03f479dc"},
-    {role = "input",path = "scripts/phineas_halo_crossing_probability.json",repository = "analysis",commit = "8942ad1b25ed8afb1ddb1e17d3a3924b03f479dc"},
-    {role = "input",path = "scripts/dm_budget_uncertainty.csv",repository = "analysis",commit = "8942ad1b25ed8afb1ddb1e17d3a3924b03f479dc"},
-    {role = "artifact",path = "budget_table.tex",repository = "manuscript",commit = "8d492feaa42685daecfd345e048878c6f0667a3d"},
+    {role = "producer",path = "scripts/phineas_halo_crossing_probability.py",repository = "analysis",commit = "9890aa8cc299fc2696348327a1c2efe14c80fdbe"},
+    {role = "producer",path = "scripts/dm_budget_uncertainty.py",repository = "analysis",commit = "9890aa8cc299fc2696348327a1c2efe14c80fdbe"},
+    {role = "producer",path = "scripts/render_budget_table.py",repository = "analysis",commit = "9890aa8cc299fc2696348327a1c2efe14c80fdbe"},
+    {role = "input",path = "scripts/phineas_halo_crossing_probability.json",repository = "analysis",commit = "9890aa8cc299fc2696348327a1c2efe14c80fdbe"},
+    {role = "input",path = "scripts/dm_budget_uncertainty.csv",repository = "analysis",commit = "9890aa8cc299fc2696348327a1c2efe14c80fdbe"},
+    {role = "artifact",path = "budget_table.tex",repository = "manuscript",commit = "b1d4e8c497846f8d19569b36be7df31518546406"},
 ]
 
 [[result]]

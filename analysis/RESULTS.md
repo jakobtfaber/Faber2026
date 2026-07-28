@@ -8,8 +8,8 @@ inventory record does not promote a scientific claim.
 ## Summary
 
 - Manuscript-facing rows: 27
-- Scientific trust: 13 trusted; 7 pending; 7 revoked
-- Provenance metadata: 7 complete; 20 pending
+- Scientific trust: 14 trusted; 6 pending; 7 revoked
+- Provenance metadata: 8 complete; 19 pending
 - Input certificates: 36 (0 trusted; 36 pending; 0 revoked)
 - Input-certificate provenance: 0 complete; 36 pending
 - Numeric prose coverage: 594 individually owned or excluded claims across 13 compiled source files
@@ -34,7 +34,7 @@ inventory record does not promote a scientific claim.
 | `census.clusters_icm_figure` | App.B | Foreground clusters ICM figure (fig:clusters_icm) | yes | trusted | pending | pipeline/galaxies/v2_0/systems_figures.py | 23fbd295a25aaa80e352ecf0c08287ba4f60a885 | figures/clusters_icm.pdf md5:089b3013 | declared input pipeline/results/sightline_dm_scattering_budget.csv is absent from the pinned checkout |
 | `budget.budget_table` | S4.2 | Per-sightline DM budget decomposition (tab:budget) | yes | trusted | pending | pipeline sightline_budget.foreground_unified + scripts/dm_budget_uncertainty.py | 23fbd295a25aaa80e352ecf0c08287ba4f60a885 | budget_table.tex md5:32bdc637 | the producing pin was inferred from the checkout and lacks an exact artifact receipt |
 | `budget.dm_int_nonzero` | S4.2 | Nonzero intervening DM sightlines after remediation | yes | trusted | pending | pipeline sightline_budget.foreground_unified | 23fbd295a25aaa80e352ecf0c08287ba4f60a885 | scripts/dm_budget_intervening_systems.csv | the producing pin was inferred from the checkout and lacks an exact artifact receipt |
-| `budget.cluster_column` | S4.2 | FRB 20230307A probabilistic intervening DM and host-DM consequence | yes | pending | pending | scripts/phineas_halo_crossing_probability.py + scripts/dm_budget_uncertainty.py + scripts/render_budget_table.py | — | budget_table.tex | the probabilistic Phineas producer/input update and matching manuscript bytes are not yet integrated together on their origin/main branches |
+| `budget.cluster_column` | S4.2 | FRB 20230307A probabilistic intervening DM and host-DM consequence | yes | trusted | complete | scripts/phineas_halo_crossing_probability.py + scripts/dm_budget_uncertainty.py + scripts/render_budget_table.py | 9890aa8cc299fc2696348327a1c2efe14c80fdbe | budget_table.tex | — |
 | `budget.dm_redshift_diagnostics` | App.C | Diagnostic DM-derived redshift distributions for three events without established host redshifts | yes | pending | complete | scripts/dm_redshift_inference.py | fa5b78848160930620e3f226e58a139785616d79 | scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56 + scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04 | — |
 | `budget.host_dm_posteriors` | App.C | Forward-modeled host DM posteriors (tab:host-forward-model + fig:dm_host_posteriors) | yes | pending | pending | scripts/dm_budget_uncertainty.py | 23fbd295a25aaa80e352ecf0c08287ba4f60a885 | figures/dm_host_posteriors.pdf md5:2cb97b38 | the producing pin was inferred from the checkout and lacks an exact artifact receipt |
 | `scattering.beta_table` | S4.4 | Per-sightline turbulence spectral-index roster (tab:beta) | no | revoked | pending | pipeline/analysis/beta_campaign/ | — | beta_table.tex md5:34365e9a | legacy table is superseded; no complete post-PL-PBF twelve-burst fit manifest, input hashes, or accepted producing pin exists |

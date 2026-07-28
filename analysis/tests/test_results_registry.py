@@ -67,14 +67,14 @@ def test_registry_covers_compiled_manuscript() -> None:
     assert validate_registry(_registry(), _manuscript_root()) == []
 
 
-def test_budget_cluster_column_is_demoted_to_current_probabilistic_values() -> None:
+def test_budget_cluster_column_has_integrated_probabilistic_values() -> None:
     row = next(
         item for item in _registry()["result"] if item["id"] == "budget.cluster_column"
     )
-    assert row["value"] == "DM_int=255 (+67/-52); host DM p50=62"
-    assert row["trust"] == "pending"
-    assert row["provenance_state"] == "pending"
-    assert row["pipeline_pin"] == ""
+    assert row["value"] == "DM_int=281 (+73/-64); host DM=38 (+89/-104)"
+    assert row["trust"] == "trusted"
+    assert row["provenance_state"] == "complete"
+    assert row["pipeline_pin"] == "9890aa8cc299fc2696348327a1c2efe14c80fdbe"
     assert "252" not in row["value"]
 
 
