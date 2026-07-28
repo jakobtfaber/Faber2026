@@ -6,8 +6,16 @@
 > when authored); (3) keep wilhelm/hamilton/chromatica **footnoted
 > provisional-z** rows (8 rows); (4) **skip** the D5 fixed rest-frame-band
 > variant.
-> Independent recomputation code: `analysis/v3_energetics/recompute_energies.py`
-> (manuscript repo — deliberately outside the pinned `pipeline/` submodule).
+> Independent recomputation code:
+> `energetics/studies/legacy-v3/recompute_energies.py`.
+
+> **Superseded roster notice (2026-07-17).** The owner subsequently adopted
+> the frozen Verdi host-redshift extract. FRB 20230814B (`johndoeii`,
+> provisional \(z=0.5535\)) replaces FRB 20221203A (`wilhelm`, redshift
+> withdrawn). Sections 2, 5, and 6 below preserve the July 15 decision record;
+> they are not the current roster authority. Current code must load
+> `foregrounds/studies/census/data/frozen_census/` rather than copying this
+> historical roster.
 
 ## 1. Energies-scoped validation contract (V1 principles applied)
 

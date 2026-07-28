@@ -54,9 +54,9 @@
     {
       "name": "Energies",
       "lane": "V3",
-      "status": "contract authored; rail + selection-rule resolved; estimator re-based data-driven (owner 2026-07-15)",
+      "status": "fit-independent producer + independent verifier implemented; 24-band candidate run fail-closed (17 candidate, 7 failed)",
       "status_class": "pend",
-      "next": "CHIME-side data-driven fluence run + independent verifier + regenerated-table review (runbook: validation-v3-energetics-2026-07-15.md §6), then owner V3 sign-off"
+      "next": "repair Isha/Oran/Phineas CHIME detections + Hamilton/JohnDoeII/Mahi/Whitney unstable windows; validate correlated-noise errors; review calibration and all 24 windows; promote accepted receipt; verify regenerated table; owner V3 sign-off"
     },
     {
       "name": "Synthesis",
