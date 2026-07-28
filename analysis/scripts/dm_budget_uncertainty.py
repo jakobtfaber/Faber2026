@@ -774,7 +774,12 @@ def main(argv: list[str] | None = None) -> int:
         f"beta-model column: p50={p50:.0f}, [p16,p84]=[{p16:.0f},{p84:.0f}], "
         f"95% CI=[{lo:.0f},{hi:.0f}] pc cm^-3"
     )
-    mnfw_central = 184.0
+    phineas = next(row for row in sightlines if row.name == "FRB 20230307A")
+    mnfw_central = next(
+        float(system.dm_point)
+        for system in phineas.intervening_systems
+        if system.kind == "cluster" and system.dm_point is not None
+    )
     print(f"mNFW central (budget census point): ~{mnfw_central:.0f} pc cm^-3")
     span_lo = min(lo, mnfw_central)
     span_hi = max(hi, mnfw_central)
