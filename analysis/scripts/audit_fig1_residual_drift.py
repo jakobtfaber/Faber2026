@@ -8,6 +8,7 @@ import csv
 import json
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 import numpy as np
@@ -197,9 +198,12 @@ def audit(
     )
     return {
         "schema_version": 1,
-        "pipeline_revision": subprocess.check_output(
-            ["git", "-C", str(PIPELINE), "rev-parse", "HEAD"], text=True
-        ).strip(),
+        "pipeline_revision": next(
+            item for item in tomllib.loads(
+                (ANALYSIS_ROOT / "pyproject.toml").read_text()
+            )["project"]["dependencies"]
+            if item.startswith("flits")
+        ).rsplit("@", 1)[1],
         "gate": "EMG residual DM is consistent with zero within 2 sigma in every panel",
         "gate_passed": all_zero,
         "measurements": measurements,
