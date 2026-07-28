@@ -203,10 +203,10 @@
       "dm_obs": 272,
       "dm_mw": 111,
       "dm_cos": 62,
-      "dm_int": 0,
+      "dm_int": 26,
       "dm_int_note": "",
-      "regime": "none",
-      "mass": "",
+      "regime": "galaxy-interior",
+      "mass": "measured",
       "dm_host": [
         102,
         31,
