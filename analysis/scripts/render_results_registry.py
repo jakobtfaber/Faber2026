@@ -131,6 +131,7 @@ CANONICAL_RESULT_IDS = (
     "budget.budget_table",
     "budget.dm_int_nonzero",
     "budget.cluster_column",
+    "budget.dm_redshift_diagnostics",
     "budget.host_dm_posteriors",
     "scattering.beta_table",
     "scattering.jointmodel_figures",
@@ -481,7 +482,7 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
         errors.append(f"duplicate result ids: {duplicates}")
     known = set(ids)
     if not has_canonical_result_inventory(rows):
-        errors.append("result inventory differs from the canonical 62-row roster")
+        errors.append("result inventory differs from the canonical result roster")
 
     rows_by_id = {row["id"]: row for row in rows if isinstance(row.get("id"), str)}
     cards = rows_by_id.get("association.cards_figures", {})

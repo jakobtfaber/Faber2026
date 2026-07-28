@@ -642,12 +642,12 @@ claims = [
   { fingerprint = "553bdb9f09e02e0b", occurrence = 1, line = 214, text = "FRB 20230913G\\tablenotemark{u} & $0.302$\\tablenotemark{r} & $171^{+65}_{-81}$ & $223^{+84}_{-106}$ & $0.03$ \\\\", owner_result_id = "budget.host_dm_posteriors" },
   { fingerprint = "ba144f69e701915a", occurrence = 1, line = 215, text = "FRB 20240203D\\tablenotemark{u} & $0.074$\\tablenotemark{r} & $101^{+30}_{-38}$ & $108^{+33}_{-40}$ & $0.01$ \\\\", owner_result_id = "budget.host_dm_posteriors" },
   { fingerprint = "51d8a5d31416dc5e", occurrence = 1, line = 216, text = "FRB 20240229A & $0.287$ & $66^{+70}_{-86}$ & $85^{+91}_{-111}$ & $0.22$ \\\\", owner_result_id = "budget.host_dm_posteriors" },
-  { fingerprint = "e68a1b498602063d", occurrence = 1, line = 230, text = "$100\\,\\mathrm{pc\\,cm^{-3}}$. This gives median and 16th--84th percentile", owner_result_id = "budget.host_dm_posteriors" },
-  { fingerprint = "0c1f4877a554887c", occurrence = 1, line = 231, text = "estimates $z=0.55^{+0.16}_{-0.14}$ for FRB~20221203A,", owner_result_id = "budget.host_dm_posteriors" },
-  { fingerprint = "0dee14a6d0b085ce", occurrence = 1, line = 232, text = "$0.92^{+0.23}_{-0.19}$ for FRB~20230325C, and", owner_result_id = "budget.host_dm_posteriors" },
-  { fingerprint = "5c04e2b8d81624f7", occurrence = 1, line = 233, text = "$0.93^{+0.23}_{-0.20}$ for FRB~20240122A. Varying the host-DM prior median from", owner_result_id = "budget.host_dm_posteriors" },
-  { fingerprint = "c4fa0c364ef0e78a", occurrence = 1, line = 234, text = "$50$ to $200\\,\\mathrm{pc\\,cm^{-3}}$ moves the respective redshift medians over", owner_result_id = "budget.host_dm_posteriors" },
-  { fingerprint = "7f025613d3202443", occurrence = 1, line = 235, text = "$0.50$--$0.59$, $0.85$--$0.96$, and $0.86$--$0.97$. Because the foreground-halo", owner_result_id = "budget.host_dm_posteriors" },
+  { fingerprint = "e68a1b498602063d", occurrence = 1, line = 230, text = "$100\\,\\mathrm{pc\\,cm^{-3}}$. This gives median and 16th--84th percentile", owner_result_id = "budget.dm_redshift_diagnostics" },
+  { fingerprint = "0c1f4877a554887c", occurrence = 1, line = 231, text = "estimates $z=0.55^{+0.16}_{-0.14}$ for FRB~20221203A,", owner_result_id = "budget.dm_redshift_diagnostics" },
+  { fingerprint = "0dee14a6d0b085ce", occurrence = 1, line = 232, text = "$0.92^{+0.23}_{-0.19}$ for FRB~20230325C, and", owner_result_id = "budget.dm_redshift_diagnostics" },
+  { fingerprint = "5c04e2b8d81624f7", occurrence = 1, line = 233, text = "$0.93^{+0.23}_{-0.20}$ for FRB~20240122A. Varying the host-DM prior median from", owner_result_id = "budget.dm_redshift_diagnostics" },
+  { fingerprint = "c4fa0c364ef0e78a", occurrence = 1, line = 234, text = "$50$ to $200\\,\\mathrm{pc\\,cm^{-3}}$ moves the respective redshift medians over", owner_result_id = "budget.dm_redshift_diagnostics" },
+  { fingerprint = "7f025613d3202443", occurrence = 1, line = 235, text = "$0.50$--$0.59$, $0.85$--$0.96$, and $0.86$--$0.97$. Because the foreground-halo", owner_result_id = "budget.dm_redshift_diagnostics" },
   { fingerprint = "6430777432d1deca", occurrence = 1, line = 246, text = "for the nine redshift-constrained sightlines, arranged in a $3\\times3$", owner_result_id = "budget.host_dm_posteriors" },
   { fingerprint = "9dc0da7f972281fe", occurrence = 1, line = 256, text = "the host-frame column is $(1+z)$ times larger), with a dashed", owner_result_id = "budget.host_dm_posteriors" },
   { fingerprint = "cf2b50a7809c386d", occurrence = 1, line = 273, text = "The July 7 DSA-110 single-component Lorentzian gallery has been removed from", owner_result_id = "scint.dsa_acf_figures" },
@@ -1346,6 +1346,34 @@ provenance_refs = [
     {role = "input",path = "scripts/phineas_halo_crossing_probability.json",repository = "analysis",commit = "8942ad1b25ed8afb1ddb1e17d3a3924b03f479dc"},
     {role = "input",path = "scripts/dm_budget_uncertainty.csv",repository = "analysis",commit = "8942ad1b25ed8afb1ddb1e17d3a3924b03f479dc"},
     {role = "artifact",path = "budget_table.tex",repository = "manuscript",commit = "8d492feaa42685daecfd345e048878c6f0667a3d"},
+]
+
+[[result]]
+id = "budget.dm_redshift_diagnostics"
+library_slots = []
+section = "App.C"
+kind = "number"
+description = "Diagnostic DM-derived redshift distributions for three events without established host redshifts"
+value = "z=0.55 (+0.16/-0.14), 0.92 (+0.23/-0.19), 0.93 (+0.23/-0.20)"
+units = ""
+producing_script = "scripts/dm_redshift_inference.py"
+pipeline_pin = "fa5b78848160930620e3f226e58a139785616d79"
+inputs = ["campaigns/foregrounds/budget_table_data.json", "dm-joint-phase-v2/manuscript_dm_catalog.csv"]
+external_sources = ["TNG-300 IGM lognormal calibration used by the host-DM budget"]
+artifact = "scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56 + scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04"
+consumed_by = ["sections/appendix.tex"]
+trust = "pending"
+provenance_state = "complete"
+provenance_gaps = []
+cleared_by = ""
+current = true
+notes = "Diagnostic-only probability distributions for candidate triage. They are not established host redshifts; the incomplete foreground census biases them high."
+provenance_refs = [
+    {role = "producer",path = "scripts/dm_redshift_inference.py",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
+    {role = "input",path = "campaigns/foregrounds/budget_table_data.json",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
+    {role = "input",path = "dm-joint-phase-v2/manuscript_dm_catalog.csv",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
+    {role = "artifact",path = "scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
+    {role = "artifact",path = "scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
 ]
 
 [[result]]

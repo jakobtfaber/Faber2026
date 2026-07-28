@@ -7,9 +7,9 @@ inventory record does not promote a scientific claim.
 
 ## Summary
 
-- Manuscript-facing rows: 26
-- Scientific trust: 13 trusted; 6 pending; 7 revoked
-- Provenance metadata: 6 complete; 20 pending
+- Manuscript-facing rows: 27
+- Scientific trust: 13 trusted; 7 pending; 7 revoked
+- Provenance metadata: 7 complete; 20 pending
 - Input certificates: 36 (0 trusted; 36 pending; 0 revoked)
 - Input-certificate provenance: 0 complete; 36 pending
 - Numeric prose coverage: 592 individually owned or excluded claims across 13 compiled source files
@@ -35,6 +35,7 @@ inventory record does not promote a scientific claim.
 | `budget.budget_table` | S4.2 | Per-sightline DM budget decomposition (tab:budget) | yes | trusted | pending | pipeline sightline_budget.foreground_unified + scripts/dm_budget_uncertainty.py | 23fbd295a25aaa80e352ecf0c08287ba4f60a885 | budget_table.tex md5:32bdc637 | the producing pin was inferred from the checkout and lacks an exact artifact receipt |
 | `budget.dm_int_nonzero` | S4.2 | Nonzero intervening DM sightlines after remediation | yes | trusted | pending | pipeline sightline_budget.foreground_unified | 23fbd295a25aaa80e352ecf0c08287ba4f60a885 | scripts/dm_budget_intervening_systems.csv | the producing pin was inferred from the checkout and lacks an exact artifact receipt |
 | `budget.cluster_column` | S4.2 | FRB 20230307A probabilistic intervening DM and host-DM consequence | yes | pending | pending | scripts/phineas_halo_crossing_probability.py + scripts/dm_budget_uncertainty.py + scripts/render_budget_table.py | — | budget_table.tex | the probabilistic Phineas producer/input update and matching manuscript bytes are not yet integrated together on their origin/main branches |
+| `budget.dm_redshift_diagnostics` | App.C | Diagnostic DM-derived redshift distributions for three events without established host redshifts | yes | pending | complete | scripts/dm_redshift_inference.py | fa5b78848160930620e3f226e58a139785616d79 | scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56 + scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04 | — |
 | `budget.host_dm_posteriors` | App.C | Forward-modeled host DM posteriors (tab:host-forward-model + fig:dm_host_posteriors) | yes | pending | pending | scripts/dm_budget_uncertainty.py | 23fbd295a25aaa80e352ecf0c08287ba4f60a885 | figures/dm_host_posteriors.pdf md5:2cb97b38 | the producing pin was inferred from the checkout and lacks an exact artifact receipt |
 | `scattering.beta_table` | S4.4 | Per-sightline turbulence spectral-index roster (tab:beta) | no | revoked | pending | pipeline/analysis/beta_campaign/ | — | beta_table.tex md5:34365e9a | legacy table is superseded; no complete post-PL-PBF twelve-burst fit manifest, input hashes, or accepted producing pin exists |
 | `scattering.jointmodel_figures` | App.E | Per-burst joint-model pairs (12 panels, jointmodel_pair/) | no | revoked | pending | pipeline/analysis/beta_campaign/ | — | figures/jointmodel_pair/ dirhash:0a70e6e0 (34 files) | legacy 12-panel set is pre-PL-PBF; the preserved JointTF v2 packet covers only three owner-pending candidate display slots and cannot establish a complete current roster |
