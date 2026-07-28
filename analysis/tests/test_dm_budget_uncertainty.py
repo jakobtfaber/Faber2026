@@ -239,6 +239,20 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
                 assert round(sum(point for point in fixed if point is not None)) == row.dm_int
 
 
+def test_chromatica_foreground_column_is_not_duplicated_on_freya():
+    """Catalog identity: the measured 26 pc cm^-3 system belongs only to Chromatica."""
+    rows = {
+        row["burst"]: row
+        for row in json.loads(dbu.BUDGET_DATA.read_text())["rows"]
+    }
+    assert rows["FRB 20230325C"]["dm_int"] == 0
+    assert rows["FRB 20230325C"]["regime"] == "none"
+    assert rows["FRB 20230325C"]["mass"] is None
+    assert rows["FRB 20240203D"]["dm_int"] == 26
+    assert rows["FRB 20240203D"]["regime"] == "galaxy-interior"
+    assert rows["FRB 20240203D"]["mass"] == "measured"
+
+
 def test_current_inputs_reject_a_stale_probabilistic_record(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ):
