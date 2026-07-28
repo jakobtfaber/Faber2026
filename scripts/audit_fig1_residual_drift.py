@@ -8,16 +8,18 @@ import csv
 import json
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-PIPELINE = ROOT / "pipeline"
-sys.path.insert(0, str(PIPELINE))
+ANALYSIS = ROOT / "analysis"
+DM_ARCHIVE = ANALYSIS / ".archive/flits/outdated-science/dm-battery-2026-07"
+sys.path.insert(0, str(DM_ARCHIVE))
 
 from dispersion.chime_dm import K_DM, measure_dm  # noqa: E402
-from dispersion.dm_campaign.render_dm_zoom_comparison import (  # noqa: E402
+from dm_campaign.render_dm_zoom_comparison import (  # noqa: E402
     _subband_arrival_times,
 )
 from dispersion.dm_power_analysis import (  # noqa: E402
@@ -173,9 +175,12 @@ def audit(data_root: Path, catalog: Path, roster_manifest: Path = ROSTER_DEFAULT
     )
     return {
         "schema_version": 1,
-        "pipeline_revision": subprocess.check_output(
-            ["git", "-C", str(PIPELINE), "rev-parse", "HEAD"], text=True
-        ).strip(),
+        "pipeline_revision": next(
+            item for item in tomllib.loads(
+                (ANALYSIS / "pyproject.toml").read_text()
+            )["project"]["dependencies"]
+            if item.startswith("flits")
+        ).rsplit("@", 1)[1],
         "gate": "EMG residual DM is consistent with zero within 2 sigma in every panel",
         "gate_passed": all_zero,
         "measurements": measurements,

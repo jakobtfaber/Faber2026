@@ -38,7 +38,6 @@ import yaml
 matplotlib.rcParams["svg.hashsalt"] = "Faber2026-codetection-triptych-v2"
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "pipeline"))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from flits.batch.codetection_data import (  # noqa: E402
@@ -60,9 +59,16 @@ MANIFEST_DEFAULT = ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"
 OUT_DEFAULT = ROOT / "figures" / "codetection_triptych"
 DATA_ROOT_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 PAD_FLOOR_MS = 1.5
-TOA_RESULTS = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
-TOA_FIXTURE = ROOT / "pipeline" / "crossmatching" / "notebook_reproduction_fixture.json"
+TOA_RESULTS = ROOT / "analysis/campaigns/crossmatching/toa_crossmatch_results.json"
+TOA_FIXTURE = ROOT / "analysis/campaigns/crossmatching/notebook_reproduction_fixture.json"
 K_DM_S_MHZ2 = 4.148808e3
+
+
+def toa_offset_ms(nick: str, *, toa_results: Path = TOA_RESULTS) -> float | None:
+    file_nick = FILE_NICK.get(nick, nick)
+    rows = json.loads(toa_results.read_text())
+    row = rows.get(file_nick) or rows.get(file_nick.lower())
+    return None if row is None else float(row["measured_offset_ms"])
 
 
 def load_manifest(path: Path) -> list[dict]:

@@ -27,11 +27,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from association_diagnostics import class_aware_chance_probability  # noqa: E402
 
-PIPELINE = ROOT / "pipeline"
-PIPELINE_SOURCE = Path(os.environ.get("FABER2026_PIPELINE_SOURCE", PIPELINE))
-REGISTRY = PIPELINE_SOURCE / "configs" / "bursts.yaml"
-TOA_RESULTS = PIPELINE_SOURCE / "crossmatching" / "toa_crossmatch_results.json"
-ASSOCIATION_REPORT = PIPELINE_SOURCE / "crossmatching" / "association_report.json"
+ANALYSIS = ROOT / "analysis"
+REGISTRY = ANALYSIS / "config" / "bursts.yaml"
+TOA_RESULTS = ANALYSIS / "campaigns/crossmatching/toa_crossmatch_results.json"
+ASSOCIATION_REPORT = ANALYSIS / "campaigns/crossmatching/association_report.json"
 OUT = ROOT / "figures" / "association_summary.pdf"
 DM_CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
 

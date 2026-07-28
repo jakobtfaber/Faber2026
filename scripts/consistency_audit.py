@@ -18,7 +18,6 @@ import csv
 import fnmatch
 import json
 import re
-import subprocess
 import sys
 from pathlib import Path
 from typing import Iterable
@@ -125,7 +124,9 @@ def check_toa_correction_gate(findings: list[str]) -> None:
     unvalidated, manuscript-facing timing products must remain on the observed
     peak convention and must not claim that the model offset is primary.
     """
-    results_path = ROOT / "pipeline" / "crossmatching" / "toa_crossmatch_results.json"
+    results_path = (
+        ROOT / "analysis/campaigns/crossmatching/toa_crossmatch_results.json"
+    )
     try:
         rows = json.loads(read_text(results_path))
     except (OSError, json.JSONDecodeError) as exc:
@@ -133,7 +134,7 @@ def check_toa_correction_gate(findings: list[str]) -> None:
         return
     if not isinstance(rows, dict) or not rows:
         findings.append(
-            "pipeline/crossmatching/toa_crossmatch_results.json: "
+            "campaigns/crossmatching/toa_crossmatch_results.json: "
             "expected a non-empty object for the ToA gate audit"
         )
         return
@@ -335,11 +336,12 @@ def patterns_overlap(a: str, b: str) -> bool:
     return a == b or fnmatch.fnmatch(a, b) or fnmatch.fnmatch(b, a)
 
 
-def pipeline_is_pinned() -> bool:
-    result = subprocess.run(
-        ["git", "ls-files", "--stage", "pipeline"], cwd=ROOT,
-        text=True, capture_output=True, check=False)
-    return result.returncode == 0 and result.stdout.startswith("160000 ")
+def flits_is_pinned() -> bool:
+    """Return whether analysis pins FLITS to one exact Git commit."""
+    project = read_text(ROOT / "analysis/pyproject.toml")
+    lock = read_text(ROOT / "analysis/uv.lock")
+    match = re.search(r"dsa110-FLITS\.git@([0-9a-f]{40})", project)
+    return bool(match and match.group(1) in lock)
 
 
 def figure_assets(pattern: str) -> list[Path]:
@@ -380,9 +382,9 @@ def check_figures_and_provenance(
                     f"'{figure}' has {len(assets)} assets; expected {expected} "
                     "from the canonical sample roster")
 
-    if needs_pipeline_pin and not pipeline_is_pinned():
+    if needs_pipeline_pin and not flits_is_pinned():
         findings.append(
-            "pipeline: expected a pinned gitlink for figure provenance")
+            "FLITS: expected an exact analysis lockfile pin for figure provenance")
 
 
 def check_inputs_and_provenance(files: Iterable[Path], findings: list[str]) -> None:
@@ -424,9 +426,9 @@ def check_inputs_and_provenance(files: Iterable[Path], findings: list[str]) -> N
                         entry.get("producer", "").startswith("pipeline/")
                         for entry in matches)
 
-    if needs_pipeline_pin and not pipeline_is_pinned():
+    if needs_pipeline_pin and not flits_is_pinned():
         findings.append(
-            "pipeline: expected a pinned gitlink for table provenance")
+            "FLITS: expected an exact analysis lockfile pin for table provenance")
 
 
 def main(argv: list[str] | None = None) -> int:

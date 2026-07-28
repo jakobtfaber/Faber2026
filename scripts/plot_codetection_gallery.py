@@ -39,7 +39,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.append(str(ROOT / "pipeline"))
+from flits.resources import path as resource_path
 
 DATA_ROOT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 OUT_DIR = ROOT / "figures"
@@ -54,11 +54,11 @@ NICK_TNS = {
     "isha": "FRB 20221113A",
     "wilhelm": "FRB 20221203A",
     "phineas": "FRB 20230307A",
-    "freya": "FRB 20230325A",
+    "freya": "FRB 20230325C",
     "johndoeii": "FRB 20230814B",
-    "hamilton": "FRB 20230913A",
+    "hamilton": "FRB 20230913G",
     "mahi": "FRB 20240122A",
-    "chromatica": "FRB 20240203A",
+    "chromatica": "FRB 20240203D",
     "casey": "FRB 20240229A",
 }
 
@@ -197,7 +197,7 @@ def _apply_style() -> None:
     except Exception:
         import matplotlib
 
-        rc = ROOT / "pipeline" / "matplotlibrc"
+        rc = resource_path("matplotlibrc")
         if rc.exists():
             matplotlib.rc_file(str(rc))
     plt.rcParams["text.usetex"] = False
@@ -267,7 +267,7 @@ def render(data_root: Path, out_dir: Path, window_ms: float) -> list[str]:
         }
     )
 
-    with open(ROOT / "pipeline" / "configs" / "bursts.yaml") as fh:
+    with open(ROOT / "analysis" / "config" / "bursts.yaml") as fh:
         catalog = yaml.safe_load(fh)["bursts"]
     order = sorted(catalog, key=lambda k: catalog[k]["mjd"])
     if set(order) != set(NICK_TNS):

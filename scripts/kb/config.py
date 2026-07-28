@@ -21,10 +21,9 @@ DOCS_GLOBS = [
     "docs/**/*.md",        # rse specs, board, protocols, referee docs
     "sections/*.tex",
     "main.tex",
-    "pipeline/*.md",       # submodule top-level docs
-    "pipeline/docs/**/*.md",
-    "pipeline/external/**/*.md",   # vendored-tool READMEs
-    "pipeline/exports/*.tex",      # generated manuscript tables
+    "analysis/*.md",
+    "analysis/docs/**/*.md",
+    "analysis/campaigns/**/*.md",
 ]
 # Paths never indexed by the docs adapter (tickets have their own adapter).
 DOCS_EXCLUDE_PARTS = {
@@ -38,35 +37,28 @@ TICKETS_DIR = REPO_ROOT / "docs" / "rse" / "wayfinder" / "tickets"
 CODE_DIRS = [
     "scripts",
     "tests",
-    "pipeline/analysis",
-    "pipeline/galaxies",
-    "pipeline/scintillation",
-    "pipeline/scattering",
-    "pipeline/flits",
-    "pipeline/simulation",
-    "pipeline/dispersion",
-    "pipeline/crossmatching",
-    "pipeline/scripts",
-    "pipeline/tests",
-    "pipeline/notebooks",   # .py and .ipynb (cell-level chunks)
-    "pipeline/external",    # vendored DM-power / DM_phase
+    "analysis/scripts",
+    "analysis/tests",
+    "analysis/campaigns",
 ]
 CODE_MAX_FILE_BYTES = 200_000
 NOTEBOOK_MAX_FILE_BYTES = 2_000_000  # .ipynb carry base64 outputs; outputs are skipped
 
 # ---------------------------------------------------------------------------
-# config: pipeline YAML (telescopes, samplers, bursts, manifests, envs)
+# config: project YAML
 # ---------------------------------------------------------------------------
 CONFIG_GLOBS = [
-    "pipeline/**/*.yaml",
-    "pipeline/**/*.yml",
+    "analysis/config/**/*.yaml",
+    "analysis/config/**/*.yml",
+    "analysis/campaigns/**/*.yaml",
+    "analysis/campaigns/**/*.yml",
 ]
 
 # ---------------------------------------------------------------------------
-# git: commit history (parent repo + pipeline/ submodule). PRs via `gh`.
+# git: commit history (parent repo + analysis submodule). PRs via `gh`.
 # ---------------------------------------------------------------------------
 GIT_MAX_COMMITS = 2000
-GIT_SUBMODULES = ["pipeline"]   # refs become "pipeline@<sha>"
+GIT_SUBMODULES = ["analysis"]
 
 # ---------------------------------------------------------------------------
 # refs: cited-references library

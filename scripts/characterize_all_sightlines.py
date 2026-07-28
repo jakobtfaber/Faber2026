@@ -5,9 +5,6 @@ from pathlib import Path
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 
-# Add pipeline to python path so we can import packages if needed
-sys.path.append(str(Path(__file__).resolve().parent.parent / "pipeline"))
-
 from mwprop.nemod.NE2025 import ne2025
 
 # Band centers (same as pipeline/scintillation/ne2025/query_ne2025_scint.py)
@@ -35,7 +32,7 @@ def scale_val(val_1ghz, freq_mhz, kind):
     return val_1ghz * freq_ghz**e
 
 # Load bursts catalog
-cat_path = Path(__file__).resolve().parent.parent / "pipeline/configs/bursts.yaml"
+cat_path = Path(__file__).resolve().parent.parent / "config/bursts.yaml"
 bursts = yaml.safe_load(cat_path.read_text())["bursts"]
 
 rows = []

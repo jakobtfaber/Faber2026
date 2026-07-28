@@ -11,12 +11,11 @@ from multiprocessing import Pool
 # Ignore all warnings to keep stdout clean
 warnings.filterwarnings("ignore")
 
-# Add pipeline directory to sys.path
-sys.path.append(str(Path(__file__).resolve().parent.parent / "pipeline"))
-
 # Load matplotlib rc file
 import matplotlib
-rc_path = Path(__file__).resolve().parent.parent / "pipeline/matplotlibrc"
+from flits.resources import path as resource_path
+
+rc_path = resource_path("matplotlibrc")
 if rc_path.exists():
     matplotlib.rc_file(str(rc_path))
 

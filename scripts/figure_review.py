@@ -507,7 +507,7 @@ def parser() -> argparse.ArgumentParser:
     new.add_argument(
         "--pipeline-repo",
         type=Path,
-        default=ROOT / "pipeline",
+        default=ROOT / "analysis",
         help="FLITS checkout used to read submodule artifacts",
     )
     new.add_argument("--initial-status", choices=("pending", "needs_revision"), default="pending")
@@ -539,8 +539,13 @@ def parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
-    args = parser().parse_args()
-    args.func(args)
+    canonical = ROOT / "analysis" / "scripts" / "figure_review.py"
+    result = subprocess.run(
+        [sys.executable, str(canonical), *sys.argv[1:]],
+        cwd=ROOT,
+        check=False,
+    )
+    raise SystemExit(result.returncode)
 
 
 if __name__ == "__main__":

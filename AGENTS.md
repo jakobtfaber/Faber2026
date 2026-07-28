@@ -15,8 +15,8 @@ Agent brief for the **Faber2026** manuscript repo.
 
 Before exploratory `grep`/`glob`/file-reading to reconstruct context, run
 `python3 analysis/scripts/kb search "<topic>"` — hybrid keyword+semantic search over
-manuscript docs, wayfinder tickets, git history (parent + `pipeline/`
-submodule), pipeline code, configs, and cited references, with ranked
+manuscript docs, wayfinder tickets, git history, analysis code, locked FLITS
+package provenance, configs, and cited references, with ranked
 cross-source results. Filter with `--source tickets|docs|git|code|config|refs`.
 Refresh after changes with `make kb-index` (incremental, seconds when
 embeddings are current). See [`analysis/docs/rse/ops/knowledge-base.md`](analysis/docs/rse/ops/knowledge-base.md).
@@ -29,9 +29,8 @@ On "walk me through my queue": follow
 regenerate via `python3 analysis/scripts/owner_queue.py`, verify heuristics, present
 one item at a time with its evidence, record every decision at its source.
 Never scheduled; owner-triggered only. Science/domain context and the
-trust-reset state live in [`analysis/CONTEXT.md`](analysis/CONTEXT.md) (and
-[`pipeline/CONTEXT.md`](pipeline/CONTEXT.md)); this file carries operational
-standing instructions only.
+trust-reset state lives in [`analysis/CONTEXT.md`](analysis/CONTEXT.md); this
+file carries operational standing instructions only.
 
 ## Standing authorization — git push / PR (owner grant, 2026-07-08)
 
@@ -53,8 +52,8 @@ Scope and guardrails — this authorization is not a licence to be careless:
   deleted by default once patch equivalence with the base is proven
   (`git cherry`/`range-diff` for squash merges); `overleaf-*` sync branches
   are never deleted.
-- **The `pipeline/` submodule pin is deliberate** — do not bump the gitlink as a
-  side effect of a manuscript change; that is its own reviewed step.
+- **The `analysis/` submodule pin is deliberate** — do not bump the gitlink as
+  a side effect of a manuscript change; that is its own reviewed step.
 - **Land by default** (owner, 2026-07-27): a mechanical, narrowly scoped,
   cheaply reversible pull request (revert restores the previous state; no
   scientific judgment, no data or pin change) merges immediately — do not
@@ -82,7 +81,7 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - When reporting science or manuscript status, answer whether work is science-ready and vetted and whether it is in the manuscript draft (plus a one-line section status); do not lead with campaign progress metrics.
 - Prefer plain verification vocabulary over L#/Tier codes: data chain = Raw Data → Input Data Products → Measurements and Fits → Analyses and Interpretations → In-Manuscript Claims; checks = Equation / Calculation / Model/Fit / Reference / No-Context Review.
 - Owner spot-check is required before closing raw-layer certification; agents must not mark that layer trusted without owner sign-off.
-- Prefer separating analysis results from fitting code across Faber2026 and `pipeline/`, funneling products into a clear navigable results inventory; put analysis/diagnostic review under `analysis/docs/analysis/` as MkDocs/HTML prose plus SVG plot panels — not PNG assets or matplotlib text sidebars.
+- Prefer separating analysis results from reusable fitting code, funneling products into a clear navigable results inventory; put analysis/diagnostic review under `analysis/docs/analysis/` as MkDocs/HTML prose plus SVG plot panels — not PNG assets or matplotlib text sidebars.
 - For heavy parallel work, orchestrate via headless Codex/Claude CLI so ChatGPT and Claude Max subscriptions are used, then guide and merge locally; route author Running Notes sorting through headless Claude Code (`claude -p`), not a Cursor agent.
 - When scrubbing `analysis/docs/`, prioritize accuracy and concision over historical record; prefer deleting obsolete or misleading material over archiving it.
 - Structure in-manuscript figure production as a declarative catalog/workflow (`figures/catalog.yaml` driving `scripts/figure_flow.py` / `make figures`) so regeneration does not require agents to rediscover plot scripts.
@@ -101,4 +100,4 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - Local burst products live under `~/Data/Faber2026/dsa110/` (DSA-110; Stokes-I cubes in `DSA_bursts/`) and `~/Data/Faber2026/chimefrb/` (CHIME/FRB; Stokes-I cubes in `CHIME_bursts/`); do not mix instruments across those trees or paper over layout drift with compatibility symlinks — fix referencing paths universally instead.
 - Product dispersion measures in `_cntr_bpc.npy` filenames are per-band archival referral values and can differ between CHIME and DSA for the same event.
 - Retained Mac worktrees and orphan clones need an explicit content disposition — land/integrate, superseded/obsolete, or preserve — with a receipt before retirement; subject-on-main alone does not prove superseded when unique patches remain.
-- The parent manuscript pins two separate repositories as submodules: `analysis/` is the research-control repository and `pipeline/` is the fitting library; changes inside either belong to that repository’s history.
+- The parent manuscript pins one submodule: `analysis/` is the research-control repository and its lockfile pins the reusable FLITS fitting library.

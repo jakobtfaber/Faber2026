@@ -37,7 +37,7 @@ DATA = Path.home() / "Data/Faber2026/dsa110"
 DSA = DATA / "DSA_bursts"
 UPCHAN = DATA / "upchan_codetections"
 DECK = ROOT / "docs/rse/decks/scintillation/waterfall-review-2026-07-18"
-MANIFEST = ROOT / "pipeline/data-manifest.csv"
+MANIFEST = ROOT / "data/catalog/data-manifest.csv"
 OUT_JSON = ROOT / "docs/rse/certificates/l0-certificates.json"
 REGISTRY = ROOT / "docs/rse/control/results-registry.toml"
 

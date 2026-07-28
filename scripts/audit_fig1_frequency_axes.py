@@ -10,6 +10,7 @@ import json
 import shlex
 import struct
 import subprocess
+import tomllib
 from pathlib import Path
 
 import numpy as np
@@ -17,8 +18,8 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/DSA_bursts"
 CHIME_METADATA_DEFAULT = Path.home() / "Data/Faber2026/dsa110/upchan_codetections"
-FIXTURE_DEFAULT = ROOT / "pipeline/crossmatching/notebook_reproduction_fixture.json"
-MANIFEST_DEFAULT = ROOT / "pipeline/data-manifest.csv"
+FIXTURE_DEFAULT = ROOT / "campaigns/crossmatching/notebook_reproduction_fixture.json"
+MANIFEST_DEFAULT = ROOT / "data/catalog/data-manifest.csv"
 
 
 def sha256(path: Path) -> str:
@@ -201,9 +202,12 @@ def audit(
         records.append({"nick": nick, "instruments": instruments})
     return {
         "schema_version": 1,
-        "pipeline_revision": subprocess.check_output(
-            ["git", "-C", str(ROOT / "pipeline"), "rev-parse", "HEAD"], text=True
-        ).strip(),
+        "pipeline_revision": next(
+            item for item in tomllib.loads(
+                (ROOT / "analysis/pyproject.toml").read_text()
+            )["project"]["dependencies"]
+            if item.startswith("flits")
+        ).rsplit("@", 1)[1],
         "audit_passed": len(records) == 12,
         "display_transform": "plot_codetection_gallery.load_band flips stored descending rows",
         "lineage_limit": (

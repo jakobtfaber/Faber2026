@@ -10,13 +10,13 @@ import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-JOINT = ROOT / "pipeline/analysis/scattering-dm-locked-2026-07-14/results"
-SCINT = ROOT / "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results"
+JOINT = ROOT / "analysis/campaigns/scattering-dm-locked-2026-07-14/results"
+SCINT = ROOT / "analysis/campaigns/scintillation-dsa-lorentzian-2026-07-07/results"
 OUT = ROOT / "analysis/provisional_propagation"
 QUARANTINE = ROOT / "quarantine" / "2026-07-17-outdated-science"
 QUARANTINE_REGENERATED = QUARANTINE / "regenerated"
 SINGLE_SCREEN_MAX = 2.0
-FOREGROUND = ROOT / "pipeline/galaxies/foreground"
+FOREGROUND = ROOT / "analysis/campaigns/foregrounds"
 BUDGET_PATH = FOREGROUND / "budget_table_data.json"
 FOREGROUND_PATH = FOREGROUND / "foreground_table_data.json"
 CONTRIBUTORS_PATH = ROOT / "scripts/dm_budget_intervening_systems.csv"

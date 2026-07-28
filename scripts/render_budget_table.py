@@ -10,16 +10,16 @@ from __future__ import annotations
 
 import argparse
 import csv
-import importlib.util
 import json
 import sys
 from pathlib import Path
 
+from galaxies.foreground import budget_table_emitter as base
+
 ROOT = Path(__file__).resolve().parent.parent
-PIPELINE = ROOT / "pipeline"
 CATALOG = ROOT / "analysis" / "dm-joint-phase-v2" / "manuscript_dm_catalog.csv"
-HOST_CSV = ROOT / "scripts" / "dm_budget_uncertainty.csv"
-BASE_DATA = PIPELINE / "galaxies" / "foreground" / "budget_table_data.json"
+HOST_CSV = ROOT / "analysis" / "scripts" / "dm_budget_uncertainty.csv"
+BASE_DATA = ROOT / "analysis/campaigns/foregrounds/budget_table_data.json"
 OUT = ROOT / "budget_table.tex"
 
 # These are usable project redshifts but do not yet have a citable published
@@ -29,27 +29,6 @@ PROVISIONAL_REDSHIFTS = {
     "FRB 20230913A",
     "FRB 20240203A",
 }
-
-EMITTER = PIPELINE / "galaxies" / "foreground" / "budget_table_emitter.py"
-
-
-def _load_base_emitter():
-    """Load the stdlib-only emitter without executing the package ``__init__``.
-
-    Importing ``galaxies.foreground`` eagerly imports Astropy, which is
-    irrelevant to table rendering and unavailable in the workflow's initial
-    plain-Python parity step.
-    """
-    spec = importlib.util.spec_from_file_location("_budget_table_emitter", EMITTER)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"cannot load budget table emitter: {EMITTER}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-base = _load_base_emitter()
-
 
 def _csv_by(path: Path, key: str) -> dict[str, dict[str, str]]:
     with path.open(newline="") as fh:
@@ -78,7 +57,7 @@ def render() -> str:
         "%    Regenerate: python -m galaxies.foreground.budget_table_emitter --out <this file>\n",
         "% !! GENERATED FILE -- do not edit by hand.\n"
         "%    Regenerate: python analysis/scripts/render_budget_table.py\n"
-        "% Foreground columns come from pipeline/galaxies/foreground/budget_table_data.json;\n"
+        "% Foreground columns come from campaigns/foregrounds/budget_table_data.json;\n"
         "% DM_obs and DM_host come from the verified super-repository products.\n",
     ).replace(
         "DSA-110 catalog dispersion measure under the shared DSA-DM reference\n"

@@ -38,7 +38,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import rm_cluster_repartition as rcr  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-REGISTRY = ROOT / "pipeline/galaxies/foreground/data/intervening_census_registry.csv"
+REGISTRY = (
+    ROOT
+    / "analysis/campaigns/foregrounds/data/intervening_census_registry.csv"
+)
 
 
 def test_registry_row_matches_pins():

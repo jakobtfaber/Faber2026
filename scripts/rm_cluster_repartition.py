@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # --- Pinned inputs (every value machine-verified by tests/test_rm_cluster_repartition.py) ---
 PINNED = {
-    # pipeline/galaxies/foreground/data/intervening_census_registry.csv:23
+    # campaigns/foregrounds/data/intervening_census_registry.csv:23
     # (J115120.4+714435 / Wen+ 1254337, the phineas cluster row)
     "m500_1e14": 1.48,
     "b_kpc": 603.6,

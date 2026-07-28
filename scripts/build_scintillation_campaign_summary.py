@@ -16,22 +16,23 @@ import math
 import shutil
 import subprocess
 import sys
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PIPELINE = ROOT / "pipeline"
-CAMPAIGN_RELATIVE = Path("analysis/window-tuning-campaign-2026-07-17/results")
-CAMPAIGN = PIPELINE / CAMPAIGN_RELATIVE
+ANALYSIS = ROOT / "analysis"
+CAMPAIGN_RELATIVE = Path("campaigns/window-tuning-campaign-2026-07-17/results")
+CAMPAIGN = ANALYSIS / CAMPAIGN_RELATIVE
 TABLE_PATH = ROOT / "chime_scintillation_campaign_table.tex"
 PROVENANCE_PATH = ROOT / "analysis/scintillation-summary/campaign_provenance.json"
 FIGURE_PROVENANCE_PATH = ROOT / "analysis/scintillation-summary/joint_figure_provenance.json"
 DSA_VALIDATION_RELATIVE = Path(
-    "analysis/scintillation-dsa-lorentzian-2026-07-07/results/"
+    "campaigns/scintillation-dsa-lorentzian-2026-07-07/results/"
     "oran_qualified/validation.json"
 )
-DSA_VALIDATION = PIPELINE / DSA_VALIDATION_RELATIVE
+DSA_VALIDATION = ANALYSIS / DSA_VALIDATION_RELATIVE
 REVIEWED_PIPELINE = "17d9d26675702e9f8917da655621bef3231f0ddb"
 EXPECTED_MEASUREMENT = "chromatica_hi"
 
@@ -84,30 +85,28 @@ def sha256_bytes(content: bytes) -> str:
 
 
 def pipeline_revision() -> str:
-    return subprocess.check_output(
-        ["git", "-C", str(PIPELINE), "rev-parse", "HEAD"], text=True
-    ).strip()
+    project = tomllib.loads((ANALYSIS / "pyproject.toml").read_text())
+    dependency = next(
+        item for item in project["project"]["dependencies"] if item.startswith("flits")
+    )
+    return dependency.rsplit("@", 1)[1]
 
 
 def pipeline_contains_reviewed_campaign() -> bool:
-    return subprocess.run(
-        [
-            "git",
-            "-C",
-            str(PIPELINE),
-            "merge-base",
-            "--is-ancestor",
-            REVIEWED_PIPELINE,
-            "HEAD",
-        ],
-        check=False,
-    ).returncode == 0
+    return all(
+        path.is_file()
+        for path in (
+            CAMPAIGN / "validation.json",
+            CAMPAIGN / "campaign_results.jsonl",
+            CAMPAIGN / "injection_recovery.json",
+            CAMPAIGN / "figures.review.json",
+            DSA_VALIDATION,
+        )
+    )
 
 
 def reviewed_blob(path: Path) -> bytes:
-    return subprocess.check_output(
-        ["git", "-C", str(PIPELINE), "show", f"{REVIEWED_PIPELINE}:{path.as_posix()}"]
-    )
+    return (ANALYSIS / path).read_bytes()
 
 
 def load_campaign(campaign_dir: Path | None = None) -> Campaign:
@@ -298,7 +297,9 @@ def render_joint_figure(candidate_root: Path) -> Path:
 
     output = candidate_root / "figures/dsa_lorentzian_summary.pdf"
     output.parent.mkdir(parents=True, exist_ok=True)
-    with plt.rc_context(fname=PIPELINE / "matplotlibrc"):
+    from flits.resources import path as resource_path
+
+    with plt.rc_context(fname=resource_path("matplotlibrc")):
         figure, axes = plt.subplots(1, 2, figsize=(9.0, 3.8), constrained_layout=True)
         left, right = axes
 
