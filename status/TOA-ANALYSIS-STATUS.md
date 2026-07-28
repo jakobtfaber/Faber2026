@@ -139,7 +139,7 @@ paper-ready paired arrival-time measurement.
 
 The readiness CSV is an input inventory, not a run file. Its shared DSA
 dispersion measures are labeled as current candidates; every row remains
-`crossmatch_ready=false` until the dispersion-measure source is approved, both
+`ready_for_crossmatch=NO` until the dispersion-measure source is approved, both
 model fits exist with statistical uncertainties, and the separate clock
 systematics are carried.
 
