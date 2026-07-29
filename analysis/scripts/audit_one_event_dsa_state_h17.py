@@ -167,7 +167,11 @@ def main() -> None:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    result = audit(legacy_stage_config(load_config(args.config)))
+    result = audit(
+        legacy_stage_config(
+            load_config(args.config, require_execution_authorized=True)
+        )
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result["dedispersion_state_fit"], indent=2))

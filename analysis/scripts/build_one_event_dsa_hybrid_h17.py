@@ -355,7 +355,9 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     result = run(
-        legacy_stage_config(load_config(args.config)),
+        legacy_stage_config(
+            load_config(args.config, require_execution_authorized=True)
+        ),
         json.loads(args.chime_result.read_text()),
         json.loads(args.dsa_audit.read_text()),
         args.output_dir,
