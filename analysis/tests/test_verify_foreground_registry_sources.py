@@ -1,12 +1,13 @@
+import csv
 import importlib.util
 import json
-import csv
-import io
 import os
 import subprocess
 from pathlib import Path
 
 import pytest
+
+pytestmark = pytest.mark.historical_replay
 
 
 ROOT = Path(__file__).resolve().parents[1]

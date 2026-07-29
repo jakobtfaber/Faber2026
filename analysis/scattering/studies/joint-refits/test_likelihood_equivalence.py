@@ -1,3 +1,4 @@
+# ruff: noqa: E402
 """Likelihood equivalence check (issue #103): Route A (POC BetaCoupledLogL) and
 Route B (driver _JointLogLikelihoodGainSharedZeta) agree at identical theta on
 synthetic bands -- including the beta ~ 4 exponential-PBF dispatch points -- and
@@ -6,6 +7,7 @@ application is slow-marked with the data-absent skip convention (#99)."""
 
 import json
 from pathlib import Path
+
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 import numpy as np
@@ -19,7 +21,6 @@ from likelihood_equivalence import (
     rel_diff,
     theta_grid,
 )
-
 
 CONFIGS = REPO_ROOT / "scattering" / "studies" / "joint-refits" / "local_runs" / "configs"
 
@@ -119,6 +120,7 @@ def test_rel_diff_properties():
 
 
 @pytest.mark.slow
+@pytest.mark.external_data
 def test_freya_real_equivalence(tmp_path):
     # Real data resolves through the pinned manuscript checkout's symlinks
     # (external to this repo) -- skip where not staged, as in the #99 smoke test.

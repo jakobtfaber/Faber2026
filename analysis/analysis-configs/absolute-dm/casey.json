@@ -1,0 +1,176 @@
+{
+  "$schema": "schema.json",
+  "schema_version": 1,
+  "event": "casey",
+  "result_status": "one_event_hybrid_pending_independent_review",
+  "identity": {
+    "reviewed_event": "casey",
+    "input_basenames": {
+      "raw_chime_h5": "singlebeam_362593221.h5",
+      "accepted_chime_reference": "casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+      "raw_dsa_filterbank": "240229aaad_dev_polcal_I.fil",
+      "accepted_dsa_reference": "casey_dsa_I_491_211_2500b_cntr_bpc.npy",
+      "timing_results": "toa_crossmatch_results.json",
+      "trigger_recovery": "trigger_mjd_microsecond_recovery.json",
+      "reproduction_fixture": "notebook_reproduction_fixture.json"
+    },
+    "output_root_basename": "casey-one-event-workflow",
+    "disallowed_event_tokens": [
+      "chromatica",
+      "freya",
+      "hamilton",
+      "isha",
+      "johndoeii",
+      "mahi",
+      "oran",
+      "phineas",
+      "whitney",
+      "wilhelm",
+      "zach"
+    ]
+  },
+  "paths": {
+    "raw_chime_h5": "/data/Faber2026/data/chime-frb/casey/singlebeam_362593221.h5",
+    "accepted_chime_reference": "/data/Faber2026/runs/flits-runs/data/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+    "raw_dsa_filterbank": "/data/Faber2026/data/dsa-110/casey/240229aaad_dev_polcal_I.fil",
+    "accepted_dsa_reference": "/data/Faber2026/runs/flits-runs/data/dsa/casey_dsa_I_491_211_2500b_cntr_bpc.npy",
+    "timing_results": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/toa_crossmatch_results.json",
+    "trigger_recovery": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/trigger_mjd_microsecond_recovery.json",
+    "reproduction_fixture": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/notebook_reproduction_fixture.json",
+    "output_root": "/data/Faber2026/evidence/dm-toa-geometry-20260728/casey-one-event-workflow"
+  },
+  "input_sha256": {
+    "raw_chime_h5": "ea15c60b2bc770b30ab24d2d21e8e3fac8f5f3fe02238019ef258679770ebc0c",
+    "accepted_chime_reference": "79e9cba92716263d7644cafafe4d35a3ea646f18509be094033b67c6fc4440c4",
+    "raw_dsa_filterbank": "8eb60706543875363f20f21ab1473d439f356120b8f8852cedaa9e567b938bd1",
+    "accepted_dsa_reference": "5ec04b0d83f66b67209e1539a37e5b917c294784ac85ae6572116fbd319bc4df",
+    "timing_results": "3743073c9feb8e5f8ad54f10ebe015b712e8ef908adc6be3f8892ae20f558c8c",
+    "trigger_recovery": "87852969eb41c2abfa4c6534557ad03ed4f3e16e64cf1b28bd9da35f4ff89a0e",
+    "reproduction_fixture": "2b139029b054c4d42e6950bb346d9cf8738c306ad1a4e2e621d16da6af9e60d1"
+  },
+  "chime": {
+    "accepted_reference_dm_pc_cm3": 491.2085,
+    "anchor_dm_pc_cm3": 491.28,
+    "reference_pulse_fwhm_s": 0.0001798,
+    "upchannel_factor": 16,
+    "window_s": 0.03,
+    "grid": {
+      "coarse_half_width_pc_cm3": 0.1,
+      "coarse_step_pc_cm3": 0.01,
+      "fine_half_width_pc_cm3": 0.015,
+      "fine_step_pc_cm3": 0.001
+    },
+    "gates": {
+      "oracle_half_width_pc_cm3": 0.01,
+      "oracle_material_threshold_pc_cm3": 0.005,
+      "oracle_normalised_curve_max_abs_difference": 0.1,
+      "oracle_center_score_ratio_tolerance": 0.2,
+      "smearing_max_fraction_of_upchannel_sample": 0.1,
+      "smearing_max_fraction_of_reference_pulse_fwhm": 0.05,
+      "injection_max_error_pc_cm3": 0.003
+    },
+    "accepted_support": {
+      "full_grid_rows": 1024,
+      "all_nan_count": 300,
+      "finite_flat_count": 4,
+      "live_count": 720,
+      "h5_present_count": 771,
+      "h5_missing_count": 253,
+      "h5_present_accepted_dead_ids": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        85,
+        88,
+        90,
+        91,
+        92,
+        100,
+        103,
+        104,
+        107,
+        108,
+        109,
+        110,
+        134,
+        139,
+        166,
+        174,
+        186,
+        187,
+        188,
+        192,
+        194,
+        195,
+        196,
+        203,
+        422,
+        430,
+        462,
+        637,
+        638,
+        639,
+        640,
+        641,
+        643,
+        644,
+        645,
+        646,
+        813,
+        882,
+        954
+      ],
+      "manual_bad_channel_ids": [],
+      "historical_row_sum_replay": false
+    }
+  },
+  "dsa": {
+    "accepted_reference_dm_pc_cm3": 491.211,
+    "raw_crop_start_sample": 13998,
+    "crop_samples": 2500,
+    "padding_samples": 64,
+    "audit_sample_rows": 96,
+    "accepted_support": {
+      "full_grid_rows": 6144,
+      "live_count": 6104,
+      "dead_count": 40,
+      "manual_bad_channel_ids": []
+    },
+    "gates": {
+      "direct_correlation_min": 0.9,
+      "reversed_correlation_max": 0.1,
+      "reference_minus_raw_dm_abs_max_pc_cm3": 0.000001,
+      "edge_fail_closed": true
+    }
+  },
+  "geometry": {
+    "geometry_dm_pc_cm3": 491.27924166266934,
+    "reference_frequency_mhz": 400.0,
+    "dsa_native_frequency_mhz": 1530.0
+  },
+  "workflow": {
+    "execution_authorized": false,
+    "regression_fixture": true,
+    "chime_container_image": "chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41",
+    "container_data_mount": "/data/Faber2026",
+    "stages": [
+      "preflight",
+      "dsa_audit",
+      "chime_hybrid",
+      "dsa_products",
+      "geometry",
+      "packet",
+      "manifests"
+    ]
+  },
+  "event_binding_sha256": "389060875d6abf41f77bd5597064bbebf4da6f2222cee60bbdcd34df6d508a1a"
+}

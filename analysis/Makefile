@@ -3,7 +3,7 @@ MANUSCRIPT_ROOT ?= ..
 MANUSCRIPT_ROOT_ABS := $(abspath $(MANUSCRIPT_ROOT))
 UV ?= uv
 
-.PHONY: check-mount check-state test figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
+.PHONY: check-mount check-state test test-manuscript test-slow test-replay test-external lint ci figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
 
 check-mount:
 	@test -f "$(MANUSCRIPT_ROOT_ABS)/main.tex" || \
@@ -14,14 +14,42 @@ check-state: check-mount
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/render_results_registry.py --validate --manuscript-root "$(MANUSCRIPT_ROOT_ABS)"
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/render_results_registry.py --check
 
-test: check-state
+test:
+	PYTHONPATH="$(CURDIR):$(CURDIR)/scripts" \
+		$(UV) run --group test --frozen python -m pytest -q \
+		--standalone-analysis \
+		-m "not slow and not network and not external_data and not historical_replay and not integration"
+	bash tests/test_journal_append.sh
+
+test-manuscript: check-mount
 	cd "$(MANUSCRIPT_ROOT_ABS)" && \
 		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
-		PYTHONPATH="$(MANUSCRIPT_ROOT_ABS)/analysis:$(MANUSCRIPT_ROOT_ABS)/analysis/scripts" \
-		$(UV) run --project analysis --group test --frozen python -m pytest -q -ra \
-		--strict-config --strict-markers analysis/tests
-	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/figure_review.py verify
-	bash tests/test_journal_append.sh
+		PYTHONPATH="$(CURDIR):$(CURDIR)/scripts" \
+		xargs $(UV) run --project "$(CURDIR)" --group test --frozen \
+		python -m pytest -q \
+		-m "not external_data and not network and not slow and not historical_replay" \
+		< "$(CURDIR)/tests/manuscript_integration_files.txt"
+
+test-slow:
+	PYTHONPATH="$(CURDIR):$(CURDIR)/scripts" \
+		$(UV) run --group test --frozen python -m pytest -q \
+		--standalone-analysis -m "slow and not network and not external_data" \
+		|| test $$? -eq 5
+
+test-replay:
+	PYTHONPATH="$(CURDIR):$(CURDIR)/scripts" \
+		$(UV) run --group test --frozen python -m pytest -q \
+		--standalone-analysis -m "historical_replay and not integration"
+
+test-external:
+	PYTHONPATH="$(CURDIR):$(CURDIR)/scripts" \
+		$(UV) run --group test --frozen python -m pytest -q \
+		--standalone-analysis --run-external-data -m "external_data"
+
+lint:
+	$(UV) run --group test --frozen python scripts/lint_changed.py
+
+ci: lint test
 
 figures: check-mount
 	cd "$(MANUSCRIPT_ROOT_ABS)" && \

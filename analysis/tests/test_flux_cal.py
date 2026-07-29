@@ -1,6 +1,7 @@
 """Tests for analysis/flux_cal.py — radiometer flux calibration (S/N -> Jy)."""
 
 import numpy as np
+import pytest
 
 from energetics.methods.flux_cal import calibrated_band_integral_jy_ms_hz, radiometer_sigma_jy
 
@@ -108,6 +109,7 @@ def test_dsa_pointing_csv_and_offsets():
         assert 0.0 <= theta < 5.0 and phi == 0.0, (n, theta)  # inside the primary beam
 
 
+@pytest.mark.external_data
 def test_dsa_fluence_matches_catalog_scale():
     # absolute-scale gate: with the coherent-beam SEFD (per-element / N_ant), the calibrated
     # band-avg fluences must land near the Law+2024 catalog values (16.2/26.2/13.2 Jy*ms). They
@@ -128,6 +130,7 @@ def test_dsa_fluence_matches_catalog_scale():
         assert 1.0 / 3 < band_avg / f_cat < 3.0, (nick, band_avg, f_cat)
 
 
+@pytest.mark.external_data
 def test_joint_band_fluence_matches_catalog_scale():
     # the model-based DSA fluence actually used for E_iso (joint c0/gamma, measured beam,
     # coherent-beam SEFD, /noise_std bandpass-unit correction over the fit's valid channels) must

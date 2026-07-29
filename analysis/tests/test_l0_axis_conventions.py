@@ -102,6 +102,7 @@ def test_certificate_json_schema_and_orders():
     not CHIME_FULL_ROOT.is_dir() or not DSA_FULL_ROOT.is_dir(),
     reason="local full-resolution roots absent",
 )
+@pytest.mark.external_data
 def test_local_bytes_match_certificates():
     rows = json.loads(CERTS.read_text())
     for r in rows:
@@ -120,6 +121,7 @@ def test_local_bytes_match_certificates():
     not CHIME_FULL_ROOT.is_dir() or not DSA_FULL_ROOT.is_dir(),
     reason="local full-resolution roots absent",
 )
+@pytest.mark.external_data
 def test_local_chime_cellular_band_still_descending():
     """Spot-check: casey full-resolution cellular-band method still returns descending."""
     sys.path.insert(0, str(ROOT / "scripts"))

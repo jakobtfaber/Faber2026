@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tomllib
-import os
 from copy import deepcopy
 from pathlib import Path
 
@@ -11,8 +11,8 @@ import pytest
 
 from scripts.generate_results_coverage import generate
 from scripts.render_results_registry import (
-    CANONICAL_RESULT_IDS,
     CANONICAL_INPUT_EXCEPTION_NAMES,
+    CANONICAL_RESULT_IDS,
     EXPECTED_CLAIM_OWNER_FIELDS,
     EXPECTED_REGISTRY_FIELDS,
     EXPECTED_SCHEMA_VERSION,
@@ -25,7 +25,6 @@ from scripts.render_results_registry import (
     validate_claim_owner_ledger,
     validate_registry,
 )
-
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "docs/rse/control/results-registry.toml"
@@ -65,6 +64,11 @@ def _manuscript_root() -> Path:
 
 def test_registry_covers_compiled_manuscript() -> None:
     assert validate_registry(_registry(), _manuscript_root()) == []
+
+
+test_registry_covers_compiled_manuscript = pytest.mark.integration(
+    test_registry_covers_compiled_manuscript
+)
 
 
 def test_budget_cluster_column_has_integrated_probabilistic_values() -> None:

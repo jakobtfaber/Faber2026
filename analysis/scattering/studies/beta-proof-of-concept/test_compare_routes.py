@@ -86,6 +86,7 @@ def test_bookkeeping_fields():
 
 
 @pytest.mark.slow
+@pytest.mark.external_data
 def test_real_artifacts_roundtrip():
     # Application test: only meaningful once both fit artifacts exist on disk.
     if not (cr.ROUTE_A_JSON.exists() and cr.ROUTE_B_NPZ.exists()):

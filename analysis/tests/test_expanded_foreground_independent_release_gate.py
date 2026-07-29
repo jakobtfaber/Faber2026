@@ -18,7 +18,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/validate_expanded_foreground_independent_release_gate.py"
 GATE = ROOT / "docs/rse/specs/validation-expanded-foreground-independent-release-gate.json"

@@ -33,6 +33,7 @@ test = [
   "pytest>=7.0",
   "pytest-cov>=4.0",
   "ruff>=0.15.18",
+  "zizmor==1.28.0",
 ]
 
 [tool.uv]
@@ -55,6 +56,8 @@ testpaths = [
 ]
 xfail_strict = true
 markers = [
+  "external_data: requires data that are intentionally not stored in this repository",
+  "historical_replay: replays frozen evidence or repository history",
   "integration: marks tests spanning multiple components",
   "network: marks tests requiring live network services",
   "slow: marks tests as slow",

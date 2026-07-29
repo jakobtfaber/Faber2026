@@ -34,6 +34,17 @@ spectra and window diagnostics, validate the correlated-noise uncertainty, then
 record `review_status=accepted` and `noise_status=accepted` explicitly.
 The builder fails closed on missing, unstable, uncalibrated, or unreviewed bands.
 
+The methods figure uses the actual central-window dynamic spectra and calibrated
+fluence spectra for one stable example:
+
+```bash
+uv run python energetics/studies/burst-energies/plot_measurement_method.py \
+  --dsa-beam-cube ~/Documents/DSA110_beam_1.h5
+```
+
+It writes SVG, PDF, and a hash-bound provenance receipt under `figures/`.
+The figure is a candidate-method illustration, not an admitted energy result.
+
 `burst_energies.json`, `burst_energies.tex`, and
 `recompute_energies.py` are legacy fitted-amplitude cross-checks. They are not
 manuscript inputs.

@@ -13,7 +13,6 @@ import tomllib
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "docs/rse/control/results-registry.toml"
 CLAIM_OWNERS = ROOT / "docs/rse/control/results-registry-claim-owners.toml"
@@ -403,7 +402,6 @@ def prose_fingerprints(path: Path) -> list[str]:
 def compiled_artifacts(root: Path) -> tuple[set[str], set[str]]:
     """Return compiled generated-table and figure paths."""
     sources = compiled_sources(root)
-    source_rel = {path.relative_to(root).as_posix() for path in sources}
     tables = {
         path.relative_to(root).as_posix()
         for path in sources
@@ -1071,6 +1069,14 @@ def main() -> int:
         )
         if errors:
             print("\n".join(errors), file=sys.stderr)
+            print(
+                "\nRepair: update claim ownership in "
+                "docs/rse/control/results-registry-claim-owners.toml, then run "
+                "`FABER2026_ROOT=/path/to/Faber2026 "
+                "python3 scripts/render_results_registry.py --validate "
+                "--manuscript-root /path/to/Faber2026`.",
+                file=sys.stderr,
+            )
             return 1
         return 0
     if args.stdout:
