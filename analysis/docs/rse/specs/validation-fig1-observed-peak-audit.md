@@ -161,3 +161,55 @@ uncorrected candidate (`2026-07-17-fig1-observed-peak-audit`) is the
 faithful adopted-DM display, and the isha/phineas CHIME smear is scattering.
 The sharpness-scan audit remains a valid measurement; its stem-misstatement
 interpretation does not. Owner decision on the two candidates remains open.
+
+## Addendum — reaffirmation test: the installed figure is not restored (2026-07-29)
+
+Question tested: because the dispersion-measure corrections were refuted, may
+the Figure 1 already installed in the manuscript simply be reaffirmed and the
+lane closed? **No.** The refutation removes one candidate; it does not restore
+the installed bytes, which fail on a separate and independent ground.
+
+Verified state of the installed figure:
+
+- `figures/codetection_data_grid.pdf` is
+  `ba56453f63fee66580bfafd50f9b4829b39901b773d3de4bd464ced0ff697d8a`, byte-exact
+  with the manuscript-owner approval and promotion receipt
+  `figure_review/decisions/approval_receipts/fig1-gallery.json`
+  (batch `2026-07-15-fig1-adopted-dm`, approved 2026-07-15, source revision
+  `49861d12`). `scripts/figure_review.py verify` reports `figure approval gate: ok`.
+- The compiled manuscript embeds those same bytes: `main.fdb_latexmk` records the
+  Figure 1 input at MD5 `4f966f2d5ea0373058202b36fa013ae7`, which equals the
+  live file. So the installed approval, the installed bytes, and the compiled
+  Figure 1 are mutually consistent.
+
+Why it still cannot be reaffirmed:
+
+- At source revision `49861d12` the producer called
+  `bands_archival(..., extra_shift_ms=fit_toa_shift_ms(...))`. The installed
+  panels are therefore anchored on **fitted joint-model arrival times**, not on
+  the observed burst profile. Pull Request #121 removed exactly that call.
+- The roster in force at that revision carried a fit artifact for 11 of the 12
+  bursts (only `chromatica` had none), and four of those artifacts — `zach`,
+  `wilhelm`, `hamilton`, `casey` — are themselves flagged rejected or
+  morphology-audit-only. The installed display anchor thus depends on fits the
+  project does not accept as physical.
+- Figure 1 is required to be a data-only product, independent of joint-model
+  acceptance. The installed bytes do not satisfy that requirement, so keeping
+  them is a third outcome, not a fallback to "the uncorrected candidate".
+
+Consequence: the surviving promotable candidate is still
+`2026-07-17-fig1-observed-peak-audit` / `fig1-gallery` at
+`979e616b2d82c395080fa32c5f5554b64568849683c0129eb4b01f55eb63915a`. Both later
+candidates remain `pending` and both batches remain undispositioned, so the
+choice stays fail-closed in the owner queue. The open owner judgment is
+unchanged and is not an agent decision: whether the per-panel residual-drift
+zero-consistency gate is the right scientific gate, given it is unmet. Counted
+directly from the batch's `provenance/residual-drift.json`, the gate's
+scattering-aware (exponentially modified Gaussian) estimator returns, over the
+24 products, 8 consistent with zero, 7 nonzero, and 9 unconstrained, with
+`gate_passed: false`. Separately, the
+owner decision of 2026-07-23 (`none_approved_for_final_draft`) already withdraws
+final-draft standing from the installed figure.
+
+Re-runnable evidence: `analysis/tests/test_fig1_reaffirmation.py`
+(`python -m pytest tests/test_fig1_reaffirmation.py`, 5 passed).
