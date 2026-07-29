@@ -14,6 +14,7 @@ ANALYSIS_ROOT = Path(__file__).resolve().parent.parent
 LATEST_MANIFEST = (
     ANALYSIS_ROOT
     / "figure_review"
+    / "artifacts"
     / "batches"
     / "2026-07-22-joint-scattering-current"
     / "provenance"
