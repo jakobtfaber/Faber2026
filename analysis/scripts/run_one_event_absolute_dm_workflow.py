@@ -4,10 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
+import os
 import socket
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -159,7 +162,11 @@ def build_stage_commands(
     }
 
 
-def expected_stage_outputs(stage: str, paths: dict[str, Path]) -> list[Path]:
+def expected_stage_outputs(
+    stage: str,
+    paths: dict[str, Path],
+    config: dict[str, Any] | None = None,
+) -> list[Path]:
     if stage == "dsa_audit":
         return [paths["dsa_audit"]]
     if stage == "chime_hybrid":
@@ -170,7 +177,7 @@ def expected_stage_outputs(stage: str, paths: dict[str, Path]) -> list[Path]:
             paths["chime_dir"] / "chime_geometry_dm.npz",
         ]
     if stage == "dsa_products":
-        return [
+        outputs = [
             paths["dsa_result"],
             paths["dsa_dir"] / "dsa_input_dm.npz",
             paths["dsa_dir"] / "dsa_accepted_reference_dm.npz",
@@ -178,6 +185,14 @@ def expected_stage_outputs(stage: str, paths: dict[str, Path]) -> list[Path]:
             paths["dsa_dir"] / "dsa_hybrid_fit_dm.npz",
             paths["dsa_dir"] / "dsa_geometry_dm.npz",
         ]
+        if config is not None and not config["workflow"]["regression_fixture"]:
+            for label in ("anchor_dm", "hybrid_fit_dm", "geometry_dm"):
+                for endpoint in ("low", "high"):
+                    outputs.append(
+                        paths["dsa_dir"]
+                        / f"dsa_{label}_input_{endpoint}.npz"
+                    )
+        return outputs
     if stage == "geometry":
         return [paths["geometry"]]
     if stage == "packet":
@@ -275,10 +290,14 @@ def _stage_input_files(
             _resolve(source[key], repo_root) for key in config["input_sha256"]
         ]
     if stage == "dsa_audit":
-        return [
+        inputs = [
             _resolve(source["raw_dsa_filterbank"], repo_root),
             _resolve(source["accepted_dsa_reference"], repo_root),
         ]
+        for key in ("dsa_state_reconstruction", "dsa_state_calibration"):
+            if key in source:
+                inputs.append(_resolve(source[key], repo_root))
+        return inputs
     if stage == "chime_hybrid":
         return [
             _resolve(source["raw_chime_h5"], repo_root),
@@ -298,7 +317,7 @@ def _stage_input_files(
             _resolve(source["reproduction_fixture"], repo_root),
         ]
     if stage == "packet":
-        return [
+        inputs = [
             paths["chime_result"],
             paths["dsa_result"],
             paths["dsa_audit"],
@@ -306,6 +325,10 @@ def _stage_input_files(
             _resolve(source["accepted_chime_reference"], repo_root),
             _resolve(source["accepted_dsa_reference"], repo_root),
         ]
+        for key in ("dsa_state_reconstruction", "dsa_state_calibration"):
+            if key in source:
+                inputs.append(_resolve(source[key], repo_root))
+        return inputs
     if stage == "manifests":
         return [
             path
@@ -376,21 +399,25 @@ def _output_set_exact(stage: str, expected: list[Path]) -> bool:
     return actual == set(expected)
 
 
-def _all_workflow_files(paths: dict[str, Path]) -> set[Path]:
+def _all_workflow_files(
+    paths: dict[str, Path],
+    config: dict[str, Any],
+) -> set[Path]:
     expected = {paths["state"], paths["provenance"]}
     for stage in STAGES:
-        expected.update(expected_stage_outputs(stage, paths))
+        expected.update(expected_stage_outputs(stage, paths, config))
     return expected
 
 
 def _workflow_output_set_valid(
     paths: dict[str, Path],
+    config: dict[str, Any],
     *,
     require_complete: bool = False,
 ) -> bool:
     root = paths["root"]
     actual = {path for path in root.rglob("*") if path.is_file()} if root.is_dir() else set()
-    expected = _all_workflow_files(paths)
+    expected = _all_workflow_files(paths, config)
     return actual == expected if require_complete else actual.issubset(expected)
 
 
@@ -415,7 +442,7 @@ def stage_record_matches(
     paths: dict[str, Path],
     command: list[str] | None,
 ) -> bool:
-    expected = expected_stage_outputs(stage, paths)
+    expected = expected_stage_outputs(stage, paths, config)
     try:
         return (
             record.get("event_binding_sha256") == config["event_binding_sha256"]
@@ -426,7 +453,7 @@ def stage_record_matches(
             == stage_input_sha256(stage, config, repo_root, paths)
             and outputs_match(record, expected)
             and _output_set_exact(stage, expected)
-            and _workflow_output_set_valid(paths)
+            and _workflow_output_set_valid(paths, config)
             and _output_schema_matches(stage, config, paths)
         )
     except (OSError, ValueError, KeyError, TypeError):
@@ -503,7 +530,54 @@ def make_plan(
 
 def _write_json(path: Path, value: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
+    payload = json.dumps(value, indent=2, allow_nan=False) + "\n"
+    descriptor, temporary = tempfile.mkstemp(
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    temporary_path = Path(temporary)
+    try:
+        with os.fdopen(descriptor, "w") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_path, path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def _log_refs() -> dict[str, str]:
+    refs = {}
+    for label, variable in (
+        ("stdout", "ONE_EVENT_WORKFLOW_STDOUT_LOG"),
+        ("stderr", "ONE_EVENT_WORKFLOW_STDERR_LOG"),
+    ):
+        value = os.environ.get(variable)
+        if value:
+            refs[label] = value
+    return refs
+
+
+def _existing_output_receipts(paths: list[Path]) -> tuple[list[dict], list[str]]:
+    outputs = []
+    unreadable = []
+    for path in paths:
+        if not path.is_file():
+            continue
+        try:
+            outputs.append({"path": str(path), "sha256": sha256_file(path)})
+        except OSError as error:
+            unreadable.append(f"{path}: {type(error).__name__}: {error}")
+    return outputs, unreadable
+
+
+def _failed_stage_message(stages: list[str]) -> str:
+    flags = " ".join(f"--retry-failed-stage {stage}" for stage in stages)
+    return (
+        f"workflow state contains failed stage(s) {', '.join(stages)}; "
+        f"inspect the failure receipt, then retry explicitly with {flags}"
+    )
 
 
 def _write_provenance(
@@ -590,7 +664,9 @@ def execute(
     from_stage: str,
     through_stage: str,
     force_stage: set[str],
+    retry_failed_stage: set[str] | None = None,
 ) -> dict[str, Any]:
+    retry_failed_stage = set(retry_failed_stage or ())
     paths = _output_paths(config)
     commands = build_stage_commands(
         config,
@@ -605,12 +681,87 @@ def execute(
     else:
         state = {
             "schema_version": 1,
+            "status": "pending",
             "event": config["event"],
             "event_binding_sha256": config["event_binding_sha256"],
             "stages": {},
         }
 
     selected_stages = _stage_window(from_stage, through_stage)
+    interrupted_stages = [
+        stage
+        for stage, record in state["stages"].items()
+        if record.get("status") == "running"
+    ]
+    if interrupted_stages:
+        interrupted_at = time.time()
+        for stage in interrupted_stages:
+            record = state["stages"][stage]
+            expected = [
+                Path(path) for path in record.get("expected_outputs", [])
+            ]
+            partial_outputs, unreadable_outputs = _existing_output_receipts(expected)
+            record.update(
+                {
+                    "status": "failed",
+                    "failed_unix": interrupted_at,
+                    "wall_seconds": max(
+                        0.0,
+                        interrupted_at
+                        - float(record.get("started_unix", interrupted_at)),
+                    ),
+                    "outputs": partial_outputs,
+                    "missing_outputs": [
+                        str(path) for path in expected if not path.is_file()
+                    ],
+                    "error": {
+                        "type": "InterruptedStageState",
+                        "message": (
+                            "prior process ended without a terminal stage receipt"
+                        ),
+                    },
+                }
+            )
+            if unreadable_outputs:
+                record["unreadable_outputs"] = unreadable_outputs
+        state.update(
+            {
+                "status": "failed",
+                "failed_stage": sorted(
+                    interrupted_stages,
+                    key=STAGES.index,
+                )[0],
+                "failed_unix": interrupted_at,
+            }
+        )
+        state.pop("active_stage", None)
+        _write_json(paths["state"], state)
+    failed_stages = sorted(
+        (
+            stage
+            for stage, record in state["stages"].items()
+            if record.get("status") == "failed"
+        ),
+        key=STAGES.index,
+    )
+    unapproved_retries = [
+        stage for stage in failed_stages if stage not in retry_failed_stage
+    ]
+    if unapproved_retries:
+        raise RuntimeError(_failed_stage_message(unapproved_retries))
+    unused_retries = retry_failed_stage - set(failed_stages)
+    if unused_retries:
+        raise RuntimeError(
+            "--retry-failed-stage names a stage without a durable failed receipt: "
+            + ", ".join(sorted(unused_retries, key=STAGES.index))
+        )
+    if any(stage not in selected_stages for stage in failed_stages):
+        raise RuntimeError(
+            "retry window does not include failed stage(s): "
+            + ", ".join(
+                stage for stage in failed_stages if stage not in selected_stages
+            )
+        )
     for prerequisite in STAGES[: STAGES.index(from_stage)]:
         if not stage_record_matches(
             state["stages"].get(prerequisite, {}),
@@ -651,7 +802,7 @@ def execute(
         if stage == "packet":
             _write_provenance(config, state, paths["provenance"])
         started = time.time()
-        expected_outputs = expected_stage_outputs(stage, paths)
+        expected_outputs = expected_stage_outputs(stage, paths, config)
         record: dict[str, Any] = {
             "stage": stage,
             "status": "running",
@@ -659,57 +810,122 @@ def execute(
             "event_binding_sha256": config["event_binding_sha256"],
             "command": commands[stage],
             "command_sha256": _hash_payload(commands[stage]),
-            "control_sha256": stage_control_sha256(
-                stage,
-                repo_root,
-                config_path,
-            ),
-            "input_sha256": stage_input_sha256(
-                stage,
-                config,
-                repo_root,
-                paths,
-            ),
             "expected_outputs": [str(path) for path in expected_outputs],
             "outputs": [],
+            "log_refs": _log_refs(),
         }
+        if previous:
+            history = copy.deepcopy(previous.get("attempt_history", []))
+            history.append(
+                {
+                    key: copy.deepcopy(value)
+                    for key, value in previous.items()
+                    if key != "attempt_history"
+                }
+            )
+            record["attempt_history"] = history
         state["stages"][stage] = record
+        state["status"] = "running"
+        state["active_stage"] = stage
         _write_json(paths["state"], state)
-        if stage == "preflight":
-            record["verified_inputs"] = verified_inputs
-        elif stage == "packet":
-            subprocess.run(commands[stage], check=True)
-        elif stage == "manifests":
-            _write_manifest(config, config_path, repo_root, paths)
-        else:
-            subprocess.run(commands[stage], check=True)
-            if stage == "geometry":
-                verify_geometry_result(config, paths["geometry"])
-        completed = time.time()
-        outputs = [
-            {"path": str(path), "sha256": sha256_file(path)}
-            for path in expected_outputs
-        ]
-        if not _output_set_exact(stage, expected_outputs):
-            raise RuntimeError(f"{stage}: unexpected output file set")
-        if not _workflow_output_set_valid(paths):
-            raise RuntimeError(f"{stage}: unexpected workflow-root output")
-        record.update(
-            {
-                "status": "completed",
-                "completed_unix": completed,
-                "wall_seconds": completed - started,
-                "outputs": outputs,
-            }
-        )
-        if not _output_schema_matches(stage, config, paths):
-            raise RuntimeError(f"{stage}: output schema or event binding mismatch")
-        _write_json(paths["state"], state)
+        try:
+            record.update(
+                {
+                    "control_sha256": stage_control_sha256(
+                        stage,
+                        repo_root,
+                        config_path,
+                    ),
+                    "input_sha256": stage_input_sha256(
+                        stage,
+                        config,
+                        repo_root,
+                        paths,
+                    ),
+                }
+            )
+            _write_json(paths["state"], state)
+            if stage == "preflight":
+                record["verified_inputs"] = verified_inputs
+            elif stage == "packet":
+                subprocess.run(commands[stage], check=True)
+            elif stage == "manifests":
+                _write_manifest(config, config_path, repo_root, paths)
+            else:
+                subprocess.run(commands[stage], check=True)
+                if stage == "geometry":
+                    verify_geometry_result(config, paths["geometry"])
+            completed = time.time()
+            outputs = [
+                {"path": str(path), "sha256": sha256_file(path)}
+                for path in expected_outputs
+            ]
+            if not _output_set_exact(stage, expected_outputs):
+                raise RuntimeError(f"{stage}: unexpected output file set")
+            if not _workflow_output_set_valid(paths, config):
+                raise RuntimeError(f"{stage}: unexpected workflow-root output")
+            record.update(
+                {
+                    "status": "completed",
+                    "completed_unix": completed,
+                    "wall_seconds": completed - started,
+                    "outputs": outputs,
+                }
+            )
+            if not _output_schema_matches(stage, config, paths):
+                raise RuntimeError(
+                    f"{stage}: output schema or event binding mismatch"
+                )
+            state.pop("active_stage", None)
+            _write_json(paths["state"], state)
+        except BaseException as error:
+            failed = time.time()
+            partial_outputs, unreadable_outputs = _existing_output_receipts(
+                expected_outputs
+            )
+            record.update(
+                {
+                    "status": "failed",
+                    "failed_unix": failed,
+                    "wall_seconds": failed - started,
+                    "outputs": partial_outputs,
+                    "missing_outputs": [
+                        str(path)
+                        for path in expected_outputs
+                        if not path.is_file()
+                    ],
+                    "error": {
+                        "type": type(error).__name__,
+                        "message": str(error),
+                    },
+                }
+            )
+            if unreadable_outputs:
+                record["unreadable_outputs"] = unreadable_outputs
+            state.update(
+                {
+                    "status": "failed",
+                    "failed_stage": stage,
+                    "failed_unix": failed,
+                }
+            )
+            state.pop("active_stage", None)
+            _write_json(paths["state"], state)
+            raise
     if through_stage == STAGES[-1] and not _workflow_output_set_valid(
         paths,
+        config,
         require_complete=True,
     ):
         raise RuntimeError("final workflow output set is incomplete or unexpected")
+    state["status"] = (
+        "completed" if through_stage == STAGES[-1] else "partial_completed"
+    )
+    state["completed_unix"] = time.time()
+    state.pop("active_stage", None)
+    state.pop("failed_stage", None)
+    state.pop("failed_unix", None)
+    _write_json(paths["state"], state)
     return state
 
 
@@ -724,6 +940,13 @@ def main() -> None:
     parser.add_argument("--from-stage", choices=STAGES, default=STAGES[0])
     parser.add_argument("--through-stage", choices=STAGES, default=STAGES[-1])
     parser.add_argument("--force-stage", choices=STAGES, action="append", default=[])
+    parser.add_argument(
+        "--retry-failed-stage",
+        choices=STAGES,
+        action="append",
+        default=[],
+        help="explicitly retry a stage that has a durable failed receipt",
+    )
     parser.add_argument(
         "--check-inputs",
         action="store_true",
@@ -758,6 +981,7 @@ def main() -> None:
         from_stage=args.from_stage,
         through_stage=args.through_stage,
         force_stage=set(args.force_stage),
+        retry_failed_stage=set(args.retry_failed_stage),
     )
     print(json.dumps(state, indent=2, allow_nan=False))
 

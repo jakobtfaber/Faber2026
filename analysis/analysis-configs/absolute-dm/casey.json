@@ -34,9 +34,9 @@
     "accepted_chime_reference": "/data/Faber2026/runs/flits-runs/data/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
     "raw_dsa_filterbank": "/data/Faber2026/data/dsa-110/casey/240229aaad_dev_polcal_I.fil",
     "accepted_dsa_reference": "/data/Faber2026/runs/flits-runs/data/dsa/casey_dsa_I_491_211_2500b_cntr_bpc.npy",
-    "timing_results": "campaigns/crossmatching/toa_crossmatch_results.json",
-    "trigger_recovery": "/Users/jakobfaber/Data/Faber2026/dsa110/trigger_mjd_microsecond_recovery.json",
-    "reproduction_fixture": "campaigns/crossmatching/notebook_reproduction_fixture.json",
+    "timing_results": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/toa_crossmatch_results.json",
+    "trigger_recovery": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/trigger_mjd_microsecond_recovery.json",
+    "reproduction_fixture": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/notebook_reproduction_fixture.json",
     "output_root": "/data/Faber2026/evidence/dm-toa-geometry-20260728/casey-one-event-workflow"
   },
   "input_sha256": {
@@ -172,5 +172,5 @@
       "manifests"
     ]
   },
-  "event_binding_sha256": "28237d4b81c2f4632c4be627cae5b97f91b20163840c2dfb2ead35bc77d5df75"
+  "event_binding_sha256": "389060875d6abf41f77bd5597064bbebf4da6f2222cee60bbdcd34df6d508a1a"
 }

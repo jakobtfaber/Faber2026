@@ -10,13 +10,17 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import generate_phase_b_workflow_configs as config_generator  # noqa: E402
+import inventory_absolute_dm_inputs_h17 as input_inventory  # noqa: E402
+import preflight_phase_b_workflows_h17 as phase_b_preflight  # noqa: E402
+import run_authorized_workflows_h17 as campaign_runner  # noqa: E402
+import run_one_event_absolute_dm_workflow as workflow_runner  # noqa: E402
 from one_event_workflow import (  # noqa: E402
     STAGES,
     event_binding_sha256,
     load_config,
     validate_config,
 )
-import run_one_event_absolute_dm_workflow as workflow_runner  # noqa: E402
 from run_one_event_absolute_dm_workflow import outputs_match  # noqa: E402
 
 CONFIG = ROOT / "analysis-configs/absolute-dm/casey.json"
@@ -24,6 +28,33 @@ CONFIG = ROOT / "analysis-configs/absolute-dm/casey.json"
 
 def _config() -> dict:
     return json.loads(CONFIG.read_text())
+
+
+def _local_execution_config(tmp_path: Path) -> tuple[dict, Path]:
+    config = _config()
+    names = {
+        "raw_chime_h5": "casey-raw-chime.h5",
+        "accepted_chime_reference": "casey-chime-reference.npy",
+        "raw_dsa_filterbank": "casey-raw-dsa.fil",
+        "accepted_dsa_reference": "casey-dsa-reference.npy",
+        "timing_results": "casey-timing.json",
+        "trigger_recovery": "casey-trigger.json",
+        "reproduction_fixture": "casey-fixture.json",
+    }
+    for key, name in names.items():
+        path = tmp_path / name
+        path.write_bytes(f"{key}\n".encode())
+        config["paths"][key] = str(path)
+        config["identity"]["input_basenames"][key] = name
+        config["input_sha256"][key] = workflow_runner.sha256_file(path)
+    output_root = tmp_path / "casey-workflow"
+    config["paths"]["output_root"] = str(output_root)
+    config["identity"]["output_root_basename"] = output_root.name
+    config["workflow"]["container_data_mount"] = str(tmp_path)
+    config["event_binding_sha256"] = event_binding_sha256(config)
+    config_path = tmp_path / "casey-workflow-config.json"
+    config_path.write_text(json.dumps(config))
+    return config, config_path
 
 
 def _substituted_config() -> dict:
@@ -223,6 +254,171 @@ def test_from_stage_cannot_bypass_input_rehash(
             through_stage="geometry",
             force_stage=set(),
         )
+
+
+def test_failed_stage_is_durable_and_retry_requires_explicit_flag(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config, config_path = _local_execution_config(tmp_path)
+    monkeypatch.setenv("ONE_EVENT_WORKFLOW_STDOUT_LOG", "/logs/casey.stdout")
+    monkeypatch.setenv("ONE_EVENT_WORKFLOW_STDERR_LOG", "/logs/casey.stderr")
+
+    def injected_failure(command: list[str], check: bool) -> None:
+        assert check is True
+        raise subprocess.CalledProcessError(23, command)
+
+    monkeypatch.setattr(workflow_runner.subprocess, "run", injected_failure)
+    with pytest.raises(subprocess.CalledProcessError):
+        workflow_runner.execute(
+            config,
+            config_path=config_path,
+            repo_root=ROOT,
+            from_stage="preflight",
+            through_stage="dsa_audit",
+            force_stage=set(),
+        )
+
+    state_path = workflow_runner._output_paths(config)["state"]
+    failed_bytes = state_path.read_bytes()
+    failed = json.loads(failed_bytes)
+    assert failed["status"] == "failed"
+    assert failed["failed_stage"] == "dsa_audit"
+    assert failed["stages"]["preflight"]["status"] == "completed"
+    record = failed["stages"]["dsa_audit"]
+    assert record["status"] == "failed"
+    assert record["error"]["type"] == "CalledProcessError"
+    assert "exit status 23" in record["error"]["message"]
+    assert record["failed_unix"] >= record["started_unix"]
+    assert record["wall_seconds"] >= 0
+    assert record["outputs"] == []
+    assert record["log_refs"] == {
+        "stderr": "/logs/casey.stderr",
+        "stdout": "/logs/casey.stdout",
+    }
+
+    with pytest.raises(RuntimeError, match="--retry-failed-stage dsa_audit"):
+        workflow_runner.execute(
+            config,
+            config_path=config_path,
+            repo_root=ROOT,
+            from_stage="preflight",
+            through_stage="dsa_audit",
+            force_stage={"dsa_audit"},
+        )
+    assert state_path.read_bytes() == failed_bytes
+
+    def successful_retry(command: list[str], check: bool) -> None:
+        assert check is True
+        output = Path(command[command.index("--output") + 1])
+        output.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "event": "casey",
+                    "event_binding_sha256": config["event_binding_sha256"],
+                }
+            )
+        )
+
+    monkeypatch.setattr(workflow_runner.subprocess, "run", successful_retry)
+    retried = workflow_runner.execute(
+        config,
+        config_path=config_path,
+        repo_root=ROOT,
+        from_stage="preflight",
+        through_stage="dsa_audit",
+        force_stage=set(),
+        retry_failed_stage={"dsa_audit"},
+    )
+    assert retried["stages"]["dsa_audit"]["status"] == "completed"
+    history = retried["stages"]["dsa_audit"]["attempt_history"]
+    assert len(history) == 1
+    assert history[0]["status"] == "failed"
+    assert history[0]["log_refs"]["stderr"] == "/logs/casey.stderr"
+
+
+def test_paused_campaign_receipt_overrides_stale_config_authorization(
+    tmp_path: Path,
+) -> None:
+    state_path = (
+        tmp_path
+        / "analysis-configs"
+        / "absolute-dm"
+        / "phase-b"
+        / "campaign-state.json"
+    )
+    state_path.parent.mkdir(parents=True)
+    state_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "campaign": "phase-b-absolute-dm",
+                "status": "paused",
+                "execution_authorized": False,
+                "authorized_configs": {},
+            }
+        )
+    )
+    stale = _config()
+    stale["workflow"]["execution_authorized"] = True
+    with pytest.raises(PermissionError, match="campaign is paused"):
+        campaign_runner.require_campaign_authorization(
+            tmp_path,
+            [(CONFIG, stale)],
+        )
+
+
+def test_all_parameterized_configs_are_execution_disabled_during_pause() -> None:
+    campaign_state = json.loads(
+        (
+            ROOT
+            / "analysis-configs/absolute-dm/phase-b/campaign-state.json"
+        ).read_text()
+    )
+    assert campaign_state["status"] == "paused"
+    assert campaign_state["execution_authorized"] is False
+    assert campaign_state["authorized_configs"] == {}
+
+    configs = [CONFIG]
+    configs.extend(
+        sorted(
+            (
+                ROOT / "analysis-configs/absolute-dm/phase-b"
+            ).glob("*/workflow-config.json")
+        )
+    )
+    assert len(configs) == 12
+    for path in configs:
+        config = load_config(path)
+        assert config["workflow"]["execution_authorized"] is False
+        if config["workflow"]["regression_fixture"] is not True:
+            assert config["review"]["configuration_status"] == "blocked"
+            assert (
+                "campaign_paused_no_execution_authorization"
+                in config["review"]["blockers"]
+            )
+
+
+def test_phase_b_control_outputs_are_labeled_paused_and_experimental() -> None:
+    statuses = (
+        input_inventory.RESULT_STATUS,
+        config_generator.SUMMARY_STATUS,
+        phase_b_preflight.RESULT_STATUS,
+    )
+    for status in statuses:
+        assert "phase_b_paused" in status
+        assert "experimental_diagnostic" in status
+        assert "not_science_authority" in status
+    review = json.loads(
+        (
+            ROOT
+            / "analysis-configs/absolute-dm/phase-b/phase-b-config-review.json"
+        ).read_text()
+    )
+    assert review["status"] == config_generator.SUMMARY_STATUS
+    assert "Phase B is currently paused" in campaign_runner.__doc__
+    assert "not science authority" in campaign_runner.__doc__
 
 
 def test_execute_keeps_packet_provenance_and_manifest_hashes_immutable(

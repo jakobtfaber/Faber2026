@@ -119,24 +119,11 @@ def validate_config(
     if identity["reviewed_event"] != event:
         raise ValueError("identity.reviewed_event must exactly match event")
 
-    paths = config["paths"]
-    _require_keys(
-        paths,
-        (
-            "raw_chime_h5",
-            "accepted_chime_reference",
-            "raw_dsa_filterbank",
-            "accepted_dsa_reference",
-            "timing_results",
-            "trigger_recovery",
-            "reproduction_fixture",
-            "output_root",
-        ),
-        "paths",
+    is_regression_fixture = (
+        isinstance(config.get("workflow"), dict)
+        and config["workflow"].get("regression_fixture") is True
     )
-    for key, value in paths.items():
-        if not isinstance(value, str) or not value:
-            raise ValueError(f"paths.{key}: expected non-empty path")
+    paths = config["paths"]
     input_keys = (
         "raw_chime_h5",
         "accepted_chime_reference",
@@ -146,6 +133,21 @@ def validate_config(
         "trigger_recovery",
         "reproduction_fixture",
     )
+    if not is_regression_fixture:
+        input_keys += ("dsa_state_reconstruction",)
+        if (
+            config["dsa"].get("input_dm_bound_source")
+            == "calibrated_v3_integer_interval_intersection"
+        ):
+            input_keys += ("dsa_state_calibration",)
+    _require_keys(
+        paths,
+        input_keys + ("output_root",),
+        "paths",
+    )
+    for key, value in paths.items():
+        if not isinstance(value, str) or not value:
+            raise ValueError(f"paths.{key}: expected non-empty path")
     basenames = identity["input_basenames"]
     _require_keys(basenames, input_keys, "identity.input_basenames")
     for key in input_keys:
@@ -182,15 +184,7 @@ def validate_config(
     hashes = config["input_sha256"]
     _require_keys(
         hashes,
-        (
-            "raw_chime_h5",
-            "accepted_chime_reference",
-            "raw_dsa_filterbank",
-            "accepted_dsa_reference",
-            "timing_results",
-            "trigger_recovery",
-            "reproduction_fixture",
-        ),
+        input_keys,
         "input_sha256",
     )
     for key, value in hashes.items():
@@ -307,6 +301,90 @@ def validate_config(
         raise ValueError("dsa.raw_crop_start_sample must be non-negative")
     if int(dsa["crop_samples"]) <= 0 or int(dsa["padding_samples"]) <= 0:
         raise ValueError("DSA crop and padding samples must be positive")
+    if not is_regression_fixture:
+        _require_keys(
+            dsa,
+            (
+                "input_dm_pc_cm3",
+                "input_dm_method",
+                "input_dm_bound_source",
+                "input_dm_half_width_pc_cm3",
+                "reference_minus_raw_dm_pc_cm3",
+                "reference_minus_raw_dm_interval_pc_cm3",
+                "input_dm_reconstruction_sha256",
+                "raw_reference_frequency_crop_start_sample",
+                "native_sample_time_s",
+            ),
+            "dsa",
+        )
+        if dsa["input_dm_method"] not in {
+            "inferred_raw_reference_row_timing",
+            "accepted_product_dm_nominal_with_residual_bound",
+        }:
+            raise ValueError("dsa.input_dm_method is invalid")
+        if dsa["input_dm_bound_source"] not in {
+            "v3_inferred_value",
+            "v3_conservative_residual_bound",
+            "calibrated_v3_integer_interval_intersection",
+        }:
+            raise ValueError("dsa.input_dm_bound_source is invalid")
+        interval = dsa["reference_minus_raw_dm_interval_pc_cm3"]
+        if (
+            not isinstance(interval, list)
+            or len(interval) != 2
+            or any(not isinstance(value, (int, float)) for value in interval)
+            or float(interval[0]) > float(interval[1])
+        ):
+            raise ValueError("DSA residual-DM interval must be ordered endpoints")
+        if float(dsa["input_dm_half_width_pc_cm3"]) <= 0:
+            raise ValueError("dsa.input_dm_half_width_pc_cm3 must be positive")
+        if float(dsa["raw_reference_frequency_crop_start_sample"]) < 0:
+            raise ValueError(
+                "dsa.raw_reference_frequency_crop_start_sample must be non-negative"
+            )
+        if float(dsa["native_sample_time_s"]) <= 0:
+            raise ValueError("dsa.native_sample_time_s must be positive")
+        _require_sha256(
+            dsa["input_dm_reconstruction_sha256"],
+            "dsa.input_dm_reconstruction_sha256",
+        )
+        if (
+            dsa["input_dm_reconstruction_sha256"]
+            != hashes["dsa_state_reconstruction"]
+        ):
+            raise ValueError("DSA reconstruction hash differs from reviewed input")
+        if (
+            dsa["input_dm_bound_source"]
+            == "calibrated_v3_integer_interval_intersection"
+        ):
+            _require_keys(
+                dsa,
+                ("input_dm_calibration_sha256",),
+                "dsa",
+            )
+            _require_sha256(
+                dsa["input_dm_calibration_sha256"],
+                "dsa.input_dm_calibration_sha256",
+            )
+            if (
+                dsa["input_dm_calibration_sha256"]
+                != hashes["dsa_state_calibration"]
+            ):
+                raise ValueError("DSA calibration hash differs from reviewed input")
+            if (
+                dsa["input_dm_method"]
+                != "accepted_product_dm_nominal_with_residual_bound"
+            ):
+                raise ValueError("calibrated DSA interval is bound-only")
+        accepted_dm = float(dsa["accepted_reference_dm_pc_cm3"])
+        residual_dm = float(dsa["reference_minus_raw_dm_pc_cm3"])
+        nominal_dm = float(dsa["input_dm_pc_cm3"])
+        if dsa["input_dm_method"] == "inferred_raw_reference_row_timing":
+            expected_nominal = accepted_dm - residual_dm
+        else:
+            expected_nominal = accepted_dm
+        if abs(nominal_dm - expected_nominal) > 1.0e-12:
+            raise ValueError("DSA nominal input DM contradicts its method")
     dsa_support = dsa["accepted_support"]
     _require_keys(
         dsa_support,
@@ -326,7 +404,6 @@ def validate_config(
         (
             "direct_correlation_min",
             "reversed_correlation_max",
-            "reference_minus_raw_dm_abs_max_pc_cm3",
             "edge_fail_closed",
         ),
         "dsa.gates",
@@ -337,8 +414,39 @@ def validate_config(
         raise ValueError("DSA direct correlation gate must lie in [0, 1]")
     if not 0.0 <= float(dsa_gates["reversed_correlation_max"]) <= 1.0:
         raise ValueError("DSA reversed correlation gate must lie in [0, 1]")
-    if float(dsa_gates["reference_minus_raw_dm_abs_max_pc_cm3"]) <= 0:
-        raise ValueError("DSA residual-DM gate must be positive")
+    if is_regression_fixture:
+        _require_keys(
+            dsa_gates,
+            ("reference_minus_raw_dm_abs_max_pc_cm3",),
+            "dsa.gates",
+        )
+        if float(dsa_gates["reference_minus_raw_dm_abs_max_pc_cm3"]) <= 0:
+            raise ValueError("DSA residual-DM gate must be positive")
+    else:
+        _require_keys(
+            dsa_gates,
+            (
+                "input_dm_reference_timing_half_width_max_native_samples",
+                "input_dm_aligned_profile_correlation_min",
+                "gallery_alignment_must_be_robust",
+            ),
+            "dsa.gates",
+        )
+        if (
+            float(
+                dsa_gates[
+                    "input_dm_reference_timing_half_width_max_native_samples"
+                ]
+            )
+            <= 0
+        ):
+            raise ValueError("DSA input-DM timing gate must be positive")
+        if not 0.0 <= float(
+            dsa_gates["input_dm_aligned_profile_correlation_min"]
+        ) <= 1.0:
+            raise ValueError("DSA input-DM morphology gate must lie in [0, 1]")
+        if dsa_gates["gallery_alignment_must_be_robust"] is not True:
+            raise ValueError("DSA gallery alignment must fail closed")
 
     geometry = config["geometry"]
     _require_keys(
@@ -381,6 +489,133 @@ def validate_config(
         or not Path(workflow["container_data_mount"]).is_absolute()
     ):
         raise ValueError("workflow.container_data_mount must be an absolute path")
+    review = config.get("review")
+    if workflow["regression_fixture"] is not True and review is None:
+        raise ValueError("non-regression configuration requires review state")
+    if review is not None:
+        _require_keys(
+            review,
+            ("configuration_status", "blockers", "dsa_input_state"),
+            "review",
+        )
+        if review["configuration_status"] not in {"blocked", "reviewed"}:
+            raise ValueError("review.configuration_status is invalid")
+        blockers = review["blockers"]
+        if (
+            not isinstance(blockers, list)
+            or blockers != sorted(set(blockers))
+            or any(not isinstance(value, str) or not value for value in blockers)
+        ):
+            raise ValueError("review.blockers must be sorted unique non-empty strings")
+        if review["configuration_status"] == "blocked" and not blockers:
+            raise ValueError("blocked review state requires at least one blocker")
+        if review["configuration_status"] == "reviewed" and blockers:
+            raise ValueError("reviewed configuration cannot retain blockers")
+        dsa_input_state = review["dsa_input_state"]
+        _require_keys(
+            dsa_input_state,
+            (
+                "authority",
+                "reconstruction_sha256",
+                "independent_uncertainty_review_status",
+                "accepted_for_config_review",
+                "conservative_bound_accepted_for_config_review",
+                "material_nonzero_residual_proven",
+                "inferred_raw_input_dm_pc_cm3",
+                "conservative_uncertainty_pc_cm3",
+            ),
+            "review.dsa_input_state",
+        )
+        if (
+            dsa_input_state["authority"]
+            != "raw_reference_row_timing_v3_value_or_bound"
+        ):
+            raise ValueError("review.dsa_input_state.authority is invalid")
+        if dsa_input_state["independent_uncertainty_review_status"] not in {
+            "pending",
+            "passed",
+        }:
+            raise ValueError("review DSA uncertainty review status is invalid")
+        _require_sha256(
+            dsa_input_state["reconstruction_sha256"],
+            "review.dsa_input_state.reconstruction_sha256",
+        )
+        if not isinstance(
+            dsa_input_state["accepted_for_config_review"],
+            bool,
+        ) or not isinstance(
+            dsa_input_state["conservative_bound_accepted_for_config_review"],
+            bool,
+        ) or not isinstance(
+            dsa_input_state["material_nonzero_residual_proven"],
+            bool,
+        ):
+            raise ValueError("review DSA decisions must be boolean")
+        if float(dsa_input_state["conservative_uncertainty_pc_cm3"]) <= 0:
+            raise ValueError("review DSA uncertainty must be positive")
+        if not is_regression_fixture:
+            if (
+                dsa_input_state["reconstruction_sha256"]
+                != dsa["input_dm_reconstruction_sha256"]
+            ):
+                raise ValueError("review and DSA reconstruction hashes differ")
+            if dsa_input_state["material_nonzero_residual_proven"] != (
+                dsa["input_dm_method"]
+                == "inferred_raw_reference_row_timing"
+            ):
+                raise ValueError("review material flag contradicts DSA input method")
+            residual_dm = float(dsa["reference_minus_raw_dm_pc_cm3"])
+            inferred_raw_dm = float(
+                dsa_input_state["inferred_raw_input_dm_pc_cm3"]
+            )
+            accepted_dm = float(dsa["accepted_reference_dm_pc_cm3"])
+            if abs(inferred_raw_dm - (accepted_dm - residual_dm)) > 1.0e-12:
+                raise ValueError("review inferred raw DSA DM contradicts residual")
+            if dsa["input_dm_method"] == "inferred_raw_reference_row_timing":
+                expected_half_width = max(
+                    abs(residual_dm - float(interval[0])),
+                    abs(float(interval[1]) - residual_dm),
+                )
+                method_accepted = dsa_input_state["accepted_for_config_review"]
+            else:
+                expected_half_width = max(
+                    abs(float(interval[0])),
+                    abs(float(interval[1])),
+                )
+                method_accepted = dsa_input_state[
+                    "conservative_bound_accepted_for_config_review"
+                ]
+            if (
+                abs(
+                    float(dsa["input_dm_half_width_pc_cm3"])
+                    - expected_half_width
+                )
+                > 1.0e-12
+            ):
+                raise ValueError("DSA input-DM half-width contradicts review evidence")
+            if not method_accepted:
+                raise ValueError("selected DSA input-DM method is not review-admissible")
+        if review["configuration_status"] == "reviewed" and not (
+            dsa_input_state["accepted_for_config_review"]
+            or dsa_input_state[
+                "conservative_bound_accepted_for_config_review"
+            ]
+        ):
+            raise ValueError("reviewed DSA state has neither value nor bound")
+        if workflow["execution_authorized"] and (
+            review["configuration_status"] != "reviewed"
+            or dsa_input_state["independent_uncertainty_review_status"]
+            != "passed"
+            or not (
+                dsa_input_state["accepted_for_config_review"]
+                or dsa_input_state[
+                    "conservative_bound_accepted_for_config_review"
+                ]
+            )
+        ):
+            raise PermissionError(
+                "execution requires reviewed, unblocked DSA value or bound"
+            )
     if require_execution_authorized and workflow["execution_authorized"] is not True:
         raise PermissionError("event execution is not authorized by this config")
 
@@ -417,6 +652,7 @@ def legacy_stage_config(config: dict[str, Any]) -> dict[str, Any]:
     dsa = config["dsa"]
     grid = chime["grid"]
     gates = chime["gates"]
+    is_regression_fixture = config["workflow"]["regression_fixture"] is True
     return {
         "schema_version": config["schema_version"],
         "event": config["event"],
@@ -468,4 +704,48 @@ def legacy_stage_config(config: dict[str, Any]) -> dict[str, Any]:
         "expected_dsa_support": dsa["accepted_support"],
         "dsa_gates": dsa["gates"],
         "reference_frequency_mhz": config["geometry"]["reference_frequency_mhz"],
+        "dsa_native_frequency_mhz": config["geometry"][
+            "dsa_native_frequency_mhz"
+        ],
+        **(
+            {
+                "dsa_state_reconstruction": paths["dsa_state_reconstruction"],
+                "expected_dsa_state_reconstruction_sha256": hashes[
+                    "dsa_state_reconstruction"
+                ],
+                "input_dsa_dm_pc_cm3": dsa["input_dm_pc_cm3"],
+                "input_dsa_dm_method": dsa["input_dm_method"],
+                "input_dsa_dm_bound_source": dsa["input_dm_bound_source"],
+                "input_dsa_dm_half_width_pc_cm3": dsa[
+                    "input_dm_half_width_pc_cm3"
+                ],
+                "reference_minus_raw_dsa_dm_pc_cm3": dsa[
+                    "reference_minus_raw_dm_pc_cm3"
+                ],
+                "reference_minus_raw_dsa_dm_interval_pc_cm3": dsa[
+                    "reference_minus_raw_dm_interval_pc_cm3"
+                ],
+                "raw_dsa_reference_frequency_crop_start_sample": dsa[
+                    "raw_reference_frequency_crop_start_sample"
+                ],
+                "expected_dsa_native_sample_time_s": dsa[
+                    "native_sample_time_s"
+                ],
+                **(
+                    {
+                        "dsa_state_calibration": paths[
+                            "dsa_state_calibration"
+                        ],
+                        "expected_dsa_state_calibration_sha256": hashes[
+                            "dsa_state_calibration"
+                        ],
+                    }
+                    if dsa["input_dm_bound_source"]
+                    == "calibrated_v3_integer_interval_intersection"
+                    else {}
+                ),
+            }
+            if not is_regression_fixture
+            else {}
+        ),
     }

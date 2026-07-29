@@ -13,10 +13,9 @@ import numpy as np
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from absolute_dm_voltage import sha256
 from matplotlib.colors import ListedColormap
 from matplotlib.patches import Patch
-
-from absolute_dm_voltage import sha256
 from one_event_workflow import load_config
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -131,10 +130,28 @@ def _plot_profiles(
     axis: plt.Axes,
     products: dict[str, dict[str, np.ndarray]],
     labels: dict[str, str],
+    *,
+    uncertainty_envelopes: dict[str, tuple[str, str]] | None = None,
 ) -> None:
     for key, label in labels.items():
         time_ms, profile = _profile(products[key])
-        axis.plot(time_ms, profile, label=label, linewidth=1.2)
+        line = axis.plot(time_ms, profile, label=label, linewidth=1.2)[0]
+        if uncertainty_envelopes and key in uncertainty_envelopes:
+            low_key, high_key = uncertainty_envelopes[key]
+            low_time, low_profile = _profile(products[low_key])
+            high_time, high_profile = _profile(products[high_key])
+            if not np.array_equal(time_ms, low_time) or not np.array_equal(
+                time_ms, high_time
+            ):
+                raise RuntimeError("DSA endpoint profile time axes differ")
+            axis.fill_between(
+                time_ms,
+                np.minimum(low_profile, high_profile),
+                np.maximum(low_profile, high_profile),
+                color=line.get_color(),
+                alpha=0.16,
+                linewidth=0,
+            )
     axis.set_xlabel("Time in fixed crop (ms)")
     axis.set_ylabel("Scaled positive profile")
     axis.set_ylim(-0.03, 1.08)
@@ -152,12 +169,25 @@ def _plot_dsa_input_audit(axis: plt.Axes, audit: dict) -> None:
         [item["correlation"] for item in matches],
         dtype=float,
     )
-    crop_start = float(audit["row_match"]["median_start_sample"])
-    axis.scatter(row, start - crop_start, s=10, color="#2563eb")
+    crop_start = float(
+        audit["row_match"].get(
+            "reference_frequency_crop_start_sample",
+            audit["row_match"]["median_start_sample"],
+        )
+    )
+    if all("start_residual_sample" in item for item in matches):
+        start_residual = np.asarray(
+            [item["start_residual_sample"] for item in matches],
+            dtype=float,
+        )
+    else:
+        start_residual = start - crop_start
+    axis.scatter(row, start_residual, s=10, color="#2563eb")
     axis.axhline(0.0, color="#111827", linewidth=0.8)
     axis.set_xlabel("DSA-110 frequency-row index")
     axis.set_ylabel("Best-start residual (samples)")
-    axis.set_ylim(-0.55, 0.55)
+    residual_limit = max(0.55, 1.1 * float(np.max(np.abs(start_residual))))
+    axis.set_ylim(-residual_limit, residual_limit)
     second = axis.twinx()
     second.scatter(row, correlation, s=8, color="#d97706", alpha=0.65)
     second.set_ylabel("Raw/reference correlation")
@@ -168,13 +198,24 @@ def _plot_dsa_input_audit(axis: plt.Axes, audit: dict) -> None:
     direct = audit["frequency_order"]["direct_median_correlation"]
     reversed_order = audit["frequency_order"]["reversed_median_correlation"]
     selected_count = int(audit["row_match"]["selected_count"])
-    start_sample = int(round(crop_start))
+    contract = audit.get("input_state_contract")
+    if contract is None:
+        state_text = (
+            f"{selected_count}/{selected_count} starts = {int(round(crop_start))}\n"
+            f"residual DM = {residual_dm:.2e}"
+        )
+    else:
+        state_text = (
+            f"{contract['method']}\n"
+            f"nominal {contract['nominal_input_dm_pc_cm3']:.6f} "
+            f"+/- {contract['input_dm_half_width_pc_cm3']:.6f}\n"
+            f"reference-minus-raw = {residual_dm:+.6f}"
+        )
     axis.text(
         0.02,
         0.97,
         (
-            f"{selected_count}/{selected_count} starts = {start_sample}\n"
-            f"residual DM = {residual_dm:.2e}\n"
+            f"{state_text}\n"
             f"direct/reversed = {direct:.3f}/{reversed_order:.3f}"
         ),
         transform=axis.transAxes,
@@ -187,7 +228,7 @@ def _plot_dsa_input_audit(axis: plt.Axes, audit: dict) -> None:
             "edgecolor": "none",
         },
     )
-    axis.set_title("DSA-110 input-state oracle", fontsize=10)
+    axis.set_title("DSA-110 input-state bound", fontsize=10)
 
 
 def _display_only_invalid_count(product: dict[str, np.ndarray]) -> int:
@@ -359,9 +400,40 @@ def _plot_status(
         "chime_container_image",
         provenance.get("container_image_id", "unrecorded"),
     )
+    dsa_input = dsa["input_state"].get(
+        "nominal_input_total_dm_pc_cm3",
+        dsa["input_state"].get("raw_total_dm_pc_cm3"),
+    )
+    uncertainty = dsa.get("uncertainty_propagation")
+    if uncertainty is None:
+        dsa_lines = [
+            (
+                f"DSA input {dsa_input:.6f}; "
+                "residual = target - input once; no edge clamp"
+            )
+        ]
+    else:
+        dsa_lines = [
+            (
+                f"DSA nominal input {dsa_input:.6f} +/- "
+                f"{uncertainty['input_dm_half_width_pc_cm3']:.6f}; "
+                f"{uncertainty['input_dm_method']}"
+            ),
+            (
+                "400 MHz timing half-width "
+                f"{uncertainty['reference_400_timing_half_width_ms']:.3f} ms = "
+                f"{uncertainty['reference_400_timing_half_width_native_samples']:.1f} "
+                "native samples"
+            ),
+            (
+                "Endpoint morphology minimum correlation "
+                f"{uncertainty['minimum_peak_aligned_profile_correlation']:.3f}; "
+                f"gallery {uncertainty['gallery_alignment_conclusion']}"
+            ),
+        ]
     text = "\n".join(
         [
-            "STATUS: one-event diagnostic; independent review pending",
+            "STATUS: experimental diagnostic; not science authority",
             (
                 f"CHIME anchor {method['anchor_dm_pc_cm3']:.6f}; "
                 f"coherent anchor count {method['coherent_anchor_count']}; "
@@ -393,10 +465,7 @@ def _plot_status(
                 f"peak shift {oracle['absolute_peak_difference_pc_cm3']:.6f}; "
                 f"gate {'PASS' if oracle['passed'] else 'FAIL'}"
             ),
-            (
-                f"DSA input {dsa['input_state']['raw_total_dm_pc_cm3']:.6f}; "
-                "residual = target - input once; no edge clamp"
-            ),
+            *dsa_lines,
             (
                 f"Event binding {control_hash[:12]}...; "
                 f"container {container[:36]}..."
@@ -459,6 +528,33 @@ def render(
         "accepted_dsa_reference"
     ]:
         raise RuntimeError("packet DSA reference hash does not match configuration")
+    reconstruction_input = None
+    calibration_input = None
+    if not config["workflow"]["regression_fixture"]:
+        reconstruction_path = Path(config["paths"]["dsa_state_reconstruction"])
+        reconstruction_sha256 = sha256(reconstruction_path)
+        if reconstruction_sha256 != config["input_sha256"][
+            "dsa_state_reconstruction"
+        ]:
+            raise RuntimeError("packet DSA reconstruction hash changed")
+        reconstruction_input = {
+            "path": str(reconstruction_path),
+            "sha256": reconstruction_sha256,
+        }
+        if (
+            config["dsa"]["input_dm_bound_source"]
+            == "calibrated_v3_integer_interval_intersection"
+        ):
+            calibration_path = Path(config["paths"]["dsa_state_calibration"])
+            calibration_sha256 = sha256(calibration_path)
+            if calibration_sha256 != config["input_sha256"][
+                "dsa_state_calibration"
+            ]:
+                raise RuntimeError("packet DSA calibration hash changed")
+            calibration_input = {
+                "path": str(calibration_path),
+                "sha256": calibration_sha256,
+            }
     if chime["support"]["proposed_extra_bad_rows"]:
         raise RuntimeError("packet cannot include an extra CHIME mask")
     if dsa["support"]["proposed_extra_bad_rows"]:
@@ -467,15 +563,27 @@ def render(
         raise RuntimeError("full-coherent oracle did not pass")
     if not chime["hybrid_method"]["smearing_bound"]["passed"]:
         raise RuntimeError("residual-smearing gate did not pass")
+    uncertainty = dsa.get("uncertainty_propagation")
+    if uncertainty is not None and (
+        uncertainty.get("gallery_alignment_conclusion")
+        != "robust_with_bounded_time_envelope"
+        or uncertainty.get("timing_gate_passed") is not True
+        or uncertainty.get("morphology_gate_passed") is not True
+    ):
+        raise RuntimeError("DSA endpoint uncertainty is not gallery-robust")
 
-    chime_products = {
-        key: _load_product(_resolve_product(chime_result_path, value["path"]))
-        for key, value in chime["products"].items()
-    }
-    dsa_products = {
-        key: _load_product(_resolve_product(dsa_result_path, value["path"]))
-        for key, value in dsa["products"].items()
-    }
+    chime_products = {}
+    for key, value in chime["products"].items():
+        path = _resolve_product(chime_result_path, value["path"])
+        if value.get("sha256") is not None and sha256(path) != value["sha256"]:
+            raise RuntimeError(f"CHIME product {key} hash changed")
+        chime_products[key] = _load_product(path)
+    dsa_products = {}
+    for key, value in dsa["products"].items():
+        path = _resolve_product(dsa_result_path, value["path"])
+        if value.get("sha256") is not None and sha256(path) != value["sha256"]:
+            raise RuntimeError(f"DSA product {key} hash changed")
+        dsa_products[key] = _load_product(path)
     chime_display_invalid = _display_only_invalid_count(
         chime_products["hybrid_fit_dm"]
     )
@@ -532,12 +640,20 @@ def render(
         dsa_products,
         {
             "input_dm": (
-                f"input {config['dsa']['accepted_reference_dm_pc_cm3']}"
+                f"input {config['dsa'].get('input_dm_pc_cm3', config['dsa']['accepted_reference_dm_pc_cm3'])}"
             ),
             "anchor_dm": "CHIME anchor",
             "hybrid_fit_dm": "hybrid fit",
             "geometry_dm": "geometry",
         },
+        uncertainty_envelopes=(
+            {
+                key: (f"{key}_input_low", f"{key}_input_high")
+                for key in ("anchor_dm", "hybrid_fit_dm", "geometry_dm")
+            }
+            if uncertainty is not None
+            else None
+        ),
     )
     dsa_profile_axis.set_title("DSA-110 profiles", fontsize=10)
     status_axis = figure.add_subplot(grid[3, 2:])
@@ -556,6 +672,7 @@ def render(
     receipt = {
         "schema_version": 1,
         "status": expected_status,
+        "authority_status": "experimental_diagnostic_not_science_authority",
         "burst": event,
         "event_binding_sha256": binding,
         "scope": "one event only",
@@ -599,6 +716,16 @@ def render(
                 "path": str(accepted_dsa_reference),
                 "sha256": sha256(accepted_dsa_reference),
             },
+            **(
+                {"dsa_state_reconstruction": reconstruction_input}
+                if reconstruction_input is not None
+                else {}
+            ),
+            **(
+                {"dsa_state_calibration": calibration_input}
+                if calibration_input is not None
+                else {}
+            ),
         },
         "checks": {
             "chime_source_missing_count": chime["support"]["h5_missing_count"],
@@ -642,9 +769,22 @@ def render(
             "injected_recovery_absolute_error_pc_cm3": chime["hybrid_method"][
                 "injected_absolute_dm_recovery"
             ]["absolute_error_pc_cm3"],
-            "dsa_input_total_dm_pc_cm3": dsa["input_state"][
-                "raw_total_dm_pc_cm3"
-            ],
+            "dsa_nominal_input_total_dm_pc_cm3": dsa["input_state"].get(
+                "nominal_input_total_dm_pc_cm3",
+                dsa["input_state"].get("raw_total_dm_pc_cm3"),
+            ),
+            "dsa_input_dm_method": dsa["input_state"].get(
+                "input_dm_method",
+                "legacy_exact_input",
+            ),
+            "dsa_input_dm_bound_source": dsa.get(
+                "uncertainty_propagation",
+                {},
+            ).get("input_dm_bound_source", "legacy_exact_input"),
+            "dsa_input_dm_half_width_pc_cm3": dsa["input_state"].get(
+                "input_dm_half_width_pc_cm3",
+                0.0,
+            ),
             "dsa_direct_frequency_order_median_correlation": dsa["input_state"][
                 "direct_frequency_order_median_correlation"
             ],
@@ -656,6 +796,40 @@ def render(
             ],
             "hybrid_fit_dm_pc_cm3": chime["grid"]["fit"]["dm_pc_cm3"],
             "geometry_dm_pc_cm3": chime["geometry_dm_pc_cm3"],
+            **(
+                {
+                    "dsa_reference_400_timing_half_width_ms": uncertainty[
+                        "reference_400_timing_half_width_ms"
+                    ],
+                    "dsa_reference_400_timing_half_width_native_samples": (
+                        uncertainty[
+                            "reference_400_timing_half_width_native_samples"
+                        ]
+                    ),
+                    "dsa_endpoint_minimum_peak_aligned_profile_correlation": (
+                        uncertainty[
+                            "minimum_peak_aligned_profile_correlation"
+                        ]
+                    ),
+                    "dsa_endpoint_maximum_measured_profile_lag_native_samples": (
+                        uncertainty[
+                            "maximum_measured_profile_lag_native_samples"
+                        ]
+                    ),
+                    "dsa_endpoint_timing_gate_passed": uncertainty[
+                        "timing_gate_passed"
+                    ],
+                    "dsa_endpoint_morphology_gate_passed": uncertainty[
+                        "morphology_gate_passed"
+                    ],
+                    "dsa_gallery_alignment_conclusion": uncertainty[
+                        "gallery_alignment_conclusion"
+                    ],
+                    "dsa_endpoint_reviews": uncertainty["endpoints"],
+                }
+                if uncertainty is not None
+                else {}
+            ),
         },
         "outputs": {
             "svg": {"path": str(output_svg), "sha256": sha256(output_svg)},

@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://faber2026.jakobfaber.com/schemas/one-event-absolute-dm-v1.json",
-  "title": "Faber2026 one-event anchored-hybrid absolute-DM workflow",
+  "title": "Faber2026 experimental one-event anchored-hybrid absolute-DM workflow",
+  "description": "Experimental diagnostic contract only. Schema validity does not establish science authority or manuscript admissibility.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -65,7 +66,9 @@
             "accepted_dsa_reference": {"$ref": "#/$defs/basename"},
             "timing_results": {"$ref": "#/$defs/basename"},
             "trigger_recovery": {"$ref": "#/$defs/basename"},
-            "reproduction_fixture": {"$ref": "#/$defs/basename"}
+            "reproduction_fixture": {"$ref": "#/$defs/basename"},
+            "dsa_state_reconstruction": {"$ref": "#/$defs/basename"},
+            "dsa_state_calibration": {"$ref": "#/$defs/basename"}
           }
         },
         "output_root_basename": {
@@ -116,6 +119,12 @@
         "reproduction_fixture": {
           "$ref": "#/$defs/path"
         },
+        "dsa_state_reconstruction": {
+          "$ref": "#/$defs/path"
+        },
+        "dsa_state_calibration": {
+          "$ref": "#/$defs/path"
+        },
         "output_root": {
           "$ref": "#/$defs/path"
         }
@@ -153,6 +162,13 @@
           "$ref": "#/$defs/sha256"
         },
         "reproduction_fixture": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dsa_state_reconstruction": {
+          "$ref": "#/$defs/sha256"
+        }
+        ,
+        "dsa_state_calibration": {
           "$ref": "#/$defs/sha256"
         }
       }
@@ -214,6 +230,52 @@
       "properties": {
         "accepted_reference_dm_pc_cm3": {
           "type": "number"
+        },
+        "input_dm_pc_cm3": {
+          "type": "number"
+        },
+        "input_dm_method": {
+          "enum": [
+            "inferred_raw_reference_row_timing",
+            "accepted_product_dm_nominal_with_residual_bound"
+          ]
+        },
+        "input_dm_half_width_pc_cm3": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "reference_minus_raw_dm_pc_cm3": {
+          "type": "number"
+        },
+        "input_dm_reconstruction_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_dm_calibration_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_dm_bound_source": {
+          "enum": [
+            "v3_inferred_value",
+            "v3_conservative_residual_bound",
+            "calibrated_v3_integer_interval_intersection"
+          ]
+        },
+        "reference_minus_raw_dm_interval_pc_cm3": {
+          "type": "array",
+          "prefixItems": [
+            {"type": "number"},
+            {"type": "number"}
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "raw_reference_frequency_crop_start_sample": {
+          "type": "number",
+          "minimum": 0
+        },
+        "native_sample_time_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
         },
         "raw_crop_start_sample": {
           "type": "integer",
@@ -298,10 +360,119 @@
         }
       }
     },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configuration_status",
+        "blockers",
+        "dsa_input_state"
+      ],
+      "properties": {
+        "configuration_status": {
+          "enum": ["blocked", "reviewed"]
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dsa_input_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authority",
+            "reconstruction_sha256",
+            "independent_uncertainty_review_status",
+            "accepted_for_config_review",
+            "conservative_bound_accepted_for_config_review",
+            "material_nonzero_residual_proven",
+            "inferred_raw_input_dm_pc_cm3",
+            "conservative_uncertainty_pc_cm3"
+          ],
+          "properties": {
+            "authority": {
+              "const": "raw_reference_row_timing_v3_value_or_bound"
+            },
+            "reconstruction_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "independent_uncertainty_review_status": {
+              "enum": ["pending", "passed"]
+            },
+            "accepted_for_config_review": {
+              "type": "boolean"
+            },
+            "conservative_bound_accepted_for_config_review": {
+              "type": "boolean"
+            },
+            "material_nonzero_residual_proven": {
+              "type": "boolean"
+            },
+            "inferred_raw_input_dm_pc_cm3": {
+              "type": "number"
+            },
+            "conservative_uncertainty_pc_cm3": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      }
+    },
     "event_binding_sha256": {
       "$ref": "#/$defs/sha256"
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "workflow": {
+            "properties": {
+              "regression_fixture": {
+                "const": false
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": ["review"],
+        "properties": {
+          "identity": {
+            "properties": {
+              "input_basenames": {
+                "required": ["dsa_state_reconstruction"]
+              }
+            }
+          },
+          "paths": {
+            "required": ["dsa_state_reconstruction"]
+          },
+          "input_sha256": {
+            "required": ["dsa_state_reconstruction"]
+          },
+          "dsa": {
+            "required": [
+              "input_dm_pc_cm3",
+              "input_dm_method",
+              "input_dm_bound_source",
+              "input_dm_half_width_pc_cm3",
+              "reference_minus_raw_dm_pc_cm3",
+              "reference_minus_raw_dm_interval_pc_cm3",
+              "input_dm_reconstruction_sha256",
+              "raw_reference_frequency_crop_start_sample",
+              "native_sample_time_s"
+            ]
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "basename": {
       "type": "string",
@@ -468,7 +639,6 @@
       "required": [
         "direct_correlation_min",
         "reversed_correlation_max",
-        "reference_minus_raw_dm_abs_max_pc_cm3",
         "edge_fail_closed"
       ],
       "properties": {
@@ -480,6 +650,17 @@
         },
         "reference_minus_raw_dm_abs_max_pc_cm3": {
           "$ref": "#/$defs/positive_number"
+        },
+        "input_dm_reference_timing_half_width_max_native_samples": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "input_dm_aligned_profile_correlation_min": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "gallery_alignment_must_be_robust": {
+          "const": true
         },
         "edge_fail_closed": {
           "const": true
