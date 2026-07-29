@@ -34,16 +34,16 @@ sweep), so "replace Zhang" is moot.
 
 ### Already Connor-based (nothing to replace)
 
-- `scripts/dm_budget_uncertainty.py:100-119` — the forward model's diffuse
+- `analysis/scripts/dm_budget_uncertainty.py:100-119` — the forward model's diffuse
   cosmic term is the IGM marginal of the `Walker2024` bivariate (IGM, halo)
   log-normal fit to IllustrisTNG-300, with the 12-point (z, mu_IGM, sigma_IGM)
   grid hard-coded. **Verified this session:** the grid matches
   `tng_params_new.npy` (columns 2 and 4) in Connor's reproduction repo
   byte-for-value (`frb_baryon_connor2024/main/src/tng_params_new.npy`).
-- `scripts/dm_budget_uncertainty.py:85-87,169-196` — f_IGM = 0.76 (+0.10/−0.11)
+- `analysis/scripts/dm_budget_uncertainty.py:85-87,169-196` — f_IGM = 0.76 (+0.10/−0.11)
   marginalized as a two-sided normal, shifting the log-median by
   ln(f_IGM / f_IGM,TNG) with `FIGM_TNG = 0.797`.
-- `scripts/dm_budget_uncertainty.py:121-166` — deliberate, documented Macquart
+- `analysis/scripts/dm_budget_uncertainty.py:121-166` — deliberate, documented Macquart
   continuation of mu(z) below the TNG grid edge (z < 0.1), reproducing tabulated
   log-median increments to 1.5% over 0.1 < z < 0.3. This is an extension of the
   Connor calibration, not a competing PDF; it should stay.
@@ -73,14 +73,14 @@ sweep), so "replace Zhang" is moot.
    from the table point estimate; a replacement must decide whether this
    sensitivity machinery migrates to the TNG log-normal or is retired.
 4. **`dm_host_arith` provenance column** —
-   `scripts/dm_budget_uncertainty.py:214` subtracts the Macquart mean; kept in
+   `analysis/scripts/dm_budget_uncertainty.py:214` subtracts the Macquart mean; kept in
    the CSV/figure as the "old mean-subtraction" comparator. If ⟨DM_cos⟩
    changes, this column changes with it (it reads `SIGHTLINES`, whose
    `DM_cosmic_mean` values at `:65-76` are copied from the V5 budget table).
 5. **Tests that construct/consume the Macquart means** —
    `pipeline/galaxies/foreground/test_sightline_budget.py:19-27,183`;
    `pipeline/galaxies/foreground/test_sightline_sensitivity.py:71-72,97`;
-   `tests/test_dm_budget_uncertainty.py:70-106,125-130`.
+   `analysis/tests/test_dm_budget_uncertainty.py:70-106,125-130`.
 6. **Prose and docs** — `sections/budget.tex:34-36` ("cosmological mean …
    follows the Macquart relation"), the table caption emitted by
    `pipeline/galaxies/foreground/budget_table_emitter.py` ("the Macquart mean
@@ -111,7 +111,7 @@ implementation exists beyond the retired descriptions already noted.
   dsa110-FLITS branch, never `main`. Any change to `sightline_budget.py`
   therefore lands as: PR to the pin's branch → regenerate
   `budget_table_data.json` + `budget_table.tex` → pin bump in Faber2026 →
-  rerun `scripts/dm_budget_uncertainty.py` → CSV + figures + prose update
+  rerun `analysis/scripts/dm_budget_uncertainty.py` → CSV + figures + prose update
   (repo memories: budget-table-parity-spans-two-repos,
   pipeline-pin-lives-off-flits-main).
 
@@ -144,7 +144,7 @@ All anchors are `main.tex:<line>` in `~/Downloads/arXiv-2409.16952v2/`.
   pattern — IGM marginal + separately measured per-sightline DM_int census —
   is a *downstream adaptation*, not Connor's stated likelihood. The covariance
   between IGM and halo columns is dropped in our adaptation; this is already
-  acknowledged implicitly in `scripts/dm_budget_uncertainty.py:26-32` but the
+  acknowledged implicitly in `analysis/scripts/dm_budget_uncertainty.py:26-32` but the
   rho-dropping is not stated in the manuscript.
 - **Critique of the alternatives** (864-899): the fixed-F form
   sigma_DM = F z^{−1/2} (`Macquart2020`, `McQuinn2014`, `James2022`) assumes
@@ -220,8 +220,8 @@ same change. Next step: `ai-research-workflows:planning-implementations`.
   `pipeline/galaxies/foreground/budget_table_emitter.py`;
   `pipeline/galaxies/foreground/test_sightline_budget.py:19-27,183`;
   `pipeline/galaxies/foreground/test_sightline_sensitivity.py:71-72,97`;
-  `scripts/dm_budget_uncertainty.py:61-76,85-87,100-196,214`;
-  `tests/test_dm_budget_uncertainty.py:70-106,125-130`;
+  `analysis/scripts/dm_budget_uncertainty.py:61-76,85-87,100-196,214`;
+  `analysis/tests/test_dm_budget_uncertainty.py:70-106,125-130`;
   `sections/budget.tex:34-36,44-67`; `sections/appendix.tex:69-121`;
   `sections/intro.tex:8`; `budget_table.tex` (root, generated).
 - External: Connor et al. 2024, arXiv:2409.16952v2 (`Connor2024`; TeX anchors

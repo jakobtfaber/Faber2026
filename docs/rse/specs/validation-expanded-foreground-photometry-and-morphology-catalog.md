@@ -2,7 +2,7 @@
 
 > Validated against `docs/rse/specs/expanded_foreground_photometry_and_morphology_catalog.md`,
 > `pipeline/galaxies/foreground/data/expanded_catalog_cross_references.csv`, and
-> `scripts/build_expanded_foreground_provenance.py` at commit `93b75419` on 2026-07-20.
+> `analysis/scripts/build_expanded_foreground_provenance.py` at commit `93b75419` on 2026-07-20.
 
 ## Overall Status: ✅ Ready / Verified
 
@@ -43,5 +43,5 @@ All catalog cross-references, GSC 2.4.2 ReadMe morphology classifications, mid-I
 
 - Catalog: `pipeline/galaxies/foreground/data/expanded_catalog_cross_references.csv`
 - Markdown Artifact: `docs/rse/specs/expanded_foreground_photometry_and_morphology_catalog.md`
-- Builder Script: `scripts/build_expanded_foreground_provenance.py`
+- Builder Script: `analysis/scripts/build_expanded_foreground_provenance.py`
 - Pipeline Helpers: `pipeline/galaxies/foreground/generate_galaxy_plots.py`, `pipeline/galaxies/foreground/vo/halos.py`

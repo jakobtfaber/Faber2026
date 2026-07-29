@@ -20,12 +20,12 @@ Codebase state researched: Faber2026 `e90d4aa2` with FLITS `a70b9c54817a94d2739e
 
 ### Current host calculation is Monte-Carlo evaluation of a convolution
 
-- `scripts/dm_budget_uncertainty.py:64-65` fixes a NumPy seed and draws
+- `analysis/scripts/dm_budget_uncertainty.py:64-65` fixes a NumPy seed and draws
   200,000 samples.
-- `scripts/dm_budget_uncertainty.py:215-227` independently samples the MW disk,
+- `analysis/scripts/dm_budget_uncertainty.py:215-227` independently samples the MW disk,
   MW halo, TNG-calibrated IGM, and a single sightline-sum intervening prior,
   then subtracts their draw-wise sum from the fixed observed DM.
-- `scripts/dm_budget_uncertainty.py:418-435` turns the samples into plotted
+- `analysis/scripts/dm_budget_uncertainty.py:418-435` turns the samples into plotted
   curves with a Gaussian KDE, downsampling to 12,000 samples and imposing a
   minimum 2 pc cm^-3 bandwidth. The KDE adds sampling texture and smoothing
   bias that are not part of the physical model.
@@ -38,7 +38,7 @@ natural numerical reference.
 
 ### Current inputs duplicate authoritative products
 
-- `scripts/dm_budget_uncertainty.py:70-101` hard-codes nine sightlines,
+- `analysis/scripts/dm_budget_uncertainty.py:70-101` hard-codes nine sightlines,
   including exact observed DMs and rounded foreground columns.
 - `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv:1-13` is the
   authoritative exact adopted-DM catalog.
@@ -48,7 +48,7 @@ natural numerical reference.
   decomposition used by the figure. Its grouped point columns reproduce the
   rounded budget totals, including four modeled systems toward FRB 20230307A
   and two toward FRB 20240229A.
-- `scripts/render_budget_table.py:27-64` already merges the adopted-DM catalog,
+- `analysis/scripts/render_budget_table.py:27-64` already merges the adopted-DM catalog,
   the pipeline budget SSOT, and the generated host CSV. The posterior producer
   should use the same sources rather than maintain a second roster.
 
@@ -81,7 +81,7 @@ renormalization. A `dx = 0.05` rerun provides a convergence reference.
 
 The current host calculation applies one lognormal to the already-summed
 `DM_int`, while the figure separately displays the individual system priors
-(`scripts/dm_budget_uncertainty.py:43-46,240-263`). Under the stated
+(`analysis/scripts/dm_budget_uncertainty.py:43-46,240-263`). Under the stated
 independence assumption the standard construction is to convolve the
 per-system PDFs. This is especially material for phineas: the fractional width
 of a sum of independent systems is narrower than assigning the cluster-family
@@ -106,11 +106,11 @@ in a separate submodule commit, then pinned by the manuscript PR.
 
 ## References / Sources
 
-- `scripts/dm_budget_uncertainty.py:43-46,64-65,70-101,215-227,240-263,418-435`
+- `analysis/scripts/dm_budget_uncertainty.py:43-46,64-65,70-101,215-227,240-263,418-435`
 - `analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv`
 - `pipeline/galaxies/foreground/budget_table_data.json`
 - `scripts/dm_budget_intervening_systems.csv`
-- `scripts/render_budget_table.py:27-64`
+- `analysis/scripts/render_budget_table.py:27-64`
 - `pipeline/galaxies/foreground/attribution_matrix.py:167-205`
 - `pipeline/galaxies/foreground/data/sightline_attribution_matrix.csv`
 - [Research: DM IGM PDF / Connor 2024](research-dm-igm-pdf-connor2024.md)
