@@ -26,14 +26,14 @@ Joint-model pair PDFs: `casey`, `freya`, `hamilton`, `isha`, `johndoeII`,
 `mahi`, `oran`, `phineas`, `whitney`, `wilhelm`, and `zach`.
 
 The exact SHA-256 inventory is
-[`overleaf-active-figure-inventory-2026-07-23.json`](../../../../figure_review/overleaf-active-figure-inventory-2026-07-23.json).
+[`overleaf-active-figure-inventory-2026-07-23.json`](../../../../figure_review/definitions/overleaf-active-figure-inventory-2026-07-23.json).
 The Overleaf copy is an independently diverged working copy; this receipt
 describes its live local bytes and does not imply GitHub or release promotion.
 
 ## Separate review candidate
 
 The only current repository candidate suitable for a future owner review is
-`figure_review/batches/2026-07-22-fig3-source-replay/candidates/fig3-halo-grid.pdf`,
+`figure_review/artifacts/batches/2026-07-22-fig3-source-replay/candidates/fig3-halo-grid.pdf`,
 SHA-256
 `45017274a7e3d60cf6918d72c3e89558c0e9d50e27427d39a216547c4999fa6c`.
 It remains available, unapproved, and unpromoted. The owner's statement
@@ -48,4 +48,4 @@ The other apparent queue entries are not current approval questions:
 - Joint-scattering decisions are morphology-only; fitted values remain
   untrusted.
 
-`figure_review/batch_dispositions.json` records these queue dispositions.
+`figure_review/decisions/batch_dispositions.json` records these queue dispositions.

@@ -22,13 +22,21 @@ TAU_REF_MHZ = 1000.0
 CHIME_REF_MHZ = 600.0
 DSA_REF_MHZ = 1400.0
 
-JOINT_GATE_CSV = REPO_ROOT / "analysis" / "scattering-refit-2026-06" / "joint_gate_verdicts.csv"
+REFIT_DIR = REPO_ROOT / "scattering" / "studies" / "joint-refits"
+# Optional legacy aggregate. Current fits are evaluated directly by
+# gate_joint_committed.py when this retired CSV is absent.
+JOINT_GATE_CSV = REFIT_DIR / "joint_gate_verdicts.csv"
 JULY_ADJUDICATION_CSV = (
-    REPO_ROOT / "analysis" / "scattering-dm-locked-2026-07-14" / "results" / "fit_adjudication.csv"
+    REPO_ROOT
+    / "dispersion"
+    / "studies"
+    / "scattering-dm-locked"
+    / "results"
+    / "fit_adjudication.csv"
 )
-REFIT_DIR = REPO_ROOT / "analysis" / "scattering-refit-2026-06"
 CITABLE_ROSTER_JSON = REFIT_DIR / "citable_alpha_roster.json"
 TAU_CONSISTENCY_DIR = DATA_DIR / "tau_consistency"
+DMLOCK_FIT_DIR = REPO_ROOT / "figures" / "jointmodel_pair" / "fit_artifacts"
 
 
 def _results_library_root() -> Path | None:
@@ -237,6 +245,11 @@ def find_citable_joint_json(burst: str) -> Path | None:
         for entry in entries:
             if str(entry.get("nickname", "")).lower() != burst:
                 continue
+            locked_path = DMLOCK_FIT_DIR / (
+                f"{entry['nickname']}_joint_fit_DMLOCK_{entry['model']}.json"
+            )
+            if locked_path.exists():
+                return locked_path
             override = entry.get("fit_json")
             if override:
                 if burst == "johndoeii" and "c2d2" not in str(override).lower():

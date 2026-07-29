@@ -6,9 +6,9 @@
         "OWNER_QUEUE.md",
         "docs/rse/certificates/figure-approval-inventory-2026-07-23/",
         "docs/rse/specs/decision/decision-2026-07-23-figure-approval-inventory.md",
-        "figure_review/batch_dispositions.json",
-        "figure_review/overleaf-active-figure-inventory-2026-07-23.json",
-        "figure_review/owner_decisions/",
+        "figure_review/decisions/batch_dispositions.json",
+        "figure_review/definitions/overleaf-active-figure-inventory-2026-07-23.json",
+        "figure_review/decisions/owner_decisions/",
         "scripts/owner_queue.py",
         "tests/test_owner_queue.py"
       ],

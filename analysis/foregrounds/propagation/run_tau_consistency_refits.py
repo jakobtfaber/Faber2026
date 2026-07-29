@@ -16,7 +16,7 @@ from foregrounds.propagation.tau_consistency import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-RUN_JOINT = REPO_ROOT / "analysis" / "scattering-refit-2026-06" / "run_joint_fit.py"
+RUN_JOINT = REPO_ROOT / "scattering" / "studies" / "joint-refits" / "run_joint_fit.py"
 
 
 def build_alpha4_joint_cmd(burst: str, morph: JulyMorphology, nlive: int, nproc: int) -> list[str]:
