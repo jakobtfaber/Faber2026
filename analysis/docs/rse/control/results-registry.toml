@@ -1261,9 +1261,9 @@ notes = ""
 
 # ── DM budget (re-validated 2026-07-07; bugfix FLITS #183) ────────────────
 provenance_refs = [
-    {role = "producer",path = "foregrounds/visualization/systems_figures.py",repository = "analysis",commit = ""},
-    {role = "input",path = "scattering/results/legacy-summary/sightline_dm_scattering_budget.csv",repository = "analysis",commit = ""},
-    {role = "input",path = "foregrounds/census/data/intervening_census_registry.csv",repository = "analysis",commit = ""},
+    {role = "producer",path = "foregrounds/visualization/systems_figures.py",repository = "analysis",commit = "f512ea78ca5e2a3c24f8162ea78e3725a34d3624"},
+    {role = "input",path = "scattering/results/legacy-summary/sightline_dm_scattering_budget.csv",repository = "analysis",commit = "f512ea78ca5e2a3c24f8162ea78e3725a34d3624"},
+    {role = "input",path = "foregrounds/census/data/intervening_census_registry.csv",repository = "analysis",commit = "f512ea78ca5e2a3c24f8162ea78e3725a34d3624"},
     {role = "artifact",path = "figures/clusters_icm.pdf md5:46f68b11da72b7ac63485d0ede5ced9d",repository = "manuscript",commit = ""},
 ]
 
@@ -1366,14 +1366,14 @@ external_sources = ["TNG-300 IGM lognormal calibration used by the host-DM budge
 artifact = "scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56 + scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04"
 consumed_by = ["sections/appendix.tex"]
 trust = "pending"
-provenance_state = "pending"
-provenance_gaps = ["canonical input path awaits the migration commit"]
+provenance_state = "complete"
+provenance_gaps = []
 cleared_by = ""
 current = true
 notes = "Diagnostic-only probability distributions for candidate triage. They are not established host redshifts; the incomplete foreground census biases them high."
 provenance_refs = [
     {role = "producer",path = "scripts/dm_redshift_inference.py",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
-    {role = "input",path = "foregrounds/census/budget_table_data.json",repository = "analysis",commit = ""},
+    {role = "input",path = "foregrounds/census/budget_table_data.json",repository = "analysis",commit = "f512ea78ca5e2a3c24f8162ea78e3725a34d3624"},
     {role = "input",path = "dispersion/results/joint-phase/manuscript_dm_catalog.csv",repository = "analysis",commit = "4666be1807faccc8ead66ac0807aa2332d3669ee"},
     {role = "artifact",path = "scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
     {role = "artifact",path = "scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
