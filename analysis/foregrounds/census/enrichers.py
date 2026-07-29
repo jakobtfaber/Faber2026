@@ -2,11 +2,10 @@
 
 import math
 
+import astropy.units as u
 import numpy as np
 import pandas as pd
 from astropy.coordinates import SkyCoord
-import astropy.units as u
-
 
 DESI_LS_MATCH_RADIUS = 1.5 * u.arcsec
 WISE_MATCH_RADIUS = 2.5 * u.arcsec

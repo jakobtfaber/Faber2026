@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager
 import fcntl
 import json
 import os
@@ -15,6 +14,7 @@ import subprocess
 import sys
 import time
 import tomllib
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -1284,4 +1284,4 @@ if __name__ == "__main__":
         raise SystemExit(main())
     except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
         print(f"wayfinder-controller: {error}", file=sys.stderr)
-        raise SystemExit(2)
+        raise SystemExit(2) from error

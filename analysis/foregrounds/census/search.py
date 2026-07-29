@@ -9,7 +9,6 @@ import astropy.units as u
 import pandas as pd
 from astropy.coordinates import SkyCoord
 
-from foregrounds.propagation import scattering_predict as scat
 from foregrounds.census.build_unified import build_for_target
 from foregrounds.census.config import (
     CLUSTER_R200_FACTOR,
@@ -44,6 +43,7 @@ from foregrounds.census.survey_coverage import (
     write_survey_coverage_csv,
 )
 from foregrounds.census.utils import calculate_impact_parameter, get_angular_radius, parse_coord
+from foregrounds.propagation import scattering_predict as scat
 
 PHOTO_Z_ERROR_COLUMNS = ("z_phot_err", "e_zphot", "z_best_err")
 DUPLICATE_SEPARATION = 10.0 * u.arcsec

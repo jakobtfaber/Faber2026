@@ -31,13 +31,14 @@ import matplotlib.pyplot as plt
 
 try:
     from foregrounds.census import config
-    from . import sightline_budget as sb
     from foregrounds.census.build_unified import build_unified_records
+
+    from . import sightline_budget as sb
 except ImportError:  # pragma: no cover - direct script execution.
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     from foregrounds.census import config
-    from foregrounds.propagation import sightline_budget as sb
     from foregrounds.census.build_unified import build_unified_records
+    from foregrounds.propagation import sightline_budget as sb
 
 # The four sightlines flagged EXCESS in results/excess_survival_models.csv.
 EXCESS_SIGHTLINES = ("Wilhelm", "Zach", "Hamilton", "Chromatica")

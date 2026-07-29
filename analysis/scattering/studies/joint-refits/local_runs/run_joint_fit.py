@@ -25,6 +25,7 @@ sys.path.insert(0, REPO)
 
 import numpy as np
 import yaml
+
 from scattering.scat_analysis.burstfit import FRBParams
 from scattering.scat_analysis.burstfit_init import data_driven_initial_guess
 from scattering.scat_analysis.burstfit_joint import fit_joint_scattering

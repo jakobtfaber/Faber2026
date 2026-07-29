@@ -12,6 +12,8 @@ from astropy.coordinates import Latitude, Longitude
 from astropy.utils.data import download_file
 from mocpy import MOC
 
+from foregrounds.paths import DATA_DIR
+
 # CDS MocServer IDs for catalogs queried in run_search (see config.VIZIER_CATALOGS).
 CDS_MOC_IDS: dict[str, str] = {
     "GLADE+": "CDS/VII/291/gladep",
@@ -28,8 +30,6 @@ VIZIER_MOC_TABLES: dict[str, str] = {
 
 # NED TAP + PSZ2/MCXC/MCXC-II cluster compendia have no spatial footprint limit.
 ALL_SKY_SURVEYS: frozenset[str] = frozenset({"NED", "CLUSTERS"})
-
-from foregrounds.paths import DATA_DIR
 
 DEFAULT_CACHE_DIR = DATA_DIR / "survey_footprints"
 DEFAULT_RASTER_ORDER = 6

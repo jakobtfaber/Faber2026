@@ -5,8 +5,8 @@ import math
 import pandas as pd
 import pytest
 
-from foregrounds.propagation import scattering_predict as sp
 from foregrounds.census.engines_extra import _standardize_cluster_columns
+from foregrounds.propagation import scattering_predict as sp
 
 
 def test_wen_han_cluster_columns_are_standardized_with_declared_units():

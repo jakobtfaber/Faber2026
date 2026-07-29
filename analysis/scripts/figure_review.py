@@ -23,9 +23,9 @@ import subprocess
 import tomllib
 from pathlib import Path
 
-from workspace import ANALYSIS_ROOT, manuscript_root
 import figure_flow
 from results_library import results_library_root
+from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = ANALYSIS_ROOT
 MANUSCRIPT_ROOT = manuscript_root()
@@ -58,7 +58,7 @@ def write_json(path: Path, payload: dict) -> None:
 
 
 def utc_now() -> str:
-    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    return dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat()
 
 
 def reproduction_errors(manifest: dict, candidate: dict) -> list[str]:

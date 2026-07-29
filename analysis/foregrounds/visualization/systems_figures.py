@@ -38,8 +38,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 try:
-    from foregrounds.propagation import scattering_predict as scat
     from foregrounds.census.config import TARGETS
+    from foregrounds.propagation import scattering_predict as scat
     from foregrounds.propagation.sightline_budget import INTERIOR_B_OVER_RVIR, foreground_unified
     from scattering.scat_analysis.burst_metadata import load_tns_name
 except ImportError:  # pragma: no cover - direct script execution
@@ -195,7 +195,7 @@ def make_galaxy_figure(
 ):
     """1xN mNFW hot-halo DM(b) panels for the dominant foreground galaxies."""
     fig, axes = plt.subplots(1, len(targets), figsize=(13.4, 4.5), dpi=150, facecolor=BG_LIGHT)
-    for ax, (name, tns, ra, dec, z_frb, _row) in zip(np.atleast_1d(axes).ravel(), targets):
+    for ax, (name, tns, ra, dec, z_frb, _row) in zip(np.atleast_1d(axes).ravel(), targets, strict=False):
         ax.set_facecolor(BG_LIGHT)
         d = dominant_foreground_halo(
             name, ra, dec, z_frb, results_dir, census_data_dir
@@ -305,7 +305,7 @@ def make_cluster_figure(cluster_targets: list[tuple]):
 
     fig, axes = plt.subplots(2, 2, figsize=(9.6, 7.6), dpi=150, facecolor=PANEL_BG)
     for ax, (objid, b_kpc, b_over_r500, z, m500, r500) in zip(
-        axes.ravel(), cluster_targets
+        axes.ravel(), cluster_targets, strict=False
     ):
         ax.set_facecolor(PANEL_BG)
         c = cluster_params(b_kpc, b_over_r500, z, m500, r500)

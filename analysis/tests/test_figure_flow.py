@@ -16,7 +16,6 @@ ROOT = manuscript_root()
 
 import figure_flow  # noqa: E402
 
-
 CATALOG = ANALYSIS_ROOT / "figures" / "catalog.yaml"
 
 

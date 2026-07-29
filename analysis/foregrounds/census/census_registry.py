@@ -8,9 +8,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from scattering.scat_analysis.burst_metadata import load_tns_name
-
 from foregrounds.paths import DATA_DIR
+from scattering.scat_analysis.burst_metadata import load_tns_name
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 DEFAULT_SCRATCH_CODETECTION = PACKAGE_DIR.parents[1] / "scratch" / "codetection"

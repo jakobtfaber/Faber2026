@@ -296,7 +296,7 @@ def make_mass_profile_fig(target_name, z_frb, gal_rows):
     norm = Normalize(vmin=z_lo, vmax=z_hi)
     cmap = plt.cm.plasma
 
-    for idx, g in enumerate(gal_rows):
+    for _idx, g in enumerate(gal_rows):
         c = cmap(norm(g["z_gal"]))
         m_enc = nfw_enclosed_mass(r_arr, g["m_halo"], g["r_vir"], g["r_s"], g["c"])
         label = f"z={g['z_gal']:.4f}  log M★={g['log_mstar']:.1f}"
@@ -516,7 +516,7 @@ def main():
 
     target_sections = []
 
-    for name, ra_str, dec_str, z_frb in TARGETS:
+    for name, _ra_str, _dec_str, z_frb in TARGETS:
         csv_path = os.path.join(results_dir, f"{name.lower()}_galaxies.csv")
         if not os.path.exists(csv_path):
             print(f"  {name}: no CSV found, skipping.")

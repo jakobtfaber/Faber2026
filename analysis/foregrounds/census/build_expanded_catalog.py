@@ -25,7 +25,6 @@ from foregrounds.census.expanded_catalog import (
     stern12_status,
 )
 from foregrounds.census.vo.halos import mstar_to_mhalo
-
 from foregrounds.paths import DATA_DIR
 
 PACKAGE_DIR = Path(__file__).resolve().parent

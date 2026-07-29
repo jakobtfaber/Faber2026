@@ -15,7 +15,6 @@ import json
 import math
 from pathlib import Path
 
-
 C_KM_S = 299_792.458
 G_KPC_KM2_S2_MSUN = 4.300_917_270_036_28e-6
 H0_KM_S_MPC = 67.66

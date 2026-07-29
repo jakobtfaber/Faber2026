@@ -78,3 +78,11 @@ extend-exclude = [
 [tool.ruff.lint]
 select = ["B", "E4", "E7", "E9", "F", "I", "UP"]
 ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"foregrounds/census/adjudication/validate_foreground.py" = ["E402"]
+"scattering/studies/joint-refits/local_runs/run_joint_fit.py" = ["E402"]
+"scattering/studies/joint-refits/run_joint_fit.py" = ["E402"]
+"scripts/build_expanded_foreground_provenance.py" = ["E402"]
+"scripts/build_survey_coverage_receipt.py" = ["E402"]
+"scripts/render_budget_table.py" = ["E402"]

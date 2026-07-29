@@ -10,10 +10,11 @@ Catalogs queried:
 
 import os
 import sys
-import pandas as pd
+
 import numpy as np
-from astropy.coordinates import SkyCoord
+import pandas as pd
 from astropy import units as u
+from astropy.coordinates import SkyCoord
 from astroquery.vizier import Vizier
 
 HERE = os.path.dirname(os.path.abspath(__file__))

@@ -16,9 +16,9 @@ import os
 import shutil
 import sys
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -503,7 +503,7 @@ def main():
     from foregrounds.census.config import TARGETS
 
     target_sections = []
-    for name, ra_str, dec_str, z_frb in TARGETS:
+    for name, _ra_str, _dec_str, z_frb in TARGETS:
         csv_path = os.path.join(results_dir, f"{name.lower()}_unified.csv")
         if not os.path.exists(csv_path):
             print(f"  {name}: no unified CSV found, skipping.")

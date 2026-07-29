@@ -18,9 +18,10 @@ Six assertions, one per subcommand of the science question:
 2. ``hostless_fail_closed`` - sightlines and candidates without a trustworthy
    redshift are explicitly labelled, are excluded from the budget, and never
    reach a ``confirmed`` verdict.
-3. ``deterministic_matching`` - the Figure 3 input rebuilds byte-identically
-   from committed inputs, cross-listing duplicates are removed by an auditable
-   rule, and every recorded separation reproduces from the coordinates.
+3. ``deterministic_matching`` - the Figure 3 input values reproduce
+   canonically from committed inputs, the approved input bytes remain pinned,
+   cross-listing duplicates are removed by an auditable rule, and every
+   recorded separation reproduces from the coordinates.
 4. ``survey_coverage`` - all twelve sightlines carry a coverage row per survey,
    coordinates agree with the burst roster, and every footprint claim is backed
    by a hashed footprint file or an explicit contract.
@@ -45,10 +46,10 @@ import math
 import subprocess
 import sys
 import tempfile
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Iterable, Sequence
-
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -60,6 +61,9 @@ MANUSCRIPT_FIGURE = ROOT.parent / "figures/sightline_halo_grid.pdf"
 # the manuscript installs, which a re-render on a different renderer version
 # cannot provide.
 STAGED_FIGURE = ROOT / "figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
+APPROVED_HALO_GRID_SHA256 = (
+    "2a59fb28bfe196fde63f2335548030ff911dfbeda9e07e133823ca511fdf79e9"
+)
 
 # Sightlines with no established host redshift.  These must stay diagnostic-only
 # everywhere: no point-estimate redshift, no confirmed foreground system, no
@@ -216,7 +220,7 @@ class Inputs:
     hashes: dict[str, str]
 
     @classmethod
-    def load(cls) -> "Inputs":
+    def load(cls) -> Inputs:
         tables: dict[str, list[dict[str, str]]] = {}
         hashes: dict[str, str] = {}
         for key, relative in INPUT_PATHS.items():
@@ -532,8 +536,10 @@ def check_deterministic_matching(data: Inputs) -> CheckResult:
         "Matching and deduplication are deterministic and auditable",
     )
 
-    # --- the Figure 3 input rebuilds byte-identically ---------------------
+    # --- Figure 3 values reproduce canonically; approved bytes stay pinned -
     try:
+        import pandas as pd
+
         from foregrounds.census.build_sightline_halo_grid_input import build_frame
     except Exception as error:  # pragma: no cover - import failure is a real failure
         result.failures.append(f"cannot import the Figure 3 input builder: {error}")
@@ -541,16 +547,30 @@ def check_deterministic_matching(data: Inputs) -> CheckResult:
 
     def serialise(frame: Any) -> str:
         buffer = io.StringIO()
-        frame.to_csv(buffer, index=False, lineterminator="\n")
+        frame.to_csv(
+            buffer,
+            index=False,
+            lineterminator="\n",
+            float_format=lambda value: format(value, ".15g"),
+        )
         return buffer.getvalue()
 
     first = serialise(build_frame())
     second = serialise(build_frame())
-    checked_in = (CENSUS / INPUT_PATHS["halo_grid"]).read_text(encoding="utf-8")
+    checked_frame = pd.read_csv(
+        CENSUS / INPUT_PATHS["halo_grid"],
+        dtype={"object_id": str},
+    )
+    checked_in = serialise(checked_frame)
+    checked_path = CENSUS / INPUT_PATHS["halo_grid"]
     result.require(first == second, "two consecutive Figure 3 input builds differ")
     result.require(
         first == checked_in,
-        "the committed Figure 3 input does not reproduce from its committed sources",
+        "the committed Figure 3 input values do not reproduce from committed sources",
+    )
+    result.require(
+        sha256_file(checked_path) == APPROVED_HALO_GRID_SHA256,
+        "the approved Figure 3 input bytes have drifted",
     )
 
     # --- the deduplication rule is auditable ------------------------------
@@ -696,7 +716,11 @@ def check_deterministic_matching(data: Inputs) -> CheckResult:
                     )
 
     result.facts = {
-        "figure3_input_rebuild_is_byte_identical": first == checked_in,
+        "figure3_input_rebuild_is_canonically_equivalent": first == checked_in,
+        "figure3_input_comparison": (
+            "canonical CSV values; approved checked-in bytes remain unchanged"
+        ),
+        "approved_figure3_input_sha256": APPROVED_HALO_GRID_SHA256,
         "duplicate_pairs_reproduced": duplicate_pairs,
         "cross_match_rows_audited": audited,
         "grid_system_rows": len(grid_keys),

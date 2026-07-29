@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import importlib.util
 import fcntl
+import importlib.util
 import json
 import subprocess
 import sys
@@ -12,7 +12,6 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-
 
 ROOT = Path(__file__).resolve().parents[1]
 

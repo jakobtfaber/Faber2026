@@ -38,9 +38,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
+from workspace import ANALYSIS_ROOT, manuscript_root
 
 from radio_pipeline.resources import path as resource_path
-from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
 
@@ -264,9 +264,8 @@ def render(
     window_ms: float,
 ) -> list[str]:
     import matplotlib.pyplot as plt
-    from matplotlib import colormaps
-
     import yaml
+    from matplotlib import colormaps
 
     _apply_style()
     plt.rcParams.update(

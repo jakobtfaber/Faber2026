@@ -5,8 +5,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from foregrounds.propagation.attribution_matrix import write_attribution_matrix
 from foregrounds.census.census_registry import write_intervening_census_registry
+from foregrounds.propagation.attribution_matrix import write_attribution_matrix
 from foregrounds.propagation.tau_consistency import write_tau_consistency_catalog
 
 

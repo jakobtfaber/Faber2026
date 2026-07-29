@@ -19,13 +19,13 @@ Run: python scripts/plot_codetection_triptych.py
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
 import hashlib
 import json
 import os
 import re
 import sys
 import warnings
+from datetime import UTC, datetime
 from pathlib import Path
 
 import matplotlib
@@ -34,18 +34,12 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml
-
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 matplotlib.rcParams["svg.hashsalt"] = "Faber2026-codetection-triptych-v2"
 
 ROOT = manuscript_root()
 sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
-
-from radio_pipeline.batch.codetection_data import (  # noqa: E402
-    chime_toa_shift_ms,
-)
-from radio_pipeline.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
 
 from plot_codetection_gallery import (  # noqa: E402
     BANDS,
@@ -55,6 +49,11 @@ from plot_codetection_gallery import (  # noqa: E402
     onpulse_span,
 )
 from results_library import results_library_root  # noqa: E402
+
+from radio_pipeline.batch.codetection_data import (  # noqa: E402
+    chime_toa_shift_ms,
+)
+from radio_pipeline.batch.codetection_plots import BandSpectrum, plot_codetection  # noqa: E402
 
 MANIFEST_DEFAULT = ANALYSIS_ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"
 OUT_DEFAULT = ROOT / "figures" / "codetection_triptych"
@@ -420,7 +419,7 @@ def render_metadata(suffix: str) -> dict | None:
     epoch = os.environ.get("SOURCE_DATE_EPOCH")
     if epoch is None:
         return None
-    stamp = datetime.fromtimestamp(int(epoch), timezone.utc)
+    stamp = datetime.fromtimestamp(int(epoch), UTC)
     if suffix == ".pdf":
         return {"CreationDate": stamp, "ModDate": stamp}
     if suffix == ".svg":

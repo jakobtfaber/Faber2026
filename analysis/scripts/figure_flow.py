@@ -17,7 +17,7 @@ import os
 import subprocess
 import sys
 from collections import defaultdict, deque
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -268,7 +268,7 @@ def run_node(
 
     receipt: dict[str, Any] = {
         "id": fid,
-        "utc": datetime.now(timezone.utc).isoformat(),
+        "utc": datetime.now(UTC).isoformat(),
         "argv": argv,
         "cwd": str(cwd.relative_to(root)) if cwd.is_relative_to(root) else str(cwd),
         "dry_run": dry_run,

@@ -10,7 +10,6 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GATE = ROOT / "docs/rse/specs/validation-expanded-foreground-independent-release-gate.json"
 DEFAULT_RECEIPTS_DIR = ROOT / "figure_review/decisions/approval_receipts"

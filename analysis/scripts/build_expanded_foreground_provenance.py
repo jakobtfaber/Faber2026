@@ -9,14 +9,15 @@ Uses audited project helpers:
 - GSC 2.4.2 official ReadMe class codes (0=Star, 1=Galaxy, 2=Blend, 3=Non-star, 4=Unclassified, 5=Defect)
 """
 
+import math
 import os
 import sys
-import math
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.cosmology import Planck18 as cosmo
-from astropy import units as u
 from astroquery.vizier import Vizier
 
 HERE = os.path.dirname(os.path.abspath(__file__))

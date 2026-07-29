@@ -3,7 +3,6 @@ import math
 import numpy as np
 import pandas as pd
 
-from foregrounds.propagation import scattering_predict as scat
 from foregrounds.census import search as search_mod
 from foregrounds.census.config import COSMO
 from foregrounds.census.engines import _add_desi_stellar_mass
@@ -13,6 +12,7 @@ from foregrounds.census.search import (
     _enrich_with_ps1_photometry,
     _foreground_mask,
 )
+from foregrounds.propagation import scattering_predict as scat
 
 
 def test_foreground_mask_photoz_point_estimate_not_rescued_by_error():

@@ -65,10 +65,9 @@ import math
 from dataclasses import dataclass
 
 import numpy as np
+import phineas_halo_crossing_probability as phineas_crossing
 from numpy.polynomial.legendre import leggauss
 from scipy import integrate, interpolate, optimize, signal, stats
-
-import phineas_halo_crossing_probability as phineas_crossing
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 REPO = manuscript_root()
@@ -365,7 +364,7 @@ def igm_mixture_pdf(
     x1 = math.ceil(upper / dx) * dx
     x = np.arange(0.0, x1 + 0.5 * dx, dx)
     density = np.zeros_like(x)
-    for weight, median in zip(weights, medians):
+    for weight, median in zip(weights, medians, strict=False):
         density += weight * stats.lognorm.pdf(x, s=sigma_ln, scale=median)
     return DiscretePDF(x0=0.0, dx=dx, density=density)
 
@@ -985,13 +984,15 @@ def _make_figure(results):
         x_lo, x_hi = x_lo - pad, x_hi + pad
         x = np.linspace(x_lo, x_hi, 360)
 
-        def density_on_plot_grid(pdf):
-            return np.interp(x, pdf.x, pdf.density, left=0.0, right=0.0)
+        def density_on_plot_grid(pdf, *, plot_x=x):
+            return np.interp(plot_x, pdf.x, pdf.density, left=0.0, right=0.0)
 
-        def plot_faded(pdf, color, lw=0.8, ls="-"):
+        def plot_faded(pdf, color, lw=0.8, ls="-", *, plot_ax=ax, plot_x=x):
             dens = _peak_norm(density_on_plot_grid(pdf))
-            ax.plot(x, dens, color=color, lw=lw, ls=ls, alpha=0.28, zorder=2)
-            ax.fill_between(x, 0.0, dens, color=color, alpha=0.04, zorder=1)
+            plot_ax.plot(plot_x, dens, color=color, lw=lw, ls=ls, alpha=0.28, zorder=2)
+            plot_ax.fill_between(
+                plot_x, 0.0, dens, color=color, alpha=0.04, zorder=1
+            )
 
         plot_faded(r["disk_pdf"], _MW_COLOR)
         plot_faded(r["halo_pdf"], _HALO_COLOR)

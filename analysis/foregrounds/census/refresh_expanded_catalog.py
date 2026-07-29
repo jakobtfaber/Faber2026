@@ -18,8 +18,8 @@ from astropy.coordinates import SkyCoord
 from astroquery.vizier import Vizier
 
 from foregrounds.census.census_registry import load_intervening_census_registry
-
 from foregrounds.paths import DATA_DIR
+
 SNAPSHOT_DIR = DATA_DIR / "catalog_crossmatch_snapshots"
 SEARCH_RADIUS_ARCSEC = 3.0
 

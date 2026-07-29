@@ -2,7 +2,6 @@
 
 from pathlib import Path
 
-
 ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
 MANUSCRIPT_ROOT = ANALYSIS_ROOT.parent
 FOREGROUND_ROOT = ANALYSIS_ROOT / "foregrounds"

@@ -28,8 +28,6 @@ import math
 import sys
 from pathlib import Path
 
-import numpy as np
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import cluster_crossing_probability as ccp  # noqa: E402

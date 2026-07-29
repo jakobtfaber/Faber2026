@@ -3,7 +3,9 @@
 import numpy as np
 from astropy import units as u
 from astropy.coordinates import SkyCoord
+
 from foregrounds.census.config import COSMO
+
 
 def get_angular_radius(z: float, impact_kpc: float) -> u.Quantity:
     """Calculate angular radius for a given physical impact parameter at redshift z."""

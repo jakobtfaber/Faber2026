@@ -11,15 +11,14 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import io
 import json
 import math
 import subprocess
-import io
 from collections import Counter
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import Any
-
 
 EXPECTED_ANALYSIS_COMMIT = "1512b15ed1403d42fd12962e77690c18dd3eab09"
 EXPECTED_PIPELINE_COMMIT = EXPECTED_ANALYSIS_COMMIT

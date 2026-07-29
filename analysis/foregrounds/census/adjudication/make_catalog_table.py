@@ -24,8 +24,8 @@ val = pd.read_csv(os.path.join(DATA, "foreground_validated.csv"))
 bur = pd.read_csv(os.path.join(DATA, "bursts.csv"))
 for d in (fin, fgr, val):
     d["obj"] = d["obj"].astype(str)
-tns = dict(zip(bur.nickname, bur.tns))
-mjd = dict(zip(bur.nickname, bur.mjd))
+tns = dict(zip(bur.nickname, bur.tns, strict=False))
+mjd = dict(zip(bur.nickname, bur.mjd, strict=False))
 
 fgr_i = fgr.set_index(["nickname", "type", "obj"])
 val_i = val.set_index(["nickname", "type", "obj"])

@@ -2,18 +2,16 @@
 
 from __future__ import annotations
 
-import math
 from pathlib import Path
 
 import astropy.units as u
 import pytest
 import yaml
 
-from galaxies.host.catalog import HostRecord, host_record_for_target, load_host_catalog
 from galaxies.host import em
+from galaxies.host.catalog import HostRecord, host_record_for_target, load_host_catalog
 from galaxies.host.dm_predict import (
     dm_host_from_halpha,
-    dm_host_from_ssfr,
     dm_host_halo,
     predict_host_dm,
 )

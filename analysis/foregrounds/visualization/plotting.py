@@ -7,11 +7,10 @@ import numpy as np
 import pandas as pd
 from adjustText import adjust_text
 
-from radio_pipeline.plotting import use_flits_style
-
 from foregrounds.census.config import TARGETS
-from foregrounds.propagation.scattering_predict import m200_from_m500_nfw, r_delta_kpc
 from foregrounds.census.utils import get_angular_radius, parse_coord
+from foregrounds.propagation.scattering_predict import m200_from_m500_nfw, r_delta_kpc
+from radio_pipeline.plotting import use_flits_style
 
 # Mirror of search._CLUSTER_RE / CLASSIFICATION_COLUMNS, kept local so this plotting
 # util need not import the astroquery-heavy search module. Keep in sync with search.py.

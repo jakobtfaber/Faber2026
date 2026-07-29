@@ -7,7 +7,6 @@ from foregrounds.visualization.systems_figures import (
     load_cluster_targets,
 )
 
-
 DATA = Path(__file__).parents[1] / "census" / "data"
 
 

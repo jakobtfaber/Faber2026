@@ -10,8 +10,8 @@ import numpy as np
 import pandas as pd
 
 from foregrounds.census.census_registry import load_census_duplicates
-
 from foregrounds.paths import DATA_DIR
+
 EXPANDED_CSV = DATA_DIR / "expanded_catalog_cross_references.csv"
 OUTPUT_CSV = DATA_DIR / "sightline_halo_grid.csv"
 BURSTS_CSV = DATA_DIR / "frozen_census" / "bursts.csv"

@@ -2,7 +2,6 @@ from pathlib import Path
 
 import yaml
 
-
 ROOT = Path(__file__).resolve().parent.parent
 ROSTER = ROOT / "figure_review" / "definitions" / "owner-morphology.yaml"
 TRIPTYCH_MANIFEST = ROOT / "scripts" / "jointmodel_triptych_manifest.yaml"

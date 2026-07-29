@@ -57,14 +57,14 @@ from __future__ import annotations
 
 import argparse
 import os
+import zlib
 from dataclasses import dataclass
 
 import numpy as np
-import zlib
 
 from foregrounds.propagation.sightline_sensitivity import (
-    default_prior_families,
     _truncated_normal,
+    default_prior_families,
 )
 
 try:  # NumPy >= 2.0
@@ -322,7 +322,7 @@ def main(argv=None) -> int:
 
     fig, axes = plt.subplots(3, 3, figsize=(12, 9), sharex=False)
     for ax, (name, (grid, like, flat_post, ln_post)) in zip(
-            axes.ravel(), curves.items()):
+            axes.ravel(), curves.items(), strict=False):
         np.savetxt(os.path.join(out_dir, f"{name}_curves.csv"),
                    np.column_stack([grid, like, flat_post, ln_post]),
                    delimiter=",",

@@ -281,7 +281,8 @@ def repartition_mc(
         b_pub, f_neg_pub = _b(rm_host, dm_host_pub)
         b_corr, f_neg_corr = _b(rm_host, dm_host_corr)
 
-        pct = lambda a: [float(x) for x in np.nanpercentile(a, [16, 50, 84])]
+        def pct(a):
+            return [float(x) for x in np.nanpercentile(a, [16, 50, 84])]
         out[b_cl] = {
             "rm_cl_obs_p16_p50_p84": pct(rm_cl_obs) if b_cl != 0.0 else [0.0, 0.0, 0.0],
             "rm_host_p16_p50_p84": pct(rm_host),
@@ -335,7 +336,7 @@ def make_figure(mc: dict, path: Path) -> None:
         ax.grid(alpha=0.2)
     fig.suptitle(
         "FRB 20230307A RM re-partition vs. assumed intracluster field "
-        f"(DM$_{{\\rm cl}}$ from the truncated-prior MC; $b/R_{{500}}=0.83$)",
+        "(DM$_{\\rm cl}$ from the truncated-prior MC; $b/R_{500}=0.83$)",
         fontsize=9,
     )
     path.parent.mkdir(parents=True, exist_ok=True)

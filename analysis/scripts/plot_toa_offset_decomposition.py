@@ -28,7 +28,6 @@ import json
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
@@ -93,7 +92,7 @@ def make_figure(rows: list[dict]):
     fig, ax = plt.subplots(figsize=(7.4, 5.4))
     ax.axvspan(gmin, gmax, color=c_geo, alpha=0.18, zorder=0, lw=0)
     ax.axvline(0, color="0.35", lw=1.0, zorder=1)
-    for yi, g, o in zip(y, geo, off):
+    for yi, g, o in zip(y, geo, off, strict=False):
         ax.plot([g, o], [yi, yi], color="0.6", lw=1.4, zorder=2, solid_capstyle="round")
     ax.scatter(geo, y, marker="|", s=140, color=c_geo, zorder=3, lw=2.0)
     ax.scatter(off, y, s=46, color=c_off, zorder=4, edgecolor="white", lw=0.6)

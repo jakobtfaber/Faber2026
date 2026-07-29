@@ -2,8 +2,8 @@
 
 import math
 
-import numpy as np
 import astropy.units as u
+import numpy as np
 
 from foregrounds.census.config import COSMO
 

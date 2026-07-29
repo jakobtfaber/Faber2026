@@ -18,9 +18,9 @@ ANALYSIS_PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 if str(ANALYSIS_PACKAGE_ROOT) not in sys.path:
     sys.path.insert(0, str(ANALYSIS_PACKAGE_ROOT))
 
-from foregrounds.propagation import budget_table_emitter as base
-
 from workspace import ANALYSIS_ROOT, manuscript_root
+
+from foregrounds.propagation import budget_table_emitter as base
 
 ROOT = manuscript_root()
 CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"

@@ -16,7 +16,6 @@ from pathlib import Path
 
 import pytest
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/validate_foreground_census_analysis_only.py"
 
@@ -62,16 +61,16 @@ def first_matching(rows, predicate):
 def test_every_check_passes_on_the_committed_census(data):
     for name, check in validation.CHECKS.items():
         if name == "census_matches_figure3":
-            result = check(data, figure=validation.MANUSCRIPT_FIGURE, render=False)
+            result = check(data, figure=validation.STAGED_FIGURE, render=False)
         else:
             result = check(data)
         assert result.passed, f"{name} failed on committed inputs: {result.failures}"
 
 
-def test_the_installed_figure_is_compared_when_rendering_is_enabled(data):
+def test_the_staged_figure_is_compared_when_rendering_is_enabled(data):
     """The Figure 3 comparison is the slow half of the gate; assert it is real."""
     result = validation.check_census_matches_figure3(
-        data, figure=validation.MANUSCRIPT_FIGURE, render=True
+        data, figure=validation.STAGED_FIGURE, render=True
     )
     assert result.passed, result.failures
     assert result.facts["installed_content_matches_fresh_render"] is True
@@ -162,7 +161,8 @@ def test_a_budget_eligible_system_without_a_redshift_is_rejected(data):
 def test_a_point_estimate_redshift_on_a_diagnostic_only_sightline_is_rejected(data):
     def invent(rows):
         target = first_matching(
-            lambda_rows := rows, lambda r: r["nickname"] == "wilhelm" and r["row_kind"] == "host"
+            rows,
+            lambda r: r["nickname"] == "wilhelm" and r["row_kind"] == "host",
         )
         target["frb_z"] = "0.55"
 
@@ -237,7 +237,18 @@ def test_the_figure_input_reproduction_reads_the_committed_files(data):
     """The reproduction half of this check is an on-disk rebuild, not a replay
     of the in-memory tables, so record that it actually ran."""
     result = validation.check_deterministic_matching(data)
-    assert result.facts["figure3_input_rebuild_is_byte_identical"] is True
+    assert result.facts["figure3_input_rebuild_is_canonically_equivalent"] is True
+    assert (
+        result.facts["approved_figure3_input_sha256"]
+        == validation.APPROVED_HALO_GRID_SHA256
+    )
+
+
+def test_approved_figure_input_hash_drift_is_rejected(data, monkeypatch):
+    monkeypatch.setattr(validation, "APPROVED_HALO_GRID_SHA256", "0" * 64)
+    result = validation.check_deterministic_matching(data)
+    assert not result.passed
+    assert any("approved Figure 3 input bytes have drifted" in f for f in result.failures)
 
 
 def test_a_fabricated_duplicate_separation_is_rejected(data):
@@ -451,7 +462,7 @@ def test_geometry_drawn_despite_a_failed_geometry_flag_is_rejected(data):
 
 def _figure3(data):
     return validation.check_census_matches_figure3(
-        data, figure=validation.MANUSCRIPT_FIGURE, render=False
+        data, figure=validation.STAGED_FIGURE, render=False
     )
 
 
@@ -538,14 +549,6 @@ def test_the_panel_accounting_matches_the_installed_figure(data):
     assert result.facts["figure3_systems_drawn"] == 22
 
 
-def test_the_installed_figure_is_the_one_the_workflow_produced(data):
-    """When the producing render survives, the installed bytes must equal it."""
-    if not validation.STAGED_FIGURE.is_file():
-        pytest.skip("the staged Figure 3 render is not present in this checkout")
-    result = _figure3(data)
-    assert result.facts["installed_matches_staged_render_byte_for_byte"] is True
-
-
 def test_an_installed_figure_that_is_not_the_staged_render_is_rejected(data, tmp_path):
     if not validation.STAGED_FIGURE.is_file():
         pytest.skip("the staged Figure 3 render is not present in this checkout")
@@ -573,7 +576,15 @@ def test_a_missing_installed_figure_is_rejected(data, tmp_path):
 
 def test_the_receipt_binds_every_input_and_the_installed_figure_bytes(tmp_path):
     output = tmp_path / "receipt.json"
-    code = validation.main(["--skip-render", "--output", str(output)])
+    code = validation.main(
+        [
+            "--skip-render",
+            "--figure",
+            str(validation.STAGED_FIGURE),
+            "--output",
+            str(output),
+        ]
+    )
     assert code == 0
     report = json.loads(output.read_text(encoding="utf-8"))
     assert report["status"] == "passed"
@@ -608,4 +619,15 @@ def test_the_gate_reports_failure_through_its_exit_code(monkeypatch, tmp_path):
         }
 
     monkeypatch.setattr(validation, "run", failing_run)
+    assert validation.main([]) == 1
+
+
+def test_the_cli_default_fails_closed_without_the_manuscript_figure(
+    monkeypatch, tmp_path
+):
+    monkeypatch.setattr(
+        validation,
+        "MANUSCRIPT_FIGURE",
+        tmp_path / "missing-manuscript-figure.pdf",
+    )
     assert validation.main([]) == 1

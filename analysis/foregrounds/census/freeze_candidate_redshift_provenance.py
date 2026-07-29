@@ -20,6 +20,7 @@ from astroquery.ipac.ned import Ned
 from astroquery.vizier import Vizier
 
 from foregrounds.paths import DATA_DIR as DATA
+
 FROZEN = DATA / "frozen_census"
 REGISTRY = DATA / "intervening_census_registry.csv"
 VALIDATED = FROZEN / "foreground_validated.csv"

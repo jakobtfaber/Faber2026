@@ -57,13 +57,13 @@ import matplotlib.pyplot as plt
 
 try:
     from foregrounds.census import config
-    from foregrounds.propagation import scattering_predict as scat
     from foregrounds.census.build_unified import MASS_PRIORITY, build_unified_records
+    from foregrounds.propagation import scattering_predict as scat
 except ImportError:  # pragma: no cover - supports direct script execution.
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     from foregrounds.census import config
-    from foregrounds.propagation import scattering_predict as scat
     from foregrounds.census.build_unified import MASS_PRIORITY
+    from foregrounds.propagation import scattering_predict as scat
 
 
 # Every MASS_PRIORITY source except the trailing "assumed" default is a real
@@ -252,7 +252,7 @@ def _load_pygedm() -> Any:
         if not hasattr(_si, "simps"):
             # pygedm.yt2020 still calls the removed scipy.integrate.simps; the
             # successor simpson made x keyword-only, so wrap rather than alias.
-            _si.simps = lambda y, x=None, *a, **k: _si.simpson(y, x=x, *a, **k)
+            _si.simps = lambda y, x=None, *a, **k: _si.simpson(y, *a, x=x, **k)
         import warnings
 
         with warnings.catch_warnings():
@@ -975,12 +975,12 @@ def make_budget_figure(df: pd.DataFrame):
         left = left + vals
 
     dm_obs = col("dm_obs")
-    for yi, xo in zip(y, dm_obs):
+    for yi, xo in zip(y, dm_obs, strict=False):
         if xo > 0:
             ax_dm.plot([xo, xo], [yi - 0.4, yi + 0.4], color=TEXT_DARK, lw=2.0, zorder=5)
 
     # Flag core-extrapolated sightlines and show the raw (uncapped) intervening DM.
-    for yi, reg, raw, cap in zip(y, regime, interv_raw, interv):
+    for yi, reg, raw, cap in zip(y, regime, interv_raw, interv, strict=False):
         if reg == "GALAXY_INTERIOR" and raw > cap:
             ax_dm.annotate(
                 f"raw interv DM={raw:.0f} (core-extrap.)",
@@ -996,7 +996,7 @@ def make_budget_figure(df: pd.DataFrame):
 
     # Mark sightlines whose host redshift is a placeholder (no cosmic/host budget).
     placeholder = [_truthy(v) for v in d.get("z_is_placeholder", pd.Series([False] * len(d)))]
-    for yi, ph, xo in zip(y, placeholder, dm_obs):
+    for yi, ph, xo in zip(y, placeholder, dm_obs, strict=False):
         if ph:
             ax_dm.annotate(
                 "z placeholder - no cosmic/host budget",
@@ -1028,7 +1028,7 @@ def make_budget_figure(df: pd.DataFrame):
     tau_int = col("tau_intervening_ms")
     tau_lo = col("tau_intervening_lo")
     tau_hi = col("tau_intervening_hi")
-    for yi, to, ti, tl, th in zip(y, tau_obs, tau_int, tau_lo, tau_hi):
+    for yi, to, ti, tl, th in zip(y, tau_obs, tau_int, tau_lo, tau_hi, strict=False):
         if ti > 0:
             ax_tau.plot(
                 [max(tl, 1e-7), max(th, 1e-7)], [yi, yi], color=INTERV_COLOR, lw=2, zorder=2
@@ -1076,7 +1076,7 @@ def make_budget_figure(df: pd.DataFrame):
     # Mark sightlines with a fit present but withheld by the quality gate.
     quality = [str(v) for v in d.get("tau_obs_quality", pd.Series([""] * len(d)))]
     withheld_labeled = False
-    for yi, q, ti, to in zip(y, quality, tau_int, tau_obs):
+    for yi, q, ti, to in zip(y, quality, tau_int, tau_obs, strict=False):
         if q in ("FAIL", "MARGINAL", "UNKNOWN") and not (to > 0):
             x_at = max(ti, 1e-6)
             ax_tau.scatter(

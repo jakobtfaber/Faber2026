@@ -235,7 +235,7 @@ vdf = pd.DataFrame(out)
 vdf.to_csv(os.path.join(DATA, "foreground_validated.csv"), index=False)
 
 print("\n=== SUMMARY ===")
-print("exists in >=1 catalog: %d / %d" % (vdf.exists.sum(), len(vdf)))
+print(f"exists in >=1 catalog: {vdf.exists.sum()} / {len(vdf)}")
 print("\nforeground_verdict:")
 print(vdf.foreground_verdict.value_counts().to_string())
 print("\nverdict x internal_flag (ZPHOT_GE_ZHOST rows):")

@@ -11,8 +11,8 @@ import numpy as np
 import pandas as pd
 from astropy.coordinates import SkyCoord
 
-from foregrounds.propagation import cgm_observables as cgm
 from foregrounds.census import config, enrichers
+from foregrounds.propagation import cgm_observables as cgm
 from foregrounds.propagation import scattering_predict as scat
 from foregrounds.visualization.generate_galaxy_plots import (
     estimate_halo_mass,

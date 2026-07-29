@@ -89,7 +89,7 @@ def _load(halo_csv: str):
     """
     df = pd.read_csv(halo_csv)
     z_known = df[(df["row_kind"] == "host") & df["frb_z"].notna()].drop_duplicates("frb_name")
-    roster = dict(zip(z_known["frb_name"], z_known["frb_z"].astype(float)))
+    roster = dict(zip(z_known["frb_name"], z_known["frb_z"].astype(float), strict=False))
 
     fg = df[(df["row_kind"] == "system") & (df["geometry_status"] == "pass")].copy()
     fg = fg[
@@ -190,7 +190,7 @@ def make_grid(halo_csv: str):
     z_max = max(roster.values())
     x_hi = 0.05 * math.ceil((z_max + 0.02) / 0.05)
 
-    for i, (ax, name) in enumerate(zip(axes, order)):
+    for _i, (ax, name) in enumerate(zip(axes, order, strict=False)):
         z_frb = roster[name]
         # Faint impact corridor (|b| < 300 kpc), a soft depth band around the LOS.
         ax.axhspan(-300, 300, color=corridor_c, zorder=0)
@@ -236,7 +236,7 @@ def make_grid(halo_csv: str):
     # a data-unit circle would collapse to a vertical sliver -- we size the disk
     # by R200 on y and map that same pixel radius back through the x scale).
     fig.canvas.draw()
-    for ax, name in zip(axes, order):
+    for ax, name in zip(axes, order, strict=False):
         bbox = ax.get_window_extent()
         x0, x1 = ax.get_xlim()
         y0, y1 = ax.get_ylim()
@@ -299,7 +299,7 @@ def make_grid(halo_csv: str):
             legend_ax.add_patch(Ellipse((cx, 210), 2 * r_px * xpp, 2 * r_px * ypp,
                                         facecolor=faint, alpha=0.16,
                                         edgecolor=faint, lw=0.8, zorder=2))
-            legend_ax.text(cx, -230, rf"$R_{{200}}$" + "\n" + rf"${r_kpc}$ kpc",
+            legend_ax.text(cx, -230, r"$R_{200}$" + "\n" + rf"${r_kpc}$ kpc",
                            fontsize=8.5, color=ink, va="top", ha="center",
                            linespacing=1.3)
         # FRB host + cluster-crossing entries, right column.
