@@ -1,6 +1,7 @@
 # Manuscript figure regeneration catalog.
 # Source of truth for `scripts/figure_flow.py` / `make figures`.
-# Cross-check: repro_manifest.csv rows (repro_output) and figure_review/slots.json.
+# Cross-check: repro_manifest.csv rows (repro_output) and
+# analysis/figure_review/definitions/slots.json.
 schema_version: 1
 
 figures:
@@ -11,16 +12,16 @@ figures:
     repro_output: figures/dm_host_posteriors.pdf
     producer:
       argv:
-        - conda
+        - uv
         - run
-        - -n
-        - flits
-        - --no-capture-output
+        - --project
+        - analysis
+        - --frozen
         - python
         - analysis/scripts/dm_budget_uncertainty.py
       cwd: .
     inputs:
-      - analysis/campaigns/foregrounds/budget_table_data.json
+      - analysis/foregrounds/census/budget_table_data.json
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
       - analysis/scripts/dm_budget_intervening_systems.csv
       - analysis/scripts/phineas_halo_crossing_inputs.csv
@@ -69,18 +70,18 @@ figures:
         - --frozen
         - python
         - -m
-        - galaxies.v2_0.sightline_halo_grid
+        - foregrounds.visualization.sightline_halo_grid
         - --halo-csv
-        - campaigns/foregrounds/data/sightline_halo_grid.csv
+        - foregrounds/census/data/sightline_halo_grid.csv
         - --out-dir
-        - figure_review/staging/fig3_halo_grid/figures
+        - figure_review/artifacts/staging/fig3_halo_grid/figures
       cwd: analysis
     inputs:
-      - analysis/campaigns/foregrounds/data/sightline_halo_grid.csv
+      - analysis/foregrounds/census/data/sightline_halo_grid.csv
     outputs:
-      - analysis/figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf
+      - analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf
     manuscript_target: figures/sightline_halo_grid.pdf
-    candidate_root: analysis/figure_review/staging/fig3_halo_grid
+    candidate_root: analysis/figure_review/artifacts/staging/fig3_halo_grid
     depends_on: []
     approval_slot: fig3-halo-grid
 
@@ -101,13 +102,13 @@ figures:
         - --frozen
         - python
         - -m
-        - galaxies.foreground.sightline_budget
+        - foregrounds.propagation.sightline_budget
         - --results-dir
         - campaigns/results
         - --configs-dir
         - config/fits/scattering/bursts/chime
         - --census-data-dir
-        - campaigns/foregrounds/data
+        - foregrounds/census/data
       cwd: analysis
     inputs: []
     outputs:
@@ -129,11 +130,11 @@ figures:
         - --frozen
         - python
         - -m
-        - galaxies.v2_0.systems_figures
+        - foregrounds.visualization.systems_figures
         - --results-dir
         - campaigns/results
         - --census-data-dir
-        - campaigns/foregrounds/data
+        - foregrounds/census/data
         - --out-dir
         - ../figures
       cwd: analysis
@@ -209,7 +210,7 @@ figures:
         - python
         - analysis/scripts/plot_codetection_data_grid.py
         - --out
-        - analysis/figure_review/staging/fig1_gallery/figures/codetection_data_grid
+        - analysis/figure_review/artifacts/staging/fig1_gallery/figures/codetection_data_grid
       cwd: .
     inputs:
       - analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
@@ -217,9 +218,9 @@ figures:
       - ~/Data/Faber2026/chimefrb/CHIME_bursts
       - ~/Data/Faber2026/dsa110/DSA_bursts
     outputs:
-      - analysis/figure_review/staging/fig1_gallery/figures/codetection_data_grid.pdf
+      - analysis/figure_review/artifacts/staging/fig1_gallery/figures/codetection_data_grid.pdf
     manuscript_target: figures/codetection_data_grid.pdf
-    candidate_root: analysis/figure_review/staging/fig1_gallery
+    candidate_root: analysis/figure_review/artifacts/staging/fig1_gallery
     depends_on: []
     approval_slot: fig1-gallery
 
@@ -324,10 +325,10 @@ figures:
     tex: null
     manuscript: false
     clone_ok: false
-    repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/oran_triptych.pdf
+    repro_output: figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych/oran_triptych.pdf
     notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
     producer:
-      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, oran, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, oran, --out-dir, figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych]
       cwd: .
     inputs:
       - results-library:scattering/jointmodel/latest/oran/jointmodel.npz
@@ -336,7 +337,7 @@ figures:
       - campaigns/crossmatching/toa_crossmatch_results.json
       - campaigns/crossmatching/notebook_reproduction_fixture.json
     outputs:
-      - figure_review/staging/joint_scattering/figures/codetection_triptych/oran_triptych.pdf
+      - figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych/oran_triptych.pdf
     depends_on: []
     approval_slot: triptych-oran
 
@@ -344,10 +345,10 @@ figures:
     tex: null
     manuscript: false
     clone_ok: false
-    repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/johndoeii_triptych.pdf
+    repro_output: figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych/johndoeii_triptych.pdf
     notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
     producer:
-      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, johndoeii, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, johndoeii, --out-dir, figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych]
       cwd: .
     inputs:
       - results-library:scattering/jointmodel/latest/johndoeii/jointmodel.npz
@@ -356,7 +357,7 @@ figures:
       - campaigns/crossmatching/toa_crossmatch_results.json
       - campaigns/crossmatching/notebook_reproduction_fixture.json
     outputs:
-      - figure_review/staging/joint_scattering/figures/codetection_triptych/johndoeii_triptych.pdf
+      - figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych/johndoeii_triptych.pdf
     depends_on: []
     approval_slot: triptych-johndoeii
 
@@ -364,10 +365,10 @@ figures:
     tex: null
     manuscript: false
     clone_ok: false
-    repro_output: figure_review/staging/joint_scattering/figures/codetection_triptych/zach_triptych.pdf
+    repro_output: figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych/zach_triptych.pdf
     notes: Candidate morphology audit only; original stochastic fit is not exactly reproducible.
     producer:
-      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, zach, --out-dir, figure_review/staging/joint_scattering/figures/codetection_triptych]
+      argv: [conda, run, -n, flits, python, analysis/scripts/plot_codetection_triptych.py, --burst, zach, --out-dir, figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych]
       cwd: .
     inputs:
       - results-library:scattering/jointmodel/latest/zach/jointmodel.npz
@@ -376,7 +377,7 @@ figures:
       - campaigns/crossmatching/toa_crossmatch_results.json
       - campaigns/crossmatching/notebook_reproduction_fixture.json
     outputs:
-      - figure_review/staging/joint_scattering/figures/codetection_triptych/zach_triptych.pdf
+      - figure_review/artifacts/staging/joint_scattering/figures/codetection_triptych/zach_triptych.pdf
     depends_on: []
     approval_slot: triptych-zach
 
