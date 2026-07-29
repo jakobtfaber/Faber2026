@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Ax agent front door for figure_flow (optional; needs ``pip install axllm``).
 
-Deterministic work still runs via ``scripts/figure_flow.py``. This module only
+Deterministic work still runs via ``analysis/scripts/figure_flow.py``. This module only
 exposes typed tools so an AxAgent can list / regen / status without opening
 plot scripts. CI and ``make figures`` do not import axllm.
 """
@@ -101,7 +101,7 @@ def build_agent():
     except ImportError as exc:  # pragma: no cover
         raise SystemExit(
             "axllm not installed. Install with: pip install axllm\n"
-            "Or use the deterministic CLI: python3 scripts/figure_flow.py --help"
+            "Or use the deterministic CLI: python3 analysis/scripts/figure_flow.py --help"
         ) from exc
 
     skill_body = load_skill_text()

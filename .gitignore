@@ -22,7 +22,7 @@
 # Python bytecode caches from running scripts/ and tests/.
 __pycache__/
 
-# Local layout prototypes (regenerate from pipeline/; promote winners to figures/).
+# Local layout prototypes (regenerate from analysis producers; promote winners to figures/).
 figures/prototypes/
 # Local grit coordination state (locks/worktrees for concurrent agents).
 .grit/
@@ -66,7 +66,6 @@ graphify-out/
 
 # Figure-flow regen receipts (scripts/figure_flow.py)
 /figures/.receipts/
-/figure_review/staging/
 
 # Root agent briefs (machine-local). Keep on disk for Cursor/Claude/Gemini;
 # do not publish to GitHub or mirror into Overleaf.
