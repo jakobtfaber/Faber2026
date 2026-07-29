@@ -245,7 +245,7 @@ def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]
             repo_root / "scripts/absolute_dm_voltage.py",
         ],
         "manifests": [
-            repo_root / "dm-toa-geometry-20260728/one-event-workflow.schema.json"
+            repo_root / "analysis-configs/absolute-dm/schema.json"
         ],
     }
     return shared + stage_files[stage]
@@ -547,7 +547,7 @@ def _write_manifest(
 ) -> None:
     controls = [
         config_path,
-        repo_root / "dm-toa-geometry-20260728/one-event-workflow.schema.json",
+        repo_root / "analysis-configs/absolute-dm/schema.json",
         repo_root / "scripts/one_event_workflow.py",
         repo_root / "scripts/one_event_hybrid_dm.py",
         repo_root / "scripts/audit_one_event_dsa_state_h17.py",

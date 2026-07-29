@@ -1,5 +1,5 @@
 {
-  "$schema": "../one-event-workflow.schema.json",
+  "$schema": "schema.json",
   "schema_version": 1,
   "event": "casey",
   "result_status": "one_event_hybrid_pending_independent_review",
@@ -158,7 +158,7 @@
     "dsa_native_frequency_mhz": 1530.0
   },
   "workflow": {
-    "execution_authorized": true,
+    "execution_authorized": false,
     "regression_fixture": true,
     "chime_container_image": "chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41",
     "container_data_mount": "/data/Faber2026",
@@ -172,5 +172,5 @@
       "manifests"
     ]
   },
-  "event_binding_sha256": "9c9ac80d0b73060ee1cc54ab14d6dc04decd9ba795c87cefbd656d1bee327f2e"
+  "event_binding_sha256": "28237d4b81c2f4632c4be627cae5b97f91b20163840c2dfb2ead35bc77d5df75"
 }

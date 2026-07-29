@@ -4,7 +4,7 @@ Status: metadata-only estimate. No second event was run.
 
 ## Measured Casey receipts
 
-H17 receipt: `casey-hybrid/run-provenance.json`.
+H17 run provenance is recorded in the approved packet receipt.
 
 | Stage | Start | End | Wall time |
 |---|---:|---:|---:|

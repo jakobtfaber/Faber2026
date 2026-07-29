@@ -19,7 +19,7 @@ from one_event_workflow import (  # noqa: E402
 import run_one_event_absolute_dm_workflow as workflow_runner  # noqa: E402
 from run_one_event_absolute_dm_workflow import outputs_match  # noqa: E402
 
-CONFIG = ROOT / "dm-toa-geometry-20260728/casey-hybrid/workflow-config.json"
+CONFIG = ROOT / "analysis-configs/absolute-dm/casey.json"
 
 
 def _config() -> dict:
@@ -67,7 +67,7 @@ def test_casey_regression_fixture_validates() -> None:
 def test_schema_accepts_casey_fixture_when_jsonschema_is_available() -> None:
     jsonschema = pytest.importorskip("jsonschema")
     schema = json.loads(
-        (ROOT / "dm-toa-geometry-20260728/one-event-workflow.schema.json").read_text()
+        (ROOT / "analysis-configs/absolute-dm/schema.json").read_text()
     )
     jsonschema.validate(_config(), schema)
 

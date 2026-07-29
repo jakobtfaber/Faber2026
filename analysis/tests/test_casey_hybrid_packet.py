@@ -165,7 +165,7 @@ def test_hybrid_packet_renderer_accepts_current_schema(tmp_path: Path) -> None:
     config = json.loads(
         (
             ROOT
-            / "dm-toa-geometry-20260728/casey-hybrid/workflow-config.json"
+            / "analysis-configs/absolute-dm/casey.json"
         ).read_text()
     )
     config["paths"]["accepted_chime_reference"] = str(accepted_chime)
