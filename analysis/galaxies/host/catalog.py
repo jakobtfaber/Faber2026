@@ -9,9 +9,9 @@ from typing import Any
 
 import yaml
 
-from galaxies.foreground import config
+from foregrounds.census import config
 
-# Must match galaxies.foreground.sightline_budget.PLACEHOLDER_Z (unknown host z).
+# Must match foregrounds.propagation.sightline_budget.PLACEHOLDER_Z (unknown host z).
 PLACEHOLDER_Z = 1.0
 
 PACKAGE_DIR = Path(__file__).resolve().parent
@@ -21,7 +21,7 @@ DEFAULT_HOSTS_PATH = PACKAGE_DIR / "data" / "hosts.yaml"
 @dataclass(frozen=True)
 class HostRecord:
     nickname: str
-    z: float
+    z: float | None
     z_is_placeholder: bool = False
     log10_mstar: float | None = None
     halpha_flux_erg_s: float | None = None
@@ -34,15 +34,17 @@ class HostRecord:
     source: str | None = None
 
 
-def _is_placeholder_z(z: float) -> bool:
-    return math.isfinite(float(z)) and abs(float(z) - PLACEHOLDER_Z) < 1.0e-6
+def _is_placeholder_z(z: float | None) -> bool:
+    return z is None or (
+        math.isfinite(float(z)) and abs(float(z) - PLACEHOLDER_Z) < 1.0e-6
+    )
 
 
-def _target_z(name: str) -> tuple[float, bool]:
+def _target_z(name: str) -> tuple[float | None, bool]:
     key = name.strip().lower()
     for nick, _ra, _dec, z in config.TARGETS:
         if nick.lower() == key:
-            z_val = float(z)
+            z_val = _coerce_optional_float(z)
             return z_val, _is_placeholder_z(z_val)
     raise KeyError(f"Unknown sightline nickname: {name!r}")
 
@@ -70,7 +72,7 @@ def load_host_catalog(path: Path | str | None = None) -> dict[str, HostRecord]:
     out: dict[str, HostRecord] = {}
     for nick, _ra, _dec, z in config.TARGETS:
         key = nick.lower()
-        z_val = float(z)
+        z_val = _coerce_optional_float(z)
         payload = overrides.get(key, {})
         z_override = _coerce_optional_float(payload.get("z"))
         if z_override is not None:

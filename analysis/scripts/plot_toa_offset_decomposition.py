@@ -20,7 +20,7 @@ field is the observed-peak offset and must equal ``peak_measured_offset_ms``.
 The producer enforces that fail-closed invariant rather than reading the
 diagnostic ``model_corrected_offset_ms`` directly. Reads
 associations/studies/crossmatching/toa_crossmatch_results.json; deterministic; no external
-data. Run:  conda run -n flits python scripts/plot_toa_offset_decomposition.py
+data. Run: uv run --frozen python scripts/plot_toa_offset_decomposition.py
 """
 from __future__ import annotations
 

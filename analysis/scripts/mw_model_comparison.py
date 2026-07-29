@@ -5,7 +5,7 @@ YMW16 are evaluated with pygedm to 30 kpc at the twelve co-detection
 positions and compared against the NE2025 disk columns adopted by the budget
 (Table tab:budget DM_MW minus the 40 pc cm^-3 halo prior).
 
-Run: conda run -n flits python scripts/mw_model_comparison.py
+Run: uv run --frozen python scripts/mw_model_comparison.py
 (pygedm's yt2020 module needs scipy<1.12's `simps`; a shim is applied.)
 """
 

@@ -37,7 +37,7 @@ def calibration_sha256(paths: list[Path]) -> str:
 
 def load_energy_roster(repo: Path) -> dict[str, dict]:
     """Load the 12-event roster from frozen redshift-source extracts."""
-    frozen = repo / "foregrounds" / "studies" / "census" / "data" / "frozen_census"
+    frozen = repo / "foregrounds" / "census" / "data" / "frozen_census"
     roster = {
         nick: {
             "nickname": nick,

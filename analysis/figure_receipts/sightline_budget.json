@@ -1,0 +1,31 @@
+{
+  "id": "sightline_budget",
+  "utc": "2026-07-29T22:17:17.452045+00:00",
+  "argv": [
+    "uv",
+    "run",
+    "--project",
+    ".",
+    "--frozen",
+    "python",
+    "-m",
+    "foregrounds.propagation.sightline_budget",
+    "--results-dir",
+    "scattering/results/legacy-summary",
+    "--configs-dir",
+    "config/fits/scattering/bursts/chime"
+  ],
+  "cwd": "analysis",
+  "dry_run": false,
+  "exit_code": 0,
+  "stdout_tail": "Wrote /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.csv\nWrote /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.md\nWrote /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.png\nWrote /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.pdf\nWrote /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.svg\n",
+  "stderr_tail": "WARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\nWARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\nWARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\n",
+  "output_sha256": {
+    "analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.csv": "ca10ec5560e4b4fd5f493d0a7583c43d233774d8df4cf9607a2246dc4769a2b0",
+    "analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.md": "a95393143b95c1790af10af9e184f59bb1f5171b4f757e314d19339b602e0c02",
+    "analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.pdf": "33e4b84d8171d144da405653894027e5b96ae77eb7f37cfe83ae1ee38c9af05a",
+    "analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.png": "59b960208f4a1536ef551a98cec468ea076ecf86276cd88bdbc3450345ccb2bd",
+    "analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.svg": "e2beea31d23741ab92e002c5d40b8b301dc4bad75a2e962cfa6c2af53c49a70d"
+  },
+  "status": "OK"
+}

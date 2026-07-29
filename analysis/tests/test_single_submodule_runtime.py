@@ -10,7 +10,7 @@ ROOT = Path(__file__).parents[1]
 def test_runtime_surfaces_do_not_require_pipeline_checkout():
     makefile = (ROOT / "Makefile").read_text()
     catalog_text = (ROOT / "figures/catalog.yaml").read_text()
-    slots_text = (ROOT / "figure_review/slots.json").read_text()
+    slots_text = (ROOT / "figure_review/definitions/slots.json").read_text()
     assert "pipeline" not in makefile
     assert "cwd: pipeline" not in catalog_text
     assert "--project analysis" not in catalog_text

@@ -21,7 +21,7 @@ from pathlib import Path
 
 REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
-sys.path.insert(0, f"{REPO}/scattering")  # so `scat_analysis` imports
+sys.path.insert(0, REPO)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # so joint_tf_prep imports
 
 import joint_tf_prep

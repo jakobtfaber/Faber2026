@@ -22,7 +22,7 @@ pipeline commit `7d26b1f7d3747afebb0ed7064d3058d25fb33396`.
 
 The answer is **yes for every adopted candidate redshift currently in the
 registry**. The freeze ledger is
-`pipeline/galaxies/foreground/data/candidate_redshift_provenance.csv`.
+`foregrounds/census/data/candidate_redshift_provenance.csv`.
 It covers all 52 registry rows and preserves every stored verdict and
 budget-eligibility flag. Forty-six rows have adopted candidate redshifts with
 stable source identifiers, source releases, retrieval timestamps, source-row
@@ -44,7 +44,7 @@ budget flag.
 
 Validation:
 
-- `uv run python -m galaxies.foreground.freeze_candidate_redshift_provenance`
-- `uv run rtk pytest galaxies/foreground/test_candidate_redshift_provenance.py -q`
-- `uv run rtk pytest galaxies/foreground/test_census_registry.py galaxies/foreground/test_foreground_table_emitter.py galaxies/foreground/test_candidate_redshift_provenance.py -q -k 'not scratch_codetection_exists'`
-- `uv run rtk ruff check galaxies/foreground/freeze_candidate_redshift_provenance.py galaxies/foreground/test_candidate_redshift_provenance.py`
+- `uv run python -m foregrounds.census.freeze_candidate_redshift_provenance`
+- `uv run --group test --frozen pytest tests/test_verify_foreground_registry_sources.py -q`
+- `uv run --group test --frozen pytest tests/test_validate_foreground_census_analysis_only.py foregrounds/tests -q`
+- `uv run --group test --frozen ruff check foregrounds/census/freeze_candidate_redshift_provenance.py`

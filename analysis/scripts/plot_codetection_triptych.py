@@ -13,7 +13,7 @@ Chromatica (npz: null) is data-only from archival `_cntr_bpc.npy` products.
 Time window: observed on-pulse union of both bands, padded on each side by
 P = max(W_CHIME, 1.5 ms).
 
-Run: conda run -n flits python scripts/plot_codetection_triptych.py
+Run: python scripts/plot_codetection_triptych.py
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ from workspace import ANALYSIS_ROOT, manuscript_root
 matplotlib.rcParams["svg.hashsalt"] = "Faber2026-codetection-triptych-v2"
 
 ROOT = manuscript_root()
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(ANALYSIS_ROOT / "scripts"))
 
 from radio_pipeline.batch.codetection_data import (  # noqa: E402
     chime_toa_shift_ms,

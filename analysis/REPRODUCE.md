@@ -171,20 +171,19 @@ is hand-maintained, is not `\input` by the manuscript, and is deliberately left
 untouched: `tab:beta` is deferred. Do not treat that file as regenerable-and-current.
 
 ```bash
-conda run -n flits python scripts/dm_budget_uncertainty.py
-conda run -n flits python scripts/render_budget_table.py
-conda run -n flits python scripts/render_budget_table.py --check
+uv run --frozen python scripts/dm_budget_uncertainty.py
+uv run --frozen python scripts/render_budget_table.py
+uv run --frozen python scripts/render_budget_table.py --check
 
-cd ../pipeline
-# foreground census: values in galaxies/foreground/foreground_table_data.json
-uv run python -m galaxies.foreground.foreground_table_emitter --out ../foreground_table.tex
+# foreground census: values in foregrounds/census/foreground_table_data.json
+uv run python -m foregrounds.propagation.foreground_table_emitter --out ../foreground_table.tex
 # verify (byte-exact vs exports/ + value cross-checks against upstream products)
-uv run pytest galaxies/foreground/test_foreground_table_emitter.py
-# ^ green at pipeline pin 6c87890 (verified 2026-07-09).
+uv run --group test python -m pytest foregrounds/tests
+# Current commands run entirely from `analysis/`.
 ```
 
-The pipeline emitters also write canonical copies to `pipeline/exports/<table>.tex` (the
-byte-exact regression anchor) and supports `--check` (non-zero exit on drift).
+The emitters write generated copies under `foregrounds/results/generated/` and
+support `--check` (non-zero exit on drift).
 **`--check` is not a sufficient CI gate on its own** — it compares the emitter's
 output to `exports/<table>.tex`, and both are derived from the *same*
 submodule-local data file, so it cannot see the cross-repository drift of
@@ -214,7 +213,7 @@ earned their keep once: they are what caught the drift described in hazard 1.
   CSV from a submodule test, so it is only meaningful for a matched
   (super-repo commit, submodule pin) pair.
 - **foreground** — every numeric object ID's verdict is cross-checked against
-  the census registry `foregrounds/studies/census/data/intervening_census_registry.csv`
+  the census registry `foregrounds/census/data/intervening_census_registry.csv`
   (27/27 registry-resident rows). The table is a curated subset of the registry's
   confirmed+inconclusive systems (refuted candidates omitted; the cluster row's
   ID comes from the WenHan2024 catalog, not the registry).
@@ -274,12 +273,10 @@ earned their keep once: they are what caught the drift described in hazard 1.
    A submodule pin that lives off the upstream default branch — as this one does —
    makes "just merge it upstream" the wrong reflex.
 
-   The lesson worth keeping: **a green parity test in the submodule proves
-   nothing until the super-repo pins the commit that made it green.** When you
-   change `dm_budget_uncertainty.py` / `.csv`, regenerate
-   `budget_table_data.json` in `dsa110-FLITS` and bump the gitlink in the same
-   breath, or the next person to run the "safe" regenerate command silently
-   reverts your numbers.
+   Historical lesson: generator and cross-input parity must land together.
+   Today both live in this analysis repository; update
+   `dm_budget_uncertainty.py`, its output, `budget_table_data.json`, and the
+   parity receipt in one focused change.
 
    (Two sightlines — FRB 20220310F and FRB 20221203A, both $z\approx0.5$ — carry
    *negative* DM_host medians. This is intended, not a defect: their posteriors
@@ -313,13 +310,8 @@ earned their keep once: they are what caught the drift described in hazard 1.
    standalone submodule checkout. No absolute machine path remains *in this
    script*; it survives a clone to any location.
 
-   (An earlier revision of this file said the constant passed through a
-   "repo-absolute path" on its way to repo-relative. It did not: no version of
-   `plot_association_cards.py` in any ref of `dsa110-FLITS` ever held a
-   `/Users/jakobfaber/Developer/repos/...` literal. The fix went from the
-   Overleaf absolute path straight to `ROOT.parent`. Corrected 2026-07-09 —
-   and note that the fix was never carried across to the two `galaxies/v2_0/`
-   modules that share the same defect. See hazard 5.)
+   This historical defect is closed. Current figure producers use repository
+   paths and accept explicit output directories.
 
 4. **Producer resolution for the two burst-nickname figures:**
    - `freya_dsa_gamma_summary.pdf` (freya = FRB 20230325A) — **resolved** to the
@@ -337,44 +329,12 @@ earned their keep once: they are what caught the drift described in hazard 1.
      canonical at α≈5.1). Almost certainly a local/HPC `burstfit` run that was
      never committed. Needs author confirmation.
 
-5. **Two `galaxies/v2_0/` modules defaulted their output to a hardcoded personal
-   Overleaf path — and one of them was not saved by its `run_command`. FIXED at
-   the current pin. (Code fix landed as FLITS #148, first reaching this repo at
-   pin `334cc74` via the `6c87890 → 334cc74` bump, Faber2026 #68. The current
-   pin `1d5633c` carries the fix unchanged, re-verified directly on 2026-07-24.)**
+5. **Foreground figure output and ordering defects. (RESOLVED 2026-07-29.)**
 
-   Hazard 3 fixed `plot_association_cards.py`. It did not fix its neighbours:
-
-   - `galaxies/v2_0/sightline_halo_grid.py:59`
-   - `galaxies/v2_0/systems_figures.py:76`
-
-   both set `DEFAULT_OUT_DIR = "/Users/jakobfaber/Developer/overleaf/Faber2026/figures"`.
-   `sightline_halo_grid.py` is harmless *only* because its `run_command` passes
-   `--out-dir ../figures` explicitly. `systems_figures.py`'s command did not, so
-   running it as documented exits **0** while writing `clusters_icm.*` and
-   `galaxies_cgm.*` into a directory that exists on exactly one laptop — silently
-   outside the repository, and on any other machine into a freshly `makedirs`'d
-   path nobody will look in. This was found on 2026-07-09 by executing the
-   command and then noticing the six modified files in the *Overleaf* checkout
-   (restored). **FLITS PR #148** replaced both defaults with
-   `os.path.join(os.path.dirname(_REPO), "figures")` — the same `_REPO`-derived
-   form hazard 3 used — and that fix is now in the pinned submodule (present
-   since `334cc74`, verified again at the current pin `1d5633c`:
-   `DEFAULT_OUT_DIR` is repo-derived at
-   `sightline_halo_grid.py:59` and `systems_figures.py:80`). A bare run therefore
-   lands `clusters_icm.*` / `galaxies_cgm.*` inside the repository. The manifest's
-   `run_command` still passes `--out-dir ../figures` explicitly, so the documented
-   invocation was already safe and remains so. The undeclared ordering dependency
-   below is unaffected by #148 and still stands.
-
-   The same run exposed an **undeclared ordering dependency**: `systems_figures.py`
-   reads `pipeline/results/sightline_dm_scattering_budget.csv`, which nothing in
-   the manifest produced before it. That CSV comes from `sightline_budget`, which
-   in turn only runs in **module** form — as a script its direct-execution import
-   fallback (`galaxies/foreground/sightline_budget.py:61-65`) imports
-   `MASS_PRIORITY` but drops `build_unified_records`, so line 528 raises
-   `NameError`. Both are fixed in the manifest's commands and neither was
-   detectable by reading a `savefig` line.
+   The canonical producers now live under `foregrounds/`. Output paths are
+   repository-relative or explicit. The figure catalog declares the
+   `sightline_budget` dependency before `clusters_icm`; both commands run in the
+   analysis environment. Direct and module execution share the same imports.
 
 6. **Ten figure rows are blocked on data outside a clone.**
    `chime_subband_compare.py`, `joint_ladder/_subband_tau_validation.py` and
@@ -421,25 +381,17 @@ earned their keep once: they are what caught the drift described in hazard 1.
 - Hazards (1) and (2) are both **done**: the two tables are generated + tested,
   and `plot_association_cards.py`'s output path is now a repo-relative default
   with `--manuscript-dir` / `--no-manuscript-copy` overrides.
-- **Hazard (5) is partly closed; (6) is open.** (5)'s `DEFAULT_OUT_DIR` half is
-  **done** — FLITS #148 made it repo-relative in the two `galaxies/v2_0/` modules,
-  in the pinned submodule since `334cc74` (Faber2026 #68) and still present at the
-  current pin `1d5633c` (verified 2026-07-24). Still open in (5): add
-  the missing `build_unified_records` to `sightline_budget.py`'s fallback import
-  (the module now lives at `galaxies/foreground/sightline_budget.py` after the
-  `v2_0 → foreground` rename; confirmed still absent at `1d5633c` — the
-  `except ImportError` branch at line 65 imports only `MASS_PRIORITY`). (6) is a data-deposition decision,
-  not a code fix.
+- Hazard (5) is closed. Hazard (6) remains a data-deposition decision.
 - **`make figures` is live.** It runs
   `python3 scripts/figure_flow.py regen --manuscript --clone-ok` against
-  [`figures/catalog.yaml`](../figures/catalog.yaml) — the declarative regen graph
+  [`figures/catalog.yaml`](figures/catalog.yaml) — the declarative regen graph
   for science-ready manuscript figures (topo-sorted deps, input checks, SHA
   receipts under `figures/.receipts/`). The clone-safe set matches the
   `clone_verified = reproduced*` figure rows that do not need `~/Data` or
   external flits-runs trees. Fig. 1 (`fig1_gallery`) is data-bound
   (`clone_ok: false`); regenerate with
   `python3 scripts/figure_flow.py regen --id fig1_gallery` (writes staging
-  under `figure_review/staging/`, then `figure_review.py new-batch` — never
+  under `figure_review/artifacts/staging/`, then `figure_review.py new-batch` — never
   silent promote). The Oran DSA qualification PNG is **not** a manuscript
   figure (`manuscript: false` / `embedded_in_manuscript=no`). Agent runbook:
   [`figures/ax/SKILL.md`](../figures/ax/SKILL.md). Broader inventory:

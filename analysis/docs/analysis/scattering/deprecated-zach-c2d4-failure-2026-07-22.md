@@ -8,7 +8,7 @@ artifacts only as failure evidence for the controlled C2D4 rerun.
 The audit reconstructs the archived fit summary, 36,243 weighted posterior
 samples, model grid, and complete standard-output and standard-error logs.
 Exact artifact hashes are in
-`figure_review/audits/2026-07-22-deprecated-zach-c2d4/audit.json`. Input,
+`figure_review/artifacts/audits/2026-07-22-deprecated-zach-c2d4/audit.json`. Input,
 configuration, and post-hoc source hashes are in the adjacent
 `provenance.json`.
 

@@ -41,7 +41,7 @@ Evidence used:
 
 - `docs/rse/specs/handoff/handoff-2026-07-08-08-55-open-author-decisions.md`
   records the live default and the frozen-census mismatch.
-- `pipeline/galaxies/foreground/data/intervening_census_registry.csv` carries
+- `foregrounds/census/data/intervening_census_registry.csv` carries
   the frozen row-level `impact_kpc`, `final_verdict`, `classification`,
   `best_z_source`, and `budget_eligible` fields.
 - `docs/rse/specs/handoff/handoff-2026-07-08-18-12-b7-cgm-census-resolved.md`

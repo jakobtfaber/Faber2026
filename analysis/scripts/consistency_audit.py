@@ -204,7 +204,7 @@ def check_toa_correction_gate(findings: list[str]) -> None:
 def check_foreground_census_wording(findings: list[str]) -> None:
     """Keep the observations prose aligned to the frozen census registry."""
     registry_path = (
-        ANALYSIS_ROOT / "foregrounds/studies/census/data/intervening_census_registry.csv"
+        ANALYSIS_ROOT / "foregrounds/census/data/intervening_census_registry.csv"
     )
     try:
         with registry_path.open(newline="", encoding="utf-8") as fh:

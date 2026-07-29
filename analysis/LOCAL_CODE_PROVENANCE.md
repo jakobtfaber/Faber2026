@@ -9,7 +9,7 @@ Code incorporated during the retirement:
 - `radio_pipeline/`, scattering, scintillation, dispersion, crossmatching, and
   simulation code: recovered from retired source commit
   `ac960872c8da2e9c6fe11da15a4ff8cbd5538aaa`.
-- `galaxies/foreground/`: recovered from the independently reviewed correction
+- `foregrounds/`: canonical foreground census, propagation, and visualization package
   commit `ee781f7`.
 
 Imports were renamed to the local `radio_pipeline` package. The active

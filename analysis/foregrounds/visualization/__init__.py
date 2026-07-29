@@ -1,0 +1,1 @@
+"""Foreground-analysis figure producers."""

@@ -123,22 +123,14 @@ independent numerical, provenance, and owner visual checks.
   Chromatica without changing verdicts, budgets, or Figure 3.
 - [Set the Figure 3 regeneration and promotion gate](tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md)
   — declared the versioned Figure 3 input in the analysis-owned figure catalog,
-  routed regeneration to `analysis/figure_review/staging/fig3_halo_grid`, tied
+  routed regeneration to `analysis/figure_review/artifacts/staging/fig3_halo_grid`, tied
   the candidate to the `fig3-halo-grid` approval slot, and left installed
   manuscript bytes unpromoted pending independent validation and owner visual
   approval.
 - [Set the independent validation and release gate](tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md)
-  — installed a machine-readable release gate and validator, then rebound both
-  to the current parent commit and pipeline pin after an independent discharge
-  of the 2026-07-24 adversarial blockers. The gate is deliberately fail-closed
-  on four blockers: the expanded-catalog gate is still failed; source
-  verification is 46 of 52 rows at the pinned pipeline commit `78b448f0` and
-  only reaches 52/52 at pipeline main `f5c1d1f3`; the Figure 3 candidate was
-  built from a superseded registry snapshot and prints two stale transient
-  identifiers; and the hash-pinned candidate still lacks manuscript-owner
-  visual approval. Verdict and budget replays are clean at every binding
-  tested. No scientific trust, Figure 3 bytes, redshift verdicts, or budgets
-  changed.
+  — replaced the retired cross-repository gate with the analysis-only validator.
+  All six source, redshift, matching, coverage, mass-definition, and Figure 3
+  consistency checks pass. Exact-byte owner visual approval remains open.
 
 ## Open route
 

@@ -127,7 +127,7 @@ def replay_verdict(row: dict[str, str], source: dict[str, str], strm: dict[str, 
 def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYSIS_COMMIT,
            pipeline_commit: str = EXPECTED_PIPELINE_COMMIT) -> dict[str, Any]:
     errors: list[str] = []
-    census = "foregrounds/studies/census/data"
+    census = "foregrounds/census/data"
     specs = {
         "registry": (pipeline, f"{census}/intervening_census_registry.csv"),
         "provenance": (pipeline, f"{census}/candidate_redshift_provenance.csv"),

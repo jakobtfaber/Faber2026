@@ -31,7 +31,7 @@ None — can start immediately.
 
 ## Resolution — 2026-07-22
 
-The [artifact audit](../../../../figure_review/audits/2026-07-22-deprecated-zach-c2d4/audit.json)
+The [artifact audit](../../../../figure_review/artifacts/audits/2026-07-22-deprecated-zach-c2d4/audit.json)
 and [scientific interpretation](../../../analysis/scattering/deprecated-zach-c2d4-failure-2026-07-22.md)
 resolve the ticket. Job 180's fourth DSA-110 component is 59.38 fitted-window
 widths wide and carries 3.0818% of modeled band fluence. It is a pedestal, not

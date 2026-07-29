@@ -47,7 +47,7 @@ def test_current_joint_dm_runner_routes_instruments_to_distinct_roots(
 
 
 def test_figure_one_catalog_declares_both_full_resolution_roots() -> None:
-    catalog = yaml.safe_load((ROOT / "figures/catalog.yaml").read_text())
+    catalog = yaml.safe_load((ANALYSIS_ROOT / "figures/catalog.yaml").read_text())
     figure = next(item for item in catalog["figures"] if item["id"] == "fig1_gallery")
     inputs = set(figure["inputs"])
     assert "~/Data/Faber2026/chimefrb/CHIME_bursts" in inputs

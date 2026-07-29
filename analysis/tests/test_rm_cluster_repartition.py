@@ -40,7 +40,7 @@ import rm_cluster_repartition as rcr  # noqa: E402
 from workspace import manuscript_root  # noqa: E402
 
 ROOT = manuscript_root()
-REGISTRY = ANALYSIS_ROOT / "foregrounds/studies/census/data/intervening_census_registry.csv"
+REGISTRY = ANALYSIS_ROOT / "foregrounds/census/data/intervening_census_registry.csv"
 
 
 def test_registry_row_matches_pins():
@@ -79,7 +79,12 @@ def test_budget_csv_bracket_matches_pins():
 
 def test_frame_algebra():
     # RM_cl(obs)/B = 0.812 * DM_obs * (1+z_cl) / (1+z_cl)^2 = 0.812*DM_obs/1.2
-    assert math.isclose(rcr.rm_per_microgauss_obs(184.0), 124.5, rel_tol=5e-3)
+    assert math.isclose(rcr.PINNED["dm_cl_mnfw_central"], 224.7196174)
+    assert math.isclose(
+        rcr.rm_per_microgauss_obs(rcr.PINNED["dm_cl_mnfw_central"]),
+        152.0603,
+        rel_tol=5e-5,
+    )
     assert math.isclose(rcr.rm_per_microgauss_obs(84.0), 56.8, rel_tol=5e-3)
     assert math.isclose(rcr.rm_per_microgauss_obs(328.0), 222.0, rel_tol=5e-3)
     # rederive from first principles rather than the module's own constant
@@ -91,7 +96,11 @@ def test_frame_algebra():
 def test_negligibility_fields():
     # sigma_RM_host(obs) = 15/(1+0.271)^2 = 9.29 rad/m^2 (plan table)
     assert math.isclose(rcr.SIGMA_RM_OBS, 9.29, abs_tol=0.01)
-    assert math.isclose(rcr.b_negligibility(184.0), 0.075, abs_tol=0.002)
+    assert math.isclose(
+        rcr.b_negligibility(rcr.PINNED["dm_cl_mnfw_central"]),
+        0.0611,
+        abs_tol=0.0002,
+    )
     assert math.isclose(rcr.b_negligibility(84.0), 0.163, abs_tol=0.003)
     assert math.isclose(rcr.b_negligibility(328.0), 0.042, abs_tol=0.002)
 

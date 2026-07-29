@@ -44,6 +44,7 @@ addopts = ["-ra", "--strict-config", "--strict-markers"]
 pythonpath = [".", "scripts"]
 testpaths = [
   "tests",
+  "foregrounds/tests",
   "scattering/studies/joint-refits/test_gate_joint_committed.py",
   "scattering/studies/joint-refits/test_posterior_compare.py",
   "scattering/studies/joint-refits/test_tail_coverage.py",

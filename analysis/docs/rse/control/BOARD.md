@@ -20,7 +20,8 @@ and remain sequenced behind their named re-validation gates.
 
 **Legend:** `[ ]` open · `[x]` done · `⛔ trust` gated on trust
 overhaul/re-validation · `⏳ campaign` gated on a cross-cutting campaign ·
-`✋ owner` needs an owner decision (usually a wayfinder ticket).
+Owner decisions live in linked Wayfinder tickets or figure-review manifests;
+the board is not an independent queue source.
 
 ---
 
@@ -58,7 +59,7 @@ independent execution path.
   predeclared gates); rerun closure/finalization + validation.json + figures
 - [ ] Fresh 36-panel input review + both-band ACF review for owner
 
-- [ ] ✋ Ratify the qualifying CHIME-band method — **blocked on remediation**
+- [ ] Ratify the qualifying CHIME-band method — **blocked on remediation**
   ([wf-02](wayfinder/tickets/02-ratify-chime-scintillation-method.md))
 - [ ] Burst configs for the four unconfigured sightlines
   (whitney/phineas/mahi/isha) (legacy B1)
@@ -73,8 +74,8 @@ independent execution path.
   h17-side tooling (legacy B6)
 
 ### Scattering re-fit campaign
-- [ ] ✋ Scintillation-to-scattering coupling design closure (legacy A1)
-  ([wf-04](wayfinder/tickets/04-close-scint-scattering-coupling-design.md))
+- [ ] Scintillation-to-scattering coupling design closure (legacy A1):
+  [residual trigger](wayfinder/tickets/04a-close-residual-trigger.md)
 - [x] Profile-component-count statistic deferred; not a submission blocker (legacy A5)
   ([wf-05](wayfinder/tickets/05-profile-component-statistic-blocker-decision.md))
 - [ ] Extended-medium (uniform-LOS) PBF kernel, β-coupled, per band (legacy A2)

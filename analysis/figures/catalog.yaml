@@ -1,6 +1,6 @@
 # Manuscript figure regeneration catalog.
 # Source of truth for `analysis/scripts/figure_flow.py` / `make figures`.
-# Cross-check: analysis/repro_manifest.csv and analysis/figure_review/slots.json.
+# Cross-check: analysis/repro_manifest.csv and analysis/figure_review/definitions/slots.json.
 schema_version: 1
 
 figures:
@@ -11,16 +11,16 @@ figures:
     repro_output: figures/dm_host_posteriors.pdf
     producer:
       argv:
-        - conda
+        - uv
         - run
-        - -n
-        - flits
-        - --no-capture-output
+        - --project
+        - analysis
+        - --frozen
         - python
         - analysis/scripts/dm_budget_uncertainty.py
       cwd: .
     inputs:
-      - analysis/foregrounds/studies/census/budget_table_data.json
+      - analysis/foregrounds/census/budget_table_data.json
       - analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv
       - analysis/scripts/dm_budget_intervening_systems.csv
       - analysis/scripts/phineas_halo_crossing_inputs.csv
@@ -36,11 +36,11 @@ figures:
     repro_output: figures/ne2025_mw_characterization_nside32.pdf
     producer:
       argv:
-        - conda
+        - uv
         - run
-        - -n
-        - flits
-        - --no-capture-output
+        - --project
+        - analysis
+        - --frozen
         - python
         - analysis/scripts/plot_ne2025_mw_properties.py
         - --nside
@@ -72,26 +72,26 @@ figures:
         - --frozen
         - python
         - -m
-        - galaxies.v2_0.sightline_halo_grid
+        - foregrounds.visualization.sightline_halo_grid
         - --halo-csv
-        - foregrounds/studies/census/data/sightline_halo_grid.csv
+        - foregrounds/census/data/sightline_halo_grid.csv
         - --out-dir
-        - figure_review/staging/fig3_halo_grid/figures
+        - figure_review/artifacts/staging/fig3_halo_grid/figures
       cwd: analysis
     inputs:
-      - analysis/foregrounds/studies/census/data/sightline_halo_grid.csv
+      - analysis/foregrounds/census/data/sightline_halo_grid.csv
     outputs:
-      - analysis/figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf
+      - analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf
     manuscript_target: figures/sightline_halo_grid.pdf
-    candidate_root: analysis/figure_review/staging/fig3_halo_grid
+    candidate_root: analysis/figure_review/artifacts/staging/fig3_halo_grid
     depends_on: []
     approval_slot: fig3-halo-grid
 
   - id: sightline_budget
     tex: null
-    manuscript: true
+    manuscript: false
     clone_ok: true
-    repro_output: figures/sightline_dm_scattering_budget.pdf
+    repro_output: analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.pdf
     notes: >-
       Intermediate node. systems_figures.py reads
       scattering/results/legacy-summary/sightline_dm_scattering_budget.csv written by this module.
@@ -104,17 +104,19 @@ figures:
         - --frozen
         - python
         - -m
-        - galaxies.foreground.sightline_budget
+        - foregrounds.propagation.sightline_budget
         - --results-dir
         - scattering/results/legacy-summary
         - --configs-dir
         - config/fits/scattering/bursts/chime
-        - --census-data-dir
-        - foregrounds/studies/census/data
       cwd: analysis
     inputs: []
     outputs:
       - analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.csv
+      - analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.md
+      - analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.pdf
+      - analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.png
+      - analysis/scattering/results/legacy-summary/sightline_dm_scattering_budget.svg
     depends_on: []
     approval_slot: null
 
@@ -132,11 +134,11 @@ figures:
         - --frozen
         - python
         - -m
-        - galaxies.v2_0.systems_figures
+        - foregrounds.visualization.systems_figures
         - --results-dir
         - scattering/results/legacy-summary
         - --census-data-dir
-        - foregrounds/studies/census/data
+        - foregrounds/census/data
         - --out-dir
         - ../figures
       cwd: analysis
@@ -178,11 +180,11 @@ figures:
     repro_output: figures/toa_offset_decomposition.pdf
     producer:
       argv:
-        - conda
+        - uv
         - run
-        - -n
-        - flits
-        - --no-capture-output
+        - --project
+        - analysis
+        - --frozen
         - python
         - analysis/scripts/plot_toa_offset_decomposition.py
       cwd: .
@@ -204,15 +206,15 @@ figures:
       promote via figure_review (never silent overwrite of manuscript PDF).
     producer:
       argv:
-        - conda
+        - uv
         - run
-        - -n
-        - flits
-        - --no-capture-output
+        - --project
+        - analysis
+        - --frozen
         - python
         - analysis/scripts/plot_codetection_data_grid.py
         - --out
-        - analysis/figure_review/staging/fig1_gallery/figures/codetection_data_grid
+        - analysis/figure_review/artifacts/staging/fig1_gallery/figures/codetection_data_grid
       cwd: .
     inputs:
       - analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv
@@ -220,9 +222,9 @@ figures:
       - ~/Data/Faber2026/chimefrb/CHIME_bursts
       - ~/Data/Faber2026/dsa110/DSA_bursts
     outputs:
-      - analysis/figure_review/staging/fig1_gallery/figures/codetection_data_grid.pdf
+      - analysis/figure_review/artifacts/staging/fig1_gallery/figures/codetection_data_grid.pdf
     manuscript_target: figures/codetection_data_grid.pdf
-    candidate_root: analysis/figure_review/staging/fig1_gallery
+    candidate_root: analysis/figure_review/artifacts/staging/fig1_gallery
     depends_on: []
     approval_slot: fig1-gallery
 
@@ -262,11 +264,11 @@ figures:
     notes: Placeholder / pending owner figure_review slot fig5-association.
     producer:
       argv:
-        - conda
+        - uv
         - run
-        - -n
-        - flits
-        - --no-capture-output
+        - --project
+        - analysis
+        - --frozen
         - python
         - analysis/scripts/plot_association_summary.py
       cwd: .
@@ -307,11 +309,9 @@ figures:
     notes: SUPPRESSED pre-PL-PBF; do not promote into manuscript.
     producer:
       argv:
-        - conda
+        - uv
         - run
-        - -n
-        - flits
-        - --no-capture-output
+        - --frozen
         - python
         - scattering/studies/joint-refits/plot_jointmodel_pair.py
         - --out-dir

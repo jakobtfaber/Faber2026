@@ -13,7 +13,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_GATE = ROOT / "docs/rse/specs/validation-expanded-foreground-independent-release-gate.json"
-DEFAULT_RECEIPTS_DIR = ROOT / "figure_review/approval_receipts"
+DEFAULT_RECEIPTS_DIR = ROOT / "figure_review/decisions/approval_receipts"
 
 
 def load_gate(path: Path) -> dict[str, Any]:
@@ -21,8 +21,21 @@ def load_gate(path: Path) -> dict[str, Any]:
         return json.load(handle)
 
 
+_MISSING_INPUTS: list[str] = []
+
+
 def _load_json_relative(path: str) -> dict[str, Any]:
-    with (ROOT / path).open(encoding="utf-8") as handle:
+    """Load a gate input, recording rather than raising when it is absent.
+
+    A gate that raises is worse than a gate that fails: the traceback looks like
+    a broken tool rather than a refused release, and callers that only check the
+    exit status can miss it entirely.
+    """
+    target = ROOT / path
+    if not target.is_file():
+        _MISSING_INPUTS.append(path)
+        return {}
+    with target.open(encoding="utf-8") as handle:
         return json.load(handle)
 
 
@@ -152,6 +165,17 @@ def gate_failures(
     pipeline_repo: Path | None = None,
     manuscript_repo: Path | None = None,
 ) -> list[str]:
+    # A retired gate is not re-run. It bound its evidence to the `dsa110-FLITS`
+    # pipeline repository and a `pipeline/` submodule the manuscript no longer
+    # carries, so every replay it declares is unreachable. Report the
+    # supersession instead of pretending to evaluate it.
+    if gate.get("disposition") == "superseded":
+        return [
+            f"gate retired {gate.get('retired_at', 'on an unrecorded date')}: "
+            f"superseded by {gate.get('superseded_by', 'an unrecorded successor')}"
+        ]
+
+    _MISSING_INPUTS.clear()
     failures: list[str] = []
     blockers = _blocker_ids(gate)
     expected = gate["expected"]
@@ -211,9 +235,12 @@ def gate_failures(
         failures.append("registry replay budget mismatches are nonempty")
 
     fig3_manifest = _load_json_relative(gate["inputs"]["figure3_review_manifest"])
-    approval_inventory = (ROOT / gate["inputs"]["figure_approval_inventory"]).read_text(
-        encoding="utf-8"
-    )
+    inventory_path = ROOT / gate["inputs"]["figure_approval_inventory"]
+    if inventory_path.is_file():
+        approval_inventory = inventory_path.read_text(encoding="utf-8")
+    else:
+        approval_inventory = ""
+        _MISSING_INPUTS.append(gate["inputs"]["figure_approval_inventory"])
     if "none of the figures" not in approval_inventory or "It remains available, unapproved, and unpromoted." not in approval_inventory:
         failures.append("owner approve-none decision is missing or changed")
     candidate = next(
@@ -289,6 +316,9 @@ def gate_failures(
             failures.append("Figure 3 approval receipt is not approved")
         if receipt_decision.get("reviewer_role") != "manuscript_owner":
             failures.append("Figure 3 approval receipt reviewer role is not manuscript_owner")
+
+    for missing in sorted(set(_MISSING_INPUTS)):
+        failures.append(f"declared gate input is missing: {missing}")
 
     return failures
 

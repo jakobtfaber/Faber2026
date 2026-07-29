@@ -45,7 +45,7 @@ def test_r500_convention_reproduces_registry():
 
 
 def test_z_vectors_pinned_to_targets():
-    from galaxies.foreground.config import TARGETS
+    from foregrounds.census.config import TARGETS
 
     targets_z = sorted(z for (_, _, _, z) in TARGETS if z is not None and z < 1.0)
     assert sorted(ccp.Z_PRIMARY) == targets_z

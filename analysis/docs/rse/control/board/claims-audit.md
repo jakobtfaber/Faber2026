@@ -33,7 +33,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### zach · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -53,7 +53,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### whitney · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -73,7 +73,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### oran · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -98,7 +98,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### isha · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -118,7 +118,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### wilhelm · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -138,7 +138,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### phineas · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -158,7 +158,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### freya · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -198,7 +198,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### hamilton · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -218,7 +218,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### mahi · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -238,7 +238,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### chromatica · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 
@@ -263,7 +263,7 @@ Only rows with manuscript consumers appear here.
 - claim: DM budget decomposition (disk, halo, Macquart, host residual) is manuscript-cleared under V5
 
 ### casey · foreground_census — `trusted`
-- artifact: `pipeline:galaxies/foreground/foreground_table_data.json` @ `2242124`
+- artifact: `analysis:foregrounds/census/foreground_table_data.json` @ `2242124`
 - consumers: `sec:foreground`, `sec:dominant-systems`, `fig:clusters_icm`, `fig:sightline_halo_grid`
 - claim: foreground census verdicts and impact parameters are manuscript-cleared under V4
 

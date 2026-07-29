@@ -13,7 +13,7 @@
 #   description       one line, plain language
 #   value             the quoted value (numbers/verdicts) or "" (tables/figures)
 #   units             "" if dimensionless/na
-#   producing_script  repo-relative path (pipeline/ or scripts/)
+#   producing_script  analysis-relative producer path
 #   pipeline_pin      exact 40-hex pipeline commit at production ("" only when
 #                     explicit provenance_gaps explain why it is unresolved)
 #   inputs            in-repo data artifacts consumed
@@ -478,7 +478,7 @@ claims = [
   { fingerprint = "e445ca35c0141628", occurrence = 1, line = 107, text = "(Section~). The FRB~20230307A sightline passes at $b/R_{500}=0.83$", owner_result_id = "budget.dm_int_nonzero" },
   { fingerprint = "cea13c671a7c1935", occurrence = 1, line = 108, text = "from the  cluster J115120.4$+$714435 ($z=0.200$,", owner_result_id = "budget.dm_int_nonzero" },
   { fingerprint = "65d58ab697daba11", occurrence = 1, line = 109, text = "$\\log M_{500}=14.1$), for which the two-phase modified-NFW model predicts an", owner_result_id = "budget.dm_int_nonzero" },
-  { fingerprint = "1374f55f9615ebb3", occurrence = 1, line = 110, text = "intracluster column of order $180\\,\\mathrm{pc\\,cm^{-3}}$", owner_result_id = "budget.dm_int_nonzero" },
+  { fingerprint = "ed40a62ef5c6b22f", occurrence = 1, line = 110, text = "intracluster column of order $225\\,\\mathrm{pc\\,cm^{-3}}$", owner_result_id = "budget.dm_int_nonzero" },
   { fingerprint = "1dd5f4cd76221b1b", occurrence = 1, line = 112, text = "X-ray/SZ-motivated isothermal $\\beta$-model with the same $M_{500}$", owner_result_id = "budget.dm_int_nonzero" },
   { fingerprint = "ad656067b36054ce", occurrence = 1, line = 114, text = "($\\approx250\\,\\mathrm{pc\\,cm^{-3}}$), and propagating the richness-based", owner_result_id = "budget.dm_int_nonzero" },
   { fingerprint = "daeaf6149f668d7f", occurrence = 1, line = 115, text = "$M_{500}$ ($\\sim\\!0.2$\\,dex scatter), the gas fraction ($f_{\\rm gas}=0.10$--$0.16$),", owner_result_id = "budget.dm_int_nonzero" },
@@ -555,7 +555,7 @@ claims = [
   { fingerprint = "cf68deb2319ee7bc", occurrence = 1, line = 20, text = "$0.117\\,\\mathrm{pc\\,cm^{-3}}$; the narrower CHIME/FRB fits are adopted.", owner_result_id = "association.dm_measurements_table" },
   { fingerprint = "e0eaa6481fcc7521", occurrence = 1, line = 22, text = "\\item \\textit{Foreground census.} The FRB~20230307A sightline is the only one in", owner_result_id = "budget.cluster_column" },
   { fingerprint = "0ff7ca50d4fcc804", occurrence = 1, line = 23, text = "the twelve-burst sample that passes within $R_{500}$ of a foreground cluster,", owner_result_id = "budget.cluster_column" },
-  { fingerprint = "de7d2b4e0e75281a", occurrence = 1, line = 24, text = "contributing an intracluster column of order $180\\,\\mathrm{pc\\,cm^{-3}}$", owner_result_id = "budget.cluster_column" },
+  { fingerprint = "2649b5a122bad857", occurrence = 1, line = 24, text = "contributing an intracluster column of order $225\\,\\mathrm{pc\\,cm^{-3}}$", owner_result_id = "budget.cluster_column" },
   { fingerprint = "80af2d3db816d0e6", occurrence = 1, line = 25, text = "($\\approx80$--$330\\,\\mathrm{pc\\,cm^{-3}}$---a factor of $\\sim$4---across", owner_result_id = "budget.cluster_column" },
   { fingerprint = "09c2194268be6422", occurrence = 1, line = 30, text = "circumgalactic contribution toward FRB~20240229A and small columns on the", owner_result_id = "budget.cluster_column" },
   { fingerprint = "9e46816adc6b7178", occurrence = 1, line = 33, text = "($b/R_{\\rm vir}\\approx0.46$--$0.96$ under vetted empirical masses), with", owner_result_id = "budget.cluster_column" },
@@ -801,7 +801,6 @@ paths = ["sample_table.tex"]
 [[artifact_coverage]]
 result_id = "scint.twoscreen_table"
 paths = ["twoscreen_provisional_table.tex"]
-
 [[input_exception]]
 name = "remediation.casey"
 class = "remediation_packet"
@@ -1136,7 +1135,7 @@ value = "disk per-sightline; halo median 40"
 units = "pc cm^-3"
 producing_script = "scripts/dm_budget_uncertainty.py"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
-inputs = ["foregrounds/studies/census/budget_table_data.json", "dispersion/results/joint-phase/manuscript_dm_catalog.csv"]
+inputs = ["foregrounds/census/budget_table_data.json", "dispersion/results/joint-phase/manuscript_dm_catalog.csv"]
 external_sources = ["NE2025", "NE2001", "YMW16"]
 artifact = "scripts/dm_budget_uncertainty.csv md5:60c063de"
 consumed_by = ["sections/observations.tex", "sections/budget.tex"]
@@ -1150,7 +1149,7 @@ notes = "halo prior width is a fiducial awaiting sign-off (wf-07)"
 # ── Foreground census (re-validated 2026-07-07 + remediated 2026-07-15) ───
 provenance_refs = [
     {role = "producer",path = "scripts/dm_budget_uncertainty.py",repository = "analysis",commit = ""},
-    {role = "input",path = "foregrounds/studies/census/budget_table_data.json",repository = "analysis",commit = ""},
+    {role = "input",path = "foregrounds/census/budget_table_data.json",repository = "analysis",commit = ""},
     {role = "input",path = "dispersion/results/joint-phase/manuscript_dm_catalog.csv",repository = "analysis",commit = ""},
     {role = "artifact",path = "scripts/dm_budget_uncertainty.csv md5:60c063de",repository = "analysis",commit = ""},
 ]
@@ -1163,9 +1162,9 @@ kind = "table"
 description = "Foreground census: candidates, verdicts, impact parameters (tab:foreground)"
 value = ""
 units = ""
-producing_script = "pipeline/galaxies/foreground/"
+producing_script = "foregrounds/"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
-inputs = ["foregrounds/studies/census/data/intervening_census_registry.csv", "foreground_table_data.json"]
+inputs = ["foregrounds/census/data/intervening_census_registry.csv", "foreground_table_data.json"]
 external_sources = [
   "Legacy Survey DR9 photo-z — re-validation queries 2026-07-06..07 (git-bound; no per-query timestamp logged)",
   "DESI DR1 TAP — re-validation queries 2026-07-06..07 (git-bound)",
@@ -1182,8 +1181,8 @@ cleared_by = "census re-validation 2026-07-07 (legacy V4) + remediation 2026-07-
 current = true
 notes = "35 catalog rows dedupe to 28 physical systems; per-sightline no-candidate rows still to add (review S9 action); per-query timestamps remain the explicit provenance gap."
 provenance_refs = [
-    {role = "producer",path = "pipeline/galaxies/foreground/",repository = "pipeline",commit = ""},
-    {role = "input",path = "foregrounds/studies/census/data/intervening_census_registry.csv",repository = "analysis",commit = ""},
+    {role = "producer",path = "foregrounds/",repository = "analysis",commit = ""},
+    {role = "input",path = "foregrounds/census/data/intervening_census_registry.csv",repository = "analysis",commit = ""},
     {role = "input",path = "foreground_table_data.json",repository = "unresolved",commit = ""},
     {role = "artifact",path = "foreground_table.tex md5:d8d052b4",repository = "manuscript",commit = ""},
 ]
@@ -1196,11 +1195,11 @@ kind = "number"
 description = "Census headline counts: 28 physical systems; confirmed = 9 halos + 1 cluster; 7/9 confirmed halos pierce R_vir"
 value = "28 systems; 9+1 confirmed; 7/9 pierce"
 units = ""
-producing_script = "pipeline/galaxies/foreground/"
+producing_script = "foregrounds/"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
 inputs = ["intervening_census_registry.csv"]
 external_sources = []
-artifact = "foregrounds/studies/census/data/intervening_census_registry.csv"
+artifact = "foregrounds/census/data/intervening_census_registry.csv"
 consumed_by = ["sections/observations.tex", "sections/results.tex"]
 trust = "trusted"
 provenance_state = "pending"
@@ -1209,9 +1208,9 @@ cleared_by = "legacy V4 + 2026-07-15 dedup adjudication"
 current = true
 notes = ""
 provenance_refs = [
-    {role = "producer",path = "pipeline/galaxies/foreground/",repository = "pipeline",commit = ""},
+    {role = "producer",path = "foregrounds/",repository = "analysis",commit = ""},
     {role = "input",path = "intervening_census_registry.csv",repository = "unresolved",commit = ""},
-    {role = "artifact",path = "foregrounds/studies/census/data/intervening_census_registry.csv",repository = "analysis",commit = ""},
+    {role = "artifact",path = "foregrounds/census/data/intervening_census_registry.csv",repository = "analysis",commit = ""},
 ]
 
 [[result]]
@@ -1222,7 +1221,7 @@ kind = "figure"
 description = "Sightline-halo grid (fig:sightline_halo_grid)"
 value = ""
 units = ""
-producing_script = "pipeline/galaxies/v2_0/sightline_halo_grid.py"
+producing_script = "foregrounds/visualization/sightline_halo_grid.py"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
 inputs = []
 external_sources = []
@@ -1235,7 +1234,7 @@ cleared_by = "legacy V4"
 current = true
 notes = "caption must state panel count/omissions (referee M15, open)"
 provenance_refs = [
-    {role = "producer",path = "pipeline/galaxies/v2_0/sightline_halo_grid.py",repository = "pipeline",commit = ""},
+    {role = "producer",path = "foregrounds/visualization/sightline_halo_grid.py",repository = "analysis",commit = ""},
     {role = "artifact",path = "figures/sightline_halo_grid.pdf md5:49523ef9",repository = "manuscript",commit = ""},
 ]
 
@@ -1247,24 +1246,25 @@ kind = "figure"
 description = "Foreground clusters ICM figure (fig:clusters_icm)"
 value = ""
 units = ""
-producing_script = "pipeline/galaxies/v2_0/systems_figures.py"
-pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
-inputs = ["pipeline/results/sightline_dm_scattering_budget.csv"]
+producing_script = "foregrounds/visualization/systems_figures.py"
+pipeline_pin = ""
+inputs = ["scattering/results/legacy-summary/sightline_dm_scattering_budget.csv", "foregrounds/census/data/intervening_census_registry.csv"]
 external_sources = ["Wen & Han 2024 cluster catalog"]
-artifact = "figures/clusters_icm.pdf md5:089b3013"
+artifact = "figures/clusters_icm.pdf md5:46f68b11da72b7ac63485d0ede5ced9d"
 consumed_by = ["sections/appendix.tex"]
 trust = "trusted"
 provenance_state = "pending"
-provenance_gaps = ["declared input pipeline/results/sightline_dm_scattering_budget.csv is absent from the pinned checkout"]
+provenance_gaps = ["exact producing commit awaits the migration commit"]
 cleared_by = "restored by census remediation 2026-07-15"
 current = true
 notes = ""
 
 # ── DM budget (re-validated 2026-07-07; bugfix FLITS #183) ────────────────
 provenance_refs = [
-    {role = "producer",path = "pipeline/galaxies/v2_0/systems_figures.py",repository = "pipeline",commit = ""},
-    {role = "input",path = "pipeline/results/sightline_dm_scattering_budget.csv",repository = "pipeline",commit = ""},
-    {role = "artifact",path = "figures/clusters_icm.pdf md5:089b3013",repository = "manuscript",commit = ""},
+    {role = "producer",path = "foregrounds/visualization/systems_figures.py",repository = "analysis",commit = ""},
+    {role = "input",path = "scattering/results/legacy-summary/sightline_dm_scattering_budget.csv",repository = "analysis",commit = ""},
+    {role = "input",path = "foregrounds/census/data/intervening_census_registry.csv",repository = "analysis",commit = ""},
+    {role = "artifact",path = "figures/clusters_icm.pdf md5:46f68b11da72b7ac63485d0ede5ced9d",repository = "manuscript",commit = ""},
 ]
 
 [[result]]
@@ -1275,7 +1275,7 @@ kind = "table"
 description = "Per-sightline DM budget decomposition (tab:budget)"
 value = ""
 units = ""
-producing_script = "pipeline sightline_budget.foreground_unified + scripts/dm_budget_uncertainty.py"
+producing_script = "foregrounds/propagation/sightline_budget.py + scripts/dm_budget_uncertainty.py"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
 inputs = ["budget_table_data.json", "intervening_census_registry.csv (authoritative roster)"]
 external_sources = ["NE2025/NE2001/YMW16", "TNG IGM lognormal (cosmic DM)", "Macquart relation f_IGM/chi_e as stated"]
@@ -1288,7 +1288,7 @@ cleared_by = "legacy V5 + phantom-DM_int fix FLITS #183 (registry authoritative 
 current = true
 notes = "phineas DM_int (243 in CONTEXT.md; 241 vs ~218 prescription conflict) awaits wf-06 adjudication"
 provenance_refs = [
-    {role = "producer",path = "pipeline sightline_budget.foreground_unified",repository = "pipeline",commit = ""},
+    {role = "producer",path = "foregrounds/propagation/sightline_budget.py",repository = "analysis",commit = ""},
     {role = "producer",path = "scripts/dm_budget_uncertainty.py",repository = "analysis",commit = ""},
     {role = "input",path = "budget_table_data.json",repository = "unresolved",commit = ""},
     {role = "input",path = "intervening_census_registry.csv (authoritative roster)",repository = "unresolved",commit = ""},
@@ -1303,7 +1303,7 @@ kind = "number"
 description = "Nonzero intervening DM sightlines after remediation"
 value = "phineas 243, casey 117, chromatica 26, whitney 6"
 units = "pc cm^-3"
-producing_script = "pipeline sightline_budget.foreground_unified"
+producing_script = "foregrounds/propagation/sightline_budget.py"
 pipeline_pin = "23fbd295a25aaa80e352ecf0c08287ba4f60a885"
 inputs = ["data/census_masses/halo_rvir_ADJUDICATED.csv", "mass_overrides.csv"]
 external_sources = []
@@ -1316,7 +1316,7 @@ cleared_by = "legacy V5 + 2026-07-15 empirical-mass adjudication (B7 masses)"
 current = true
 notes = "phineas value conditional on wf-06 (prescription conflict, 241/243 vs ~218)"
 provenance_refs = [
-    {role = "producer",path = "pipeline sightline_budget.foreground_unified",repository = "pipeline",commit = ""},
+    {role = "producer",path = "foregrounds/propagation/sightline_budget.py",repository = "analysis",commit = ""},
     {role = "input",path = "data/census_masses/halo_rvir_ADJUDICATED.csv",repository = "unresolved",commit = ""},
     {role = "input",path = "mass_overrides.csv",repository = "unresolved",commit = ""},
     {role = "artifact",path = "scripts/dm_budget_intervening_systems.csv",repository = "analysis",commit = ""},
@@ -1361,19 +1361,19 @@ value = "z=0.55 (+0.16/-0.14), 0.92 (+0.23/-0.19), 0.93 (+0.23/-0.20)"
 units = ""
 producing_script = "scripts/dm_redshift_inference.py"
 pipeline_pin = "fa5b78848160930620e3f226e58a139785616d79"
-inputs = ["foregrounds/studies/census/budget_table_data.json", "dispersion/results/joint-phase/manuscript_dm_catalog.csv"]
+inputs = ["foregrounds/census/budget_table_data.json", "dispersion/results/joint-phase/manuscript_dm_catalog.csv"]
 external_sources = ["TNG-300 IGM lognormal calibration used by the host-DM budget"]
 artifact = "scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56 + scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04"
 consumed_by = ["sections/appendix.tex"]
 trust = "pending"
-provenance_state = "complete"
-provenance_gaps = []
+provenance_state = "pending"
+provenance_gaps = ["canonical input path awaits the migration commit"]
 cleared_by = ""
 current = true
 notes = "Diagnostic-only probability distributions for candidate triage. They are not established host redshifts; the incomplete foreground census biases them high."
 provenance_refs = [
     {role = "producer",path = "scripts/dm_redshift_inference.py",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
-    {role = "input",path = "foregrounds/studies/census/budget_table_data.json",repository = "analysis",commit = "4666be1807faccc8ead66ac0807aa2332d3669ee"},
+    {role = "input",path = "foregrounds/census/budget_table_data.json",repository = "analysis",commit = ""},
     {role = "input",path = "dispersion/results/joint-phase/manuscript_dm_catalog.csv",repository = "analysis",commit = "4666be1807faccc8ead66ac0807aa2332d3669ee"},
     {role = "artifact",path = "scripts/dm_redshift_inference.json md5:0ce9ec633a56cec21370446b32110b56",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
     {role = "artifact",path = "scripts/dm_redshift_inference.csv md5:7e524ddfd48e7ea6cf61f665a53c8d04",repository = "analysis",commit = "dc23310cf93c11ee79bef51c6436e20cd30404da"},
@@ -1552,7 +1552,7 @@ value = ""
 units = ""
 producing_script = "scripts/build_provisional_propagation_tables.py"
 pipeline_pin = "17d9d26675702e9f8917da655621bef3231f0ddb"
-inputs = ["foregrounds/studies/census/data/tau_consistency_catalog.csv", "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv"]
+inputs = ["foregrounds/census/data/tau_consistency_catalog.csv", "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv"]
 external_sources = []
 artifact = "twoscreen_provisional_table.tex md5:7a8a1042"
 consumed_by = ["sections/discussion.tex"]
@@ -1566,7 +1566,7 @@ notes = "rests on revoked DSA-band ACF + tau fits; rebuild on joint CHIME+DSA pr
 # ── Energies (wave-1 revoked) ─────────────────────────────────────────────
 provenance_refs = [
     {role = "producer",path = "scripts/build_provisional_propagation_tables.py",repository = "analysis",commit = ""},
-    {role = "input",path = "foregrounds/studies/census/data/tau_consistency_catalog.csv",repository = "analysis",commit = ""},
+    {role = "input",path = "foregrounds/census/data/tau_consistency_catalog.csv",repository = "analysis",commit = ""},
     {role = "input",path = "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv",repository = "pipeline",commit = ""},
     {role = "artifact",path = "twoscreen_provisional_table.tex md5:7a8a1042",repository = "manuscript",commit = ""},
 ]
@@ -1583,8 +1583,8 @@ producing_script = "energetics/studies/burst-energies/build_data_driven_energies
 pipeline_pin = ""
 inputs = [
     "energetics/studies/burst-energies/data_fluences.accepted.csv",
-    "foregrounds/studies/census/data/frozen_census/law2024_host_redshift_extract.csv",
-    "foregrounds/studies/census/data/frozen_census/verdi2025_host_redshift_extract.csv",
+    "foregrounds/census/data/frozen_census/law2024_host_redshift_extract.csv",
+    "foregrounds/census/data/frozen_census/verdi2025_host_redshift_extract.csv",
 ]
 external_sources = []
 artifact = "energetics/studies/burst-energies/data_fluences.candidate.csv"
@@ -1604,8 +1604,8 @@ notes = "fit-independent producer, verifier, 12-event roster loader, and hard wi
 provenance_refs = [
     {role = "producer",path = "energetics/studies/burst-energies/build_data_driven_energies.py",repository = "analysis",commit = ""},
     {role = "input",path = "energetics/studies/burst-energies/data_fluences.accepted.csv",repository = "analysis",commit = ""},
-    {role = "input",path = "foregrounds/studies/census/data/frozen_census/law2024_host_redshift_extract.csv",repository = "analysis",commit = ""},
-    {role = "input",path = "foregrounds/studies/census/data/frozen_census/verdi2025_host_redshift_extract.csv",repository = "analysis",commit = ""},
+    {role = "input",path = "foregrounds/census/data/frozen_census/law2024_host_redshift_extract.csv",repository = "analysis",commit = ""},
+    {role = "input",path = "foregrounds/census/data/frozen_census/verdi2025_host_redshift_extract.csv",repository = "analysis",commit = ""},
     {role = "artifact",path = "energetics/studies/burst-energies/data_fluences.candidate.csv",repository = "analysis",commit = ""},
 ]
 

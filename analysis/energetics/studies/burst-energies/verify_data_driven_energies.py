@@ -150,7 +150,6 @@ def _load_roster() -> dict[str, dict]:
     frozen = (
         REPO
         / "foregrounds"
-        / "studies"
         / "census"
         / "data"
         / "frozen_census"

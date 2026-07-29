@@ -16,10 +16,12 @@ def manuscript_root() -> Path:
     candidates.append(ANALYSIS_ROOT.parent)
     for candidate in candidates:
         resolved = candidate.resolve()
-        if (resolved / "main.tex").is_file() and (resolved / "figures" / "catalog.yaml").is_file():
+        if (
+            (resolved / "main.tex").is_file()
+            and (ANALYSIS_ROOT / "figures" / "catalog.yaml").is_file()
+        ):
             return resolved
     raise RuntimeError(
         "Faber2026 manuscript checkout not found; mount this repository as "
         "Faber2026/analysis or set FABER2026_ROOT=/path/to/Faber2026"
     )
-

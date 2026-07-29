@@ -90,7 +90,7 @@ def test_ticket_10_records_accepted_batch_disposition(owner_frontier):
 def test_owner_queue_matches_canonical_ticket_state():
     from scripts.owner_queue import render_owner_queue
 
-    rendered = render_owner_queue(ROOT, include_github=False)
+    rendered = render_owner_queue(ROOT)
     expected = (ROOT / "OWNER_QUEUE.md").read_text(encoding="utf-8")
     assert rendered == expected
 

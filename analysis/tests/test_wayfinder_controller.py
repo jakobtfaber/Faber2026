@@ -142,7 +142,7 @@ repo = "owner/repo"
 base_branch = "main"
 ticket_glob = "tickets/*.md"
 state_dir = "~/.local/state/test"
-model = "gpt-5.5"
+model = "gpt-5.6-sol"
 reasoning_effort = "medium"
 max_parallel = 1
 timeout_seconds = 60
@@ -168,6 +168,24 @@ status = "resolved"
         encoding="utf-8",
     )
     with pytest.raises(ValueError, match="branch"):
+        wc.load_manifest(manifest)
+
+
+def test_manifest_rejects_nonstandard_review_model(tmp_path):
+    wc = load_controller()
+    source = ROOT / "docs/rse/control/wayfinder-automation.toml"
+    manifest = tmp_path / "wrong-model.toml"
+    manifest.write_text(
+        source.read_text(encoding="utf-8").replace(
+            'model = "gpt-5.6-sol"', 'model = "gpt-5.5"', 1
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="controller model must be gpt-5.6-sol",
+    ):
         wc.load_manifest(manifest)
 
 
@@ -384,6 +402,8 @@ def test_codex_command_closes_stdin_and_uses_schema(monkeypatch, tmp_path):
     )
     assert command[0].endswith("timeout") or command[0].endswith("gtimeout")
     assert any(Path(part).name == "codex" for part in command)
+    assert command[command.index("-m") + 1] == "gpt-5.6-sol"
+    assert 'model_reasoning_effort="medium"' in command
     assert "--output-schema" in command
     assert "--output-last-message" in command
     assert "danger-full-access" in command

@@ -19,7 +19,7 @@ visual inspection still do **not** constitute manuscript-owner approval.
 
 Create the candidate batch as below, but do not send its preview to the owner.
 Re-run the producer from a clean checkout. Record the run using
-[`reproduction-receipt.example.json`](reproduction-receipt.example.json):
+[`reproduction-receipt.example.json`](definitions/reproduction-receipt.example.json):
 
 ```bash
 python scripts/figure_review.py certify-reproduction <batch> <candidate> \

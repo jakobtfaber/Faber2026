@@ -52,7 +52,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -128,7 +128,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -204,7 +204,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -280,7 +280,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -356,7 +356,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -432,7 +432,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -508,7 +508,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -584,7 +584,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "diagnostic"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared the census verdict, but johndoeII's interior z=0.77 dominant-halo attribution is provisional until a spectroscopic host redshift exists"
 claims = []
@@ -660,7 +660,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -736,7 +736,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -812,7 +812,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]
@@ -888,7 +888,7 @@ consumers = ["sec:budget", "sec:results-budget", "eq:dmbudget"]
 [[sightline.evidence]]
 strand = "foreground_census"
 status = "trusted"
-artifact = "pipeline:galaxies/foreground/foreground_table_data.json"
+artifact = "analysis:foregrounds/census/foreground_table_data.json"
 commit = "2242124"
 scope = "V4 cleared 2026-07-07; 35-system census (Wen & Han 2024 DESI Legacy/WISE); tab:foreground and fig:clusters_icm restored"
 claims = ["foreground census verdicts and impact parameters are manuscript-cleared under V4"]

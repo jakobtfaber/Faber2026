@@ -1,19 +1,28 @@
+"""The retired expanded-foreground release gate.
+
+This gate bound every replay it declared to the `dsa110-FLITS` pipeline
+repository through a `pipeline/` submodule the manuscript no longer carries. It
+was retired on 2026-07-29 and superseded by an analysis-only validation.
+
+These tests assert the retirement contract rather than the gate's old
+behaviour: the record still refuses promotion, the validator reports the
+supersession instead of raising, the successor exists, and no tampering can
+turn a retired or failed gate into a passing one.
+"""
+
 from __future__ import annotations
 
 import importlib.util
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
-import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/validate_expanded_foreground_independent_release_gate.py"
 GATE = ROOT / "docs/rse/specs/validation-expanded-foreground-independent-release-gate.json"
-PIPELINE = Path(os.environ.get("FOREGROUND_PIPELINE_REPO", ROOT))
-MANUSCRIPT = Path(os.environ.get("FABER2026_MANUSCRIPT_REPO", ROOT))
+SUCCESSOR = ROOT / "scripts/validate_foreground_census_analysis_only.py"
 
 
 def _module():
@@ -24,17 +33,35 @@ def _module():
     return module
 
 
-def test_release_gate_is_fail_closed_until_source_and_owner_gates_pass():
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    assert gate["status"] == "failed"
-    assert gate["disposition"] == "fail_closed"
+def _gate() -> dict:
+    return json.loads(GATE.read_text(encoding="utf-8"))
+
+
+def test_the_gate_is_recorded_as_retired_and_names_its_successor():
+    gate = _gate()
+    assert gate["status"] == "retired"
+    assert gate["disposition"] == "superseded"
+    assert gate["retired_at"]
+    assert gate["superseded_by"] == "scripts/validate_foreground_census_analysis_only.py"
+    assert SUCCESSOR.is_file(), "the retired gate names a successor that does not exist"
+    assert "pipeline" in gate["retirement_reason"]
+
+
+def test_retirement_did_not_promote_anything():
+    """Retiring a fail-closed gate must not quietly release what it withheld."""
+    gate = _gate()
     assert gate["scientific_trust_promoted"] is False
     assert gate["figure3_promoted"] is False
+    assert gate["release_rule"]["may_say_verified"] is False
+    assert gate["release_rule"]["may_promote_figure3"] is False
+    assert gate["release_rule"]["may_promote_scientific_trust"] is False
+
+
+def test_the_retired_state_is_preserved_for_the_record():
+    gate = _gate()
+    assert gate["retired_state"]["status"] == "failed"
+    assert gate["retired_state"]["disposition"] == "fail_closed"
     blockers = {item["id"] for item in gate["blockers"]}
-    # source-verification-incomplete was discharged by the 2026-07-26 pin bump
-    # (52/52, zero discrepancies); figure3-registry-snapshot-stale was
-    # discharged by the corrected candidate built at pipeline 2463289 from the
-    # pinned registry snapshot (dsa110-FLITS #234).
     assert blockers == {
         "expanded-catalog-gate-not-passed",
         "figure3-owner-approval-missing",
@@ -42,61 +69,17 @@ def test_release_gate_is_fail_closed_until_source_and_owner_gates_pass():
     assert all(item["status"] == "failed" for item in gate["blockers"])
 
 
-def test_release_gate_preserves_its_frozen_source_commit_binding():
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    source = gate["pipeline_commit"]
-    assert len(source) == 40
-    assert gate["expected"]["source_verification_pipeline_commit"] == source
-    assert gate["expected"]["registry_replay_pipeline_commit"] == source
-
-
-def test_release_gate_accepts_only_a_figure_built_from_the_pinned_registry():
+def test_the_validator_reports_the_supersession_instead_of_raising():
     module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    build = json.loads(
-        (ROOT / "figure_review/batches/2026-07-26-fig3-no-diamonds"
-              "/provenance/expanded-catalog-build.json").read_text(encoding="utf-8")
-    )
-    # The corrected candidate is built from the pinned registry snapshot, so
-    # the snapshot-staleness failure must be gone from the current gate...
-    assert build["registry_sha256"] == gate["expected"]["figure3_build_registry_sha256"]
-    assert build["registry_sha256"] == gate["expected"]["pinned_registry_sha256"]
     failures = module.gate_failures(module.load_gate(GATE))
-    assert not any(
-        item.startswith("Figure 3 was built from registry snapshot")
-        for item in failures
-    )
-    # ...while a candidate recorded against any other snapshot still fails.
-    tampered = json.loads(GATE.read_text(encoding="utf-8"))
-    tampered["expected"]["pinned_registry_sha256"] = "0" * 64
-    failures = module.gate_failures(tampered)
-    assert any(
-        item.startswith("Figure 3 was built from registry snapshot")
-        for item in failures
-    )
+    assert len(failures) == 1
+    assert "gate retired" in failures[0]
+    assert "validate_foreground_census_analysis_only.py" in failures[0]
 
 
-def test_source_verifier_accepts_an_explicit_commit_binding():
+def test_the_validator_still_exits_nonzero():
     result = subprocess.run(
-        [
-            sys.executable,
-            str(ROOT / "scripts/verify_foreground_registry_sources.py"),
-            "--help",
-        ],
-        cwd=ROOT, check=True, capture_output=True, text=True,
-    )
-    assert "--pipeline-commit" in result.stdout
-    assert "--analysis-commit" in result.stdout
-
-
-def test_release_gate_validator_exits_nonzero_and_names_blockers():
-    result = subprocess.run(
-        [
-            sys.executable,
-            str(SCRIPT),
-            "--gate",
-            str(GATE),
-        ],
+        [sys.executable, str(SCRIPT), "--gate", str(GATE)],
         cwd=ROOT,
         check=False,
         text=True,
@@ -104,13 +87,40 @@ def test_release_gate_validator_exits_nonzero_and_names_blockers():
     )
     assert result.returncode == 1
     assert "expanded foreground independent release gate failed" in result.stderr
-    assert "expanded-catalog-gate-not-passed" in result.stderr
-    assert "figure3-owner-approval-missing" in result.stderr
+    assert "gate retired" in result.stderr
 
 
-def test_release_gate_rejects_trust_promotion_when_failed(tmp_path: Path):
+def test_a_missing_declared_input_fails_closed_rather_than_raising(tmp_path: Path):
+    """The failure that retired this gate was a traceback, not a refusal."""
     module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
+    gate = _gate()
+    gate["disposition"] = "fail_closed"
+    gate["inputs"]["figure3_review_manifest"] = "docs/rse/specs/does-not-exist.json"
+    gate["inputs"]["figure_approval_inventory"] = "docs/rse/specs/also-missing.md"
+    path = tmp_path / "gate.json"
+    path.write_text(json.dumps(gate), encoding="utf-8")
+    failures = module.gate_failures(module.load_gate(path))
+    assert any("declared gate input is missing" in item for item in failures)
+
+
+def test_a_retired_gate_cannot_be_flipped_to_passed(tmp_path: Path):
+    module = _module()
+    for disposition in ("superseded", "release_ready"):
+        gate = _gate()
+        gate["status"] = "passed"
+        gate["disposition"] = disposition
+        path = tmp_path / f"gate-{disposition}.json"
+        path.write_text(json.dumps(gate), encoding="utf-8")
+        assert module.gate_failures(module.load_gate(path)), (
+            f"a retired gate passed when its disposition was set to {disposition}"
+        )
+
+
+def test_a_failed_gate_cannot_promote_scientific_trust(tmp_path: Path):
+    module = _module()
+    gate = _gate()
+    gate["status"] = "failed"
+    gate["disposition"] = "fail_closed"
     gate["scientific_trust_promoted"] = True
     path = tmp_path / "gate.json"
     path.write_text(json.dumps(gate), encoding="utf-8")
@@ -118,59 +128,43 @@ def test_release_gate_rejects_trust_promotion_when_failed(tmp_path: Path):
     assert "failed gate cannot promote scientific trust" in failures
 
 
-def test_recorded_blockers_do_not_allow_passed_status(tmp_path: Path):
-    module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    gate["status"] = "passed"
-    gate["disposition"] = "release_ready"
-    path = tmp_path / "gate.json"
-    path.write_text(json.dumps(gate), encoding="utf-8")
-    failures = module.gate_failures(module.load_gate(path))
-    assert any("passed gate cannot retain blockers" in item for item in failures)
-    assert "expanded catalog gate is not passed" in failures
-    assert "Figure 3 owner approval is missing" in failures
-    assert "Figure 3 approval receipt is missing" in failures
-
-
 def test_emptying_the_blocker_list_does_not_pass_the_gate(tmp_path: Path):
     module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
+    gate = _gate()
     gate["status"] = "passed"
     gate["disposition"] = "release_ready"
     gate["blockers"] = []
     path = tmp_path / "gate.json"
     path.write_text(json.dumps(gate), encoding="utf-8")
-    failures = module.gate_failures(module.load_gate(path))
-    assert "expanded catalog gate is not passed" in failures
-    assert "Figure 3 owner approval is missing" in failures
-    assert "Figure 3 approval receipt is missing" in failures
+    assert module.gate_failures(module.load_gate(path))
 
 
-def test_release_gate_pins_registry_and_figure3_evidence_hashes(tmp_path: Path):
-    module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    gate["expected"]["registry_replay_input_sha256"]["intervening_census_registry.csv"] = "0" * 64
-    gate["expected"]["figure3_evidence_sha256"]["figure3-input"] = "0" * 64
-    path = tmp_path / "gate.json"
-    path.write_text(json.dumps(gate), encoding="utf-8")
-    failures = module.gate_failures(module.load_gate(path))
-    assert "registry replay input hash drift" in failures
-    assert "Figure 3 evidence hash drift" in failures
-
-
-def test_release_gate_hashes_every_pinned_artifact():
-    module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    assert module._artifact_failures(gate) == []
-
-
-def test_release_gate_replays_sources_and_proves_no_promotion():
-    if "FOREGROUND_PIPELINE_REPO" not in os.environ or "FABER2026_MANUSCRIPT_REPO" not in os.environ:
-        pytest.skip("integration repositories not configured")
-    module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    failures = module._independent_replay_failures(gate, PIPELINE)
-    # At the 2026-07-26 pinned commit (2463289) the replay is 52/52 with
-    # zero discrepancy rows, so a clean replay is the release requirement.
-    assert failures == []
-    assert module._promotion_failures(gate, MANUSCRIPT) == []
+def test_the_successor_covers_the_science_the_retired_gate_withheld():
+    """Retirement is only honest if the successor asserts the same content."""
+    spec = importlib.util.spec_from_file_location("successor", SUCCESSOR)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    assert set(module.CHECKS) == {
+        "sourced_redshifts",
+        "hostless_fail_closed",
+        "deterministic_matching",
+        "survey_coverage",
+        "mass_radius_conventions",
+        "census_matches_figure3",
+    }
+    # The registry-replay inputs the retired gate pinned must still be readable
+    # from analysis/ alone, with the same bytes.
+    pinned = _gate()["expected"]["registry_replay_input_sha256"]
+    data = module.Inputs.load()
+    for name, digest in pinned.items():
+        matches = [
+            value
+            for path, value in data.hashes.items()
+            if Path(path).name == name
+        ]
+        assert matches, f"the retired gate pinned {name}, which analysis/ no longer holds"
+        assert matches[0] == digest, (
+            f"{name} differs from the byte content the retired gate pinned"
+        )

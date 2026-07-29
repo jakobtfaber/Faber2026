@@ -28,7 +28,7 @@ def test_figure_approval_gate() -> None:
 
 
 def test_review_slots_are_unique_and_cover_requested_families() -> None:
-    config = json.loads((ROOT / "figure_review/slots.json").read_text())
+    config = json.loads((ROOT / "figure_review/definitions/slots.json").read_text())
     families = {group["family"] for group in config["groups"]}
     assert families == {
         "gallery",
@@ -70,7 +70,7 @@ def test_figure3_review_slot_does_not_retroactively_protect_old_bytes() -> None:
 
 
 def test_figure3_source_replay_batch_is_exactly_pinned() -> None:
-    batch = ROOT / "figure_review/batches/2026-07-22-fig3-source-replay"
+    batch = ROOT / "figure_review/artifacts/batches/2026-07-22-fig3-source-replay"
     manifest = json.loads((batch / "manifest.json").read_text())
     candidate = manifest["candidates"][0]
     assert manifest["source_revision"] == "afa9cc7d59f3f64b5098acd6cf8dca842ca86661"
@@ -108,7 +108,7 @@ def test_gate_rejects_unapproved_protected_inclusion() -> None:
 
 
 def test_approval_receipts_are_hash_pinned() -> None:
-    receipts = ROOT / "figure_review/approval_receipts"
+    receipts = ROOT / "figure_review/decisions/approval_receipts"
     if not receipts.exists():
         return
     for path in receipts.glob("*.json"):

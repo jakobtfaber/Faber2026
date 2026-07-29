@@ -44,6 +44,18 @@ def test_topo_sort_sightline_budget_before_clusters():
     assert order.index("sightline_budget") < order.index("clusters_icm")
 
 
+def test_stale_can_check_one_workflow(monkeypatch):
+    figures = [
+        {"id": "fresh", "manuscript": True},
+        {"id": "unrelated", "manuscript": True},
+    ]
+    monkeypatch.setattr(
+        figure_flow, "is_stale", lambda fig: fig["id"] == "unrelated"
+    )
+    monkeypatch.setattr(figure_flow, "missing_inputs", lambda fig: [])
+    assert figure_flow.cmd_stale(figures, ids=["fresh"]) == 0
+
+
 def test_clone_ok_selection_excludes_fig1():
     figures = figure_flow.load_catalog(CATALOG)
     selected = figure_flow.select_ids(figures, ids=None, manuscript=True, clone_ok=True)
@@ -239,13 +251,13 @@ def test_figure3_is_staged_from_versioned_catalog_input():
     assert "~/Data/frb-foreground-halos" not in " ".join(figure["producer"]["argv"])
     assert figure["producer"]["argv"][
         figure["producer"]["argv"].index("--halo-csv") + 1
-    ] == "foregrounds/studies/census/data/sightline_halo_grid.csv"
+    ] == "foregrounds/census/data/sightline_halo_grid.csv"
     assert figure["approval_slot"] == "fig3-halo-grid"
     assert figure["inputs"] == [
-        "analysis/foregrounds/studies/census/data/sightline_halo_grid.csv"
+        "analysis/foregrounds/census/data/sightline_halo_grid.csv"
     ]
     assert figure["outputs"] == [
-        "analysis/figure_review/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
+        "analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
     ]
     assert figure["manuscript_target"] == "figures/sightline_halo_grid.pdf"
 

@@ -2,7 +2,7 @@
 
 Renders figures/codetection_gallery.{pdf,png,svg}: one cell per co-detected
 burst (4 cols x 3 rows, MJD-ascending). Each cell mirrors the joint-fit
-co-detection figures (pipeline/flits/batch/codetection_plots.py): both bands on
+co-detection figures (`radio_pipeline.batch.codetection_plots`): both bands on
 ONE frequency axis drawn to scale (CHIME/FRB 0.40-0.80, DSA-110 1.31-1.50 GHz)
 with the unobserved 0.80-1.31 GHz gap hatched, a band-summed profile strip on
 top, and a time-integrated on-pulse spectrum marginal on the right. The time
@@ -25,7 +25,7 @@ products carry no shared absolute time zero).
 No fit/model products are read or drawn (CONTEXT.md trust reset: raw
 observational inputs only).
 
-Run: conda run -n flits python scripts/plot_codetection_gallery.py
+Run: uv run --frozen python scripts/plot_codetection_gallery.py
 """
 
 from __future__ import annotations
@@ -189,8 +189,7 @@ def discover_products(
 
 def _apply_style() -> None:
     """radio_pipeline.plotting.use_flits_style() (the repo standard), with a fallback
-    that replicates its rcParams (pipeline/flits/plotting.py:50-55) if the
-    flits import chain (scattering.burstfit) is unavailable."""
+    that replicates its rcParams if the shared plotting import is unavailable."""
     import matplotlib.pyplot as plt
 
     try:

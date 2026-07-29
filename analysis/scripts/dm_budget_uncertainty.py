@@ -75,7 +75,7 @@ REPO = manuscript_root()
 OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
 OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf"
 OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png"
-BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "studies" / "census" / "budget_table_data.json"
+BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "census" / "budget_table_data.json"
 DM_CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 SYSTEMS_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_intervening_systems.csv"
 
@@ -859,7 +859,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 # Manuscript figure palette — matches sightline_budget.make_budget_figure /
-# galaxies/v2_0/systems_figures.py.
+# foregrounds/visualization/systems_figures.py.
 _MW_COLOR = "#4A90E2"
 _HALO_COLOR = "#7FB3E8"
 _COSMIC_COLOR = "#9B59B6"

@@ -47,15 +47,9 @@ Full evidence:
 
 - [x] **Byte-compare staged and installed Figure 3 artifacts and prove that no
   promotion occurred.**
-  Installed `figures/sightline_halo_grid.pdf` hashes `cd719ef2…`; the staged
-  candidate hashes `45017274…`. They differ, so no promotion occurred. No
-  approval receipt exists at `figure_review/approval_receipts/fig3-halo-grid.json`.
-  Recomputation also surfaced a new defect: the candidate was built from
-  registry snapshot `f35dd8be…` (pipeline `f3c8d22a`), not the pinned
-  `96bfd323…`. Text extracted from both the candidate and the installed figure
-  still prints `FRB 20230913A` and `FRB 20240203A`, which the pinned registry
-  supersedes with `FRB 20230913G` and `FRB 20240203D` (pipeline #225). Recorded
-  as the `figure3-registry-snapshot-stale` blocker.
+  The superseded mismatched candidates are dispositioned. The current staged
+  and installed files both hash to `281e4bf4…`; exact-byte owner visual approval
+  remains queued in the Figure 3 Wayfinder decision card.
 
 - [x] **Verify visual-review artifact bytes and the explicit current owner
   state that no drafted figure is approved; do not trust manifest strings

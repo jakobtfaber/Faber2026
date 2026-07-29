@@ -3,9 +3,52 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: owner + agent (joint, interactive)
-- Blocked by: —
+- Blocked by: repository integration and worktree cleanup
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner charter, 2026-07-26
+
+## Owner decision card
+
+```json
+{
+  "id": "resume-scintillation-redo",
+  "kind": "scientific",
+  "title": "Resume scintillation re-do",
+  "decision": "Should the interactive raw-data scintillation campaign resume?",
+  "recommended": {
+    "choice": "paused",
+    "reason": "Keep it paused until repository integration and worktree cleanup are complete."
+  },
+  "choices": [
+    {
+      "id": "resume",
+      "label": "Resume with dispersion-measure reference and uncertainty decisions."
+    },
+    {
+      "id": "paused",
+      "label": "Keep the campaign paused."
+    }
+  ],
+  "context": [
+    "The 24-file raw-input set is frozen and accepted.",
+    "All previous scintillation results remain first-pass rather than final manuscript measurements.",
+    "The owner directed execution to wait for a fully reconciled workspace."
+  ],
+  "evidence": [
+    {
+      "label": "Raw-input freeze",
+      "path": "docs/rse/specs/scint-redo-step1-raw-input-freeze-2026-07-26.md",
+      "sha256": "1ee642130eaf626ef8cb321e6753d04455260aa6813019c9a366f07454c4b82f"
+    }
+  ],
+  "effect": "The choice either starts the next interactive checkpoint or preserves the current pause.",
+  "recorder": {
+    "path": "docs/rse/wayfinder/tickets/scint-redo-01-interactive-recampaign-from-raw-data.md",
+    "action": "Record the choice and clear the blocker only after workspace reconciliation."
+  },
+  "priority": 50
+}
+```
 
 ## Charter
 

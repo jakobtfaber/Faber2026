@@ -214,7 +214,7 @@ def approval_hint(fig: dict[str, Any]) -> str | None:
     slot = fig.get("approval_slot")
     if not slot:
         return None
-    candidate_root = fig.get("candidate_root") or "figure_review/staging/" + fig["id"]
+    candidate_root = fig.get("candidate_root") or "figure_review/artifacts/staging/" + fig["id"]
     return (
         "APPROVAL_REQUIRED: do not promote silently. Stage a review batch, e.g.\n"
         f"  python3 scripts/figure_review.py new-batch \\\n"
@@ -336,10 +336,19 @@ def cmd_list(figures: list[dict[str, Any]]) -> int:
     return 0
 
 
-def cmd_stale(figures: list[dict[str, Any]]) -> int:
+def cmd_stale(
+    figures: list[dict[str, Any]], *, ids: list[str] | None = None
+) -> int:
+    index = by_id(figures)
+    unknown = sorted(set(ids or []) - set(index))
+    if unknown:
+        raise FigureFlowError("UNKNOWN_ID", ", ".join(unknown))
+    selected = set(ids) if ids else {
+        fig["id"] for fig in figures if fig.get("manuscript")
+    }
     any_stale = False
     for fig in figures:
-        if not fig.get("manuscript"):
+        if fig["id"] not in selected:
             continue
         stale = is_stale(fig)
         missing = missing_inputs(fig)
@@ -406,7 +415,12 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser("list", help="list catalog figures")
-    sub.add_parser("stale", help="report stale / missing-input manuscript figures")
+    stale = sub.add_parser(
+        "stale", help="report stale / missing-input manuscript figures"
+    )
+    stale.add_argument(
+        "--id", action="append", dest="ids", help="figure id (repeatable)"
+    )
 
     regen = sub.add_parser("regen", help="regenerate selected figures")
     regen.add_argument(
@@ -438,7 +452,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "list":
         return cmd_list(figures)
     if args.command == "stale":
-        return cmd_stale(figures)
+        try:
+            return cmd_stale(figures, ids=args.ids)
+        except FigureFlowError as exc:
+            print(f"ERROR {exc}", file=sys.stderr)
+            return 2
     if args.command == "regen":
         return cmd_regen(
             figures,

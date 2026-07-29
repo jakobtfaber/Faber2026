@@ -1,0 +1,70 @@
+{
+  "schema": "faber2026-analysis-zach-component-count-schedule/v1",
+  "issue": "https://github.com/jakobtfaber/Faber2026/issues/205",
+  "burst": "zach",
+  "frozen": true,
+  "frozen_on": "2026-07-29",
+  "pulse_broadening_family": "all-exponential exponentially modified Gaussian (canonical)",
+  "component_counts": [
+    {"label": "C2D3", "components_C": 2, "components_D": 3},
+    {"label": "C2D4", "components_C": 2, "components_D": 4},
+    {"label": "C2D5", "components_C": 2, "components_D": 5}
+  ],
+  "gain_prior_variances": [1, 10, 100],
+  "seeds": [20220207, 20220208, 20220209],
+  "seed_schedule_note": "20220207 is the seed the 2026-07-23 C2D4 run used; the two successors are its immediate increments. The three seeds exist only to measure the sampler's own log-evidence scatter, which enters the acceptance test as a numerical uncertainty. Chosen by this lane as a reversible default and recorded here so it is reproducible.",
+  "total_rungs": 27,
+  "sampler": {
+    "nlive": 1000,
+    "nproc": 4,
+    "dlogz": 0.5,
+    "sample": "rwalk",
+    "alpha_bounds": [2.0, 6.0],
+    "beta_bounds": null,
+    "mu_degree": 1,
+    "marginalize_gain": false,
+    "marginalize_gain_gp": false,
+    "force_multi": false,
+    "fixed_delta_dm_C": null,
+    "fixed_delta_dm_D": null,
+    "shared_zeta": false
+  },
+  "shared_zeta_note": "the driver passes no --per-band-zeta flag; because every rung is multi-component the runner sets the effective shared_zeta to false on its own, which is what the contract must record",
+  "identical_across_rungs": [
+    "both input waterfalls and their hashes",
+    "both band run configurations",
+    "the telescope and sampler configurations",
+    "the bad-channel masks and surviving frequency channels",
+    "the fitted window in each band",
+    "the prior version and every prior endpoint",
+    "the environment lock and the runtime environment identity",
+    "every executed source file and the source revision"
+  ],
+  "varies_across_rungs": [
+    "components_D (3, 4, 5)",
+    "gain_s2 (1, 10, 100)",
+    "seed (20220207, 20220208, 20220209)"
+  ],
+  "resolution_contract": {
+    "required_by_issue": "DSA-110 at native 32.768 microsecond time resolution; CHIME/FRB at its existing prepared resolution",
+    "delivered_by_current_code": "DSA-110 at 65.5 microseconds (time decimation 2)",
+    "status": "UNRESOLVED - owner decision",
+    "cause": "band reconciliation. choose_resolution picks native 32.768 us for DSA-110 from its own 41-sample window; _common_peak_relative_window then unions the bands, and CHIME/FRB's 9280-sample window stretches the common span to 23.8 ms = 726 native DSA-110 samples; _build_model (joint_tf_prep.py:439-442) re-applies the MAX_TIME_BINS cap of 512 to that reconciled window and doubles the decimation to 2. Raising the cap to 1024 restores native resolution. DSA-110 is coarsened because CHIME/FRB is long, not because DSA-110 needs it.",
+    "note": "this schedule is written for whichever resolution the owner fixes; the resolution must be identical across all 27 rungs or the comparison is void"
+  },
+  "acceptance": {
+    "evidence_threshold": 5.0,
+    "evidence_rule": "accept a step from N to N+1 only if the log-evidence improvement exceeds 5 with the same sign at every fixed gain-prior variance, after subtracting twice the combined numerical uncertainty (the sampler's reported error added in quadrature with the standard deviation across the three seeds)",
+    "reject_if": [
+      "any run fails to reach the stopping threshold or has an incomplete output set",
+      "any component's posterior arrival time falls outside its band's fitted window",
+      "neighbouring counts occupy different scattering modes (non-overlapping pulse-broadening exponent posteriors, or a posterior against a prior edge)",
+      "an added component has null or unbounded amplitude, or does not coincide with an owner-identified candidate feature",
+      "local residuals do not improve where the component was added",
+      "per-band visual residual diagnostics are unacceptable in either band"
+    ],
+    "on_statistical_failure": "the owner-confirmed morphology stands as recorded; fitted parameters and count evidence remain unaccepted. C2D3 is not reinstated as physical.",
+    "downstream_hold": "scattering time times scintillation bandwidth stays downstream of fit acceptance",
+    "inner_scale_power_law_model": "conditional sensitivity test only, at a single accepted count, and only if the canonical fit retains tail-shaped residuals or boundary behaviour. Never mixed into component-count evidence."
+  }
+}
