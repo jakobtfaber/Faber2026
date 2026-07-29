@@ -72,6 +72,7 @@ def test_chi2_flag_parity_with_kernel():
 
 
 @pytest.mark.slow
+@pytest.mark.external_data
 def test_real_artifacts_roundtrip():
     needed = (bv.ROUTE_B_JSON, bv.ROUTE_B_NPZ, bv.ROUTE_A_JSON, bv.A_VS_B_JSON, bv.EXP_ERA_JSON)
     if not all(p.exists() for p in needed):

@@ -2,6 +2,9 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
+pytestmark = pytest.mark.historical_replay
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/replay_frozen_nine_sightline_corpora.py"
@@ -133,6 +136,7 @@ def test_tap_coverage_rejects_overflow_and_error_statuses():
             '</RESOURCE></VOTABLE>'
         ).encode()
         import gzip
+
         import pytest
 
         with pytest.raises(ValueError, match="not complete OK"):

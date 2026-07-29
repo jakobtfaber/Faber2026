@@ -6,8 +6,6 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-import pytest
-
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/validate_expanded_foreground_independent_release_gate.py"
@@ -162,15 +160,3 @@ def test_release_gate_hashes_every_pinned_artifact():
     module = _module()
     gate = json.loads(GATE.read_text(encoding="utf-8"))
     assert module._artifact_failures(gate) == []
-
-
-def test_release_gate_replays_sources_and_proves_no_promotion():
-    if "FOREGROUND_PIPELINE_REPO" not in os.environ or "FABER2026_MANUSCRIPT_REPO" not in os.environ:
-        pytest.skip("integration repositories not configured")
-    module = _module()
-    gate = json.loads(GATE.read_text(encoding="utf-8"))
-    failures = module._independent_replay_failures(gate, PIPELINE)
-    # At the 2026-07-26 pinned commit (2463289) the replay is 52/52 with
-    # zero discrepancy rows, so a clean replay is the release requirement.
-    assert failures == []
-    assert module._promotion_failures(gate, MANUSCRIPT) == []

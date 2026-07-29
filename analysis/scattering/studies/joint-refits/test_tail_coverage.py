@@ -1,9 +1,11 @@
+# ruff: noqa: E402
 """Tail-coverage preflight (issue #101): analytic unit tests for the closed-form
 captured fraction / e-folds, threshold boundary behavior, and the slow-marked
 real-window application on freya's prepared CHIME+DSA bands (#99 configs)."""
 
 import json
 from pathlib import Path
+
 REPO_ROOT = Path(__file__).resolve().parents[3]
 
 import numpy as np
@@ -15,7 +17,6 @@ from tail_coverage import (
     pbf_crossover,
     tail_coverage,
 )
-
 
 CONFIGS = REPO_ROOT / "scattering" / "studies" / "joint-refits" / "local_runs" / "configs"
 
@@ -133,6 +134,7 @@ def test_huge_window_stays_json_serializable():
 
 
 @pytest.mark.slow
+@pytest.mark.external_data
 def test_freya_real_window_preflight(tmp_path):
     # Real data resolves through the pinned manuscript checkout's symlinks
     # (external to this repo) — skip where not staged, as in the #99 smoke test.
