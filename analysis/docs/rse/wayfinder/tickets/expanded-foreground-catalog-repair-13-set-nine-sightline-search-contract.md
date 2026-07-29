@@ -29,7 +29,7 @@ redshift, verdict, budget flag, trust state, or Figure 3 status.
   earlier 5-arcminute galaxy cone, 20-arcminute cluster cone, and redshift-first
   candidate admission recorded on 2026-07-21.
 - Center every query on the frozen FRB International Celestial Reference System
-  coordinates in `pipeline/galaxies/foreground/data/frozen_census/bursts.csv`.
+  coordinates in `foregrounds/census/data/frozen_census/bursts.csv`.
   Do not center on the host or a foreground candidate.
 - Galaxy search: a fully paginated, inclusive 15-arcminute cone per sightline.
   Record exact spherical separation. A service row limit must not truncate the

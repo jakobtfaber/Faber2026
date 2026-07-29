@@ -22,7 +22,7 @@ the image. Owner decision and manuscript promotion are disabled.
 
 - `../results-registry.toml`: manuscript result and trust authority.
 - parent `figures/catalog.yaml`: regeneration graph.
-- `figure_review/slots.json`: stable review definitions.
+- `figure_review/definitions/slots.json`: stable review definitions.
 - batch `manifest.json`: immutable candidate, evidence, reproduction, and
   owner decision.
 - `approval_receipts/`: exact promoted-byte approvals.

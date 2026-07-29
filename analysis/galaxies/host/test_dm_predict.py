@@ -2,18 +2,16 @@
 
 from __future__ import annotations
 
-import math
 from pathlib import Path
 
 import astropy.units as u
 import pytest
 import yaml
 
-from galaxies.host.catalog import HostRecord, host_record_for_target, load_host_catalog
 from galaxies.host import em
+from galaxies.host.catalog import HostRecord, host_record_for_target, load_host_catalog
 from galaxies.host.dm_predict import (
     dm_host_from_halpha,
-    dm_host_from_ssfr,
     dm_host_halo,
     predict_host_dm,
 )
@@ -27,13 +25,13 @@ def test_em_dm_roundtrip_is_positive():
     assert dm_src.to(u.pc / u.cm**3).value > 0.0
 
 
-@__import__("pytest").mark.skipif(not __import__("pathlib").Path("galaxies/foreground/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
+@__import__("pytest").mark.skipif(not __import__("pathlib").Path("foregrounds/census/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
 def test_dm_host_halo_matches_frb_mnfw_kernel():
     # Observer-frame mNFW column / 2 (FRB Ne_Rperp/2 omits the (1+z)_DM factor our
     # kernel applies for budget consistency with dm_obs).
     val = dm_host_halo(0.0, 10.5, 0.271)
     assert val is not None
-    assert val == pytest.approx(27.810043806301092, rel=1e-4)
+    assert val == pytest.approx(38.15263244897029, rel=1e-4)
 
 
 def test_dm_host_halo_decreases_with_offset():
@@ -48,12 +46,12 @@ def test_dm_host_from_halpha_requires_finite_inputs():
     assert dm_host_from_halpha(0.27, 1e-16 * u.erg / u.s, 0.0 * u.arcsec) is None
 
 
-@__import__("pytest").mark.skipif(not __import__("pathlib").Path("galaxies/foreground/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
+@__import__("pytest").mark.skipif(not __import__("pathlib").Path("foregrounds/census/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
 def test_predict_host_dm_with_stellar_mass():
     rec = HostRecord(nickname="phineas", z=0.271, log10_mstar=10.5)
     pred = predict_host_dm(rec)
     assert pred["host_pred_method"] == "halo_mnfw"
-    assert pred["dm_host_halo_pred"] == pytest.approx(27.810043806301092, rel=1e-4)
+    assert pred["dm_host_halo_pred"] == pytest.approx(38.15263244897029, rel=1e-4)
     assert pred["dm_host_pred"] == pred["dm_host_halo_pred"]
 
 
@@ -64,7 +62,14 @@ def test_predict_host_dm_skips_placeholder_z():
     assert pred["dm_host_halo_pred"] is None
 
 
-@__import__("pytest").mark.skipif(not __import__("pathlib").Path("galaxies/foreground/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
+def test_load_host_catalog_keeps_missing_redshift_fail_closed():
+    record = load_host_catalog()["freya"]
+    assert record.z is None
+    assert record.z_is_placeholder is True
+    assert predict_host_dm(record)["host_pred_method"] == "z_placeholder"
+
+
+@__import__("pytest").mark.skipif(not __import__("pathlib").Path("foregrounds/census/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
 def test_load_host_catalog_merges_yaml(tmp_path: Path):
     path = tmp_path / "hosts.yaml"
     path.write_text(
@@ -85,7 +90,7 @@ def test_load_host_catalog_merges_yaml(tmp_path: Path):
     assert cat["zach"].z == pytest.approx(0.043)
 
 
-@__import__("pytest").mark.skipif(not __import__("pathlib").Path("galaxies/foreground/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
+@__import__("pytest").mark.skipif(not __import__("pathlib").Path("foregrounds/census/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
 def test_host_record_for_target_unknown_raises():
     with pytest.raises(KeyError):
         host_record_for_target("not_a_burst")

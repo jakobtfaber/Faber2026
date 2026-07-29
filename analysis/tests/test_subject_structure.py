@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SUBJECTS = {
     "observations",
@@ -26,6 +25,16 @@ def test_canonical_subjects_have_documented_interfaces():
         readme = ROOT / subject / "README.md"
         assert readme.is_file(), f"{subject} lacks README.md"
         text = readme.read_text()
+        if subject == "foregrounds":
+            for responsibility in (
+                "census",
+                "propagation",
+                "visualization",
+                "results",
+                "tests",
+            ):
+                assert f"`{responsibility}/`" in text
+            continue
         for section in ("data", "methods", "results", "figures", "tests", "studies"):
             assert f"`{section}/`" in text, f"{subject} omits {section}/ from its interface"
 

@@ -1,29 +1,28 @@
 # Owner queue walkthrough (manual trigger — never scheduled)
 
-When the owner says anything like **"walk me through my queue"**, in any
-agent session:
+When the owner says **"walk me through my queue"**:
 
-1. Run `python3 scripts/owner_queue.py` — regenerates `OWNER_QUEUE.md` from
-   the wayfinder frontier (open + unblocked + owner-facing tickets),
-   figure-review batches without approval receipts, ✋-marked BOARD.md
-   tasks, and open PRs (`gh`, best-effort). Verify heuristics before
-   presenting — e.g. confirm a "no receipt" batch is genuinely undecided.
-2. Walk the queue **one item at a time**: state the decision plainly, show
-   the evidence it needs (figure full-size, diff, ticket body) *before*
-   asking, capture the owner's call, and **record it at the source** —
-   ticket resolution, `figure_review.py decide`, registry note, PR
-   merge/comment — never only in chat.
-3. Regenerate between items; stop when the owner says stop or the queue is
-   empty. Commit state changes via the normal branch→PR flow before ending.
+1. Run `python3 scripts/owner_queue.py --check`, then
+   `python3 scripts/owner_queue.py`.
+2. Show one generated decision card at a time. Open its evidence before asking.
+3. Record the selected choice at the card's recorder path. Never leave the
+   decision only in chat.
+4. Regenerate after each choice. Stop when asked or when the queue is empty.
 
-Standing rule: agents adding work that needs the owner must make it
-discoverable by these sources (owner-facing wayfinder ticket, figure-review
-batch, ✋ board line, or PR). **A request that isn't in the queue doesn't
-exist.**
+Wayfinder tickets and figure-review manifests are the only queue authorities.
+Board lines link to them; technical pull-request review is not owner-queue work.
+A pending figure receipt counts only when its candidate hash matches exactly.
 
-Assignment does not remove a human-in-the-loop ticket from the owner queue.
-Assigned human-review tickets remain visible until resolved; assignment only
-records who is preparing evidence or coordinating the decision.
+Every card must contain one decision, two or three choices, one recommendation,
+at most three context facts, one to three evidence links, the effect, and the
+recording destination. Scientific and visual choices never auto-resolve.
+Silence leaves promotion and claims blocked.
+
+Outside a requested walkthrough, report only: **"N decisions queued."**
+Do not repeat decision requests in chat.
+
+Assignment does not remove a human-review ticket. Resolved tickets, exact-hash
+approval receipts, and explicit batch dispositions remove items on regeneration.
 
 (This doc is the tracked copy; the machine-local `CLAUDE.md`/`AGENTS.md`
 briefs mirror it.)

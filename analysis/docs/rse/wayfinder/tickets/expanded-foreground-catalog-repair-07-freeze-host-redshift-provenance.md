@@ -44,13 +44,13 @@ Rebuild and fail-closed check:
 ```bash
 python3 scripts/freeze_verdi_host_redshifts.py \
   --archive "$VERDI_ZIP" \
-  --bursts "$FABER2026_ROOT/pipeline/galaxies/foreground/data/frozen_census/bursts.csv" \
+  --bursts "$FABER2026_ROOT/analysis/foregrounds/census/data/frozen_census/bursts.csv" \
   --output-dir docs/rse/specs/evidence/verdi-host-redshifts-2026-07-22 \
   --source-received-date 2026-07-22 \
   --expect-archive-sha256 c1e14983531711aa47f214f0c010cdba550f4bf26b1ac132da96280d748a7346
 python3 scripts/freeze_verdi_host_redshifts.py \
   --archive "$VERDI_ZIP" \
-  --bursts "$FABER2026_ROOT/pipeline/galaxies/foreground/data/frozen_census/bursts.csv" \
+  --bursts "$FABER2026_ROOT/analysis/foregrounds/census/data/frozen_census/bursts.csv" \
   --output-dir /tmp/verdi-host-redshift-check \
   --source-received-date 2026-07-22 \
   --expect-archive-sha256 c1e14983531711aa47f214f0c010cdba550f4bf26b1ac132da96280d748a7346 \

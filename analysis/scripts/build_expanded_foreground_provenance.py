@@ -9,23 +9,24 @@ Uses audited project helpers:
 - GSC 2.4.2 official ReadMe class codes (0=Star, 1=Galaxy, 2=Blend, 3=Non-star, 4=Unclassified, 5=Defect)
 """
 
+import math
 import os
 import sys
-import math
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+from astropy import units as u
 from astropy.coordinates import SkyCoord
 from astropy.cosmology import Planck18 as cosmo
-from astropy import units as u
 from astroquery.vizier import Vizier
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(HERE)
 sys.path.insert(0, REPO_ROOT)
 
-from galaxies.foreground.generate_galaxy_plots import estimate_halo_mass, get_rvir_and_rs
+from foregrounds.visualization.generate_galaxy_plots import estimate_halo_mass, get_rvir_and_rs
 
-REGISTRY_PATH = os.path.join(REPO_ROOT, "foregrounds/studies/census/data/intervening_census_registry.csv")
+REGISTRY_PATH = os.path.join(REPO_ROOT, "foregrounds/census/data/intervening_census_registry.csv")
 
 def cluver_w1_stellar_mass(w1_mag, w2_mag, z):
     """Estimate stellar mass log10(M*/Msun) using Cluver et al. 2014 Eq. 2 (color-dependent M/L_W1)."""
@@ -196,7 +197,7 @@ def main():
     out_df = pd.DataFrame(records)
     
     # Save CSV
-    csv_out = os.path.join(REPO_ROOT, "foregrounds/studies/census/data/expanded_catalog_cross_references.csv")
+    csv_out = os.path.join(REPO_ROOT, "foregrounds/census/data/expanded_catalog_cross_references.csv")
     out_df.to_csv(csv_out, index=False)
     print(f"\nSaved CSV database to: {csv_out}")
     

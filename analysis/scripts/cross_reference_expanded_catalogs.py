@@ -10,18 +10,19 @@ Catalogs queried:
 
 import os
 import sys
-import pandas as pd
+
 import numpy as np
-from astropy.coordinates import SkyCoord
+import pandas as pd
 from astropy import units as u
+from astropy.coordinates import SkyCoord
 from astroquery.vizier import Vizier
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(HERE)
 sys.path.insert(0, REPO_ROOT)
 
-REGISTRY_PATH = os.path.join(REPO_ROOT, "foregrounds/studies/census/data/intervening_census_registry.csv")
-BURSTS_PATH = os.path.join(REPO_ROOT, "foregrounds/studies/census/data/frozen_census/bursts.csv")
+REGISTRY_PATH = os.path.join(REPO_ROOT, "foregrounds/census/data/intervening_census_registry.csv")
+BURSTS_PATH = os.path.join(REPO_ROOT, "foregrounds/census/data/frozen_census/bursts.csv")
 
 def parse_registry():
     df = pd.read_csv(REGISTRY_PATH)
@@ -137,7 +138,7 @@ def main():
     print(res_df[["idx", "nickname", "obj", "verdict", "gsc_class", "allwise_w1", "w1_w2_color"]].head(15).to_string())
     
     # Save full expanded cross-reference report to CSV
-    out_csv = os.path.join(REPO_ROOT, "foregrounds/studies/census/data/expanded_catalog_cross_references.csv")
+    out_csv = os.path.join(REPO_ROOT, "foregrounds/census/data/expanded_catalog_cross_references.csv")
     res_df.to_csv(out_csv, index=False)
     print(f"\nSaved full expanded catalog cross-reference table to: {out_csv}")
     print("================================================================================")

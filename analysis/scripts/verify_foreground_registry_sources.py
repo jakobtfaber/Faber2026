@@ -11,15 +11,14 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import io
 import json
 import math
 import subprocess
-import io
 from collections import Counter
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import Any
-
 
 EXPECTED_ANALYSIS_COMMIT = "1512b15ed1403d42fd12962e77690c18dd3eab09"
 EXPECTED_PIPELINE_COMMIT = EXPECTED_ANALYSIS_COMMIT
@@ -127,7 +126,7 @@ def replay_verdict(row: dict[str, str], source: dict[str, str], strm: dict[str, 
 def verify(root: Path, pipeline: Path, *, analysis_commit: str = EXPECTED_ANALYSIS_COMMIT,
            pipeline_commit: str = EXPECTED_PIPELINE_COMMIT) -> dict[str, Any]:
     errors: list[str] = []
-    census = "foregrounds/studies/census/data"
+    census = "foregrounds/census/data"
     specs = {
         "registry": (pipeline, f"{census}/intervening_census_registry.csv"),
         "provenance": (pipeline, f"{census}/candidate_redshift_provenance.csv"),

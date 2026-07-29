@@ -18,14 +18,13 @@ import json
 import math
 from dataclasses import dataclass
 
+import dm_budget_uncertainty as budget
 import numpy as np
 from scipy import integrate
-
-import dm_budget_uncertainty as budget
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "studies" / "census" / "budget_table_data.json"
+BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "census" / "budget_table_data.json"
 DM_CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 OUT_JSON = ANALYSIS_ROOT / "scripts" / "dm_redshift_inference.json"
 OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_redshift_inference.csv"

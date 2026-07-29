@@ -21,6 +21,7 @@ dependencies = [
   "mwprop>=0.1.0",
   "numpy>=1.20",
   "pandas>=1.3",
+  "pypdf>=5.0",
   "pyvo",
   "PyYAML>=5.4",
   "SciencePlots>=2.0",
@@ -45,6 +46,7 @@ addopts = ["-ra", "--strict-config", "--strict-markers"]
 pythonpath = [".", "scripts"]
 testpaths = [
   "tests",
+  "foregrounds/tests",
   "scattering/studies/joint-refits/test_gate_joint_committed.py",
   "scattering/studies/joint-refits/test_posterior_compare.py",
   "scattering/studies/joint-refits/test_tail_coverage.py",
@@ -76,3 +78,11 @@ extend-exclude = [
 [tool.ruff.lint]
 select = ["B", "E4", "E7", "E9", "F", "I", "UP"]
 ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"foregrounds/census/adjudication/validate_foreground.py" = ["E402"]
+"scattering/studies/joint-refits/local_runs/run_joint_fit.py" = ["E402"]
+"scattering/studies/joint-refits/run_joint_fit.py" = ["E402"]
+"scripts/build_expanded_foreground_provenance.py" = ["E402"]
+"scripts/build_survey_coverage_receipt.py" = ["E402"]
+"scripts/render_budget_table.py" = ["E402"]

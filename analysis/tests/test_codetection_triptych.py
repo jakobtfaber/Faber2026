@@ -14,6 +14,7 @@ ANALYSIS_ROOT = Path(__file__).resolve().parent.parent
 LATEST_MANIFEST = (
     ANALYSIS_ROOT
     / "figure_review"
+    / "artifacts"
     / "batches"
     / "2026-07-22-joint-scattering-current"
     / "provenance"
@@ -25,8 +26,6 @@ from workspace import manuscript_root  # noqa: E402
 ROOT = manuscript_root()
 
 import plot_codetection_triptych as triptych  # noqa: E402
-from radio_pipeline.batch.codetection_plots import BandSpectrum  # noqa: E402
-
 from plot_codetection_triptych import (  # noqa: E402
     BANDS,
     PAD_FLOOR_MS,
@@ -34,6 +33,8 @@ from plot_codetection_triptych import (  # noqa: E402
     crop_spectrum,
     load_manifest,
 )
+
+from radio_pipeline.batch.codetection_plots import BandSpectrum  # noqa: E402
 
 
 def _fake_band(label: str, t0: float, t1: float, dt: float = 0.033) -> BandSpectrum:

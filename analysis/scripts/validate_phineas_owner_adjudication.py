@@ -15,7 +15,6 @@ import json
 import math
 from pathlib import Path
 
-
 C_KM_S = 299_792.458
 G_KPC_KM2_S2_MSUN = 4.300_917_270_036_28e-6
 H0_KM_S_MPC = 67.66
@@ -245,7 +244,8 @@ def input_hash_status(paths: dict[str, Path]) -> tuple[dict[str, str], dict[str,
 
 
 def validate(analysis_root: Path) -> dict:
-    data = analysis_root / "foregrounds" / "studies" / "census" / "data"
+    census = analysis_root / "foregrounds" / "census"
+    data = census / "data"
     paths = {
         "bursts": data / "frozen_census" / "bursts.csv",
         "registry": data / "intervening_census_registry.csv",
@@ -253,7 +253,7 @@ def validate(analysis_root: Path) -> dict:
         "duplicates": data / "census_masses" / "census_duplicates.csv",
         "overrides": data / "census_masses" / "mass_overrides.csv",
         "method": data / "census_masses" / "CGM_intersection_census_METHOD.md",
-        "budget": analysis_root / "foregrounds" / "studies" / "census" / "budget_table_data.json",
+        "budget": census / "budget_table_data.json",
     }
     missing = [str(path) for path in paths.values() if not path.is_file()]
     if missing:

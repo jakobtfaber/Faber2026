@@ -17,7 +17,8 @@ foreground geometry may replace the installed Figure 3 bytes?
 
 Build a checked-in figure-input CSV from the census verdicts plus corrected
 mass/radius product. Declare it in `figures/catalog.yaml`; remove the home-directory
-default from the generator. Render only to `figure_review/staging/fig3_halo_grid`,
+default from the generator. Render only to
+`figure_review/artifacts/staging/fig3_halo_grid`,
 register a `fig3-halo-grid` approval slot, and require independent validation
 plus manuscript-owner visual approval before byte-identical promotion.
 
@@ -25,10 +26,10 @@ plus manuscript-owner visual approval before byte-identical promotion.
 
 Resolved 2026-07-24 under the standing delegated decision authority. The
 analysis-owned `figures/catalog.yaml` now declares `sightline_halo_grid` with
-the versioned pipeline input
-`pipeline/galaxies/foreground/data/sightline_halo_grid.csv`, passes that input
+the versioned analysis input
+`foregrounds/census/data/sightline_halo_grid.csv`, passes that input
 explicitly via `--halo-csv`, and renders only to
-`analysis/figure_review/staging/fig3_halo_grid/figures/`.
+`analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/`.
 
 The default figure-flow catalog now comes from the analysis repository. The
 Figure 3 node is not `clone_ok`, has manuscript target

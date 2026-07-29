@@ -1,6 +1,6 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:task` (AFK)
+- Type: `wayfinder:task` (HITL)
 - Status: open
 - Assignee: —
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
@@ -8,6 +8,57 @@
 - Plan: [Controlled joint-scattering reruns](../../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md)
 - GitHub: [Issue #205](https://github.com/jakobtfaber/Faber2026/issues/205)
 - Authorization: manuscript-owner approval, 2026-07-22
+
+## Owner decision card
+
+```json
+{
+  "id": "zach-time-resolution",
+  "kind": "scientific",
+  "title": "Zach time resolution",
+  "decision": "Which DSA-110 time resolution should govern the Zach component-count comparison?",
+  "recommended": {
+    "choice": "native",
+    "reason": "Retain 32.768 microseconds because the issue requires native resolution and the earlier failed comparison used coarse binning."
+  },
+  "choices": [
+    {
+      "id": "native",
+      "label": "Retain 32.768 microseconds and raise the reconciled-bin cap."
+    },
+    {
+      "id": "coarse",
+      "label": "Permit 65.536 microseconds and amend the scientific contract."
+    },
+    {
+      "id": "stop",
+      "label": "Stop the component-count comparison."
+    }
+  ],
+  "context": [
+    "The per-band preparation selects native DSA-110 resolution, but the later shared-window cap doubles the time bin.",
+    "Raising the cap to 1024 restores native resolution and increases sampler cost."
+  ],
+  "evidence": [
+    {
+      "label": "Readiness audit",
+      "path": "docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/readiness-audit.json",
+      "sha256": "c1894081a9fbf98e5b6d90fd87651bab88601c8b37c064f799f70145a4213294"
+    },
+    {
+      "label": "Readiness explanation",
+      "path": "docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/README.md",
+      "sha256": "974aac68ba78589322c6f9aee5cacd0124fd380995997fd24470536dcd214548"
+    }
+  ],
+  "effect": "The choice freezes the processing contract so the 27 controlled fits can run.",
+  "recorder": {
+    "path": "docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+    "action": "Record the selected resolution and update the controlled-run contract."
+  },
+  "priority": 30
+}
+```
 
 ## What to build
 

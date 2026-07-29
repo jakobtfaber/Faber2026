@@ -5,7 +5,7 @@ Predeclared record: docs/rse/specs/plan-rm-cluster-bfield-repartition-2026-07-17
 This module implements Phases 0-2: pin verification, the negligibility-field
 algebra, the literature comparison, and the conditional re-partition MC.
 
-Run:  uv run --project pipeline --frozen python scripts/rm_cluster_repartition.py
+Run: uv run --frozen python scripts/rm_cluster_repartition.py
 Emits scripts/rm_cluster_repartition.json and
 docs/rse/specs/thread1-figures/rm_repartition_sensitivity.pdf.
 
@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # --- Pinned inputs (every value machine-verified by tests/test_rm_cluster_repartition.py) ---
 PINNED = {
-    # foregrounds/studies/census/data/intervening_census_registry.csv:23
+    # foregrounds/census/data/intervening_census_registry.csv:23
     # (J115120.4+714435 / Wen+ 1254337, the phineas cluster row)
     "m500_1e14": 1.48,
     "b_kpc": 603.6,
@@ -42,7 +42,7 @@ PINNED = {
     "dm_cl_beta_p16_p50_p84": (141.0, 203.0, 266.0),
     "dm_cl_95ci": (91.0, 327.0),
     # sections/appendix.tex fig:clusters_icm caption (carried mNFW central)
-    "dm_cl_mnfw_central": 184.0,
+    "dm_cl_mnfw_central": 224.7196174,
     # polarization/studies/codetections/main.tex:165 (tb:host_props, 2026-07-17 draft)
     "rm_obs": -473.49,
     "rm_obs_err": 0.09,
@@ -281,7 +281,8 @@ def repartition_mc(
         b_pub, f_neg_pub = _b(rm_host, dm_host_pub)
         b_corr, f_neg_corr = _b(rm_host, dm_host_corr)
 
-        pct = lambda a: [float(x) for x in np.nanpercentile(a, [16, 50, 84])]
+        def pct(a):
+            return [float(x) for x in np.nanpercentile(a, [16, 50, 84])]
         out[b_cl] = {
             "rm_cl_obs_p16_p50_p84": pct(rm_cl_obs) if b_cl != 0.0 else [0.0, 0.0, 0.0],
             "rm_host_p16_p50_p84": pct(rm_host),
@@ -335,7 +336,7 @@ def make_figure(mc: dict, path: Path) -> None:
         ax.grid(alpha=0.2)
     fig.suptitle(
         "FRB 20230307A RM re-partition vs. assumed intracluster field "
-        f"(DM$_{{\\rm cl}}$ from the truncated-prior MC; $b/R_{{500}}=0.83$)",
+        "(DM$_{\\rm cl}$ from the truncated-prior MC; $b/R_{500}=0.83$)",
         fontsize=9,
     )
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -349,7 +350,7 @@ def main() -> int:
             "rm_per_uG_obs": round(rm_per_microgauss_obs(dm), 1),
             "b_neg_uG": round(b_negligibility(dm), 3),
         }
-        for dm in (84.0, 184.0, 200.0, 328.0)
+        for dm in (84.0, PINNED["dm_cl_mnfw_central"], 200.0, 328.0)
     }
     rm_lit = rm_lit_obs()
     verdict = classify(rm_lit)

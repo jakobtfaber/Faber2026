@@ -7,6 +7,8 @@ analysis/tests/test_dm_budget_low_z_sensitivity.py
 analysis/tests/test_dm_budget_uncertainty.py
 analysis/tests/test_dm_redshift_inference.py
 analysis/tests/test_fig1_residual_drift_audit.py
+analysis/tests/test_fig1_reaffirmation.py
+analysis/tests/test_foreground_census_manuscript_integration.py
 analysis/tests/test_figure_approval.py
 analysis/tests/test_figure_flow.py
 analysis/tests/test_figure_review_cli.py

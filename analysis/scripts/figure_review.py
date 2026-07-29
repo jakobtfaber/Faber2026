@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fail-closed author review and promotion for manuscript figures.
 
-Candidates are immutable, hash-pinned files under figure_review/batches/.  A
+Candidates are immutable, hash-pinned files under figure_review/artifacts/batches/.  A
 candidate can reach a manuscript target only after an explicit manuscript-owner
 decision.  The resulting receipt binds the decision, candidate bytes, and
 promoted bytes together; ``verify`` rejects protected TeX inclusions without a
@@ -23,15 +23,18 @@ import subprocess
 import tomllib
 from pathlib import Path
 
-from workspace import ANALYSIS_ROOT, manuscript_root
 import figure_flow
 from results_library import results_library_root
+from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = ANALYSIS_ROOT
 MANUSCRIPT_ROOT = manuscript_root()
 REVIEW_ROOT = ROOT / "figure_review"
-SLOTS_PATH = REVIEW_ROOT / "slots.json"
-RECEIPTS = REVIEW_ROOT / "approval_receipts"
+DEFINITIONS = REVIEW_ROOT / "definitions"
+ARTIFACTS = REVIEW_ROOT / "artifacts"
+DECISIONS = REVIEW_ROOT / "decisions"
+SLOTS_PATH = DEFINITIONS / "slots.json"
+RECEIPTS = DECISIONS / "approval_receipts"
 
 
 def sha256(path: Path) -> str:
@@ -55,7 +58,7 @@ def write_json(path: Path, payload: dict) -> None:
 
 
 def utc_now() -> str:
-    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    return dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat()
 
 
 def reproduction_errors(manifest: dict, candidate: dict) -> list[str]:
@@ -141,7 +144,7 @@ def slots() -> list[dict]:
 
 
 def batch_dir(batch_id: str) -> Path:
-    return REVIEW_ROOT / "batches" / batch_id
+    return ARTIFACTS / "batches" / batch_id
 
 
 def manifest_path(batch_id: str) -> Path:
@@ -272,48 +275,48 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ),
         (
             "joint-fit-roster",
-            "pipeline",
-            "analysis/scattering-dm-locked-2026-07-14/fit_roster.csv",
+            "analysis",
+            "dispersion/studies/scattering-dm-locked/fit_roster.csv",
         ),
         (
             "joint-fit-adjudication",
-            "pipeline",
-            "analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv",
+            "analysis",
+            "dispersion/studies/scattering-dm-locked/results/fit_adjudication.csv",
         ),
         (
             "scint-component-catalog",
-            "pipeline",
-            "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv",
+            "results-library",
+            "scintillation/dsa-lorentzian-first-pass/dsa_lorentzian_components.csv",
         ),
         (
             "scint-fit-catalog",
-            "pipeline",
-            "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_fits.json",
+            "results-library",
+            "scintillation/dsa-lorentzian-first-pass/dsa_lorentzian_fits.json",
         ),
         (
             "oran-qualification",
-            "pipeline",
-            "analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json",
+            "analysis",
+            "scintillation/studies/dsa-lorentzian/results/oran_qualified/validation.json",
         ),
         (
             "chime-campaign-validation",
-            "pipeline",
-            "analysis/window-tuning-campaign-2026-07-17/results/validation.json",
+            "analysis",
+            "scintillation/studies/window-tuning/results/validation.json",
         ),
         (
             "chime-campaign-records",
-            "pipeline",
-            "analysis/window-tuning-campaign-2026-07-17/results/campaign_results.jsonl",
+            "analysis",
+            "scintillation/studies/window-tuning/results/campaign_results.jsonl",
         ),
         (
             "chromatica-hi-campaign",
-            "pipeline",
-            "analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json",
+            "analysis",
+            "scintillation/studies/window-tuning/results/chromatica_hi_campaign.json",
         ),
         (
             "chime-campaign-figure-review",
-            "pipeline",
-            "analysis/window-tuning-campaign-2026-07-17/results/figures.review.json",
+            "analysis",
+            "scintillation/studies/window-tuning/results/figures.review.json",
         ),
         (
             "joint-scint-figure-provenance",
@@ -322,38 +325,38 @@ def command_new_batch(args: argparse.Namespace) -> None:
         ),
         (
             "expanded-catalog-build",
-            "pipeline",
-            "galaxies/foreground/data/expanded_catalog_build.json",
+            "analysis",
+            "foregrounds/census/data/expanded_catalog_build.json",
         ),
         (
             "figure3-input",
-            "pipeline",
-            "galaxies/foreground/data/sightline_halo_grid.csv",
+            "analysis",
+            "foregrounds/census/data/sightline_halo_grid.csv",
         ),
         (
             "verdi-host-redshifts",
-            "pipeline",
-            "galaxies/foreground/data/frozen_census/verdi2025_host_redshift_extract.csv",
+            "analysis",
+            "foregrounds/census/data/frozen_census/verdi2025_host_redshift_extract.csv",
         ),
         (
             "law-host-redshifts",
-            "pipeline",
-            "galaxies/foreground/data/frozen_census/law2024_host_redshift_extract.csv",
+            "analysis",
+            "foregrounds/census/data/frozen_census/law2024_host_redshift_extract.csv",
         ),
         (
             "candidate-redshift-ledger",
-            "pipeline",
-            "galaxies/foreground/data/candidate_redshift_provenance.csv",
+            "analysis",
+            "foregrounds/census/data/candidate_redshift_provenance.csv",
         ),
         (
             "candidate-redshift-replay",
-            "pipeline",
-            "galaxies/foreground/data/candidate_redshift_replay_2026-07-22.json",
+            "analysis",
+            "foregrounds/census/data/candidate_redshift_replay_2026-07-22.json",
         ),
         (
             "candidate-redshift-payloads",
-            "pipeline",
-            "galaxies/foreground/data/candidate_redshift_source_payloads_2026-07-22.json",
+            "analysis",
+            "foregrounds/census/data/candidate_redshift_source_payloads_2026-07-22.json",
         ),
     ]
     evidence: list[dict] = []
@@ -365,16 +368,6 @@ def command_new_batch(args: argparse.Namespace) -> None:
         if repository == "analysis":
             command = ["git", "show", f"{source_revision}:{source_path}"]
             revision = source_revision
-            stored.write_bytes(subprocess.check_output(command, cwd=ROOT))
-        elif repository == "pipeline":
-            command = [
-                "git",
-                "-C",
-                str(args.pipeline_repo),
-                "show",
-                f"{args.pipeline_revision}:{source_path}",
-            ]
-            revision = args.pipeline_revision
             stored.write_bytes(subprocess.check_output(command, cwd=ROOT))
         else:
             source = results_library_root() / source_path
@@ -405,17 +398,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
         preview_rel = Path("previews") / f"{slot['id']}.png"
         artifact = destination / artifact_rel
         if args.read_from_revision:
-            if slot["target"].startswith("pipeline/"):
-                relative = slot["target"].removeprefix("pipeline/")
-                command = [
-                    "git",
-                    "-C",
-                    str(args.pipeline_repo),
-                    "show",
-                    f"{args.pipeline_revision}:{relative}",
-                ]
-            else:
-                command = ["git", "show", f"{source_revision}:{slot['target']}"]
+            command = ["git", "show", f"{source_revision}:{slot['target']}"]
             artifact.write_bytes(subprocess.check_output(command, cwd=ROOT))
         else:
             shutil.copy2(source, artifact)
@@ -608,7 +591,7 @@ img{{width:100%;max-height:680px;object-fit:contain;background:white}} code{{wor
 <h1>{html.escape(manifest["title"])}</h1>
 <section class="summary"><p><strong>Batch:</strong> <code>{html.escape(batch_id)}</code><br>
 <strong>Source revision:</strong> <code>{html.escape(manifest["source_revision"])}</code><br>
-<strong>Pipeline revision:</strong> <code>{html.escape(manifest["pipeline_revision"])}</code><br>
+<strong>Producer revision:</strong> <code>{html.escape(manifest["pipeline_revision"])}</code><br>
 <strong>DM catalog:</strong> <code>{html.escape(manifest["dm_catalog"]["sha256"])}</code></p>
 <p>Approval is per candidate. Reply with the stable candidate ID and either <em>approve</em> or <em>needs revision</em>, plus notes. Promotion is impossible unless the approved candidate bytes still match this packet.</p>
 <p>Figures remain hidden until exact inputs, code revisions, command, environment, and regenerated output have passed the reproduction gate.</p>
@@ -712,7 +695,7 @@ def command_certify_reproduction(args: argparse.Namespace) -> None:
 
 def ready_candidates() -> list[dict]:
     ready: list[dict] = []
-    batches = REVIEW_ROOT / "batches"
+    batches = ARTIFACTS / "batches"
     for path in sorted(batches.glob("*/manifest.json")) if batches.exists() else []:
         batch_id = path.parent.name
         manifest, errors = validate_batch(batch_id)
@@ -756,7 +739,7 @@ def registry_artifact_matches(target: str, artifact: str) -> bool:
 def manuscript_figure_status() -> list[dict]:
     """Join regeneration, review, approval, and trust authorities."""
     candidates_by_target: dict[str, list[tuple[str, dict, dict]]] = {}
-    batches = REVIEW_ROOT / "batches"
+    batches = ARTIFACTS / "batches"
     for path in sorted(batches.glob("*/manifest.json")) if batches.exists() else []:
         manifest = load_json(path)
         for candidate in manifest.get("candidates", []):
@@ -952,12 +935,6 @@ def parser() -> argparse.ArgumentParser:
         dest="candidate",
         action="append",
         help="stage only this candidate id; repeat for multiple candidates",
-    )
-    new.add_argument(
-        "--pipeline-repo",
-        type=Path,
-        default=ANALYSIS_ROOT,
-        help="FLITS checkout used to read submodule artifacts",
     )
     new.add_argument(
         "--initial-status", choices=("pending", "needs_revision"), default="pending"

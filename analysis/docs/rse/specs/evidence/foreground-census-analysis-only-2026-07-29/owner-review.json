@@ -1,0 +1,58 @@
+{
+  "artifact": "figure3_owner_review_binding",
+  "candidate_id": "fig3-halo-grid",
+  "decision": {
+    "notes": null,
+    "reviewed_at": null,
+    "reviewer": null,
+    "reviewer_role": null,
+    "status": "pending"
+  },
+  "install_blocker": "figure_review.py new-batch still requires --pipeline-revision, an argument that names the retired dsa110-FLITS repository. A review batch cannot be created for this candidate without either supplying a dead revision or making that argument optional. That is a change to a shared review surface and was left for the owner rather than made here; this record binds the exact bytes in the meantime.",
+  "install_command": "python3 scripts/figure_review.py new-batch 2026-07-29-fig3-installed --title 'Figure 3 as installed' --candidate fig3-halo-grid --pipeline-revision <...>",
+  "owner_question": "Approve the installed Figure 3 bytes sha256 281e4bf4c9d910c070cb822195a743920a7ecf14e249c924521e359a9d788a75 for the manuscript, or return needs_revision with the change required.",
+  "prepared_at": "2026-07-29",
+  "prepared_by": "independent analysis-only validation for Faber2026 issue #206",
+  "review_target": {
+    "bytes": 52576,
+    "description": "the Figure 3 bytes already installed in the manuscript, rebuilt from the consolidated sightline census by pull request #282",
+    "path": "figures/sightline_halo_grid.pdf",
+    "preview": "installed-figure3-preview.png",
+    "preview_sha256": "1d8d3e082f37d57715822dbdc19ee17aae8101417beae0773f590c9788a3a2d4",
+    "reproduction": "byte-identical to the staged render at figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf; the manuscript installs exactly what the figure workflow produced",
+    "sha256": "281e4bf4c9d910c070cb822195a743920a7ecf14e249c924521e359a9d788a75"
+  },
+  "schema_version": 1,
+  "snapshot": {
+    "analysis_commit": "a762ece30da414e1dacf72c730bcc2cc5a08c5c5",
+    "analysis_repo": "Faber2026-analysis",
+    "analysis_worktree": "dirty - concurrent workers; the bytes bound here are hashed directly, not inferred from the commit",
+    "manuscript_commit": "d4eebe4f87d0c99a432539912704383f1c5b0708",
+    "manuscript_repo": "Faber2026"
+  },
+  "status": "awaiting_manuscript_owner_decision",
+  "supersedes": {
+    "batch": "figure_review/artifacts/batches/2026-07-26-fig3-no-diamonds",
+    "candidate_sha256": "3dece7e3f81f652aedd58b1cf53cb5fb1b86c3dc590238b0c72124c937b9bccb",
+    "reason": "the retired release gate bound owner approval to a candidate built at dsa110-FLITS 99e60c3a; those bytes are not what the manuscript now installs, so an approval of them would not approve the published figure"
+  },
+  "validation": {
+    "command": "python3 scripts/validate_foreground_census_analysis_only.py --output docs/rse/specs/evidence/foreground-census-analysis-only-2026-07-29/validation.json",
+    "receipt": "validation.json",
+    "receipt_sha256": "577ccb27f97e6a85009df8b64ba90c9b49025ad3ccbc41fcac9eb2754e2cd36a",
+    "status": "passed"
+  },
+  "what_validation_does_not_establish": [
+    "whether the figure reads well: panel layout, glyph legibility, colour scale, and legend are visual judgements this validation cannot make",
+    "whether nine drawn panels rather than twelve is the right presentation for the paper",
+    "the scientific interpretation of the census itself"
+  ],
+  "what_validation_establishes": [
+    "every adopted host and candidate redshift carries a frozen, hashed source record",
+    "redshiftless systems and the three sightlines without an established host redshift fail closed everywhere",
+    "the Figure 3 input rebuilds byte-identically from committed analysis inputs and every deduplication and cross-match is reproducible",
+    "all twelve sightlines carry survey coverage backed by hashed footprints",
+    "halo and cluster mass and radius conventions are declared, distinct, and never mixed; every halo radius reproduces from its mass",
+    "the drawn figure and the census describe the same systems"
+  ]
+}

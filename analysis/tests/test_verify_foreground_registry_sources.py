@@ -84,6 +84,14 @@ def test_spherical_separation_handles_high_declination():
 
 
 PIPELINE_PATHS = [
+    "foregrounds/census/data/intervening_census_registry.csv",
+    "foregrounds/census/data/candidate_redshift_provenance.csv",
+    "foregrounds/census/data/candidate_redshift_source_payloads_2026-07-22.json",
+    "foregrounds/census/data/frozen_census/strm_catalog_rows.csv",
+    "foregrounds/census/data/census_masses/census_duplicates.csv",
+    "foregrounds/census/data/census_extensions/v4_extension.csv",
+]
+PIPELINE_SOURCE_PATHS = [
     "foregrounds/studies/census/data/intervening_census_registry.csv",
     "foregrounds/studies/census/data/candidate_redshift_provenance.csv",
     "foregrounds/studies/census/data/candidate_redshift_source_payloads_2026-07-22.json",
@@ -102,15 +110,16 @@ def _git(repo, *args):
     return subprocess.run(["git", *args], cwd=repo, check=True, capture_output=True, text=True).stdout
 
 
-def _make_repo(path, source, commit, files):
+def _make_repo(path, source, commit, files, source_files=None):
     path.mkdir()
     _git(path, "init", "-q")
     _git(path, "config", "user.email", "fixture@example.invalid")
     _git(path, "config", "user.name", "Fixture")
-    for relpath in files:
+    source_files = files if source_files is None else source_files
+    for relpath, source_relpath in zip(files, source_files, strict=True):
         target = path / relpath
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(_git(source, "show", f"{commit}:{relpath}"))
+        target.write_text(_git(source, "show", f"{commit}:{source_relpath}"))
     _git(path, "add", ".")
     _git(path, "commit", "-qm", "fixture")
     return _git(path, "rev-parse", "HEAD").strip()
@@ -124,7 +133,11 @@ def mutable_repos(tmp_path):
         analysis, ROOT, "1512b15ed1403d42fd12962e77690c18dd3eab09", ANALYSIS_PATHS
     )
     pipeline_commit = _make_repo(
-        pipeline, PIPELINE_SOURCE, "1512b15ed1403d42fd12962e77690c18dd3eab09", PIPELINE_PATHS
+        pipeline,
+        PIPELINE_SOURCE,
+        "1512b15ed1403d42fd12962e77690c18dd3eab09",
+        PIPELINE_PATHS,
+        PIPELINE_SOURCE_PATHS,
     )
     return analysis, pipeline, analysis_commit, pipeline_commit
 

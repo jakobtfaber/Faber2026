@@ -9,7 +9,7 @@ import astropy.units as u
 import numpy as np
 from scipy.optimize import brentq
 
-from galaxies.foreground import scattering_predict as scat
+from foregrounds.propagation import scattering_predict as scat
 from galaxies.host import em
 from galaxies.host.catalog import HostRecord
 
@@ -126,7 +126,7 @@ def dm_host_from_ssfr(
     """ISM DM from specific SFR surface density (observer frame)."""
     if not _finite(z) or float(z) <= 0.0:
         return None
-    from galaxies.foreground.config import COSMO
+    from foregrounds.census.config import COSMO
 
     halpha_kpc2 = ssfr / HA_CONVERSION * u.erg / u.s
     kpc_arcmin = COSMO.kpc_proper_per_arcmin(float(z))

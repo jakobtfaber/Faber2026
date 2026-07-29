@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager
 import fcntl
 import json
 import os
@@ -15,6 +14,7 @@ import subprocess
 import sys
 import time
 import tomllib
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -40,6 +40,7 @@ TERMINAL_STATUSES = {
 RECEIPT_OUTCOMES = {"resolved", "review_ready", "blocked", "failed"}
 MODES = {"resolve", "review"}
 EXECUTIONS = {"afk", "hitl"}
+REQUIRED_REVIEW_MODEL = "gpt-5.6-sol"
 
 
 @dataclass(frozen=True)
@@ -220,12 +221,18 @@ def load_manifest(path: Path = DEFAULT_MANIFEST) -> Manifest:
     if unknown:
         raise ValueError(f"unknown task dependencies: {sorted(unknown)}")
 
+    model = str(_required(control, "model", "controller"))
+    if model != REQUIRED_REVIEW_MODEL:
+        raise ValueError(
+            f"controller model must be {REQUIRED_REVIEW_MODEL}, got {model}"
+        )
+
     manifest = Manifest(
         repo=controller_repo,
         base_branch=base_branch,
         state_dir=state_dir,
         worktree_root=worktree_root,
-        model=str(_required(control, "model", "controller")),
+        model=model,
         reasoning_effort=str(_required(control, "reasoning_effort", "controller")),
         max_parallel=max_parallel,
         timeout_seconds=timeout_seconds,
@@ -1277,4 +1284,4 @@ if __name__ == "__main__":
         raise SystemExit(main())
     except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as error:
         print(f"wayfinder-controller: {error}", file=sys.stderr)
-        raise SystemExit(2)
+        raise SystemExit(2) from error

@@ -227,7 +227,7 @@ so budget-ineligible). The extended census the manuscript now states
 systems; 26 retained for interpretation: 11 confirmed foreground (9 halos +
 2 cataloged clusters, 10 of 11 budget-eligible) + 15 inconclusive; 5 refuted
 as background**, with 14 further spectroscopic clusters outside R_500. The
-pipeline registry (`galaxies/foreground/data/intervening_census_registry.csv`)
+analysis registry (`foregrounds/census/data/intervening_census_registry.csv`)
 carries 52 catalog rows (29 confirmed / 16 inconclusive / 7 refuted before
 deduplication and aperture cuts). The 2026-07-07 "35 systems / 28 physical /
 9 halos + 1 cluster" numbers above describe the pre-extension census and are

@@ -177,7 +177,7 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/foregrounds/studies/census/data/tau_consistency_catalog.csv
+      - analysis/foregrounds/census/data/tau_consistency_catalog.csv
     notes: Keep tracked in FLITS (small; code-coupled). Library links for navigation.
 
   - id: foreground.budget-exports
@@ -188,8 +188,8 @@ entries:
     mode: link_only
     result_ids: []
     sources:
-      - analysis/foregrounds/results/manuscript-tables
-    notes: Generated TeX for manuscript — stay in FLITS git.
+      - analysis/foregrounds/results/generated
+    notes: Deterministic generated TeX retained in the analysis repository.
 
   - id: foreground.provisional-propagation
     domain: foreground

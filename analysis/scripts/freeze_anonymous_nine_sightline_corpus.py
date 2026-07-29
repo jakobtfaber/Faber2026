@@ -11,7 +11,6 @@ unresolved, truncated, or overflowed response.
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import csv
 import gzip
 import hashlib
@@ -26,10 +25,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import NamedTuple
-
 
 SCHEMA_VERSION = "faber2026.anonymous-nine-sightline-corpus.v2"
 FROZEN_INPUT_SHA256 = "204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644"
@@ -371,7 +370,7 @@ def sha256_file(path: Path, chunk_size: int = 8 * 1024 * 1024) -> str:
 
 
 def utc_now() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def required_cell_keys() -> set[tuple[str, str]]:
@@ -402,8 +401,8 @@ def cluster_projected_separation_mpc(separation_arcmin: float, redshift: float) 
     """Return proper transverse separation under the ticket-13 Planck18 rule."""
     if not math.isfinite(redshift) or redshift <= 0:
         raise ValueError("cluster search geometry requires a finite positive redshift")
-    from astropy.cosmology import Planck18
     import astropy.units as u
+    from astropy.cosmology import Planck18
 
     theta = (separation_arcmin * u.arcmin).to_value(u.rad)
     return float(theta * Planck18.angular_diameter_distance(redshift).to_value(u.Mpc))
@@ -623,7 +622,7 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
     for name in sorted(set(authority_roster) & set(manifest_roster)):
         expected = authority_roster[name]
         actual = manifest_roster[name]
-        if any(abs(a - b) > ROSTER_COORD_TOLERANCE_DEG for a, b in zip(actual, expected)):
+        if any(abs(a - b) > ROSTER_COORD_TOLERANCE_DEG for a, b in zip(actual, expected, strict=False)):
             errors.append(f"manifest sightline coordinates drift from roster authority: {name}")
 
     raw_cells = manifest.get("cells")
@@ -673,7 +672,7 @@ def validate_manifest(manifest: dict, evidence_root: Path) -> list[str]:
             if not isinstance(retrieved_at, str) or not retrieved_at.endswith("Z"):
                 raise ValueError
             parsed_retrieval = datetime.fromisoformat(retrieved_at.replace("Z", "+00:00"))
-            if parsed_retrieval.utcoffset() != timezone.utc.utcoffset(parsed_retrieval):
+            if parsed_retrieval.utcoffset() != UTC.utcoffset(parsed_retrieval):
                 raise ValueError
         except ValueError:
             errors.append(f"{prefix}: retrieval time missing or invalid")
@@ -1162,11 +1161,11 @@ def _legacy_nexp_bundle(source_body: bytes, images: dict[str, bytes]) -> bytes:
 
 def replay_legacy_nexp_bundle(bundle: bytes, ra: float, dec: float) -> tuple[bool, int]:
     """Verify and replay a self-contained official NEXP evidence bundle offline."""
-    from astropy.io import fits
-    from astropy.wcs import WCS
-    from astropy.coordinates import SkyCoord
     import astropy.units as u
     import numpy as np
+    from astropy.coordinates import SkyCoord
+    from astropy.io import fits
+    from astropy.wcs import WCS
 
     with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:") as archive:
         names = [member.name for member in archive.getmembers() if member.isfile()]
@@ -1211,7 +1210,7 @@ def _unit_vector(ra_deg: float, dec_deg: float) -> tuple[float, float, float]:
 
 
 def _dot(a, b) -> float:
-    return sum(x * y for x, y in zip(a, b))
+    return sum(x * y for x, y in zip(a, b, strict=False))
 
 
 def _cross(a, b) -> tuple[float, float, float]:
@@ -1240,7 +1239,7 @@ def _point_in_spherical_polygon(point, vertices) -> bool:
             return True
         tangents.append(tuple(value / length for value in projected))
     winding = 0.0
-    for first, second in zip(tangents, tangents[1:] + tangents[:1]):
+    for first, second in zip(tangents, tangents[1:] + tangents[:1], strict=False):
         winding += math.atan2(_dot(point, _cross(first, second)), _dot(first, second))
     return abs(winding) > math.pi
 
@@ -1258,9 +1257,18 @@ def _point_to_arc_distance(point, first, second) -> float:
     projected_length = _norm(projected)
     if projected_length < 1e-15:
         return best
-    candidate = tuple(value / projected_length for value in projected)
-    for candidate in (candidate, tuple(-value for value in candidate)):
-        if abs((_angular(first, candidate) + _angular(candidate, second)) - arc_length) < 1e-10:
+    projected_candidate = tuple(value / projected_length for value in projected)
+    for candidate in (
+        projected_candidate,
+        tuple(-value for value in projected_candidate),
+    ):
+        if (
+            abs(
+                (_angular(first, candidate) + _angular(candidate, second))
+                - arc_length
+            )
+            < 1e-10
+        ):
             best = min(best, _angular(point, candidate))
     return best
 
@@ -1291,7 +1299,7 @@ def _exact_stcs_intersects_cone(stcs: str, ra: float, dec: float) -> bool:
             return True
         if any(
             _point_to_arc_distance(center, first, second) <= radius
-            for first, second in zip(vertices, vertices[1:] + vertices[:1])
+            for first, second in zip(vertices, vertices[1:] + vertices[:1], strict=False)
         ):
             return True
     return False
@@ -1421,11 +1429,11 @@ def _swift_bundle(members: dict[str, bytes], metadata: dict) -> bytes:
 
 def replay_swift_exposure_bundle(bundle: bytes, ra: float, dec: float) -> tuple[bool, int]:
     """Verify API provenance and replay native-WCS Swift exposure pixels offline."""
+    import astropy.units as u
     import numpy as np
     from astropy.coordinates import SkyCoord
     from astropy.io import fits
     from astropy.wcs import WCS
-    import astropy.units as u
 
     with tarfile.open(fileobj=io.BytesIO(bundle), mode="r:") as archive:
         names = [member.name for member in archive.getmembers() if member.isfile()]
@@ -1960,8 +1968,8 @@ def acquire_cell(service: Service, sightline: str, root: Path, timeout: float, r
         coverage_exact_query = None
         coverage_config = COVERAGE_CONFIG.get(service.key)
         if coverage_config and coverage_config["kind"] == "erass1_german_half":
-            from astropy.coordinates import SkyCoord
             import astropy.units as u
+            from astropy.coordinates import SkyCoord
 
             center_ra, center_dec = SIGHTLINE_COORDS[sightline]
             galactic_l = float(SkyCoord(center_ra * u.deg, center_dec * u.deg).galactic.l.deg)
@@ -2253,7 +2261,7 @@ def acquire_corpus(output_dir: Path, timeout: float, workers: int, resume: bool)
     cells.sort(key=lambda cell: (cell["sightline"], cell["service"]))
     manifest = {
         "schema_version": SCHEMA_VERSION,
-        "input_path": "foregrounds/studies/census/data/frozen_census/bursts.csv",
+        "input_path": "foregrounds/census/data/frozen_census/bursts.csv",
         "input_sha256": FROZEN_INPUT_SHA256,
         "roster_authority_path": ROSTER_AUTHORITY_PATH,
         "roster_authority_sha256": ROSTER_AUTHORITY_SHA256,

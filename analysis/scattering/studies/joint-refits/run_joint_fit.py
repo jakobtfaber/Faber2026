@@ -21,16 +21,17 @@ from pathlib import Path
 
 REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
-sys.path.insert(0, f"{REPO}/scattering")  # so `scat_analysis` imports
+sys.path.insert(0, REPO)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # so joint_tf_prep imports
 
 import joint_tf_prep
 import numpy as np
+import yaml
+
 import scattering.scat_analysis.burstfit_joint as burstfit_joint_module
 import scattering.scat_analysis.controlled_run as controlled_run_module
 import scattering.scat_analysis.joint_fit_diagnostics as diagnostics_module
 import scattering.scat_analysis.joint_model_grid as model_grid_module
-import yaml
 from scattering.scat_analysis.burstfit import FRBParams
 from scattering.scat_analysis.burstfit_init import data_driven_initial_guess
 from scattering.scat_analysis.burstfit_joint import fit_joint_scattering

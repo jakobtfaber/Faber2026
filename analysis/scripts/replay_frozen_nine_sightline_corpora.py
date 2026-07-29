@@ -25,7 +25,6 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
-
 ANON = Path("docs/rse/specs/evidence/nine-sightline-anonymous-catalog-corpus-2026-07-22")
 PROTECTED = Path("docs/rse/specs/evidence/protected-nine-sightline-2026-07-22")
 CADC = Path("docs/rse/specs/evidence/cadc-cfis-access-2026-07-22")
@@ -93,8 +92,8 @@ def _replay_verdict(
 
 
 def replay_registry(pipeline_dir: Path, errors: list[str]) -> dict[str, Any]:
-    migrated = pipeline_dir / "foregrounds/studies/census/data"
-    data = migrated if migrated.is_dir() else pipeline_dir / "galaxies/foreground/data"
+    migrated = pipeline_dir / "foregrounds/census/data"
+    data = migrated if migrated.is_dir() else pipeline_dir / "foregrounds/census/data"
     registry_path = data / "intervening_census_registry.csv"
     provenance_path = data / "candidate_redshift_provenance.csv"
     duplicate_path = data / "census_masses/census_duplicates.csv"
@@ -244,7 +243,7 @@ def check_protected_rectangle(
     expected = (bounds["ra_min"], bounds["ra_max"], bounds["dec_min"], bounds["dec_max"])
     if match is None or any(
         not math.isclose(float(value), target, rel_tol=0, abs_tol=1e-12)
-        for value, target in zip(match.groups(), expected)
+        for value, target in zip(match.groups(), expected, strict=False)
     ):
         errors.append(f"{label}: SQL bounds disagree with manifest bounding box")
         return
@@ -273,7 +272,7 @@ def protected_row_separation(
     row_center = (float(row["center_ra_deg"]), float(row["center_dec_deg"]))
     if any(
         not math.isclose(value, expected, rel_tol=0, abs_tol=1e-12)
-        for value, expected in zip(row_center, center)
+        for value, expected in zip(row_center, center, strict=False)
     ):
         errors.append(f"{label}: CSV center disagrees with manifest center")
     return angular_separation_arcmin(
@@ -326,7 +325,7 @@ def _votable_rows(payload: bytes) -> list[dict[str, str]]:
     rows = []
     for tr in (element for element in root.iter() if element.tag.endswith("TR")):
         values = [(td.text or "") for td in tr if td.tag.endswith("TD")]
-        rows.append(dict(zip(fields, values)))
+        rows.append(dict(zip(fields, values, strict=False)))
     return rows
 
 
@@ -336,7 +335,7 @@ def _unit_vector(ra_deg: float, dec_deg: float) -> tuple[float, float, float]:
 
 
 def _dot(a: tuple[float, ...], b: tuple[float, ...]) -> float:
-    return sum(x * y for x, y in zip(a, b))
+    return sum(x * y for x, y in zip(a, b, strict=False))
 
 
 def _cross(a, b):
@@ -361,7 +360,7 @@ def _point_in_polygon(point, vertices) -> bool:
         tangents.append(tuple(value / length for value in projected))
     winding = sum(
         math.atan2(_dot(point, _cross(first, second)), _dot(first, second))
-        for first, second in zip(tangents, tangents[1:] + tangents[:1])
+        for first, second in zip(tangents, tangents[1:] + tangents[:1], strict=False)
     )
     return abs(winding) > math.pi
 
@@ -378,8 +377,11 @@ def _point_arc_distance(point, first, second) -> float:
     length = _norm(projected)
     if length < 1e-15:
         return best
-    candidate = tuple(value / length for value in projected)
-    for candidate in (candidate, tuple(-value for value in candidate)):
+    projected_candidate = tuple(value / length for value in projected)
+    for candidate in (
+        projected_candidate,
+        tuple(-value for value in projected_candidate),
+    ):
         if abs(_angular(first, candidate) + _angular(candidate, second) - arc) < 1e-10:
             best = min(best, _angular(point, candidate))
     return best
@@ -395,7 +397,7 @@ def _stcs_intersects(stcs: str, center: tuple[float, float]) -> bool:
             return True
         if any(_angular(point, vertex) <= radius for vertex in vertices):
             return True
-        if any(_point_arc_distance(point, first, second) <= radius for first, second in zip(vertices, vertices[1:] + vertices[:1])):
+        if any(_point_arc_distance(point, first, second) <= radius for first, second in zip(vertices, vertices[1:] + vertices[:1], strict=False)):
             return True
     return False
 
@@ -404,8 +406,8 @@ def _positive_fits_pixels(
     bodies: dict[str, bytes], center: tuple[float, float], prefix: str,
     compressed: bool, radius_arcmin: float,
 ) -> int:
-    import numpy as np
     import astropy.units as u
+    import numpy as np
     from astropy.coordinates import SkyCoord
     from astropy.io import fits
     from astropy.wcs import WCS
@@ -703,7 +705,7 @@ def replay_cadc(root: Path, errors: list[str]) -> dict[str, Any]:
 
 
 def _default_pipeline_dir(root: Path) -> Path:
-    if (root / "foregrounds/studies/census/data").is_dir():
+    if (root / "foregrounds/census/data").is_dir():
         return root
     configured = os.environ.get("FOREGROUND_PIPELINE_REPO")
     if configured:

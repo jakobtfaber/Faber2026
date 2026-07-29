@@ -6,8 +6,8 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 from astropy.coordinates import SkyCoord
 
@@ -15,10 +15,10 @@ ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
 if str(ANALYSIS_ROOT) not in sys.path:
     sys.path.insert(0, str(ANALYSIS_ROOT))
 
-from galaxies.foreground.config import SURVEY_CONTRACT, TARGETS
-from galaxies.foreground.paths import CENSUS_ROOT
-from galaxies.foreground.survey_coverage import survey_in_footprint
-from galaxies.foreground.survey_footprint_mocs import CDS_MOC_IDS, moc_cache_path
+from foregrounds.census.config import SURVEY_CONTRACT, TARGETS
+from foregrounds.census.survey_coverage import survey_in_footprint
+from foregrounds.census.survey_footprint_mocs import CDS_MOC_IDS, moc_cache_path
+from foregrounds.paths import CENSUS_ROOT
 
 DISCOVERY_SURVEYS = ("NED", "GLADE+", "DESI_DR8_NORTH", "SDSS_DR12", "CLUSTERS")
 OUTPUT_DIR = CENSUS_ROOT / "data" / "survey_coverage"
