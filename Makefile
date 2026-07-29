@@ -3,7 +3,7 @@ MAIN := main
 UV ?= uv
 FABER2026_ROOT := $(CURDIR)
 
-.PHONY: all clean watch check-state test-science figures figure-review-status figure-review-next kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
+.PHONY: all clean watch check-state check-provenance test-science figures figure-review-status figure-review-next kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
 
 all: $(MAIN).pdf
 
@@ -21,7 +21,20 @@ check-state:
 	FABER2026_ROOT="$(FABER2026_ROOT)" \
 		python3 analysis/scripts/sync_state.py --check --offline
 
-test-science: check-state
+check-provenance: check-state
+	FABER2026_ROOT="$(FABER2026_ROOT)" \
+		python3 analysis/scripts/render_results_registry.py --validate \
+		--manuscript-root "$(FABER2026_ROOT)"
+	FABER2026_ROOT="$(FABER2026_ROOT)" \
+		python3 analysis/scripts/render_results_registry.py --check
+	FABER2026_ROOT="$(FABER2026_ROOT)" python3 analysis/scripts/figure_review.py verify
+	$(MAKE) -C analysis test-manuscript MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
+	$(UV) run --project analysis --group test --frozen \
+		python analysis/scripts/render_dm_measurements_table.py --check
+	$(UV) run --project analysis --group test --frozen \
+		python analysis/scripts/render_budget_table.py --check
+
+test-science: check-provenance
 	$(MAKE) -C analysis test MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
 
 figures:
