@@ -27,7 +27,10 @@ from build_results_library_inventory import (  # noqa: E402
 from materialize_results_library import materialize_one  # noqa: E402
 
 
-def test_default_repo_root_is_the_declared_manuscript() -> None:
+def test_default_repo_root_is_the_declared_manuscript(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("FABER2026_ROOT", str(ROOT.parent))
     root = _repo_root(None)
     assert (root / "main.tex").is_file()
     assert root.resolve() == Path(os.environ["FABER2026_ROOT"]).resolve()
