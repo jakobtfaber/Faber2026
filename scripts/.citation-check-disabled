@@ -1,3 +1,0 @@
-Scope: disable natural-language citation-check for code files under scripts/.
-Manuscript prose (sections/, *.tex) remains checked. Code-comment citations
-(Macquart2020, WenHan2024, etc.) are all present in bib/refs.bib.

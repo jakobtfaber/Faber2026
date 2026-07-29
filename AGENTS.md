@@ -84,7 +84,7 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - Prefer separating analysis results from reusable fitting code, funneling products into a clear navigable results inventory; put analysis/diagnostic review under `analysis/docs/analysis/` as MkDocs/HTML prose plus SVG plot panels — not PNG assets or matplotlib text sidebars.
 - For heavy parallel work, orchestrate via headless Codex/Claude CLI so ChatGPT and Claude Max subscriptions are used, then guide and merge locally; route author Running Notes sorting through headless Claude Code (`claude -p`), not a Cursor agent.
 - When scrubbing `analysis/docs/`, prioritize accuracy and concision over historical record; prefer deleting obsolete or misleading material over archiving it.
-- Structure in-manuscript figure production as a declarative catalog/workflow (`figures/catalog.yaml` driving `scripts/figure_flow.py` / `make figures`) so regeneration does not require agents to rediscover plot scripts.
+- Structure in-manuscript figure production as a declarative catalog/workflow (`analysis/figures/catalog.yaml` driving `analysis/scripts/figure_flow.py` / `make figures`) so regeneration does not require agents to rediscover plot scripts.
 - For dual-band dispersion-measure fits: use band-specific on-pulse envelopes (owner eye-set is fine when automated widths under-cut); multi-component events span first through last component (not only the brightest); before DM-phase, center the burst with band-specific off-pulse padding and visually check crops on the dynamic spectra.
 
 ## Learned Workspace Facts
