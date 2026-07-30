@@ -72,6 +72,28 @@
     "residual_dm": 0.0,
     "telescope": "dsa"
   },
+  "independent_recheck": {
+    "differences": "reads the archival array directly rather than through load_band; stricter dead-channel rule; own block averaging; one off-pulse baseline fixed in native time for both arms instead of each arm's own quartiles; scipy.signal.find_peaks instead of a hand-rolled local-maximum search",
+    "offset_cause_identified": "the 0.0997 constant is load_band recomputing its per-channel baseline from the outer quartiles of each already-decimated array (scripts/plot_codetection_gallery.py:227-232), so the two time factors do not share a zero point. Intended behaviour.",
+    "qualification": "requiring a peak prominence of two standard deviations above the neighbouring troughs collapses both arms to four. The two components averaging destroys are low-prominence shoulders, prominence between one and two standard deviations. The ordering native > coarse survives at prominence 0 and 1 and at every height threshold tested; it does not survive a prominence requirement of 2.",
+    "reproduces": "six versus four above five standard deviations, with every component time and significance identical, and separations of 0.163 and 0.230 ms for the two lost components",
+    "script": "independent_recheck.py",
+    "shares_no_code_with": "compare_resolution.py",
+    "threshold_sweep": {
+      "4_sigma": {
+        "adjacent_pair": 4,
+        "native": 6
+      },
+      "5_sigma": {
+        "adjacent_pair": 4,
+        "native": 6
+      },
+      "6_sigma": {
+        "adjacent_pair": 4,
+        "native": 5
+      }
+    }
+  },
   "input": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
   "input_sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01",
   "peak_snr_ratio_coarse_over_native": 1.1233247022825428,

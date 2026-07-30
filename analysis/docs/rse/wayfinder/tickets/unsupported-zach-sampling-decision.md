@@ -50,7 +50,7 @@
     {
       "label": "The comparison the retracted decision cited but never produced, now run: it reaches the opposite conclusion",
       "path": "docs/rse/verify/zach-dsa-resolution-comparison-20260730/zach_dsa_resolution_comparison.json",
-      "sha256": "99af3828c6edc1a8382f288eb22d18ba6ba877cde21a11c7e317ad7430f04a2d"
+      "sha256": "2ef036af863a79463a6aa36d12f76326cc23797b629f6864e739b1fdcf7276f0"
     }
   ],
   "effect": "Determines whether the repair stops at this decision or extends to an audit of every owner-attributed decision.",

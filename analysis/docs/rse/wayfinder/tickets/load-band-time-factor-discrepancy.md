@@ -25,10 +25,17 @@ about 0.37 off-pulse standard deviations, with the maximum difference
 approximately equal to the median difference — the signature of a constant
 offset rather than a shape change.
 
-The most likely explanation is an ordinary baseline subtraction or
-normalisation step applied per decimated array, which would be correct
-behaviour rather than a defect. That is a hypothesis; it has not been read out
-of the code.
+The cause was identified incidentally while re-deriving the component count and
+is recorded here so nobody re-investigates it: `load_band` subtracts a
+per-channel baseline taken as the median over the **outer quartiles of the
+already-decimated array** (`scripts/plot_codetection_gallery.py:227-232`). The
+quartile boundaries and the resulting median differ between the two time
+factors, so each arm subtracts a slightly different constant. The independent
+re-derivation, which fixes one off-pulse baseline in native time and applies it
+to both arms, shows no such offset.
+
+This is intended behaviour, not a defect. What remains is the small
+documentation task below.
 
 ## Why it is worth a ticket
 
@@ -47,11 +54,11 @@ does not move its conclusion.
 
 ## Acceptance criteria
 
-- [ ] The step responsible for the offset is identified in the source, by file
+- [x] The step responsible for the offset is identified in the source, by file
       and line.
-- [ ] Whether the offset is intended behaviour is stated, with the reason.
-- [ ] If it is a defect, a separate ticket carries the fix and its blast radius;
-      if it is intended, `load_band`'s docstring says so.
+- [x] Whether the offset is intended behaviour is stated, with the reason.
+- [ ] `load_band`'s docstring says that the baseline is recomputed per decimated
+      array, so two time factors do not share a zero point.
 - [ ] The comparison receipt's `averaging_identity_note` is updated to point at
       the explanation instead of describing the discrepancy.
 

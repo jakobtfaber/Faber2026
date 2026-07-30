@@ -38,6 +38,23 @@
   raising the cap to 1024, at roughly double the DSA-110 sample count and a
   corresponding increase in fit time. That code change is the remaining work on
   this ticket.
+- Robustness: the count was re-derived independently — a separate loader
+  reading the archival array directly, a stricter dead-channel rule, its own
+  block averaging, one off-pulse baseline defined in native time for both arms
+  instead of per-arm quartiles, and `scipy.signal.find_peaks` in place of a
+  hand-rolled local-maximum search. It reproduces the six-versus-four result and
+  every component time and significance exactly, and the ordering holds at 4, 5
+  and 6 standard deviations. See `independent_recheck.py` beside the receipt.
+
+  One qualification that the first pass did not state. Requiring a peak
+  prominence of two standard deviations above the neighbouring troughs collapses
+  both arms to four. The two components that averaging destroys are therefore
+  **low-prominence shoulders**, resolved but not deeply notched, with prominence
+  between one and two standard deviations. That does not change the decision —
+  averaging still merges structure that native sampling resolves — but the
+  component-count fit should not treat those two as strongly separated
+  components on the strength of this comparison alone.
+
 - Supersedes: the decision recorded on 2026-07-29 selecting 65.536 microseconds,
   which the owner did not make. See
   [Retract the unsupported Zach sampling decision](unsupported-zach-sampling-decision.md).

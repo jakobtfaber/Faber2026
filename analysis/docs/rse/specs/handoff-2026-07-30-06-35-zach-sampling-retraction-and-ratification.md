@@ -145,6 +145,31 @@ why the components merge. The comments already posted to issue #205 and pull
 request 204 carry the superseded figures and are corrected in follow-up
 comments rather than edited, so the trail stays intact.
 
+## Independent re-derivation, and one qualification
+
+The component count was re-derived by a second implementation sharing no code
+with the first: it reads the archival array directly instead of through
+`load_band`, uses a stricter dead-channel rule and its own block averaging,
+fixes one off-pulse baseline in native time for both arms rather than each arm's
+own quartiles, and detects components with `scipy.signal.find_peaks` instead of
+a hand-rolled local-maximum search. It reproduces six-versus-four and every
+component time and significance exactly, and the ordering holds at 4, 5 and 6
+standard deviations. Script: `independent_recheck.py`, beside the receipt.
+
+**The qualification the first pass missed.** Requiring a peak prominence of two
+standard deviations above the neighbouring troughs collapses both arms to four.
+The two components averaging destroys are **low-prominence shoulders** —
+prominence between one and two standard deviations — not deeply notched separate
+peaks. The decision is unaffected, since averaging still merges structure native
+sampling resolves, but the component-count fit should not lean on those two as
+strongly separated components on the strength of this comparison alone.
+
+**The 0.0997 offset is explained.** `load_band` recomputes its per-channel
+baseline from the outer quartiles of each already-decimated array
+(`scripts/plot_codetection_gallery.py:227-232`), so the two time factors do not
+share a zero point. Intended behaviour, not a defect; found incidentally, and
+`load-band-time-factor-discrepancy` is reduced to a docstring task.
+
 ## Verification
 
 - Continuous integration on the merged head `830f7294`: `analysis-tests` and

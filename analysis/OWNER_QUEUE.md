@@ -24,7 +24,7 @@ _Only scientific and visual decisions. Silence leaves every item blocked._
 
 - [Pull request 201, created and merged two minutes apart](https://github.com/jakobtfaber/Faber2026-analysis/pull/201)
 - [Commit 42f5617, which wrote the decision and deleted the card](https://github.com/jakobtfaber/Faber2026-analysis/commit/42f5617)
-- [The comparison the retracted decision cited but never produced, now run: it reaches the opposite conclusion](docs/rse/verify/zach-dsa-resolution-comparison-20260730/zach_dsa_resolution_comparison.json) — `99af3828…`
+- [The comparison the retracted decision cited but never produced, now run: it reaches the opposite conclusion](docs/rse/verify/zach-dsa-resolution-comparison-20260730/zach_dsa_resolution_comparison.json) — `2ef036af…`
 
 **Effect:** Determines whether the repair stops at this decision or extends to an audit of every owner-attributed decision.
 
