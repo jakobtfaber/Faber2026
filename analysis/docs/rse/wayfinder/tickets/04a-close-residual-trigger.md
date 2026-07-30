@@ -1,7 +1,7 @@
 # Close the scattering escalation trigger
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: resolved — owner selected validation before use, 2026-07-29
 - Assignee: manuscript owner
 - Blocked by: [CHIME-band method](02-ratify-chime-scintillation-method.md)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -56,4 +56,14 @@
 
 ## Resolution
 
-Open. Silence leaves the trigger unaccepted.
+Owner decision, 2026-07-29: **validate before use**.
+
+The predicted-delay mismatch rule may not by itself justify fitting a second
+scattering screen until it has been tested on known one-screen and two-screen
+examples. The validation must report both:
+
+- how often one-screen cases incorrectly request a second screen; and
+- how often true two-screen cases are detected.
+
+Until those rates are measured and accepted, the rule remains unavailable for
+scientific model selection.
