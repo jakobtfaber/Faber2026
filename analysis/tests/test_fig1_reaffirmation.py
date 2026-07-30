@@ -133,15 +133,13 @@ def test_fitted_anchor_would_have_touched_eleven_of_twelve_panels() -> None:
     assert sorted(not_physical) == ["casey", "hamilton", "wilhelm", "zach"]
 
 
-def test_both_later_fig1_candidates_remain_owner_gated() -> None:
-    """The replacement decision is still the owner's; no agent may pre-empt it.
-
-    The surviving candidate must stay undispositioned, so it keeps surfacing
-    fail-closed in the owner queue. The refuted companion may carry a
-    disposition, but only a suppressing one — never an approval.
-    """
-    for batch_id in (OBSERVED_PEAK_BATCH, DMCORR_BATCH):
-        assert candidate(batch_id)["decision"]["status"] == "pending"
+def test_owner_rejected_observed_peak_candidate_and_dmcorr_stays_unapproved() -> None:
+    """The recorded owner rejection supersedes the former pending-state guard."""
+    observed = candidate(OBSERVED_PEAK_BATCH)["decision"]
+    assert observed["status"] == "needs_revision"
+    assert observed["reviewer_role"] == "manuscript_owner"
+    assert "geometric arrival-time offset" in observed["notes"]
+    assert candidate(DMCORR_BATCH)["decision"]["status"] == "pending"
     dispositions = json.loads(
         (ROOT / "figure_review/decisions/batch_dispositions.json").read_text()
     )["batches"]
