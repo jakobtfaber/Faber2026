@@ -74,9 +74,7 @@ def _reconstruction_event(config: dict) -> tuple[dict, dict, dict | None]:
     reconstruction = json.loads(path.read_text())
     if (
         reconstruction.get("synthetic_sign_oracle", {}).get("passed") is not True
-        or reconstruction.get("known_zero_control", {}).get(
-            "zero_covered_by_systematic_model"
-        )
+        or reconstruction.get("known_zero_control", {}).get("zero_covered_by_systematic_model")
         is not True
     ):
         raise RuntimeError("DSA reconstruction global controls did not pass")
@@ -125,18 +123,14 @@ def _reconstruction_event(config: dict) -> tuple[dict, dict, dict | None]:
         raise RuntimeError("DSA reconstruction does not admit configured method")
     if abs(float(config["input_dsa_dm_pc_cm3"]) - expected_nominal) > 1.0e-12:
         raise RuntimeError("DSA nominal input DM differs from reconstruction")
-    if (
-        config["input_dsa_dm_bound_source"]
-        == "calibrated_v3_integer_interval_intersection"
-    ):
+    if config["input_dsa_dm_bound_source"] == "calibrated_v3_integer_interval_intersection":
         calibration_path = Path(config["dsa_state_calibration"])
         calibration_sha256 = sha256(calibration_path)
         if calibration_sha256 != config["expected_dsa_state_calibration_sha256"]:
             raise RuntimeError("DSA calibration SHA-256 mismatch")
         calibration = json.loads(calibration_path.read_text())
         if (
-            calibration.get("source_reconstruction", {}).get("sha256")
-            != expected_sha256
+            calibration.get("source_reconstruction", {}).get("sha256") != expected_sha256
             or calibration.get("zero_control", {}).get("passed") is not True
         ):
             raise RuntimeError("DSA calibration source or zero control failed")
@@ -148,22 +142,13 @@ def _reconstruction_event(config: dict) -> tuple[dict, dict, dict | None]:
         if len(calibration_matches) != 1:
             raise RuntimeError("DSA calibration lacks exactly one event")
         calibration_event = calibration_matches[0]
-        if (
-            calibration_event.get(
-                "calibration_accepted_for_bound_narrowing"
-            )
-            is not True
-        ):
+        if calibration_event.get("calibration_accepted_for_bound_narrowing") is not True:
             raise RuntimeError("DSA calibration is not accepted for narrowing")
         expected_interval = [
-            float(value)
-            for value in calibration_event[
-                "selected_residual_interval_pc_cm3"
-            ]
+            float(value) for value in calibration_event["selected_residual_interval_pc_cm3"]
         ]
     configured_interval = [
-        float(value)
-        for value in config["reference_minus_raw_dsa_dm_interval_pc_cm3"]
+        float(value) for value in config["reference_minus_raw_dsa_dm_interval_pc_cm3"]
     ]
     if not np.allclose(
         configured_interval,
@@ -180,10 +165,7 @@ def _reconstruction_event(config: dict) -> tuple[dict, dict, dict | None]:
         if method == "inferred_raw_reference_row_timing"
         else max(abs(expected_interval[0]), abs(expected_interval[1]))
     )
-    if abs(
-        float(config["input_dsa_dm_half_width_pc_cm3"])
-        - expected_half_width
-    ) > 1.0e-12:
+    if abs(float(config["input_dsa_dm_half_width_pc_cm3"]) - expected_half_width) > 1.0e-12:
         raise RuntimeError("DSA input-DM half-width differs from reconstruction")
     return reconstruction, row, calibration_event
 
@@ -202,53 +184,36 @@ def audit(config: dict) -> dict:
     selected_count = int(config["dsa_audit_sample_rows"])
     if valid_rows.size < selected_count:
         raise RuntimeError("accepted DSA support has too few live rows for audit")
-    selected = valid_rows[
-        np.linspace(0, valid_rows.size - 1, selected_count, dtype=int)
-    ]
+    selected = valid_rows[np.linspace(0, valid_rows.size - 1, selected_count, dtype=int)]
     direct = _row_matches(raw, reference, selected)
     reversed_frequency = _row_matches(raw[::-1], reference, selected)
     direct_median = float(np.median([row["correlation"] for row in direct]))
-    reversed_median = float(
-        np.median([row["correlation"] for row in reversed_frequency])
-    )
+    reversed_median = float(np.median([row["correlation"] for row in reversed_frequency]))
     if direct_median <= reversed_median:
         raise RuntimeError("accepted reference does not match raw frequency order")
 
     starts = np.asarray([row["best_start_sample"] for row in direct], dtype=float)
     correlations = np.asarray([row["correlation"] for row in direct], dtype=float)
-    frequency_mhz = float(reader.header["fch1"]) + float(
-        reader.header["foff"]
-    ) * selected
-    delay_coordinate = (
-        frequency_mhz**-2 - float(config["reference_frequency_mhz"]) ** -2
-    ) / float(reader.header["tsamp"])
+    frequency_mhz = float(reader.header["fch1"]) + float(reader.header["foff"]) * selected
+    delay_coordinate = (frequency_mhz**-2 - float(config["reference_frequency_mhz"]) ** -2) / float(
+        reader.header["tsamp"]
+    )
     if "input_dsa_dm_method" in config:
         (
             reconstruction,
             reconstruction_event,
             calibration_event,
         ) = _reconstruction_event(config)
-        inferred_residual_dm = float(
-            reconstruction_event["reference_minus_raw_dm_pc_cm3"]
-        )
+        inferred_residual_dm = float(reconstruction_event["reference_minus_raw_dm_pc_cm3"])
         crop_coordinate = float(
-            reconstruction_event["full_window_fit"][
-                "reference_frequency_crop_start_sample"
-            ]
+            reconstruction_event["full_window_fit"]["reference_frequency_crop_start_sample"]
         )
-        predicted = (
-            crop_coordinate
-            + K_DM_S_MHZ2 * inferred_residual_dm * delay_coordinate
-        )
-        use_count = int(
-            reconstruction_event["full_window_fit"]["used_count"]
-        )
+        predicted = crop_coordinate + K_DM_S_MHZ2 * inferred_residual_dm * delay_coordinate
+        use_count = int(reconstruction_event["full_window_fit"]["used_count"])
         fit_source = "bound_v3_reconstruction_artifact"
         for index, match in enumerate(direct):
             match["predicted_start_sample"] = float(predicted[index])
-            match["start_residual_sample"] = float(
-                starts[index] - predicted[index]
-            )
+            match["start_residual_sample"] = float(starts[index] - predicted[index])
     else:
         use = correlations >= np.quantile(correlations, 0.50)
         coefficient = np.polyfit(delay_coordinate[use], starts[use], 1)
@@ -273,9 +238,9 @@ def audit(config: dict) -> dict:
             "header": {
                 key: (
                     float(value)
-                    if isinstance(value, (float, np.floating))
+                    if isinstance(value, float | np.floating)
                     else int(value)
-                    if isinstance(value, (int, np.integer))
+                    if isinstance(value, int | np.integer)
                     else str(value)
                 )
                 for key, value in reader.header.items()
@@ -287,9 +252,7 @@ def audit(config: dict) -> dict:
             "shape": list(reference.shape),
             "valid_row_count": int(valid.sum()),
             "dead_row_count": int((~valid).sum()),
-            "product_dm_pc_cm3": float(
-                config["accepted_dsa_reference_dm_pc_cm3"]
-            ),
+            "product_dm_pc_cm3": float(config["accepted_dsa_reference_dm_pc_cm3"]),
             "product_dm_source": "reviewed one-event workflow configuration",
         },
         "frequency_order": {
@@ -318,9 +281,7 @@ def audit(config: dict) -> dict:
             "reference_frequency_mhz": float(config["reference_frequency_mhz"]),
             "inferred_reference_minus_raw_dm_pc_cm3": inferred_residual_dm,
             "start_residual_median_samples": float(np.median(residual)),
-            "start_residual_mad_samples": float(
-                np.median(np.abs(residual - np.median(residual)))
-            ),
+            "start_residual_mad_samples": float(np.median(np.abs(residual - np.median(residual)))),
             "fit_row_count": use_count,
             "source": fit_source,
         },
@@ -330,9 +291,7 @@ def audit(config: dict) -> dict:
             "method": config["input_dsa_dm_method"],
             "bound_source": config["input_dsa_dm_bound_source"],
             "nominal_input_dm_pc_cm3": float(config["input_dsa_dm_pc_cm3"]),
-            "input_dm_half_width_pc_cm3": float(
-                config["input_dsa_dm_half_width_pc_cm3"]
-            ),
+            "input_dm_half_width_pc_cm3": float(config["input_dsa_dm_half_width_pc_cm3"]),
             "input_dm_interval_pc_cm3": [
                 float(config["input_dsa_dm_pc_cm3"])
                 - float(config["input_dsa_dm_half_width_pc_cm3"]),
@@ -344,34 +303,25 @@ def audit(config: dict) -> dict:
                 "reference_minus_raw_dsa_dm_interval_pc_cm3"
             ],
             "reconstruction_path": config["dsa_state_reconstruction"],
-            "reconstruction_sha256": config[
-                "expected_dsa_state_reconstruction_sha256"
-            ],
-            "accepted_for_config_review": bool(
-                reconstruction_event["accepted_for_config_review"]
-            ),
+            "reconstruction_sha256": config["expected_dsa_state_reconstruction_sha256"],
+            "accepted_for_config_review": bool(reconstruction_event["accepted_for_config_review"]),
             "material_nonzero_residual_proven": bool(
                 reconstruction_event["material_nonzero_residual_proven"]
             ),
             "known_zero_systematic_floor_pc_cm3": float(
-                reconstruction["known_zero_control"][
-                    "derived_systematic_floor_pc_cm3"
-                ]
+                reconstruction["known_zero_control"]["derived_systematic_floor_pc_cm3"]
             ),
             "raw_header_dm_certified": False,
             "raw_state_claim": (
                 "inferred value with conservative uncertainty"
-                if config["input_dsa_dm_method"]
-                == "inferred_raw_reference_row_timing"
+                if config["input_dsa_dm_method"] == "inferred_raw_reference_row_timing"
                 else "accepted-product nominal with conservative residual bound; "
                 "exact raw state remains ambiguous"
             ),
             **(
                 {
                     "calibration_path": config["dsa_state_calibration"],
-                    "calibration_sha256": config[
-                        "expected_dsa_state_calibration_sha256"
-                    ],
+                    "calibration_sha256": config["expected_dsa_state_calibration_sha256"],
                     "calibration_accepted_for_bound_narrowing": True,
                 }
                 if calibration_event is not None
@@ -385,10 +335,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--preparation-only", action="store_true")
     args = parser.parse_args()
     result = audit(
         legacy_stage_config(
-            load_config(args.config, require_execution_authorized=True)
+            load_config(
+                args.config,
+                require_execution_authorized=not args.preparation_only,
+            )
         )
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)

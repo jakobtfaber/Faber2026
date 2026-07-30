@@ -12,14 +12,20 @@ from typing import Any
 
 import h5py
 import numpy as np
+from absolute_dm_voltage import (
+    package_dm_argument,
+    physical_dm_from_package_coordinate,
+    sha256,
+    validate_frequency_map,
+)
 from baseband_analysis.core.bbdata import BBData
 from baseband_analysis.core.dedispersion import (
     K_DM as PACKAGE_K_DM_S_MHZ2,
+)
+from baseband_analysis.core.dedispersion import (
     coherent_dedisp,
 )
 from baseband_analysis.core.sampling import _upchannel
-
-from absolute_dm_voltage import package_dm_argument, sha256, validate_frequency_map
 from one_event_hybrid_dm import (
     K_DM_S_MHZ2,
     REFERENCE_FREQUENCY_MHZ,
@@ -27,6 +33,7 @@ from one_event_hybrid_dm import (
     apply_fractional_residual_dm,
     assert_exactly_once_identity,
     fit_grid,
+    injected_absolute_dm_recovery,
     parabolic_peak,
     peak_time,
     residual_intra_channel_smearing_bound,
@@ -34,6 +41,12 @@ from one_event_hybrid_dm import (
     score_crop,
 )
 from one_event_workflow import legacy_stage_config, load_config
+
+from radio_pipeline.fitting import DispersionState
+from radio_pipeline.fitting.products import (
+    unix_seconds_parts_to_ns,
+    write_band_observation_product,
+)
 
 
 def _accepted_support(
@@ -44,9 +57,7 @@ def _accepted_support(
         warnings.simplefilter("ignore", category=RuntimeWarning)
         standard_deviation = np.nanstd(reference, axis=1)
     all_nan = ~np.isfinite(reference).any(axis=1)
-    finite_flat = ~all_nan & np.isfinite(standard_deviation) & (
-        standard_deviation == 0
-    )
+    finite_flat = ~all_nan & np.isfinite(standard_deviation) & (standard_deviation == 0)
     live = np.isfinite(standard_deviation) & (standard_deviation > 0)
     if (
         reference.shape[0] != int(expected["full_grid_rows"])
@@ -106,14 +117,16 @@ def _align_upchannelized(
     waterfall: np.ndarray,
     *,
     residual_shift_frequency_mhz: np.ndarray,
-    row_start_s: np.ndarray,
+    row_start_unix_ns: np.ndarray,
     accepted_live: np.ndarray,
     sample_time_s: float,
     total_dm_pc_cm3: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, int]:
     values = np.asarray(waterfall, dtype=float)
     frequency = np.asarray(residual_shift_frequency_mhz, dtype=float)
-    start = np.asarray(row_start_s, dtype=float)
+    start_ns = np.asarray(row_start_unix_ns, dtype=np.int64)
+    time_base_unix_ns = int(np.min(start_ns[np.asarray(accepted_live, dtype=bool)]))
+    start = (start_ns - time_base_unix_ns).astype(float) * 1.0e-9
     live = np.asarray(accepted_live, dtype=bool)
     referred_start = start - K_DM_S_MHZ2 * float(total_dm_pc_cm3) * (
         frequency**-2 - REFERENCE_FREQUENCY_MHZ**-2
@@ -133,7 +146,7 @@ def _align_upchannelized(
             left=np.nan,
             right=np.nan,
         ).astype(np.float32)
-    return aligned, time_s
+    return aligned, time_s, time_base_unix_ns
 
 
 def _fixed_padded_source(
@@ -144,14 +157,19 @@ def _fixed_padded_source(
     sample_time_s: float,
     window_s: float,
     padding_samples: int,
-) -> tuple[np.ndarray, int]:
+) -> tuple[np.ndarray, int, float]:
     width = int(round(window_s / sample_time_s))
     center = int(round((peak_time_s - float(time_s[0])) / sample_time_s))
     start = center - width // 2 - padding_samples
     stop = start + width + 2 * padding_samples
     if start < 0 or stop > waterfall.shape[1]:
         raise RuntimeError("padded hybrid crop extends beyond anchor data")
-    return np.asarray(waterfall[:, start:stop], dtype=float), width
+    output_time0_s = float(time_s[start + padding_samples])
+    return (
+        np.asarray(waterfall[:, start:stop], dtype=float),
+        width,
+        output_time0_s,
+    )
 
 
 def _hybrid_trial(
@@ -159,6 +177,7 @@ def _hybrid_trial(
     *,
     target_dm_pc_cm3: float,
     anchor_dm_pc_cm3: float,
+    input_dm_pc_cm3: float,
     residual_shift_frequency_mhz: np.ndarray,
     fine_id: np.ndarray,
     accepted_live: np.ndarray,
@@ -167,7 +186,7 @@ def _hybrid_trial(
     output_width_samples: int,
 ) -> tuple[dict[str, Any], np.ndarray]:
     identity = assert_exactly_once_identity(
-        0.0,
+        input_dm_pc_cm3,
         anchor_dm_pc_cm3,
         target_dm_pc_cm3,
     )
@@ -188,87 +207,13 @@ def _hybrid_trial(
         {
             "target_total_dm_pc_cm3": float(target_dm_pc_cm3),
             "anchor_total_dm_pc_cm3": float(anchor_dm_pc_cm3),
-            "applied_residual_dm_pc_cm3": identity[
-                "incoherent_residual_correction_pc_cm3"
-            ],
+            "applied_residual_dm_pc_cm3": identity["incoherent_residual_correction_pc_cm3"],
             "exactly_once_identity": identity,
             "minimum_shift_samples": float(np.min(shift_sample)),
             "maximum_shift_samples": float(np.max(shift_sample)),
         }
     )
     return result, crop
-
-
-def _injected_recovery(
-    anchor_dm_pc_cm3: float,
-    sample_time_s: float,
-    maximum_error_pc_cm3: float,
-) -> dict:
-    rng = np.random.default_rng(20260728)
-    frequency = np.linspace(410.0, 790.0, 128)
-    fine_id = np.arange(frequency.size, dtype=np.int64)
-    sample = np.arange(768, dtype=float)
-    aligned = rng.normal(0.0, 0.15, (frequency.size, sample.size))
-    aligned += 5.0 * np.exp(-0.5 * ((sample - 384.0) / 2.5) ** 2)
-    injected_dm = anchor_dm_pc_cm3 + 0.036
-    anchor_observation, _ = apply_fractional_residual_dm(
-        aligned,
-        frequency,
-        sample_time_s,
-        anchor_dm_pc_cm3 - injected_dm,
-    )
-    padding = 96
-    grid = np.arange(injected_dm - 0.030, injected_dm + 0.0301, 0.002)
-    rows = []
-    for trial_dm in grid:
-        recovered, _ = apply_fractional_residual_dm(
-            anchor_observation,
-            frequency,
-            sample_time_s,
-            trial_dm - anchor_dm_pc_cm3,
-        )
-        crop = recovered[:, padding:-padding]
-        row = score_crop(crop, sample_time_s, frequency_id=fine_id)
-        row["target_total_dm_pc_cm3"] = float(trial_dm)
-        rows.append(row)
-    fit = fit_grid(rows)
-    selected = str(fit["selected_cutoff_hz"])
-    correct, _ = apply_fractional_residual_dm(
-        anchor_observation,
-        frequency,
-        sample_time_s,
-        injected_dm - anchor_dm_pc_cm3,
-    )
-    double, _ = apply_fractional_residual_dm(
-        anchor_observation,
-        frequency,
-        sample_time_s,
-        2.0 * (injected_dm - anchor_dm_pc_cm3),
-    )
-    correct_score = score_crop(
-        correct[:, padding:-padding],
-        sample_time_s,
-        frequency_id=fine_id,
-    )["score"][selected]
-    double_score = score_crop(
-        double[:, padding:-padding],
-        sample_time_s,
-        frequency_id=fine_id,
-    )["score"][selected]
-    error = abs(float(fit["dm_pc_cm3"]) - injected_dm)
-    if error > maximum_error_pc_cm3 or correct_score <= double_score:
-        raise RuntimeError("hybrid injected absolute-DM recovery failed")
-    return {
-        "anchor_dm_pc_cm3": anchor_dm_pc_cm3,
-        "injected_absolute_dm_pc_cm3": injected_dm,
-        "recovered_absolute_dm_pc_cm3": float(fit["dm_pc_cm3"]),
-        "absolute_error_pc_cm3": error,
-        "maximum_error_pc_cm3": maximum_error_pc_cm3,
-        "grid_step_pc_cm3": 0.002,
-        "correct_once_score": float(correct_score),
-        "double_application_score": float(double_score),
-        "passed": True,
-    }
 
 
 def _write_product(
@@ -279,44 +224,78 @@ def _write_product(
     sample_time_s: float,
     target_dm_pc_cm3: float,
     anchor_dm_pc_cm3: float,
+    input_dm_pc_cm3: float,
+    time0_unix_ns: int,
+    fine_channel_width_mhz: float,
+    input_sha256: dict[str, str],
     role: str,
+    upchannel_factor: int,
+    fully_coherent: bool = False,
 ) -> dict:
-    np.savez_compressed(
+    valid = np.asarray(upchannel["accepted_live"], dtype=bool)[:, None] & np.isfinite(waterfall)
+    receipt = write_band_observation_product(
         path,
-        waterfall=np.asarray(waterfall, dtype=np.float32),
-        frequency_mhz=np.asarray(
-            upchannel["fine_frequency_mhz"],
-            dtype=np.float64,
+        instrument="chime",
+        waterfall=waterfall,
+        valid=valid,
+        frequency_mhz=upchannel["fine_frequency_mhz"],
+        channel_width_mhz=fine_channel_width_mhz,
+        sample_interval_s=sample_time_s,
+        time0_unix_ns=time0_unix_ns,
+        dispersion=DispersionState(
+            input_dm_pc_cm3=input_dm_pc_cm3,
+            coherent_correction_pc_cm3=(
+                target_dm_pc_cm3 - input_dm_pc_cm3
+                if fully_coherent
+                else anchor_dm_pc_cm3 - input_dm_pc_cm3
+            ),
+            incoherent_correction_pc_cm3=(
+                0.0 if fully_coherent else target_dm_pc_cm3 - anchor_dm_pc_cm3
+            ),
+            product_dm_pc_cm3=target_dm_pc_cm3,
+            mode=(
+                "singlebeam_h5_fully_coherent"
+                if fully_coherent
+                else "singlebeam_h5_coherent_anchor_plus_fractional_residual"
+            ),
         ),
-        residual_shift_frequency_mhz=np.asarray(
-            upchannel["coarse_frequency_mhz"],
-            dtype=np.float64,
-        ),
-        fine_frequency_id=np.asarray(upchannel["fine_id"], dtype=np.int64),
-        coarse_frequency_id=np.asarray(
-            upchannel["coarse_frequency_id"],
-            dtype=np.int64,
-        ),
-        accepted_live=np.asarray(upchannel["accepted_live"], dtype=bool),
-        sample_time_s=np.asarray(sample_time_s),
-        target_total_dm_pc_cm3=np.asarray(target_dm_pc_cm3),
-        anchor_total_dm_pc_cm3=np.asarray(anchor_dm_pc_cm3),
-        applied_residual_dm_pc_cm3=np.asarray(
-            target_dm_pc_cm3 - anchor_dm_pc_cm3
-        ),
-        role=np.asarray(role),
+        input_sha256=input_sha256,
+        extra={
+            "residual_shift_frequency_mhz": np.asarray(
+                upchannel["coarse_frequency_mhz"], dtype=np.float64
+            ),
+            "fine_frequency_id": np.asarray(upchannel["fine_id"], dtype=np.int64),
+            "coarse_frequency_id": np.asarray(upchannel["coarse_frequency_id"], dtype=np.int64),
+            "accepted_live": np.asarray(upchannel["accepted_live"], dtype=bool),
+            "sample_time_s": np.asarray(sample_time_s),
+            "target_total_dm_pc_cm3": np.asarray(target_dm_pc_cm3),
+            "anchor_total_dm_pc_cm3": np.asarray(anchor_dm_pc_cm3),
+            "applied_residual_dm_pc_cm3": np.asarray(target_dm_pc_cm3 - anchor_dm_pc_cm3),
+            "role": np.asarray(role),
+            "frequency_bin_factor": np.asarray(upchannel_factor),
+            "time_bin_factor": np.asarray(2 * upchannel_factor),
+        },
     )
-    return {
-        "path": str(path),
-        "sha256": sha256(path),
-        "target_total_dm_pc_cm3": target_dm_pc_cm3,
-        "anchor_total_dm_pc_cm3": anchor_dm_pc_cm3,
-        "applied_residual_dm_pc_cm3": target_dm_pc_cm3 - anchor_dm_pc_cm3,
-        "role": role,
-    }
+    receipt.update(
+        {
+            "target_total_dm_pc_cm3": target_dm_pc_cm3,
+            "anchor_total_dm_pc_cm3": anchor_dm_pc_cm3,
+            "applied_residual_dm_pc_cm3": target_dm_pc_cm3 - anchor_dm_pc_cm3,
+            "role": role,
+            "frequency_bin_factor": upchannel_factor,
+            "time_bin_factor": 2 * upchannel_factor,
+        }
+    )
+    return receipt
 
 
-def run(config: dict, output_dir: Path) -> dict:
+def run(
+    config: dict,
+    output_dir: Path,
+    *,
+    verification_dms_pc_cm3: np.ndarray | None = None,
+    preparation_only: bool = False,
+) -> dict:
     event = config["event"]
     h5_path = Path(config["h5_path"])
     reference_path = Path(config["accepted_chime_reference"])
@@ -335,14 +314,21 @@ def run(config: dict, output_dir: Path) -> dict:
     with h5py.File(h5_path, "r") as handle:
         frequency_id = np.asarray(handle["index_map/freq"]["id"], dtype=np.int64)
         frequency_mhz = np.asarray(handle["index_map/freq"]["centre"], dtype=float)
-        row_start_s = np.asarray(handle["time0"]["ctime"], dtype=float) + np.asarray(
-            handle["time0"]["ctime_offset"],
-            dtype=float,
+        row_start_unix_ns = unix_seconds_parts_to_ns(
+            handle["time0"]["ctime"][:],
+            handle["time0"]["ctime_offset"][:],
         )
         raw_sample_time_s = float(handle.attrs["delta_time"])
         baseband_dm_present = "DM" in handle["tiedbeam_baseband"].attrs
+        package_input_dm = (
+            float(handle["tiedbeam_baseband"].attrs["DM"]) if baseband_dm_present else 0.0
+        )
         embedded_sha = str(handle.attrs["baseband-analysis_git_sha"])
     validate_frequency_map(frequency_id, frequency_mhz, raw_voltage.shape[0])
+    input_coordinate_dm = physical_dm_from_package_coordinate(
+        package_input_dm,
+        package_dispersion_constant=PACKAGE_K_DM_S_MHZ2,
+    )
     full_grid_rows = int(expected_support["full_grid_rows"])
     missing_id = np.setdiff1d(
         np.arange(full_grid_rows, dtype=np.int64),
@@ -368,6 +354,8 @@ def run(config: dict, output_dir: Path) -> dict:
 
     anchor_dm = float(config["anchor_dm_pc_cm3"])
     upchannel_factor = int(config["upchannel_factor"])
+    # coherent_dedisp subtracts the H5 DM0 internally. Pass the package-scaled
+    # absolute target; passing input_coordinate_dm here would subtract DM0 twice.
     package_argument = package_dm_argument(
         anchor_dm,
         0.0,
@@ -388,20 +376,16 @@ def run(config: dict, output_dir: Path) -> dict:
     )
     del anchor_voltage
     gc.collect()
-    upchannel_sample_time_s = (
-        raw_sample_time_s * 2.0 * upchannel_factor
-    )
-    block_center_offset_s = (
-        (2.0 * upchannel_factor - 1.0) / 2.0 * raw_sample_time_s
-    )
-    fine_row_start_s = np.repeat(
-        row_start_s + block_center_offset_s,
+    upchannel_sample_time_s = raw_sample_time_s * 2.0 * upchannel_factor
+    block_center_offset_ns = round((2.0 * upchannel_factor - 1.0) / 2.0 * raw_sample_time_s * 1.0e9)
+    fine_row_start_unix_ns = np.repeat(
+        row_start_unix_ns + block_center_offset_ns,
         upchannel_factor,
     )
-    anchor_aligned, anchor_time_s = _align_upchannelized(
+    anchor_aligned, anchor_time_s, time_base_unix_ns = _align_upchannelized(
         upchannel["waterfall"],
         residual_shift_frequency_mhz=upchannel["coarse_frequency_mhz"],
-        row_start_s=fine_row_start_s,
+        row_start_unix_ns=fine_row_start_unix_ns,
         accepted_live=upchannel["accepted_live"],
         sample_time_s=upchannel_sample_time_s,
         total_dm_pc_cm3=anchor_dm,
@@ -415,9 +399,7 @@ def run(config: dict, output_dir: Path) -> dict:
     )
 
     coarse_half_width = float(config["coarse_half_width_pc_cm3"])
-    maximum_residual = coarse_half_width + float(
-        config["fine_half_width_pc_cm3"]
-    )
+    maximum_residual = coarse_half_width + float(config["fine_half_width_pc_cm3"])
     maximum_shift = np.max(
         np.abs(
             residual_shift_samples(
@@ -428,7 +410,7 @@ def run(config: dict, output_dir: Path) -> dict:
         )
     )
     padding_samples = int(np.ceil(maximum_shift)) + 4
-    anchor_source, output_width_samples = _fixed_padded_source(
+    anchor_source, output_width_samples, product_time0_s = _fixed_padded_source(
         anchor_aligned,
         anchor_time_s,
         peak_time_s=peak_time_s,
@@ -436,6 +418,20 @@ def run(config: dict, output_dir: Path) -> dict:
         window_s=float(config["window_s"]),
         padding_samples=padding_samples,
     )
+    product_time0_unix_ns = time_base_unix_ns + round(product_time0_s * 1.0e9)
+    coarse_width_mhz = abs(
+        float(
+            np.median(
+                np.diff(frequency_mhz[np.argsort(frequency_id)])
+                / np.diff(frequency_id[np.argsort(frequency_id)])
+            )
+        )
+    )
+    fine_channel_width_mhz = coarse_width_mhz / upchannel_factor
+    input_hashes = {
+        "raw_chime_h5": expected_h5_sha256,
+        "accepted_chime_reference": expected_reference_sha256,
+    }
     del anchor_aligned
     gc.collect()
     if not np.all(np.isfinite(anchor_source[upchannel["accepted_live"]])):
@@ -451,6 +447,7 @@ def run(config: dict, output_dir: Path) -> dict:
             anchor_source,
             target_dm_pc_cm3=dm,
             anchor_dm_pc_cm3=anchor_dm,
+            input_dm_pc_cm3=input_coordinate_dm,
             residual_shift_frequency_mhz=upchannel["coarse_frequency_mhz"],
             fine_id=upchannel["fine_id"],
             accepted_live=upchannel["accepted_live"],
@@ -475,6 +472,7 @@ def run(config: dict, output_dir: Path) -> dict:
             anchor_source,
             target_dm_pc_cm3=dm,
             anchor_dm_pc_cm3=anchor_dm,
+            input_dm_pc_cm3=input_coordinate_dm,
             residual_shift_frequency_mhz=upchannel["coarse_frequency_mhz"],
             fine_id=upchannel["fine_id"],
             accepted_live=upchannel["accepted_live"],
@@ -494,6 +492,7 @@ def run(config: dict, output_dir: Path) -> dict:
         anchor_source,
         target_dm_pc_cm3=anchor_dm,
         anchor_dm_pc_cm3=anchor_dm,
+        input_dm_pc_cm3=input_coordinate_dm,
         residual_shift_frequency_mhz=upchannel["coarse_frequency_mhz"],
         fine_id=upchannel["fine_id"],
         accepted_live=upchannel["accepted_live"],
@@ -508,12 +507,18 @@ def run(config: dict, output_dir: Path) -> dict:
         sample_time_s=upchannel_sample_time_s,
         target_dm_pc_cm3=anchor_dm,
         anchor_dm_pc_cm3=anchor_dm,
+        input_dm_pc_cm3=input_coordinate_dm,
+        time0_unix_ns=product_time0_unix_ns,
+        fine_channel_width_mhz=fine_channel_width_mhz,
+        input_sha256=input_hashes,
         role="one coherently dedispersed anchor before residual correction",
+        upchannel_factor=upchannel_factor,
     )
     fit_row, fit_crop = _hybrid_trial(
         anchor_source,
         target_dm_pc_cm3=float(fit["dm_pc_cm3"]),
         anchor_dm_pc_cm3=anchor_dm,
+        input_dm_pc_cm3=input_coordinate_dm,
         residual_shift_frequency_mhz=upchannel["coarse_frequency_mhz"],
         fine_id=upchannel["fine_id"],
         accepted_live=upchannel["accepted_live"],
@@ -528,13 +533,19 @@ def run(config: dict, output_dir: Path) -> dict:
         sample_time_s=upchannel_sample_time_s,
         target_dm_pc_cm3=float(fit["dm_pc_cm3"]),
         anchor_dm_pc_cm3=anchor_dm,
+        input_dm_pc_cm3=input_coordinate_dm,
+        time0_unix_ns=product_time0_unix_ns,
+        fine_channel_width_mhz=fine_channel_width_mhz,
+        input_sha256=input_hashes,
         role="anchor intensity shifted once by fit minus anchor",
+        upchannel_factor=upchannel_factor,
     )
     geometry_dm = float(config["geometry_dm_pc_cm3"])
     geometry_row, geometry_crop = _hybrid_trial(
         anchor_source,
         target_dm_pc_cm3=geometry_dm,
         anchor_dm_pc_cm3=anchor_dm,
+        input_dm_pc_cm3=input_coordinate_dm,
         residual_shift_frequency_mhz=upchannel["coarse_frequency_mhz"],
         fine_id=upchannel["fine_id"],
         accepted_live=upchannel["accepted_live"],
@@ -549,23 +560,94 @@ def run(config: dict, output_dir: Path) -> dict:
         sample_time_s=upchannel_sample_time_s,
         target_dm_pc_cm3=geometry_dm,
         anchor_dm_pc_cm3=anchor_dm,
+        input_dm_pc_cm3=input_coordinate_dm,
+        time0_unix_ns=product_time0_unix_ns,
+        fine_channel_width_mhz=fine_channel_width_mhz,
+        input_sha256=input_hashes,
         role="anchor intensity shifted once by geometry minus anchor",
+        upchannel_factor=upchannel_factor,
     )
 
+    if preparation_only:
+        result = {
+            "schema_version": 1,
+            "status": config["result_status"],
+            "burst": event,
+            "event_binding_sha256": config["event_binding_sha256"],
+            "scope": f"{event} reviewed-input preparation only",
+            "preparation_only": True,
+            "source_h5": {"path": str(h5_path), "sha256": expected_h5_sha256},
+            "accepted_reference": {
+                "path": str(reference_path),
+                "sha256": expected_reference_sha256,
+                "dm_pc_cm3": float(config["accepted_chime_reference_dm_pc_cm3"]),
+            },
+            "support": {
+                "full_grid_rows": full_grid_rows,
+                "h5_present_count": int(frequency_id.size),
+                "h5_missing_count": int(missing_id.size),
+                "h5_missing_ids": missing_id.tolist(),
+                "h5_present_accepted_dead_count": int(present_dead_id.size),
+                "h5_present_accepted_dead_ids": present_dead_id.tolist(),
+                "accepted_live_count": int(support["live"].sum()),
+                "accepted_dead_count": int((~support["live"]).sum()),
+                "accepted_live_absent_from_h5_count": int(live_absent_id.size),
+                "proposed_extra_bad_rows": [],
+                "manual_event_mask_applied": False,
+                "historical_row_sum_replay_applied": False,
+            },
+            "hybrid_method": {
+                "input_coordinate_dm_pc_cm3": input_coordinate_dm,
+                "h5_package_dm_attribute_pc_cm3": package_input_dm,
+                "anchor_dm_pc_cm3": anchor_dm,
+                "coherent_anchor_package_argument_pc_cm3": package_argument,
+                "coherent_anchor_count": 1,
+                "oracle_only_fully_coherent_count": 0,
+                "upchannel_factor": upchannel_factor,
+                "raw_sample_time_s": raw_sample_time_s,
+                "upchannel_sample_time_s": upchannel_sample_time_s,
+                "reference_frequency_mhz": REFERENCE_FREQUENCY_MHZ,
+                "residual_rule": "trial absolute DM minus anchor DM exactly once",
+                "nonwrapping_fractional_sample_shifts": True,
+            },
+            "grid": {
+                "coarse": coarse_rows,
+                "coarse_fit": coarse_fit,
+                "fine": fine_rows,
+                "fit": fit,
+            },
+            "fit_trial": fit_row,
+            "anchor_trial": anchor_row,
+            "geometry_trial": geometry_row,
+            "geometry_dm_pc_cm3": geometry_dm,
+            "products": products,
+        }
+        result_path = output_dir / "chime_hybrid_result.json"
+        result_path.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
+        return result
+
     selected_cutoff = str(fit["selected_cutoff_hz"])
-    oracle_half_width = float(config["oracle_half_width_pc_cm3"])
-    oracle_dm = np.asarray(
-        [
-            float(fit["dm_pc_cm3"]) - oracle_half_width,
-            float(fit["dm_pc_cm3"]),
-            float(fit["dm_pc_cm3"]) + oracle_half_width,
-        ]
-    )
+    if verification_dms_pc_cm3 is None:
+        oracle_half_width = float(config["oracle_half_width_pc_cm3"])
+        oracle_dm = np.asarray(
+            [
+                float(fit["dm_pc_cm3"]) - oracle_half_width,
+                float(fit["dm_pc_cm3"]),
+                float(fit["dm_pc_cm3"]) + oracle_half_width,
+            ]
+        )
+        oracle_role = "hybrid_power_maximum"
+    else:
+        oracle_dm = np.asarray(verification_dms_pc_cm3, dtype=float)
+        if oracle_dm.shape != (3,) or not np.all(np.diff(oracle_dm) > 0):
+            raise ValueError("posterior verification DMs must be ordered lower, median, upper")
+        oracle_role = "joint_posterior_lower_median_upper"
     hybrid_oracle_rows = [
         _hybrid_trial(
             anchor_source,
             target_dm_pc_cm3=dm,
             anchor_dm_pc_cm3=anchor_dm,
+            input_dm_pc_cm3=input_coordinate_dm,
             residual_shift_frequency_mhz=upchannel["coarse_frequency_mhz"],
             fine_id=upchannel["fine_id"],
             accepted_live=upchannel["accepted_live"],
@@ -576,7 +658,8 @@ def run(config: dict, output_dir: Path) -> dict:
         for dm in oracle_dm
     ]
     fully_coherent_rows = []
-    for dm in oracle_dm:
+    posterior_labels = ("lower", "median", "upper")
+    for oracle_index, dm in enumerate(oracle_dm):
         direct_argument = package_dm_argument(
             dm,
             0.0,
@@ -596,16 +679,16 @@ def run(config: dict, output_dir: Path) -> dict:
             upchannel_factor=upchannel_factor,
         )
         del direct_voltage
-        direct_aligned, direct_time_s = _align_upchannelized(
+        direct_aligned, direct_time_s, direct_time_base_unix_ns = _align_upchannelized(
             direct_upchannel["waterfall"],
-            residual_shift_frequency_mhz=direct_upchannel[
-                "coarse_frequency_mhz"
-            ],
-            row_start_s=fine_row_start_s,
+            residual_shift_frequency_mhz=direct_upchannel["coarse_frequency_mhz"],
+            row_start_unix_ns=fine_row_start_unix_ns,
             accepted_live=direct_upchannel["accepted_live"],
             sample_time_s=upchannel_sample_time_s,
             total_dm_pc_cm3=dm,
         )
+        if direct_time_base_unix_ns != time_base_unix_ns:
+            raise RuntimeError("fully coherent oracle changed the time origin")
         direct_crop = absolute_crop(
             direct_aligned,
             direct_time_s,
@@ -622,14 +705,33 @@ def run(config: dict, output_dir: Path) -> dict:
         )
         direct_row["target_total_dm_pc_cm3"] = float(dm)
         fully_coherent_rows.append(direct_row)
+        if verification_dms_pc_cm3 is not None:
+            width = int(round(float(config["window_s"]) / upchannel_sample_time_s))
+            center = int(round((peak_time_s - float(direct_time_s[0])) / upchannel_sample_time_s))
+            start = center - width // 2
+            direct_time0_unix_ns = direct_time_base_unix_ns + round(
+                float(direct_time_s[start]) * 1.0e9
+            )
+            label = posterior_labels[oracle_index]
+            products[f"fully_coherent_posterior_{label}"] = _write_product(
+                output_dir / f"chime_fully_coherent_posterior_{label}.npz",
+                waterfall=direct_crop,
+                upchannel=direct_upchannel,
+                sample_time_s=upchannel_sample_time_s,
+                target_dm_pc_cm3=float(dm),
+                anchor_dm_pc_cm3=float(dm),
+                input_dm_pc_cm3=input_coordinate_dm,
+                time0_unix_ns=direct_time0_unix_ns,
+                fine_channel_width_mhz=fine_channel_width_mhz,
+                input_sha256=input_hashes,
+                role=(f"fully coherent H5 posterior verification {label}"),
+                upchannel_factor=upchannel_factor,
+                fully_coherent=True,
+            )
         del direct_upchannel, direct_aligned, direct_crop
         gc.collect()
-    hybrid_oracle_score = np.asarray(
-        [row["score"][selected_cutoff] for row in hybrid_oracle_rows]
-    )
-    direct_oracle_score = np.asarray(
-        [row["score"][selected_cutoff] for row in fully_coherent_rows]
-    )
+    hybrid_oracle_score = np.asarray([row["score"][selected_cutoff] for row in hybrid_oracle_rows])
+    direct_oracle_score = np.asarray([row["score"][selected_cutoff] for row in fully_coherent_rows])
     hybrid_oracle_peak = parabolic_peak(oracle_dm, hybrid_oracle_score)
     direct_oracle_peak = parabolic_peak(oracle_dm, direct_oracle_score)
     oracle_difference = abs(direct_oracle_peak - hybrid_oracle_peak)
@@ -638,29 +740,23 @@ def run(config: dict, output_dir: Path) -> dict:
     direct_normalised = direct_oracle_score / direct_oracle_score[1]
     normalised_difference = np.abs(hybrid_normalised - direct_normalised)
     maximum_normalised_difference = float(np.max(normalised_difference))
-    normalised_tolerance = float(
-        config["oracle_normalised_curve_max_abs_difference"]
-    )
-    center_score_ratio = float(
-        hybrid_oracle_score[1] / direct_oracle_score[1]
-    )
+    normalised_tolerance = float(config["oracle_normalised_curve_max_abs_difference"])
+    center_score_ratio = float(hybrid_oracle_score[1] / direct_oracle_score[1])
     center_ratio_tolerance = float(config["oracle_center_score_ratio_tolerance"])
     oracle_center_is_maximum = (
-        int(np.argmax(hybrid_oracle_score)) == 1
-        and int(np.argmax(direct_oracle_score)) == 1
+        int(np.argmax(hybrid_oracle_score)) == 1 and int(np.argmax(direct_oracle_score)) == 1
     )
+    center_requirement_applies = verification_dms_pc_cm3 is None
     oracle_curve_agreement = (
         maximum_normalised_difference <= normalised_tolerance
         and abs(center_score_ratio - 1.0) <= center_ratio_tolerance
     )
     if (
-        not oracle_center_is_maximum
+        (center_requirement_applies and not oracle_center_is_maximum)
         or oracle_difference > material_threshold
         or not oracle_curve_agreement
     ):
-        raise RuntimeError(
-            "full-coherent bracket oracle disagrees with the hybrid objective"
-        )
+        raise RuntimeError("full-coherent bracket oracle disagrees with the hybrid objective")
 
     smearing = residual_intra_channel_smearing_bound(
         frequency_mhz[accepted_live_h5],
@@ -673,32 +769,24 @@ def run(config: dict, output_dir: Path) -> dict:
     )
     pulse_fwhm_s = float(config["reference_pulse_fwhm_s"])
     smearing["reference_pulse_fwhm_s"] = pulse_fwhm_s
-    smearing["fraction_of_reference_pulse_fwhm"] = (
-        smearing["maximum_smearing_s"] / pulse_fwhm_s
-    )
-    sample_fraction_threshold = float(
-        config["smearing_max_fraction_of_upchannel_sample"]
-    )
-    pulse_fraction_threshold = float(
-        config["smearing_max_fraction_of_reference_pulse_fwhm"]
-    )
+    smearing["fraction_of_reference_pulse_fwhm"] = smearing["maximum_smearing_s"] / pulse_fwhm_s
+    sample_fraction_threshold = float(config["smearing_max_fraction_of_upchannel_sample"])
+    pulse_fraction_threshold = float(config["smearing_max_fraction_of_reference_pulse_fwhm"])
     smearing["maximum_fraction_of_upchannel_sample"] = sample_fraction_threshold
-    smearing["maximum_fraction_of_reference_pulse_fwhm"] = (
-        pulse_fraction_threshold
-    )
+    smearing["maximum_fraction_of_reference_pulse_fwhm"] = pulse_fraction_threshold
     smearing["threshold_justification"] = (
         "negligible requires residual sweep below 10% of one hybrid time bin "
         "and below the configured fraction of the accepted pulse FWHM"
     )
     smearing["passed"] = (
         smearing["fraction_of_upchannel_sample"] <= sample_fraction_threshold
-        and smearing["fraction_of_reference_pulse_fwhm"]
-        <= pulse_fraction_threshold
+        and smearing["fraction_of_reference_pulse_fwhm"] <= pulse_fraction_threshold
     )
     if not smearing["passed"]:
         raise RuntimeError("hybrid residual intra-channel smearing is not negligible")
-    injected = _injected_recovery(
+    injected = injected_absolute_dm_recovery(
         anchor_dm,
+        input_coordinate_dm,
         upchannel_sample_time_s,
         float(config["injection_max_error_pc_cm3"]),
     )
@@ -733,7 +821,8 @@ def run(config: dict, output_dir: Path) -> dict:
             "historical_row_sum_replay_applied": False,
         },
         "hybrid_method": {
-            "input_coordinate_dm_pc_cm3": 0.0,
+            "input_coordinate_dm_pc_cm3": input_coordinate_dm,
+            "h5_package_dm_attribute_pc_cm3": package_input_dm,
             "anchor_dm_pc_cm3": anchor_dm,
             "coherent_anchor_package_argument_pc_cm3": package_argument,
             "coherent_anchor_count": 1,
@@ -766,6 +855,7 @@ def run(config: dict, output_dir: Path) -> dict:
         "geometry_trial": geometry_row,
         "geometry_dm_pc_cm3": geometry_dm,
         "full_coherent_oracle": {
+            "role": oracle_role,
             "dm_pc_cm3": oracle_dm.tolist(),
             "selected_cutoff_hz": float(selected_cutoff),
             "hybrid_rows": hybrid_oracle_rows,
@@ -776,12 +866,8 @@ def run(config: dict, output_dir: Path) -> dict:
             "material_threshold_pc_cm3": material_threshold,
             "hybrid_normalised_score": hybrid_normalised.tolist(),
             "fully_coherent_normalised_score": direct_normalised.tolist(),
-            "normalised_score_absolute_difference": (
-                normalised_difference.tolist()
-            ),
-            "maximum_normalised_score_absolute_difference": (
-                maximum_normalised_difference
-            ),
+            "normalised_score_absolute_difference": (normalised_difference.tolist()),
+            "maximum_normalised_score_absolute_difference": (maximum_normalised_difference),
             "normalised_curve_tolerance": normalised_tolerance,
             "center_score_ratio_hybrid_over_fully_coherent": center_score_ratio,
             "center_score_ratio_tolerance": center_ratio_tolerance,
@@ -793,6 +879,7 @@ def run(config: dict, output_dir: Path) -> dict:
                 "remains 0.005 pc cm^-3"
             ),
             "center_is_maximum_for_both": oracle_center_is_maximum,
+            "center_maximum_requirement_applies": center_requirement_applies,
             "passed": True,
         },
         "products": products,
@@ -806,17 +893,31 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--joint-fit-result", type=Path)
+    parser.add_argument("--preparation-only", action="store_true")
     args = parser.parse_args()
+    verification_dms = None
+    if args.joint_fit_result is not None:
+        fit_result = json.loads(args.joint_fit_result.read_text())
+        summary = fit_result["shared_absolute_dm_pc_cm3"]
+        verification_dms = np.asarray(
+            [summary["lower"], summary["median"], summary["upper"]],
+            dtype=float,
+        )
     result = run(
         legacy_stage_config(
-            load_config(args.config, require_execution_authorized=True)
+            load_config(
+                args.config,
+                require_execution_authorized=not args.preparation_only,
+            )
         ),
         args.output_dir,
+        verification_dms_pc_cm3=verification_dms,
+        preparation_only=args.preparation_only,
     )
     fit = result["grid"]["fit"]
     print(
-        f"{result['burst']} hybrid: "
-        f"{fit['dm_pc_cm3']:.6f} +/- {fit['sigma_pc_cm3']:.6f} pc cm^-3",
+        f"{result['burst']} hybrid: {fit['dm_pc_cm3']:.6f} +/- {fit['sigma_pc_cm3']:.6f} pc cm^-3",
         flush=True,
     )
 

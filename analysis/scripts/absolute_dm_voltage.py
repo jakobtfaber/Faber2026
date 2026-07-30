@@ -55,6 +55,28 @@ def package_dm_argument(
     return correction * physical_constant / package_constant
 
 
+def physical_dm_from_package_coordinate(
+    package_dm: float,
+    *,
+    package_dispersion_constant: float,
+    physical_dispersion_constant: float = K_DM_S_MHZ2,
+) -> float:
+    """Express an H5 package-DM attribute on the physical phase coordinate."""
+
+    value = float(package_dm)
+    package_constant = float(package_dispersion_constant)
+    physical_constant = float(physical_dispersion_constant)
+    if (
+        not np.isfinite(value)
+        or not np.isfinite(package_constant)
+        or package_constant <= 0
+        or not np.isfinite(physical_constant)
+        or physical_constant <= 0
+    ):
+        raise ValueError("H5 DM and dispersion constants must be finite")
+    return value * package_constant / physical_constant
+
+
 def validate_frequency_map(
     frequency_id: np.ndarray,
     frequency_mhz: np.ndarray,

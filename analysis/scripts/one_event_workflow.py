@@ -5,8 +5,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import re
 from copy import deepcopy
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -19,9 +21,13 @@ SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 STAGES = (
     "preflight",
     "dsa_audit",
-    "chime_hybrid",
+    "chime_products",
     "dsa_products",
-    "geometry",
+    "geometry_constraint",
+    "joint_fit",
+    "chime_oracle",
+    "dsa_oracle",
+    "oracle_check",
     "packet",
     "manifests",
 )
@@ -50,9 +56,96 @@ def event_binding_payload(config: dict[str, Any]) -> dict[str, Any]:
 
 
 def event_binding_sha256(config: dict[str, Any]) -> str:
-    return hashlib.sha256(
-        canonical_json(event_binding_payload(config)).encode("utf-8")
-    ).hexdigest()
+    return hashlib.sha256(canonical_json(event_binding_payload(config)).encode("utf-8")).hexdigest()
+
+
+def validate_timing_uncertainties(geometry: dict[str, Any]) -> None:
+    """Validate the complete owner-adopted timing prior before data access."""
+
+    uncertainty_fields = ("site_delay_sigma_s", "clock_sigma_s")
+    provenance_field = "timing_uncertainty_provenance"
+    missing = [
+        field for field in (*uncertainty_fields, provenance_field) if field not in geometry
+    ]
+    if missing:
+        raise ValueError(f"geometry lacks reviewed timing fields: {missing}")
+    for field in uncertainty_fields:
+        values = geometry[field]
+        if (
+            not isinstance(values, dict)
+            or set(values) != {"chime", "dsa"}
+            or any(
+                not math.isfinite(float(values[instrument]))
+                or float(values[instrument]) <= 0
+                for instrument in ("chime", "dsa")
+            )
+        ):
+            raise ValueError(f"{field} needs positive finite CHIME and DSA values")
+
+    provenance = geometry[provenance_field]
+    required_provenance = (
+        "status",
+        "inter_site_clock_sigma_s",
+        "clock_allocation",
+        "clock_basis",
+        "site_delay_basis",
+        "absolute_utc_calibration_status",
+        "owner_adoption_date",
+    )
+    if not isinstance(provenance, dict):
+        raise ValueError("timing uncertainty provenance must be an object")
+    extra_provenance = sorted(set(provenance) - set(required_provenance))
+    if extra_provenance:
+        raise ValueError(
+            f"timing uncertainty provenance has unsupported fields: {extra_provenance}"
+        )
+    missing_provenance = [
+        field for field in required_provenance if field not in provenance
+    ]
+    if missing_provenance:
+        raise ValueError(
+            f"timing uncertainty provenance lacks fields: {missing_provenance}"
+        )
+    if provenance["status"] != "owner_adopted_provisional_bounds":
+        raise ValueError("timing uncertainties need explicit provisional owner adoption")
+    if provenance["clock_allocation"] != "equal_independent_station_terms":
+        raise ValueError("clock uncertainty allocation must use independent station terms")
+    if provenance["absolute_utc_calibration_status"] != "not_independently_measured":
+        raise ValueError("absolute UTC calibration must remain explicitly unmeasured")
+    for field in ("clock_basis", "site_delay_basis", "owner_adoption_date"):
+        if not isinstance(provenance[field], str) or not provenance[field].strip():
+            raise ValueError(f"timing uncertainty provenance needs non-empty {field}")
+    adoption_date = provenance["owner_adoption_date"]
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", adoption_date) is None:
+        raise ValueError("owner adoption date must use YYYY-MM-DD")
+    try:
+        date.fromisoformat(adoption_date)
+    except ValueError as exc:
+        raise ValueError("owner adoption date is not a valid date") from exc
+
+    inter_site_clock_sigma_s = float(provenance["inter_site_clock_sigma_s"])
+    if not math.isfinite(inter_site_clock_sigma_s) or inter_site_clock_sigma_s <= 0:
+        raise ValueError("inter-site clock uncertainty must be positive and finite")
+    allocated_clock_sigma_s = math.hypot(
+        float(geometry["clock_sigma_s"]["chime"]),
+        float(geometry["clock_sigma_s"]["dsa"]),
+    )
+    if not math.isclose(
+        float(geometry["clock_sigma_s"]["chime"]),
+        float(geometry["clock_sigma_s"]["dsa"]),
+        rel_tol=1.0e-12,
+        abs_tol=0.0,
+    ):
+        raise ValueError("clock uncertainty allocation must be equal between stations")
+    if not math.isclose(
+        allocated_clock_sigma_s,
+        inter_site_clock_sigma_s,
+        rel_tol=1.0e-12,
+        abs_tol=0.0,
+    ):
+        raise ValueError(
+            "station clock terms do not reproduce the adopted inter-site uncertainty"
+        )
 
 
 def _require_keys(mapping: dict[str, Any], keys: tuple[str, ...], label: str) -> None:
@@ -168,9 +261,7 @@ def validate_config(
         tokens = set(re.split(r"[^a-z0-9]+", value.lower()))
         conflicts = sorted(tokens.intersection(disallowed))
         if conflicts:
-            raise ValueError(
-                f"cross-event path token rejected for {event!r}: {conflicts}"
-            )
+            raise ValueError(f"cross-event path token rejected for {event!r}: {conflicts}")
     for key in (
         "raw_chime_h5",
         "accepted_chime_reference",
@@ -239,10 +330,7 @@ def validate_config(
     if (
         not isinstance(present_dead, list)
         or present_dead != sorted(set(present_dead))
-        or any(
-            not isinstance(row, int) or row < 0 or row >= full_grid
-            for row in present_dead
-        )
+        or any(not isinstance(row, int) or row < 0 or row >= full_grid for row in present_dead)
     ):
         raise ValueError("CHIME H5-present accepted-dead IDs must be sorted unique IDs")
     if len(present_dead) + live != present:
@@ -332,31 +420,23 @@ def validate_config(
         if (
             not isinstance(interval, list)
             or len(interval) != 2
-            or any(not isinstance(value, (int, float)) for value in interval)
+            or any(not isinstance(value, int | float) for value in interval)
             or float(interval[0]) > float(interval[1])
         ):
             raise ValueError("DSA residual-DM interval must be ordered endpoints")
         if float(dsa["input_dm_half_width_pc_cm3"]) <= 0:
             raise ValueError("dsa.input_dm_half_width_pc_cm3 must be positive")
         if float(dsa["raw_reference_frequency_crop_start_sample"]) < 0:
-            raise ValueError(
-                "dsa.raw_reference_frequency_crop_start_sample must be non-negative"
-            )
+            raise ValueError("dsa.raw_reference_frequency_crop_start_sample must be non-negative")
         if float(dsa["native_sample_time_s"]) <= 0:
             raise ValueError("dsa.native_sample_time_s must be positive")
         _require_sha256(
             dsa["input_dm_reconstruction_sha256"],
             "dsa.input_dm_reconstruction_sha256",
         )
-        if (
-            dsa["input_dm_reconstruction_sha256"]
-            != hashes["dsa_state_reconstruction"]
-        ):
+        if dsa["input_dm_reconstruction_sha256"] != hashes["dsa_state_reconstruction"]:
             raise ValueError("DSA reconstruction hash differs from reviewed input")
-        if (
-            dsa["input_dm_bound_source"]
-            == "calibrated_v3_integer_interval_intersection"
-        ):
+        if dsa["input_dm_bound_source"] == "calibrated_v3_integer_interval_intersection":
             _require_keys(
                 dsa,
                 ("input_dm_calibration_sha256",),
@@ -366,15 +446,9 @@ def validate_config(
                 dsa["input_dm_calibration_sha256"],
                 "dsa.input_dm_calibration_sha256",
             )
-            if (
-                dsa["input_dm_calibration_sha256"]
-                != hashes["dsa_state_calibration"]
-            ):
+            if dsa["input_dm_calibration_sha256"] != hashes["dsa_state_calibration"]:
                 raise ValueError("DSA calibration hash differs from reviewed input")
-            if (
-                dsa["input_dm_method"]
-                != "accepted_product_dm_nominal_with_residual_bound"
-            ):
+            if dsa["input_dm_method"] != "accepted_product_dm_nominal_with_residual_bound":
                 raise ValueError("calibrated DSA interval is bound-only")
         accepted_dm = float(dsa["accepted_reference_dm_pc_cm3"])
         residual_dm = float(dsa["reference_minus_raw_dm_pc_cm3"])
@@ -391,9 +465,8 @@ def validate_config(
         ("full_grid_rows", "live_count", "dead_count", "manual_bad_channel_ids"),
         "dsa.accepted_support",
     )
-    if (
-        int(dsa_support["live_count"]) + int(dsa_support["dead_count"])
-        != int(dsa_support["full_grid_rows"])
+    if int(dsa_support["live_count"]) + int(dsa_support["dead_count"]) != int(
+        dsa_support["full_grid_rows"]
     ):
         raise ValueError("DSA accepted support does not partition the full grid")
     if dsa_support["manual_bad_channel_ids"] != []:
@@ -432,18 +505,9 @@ def validate_config(
             ),
             "dsa.gates",
         )
-        if (
-            float(
-                dsa_gates[
-                    "input_dm_reference_timing_half_width_max_native_samples"
-                ]
-            )
-            <= 0
-        ):
+        if float(dsa_gates["input_dm_reference_timing_half_width_max_native_samples"]) <= 0:
             raise ValueError("DSA input-DM timing gate must be positive")
-        if not 0.0 <= float(
-            dsa_gates["input_dm_aligned_profile_correlation_min"]
-        ) <= 1.0:
+        if not 0.0 <= float(dsa_gates["input_dm_aligned_profile_correlation_min"]) <= 1.0:
             raise ValueError("DSA input-DM morphology gate must lie in [0, 1]")
         if dsa_gates["gallery_alignment_must_be_robust"] is not True:
             raise ValueError("DSA gallery alignment must fail closed")
@@ -459,9 +523,114 @@ def validate_config(
         "geometry",
     )
     if float(geometry["reference_frequency_mhz"]) != REFERENCE_FREQUENCY_MHZ:
-        raise ValueError(
-            f"geometry.reference_frequency_mhz must remain {REFERENCE_FREQUENCY_MHZ}"
+        raise ValueError(f"geometry.reference_frequency_mhz must remain {REFERENCE_FREQUENCY_MHZ}")
+
+    joint_fit = config.get("joint_fit")
+    if joint_fit is not None:
+        _require_keys(
+            joint_fit,
+            (
+                "status",
+                "execution_authorized",
+                "reference_frequency_mhz",
+                "blockers",
+                "geometry",
+                "resolution",
+            ),
+            "joint_fit",
         )
+        if float(joint_fit["reference_frequency_mhz"]) != REFERENCE_FREQUENCY_MHZ:
+            raise ValueError("joint_fit reference frequency must remain 400 MHz")
+        blockers = joint_fit["blockers"]
+        if (
+            not isinstance(blockers, list)
+            or blockers != sorted(set(blockers))
+            or any(not isinstance(value, str) or not value for value in blockers)
+        ):
+            raise ValueError("joint_fit blockers must be sorted unique strings")
+        if joint_fit["status"] == "ready":
+            if blockers or joint_fit["execution_authorized"] is not True:
+                raise ValueError("ready joint fit must be unblocked and authorized")
+            _require_keys(
+                joint_fit,
+                (
+                    "components",
+                    "associations",
+                    "dm_bounds_pc_cm3",
+                    "morphologies",
+                    "scattering_tau_1ghz_bounds_s",
+                    "scattering_alpha_bounds",
+                    "gain_variance",
+                    "sampler",
+                    "acceptance",
+                ),
+                "joint_fit",
+            )
+            _require_keys(
+                joint_fit["geometry"],
+                (
+                    "source_icrs",
+                    "epoch_mjd_utc",
+                    "site_delay_sigma_s",
+                    "clock_sigma_s",
+                    "timing_uncertainty_provenance",
+                ),
+                "joint_fit.geometry",
+            )
+            validate_timing_uncertainties(joint_fit["geometry"])
+            if joint_fit["resolution"].get("crop_and_off_pulse_padding_locked") is not True:
+                raise ValueError("joint fit requires locked crop and padding")
+            _require_keys(
+                joint_fit["resolution"],
+                (
+                    "chime_shape",
+                    "dsa_shape",
+                    "chime_sample_interval_s",
+                    "dsa_sample_interval_s",
+                    "chime_frequency_bin_factor",
+                    "chime_time_bin_factor",
+                    "dsa_frequency_bin_factor",
+                    "dsa_time_bin_factor",
+                    "chime_frequency_grid_sha256",
+                    "dsa_frequency_grid_sha256",
+                    "chime_valid_mask_sha256",
+                    "dsa_valid_mask_sha256",
+                    "chime_off_pulse_mask_sha256",
+                    "dsa_off_pulse_mask_sha256",
+                    "chime_time0_unix_ns",
+                    "dsa_time0_unix_ns",
+                ),
+                "joint_fit.resolution",
+            )
+            for key in (
+                "chime_frequency_grid_sha256",
+                "dsa_frequency_grid_sha256",
+                "chime_valid_mask_sha256",
+                "dsa_valid_mask_sha256",
+                "chime_off_pulse_mask_sha256",
+                "dsa_off_pulse_mask_sha256",
+            ):
+                if SHA256_RE.fullmatch(joint_fit["resolution"][key]) is None:
+                    raise ValueError(f"joint_fit.resolution.{key} must be SHA-256")
+            _require_keys(
+                joint_fit["sampler"],
+                ("seed", "nlive", "dlogz"),
+                "joint_fit.sampler",
+            )
+            _require_keys(
+                joint_fit["acceptance"],
+                (
+                    "maximum_reduced_residual_power",
+                    "maximum_structured_residual_correlation",
+                    "posterior_edge_fraction",
+                    "maximum_prior_edge_mass",
+                ),
+                "joint_fit.acceptance",
+            )
+        elif joint_fit["status"] != "blocked_pending_reviewed_inputs":
+            raise ValueError("joint_fit status is invalid")
+        elif not blockers or joint_fit["execution_authorized"] is not False:
+            raise ValueError("blocked joint fit needs blockers and disabled execution")
 
     workflow = config["workflow"]
     _require_keys(
@@ -475,8 +644,20 @@ def validate_config(
         ),
         "workflow",
     )
-    if workflow["stages"] != list(STAGES):
-        raise ValueError(f"workflow.stages must equal {list(STAGES)}")
+    legacy_stages = [
+        "preflight",
+        "dsa_audit",
+        "chime_hybrid",
+        "dsa_products",
+        "geometry",
+        "packet",
+        "manifests",
+    ]
+    allowed_stages = [list(STAGES)]
+    if joint_fit is None:
+        allowed_stages.append(legacy_stages)
+    if workflow["stages"] not in allowed_stages:
+        raise ValueError(f"workflow.stages must equal one of {allowed_stages}")
     if not isinstance(workflow["execution_authorized"], bool):
         raise ValueError("workflow.execution_authorized must be boolean")
     if (
@@ -526,10 +707,7 @@ def validate_config(
             ),
             "review.dsa_input_state",
         )
-        if (
-            dsa_input_state["authority"]
-            != "raw_reference_row_timing_v3_value_or_bound"
-        ):
+        if dsa_input_state["authority"] != "raw_reference_row_timing_v3_value_or_bound":
             raise ValueError("review.dsa_input_state.authority is invalid")
         if dsa_input_state["independent_uncertainty_review_status"] not in {
             "pending",
@@ -540,34 +718,32 @@ def validate_config(
             dsa_input_state["reconstruction_sha256"],
             "review.dsa_input_state.reconstruction_sha256",
         )
-        if not isinstance(
-            dsa_input_state["accepted_for_config_review"],
-            bool,
-        ) or not isinstance(
-            dsa_input_state["conservative_bound_accepted_for_config_review"],
-            bool,
-        ) or not isinstance(
-            dsa_input_state["material_nonzero_residual_proven"],
-            bool,
+        if (
+            not isinstance(
+                dsa_input_state["accepted_for_config_review"],
+                bool,
+            )
+            or not isinstance(
+                dsa_input_state["conservative_bound_accepted_for_config_review"],
+                bool,
+            )
+            or not isinstance(
+                dsa_input_state["material_nonzero_residual_proven"],
+                bool,
+            )
         ):
             raise ValueError("review DSA decisions must be boolean")
         if float(dsa_input_state["conservative_uncertainty_pc_cm3"]) <= 0:
             raise ValueError("review DSA uncertainty must be positive")
         if not is_regression_fixture:
-            if (
-                dsa_input_state["reconstruction_sha256"]
-                != dsa["input_dm_reconstruction_sha256"]
-            ):
+            if dsa_input_state["reconstruction_sha256"] != dsa["input_dm_reconstruction_sha256"]:
                 raise ValueError("review and DSA reconstruction hashes differ")
             if dsa_input_state["material_nonzero_residual_proven"] != (
-                dsa["input_dm_method"]
-                == "inferred_raw_reference_row_timing"
+                dsa["input_dm_method"] == "inferred_raw_reference_row_timing"
             ):
                 raise ValueError("review material flag contradicts DSA input method")
             residual_dm = float(dsa["reference_minus_raw_dm_pc_cm3"])
-            inferred_raw_dm = float(
-                dsa_input_state["inferred_raw_input_dm_pc_cm3"]
-            )
+            inferred_raw_dm = float(dsa_input_state["inferred_raw_input_dm_pc_cm3"])
             accepted_dm = float(dsa["accepted_reference_dm_pc_cm3"])
             if abs(inferred_raw_dm - (accepted_dm - residual_dm)) > 1.0e-12:
                 raise ValueError("review inferred raw DSA DM contradicts residual")
@@ -582,40 +758,27 @@ def validate_config(
                     abs(float(interval[0])),
                     abs(float(interval[1])),
                 )
-                method_accepted = dsa_input_state[
-                    "conservative_bound_accepted_for_config_review"
-                ]
-            if (
-                abs(
-                    float(dsa["input_dm_half_width_pc_cm3"])
-                    - expected_half_width
-                )
-                > 1.0e-12
-            ):
+                method_accepted = dsa_input_state["conservative_bound_accepted_for_config_review"]
+            if abs(float(dsa["input_dm_half_width_pc_cm3"]) - expected_half_width) > 1.0e-12:
                 raise ValueError("DSA input-DM half-width contradicts review evidence")
             if not method_accepted:
                 raise ValueError("selected DSA input-DM method is not review-admissible")
         if review["configuration_status"] == "reviewed" and not (
             dsa_input_state["accepted_for_config_review"]
-            or dsa_input_state[
-                "conservative_bound_accepted_for_config_review"
-            ]
+            or dsa_input_state["conservative_bound_accepted_for_config_review"]
         ):
             raise ValueError("reviewed DSA state has neither value nor bound")
         if workflow["execution_authorized"] and (
             review["configuration_status"] != "reviewed"
-            or dsa_input_state["independent_uncertainty_review_status"]
-            != "passed"
+            or dsa_input_state["independent_uncertainty_review_status"] != "passed"
             or not (
                 dsa_input_state["accepted_for_config_review"]
-                or dsa_input_state[
-                    "conservative_bound_accepted_for_config_review"
-                ]
+                or dsa_input_state["conservative_bound_accepted_for_config_review"]
             )
         ):
-            raise PermissionError(
-                "execution requires reviewed, unblocked DSA value or bound"
-            )
+            raise PermissionError("execution requires reviewed, unblocked DSA value or bound")
+    if require_execution_authorized and joint_fit is not None and joint_fit["status"] != "ready":
+        raise PermissionError("joint fit is blocked pending reviewed inputs")
     if require_execution_authorized and workflow["execution_authorized"] is not True:
         raise PermissionError("event execution is not authorized by this config")
 
@@ -663,23 +826,17 @@ def legacy_stage_config(config: dict[str, Any]) -> dict[str, Any]:
         "accepted_chime_reference": paths["accepted_chime_reference"],
         "expected_h5_sha256": hashes["raw_chime_h5"],
         "expected_chime_reference_sha256": hashes["accepted_chime_reference"],
-        "accepted_chime_reference_dm_pc_cm3": chime[
-            "accepted_reference_dm_pc_cm3"
-        ],
+        "accepted_chime_reference_dm_pc_cm3": chime["accepted_reference_dm_pc_cm3"],
         "anchor_dm_pc_cm3": chime["anchor_dm_pc_cm3"],
         "upchannel_factor": chime["upchannel_factor"],
         "window_s": chime["window_s"],
         **grid,
         "oracle_half_width_pc_cm3": gates["oracle_half_width_pc_cm3"],
-        "oracle_material_threshold_pc_cm3": gates[
-            "oracle_material_threshold_pc_cm3"
-        ],
+        "oracle_material_threshold_pc_cm3": gates["oracle_material_threshold_pc_cm3"],
         "oracle_normalised_curve_max_abs_difference": gates[
             "oracle_normalised_curve_max_abs_difference"
         ],
-        "oracle_center_score_ratio_tolerance": gates[
-            "oracle_center_score_ratio_tolerance"
-        ],
+        "oracle_center_score_ratio_tolerance": gates["oracle_center_score_ratio_tolerance"],
         "reference_pulse_fwhm_s": chime["reference_pulse_fwhm_s"],
         "smearing_max_fraction_of_upchannel_sample": gates[
             "smearing_max_fraction_of_upchannel_sample"
@@ -694,9 +851,7 @@ def legacy_stage_config(config: dict[str, Any]) -> dict[str, Any]:
         "accepted_dsa_reference": paths["accepted_dsa_reference"],
         "expected_dsa_raw_sha256": hashes["raw_dsa_filterbank"],
         "expected_dsa_reference_sha256": hashes["accepted_dsa_reference"],
-        "accepted_dsa_reference_dm_pc_cm3": dsa[
-            "accepted_reference_dm_pc_cm3"
-        ],
+        "accepted_dsa_reference_dm_pc_cm3": dsa["accepted_reference_dm_pc_cm3"],
         "raw_dsa_crop_start_sample": dsa["raw_crop_start_sample"],
         "dsa_crop_samples": dsa["crop_samples"],
         "dsa_padding_samples": dsa["padding_samples"],
@@ -704,44 +859,29 @@ def legacy_stage_config(config: dict[str, Any]) -> dict[str, Any]:
         "expected_dsa_support": dsa["accepted_support"],
         "dsa_gates": dsa["gates"],
         "reference_frequency_mhz": config["geometry"]["reference_frequency_mhz"],
-        "dsa_native_frequency_mhz": config["geometry"][
-            "dsa_native_frequency_mhz"
-        ],
+        "dsa_native_frequency_mhz": config["geometry"]["dsa_native_frequency_mhz"],
         **(
             {
                 "dsa_state_reconstruction": paths["dsa_state_reconstruction"],
-                "expected_dsa_state_reconstruction_sha256": hashes[
-                    "dsa_state_reconstruction"
-                ],
+                "expected_dsa_state_reconstruction_sha256": hashes["dsa_state_reconstruction"],
                 "input_dsa_dm_pc_cm3": dsa["input_dm_pc_cm3"],
                 "input_dsa_dm_method": dsa["input_dm_method"],
                 "input_dsa_dm_bound_source": dsa["input_dm_bound_source"],
-                "input_dsa_dm_half_width_pc_cm3": dsa[
-                    "input_dm_half_width_pc_cm3"
-                ],
-                "reference_minus_raw_dsa_dm_pc_cm3": dsa[
-                    "reference_minus_raw_dm_pc_cm3"
-                ],
+                "input_dsa_dm_half_width_pc_cm3": dsa["input_dm_half_width_pc_cm3"],
+                "reference_minus_raw_dsa_dm_pc_cm3": dsa["reference_minus_raw_dm_pc_cm3"],
                 "reference_minus_raw_dsa_dm_interval_pc_cm3": dsa[
                     "reference_minus_raw_dm_interval_pc_cm3"
                 ],
                 "raw_dsa_reference_frequency_crop_start_sample": dsa[
                     "raw_reference_frequency_crop_start_sample"
                 ],
-                "expected_dsa_native_sample_time_s": dsa[
-                    "native_sample_time_s"
-                ],
+                "expected_dsa_native_sample_time_s": dsa["native_sample_time_s"],
                 **(
                     {
-                        "dsa_state_calibration": paths[
-                            "dsa_state_calibration"
-                        ],
-                        "expected_dsa_state_calibration_sha256": hashes[
-                            "dsa_state_calibration"
-                        ],
+                        "dsa_state_calibration": paths["dsa_state_calibration"],
+                        "expected_dsa_state_calibration_sha256": hashes["dsa_state_calibration"],
                     }
-                    if dsa["input_dm_bound_source"]
-                    == "calibrated_v3_integer_interval_intersection"
+                    if dsa["input_dm_bound_source"] == "calibrated_v3_integer_interval_intersection"
                     else {}
                 ),
             }

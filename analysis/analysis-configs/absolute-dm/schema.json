@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://faber2026.jakobfaber.com/schemas/one-event-absolute-dm-v1.json",
-  "title": "Faber2026 experimental one-event anchored-hybrid absolute-DM workflow",
-  "description": "Experimental diagnostic contract only. Schema validity does not establish science authority or manuscript admissibility.",
+  "title": "Faber2026 geometry-constrained one-event joint fitting workflow",
+  "description": "Formal joint-fit configuration plus historical compatibility fields. Schema validity does not establish science authority or manuscript admissibility.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -322,6 +322,232 @@
         }
       }
     },
+    "joint_fit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "execution_authorized",
+        "reference_frequency_mhz",
+        "blockers",
+        "geometry",
+        "resolution"
+      ],
+      "properties": {
+        "status": {
+          "enum": ["blocked_pending_reviewed_inputs", "ready"]
+        },
+        "execution_authorized": {
+          "type": "boolean"
+        },
+        "reference_frequency_mhz": {
+          "const": 400.0
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "geometry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_icrs",
+            "epoch_mjd_utc",
+            "maximum_projection_disagreement_s"
+          ],
+          "properties": {
+            "source_icrs": {"type": "string", "minLength": 1},
+            "epoch_mjd_utc": {"type": ["string", "number"]},
+            "maximum_projection_disagreement_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "site_delay_sigma_s": {
+              "$ref": "#/$defs/instrumentPositiveValues"
+            },
+            "clock_sigma_s": {
+              "$ref": "#/$defs/instrumentPositiveValues"
+            },
+            "timing_uncertainty_provenance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "inter_site_clock_sigma_s",
+                "clock_allocation",
+                "clock_basis",
+                "site_delay_basis",
+                "absolute_utc_calibration_status",
+                "owner_adoption_date"
+              ],
+              "properties": {
+                "status": {"const": "owner_adopted_provisional_bounds"},
+                "inter_site_clock_sigma_s": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "clock_allocation": {
+                  "const": "equal_independent_station_terms"
+                },
+                "clock_basis": {"type": "string", "minLength": 1},
+                "site_delay_basis": {"type": "string", "minLength": 1},
+                "absolute_utc_calibration_status": {
+                  "const": "not_independently_measured"
+                },
+                "owner_adoption_date": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "crop_and_off_pulse_padding_locked"
+          ],
+          "properties": {
+            "status": {"type": "string", "minLength": 1},
+            "crop_and_off_pulse_padding_locked": {"type": "boolean"},
+            "chime_shape": {"$ref": "#/$defs/arrayShape"},
+            "dsa_shape": {"$ref": "#/$defs/arrayShape"},
+            "chime_sample_interval_s": {"type": "number", "exclusiveMinimum": 0},
+            "dsa_sample_interval_s": {"type": "number", "exclusiveMinimum": 0},
+            "chime_frequency_bin_factor": {"type": ["integer", "null"], "minimum": 1},
+            "chime_time_bin_factor": {"type": ["integer", "null"], "minimum": 1},
+            "dsa_frequency_bin_factor": {"type": ["integer", "null"], "minimum": 1},
+            "dsa_time_bin_factor": {"type": ["integer", "null"], "minimum": 1},
+            "chime_frequency_grid_sha256": {"$ref": "#/$defs/sha256"},
+            "dsa_frequency_grid_sha256": {"$ref": "#/$defs/sha256"},
+            "chime_valid_mask_sha256": {"$ref": "#/$defs/sha256"},
+            "dsa_valid_mask_sha256": {"$ref": "#/$defs/sha256"},
+            "chime_off_pulse_mask_sha256": {"$ref": "#/$defs/sha256"},
+            "dsa_off_pulse_mask_sha256": {"$ref": "#/$defs/sha256"},
+            "chime_time0_unix_ns": {"type": ["integer", "null"]},
+            "dsa_time0_unix_ns": {"type": ["integer", "null"]}
+          }
+        },
+        "components": {"type": "array", "minItems": 2},
+        "associations": {"type": "array", "minItems": 1},
+        "dm_bounds_pc_cm3": {"$ref": "#/$defs/numberPair"},
+        "morphologies": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["gaussian", "scattering"]}
+        },
+        "scattering_tau_1ghz_bounds_s": {"$ref": "#/$defs/numberPair"},
+        "scattering_alpha_bounds": {"$ref": "#/$defs/numberPair"},
+        "gain_variance": {"type": "number", "exclusiveMinimum": 0},
+        "sampler": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["seed", "nlive", "dlogz"],
+          "properties": {
+            "seed": {"type": "integer"},
+            "nlive": {"type": "integer", "minimum": 20},
+            "dlogz": {"type": "number", "exclusiveMinimum": 0},
+            "sample": {"type": "string", "minLength": 1},
+            "pool_size": {"type": "integer", "minimum": 1},
+            "resume": {"type": "boolean"}
+          }
+        },
+        "acceptance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maximum_reduced_residual_power",
+            "maximum_structured_residual_correlation",
+            "posterior_edge_fraction",
+            "maximum_prior_edge_mass"
+          ],
+          "properties": {
+            "maximum_reduced_residual_power": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maximum_structured_residual_correlation": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "posterior_edge_fraction": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 0.5
+            },
+            "maximum_prior_edge_mass": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 0.5
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "ready"}}},
+          "then": {
+            "required": [
+              "components",
+              "associations",
+              "dm_bounds_pc_cm3",
+              "morphologies",
+              "scattering_tau_1ghz_bounds_s",
+              "scattering_alpha_bounds",
+              "gain_variance",
+              "sampler",
+              "acceptance"
+            ],
+            "properties": {
+              "execution_authorized": {"const": true},
+              "blockers": {"maxItems": 0},
+              "geometry": {
+                "required": [
+                  "site_delay_sigma_s",
+                  "clock_sigma_s",
+                  "timing_uncertainty_provenance"
+                ]
+              },
+              "resolution": {
+                "required": [
+                  "chime_shape",
+                  "dsa_shape",
+                  "chime_sample_interval_s",
+                  "dsa_sample_interval_s",
+                  "chime_frequency_bin_factor",
+                  "chime_time_bin_factor",
+                  "dsa_frequency_bin_factor",
+                  "dsa_time_bin_factor",
+                  "chime_frequency_grid_sha256",
+                  "dsa_frequency_grid_sha256",
+                  "chime_valid_mask_sha256",
+                  "dsa_valid_mask_sha256",
+                  "chime_off_pulse_mask_sha256",
+                  "dsa_off_pulse_mask_sha256",
+                  "chime_time0_unix_ns",
+                  "dsa_time0_unix_ns"
+                ],
+                "properties": {
+                  "crop_and_off_pulse_padding_locked": {"const": true},
+                  "chime_frequency_bin_factor": {"type": "integer"},
+                  "chime_time_bin_factor": {"type": "integer"},
+                  "dsa_frequency_bin_factor": {"type": "integer"},
+                  "dsa_time_bin_factor": {"type": "integer"}
+                  ,
+                  "chime_time0_unix_ns": {"type": "integer"},
+                  "dsa_time0_unix_ns": {"type": "integer"}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "workflow": {
       "type": "object",
       "additionalProperties": false,
@@ -348,14 +574,33 @@
           "pattern": "^/"
         },
         "stages": {
-          "const": [
-            "preflight",
-            "dsa_audit",
-            "chime_hybrid",
-            "dsa_products",
-            "geometry",
-            "packet",
-            "manifests"
+          "oneOf": [
+            {
+              "const": [
+                "preflight",
+                "dsa_audit",
+                "chime_products",
+                "dsa_products",
+                "geometry_constraint",
+                "joint_fit",
+                "chime_oracle",
+                "dsa_oracle",
+                "oracle_check",
+                "packet",
+                "manifests"
+              ]
+            },
+            {
+              "const": [
+                "preflight",
+                "dsa_audit",
+                "chime_hybrid",
+                "dsa_products",
+                "geometry",
+                "packet",
+                "manifests"
+              ]
+            }
           ]
         }
       }
@@ -490,6 +735,35 @@
     "positive_number": {
       "type": "number",
       "exclusiveMinimum": 0
+    },
+    "numberPair": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number"},
+        {"type": "number"}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "arrayShape": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "integer", "minimum": 1},
+        {"type": "integer", "minimum": 1}
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "instrumentPositiveValues": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chime", "dsa"],
+      "properties": {
+        "chime": {"type": "number", "exclusiveMinimum": 0},
+        "dsa": {"type": "number", "exclusiveMinimum": 0}
+      }
     },
     "chime_grid": {
       "type": "object",

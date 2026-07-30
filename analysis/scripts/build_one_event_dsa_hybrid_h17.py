@@ -13,6 +13,12 @@ from absolute_dm_voltage import K_DM_S_MHZ2, REFERENCE_FREQUENCY_MHZ, sha256
 from blimpy import Waterfall
 from one_event_workflow import legacy_stage_config, load_config
 
+from radio_pipeline.fitting import DispersionState
+from radio_pipeline.fitting.products import (
+    mjd_crop_time0_unix_ns,
+    write_band_observation_product,
+)
+
 
 def apply_residual_dm(
     waterfall: np.ndarray,
@@ -71,9 +77,7 @@ def apply_residual_dm_absolute_crop(
     output_offset = np.arange(crop_samples, dtype=float)
     corrected = np.full((values.shape[0], crop_samples), np.nan, dtype=float)
     for row, shift in enumerate(shift_sample):
-        source_coordinate = (
-            float(reference_frequency_crop_start_sample) + output_offset - shift
-        )
+        source_coordinate = float(reference_frequency_crop_start_sample) + output_offset - shift
         corrected[row] = np.interp(
             source_coordinate,
             source_axis,
@@ -163,10 +167,7 @@ def reference_400_timing_half_width(
         1000.0
         * K_DM_S_MHZ2
         * float(input_dm_half_width_pc_cm3)
-        * abs(
-            REFERENCE_FREQUENCY_MHZ**-2
-            - float(native_frequency_mhz) ** -2
-        )
+        * abs(REFERENCE_FREQUENCY_MHZ**-2 - float(native_frequency_mhz) ** -2)
     )
     return {
         "ms": half_width_ms,
@@ -181,23 +182,13 @@ def endpoint_gate_summary(
     timing_limit_native_samples: float,
     correlation_limit: float,
 ) -> dict:
-    rows = [
-        endpoint
-        for target in endpoint_review.values()
-        for endpoint in target.values()
-    ]
+    rows = [endpoint for target in endpoint_review.values() for endpoint in target.values()]
     if not rows:
         raise ValueError("endpoint review is empty")
-    maximum_measured_lag = max(
-        abs(int(row["measured_profile_lag_native_samples"]))
-        for row in rows
-    )
-    minimum_correlation = min(
-        float(row["peak_aligned_profile_correlation"]) for row in rows
-    )
+    maximum_measured_lag = max(abs(int(row["measured_profile_lag_native_samples"])) for row in rows)
+    minimum_correlation = min(float(row["peak_aligned_profile_correlation"]) for row in rows)
     timing_passed = bool(
-        predicted_timing_half_width_native_samples
-        <= timing_limit_native_samples
+        predicted_timing_half_width_native_samples <= timing_limit_native_samples
         and maximum_measured_lag <= timing_limit_native_samples
         and all(row["timing_gate_passed"] for row in rows)
     )
@@ -268,30 +259,54 @@ def _write_product(
     target_dm: float,
     input_dm: float,
     source_start_sample: float,
+    time0_unix_ns: int,
+    channel_width_mhz: float,
+    input_sha256: dict[str, str],
     input_assumption: str = "nominal",
 ) -> dict:
     output = np.asarray(waterfall, dtype=float).copy()
     output[~accepted_live] = np.nan
-    np.savez_compressed(
+    valid = np.asarray(accepted_live, dtype=bool)[:, None] & np.isfinite(output)
+    receipt = write_band_observation_product(
         path,
-        waterfall=output.astype(np.float32),
-        frequency_mhz=np.asarray(frequency_mhz, dtype=np.float64),
-        accepted_live=np.asarray(accepted_live, dtype=bool),
-        sample_time_s=np.asarray(sample_time_s),
-        target_total_dm_pc_cm3=np.asarray(target_dm),
-        input_total_dm_pc_cm3=np.asarray(input_dm),
-        applied_residual_dm_pc_cm3=np.asarray(target_dm - input_dm),
-        source_start_sample=np.asarray(source_start_sample),
-        input_dm_assumption=np.asarray(input_assumption),
+        instrument="dsa",
+        waterfall=output,
+        valid=valid,
+        frequency_mhz=frequency_mhz,
+        channel_width_mhz=channel_width_mhz,
+        sample_interval_s=sample_time_s,
+        time0_unix_ns=time0_unix_ns,
+        dispersion=DispersionState(
+            input_dm_pc_cm3=input_dm,
+            coherent_correction_pc_cm3=0.0,
+            incoherent_correction_pc_cm3=target_dm - input_dm,
+            product_dm_pc_cm3=target_dm,
+            mode="audited_filterbank_state_plus_fractional_residual",
+        ),
+        input_sha256=input_sha256,
+        extra={
+            "accepted_live": np.asarray(accepted_live, dtype=bool),
+            "sample_time_s": np.asarray(sample_time_s),
+            "target_total_dm_pc_cm3": np.asarray(target_dm),
+            "input_total_dm_pc_cm3": np.asarray(input_dm),
+            "applied_residual_dm_pc_cm3": np.asarray(target_dm - input_dm),
+            "source_start_sample": np.asarray(source_start_sample),
+            "input_dm_assumption": np.asarray(input_assumption),
+            "frequency_bin_factor": np.asarray(1),
+            "time_bin_factor": np.asarray(1),
+        },
     )
-    return {
-        "path": str(path),
-        "sha256": sha256(path),
-        "target_total_dm_pc_cm3": target_dm,
-        "input_total_dm_pc_cm3": input_dm,
-        "applied_residual_dm_pc_cm3": target_dm - input_dm,
-        "input_dm_assumption": input_assumption,
-    }
+    receipt.update(
+        {
+            "target_total_dm_pc_cm3": target_dm,
+            "input_total_dm_pc_cm3": input_dm,
+            "applied_residual_dm_pc_cm3": target_dm - input_dm,
+            "input_dm_assumption": input_assumption,
+            "frequency_bin_factor": 1,
+            "time_bin_factor": 1,
+        }
+    )
+    return receipt
 
 
 def run(
@@ -299,6 +314,8 @@ def run(
     chime_result: dict,
     dsa_audit: dict,
     output_dir: Path,
+    *,
+    verification_dms_pc_cm3: np.ndarray | None = None,
 ) -> dict:
     event = config["event"]
     expected_status = config["result_status"]
@@ -370,9 +387,7 @@ def run(
             > 1.0e-12
         ):
             raise RuntimeError("DSA audit residual differs from configuration")
-        crop_start = float(
-            config["raw_dsa_reference_frequency_crop_start_sample"]
-        )
+        crop_start = float(config["raw_dsa_reference_frequency_crop_start_sample"])
     else:
         if abs(float(state["inferred_reference_minus_raw_dm_pc_cm3"])) > float(
             gates["reference_minus_raw_dm_abs_max_pc_cm3"]
@@ -390,13 +405,26 @@ def run(
     reference = np.load(reference_path)
     accepted_live = _accepted_support(reference, config["expected_dsa_support"])
     sample_time_s = float(reader.header["tsamp"])
-    if uncertainty_mode and abs(
-        sample_time_s - float(config["expected_dsa_native_sample_time_s"])
-    ) > 1.0e-15:
+    if (
+        uncertainty_mode
+        and abs(sample_time_s - float(config["expected_dsa_native_sample_time_s"])) > 1.0e-15
+    ):
         raise RuntimeError("DSA native sample time differs from configuration")
-    frequency_mhz = float(reader.header["fch1"]) + float(
-        reader.header["foff"]
-    ) * np.arange(int(reader.header["nchans"]))
+    frequency_mhz = float(reader.header["fch1"]) + float(reader.header["foff"]) * np.arange(
+        int(reader.header["nchans"])
+    )
+    if "tstart" not in reader.header:
+        raise RuntimeError("DSA filterbank lacks an authoritative MJD time origin")
+    product_time0_unix_ns = mjd_crop_time0_unix_ns(
+        reader.header["tstart"],
+        crop_start,
+        sample_time_s,
+    )
+    channel_width_mhz = abs(float(reader.header["foff"]))
+    input_hashes = {
+        "raw_dsa_filterbank": expected_raw_sha256,
+        "accepted_dsa_reference": expected_reference_sha256,
+    }
     input_dm = float(
         config["input_dsa_dm_pc_cm3"]
         if uncertainty_mode
@@ -436,6 +464,9 @@ def run(
         target_dm=input_dm,
         input_dm=input_dm,
         source_start_sample=crop_start,
+        time0_unix_ns=product_time0_unix_ns,
+        channel_width_mhz=channel_width_mhz,
+        input_sha256=input_hashes,
     )
     products["accepted_reference_dm"] = _write_product(
         output_dir / "dsa_accepted_reference_dm.npz",
@@ -446,13 +477,30 @@ def run(
         target_dm=float(config["accepted_dsa_reference_dm_pc_cm3"]),
         input_dm=input_dm,
         source_start_sample=crop_start,
+        time0_unix_ns=product_time0_unix_ns,
+        channel_width_mhz=channel_width_mhz,
+        input_sha256=input_hashes,
         input_assumption="external_accepted_reference",
     )
-    targets = {
-        "anchor_dm": float(chime_result["hybrid_method"]["anchor_dm_pc_cm3"]),
-        "hybrid_fit_dm": float(chime_result["grid"]["fit"]["dm_pc_cm3"]),
-        "geometry_dm": float(config["geometry_dm_pc_cm3"]),
-    }
+    if verification_dms_pc_cm3 is None:
+        targets = {
+            "anchor_dm": float(chime_result["hybrid_method"]["anchor_dm_pc_cm3"]),
+            "hybrid_fit_dm": float(chime_result["grid"]["fit"]["dm_pc_cm3"]),
+            "geometry_dm": float(config["geometry_dm_pc_cm3"]),
+        }
+        target_role = "legacy_absolute_dm_diagnostics"
+    else:
+        values = np.asarray(verification_dms_pc_cm3, dtype=float)
+        if values.shape != (3,) or not np.all(np.diff(values) > 0):
+            raise ValueError("posterior verification DMs must be ordered lower, median, upper")
+        targets = dict(
+            zip(
+                ("posterior_lower", "posterior_median", "posterior_upper"),
+                map(float, values),
+                strict=True,
+            )
+        )
+        target_role = "joint_posterior_lower_median_upper"
     endpoint_review: dict[str, dict] = {}
     if uncertainty_mode:
         half_width = float(config["input_dsa_dm_half_width_pc_cm3"])
@@ -468,17 +516,9 @@ def run(
             sample_time_s,
         )
         reference_timing_half_width_ms = float(reference_timing["ms"])
-        reference_timing_half_width_native_samples = float(
-            reference_timing["native_samples"]
-        )
-        timing_limit = float(
-            gates[
-                "input_dm_reference_timing_half_width_max_native_samples"
-            ]
-        )
-        correlation_limit = float(
-            gates["input_dm_aligned_profile_correlation_min"]
-        )
+        reference_timing_half_width_native_samples = float(reference_timing["native_samples"])
+        timing_limit = float(gates["input_dm_reference_timing_half_width_max_native_samples"])
+        correlation_limit = float(gates["input_dm_aligned_profile_correlation_min"])
         correlation_search_lag = min(
             window // 4,
             max(
@@ -500,15 +540,10 @@ def run(
                 )
                 if not np.all(np.isfinite(corrected[accepted_live])):
                     raise RuntimeError(
-                        f"DSA {label}/{assumption} correction reached "
-                        "the fixed-crop edge"
+                        f"DSA {label}/{assumption} correction reached the fixed-crop edge"
                     )
                 endpoint_arrays[assumption] = corrected
-                product_key = (
-                    label
-                    if assumption == "nominal"
-                    else f"{label}_input_{assumption}"
-                )
+                product_key = label if assumption == "nominal" else f"{label}_input_{assumption}"
                 products[product_key] = _write_product(
                     output_dir / f"dsa_{product_key}.npz",
                     waterfall=corrected,
@@ -518,6 +553,9 @@ def run(
                     target_dm=target_dm,
                     input_dm=assumed_input_dm,
                     source_start_sample=crop_start,
+                    time0_unix_ns=product_time0_unix_ns,
+                    channel_width_mhz=channel_width_mhz,
+                    input_sha256=input_hashes,
                     input_assumption=assumption,
                 )
             for assumption in ("low", "high"):
@@ -527,33 +565,20 @@ def run(
                     accepted_live,
                     maximum_lag_samples=correlation_search_lag,
                 )
-                delta_input_dm = (
-                    input_assumptions[assumption] - input_assumptions["nominal"]
-                )
+                delta_input_dm = input_assumptions[assumption] - input_assumptions["nominal"]
                 predicted_shift_ms = (
                     1000.0
                     * K_DM_S_MHZ2
                     * delta_input_dm
-                    * (
-                        REFERENCE_FREQUENCY_MHZ**-2
-                        - native_frequency_mhz**-2
-                    )
+                    * (REFERENCE_FREQUENCY_MHZ**-2 - native_frequency_mhz**-2)
                 )
-                predicted_shift_samples = predicted_shift_ms / (
-                    1000.0 * sample_time_s
-                )
+                predicted_shift_samples = predicted_shift_ms / (1000.0 * sample_time_s)
                 endpoint_review[label][assumption] = {
                     "input_dm_pc_cm3": input_assumptions[assumption],
                     "predicted_400_mhz_timing_shift_ms": predicted_shift_ms,
-                    "predicted_400_mhz_timing_shift_native_samples": (
-                        predicted_shift_samples
-                    ),
-                    "measured_profile_lag_native_samples": int(
-                        metrics["lag_samples"]
-                    ),
-                    "peak_aligned_profile_correlation": float(
-                        metrics["correlation"]
-                    ),
+                    "predicted_400_mhz_timing_shift_native_samples": (predicted_shift_samples),
+                    "measured_profile_lag_native_samples": int(metrics["lag_samples"]),
+                    "peak_aligned_profile_correlation": float(metrics["correlation"]),
                     "timing_gate_passed": bool(
                         abs(predicted_shift_samples) <= timing_limit
                         and abs(int(metrics["lag_samples"])) <= timing_limit
@@ -564,15 +589,12 @@ def run(
                 }
         endpoint_gate = endpoint_gate_summary(
             endpoint_review,
-            predicted_timing_half_width_native_samples=(
-                reference_timing_half_width_native_samples
-            ),
+            predicted_timing_half_width_native_samples=(reference_timing_half_width_native_samples),
             timing_limit_native_samples=timing_limit,
             correlation_limit=correlation_limit,
         )
         gallery_robust = (
-            endpoint_gate["gallery_alignment_conclusion"]
-            == "robust_with_bounded_time_envelope"
+            endpoint_gate["gallery_alignment_conclusion"] == "robust_with_bounded_time_envelope"
         )
         uncertainty_propagation = {
             "input_dm_method": config["input_dsa_dm_method"],
@@ -586,9 +608,7 @@ def run(
             "reference_minus_raw_dm_interval_pc_cm3": config[
                 "reference_minus_raw_dsa_dm_interval_pc_cm3"
             ],
-            "reference_400_timing_half_width_ms": (
-                reference_timing_half_width_ms
-            ),
+            "reference_400_timing_half_width_ms": (reference_timing_half_width_ms),
             "reference_400_timing_half_width_native_samples": (
                 reference_timing_half_width_native_samples
             ),
@@ -598,26 +618,15 @@ def run(
             ),
             "aligned_profile_correlation_min": correlation_limit,
             "maximum_measured_profile_lag_native_samples": (
-                endpoint_gate[
-                    "maximum_measured_profile_lag_native_samples"
-                ]
+                endpoint_gate["maximum_measured_profile_lag_native_samples"]
             ),
             "timing_gate_passed": endpoint_gate["timing_gate_passed"],
-            "morphology_gate_passed": endpoint_gate[
-                "morphology_gate_passed"
-            ],
-            "gallery_alignment_conclusion": endpoint_gate[
-                "gallery_alignment_conclusion"
-            ],
+            "morphology_gate_passed": endpoint_gate["morphology_gate_passed"],
+            "gallery_alignment_conclusion": endpoint_gate["gallery_alignment_conclusion"],
             "endpoints": endpoint_review,
         }
-        if (
-            gates["gallery_alignment_must_be_robust"]
-            and not gallery_robust
-        ):
-            raise RuntimeError(
-                "DSA input-DM endpoint timing/morphology gate failed"
-            )
+        if gates["gallery_alignment_must_be_robust"] and not gallery_robust:
+            raise RuntimeError("DSA input-DM endpoint timing/morphology gate failed")
     else:
         for label, target_dm in targets.items():
             corrected = apply_residual_dm(
@@ -628,9 +637,7 @@ def run(
             )
             fixed_crop = corrected[:, padding : padding + window]
             if not np.all(np.isfinite(fixed_crop[accepted_live])):
-                raise RuntimeError(
-                    f"DSA {label} correction reached the fixed-crop edge"
-                )
+                raise RuntimeError(f"DSA {label} correction reached the fixed-crop edge")
             products[label] = _write_product(
                 output_dir / f"dsa_{label}.npz",
                 waterfall=fixed_crop,
@@ -640,6 +647,9 @@ def run(
                 target_dm=target_dm,
                 input_dm=input_dm,
                 source_start_sample=crop_start,
+                time0_unix_ns=product_time0_unix_ns,
+                channel_width_mhz=channel_width_mhz,
+                input_sha256=input_hashes,
             )
         uncertainty_propagation = None
 
@@ -677,9 +687,7 @@ def run(
                 else "header_independent_legacy_exact_crop_audit"
             ),
             "input_dm_half_width_pc_cm3": (
-                float(config["input_dsa_dm_half_width_pc_cm3"])
-                if uncertainty_mode
-                else 0.0
+                float(config["input_dsa_dm_half_width_pc_cm3"]) if uncertainty_mode else 0.0
             ),
             "raw_state_claim": (
                 dsa_audit["input_state_contract"]["raw_state_claim"]
@@ -703,9 +711,7 @@ def run(
             ),
             "direct_frequency_order_median_correlation": direct_correlation,
             "reversed_frequency_order_median_correlation": reversed_correlation,
-            "row_start_residual_mad_samples": float(
-                state["start_residual_mad_samples"]
-            ),
+            "row_start_residual_mad_samples": float(state["start_residual_mad_samples"]),
         },
         "dedispersion": {
             "coordinate": "absolute total DM in pc cm^-3",
@@ -723,6 +729,7 @@ def run(
             "proposed_extra_bad_rows": [],
         },
         "products": products,
+        "target_role": target_role,
         **(
             {"uncertainty_propagation": uncertainty_propagation}
             if uncertainty_propagation is not None
@@ -730,9 +737,7 @@ def run(
         ),
         "display": {
             "normalization": "per-row median and median absolute deviation",
-            "time_crop": (
-                f"accepted {window}-sample {event} crop at raw sample {crop_start}"
-            ),
+            "time_crop": (f"accepted {window}-sample {event} crop at raw sample {crop_start}"),
             "normalization_role": "display only; does not alter row support",
             "upchannelization": "none; native 0.03051757812 MHz rows",
         },
@@ -748,14 +753,28 @@ def main() -> None:
     parser.add_argument("--chime-result", type=Path, required=True)
     parser.add_argument("--dsa-audit", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--joint-fit-result", type=Path)
+    parser.add_argument("--preparation-only", action="store_true")
     args = parser.parse_args()
+    verification_dms = None
+    if args.joint_fit_result is not None:
+        fit_result = json.loads(args.joint_fit_result.read_text())
+        summary = fit_result["shared_absolute_dm_pc_cm3"]
+        verification_dms = np.asarray(
+            [summary["lower"], summary["median"], summary["upper"]],
+            dtype=float,
+        )
     result = run(
         legacy_stage_config(
-            load_config(args.config, require_execution_authorized=True)
+            load_config(
+                args.config,
+                require_execution_authorized=not args.preparation_only,
+            )
         ),
         json.loads(args.chime_result.read_text()),
         json.loads(args.dsa_audit.read_text()),
         args.output_dir,
+        verification_dms_pc_cm3=verification_dms,
     )
     print(
         f"{result['burst']} DSA: "

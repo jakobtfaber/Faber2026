@@ -157,6 +157,45 @@
     "reference_frequency_mhz": 400.0,
     "dsa_native_frequency_mhz": 1530.0
   },
+  "joint_fit": {
+    "status": "blocked_pending_reviewed_inputs",
+    "execution_authorized": false,
+    "reference_frequency_mhz": 400.0,
+    "blockers": [
+      "component_windows_and_associations_not_reviewed",
+      "strict_observation_products_not_regenerated"
+    ],
+    "geometry": {
+      "source_icrs": "11h19m56.05s +70d40m34.4s",
+      "epoch_mjd_utc": "60369.37095221912",
+      "site_delay_sigma_s": {
+        "chime": 5e-7,
+        "dsa": 5e-7
+      },
+      "clock_sigma_s": {
+        "chime": 0.0007071067811865475,
+        "dsa": 0.0007071067811865475
+      },
+      "timing_uncertainty_provenance": {
+        "status": "owner_adopted_provisional_bounds",
+        "inter_site_clock_sigma_s": 0.001,
+        "clock_allocation": "equal_independent_station_terms",
+        "clock_basis": "owner-adopted provisional 1 ms Gaussian standard deviation on the inter-site difference for this fit",
+        "site_delay_basis": "owner-adopted provisional 0.5 us Gaussian standard deviation per station; not inferred from projection agreement",
+        "absolute_utc_calibration_status": "not_independently_measured",
+        "owner_adoption_date": "2026-07-29"
+      },
+      "maximum_projection_disagreement_s": 5e-7
+    },
+    "resolution": {
+      "status": "pending_owner_review",
+      "chime_frequency_bin_factor": null,
+      "chime_time_bin_factor": null,
+      "dsa_frequency_bin_factor": null,
+      "dsa_time_bin_factor": null,
+      "crop_and_off_pulse_padding_locked": false
+    }
+  },
   "workflow": {
     "execution_authorized": false,
     "regression_fixture": true,
@@ -165,12 +204,16 @@
     "stages": [
       "preflight",
       "dsa_audit",
-      "chime_hybrid",
+      "chime_products",
       "dsa_products",
-      "geometry",
+      "geometry_constraint",
+      "joint_fit",
+      "chime_oracle",
+      "dsa_oracle",
+      "oracle_check",
       "packet",
       "manifests"
     ]
   },
-  "event_binding_sha256": "389060875d6abf41f77bd5597064bbebf4da6f2222cee60bbdcd34df6d508a1a"
+  "event_binding_sha256": "d47955732f1191597eecd14ef1f379ce10e827cc29aa3c1a83ed4836be66853f"
 }

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import os
 import socket
@@ -21,9 +22,39 @@ from one_event_workflow import (
     event_binding_sha256,
     load_config,
     sha256_file,
+    validate_timing_uncertainties,
 )
 
 CONTAINER_REPO = Path("/workflow")
+
+
+def _require_supported_python() -> None:
+    if sys.version_info < (3, 12):  # noqa: UP036 - direct script use bypasses packaging
+        raise RuntimeError(
+            "workflow requires Python 3.12 or newer; run with `uv run --locked python`"
+        )
+
+
+def _stage_environment(repo_root: Path) -> dict[str, str]:
+    """Make the current checkout importable without an editable installation."""
+
+    environment = os.environ.copy()
+    existing = environment.get("PYTHONPATH")
+    environment["PYTHONPATH"] = os.pathsep.join(
+        value for value in (str(repo_root.resolve()), existing) if value
+    )
+    return environment
+
+
+def _require_preparation_geometry(config: dict[str, Any]) -> None:
+    geometry = config["joint_fit"]["geometry"]
+    try:
+        validate_timing_uncertainties(geometry)
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError(
+            f"input preparation preflight rejected timing inputs: {exc}; "
+            "no data processing started"
+        ) from exc
 
 
 def _resolve(path: str, repo_root: Path) -> Path:
@@ -36,16 +67,23 @@ def _output_paths(config: dict[str, Any]) -> dict[str, Path]:
     return {
         "root": root,
         "state": root / "workflow-state.json",
+        "preparation_state": root / "preparation-state.json",
         "provenance": root / "run-provenance.json",
         "dsa_audit": root / "dsa_state_audit.json",
         "chime_dir": root / "products" / "chime",
         "chime_result": root / "products" / "chime" / "chime_hybrid_result.json",
         "dsa_dir": root / "products" / "dsa",
         "dsa_result": root / "products" / "dsa" / "dsa_hybrid_result.json",
-        "geometry": root / "geometry.json",
-        "packet_svg": root / "review" / "one_event_hybrid_packet.svg",
-        "packet_png": root / "review" / "one_event_hybrid_packet.png",
-        "packet_receipt": root / "review" / "one_event_hybrid_packet_receipt.json",
+        "geometry_constraint": root / "geometry-constraint.json",
+        "fit_result": root / "fit-result.json",
+        "posterior": root / "posterior.npz",
+        "model_products": root / "model-products.npz",
+        "chime_oracle_dir": root / "oracles" / "chime",
+        "chime_oracle_result": root / "oracles" / "chime" / "chime_hybrid_result.json",
+        "dsa_oracle_dir": root / "oracles" / "dsa",
+        "dsa_oracle_result": root / "oracles" / "dsa" / "dsa_hybrid_result.json",
+        "oracle_verification": root / "oracle-verification.json",
+        "packet_pdf": root / "review-packet.pdf",
         "manifest": root / "manifests" / "workflow-manifest.json",
     }
 
@@ -69,6 +107,7 @@ def build_stage_commands(
     *,
     config_path: Path,
     repo_root: Path,
+    preparation_only: bool = False,
 ) -> dict[str, list[str] | None]:
     """Return exact argv for each stage; no command is run here."""
 
@@ -82,6 +121,8 @@ def build_stage_commands(
         "docker",
         "run",
         "--rm",
+        "-e",
+        f"PYTHONPATH={CONTAINER_REPO}",
         "-v",
         f"{data_mount}:{data_mount}",
         "-v",
@@ -104,8 +145,12 @@ def build_stage_commands(
             str(config_path),
             "--output",
             str(paths["dsa_audit"]),
+            *(["--preparation-only"] if preparation_only else []),
         ],
-        "chime_hybrid": chime_command,
+        "chime_products": [
+            *chime_command,
+            *(["--preparation-only"] if preparation_only else []),
+        ],
         "dsa_products": [
             python,
             str(repo_root / "scripts/build_one_event_dsa_hybrid_h17.py"),
@@ -117,46 +162,98 @@ def build_stage_commands(
             str(paths["dsa_audit"]),
             "--output-dir",
             str(paths["dsa_dir"]),
+            *(["--preparation-only"] if preparation_only else []),
         ],
-        "geometry": [
+        "geometry_constraint": [
             python,
-            str(repo_root / "scripts/recompute_geometry_dm.py"),
-            "--timing-results",
-            str(_resolve(config["paths"]["timing_results"], repo_root)),
-            "--trigger-recovery",
-            str(_resolve(config["paths"]["trigger_recovery"], repo_root)),
-            "--reproduction-fixture",
-            str(_resolve(config["paths"]["reproduction_fixture"], repo_root)),
-            "--event",
-            config["event"],
-            "--event-binding-sha256",
-            config["event_binding_sha256"],
+            str(repo_root / "scripts/build_geometry_constraint.py"),
+            "--config",
+            str(config_path),
             "--output",
-            str(paths["geometry"]),
+            str(paths["geometry_constraint"]),
         ],
-        "packet": [
+        "joint_fit": [
             python,
-            str(repo_root / "scripts/render_one_event_hybrid_packet.py"),
+            str(repo_root / "scripts/fit_one_event_joint_burst.py"),
+            "--config",
+            str(config_path),
+            "--chime-observation",
+            str(paths["chime_dir"] / "chime_anchor_before_residual.npz"),
+            "--dsa-observation",
+            str(paths["dsa_dir"] / "dsa_anchor_dm.npz"),
+            "--geometry-constraint",
+            str(paths["geometry_constraint"]),
+            "--output-dir",
+            str(paths["root"]),
+        ],
+        "chime_oracle": [
+            *chime_command[:-2],
+            "--joint-fit-result",
+            str(paths["fit_result"]),
+            "--output-dir",
+            str(paths["chime_oracle_dir"]),
+        ],
+        "dsa_oracle": [
+            python,
+            str(repo_root / "scripts/build_one_event_dsa_hybrid_h17.py"),
             "--config",
             str(config_path),
             "--chime-result",
             str(paths["chime_result"]),
-            "--dsa-result",
-            str(paths["dsa_result"]),
             "--dsa-audit",
             str(paths["dsa_audit"]),
-            "--run-provenance",
-            str(paths["provenance"]),
-            "--accepted-chime-reference",
-            config["paths"]["accepted_chime_reference"],
-            "--accepted-dsa-reference",
-            config["paths"]["accepted_dsa_reference"],
-            "--output-svg",
-            str(paths["packet_svg"]),
-            "--output-png",
-            str(paths["packet_png"]),
-            "--receipt",
-            str(paths["packet_receipt"]),
+            "--output-dir",
+            str(paths["dsa_oracle_dir"]),
+            "--joint-fit-result",
+            str(paths["fit_result"]),
+        ],
+        "oracle_check": [
+            python,
+            str(repo_root / "scripts/verify_joint_fit_oracles.py"),
+            "--config",
+            str(config_path),
+            "--fit-result",
+            str(paths["fit_result"]),
+            "--chime-result",
+            str(paths["chime_oracle_result"]),
+            "--dsa-result",
+            str(paths["dsa_oracle_result"]),
+            "--posterior",
+            str(paths["posterior"]),
+            "--model-products",
+            str(paths["model_products"]),
+            "--geometry-constraint",
+            str(paths["geometry_constraint"]),
+            "--chime-observation",
+            str(paths["chime_dir"] / "chime_anchor_before_residual.npz"),
+            "--dsa-observation",
+            str(paths["dsa_dir"] / "dsa_anchor_dm.npz"),
+            "--output",
+            str(paths["oracle_verification"]),
+        ],
+        "packet": [
+            python,
+            str(repo_root / "scripts/render_joint_fit_packet.py"),
+            "--chime-observation",
+            str(paths["chime_dir"] / "chime_anchor_before_residual.npz"),
+            "--dsa-observation",
+            str(paths["dsa_dir"] / "dsa_anchor_dm.npz"),
+            "--chime-posterior-observation",
+            str(paths["chime_oracle_dir"] / "chime_fully_coherent_posterior_median.npz"),
+            "--dsa-posterior-observation",
+            str(paths["dsa_oracle_dir"] / "dsa_posterior_median.npz"),
+            "--fit-result",
+            str(paths["fit_result"]),
+            "--posterior",
+            str(paths["posterior"]),
+            "--model-products",
+            str(paths["model_products"]),
+            "--geometry-constraint",
+            str(paths["geometry_constraint"]),
+            "--oracle-verification",
+            str(paths["oracle_verification"]),
+            "--output",
+            str(paths["packet_pdf"]),
         ],
         "manifests": None,
     }
@@ -169,7 +266,7 @@ def expected_stage_outputs(
 ) -> list[Path]:
     if stage == "dsa_audit":
         return [paths["dsa_audit"]]
-    if stage == "chime_hybrid":
+    if stage == "chime_products":
         return [
             paths["chime_result"],
             paths["chime_dir"] / "chime_anchor_before_residual.npz",
@@ -188,15 +285,47 @@ def expected_stage_outputs(
         if config is not None and not config["workflow"]["regression_fixture"]:
             for label in ("anchor_dm", "hybrid_fit_dm", "geometry_dm"):
                 for endpoint in ("low", "high"):
+                    outputs.append(paths["dsa_dir"] / f"dsa_{label}_input_{endpoint}.npz")
+        return outputs
+    if stage == "geometry_constraint":
+        return [paths["geometry_constraint"]]
+    if stage == "joint_fit":
+        return [
+            paths["fit_result"],
+            paths["posterior"],
+            paths["model_products"],
+            paths["provenance"],
+        ]
+    if stage == "chime_oracle":
+        outputs = [
+            paths["chime_oracle_result"],
+            paths["chime_oracle_dir"] / "chime_anchor_before_residual.npz",
+            paths["chime_oracle_dir"] / "chime_hybrid_fit_dm.npz",
+            paths["chime_oracle_dir"] / "chime_geometry_dm.npz",
+        ]
+        outputs.extend(
+            paths["chime_oracle_dir"] / f"chime_fully_coherent_posterior_{label}.npz"
+            for label in ("lower", "median", "upper")
+        )
+        return outputs
+    if stage == "dsa_oracle":
+        outputs = [
+            paths["dsa_oracle_result"],
+            paths["dsa_oracle_dir"] / "dsa_input_dm.npz",
+            paths["dsa_oracle_dir"] / "dsa_accepted_reference_dm.npz",
+        ]
+        for label in ("lower", "median", "upper"):
+            outputs.append(paths["dsa_oracle_dir"] / f"dsa_posterior_{label}.npz")
+            if config is not None and not config["workflow"]["regression_fixture"]:
+                for endpoint in ("low", "high"):
                     outputs.append(
-                        paths["dsa_dir"]
-                        / f"dsa_{label}_input_{endpoint}.npz"
+                        paths["dsa_oracle_dir"] / f"dsa_posterior_{label}_input_{endpoint}.npz"
                     )
         return outputs
-    if stage == "geometry":
-        return [paths["geometry"]]
+    if stage == "oracle_check":
+        return [paths["oracle_verification"]]
     if stage == "packet":
-        return [paths["packet_svg"], paths["packet_png"], paths["packet_receipt"]]
+        return [paths["packet_pdf"]]
     if stage == "manifests":
         return [paths["manifest"]]
     return []
@@ -228,9 +357,53 @@ def outputs_match(
 
 
 def _hash_payload(value: Any) -> str:
-    import hashlib
-
     return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
+
+
+def _array_sha256(*arrays: Any) -> str:
+    import numpy as np
+
+    digest = hashlib.sha256()
+    for array in arrays:
+        value = np.ascontiguousarray(array)
+        digest.update(value.dtype.str.encode())
+        digest.update(repr(value.shape).encode())
+        digest.update(value.view(np.uint8))
+    return digest.hexdigest()
+
+
+def resolution_lock_proposal(paths: dict[str, Path]) -> dict[str, Any]:
+    """Read-only proposal for owner-reviewed locks after product preparation."""
+
+    import numpy as np
+
+    proposal: dict[str, Any] = {
+        "status": "pending_owner_review",
+        "crop_and_off_pulse_padding_locked": False,
+    }
+    for instrument, path in (
+        ("chime", paths["chime_dir"] / "chime_anchor_before_residual.npz"),
+        ("dsa", paths["dsa_dir"] / "dsa_anchor_dm.npz"),
+    ):
+        with np.load(path, allow_pickle=False) as product:
+            proposal.update(
+                {
+                    f"{instrument}_shape": list(product["waterfall"].shape),
+                    f"{instrument}_sample_interval_s": float(product["sample_interval_s"]),
+                    f"{instrument}_frequency_bin_factor": int(product["frequency_bin_factor"]),
+                    f"{instrument}_time_bin_factor": int(product["time_bin_factor"]),
+                    f"{instrument}_frequency_grid_sha256": _array_sha256(
+                        product["frequency_mhz"],
+                        product["channel_width_mhz"],
+                    ),
+                    f"{instrument}_valid_mask_sha256": _array_sha256(product["pixel_valid"]),
+                    f"{instrument}_off_pulse_mask_sha256": _array_sha256(
+                        product["noise_estimation_mask"]
+                    ),
+                    f"{instrument}_time0_unix_ns": int(product["time0_unix_ns"]),
+                }
+            )
+    return proposal
 
 
 def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]:
@@ -245,7 +418,7 @@ def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]
             repo_root / "scripts/audit_one_event_dsa_state_h17.py",
             repo_root / "scripts/absolute_dm_voltage.py",
         ],
-        "chime_hybrid": [
+        "chime_products": [
             repo_root / "scripts/run_one_event_hybrid_absolute_dm_h17.py",
             repo_root / "scripts/one_event_hybrid_dm.py",
             repo_root / "scripts/absolute_dm_voltage.py",
@@ -254,14 +427,31 @@ def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]
             repo_root / "scripts/build_one_event_dsa_hybrid_h17.py",
             repo_root / "scripts/absolute_dm_voltage.py",
         ],
-        "geometry": [repo_root / "scripts/recompute_geometry_dm.py"],
-        "packet": [
-            repo_root / "scripts/render_one_event_hybrid_packet.py",
+        "geometry_constraint": [repo_root / "scripts/build_geometry_constraint.py"],
+        "joint_fit": [
+            repo_root / "scripts/fit_one_event_joint_burst.py",
+            repo_root / "radio_pipeline/fitting/joint_burst.py",
+            repo_root / "radio_pipeline/fitting/products.py",
+            repo_root / "radio_pipeline/fitting/_pulse_kernels.py",
+        ],
+        "chime_oracle": [
+            repo_root / "scripts/run_one_event_hybrid_absolute_dm_h17.py",
+            repo_root / "scripts/one_event_hybrid_dm.py",
             repo_root / "scripts/absolute_dm_voltage.py",
         ],
-        "manifests": [
-            repo_root / "analysis-configs/absolute-dm/schema.json"
+        "dsa_oracle": [
+            repo_root / "scripts/build_one_event_dsa_hybrid_h17.py",
+            repo_root / "scripts/absolute_dm_voltage.py",
         ],
+        "oracle_check": [
+            repo_root / "scripts/verify_joint_fit_oracles.py",
+            repo_root / "radio_pipeline/fitting/products.py",
+            repo_root / "radio_pipeline/fitting/joint_burst.py",
+        ],
+        "packet": [
+            repo_root / "scripts/render_joint_fit_packet.py",
+        ],
+        "manifests": [repo_root / "analysis-configs/absolute-dm/schema.json"],
     }
     return shared + stage_files[stage]
 
@@ -286,9 +476,7 @@ def _stage_input_files(
 ) -> list[Path]:
     source = config["paths"]
     if stage == "preflight":
-        return [
-            _resolve(source[key], repo_root) for key in config["input_sha256"]
-        ]
+        return [_resolve(source[key], repo_root) for key in config["input_sha256"]]
     if stage == "dsa_audit":
         inputs = [
             _resolve(source["raw_dsa_filterbank"], repo_root),
@@ -298,7 +486,7 @@ def _stage_input_files(
             if key in source:
                 inputs.append(_resolve(source[key], repo_root))
         return inputs
-    if stage == "chime_hybrid":
+    if stage == "chime_products":
         return [
             _resolve(source["raw_chime_h5"], repo_root),
             _resolve(source["accepted_chime_reference"], repo_root),
@@ -310,24 +498,61 @@ def _stage_input_files(
             _resolve(source["raw_dsa_filterbank"], repo_root),
             _resolve(source["accepted_dsa_reference"], repo_root),
         ]
-    if stage == "geometry":
+    if stage == "geometry_constraint":
+        return []
+    if stage == "joint_fit":
         return [
-            _resolve(source["timing_results"], repo_root),
-            _resolve(source["trigger_recovery"], repo_root),
-            _resolve(source["reproduction_fixture"], repo_root),
+            paths["chime_dir"] / "chime_anchor_before_residual.npz",
+            paths["dsa_dir"] / "dsa_anchor_dm.npz",
+            paths["geometry_constraint"],
+        ]
+    if stage == "chime_oracle":
+        return [
+            paths["fit_result"],
+            _resolve(source["raw_chime_h5"], repo_root),
+            _resolve(source["accepted_chime_reference"], repo_root),
+        ]
+    if stage == "dsa_oracle":
+        return [
+            paths["fit_result"],
+            paths["chime_result"],
+            paths["dsa_audit"],
+            _resolve(source["raw_dsa_filterbank"], repo_root),
+            _resolve(source["accepted_dsa_reference"], repo_root),
+        ]
+    if stage == "oracle_check":
+        return [
+            paths["fit_result"],
+            paths["posterior"],
+            paths["model_products"],
+            paths["geometry_constraint"],
+            paths["chime_dir"] / "chime_anchor_before_residual.npz",
+            paths["dsa_dir"] / "dsa_anchor_dm.npz",
+            paths["chime_oracle_result"],
+            paths["dsa_oracle_result"],
+            *[
+                path
+                for path in expected_stage_outputs("chime_oracle", paths, config)
+                if path.suffix == ".npz"
+            ],
+            *[
+                path
+                for path in expected_stage_outputs("dsa_oracle", paths, config)
+                if path.suffix == ".npz"
+            ],
         ]
     if stage == "packet":
         inputs = [
-            paths["chime_result"],
-            paths["dsa_result"],
-            paths["dsa_audit"],
-            paths["provenance"],
-            _resolve(source["accepted_chime_reference"], repo_root),
-            _resolve(source["accepted_dsa_reference"], repo_root),
+            paths["chime_dir"] / "chime_anchor_before_residual.npz",
+            paths["dsa_dir"] / "dsa_anchor_dm.npz",
+            paths["chime_oracle_dir"] / "chime_fully_coherent_posterior_median.npz",
+            paths["dsa_oracle_dir"] / "dsa_posterior_median.npz",
+            paths["fit_result"],
+            paths["posterior"],
+            paths["model_products"],
+            paths["geometry_constraint"],
+            paths["oracle_verification"],
         ]
-        for key in ("dsa_state_reconstruction", "dsa_state_calibration"):
-            if key in source:
-                inputs.append(_resolve(source[key], repo_root))
         return inputs
     if stage == "manifests":
         return [
@@ -358,19 +583,27 @@ def _output_schema_matches(
     config: dict[str, Any],
     paths: dict[str, Path],
 ) -> bool:
-    if stage in {"preflight", "chime_hybrid", "dsa_products"}:
+    if stage in {"preflight", "chime_products", "dsa_products"}:
         json_path = {
-            "chime_hybrid": paths["chime_result"],
+            "chime_products": paths["chime_result"],
             "dsa_products": paths["dsa_result"],
         }.get(stage)
         if json_path is None:
             return True
     elif stage == "dsa_audit":
         json_path = paths["dsa_audit"]
-    elif stage == "geometry":
-        json_path = paths["geometry"]
+    elif stage == "geometry_constraint":
+        json_path = paths["geometry_constraint"]
+    elif stage == "joint_fit":
+        json_path = paths["fit_result"]
+    elif stage == "chime_oracle":
+        json_path = paths["chime_oracle_result"]
+    elif stage == "dsa_oracle":
+        json_path = paths["dsa_oracle_result"]
+    elif stage == "oracle_check":
+        json_path = paths["oracle_verification"]
     elif stage == "packet":
-        json_path = paths["packet_receipt"]
+        return paths["packet_pdf"].is_file()
     elif stage == "manifests":
         json_path = paths["manifest"]
     else:
@@ -381,16 +614,18 @@ def _output_schema_matches(
         return False
     if value.get("event_binding_sha256") != config["event_binding_sha256"]:
         return False
-    if stage == "geometry":
-        rows = value.get("results", [])
-        recorded_event = rows[0].get("burst") if len(rows) == 1 else None
-    else:
-        recorded_event = value.get("event", value.get("burst"))
+    recorded_event = value.get("event", value.get("burst"))
     return recorded_event == config["event"]
 
 
 def _output_set_exact(stage: str, expected: list[Path]) -> bool:
-    if stage not in {"chime_hybrid", "dsa_products", "packet", "manifests"}:
+    if stage not in {
+        "chime_products",
+        "dsa_products",
+        "chime_oracle",
+        "dsa_oracle",
+        "manifests",
+    }:
         return True
     if not expected:
         return False
@@ -404,6 +639,8 @@ def _all_workflow_files(
     config: dict[str, Any],
 ) -> set[Path]:
     expected = {paths["state"], paths["provenance"]}
+    if paths["preparation_state"].is_file():
+        expected.add(paths["preparation_state"])
     for stage in STAGES:
         expected.update(expected_stage_outputs(stage, paths, config))
     return expected
@@ -421,17 +658,6 @@ def _workflow_output_set_valid(
     return actual == expected if require_complete else actual.issubset(expected)
 
 
-def _packet_provenance_matches_receipt(paths: dict[str, Path]) -> bool:
-    if not paths["provenance"].is_file() or not paths["packet_receipt"].is_file():
-        return False
-    try:
-        receipt = json.loads(paths["packet_receipt"].read_text())
-        expected = receipt["inputs"]["run_provenance"]["sha256"]
-    except (OSError, ValueError, KeyError, TypeError):
-        return False
-    return sha256_file(paths["provenance"]) == expected
-
-
 def stage_record_matches(
     record: dict[str, Any],
     *,
@@ -446,11 +672,9 @@ def stage_record_matches(
     try:
         return (
             record.get("event_binding_sha256") == config["event_binding_sha256"]
-            and record.get("control_sha256")
-            == stage_control_sha256(stage, repo_root, config_path)
+            and record.get("control_sha256") == stage_control_sha256(stage, repo_root, config_path)
             and record.get("command_sha256") == _hash_payload(command)
-            and record.get("input_sha256")
-            == stage_input_sha256(stage, config, repo_root, paths)
+            and record.get("input_sha256") == stage_input_sha256(stage, config, repo_root, paths)
             and outputs_match(record, expected)
             and _output_set_exact(stage, expected)
             and _workflow_output_set_valid(paths, config)
@@ -475,22 +699,14 @@ def verify_inputs(config: dict[str, Any], repo_root: Path) -> dict[str, Any]:
     return checked
 
 
-def verify_geometry_result(config: dict[str, Any], path: Path) -> None:
+def verify_geometry_constraint(config: dict[str, Any], path: Path) -> None:
     result = json.loads(path.read_text())
-    rows = result.get("results", [])
-    if len(rows) != 1 or rows[0].get("burst", "").lower() != config["event"]:
-        raise RuntimeError("geometry result does not contain exactly the configured event")
+    if result.get("event") != config["event"]:
+        raise RuntimeError("geometry constraint event differs from configuration")
     if result.get("event_binding_sha256") != config["event_binding_sha256"]:
-        raise RuntimeError("geometry result binding does not match configuration")
-    actual = float(rows[0]["geometry_aligning_dm_pc_cm3"])
-    expected = float(config["geometry"]["geometry_dm_pc_cm3"])
-    if abs(actual - expected) > 1.0e-12:
-        raise RuntimeError("recomputed geometry DM does not match configuration")
-    if (
-        float(result["method"]["reference_frequency_mhz"])
-        != float(config["geometry"]["reference_frequency_mhz"])
-    ):
-        raise RuntimeError("geometry result reference frequency changed")
+        raise RuntimeError("geometry constraint binding differs from configuration")
+    if float(result["reference_frequency_mhz"]) != 400.0:
+        raise RuntimeError("geometry constraint reference frequency changed")
 
 
 def _stage_window(from_stage: str, through_stage: str) -> tuple[str, ...]:
@@ -515,17 +731,26 @@ def make_plan(
         repo_root=repo_root,
     )
     selected = _stage_window(from_stage, through_stage)
-    return {
+    plan = {
         "schema_version": 1,
         "mode": "dry-run",
         "event": config["event"],
         "event_binding_sha256": config["event_binding_sha256"],
         "output_root": config["paths"]["output_root"],
-        "stages": [
-            {"stage": stage, "command": commands[stage]} for stage in selected
-        ],
+        "stages": [{"stage": stage, "command": commands[stage]} for stage in selected],
         "writes_performed": False,
     }
+    if "joint_fit" in config:
+        plan["joint_fit_readiness"] = {
+            "status": config["joint_fit"]["status"],
+            "execution_authorized": config["joint_fit"]["execution_authorized"],
+            "blockers": config["joint_fit"]["blockers"],
+            "active_inference": (
+                "geometry-constrained shared absolute DM and geocentric "
+                "400 MHz component arrival times"
+            ),
+        }
+    return plan
 
 
 def _write_json(path: Path, value: Any) -> None:
@@ -589,9 +814,7 @@ def _write_provenance(
     completed = {
         stage: record
         for stage, record in state["stages"].items()
-        if stage in STAGES
-        and STAGES.index(stage) < cutoff
-        and record.get("status") == "completed"
+        if stage in STAGES and STAGES.index(stage) < cutoff and record.get("status") == "completed"
     }
     _write_json(
         path,
@@ -627,8 +850,11 @@ def _write_manifest(
         repo_root / "scripts/audit_one_event_dsa_state_h17.py",
         repo_root / "scripts/run_one_event_hybrid_absolute_dm_h17.py",
         repo_root / "scripts/build_one_event_dsa_hybrid_h17.py",
-        repo_root / "scripts/recompute_geometry_dm.py",
-        repo_root / "scripts/render_one_event_hybrid_packet.py",
+        repo_root / "scripts/build_geometry_constraint.py",
+        repo_root / "scripts/fit_one_event_joint_burst.py",
+        repo_root / "scripts/render_joint_fit_packet.py",
+        repo_root / "radio_pipeline/fitting/joint_burst.py",
+        repo_root / "radio_pipeline/fitting/products.py",
         repo_root / "scripts/run_one_event_absolute_dm_workflow.py",
     ]
     products = [
@@ -644,14 +870,8 @@ def _write_manifest(
             "schema_version": 1,
             "event": config["event"],
             "event_binding_sha256": config["event_binding_sha256"],
-            "controls": [
-                {"path": str(path), "sha256": sha256_file(path)}
-                for path in controls
-            ],
-            "products": [
-                {"path": str(path), "sha256": sha256_file(path)}
-                for path in products
-            ],
+            "controls": [{"path": str(path), "sha256": sha256_file(path)} for path in controls],
+            "products": [{"path": str(path), "sha256": sha256_file(path)} for path in products],
         },
     )
 
@@ -665,14 +885,19 @@ def execute(
     through_stage: str,
     force_stage: set[str],
     retry_failed_stage: set[str] | None = None,
+    preparation_only: bool = False,
 ) -> dict[str, Any]:
     retry_failed_stage = set(retry_failed_stage or ())
     paths = _output_paths(config)
+    if preparation_only:
+        paths["state"] = paths["preparation_state"]
     commands = build_stage_commands(
         config,
         config_path=config_path,
         repo_root=repo_root,
+        preparation_only=preparation_only,
     )
+    stage_environment = _stage_environment(repo_root)
     verified_inputs = verify_inputs(config, repo_root)
     if paths["state"].is_file():
         state = json.loads(paths["state"].read_text())
@@ -689,17 +914,13 @@ def execute(
 
     selected_stages = _stage_window(from_stage, through_stage)
     interrupted_stages = [
-        stage
-        for stage, record in state["stages"].items()
-        if record.get("status") == "running"
+        stage for stage, record in state["stages"].items() if record.get("status") == "running"
     ]
     if interrupted_stages:
         interrupted_at = time.time()
         for stage in interrupted_stages:
             record = state["stages"][stage]
-            expected = [
-                Path(path) for path in record.get("expected_outputs", [])
-            ]
+            expected = [Path(path) for path in record.get("expected_outputs", [])]
             partial_outputs, unreadable_outputs = _existing_output_receipts(expected)
             record.update(
                 {
@@ -707,18 +928,13 @@ def execute(
                     "failed_unix": interrupted_at,
                     "wall_seconds": max(
                         0.0,
-                        interrupted_at
-                        - float(record.get("started_unix", interrupted_at)),
+                        interrupted_at - float(record.get("started_unix", interrupted_at)),
                     ),
                     "outputs": partial_outputs,
-                    "missing_outputs": [
-                        str(path) for path in expected if not path.is_file()
-                    ],
+                    "missing_outputs": [str(path) for path in expected if not path.is_file()],
                     "error": {
                         "type": "InterruptedStageState",
-                        "message": (
-                            "prior process ended without a terminal stage receipt"
-                        ),
+                        "message": ("prior process ended without a terminal stage receipt"),
                     },
                 }
             )
@@ -737,16 +953,10 @@ def execute(
         state.pop("active_stage", None)
         _write_json(paths["state"], state)
     failed_stages = sorted(
-        (
-            stage
-            for stage, record in state["stages"].items()
-            if record.get("status") == "failed"
-        ),
+        (stage for stage, record in state["stages"].items() if record.get("status") == "failed"),
         key=STAGES.index,
     )
-    unapproved_retries = [
-        stage for stage in failed_stages if stage not in retry_failed_stage
-    ]
+    unapproved_retries = [stage for stage in failed_stages if stage not in retry_failed_stage]
     if unapproved_retries:
         raise RuntimeError(_failed_stage_message(unapproved_retries))
     unused_retries = retry_failed_stage - set(failed_stages)
@@ -758,9 +968,7 @@ def execute(
     if any(stage not in selected_stages for stage in failed_stages):
         raise RuntimeError(
             "retry window does not include failed stage(s): "
-            + ", ".join(
-                stage for stage in failed_stages if stage not in selected_stages
-            )
+            + ", ".join(stage for stage in failed_stages if stage not in selected_stages)
         )
     for prerequisite in STAGES[: STAGES.index(from_stage)]:
         if not stage_record_matches(
@@ -772,22 +980,10 @@ def execute(
             paths=paths,
             command=commands[prerequisite],
         ):
-            raise RuntimeError(
-                f"{from_stage}: prerequisite stage {prerequisite} is not resumable"
-            )
+            raise RuntimeError(f"{from_stage}: prerequisite stage {prerequisite} is not resumable")
 
     for stage in selected_stages:
         previous = state["stages"].get(stage, {})
-        if (
-            stage == "packet"
-            and previous.get("status") == "completed"
-            and stage not in force_stage
-            and not _packet_provenance_matches_receipt(paths)
-        ):
-            raise RuntimeError(
-                "packet provenance differs from its receipt; inspect and use "
-                "--force-stage packet only after review"
-            )
         if stage not in force_stage and stage_record_matches(
             previous,
             stage=stage,
@@ -799,8 +995,6 @@ def execute(
         ):
             print(f"resume: {stage} output hashes match", flush=True)
             continue
-        if stage == "packet":
-            _write_provenance(config, state, paths["provenance"])
         started = time.time()
         expected_outputs = expected_stage_outputs(stage, paths, config)
         record: dict[str, Any] = {
@@ -848,17 +1042,16 @@ def execute(
             if stage == "preflight":
                 record["verified_inputs"] = verified_inputs
             elif stage == "packet":
-                subprocess.run(commands[stage], check=True)
+                subprocess.run(commands[stage], check=True, env=stage_environment)
             elif stage == "manifests":
                 _write_manifest(config, config_path, repo_root, paths)
             else:
-                subprocess.run(commands[stage], check=True)
-                if stage == "geometry":
-                    verify_geometry_result(config, paths["geometry"])
+                subprocess.run(commands[stage], check=True, env=stage_environment)
+                if stage == "geometry_constraint":
+                    verify_geometry_constraint(config, paths["geometry_constraint"])
             completed = time.time()
             outputs = [
-                {"path": str(path), "sha256": sha256_file(path)}
-                for path in expected_outputs
+                {"path": str(path), "sha256": sha256_file(path)} for path in expected_outputs
             ]
             if not _output_set_exact(stage, expected_outputs):
                 raise RuntimeError(f"{stage}: unexpected output file set")
@@ -873,16 +1066,12 @@ def execute(
                 }
             )
             if not _output_schema_matches(stage, config, paths):
-                raise RuntimeError(
-                    f"{stage}: output schema or event binding mismatch"
-                )
+                raise RuntimeError(f"{stage}: output schema or event binding mismatch")
             state.pop("active_stage", None)
             _write_json(paths["state"], state)
         except BaseException as error:
             failed = time.time()
-            partial_outputs, unreadable_outputs = _existing_output_receipts(
-                expected_outputs
-            )
+            partial_outputs, unreadable_outputs = _existing_output_receipts(expected_outputs)
             record.update(
                 {
                     "status": "failed",
@@ -890,9 +1079,7 @@ def execute(
                     "wall_seconds": failed - started,
                     "outputs": partial_outputs,
                     "missing_outputs": [
-                        str(path)
-                        for path in expected_outputs
-                        if not path.is_file()
+                        str(path) for path in expected_outputs if not path.is_file()
                     ],
                     "error": {
                         "type": type(error).__name__,
@@ -918,9 +1105,7 @@ def execute(
         require_complete=True,
     ):
         raise RuntimeError("final workflow output set is incomplete or unexpected")
-    state["status"] = (
-        "completed" if through_stage == STAGES[-1] else "partial_completed"
-    )
+    state["status"] = "completed" if through_stage == STAGES[-1] else "partial_completed"
     state["completed_unix"] = time.time()
     state.pop("active_stage", None)
     state.pop("failed_stage", None)
@@ -930,11 +1115,20 @@ def execute(
 
 
 def main() -> None:
+    _require_supported_python()
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, required=True)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true")
     mode.add_argument("--execute", action="store_true")
+    mode.add_argument(
+        "--prepare-reviewed-inputs",
+        action="store_true",
+        help=(
+            "build only audited observation products and geometry so their "
+            "exact locks can be reviewed"
+        ),
+    )
     mode.add_argument("--print-binding", action="store_true")
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).parents[1])
     parser.add_argument("--from-stage", choices=STAGES, default=STAGES[0])
@@ -962,6 +1156,37 @@ def main() -> None:
         config_path,
         require_execution_authorized=args.execute,
     )
+    if "joint_fit" not in config:
+        raise RuntimeError(
+            "historical anchored-hybrid configuration is compatibility-only; "
+            "add a reviewed joint_fit section before using the active command"
+        )
+    if args.prepare_reviewed_inputs:
+        if args.from_stage != STAGES[0] or args.through_stage != STAGES[-1]:
+            raise ValueError("input preparation owns its fixed pre-fit stage window")
+        _require_preparation_geometry(config)
+        state = execute(
+            config,
+            config_path=config_path,
+            repo_root=repo_root,
+            from_stage="preflight",
+            through_stage="geometry_constraint",
+            force_stage=set(args.force_stage),
+            retry_failed_stage=set(args.retry_failed_stage),
+            preparation_only=True,
+        )
+        print(
+            json.dumps(
+                {
+                    "state": state,
+                    "resolution_lock_proposal": resolution_lock_proposal(_output_paths(config)),
+                    "owner_review_required": True,
+                },
+                indent=2,
+                allow_nan=False,
+            )
+        )
+        return
     if not args.execute:
         plan = make_plan(
             config,
@@ -974,6 +1199,7 @@ def main() -> None:
             plan["verified_inputs"] = verify_inputs(config, repo_root)
         print(canonical_json(plan))
         return
+    _require_preparation_geometry(config)
     state = execute(
         config,
         config_path=config_path,

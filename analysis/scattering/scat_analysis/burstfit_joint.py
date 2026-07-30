@@ -1,6 +1,8 @@
-"""
-burstfit_joint.py
-=================
+"""Compatibility-only historical joint scattering fitter.
+
+New dual-band dispersion and arrival-time inference uses
+``radio_pipeline.fitting.fit_joint_event``. This module remains importable for
+historical-product reproduction and extracted-kernel parity checks.
 
 Joint two-telescope scattering fit (CHIME ~0.6 GHz + DSA ~1.4 GHz).
 

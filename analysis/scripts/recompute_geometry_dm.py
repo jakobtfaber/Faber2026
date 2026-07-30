@@ -11,7 +11,7 @@ from typing import Any
 
 import astropy.constants as const
 import astropy.units as u
-from astropy.coordinates import EarthLocation, ITRS, SkyCoord
+from astropy.coordinates import GCRS, ITRS, EarthLocation, SkyCoord
 from astropy.time import Time
 from astropy.utils import iers
 
@@ -42,9 +42,7 @@ def referral_slope_ms_per_dm(
     native_frequency_mhz: float = DSA_NATIVE_FREQUENCY_MHZ,
     reference_frequency_mhz: float = REFERENCE_FREQUENCY_MHZ,
 ) -> float:
-    return -1000.0 * K_DM_S_MHZ2 * (
-        reference_frequency_mhz**-2 - native_frequency_mhz**-2
-    )
+    return -1000.0 * K_DM_S_MHZ2 * (reference_frequency_mhz**-2 - native_frequency_mhz**-2)
 
 
 def geometric_delay_ms(
@@ -55,7 +53,8 @@ def geometric_delay_ms(
 ) -> float:
     first_position = first.get_gcrs(arrival_time).cartesian.xyz
     second_position = second.get_gcrs(arrival_time).cartesian.xyz
-    projected_baseline = (second_position - first_position).dot(source.cartesian.xyz)
+    direction = source.transform_to(GCRS(obstime=arrival_time)).cartesian.xyz
+    projected_baseline = (second_position - first_position).dot(direction)
     return float((projected_baseline / const.c).to_value(u.ms))
 
 
@@ -81,9 +80,7 @@ def dsa_toa_at_reference(
     native_frequency_mhz: float = DSA_NATIVE_FREQUENCY_MHZ,
     reference_frequency_mhz: float = REFERENCE_FREQUENCY_MHZ,
 ) -> Time:
-    shift_s = K_DM_S_MHZ2 * float(dm) * (
-        reference_frequency_mhz**-2 - native_frequency_mhz**-2
-    )
+    shift_s = K_DM_S_MHZ2 * float(dm) * (reference_frequency_mhz**-2 - native_frequency_mhz**-2)
     return Time(float(trigger_mjd), format="mjd", scale="utc") + shift_s * u.s
 
 
@@ -109,8 +106,7 @@ def recompute(
     triggers = json.loads(trigger_recovery_path.read_text())
     fixture = json.loads(reproduction_fixture_path.read_text())
     source_by_burst = {
-        str(row["name"]).lower(): str(row["source_coord"]).strip()
-        for row in fixture["bursts"]
+        str(row["name"]).lower(): str(row["source_coord"]).strip() for row in fixture["bursts"]
     }
     results = []
     for burst, archived in timing.items():
@@ -158,9 +154,7 @@ def recompute(
                 "corrected_measured_offset_ms": measured_offset_ms,
                 "geometric_delay_ms": delay_ms,
                 "geometric_delay_itrs_oracle_ms": delay_itrs_ms,
-                "geometry_projection_difference_ns": float(
-                    1.0e6 * (delay_ms - delay_itrs_ms)
-                ),
+                "geometry_projection_difference_ns": float(1.0e6 * (delay_ms - delay_itrs_ms)),
                 "geometry_aligning_dm_pc_cm3": geometry_dm,
                 "alignment_check_residual_ms": float(check_offset_ms - delay_ms),
                 "archived_geometric_delay_ms": float(archived["geometric_delay_ms"]),
@@ -206,9 +200,7 @@ def recompute(
             "corrected_trigger_recovery": str(trigger_recovery_path),
             "corrected_trigger_recovery_sha256": sha256(trigger_recovery_path),
             "current_reproduction_fixture": str(reproduction_fixture_path),
-            "current_reproduction_fixture_sha256": sha256(
-                reproduction_fixture_path
-            ),
+            "current_reproduction_fixture_sha256": sha256(reproduction_fixture_path),
         },
         "results": results,
     }

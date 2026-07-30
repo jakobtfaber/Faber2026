@@ -40,7 +40,7 @@ def test_geometric_delay_is_millisecond_scale_for_chromatica() -> None:
     arrival = Time(1706990275.9983277, format="unix", scale="utc")
     delay = MODULE.geometric_delay_ms(arrival, source)
     itrs_oracle = MODULE.geometric_delay_itrs_ms(arrival, source)
-    assert delay == pytest.approx(-2.284541885429817, abs=2.0e-9)
+    assert delay == pytest.approx(-2.2845614245, abs=2.0e-9)
     assert itrs_oracle == pytest.approx(-2.2845614245, abs=2.0e-9)
     assert delay < 0
-    assert abs(delay - itrs_oracle) < 5.0e-5
+    assert abs(delay - itrs_oracle) < 2.0e-9

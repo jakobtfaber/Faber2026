@@ -6,6 +6,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from scripts.one_event_hybrid_dm import injected_absolute_dm_recovery
+
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/absolute_dm_voltage.py"
 SPEC = importlib.util.spec_from_file_location("absolute_dm_voltage", SCRIPT)
@@ -37,11 +39,40 @@ def test_package_argument_preserves_physical_phase_scale() -> None:
     )
 
 
+def test_h5_package_dm_attribute_maps_to_physical_phase_coordinate() -> None:
+    package_constant = 4149.377593360996
+    physical = MODULE.physical_dm_from_package_coordinate(
+        491.2,
+        package_dispersion_constant=package_constant,
+    )
+    assert physical * MODULE.K_DM_S_MHZ2 == pytest.approx(491.2 * package_constant)
+
+
+def test_nonzero_h5_dm0_is_subtracted_once_by_coherent_pipeline() -> None:
+    package_constant = 4149.377593360996
+    package_input_dm = 491.2
+    target_physical_dm = 491.28
+    input_physical_dm = MODULE.physical_dm_from_package_coordinate(
+        package_input_dm,
+        package_dispersion_constant=package_constant,
+    )
+    package_target = MODULE.package_dm_argument(
+        target_physical_dm,
+        0.0,
+        package_dispersion_constant=package_constant,
+    )
+    applied_physical_correction = (
+        package_constant * (package_target - package_input_dm) / MODULE.K_DM_S_MHZ2
+    )
+    assert applied_physical_correction == pytest.approx(
+        target_physical_dm - input_physical_dm,
+        abs=1.0e-12,
+    )
+
+
 def _fourier_shift(signal: np.ndarray, sample_shift: float) -> np.ndarray:
     frequency = np.fft.fftfreq(signal.size)
-    return np.fft.ifft(
-        np.fft.fft(signal) * np.exp(-2j * np.pi * frequency * sample_shift)
-    )
+    return np.fft.ifft(np.fft.fft(signal) * np.exp(-2j * np.pi * frequency * sample_shift))
 
 
 def test_injected_dispersed_voltage_recovers_dm_exactly_once() -> None:
@@ -52,12 +83,8 @@ def test_injected_dispersed_voltage_recovers_dm_exactly_once() -> None:
     frequency_mhz = np.linspace(410.0, 790.0, 48)
     sample = np.arange(4096)
     pulse = np.exp(-0.5 * ((sample - 2048.0) / 11.0) ** 2).astype(complex)
-    delay_s = physical_constant * injected_dm * (
-        frequency_mhz**-2 - 400.0**-2
-    )
-    dispersed = np.asarray(
-        [_fourier_shift(pulse, delay / sample_time_s) for delay in delay_s]
-    )
+    delay_s = physical_constant * injected_dm * (frequency_mhz**-2 - 400.0**-2)
+    dispersed = np.asarray([_fourier_shift(pulse, delay / sample_time_s) for delay in delay_s])
 
     def score(target_total_dm: float, applications: int = 1) -> float:
         argument = MODULE.package_dm_argument(
@@ -65,9 +92,7 @@ def test_injected_dispersed_voltage_recovers_dm_exactly_once() -> None:
             0.0,
             package_dispersion_constant=package_constant,
         )
-        correction_s = package_constant * argument * (
-            frequency_mhz**-2 - 400.0**-2
-        )
+        correction_s = package_constant * argument * (frequency_mhz**-2 - 400.0**-2)
         recovered = np.asarray(
             [
                 _fourier_shift(row, -applications * shift / sample_time_s)
@@ -80,6 +105,20 @@ def test_injected_dispersed_voltage_recovers_dm_exactly_once() -> None:
     recovered_dm = float(grid[np.argmax([score(dm) for dm in grid])])
     assert recovered_dm == pytest.approx(injected_dm, abs=1.0e-12)
     assert score(injected_dm) > 10.0 * score(injected_dm, applications=2)
+
+
+def test_hybrid_campaign_injection_uses_input_anchor_total_identity() -> None:
+    result = injected_absolute_dm_recovery(
+        491.28,
+        491.211,
+        81.92e-6,
+        0.005,
+    )
+    assert result["passed"] is True
+    identity = result["exactly_once_identity"]
+    assert identity["reconstructed_trial_dm_pc_cm3"] == pytest.approx(
+        result["injected_absolute_dm_pc_cm3"]
+    )
 
 
 def test_frequency_map_preserves_h5_identity() -> None:

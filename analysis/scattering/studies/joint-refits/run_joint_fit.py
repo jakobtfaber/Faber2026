@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Driver: joint CHIME+DSA scattering fit for one burst.
+"""Compatibility-only historical joint CHIME+DSA scattering study runner.
 
 Reads the two single-band HPCC run-configs (<b>_chime_run.yaml, <b>_dsa_run.yaml),
 rebuilds each band's preprocessed FRBModel + data-driven init exactly as the

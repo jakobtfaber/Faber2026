@@ -118,11 +118,7 @@ def score_crop(
         jackknife[str(cutoff)] = [
             float(
                 np.sum(
-                    np.abs(
-                        coherent[use]
-                        - np.sum(phase[group == group_index][:, use], axis=0)
-                    )
-                    ** 2
+                    np.abs(coherent[use] - np.sum(phase[group == group_index][:, use], axis=0)) ** 2
                     * weight
                 )
             )
@@ -176,14 +172,8 @@ def fit_grid(rows: list[dict[str, Any]]) -> dict[str, Any]:
     candidates = list(map(str, CUTOFFS_HZ))
     stable = []
     for index, key in enumerate(candidates):
-        neighbours = (
-            candidates[max(0, index - 1) : index]
-            + candidates[index + 1 : index + 2]
-        )
-        if any(
-            abs(cutoff_peak[key] - cutoff_peak[other]) <= 0.10
-            for other in neighbours
-        ):
+        neighbours = candidates[max(0, index - 1) : index] + candidates[index + 1 : index + 2]
+        if any(abs(cutoff_peak[key] - cutoff_peak[other]) <= 0.10 for other in neighbours):
             stable.append(key)
     selected = max(stable or candidates, key=lambda key: contrast[key])
     score = np.asarray([row["score"][selected] for row in rows])
@@ -193,18 +183,14 @@ def fit_grid(rows: list[dict[str, Any]]) -> dict[str, Any]:
         [
             parabolic_peak(
                 grid,
-                np.asarray(
-                    [row["jackknife_score"][selected][group] for row in rows]
-                ),
+                np.asarray([row["jackknife_score"][selected][group] for row in rows]),
             )
             for group in range(group_count)
         ]
     )
     mean = float(np.mean(jackknife_peak))
     n = jackknife_peak.size
-    sigma_jackknife = float(
-        np.sqrt((n - 1.0) / n * np.sum((jackknife_peak - mean) ** 2))
-    )
+    sigma_jackknife = float(np.sqrt((n - 1.0) / n * np.sum((jackknife_peak - mean) ** 2)))
     cutoff_values = np.asarray(list(cutoff_peak.values()))
     sigma_cutoff = float(np.std(cutoff_values, ddof=1))
     step = float(np.median(np.diff(grid)))
@@ -247,6 +233,88 @@ def assert_exactly_once_identity(
         "coherent_anchor_correction_pc_cm3": coherent_correction,
         "incoherent_residual_correction_pc_cm3": residual_correction,
         "reconstructed_trial_dm_pc_cm3": reconstructed,
+    }
+
+
+def injected_absolute_dm_recovery(
+    anchor_dm_pc_cm3: float,
+    input_dm_pc_cm3: float,
+    sample_time_s: float,
+    maximum_error_pc_cm3: float,
+) -> dict:
+    """Recover a known total DM and reject a second residual application."""
+
+    rng = np.random.default_rng(20260728)
+    frequency = np.linspace(410.0, 790.0, 128)
+    fine_id = np.arange(frequency.size, dtype=np.int64)
+    sample = np.arange(768, dtype=float)
+    aligned = rng.normal(0.0, 0.15, (frequency.size, sample.size))
+    aligned += 5.0 * np.exp(-0.5 * ((sample - 384.0) / 2.5) ** 2)
+    injected_dm = anchor_dm_pc_cm3 + 0.036
+    anchor_observation, _ = apply_fractional_residual_dm(
+        aligned,
+        frequency,
+        sample_time_s,
+        anchor_dm_pc_cm3 - injected_dm,
+    )
+    padding = 96
+    grid = np.arange(injected_dm - 0.030, injected_dm + 0.0301, 0.002)
+    rows = []
+    for trial_dm in grid:
+        recovered, _ = apply_fractional_residual_dm(
+            anchor_observation,
+            frequency,
+            sample_time_s,
+            trial_dm - anchor_dm_pc_cm3,
+        )
+        crop = recovered[:, padding:-padding]
+        row = score_crop(crop, sample_time_s, frequency_id=fine_id)
+        row["target_total_dm_pc_cm3"] = float(trial_dm)
+        rows.append(row)
+    fit = fit_grid(rows)
+    selected = str(fit["selected_cutoff_hz"])
+    correct, _ = apply_fractional_residual_dm(
+        anchor_observation,
+        frequency,
+        sample_time_s,
+        injected_dm - anchor_dm_pc_cm3,
+    )
+    double, _ = apply_fractional_residual_dm(
+        anchor_observation,
+        frequency,
+        sample_time_s,
+        2.0 * (injected_dm - anchor_dm_pc_cm3),
+    )
+    correct_score = score_crop(
+        correct[:, padding:-padding],
+        sample_time_s,
+        frequency_id=fine_id,
+    )["score"][selected]
+    double_score = score_crop(
+        double[:, padding:-padding],
+        sample_time_s,
+        frequency_id=fine_id,
+    )["score"][selected]
+    error = abs(float(fit["dm_pc_cm3"]) - injected_dm)
+    if error > maximum_error_pc_cm3 or correct_score <= double_score:
+        raise RuntimeError("hybrid injected absolute-DM recovery failed")
+    identity = assert_exactly_once_identity(
+        input_dm_pc_cm3,
+        anchor_dm_pc_cm3,
+        injected_dm,
+    )
+    return {
+        "input_dm_pc_cm3": input_dm_pc_cm3,
+        "anchor_dm_pc_cm3": anchor_dm_pc_cm3,
+        "injected_absolute_dm_pc_cm3": injected_dm,
+        "recovered_absolute_dm_pc_cm3": float(fit["dm_pc_cm3"]),
+        "absolute_error_pc_cm3": error,
+        "maximum_error_pc_cm3": maximum_error_pc_cm3,
+        "grid_step_pc_cm3": 0.002,
+        "correct_once_score": float(correct_score),
+        "double_application_score": float(double_score),
+        "exactly_once_identity": identity,
+        "passed": True,
     }
 
 

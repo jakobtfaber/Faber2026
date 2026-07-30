@@ -78,12 +78,8 @@ def _substituted_config() -> dict:
         "raw_dsa_filterbank",
         "accepted_dsa_reference",
     ):
-        config["identity"]["input_basenames"][key] = Path(
-            config["paths"][key]
-        ).name
-    config["identity"]["output_root_basename"] = Path(
-        config["paths"]["output_root"]
-    ).name
+        config["identity"]["input_basenames"][key] = Path(config["paths"][key]).name
+    config["identity"]["output_root_basename"] = Path(config["paths"]["output_root"]).name
     return config
 
 
@@ -97,9 +93,7 @@ def test_casey_regression_fixture_validates() -> None:
 
 def test_schema_accepts_casey_fixture_when_jsonschema_is_available() -> None:
     jsonschema = pytest.importorskip("jsonschema")
-    schema = json.loads(
-        (ROOT / "analysis-configs/absolute-dm/schema.json").read_text()
-    )
+    schema = json.loads((ROOT / "analysis-configs/absolute-dm/schema.json").read_text())
     jsonschema.validate(_config(), schema)
 
 
@@ -149,9 +143,7 @@ def test_full_config_binding_rejects_every_science_or_runtime_mutation() -> None
         if mutation == "dm":
             config["chime"]["anchor_dm_pc_cm3"] += 0.01
         elif mutation == "support":
-            config["chime"]["accepted_support"][
-                "h5_present_accepted_dead_ids"
-            ][0] = 2
+            config["chime"]["accepted_support"]["h5_present_accepted_dead_ids"][0] = 2
         elif mutation == "threshold":
             config["chime"]["gates"]["oracle_material_threshold_pc_cm3"] += 0.001
         elif mutation == "grid":
@@ -218,6 +210,11 @@ def test_default_dry_run_lists_all_stages_and_writes_nothing(tmp_path: Path) -> 
     assert not output_root.exists()
 
 
+def test_casey_execution_fails_before_inputs_while_joint_review_is_blocked() -> None:
+    with pytest.raises(PermissionError, match="joint fit is blocked"):
+        load_config(CONFIG, require_execution_authorized=True)
+
+
 def test_resume_requires_matching_output_hash(tmp_path: Path) -> None:
     output = tmp_path / "result.json"
     output.write_text("{}")
@@ -225,7 +222,7 @@ def test_resume_requires_matching_output_hash(tmp_path: Path) -> None:
 
     expected = hashlib.sha256(output.read_bytes()).hexdigest()
     record = {
-        "stage": "geometry",
+        "stage": "geometry_constraint",
         "status": "completed",
         "expected_outputs": [str(output)],
         "outputs": [{"path": str(output), "sha256": expected}],
@@ -235,7 +232,7 @@ def test_resume_requires_matching_output_hash(tmp_path: Path) -> None:
     assert not outputs_match(record)
     extra = tmp_path / "stale.json"
     extra.write_text("{}")
-    assert not workflow_runner._output_set_exact("packet", [output])
+    assert not workflow_runner._output_set_exact("manifests", [output])
 
 
 def test_from_stage_cannot_bypass_input_rehash(
@@ -250,8 +247,8 @@ def test_from_stage_cannot_bypass_input_rehash(
             _config(),
             config_path=CONFIG,
             repo_root=ROOT,
-            from_stage="geometry",
-            through_stage="geometry",
+            from_stage="geometry_constraint",
+            through_stage="geometry_constraint",
             force_stage=set(),
         )
 
@@ -264,8 +261,9 @@ def test_failed_stage_is_durable_and_retry_requires_explicit_flag(
     monkeypatch.setenv("ONE_EVENT_WORKFLOW_STDOUT_LOG", "/logs/casey.stdout")
     monkeypatch.setenv("ONE_EVENT_WORKFLOW_STDERR_LOG", "/logs/casey.stderr")
 
-    def injected_failure(command: list[str], check: bool) -> None:
+    def injected_failure(command: list[str], check: bool, env: dict[str, str]) -> None:
         assert check is True
+        assert str(ROOT) in env["PYTHONPATH"]
         raise subprocess.CalledProcessError(23, command)
 
     monkeypatch.setattr(workflow_runner.subprocess, "run", injected_failure)
@@ -308,8 +306,9 @@ def test_failed_stage_is_durable_and_retry_requires_explicit_flag(
         )
     assert state_path.read_bytes() == failed_bytes
 
-    def successful_retry(command: list[str], check: bool) -> None:
+    def successful_retry(command: list[str], check: bool, env: dict[str, str]) -> None:
         assert check is True
+        assert str(ROOT) in env["PYTHONPATH"]
         output = Path(command[command.index("--output") + 1])
         output.write_text(
             json.dumps(
@@ -341,13 +340,7 @@ def test_failed_stage_is_durable_and_retry_requires_explicit_flag(
 def test_paused_campaign_receipt_overrides_stale_config_authorization(
     tmp_path: Path,
 ) -> None:
-    state_path = (
-        tmp_path
-        / "analysis-configs"
-        / "absolute-dm"
-        / "phase-b"
-        / "campaign-state.json"
-    )
+    state_path = tmp_path / "analysis-configs" / "absolute-dm" / "phase-b" / "campaign-state.json"
     state_path.parent.mkdir(parents=True)
     state_path.write_text(
         json.dumps(
@@ -371,10 +364,7 @@ def test_paused_campaign_receipt_overrides_stale_config_authorization(
 
 def test_all_parameterized_configs_are_execution_disabled_during_pause() -> None:
     campaign_state = json.loads(
-        (
-            ROOT
-            / "analysis-configs/absolute-dm/phase-b/campaign-state.json"
-        ).read_text()
+        (ROOT / "analysis-configs/absolute-dm/phase-b/campaign-state.json").read_text()
     )
     assert campaign_state["status"] == "paused"
     assert campaign_state["execution_authorized"] is False
@@ -382,11 +372,7 @@ def test_all_parameterized_configs_are_execution_disabled_during_pause() -> None
 
     configs = [CONFIG]
     configs.extend(
-        sorted(
-            (
-                ROOT / "analysis-configs/absolute-dm/phase-b"
-            ).glob("*/workflow-config.json")
-        )
+        sorted((ROOT / "analysis-configs/absolute-dm/phase-b").glob("*/workflow-config.json"))
     )
     assert len(configs) == 12
     for path in configs:
@@ -394,10 +380,7 @@ def test_all_parameterized_configs_are_execution_disabled_during_pause() -> None
         assert config["workflow"]["execution_authorized"] is False
         if config["workflow"]["regression_fixture"] is not True:
             assert config["review"]["configuration_status"] == "blocked"
-            assert (
-                "campaign_paused_no_execution_authorization"
-                in config["review"]["blockers"]
-            )
+            assert "campaign_paused_no_execution_authorization" in config["review"]["blockers"]
 
 
 def test_phase_b_control_outputs_are_labeled_paused_and_experimental() -> None:
@@ -411,10 +394,7 @@ def test_phase_b_control_outputs_are_labeled_paused_and_experimental() -> None:
         assert "experimental_diagnostic" in status
         assert "not_science_authority" in status
     review = json.loads(
-        (
-            ROOT
-            / "analysis-configs/absolute-dm/phase-b/phase-b-config-review.json"
-        ).read_text()
+        (ROOT / "analysis-configs/absolute-dm/phase-b/phase-b-config-review.json").read_text()
     )
     assert review["status"] == config_generator.SUMMARY_STATUS
     assert "Phase B is currently paused" in campaign_runner.__doc__
@@ -459,8 +439,9 @@ def test_execute_keeps_packet_provenance_and_manifest_hashes_immutable(
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value))
 
-    def fake_run(command: list[str], check: bool) -> None:
+    def fake_run(command: list[str], check: bool, env: dict[str, str]) -> None:
         assert check is True
+        assert str(ROOT) in env["PYTHONPATH"]
         calls.append(command)
         joined = " ".join(command)
         if "audit_one_event_dsa_state_h17.py" in joined:
@@ -482,11 +463,17 @@ def test_execute_keeps_packet_provenance_and_manifest_hashes_immutable(
                     "event_binding_sha256": binding,
                 },
             )
-            for name in (
+            names = [
                 "chime_anchor_before_residual.npz",
                 "chime_hybrid_fit_dm.npz",
                 "chime_geometry_dm.npz",
-            ):
+            ]
+            if "--joint-fit-result" in command:
+                names.extend(
+                    f"chime_fully_coherent_posterior_{label}.npz"
+                    for label in ("lower", "median", "upper")
+                )
+            for name in names:
                 (output / name).write_bytes(name.encode())
         elif "build_one_event_dsa_hybrid_h17.py" in joined:
             output = argument(command, "--output-dir")
@@ -498,51 +485,69 @@ def test_execute_keeps_packet_provenance_and_manifest_hashes_immutable(
                     "event_binding_sha256": binding,
                 },
             )
-            for name in (
+            names = [
                 "dsa_input_dm.npz",
                 "dsa_accepted_reference_dm.npz",
-                "dsa_anchor_dm.npz",
-                "dsa_hybrid_fit_dm.npz",
-                "dsa_geometry_dm.npz",
-            ):
+            ]
+            if "--joint-fit-result" in command:
+                names.extend(f"dsa_posterior_{label}.npz" for label in ("lower", "median", "upper"))
+            else:
+                names.extend(
+                    (
+                        "dsa_anchor_dm.npz",
+                        "dsa_hybrid_fit_dm.npz",
+                        "dsa_geometry_dm.npz",
+                    )
+                )
+            for name in names:
                 (output / name).write_bytes(name.encode())
-        elif "recompute_geometry_dm.py" in joined:
+        elif "build_geometry_constraint.py" in joined:
             write_json(
                 argument(command, "--output"),
                 {
-                    "schema_version": 2,
+                    "schema_version": 1,
+                    "status": "provisional_pending_owner_approval",
+                    "event": "casey",
                     "event_binding_sha256": binding,
-                    "method": {"reference_frequency_mhz": 400.0},
-                    "results": [
-                        {
-                            "burst": "casey",
-                            "geometry_aligning_dm_pc_cm3": config["geometry"][
-                                "geometry_dm_pc_cm3"
-                            ],
-                        }
-                    ],
+                    "reference_frequency_mhz": 400.0,
                 },
             )
-        elif "render_one_event_hybrid_packet.py" in joined:
-            provenance = argument(command, "--run-provenance")
-            svg = argument(command, "--output-svg")
-            png = argument(command, "--output-png")
-            svg.parent.mkdir(parents=True, exist_ok=True)
-            svg.write_text("<svg/>")
-            png.write_bytes(b"png")
+        elif "fit_one_event_joint_burst.py" in joined:
+            output = argument(command, "--output-dir")
             write_json(
-                argument(command, "--receipt"),
+                output / "fit-result.json",
                 {
                     "schema_version": 1,
-                    "burst": "casey",
+                    "status": "provisional_pending_owner_approval",
+                    "event": "casey",
                     "event_binding_sha256": binding,
-                    "inputs": {
-                        "run_provenance": {
-                            "sha256": workflow_runner.sha256_file(provenance)
-                        }
-                    },
                 },
             )
+            (output / "posterior.npz").write_bytes(b"posterior")
+            (output / "model-products.npz").write_bytes(b"model")
+            write_json(
+                output / "run-provenance.json",
+                {
+                    "schema_version": 1,
+                    "status": "provisional_pending_owner_approval",
+                    "event": "casey",
+                    "event_binding_sha256": binding,
+                },
+            )
+        elif "verify_joint_fit_oracles.py" in joined:
+            write_json(
+                argument(command, "--output"),
+                {
+                    "schema_version": 1,
+                    "status": "passed_pending_owner_visual_approval",
+                    "event": "casey",
+                    "event_binding_sha256": binding,
+                },
+            )
+        elif "render_joint_fit_packet.py" in joined:
+            pdf = argument(command, "--output")
+            pdf.parent.mkdir(parents=True, exist_ok=True)
+            pdf.write_bytes(b"%PDF-test")
         else:
             raise AssertionError(command)
 
@@ -556,10 +561,6 @@ def test_execute_keeps_packet_provenance_and_manifest_hashes_immutable(
         force_stage=set(),
     )
     paths = workflow_runner._output_paths(config)
-    receipt = json.loads(paths["packet_receipt"].read_text())
-    assert receipt["inputs"]["run_provenance"]["sha256"] == (
-        workflow_runner.sha256_file(paths["provenance"])
-    )
     manifest = json.loads(paths["manifest"].read_text())
     for item in manifest["products"]:
         assert workflow_runner.sha256_file(item["path"]) == item["sha256"]
@@ -575,18 +576,17 @@ def test_execute_keeps_packet_provenance_and_manifest_hashes_immutable(
     assert len(calls) == call_count
     assert resumed["stages"]["manifests"]["status"] == "completed"
     assert state["event_binding_sha256"] == binding
-    provenance_bytes = paths["provenance"].read_bytes()
     paths["provenance"].write_text('{"tampered": true}')
-    with pytest.raises(RuntimeError, match="provenance differs"):
-        workflow_runner.execute(
-            config,
-            config_path=config_path,
-            repo_root=ROOT,
-            from_stage="packet",
-            through_stage="packet",
-            force_stage=set(),
-        )
-    paths["provenance"].write_bytes(provenance_bytes)
+    workflow_runner.execute(
+        config,
+        config_path=config_path,
+        repo_root=ROOT,
+        from_stage="joint_fit",
+        through_stage="packet",
+        force_stage=set(),
+    )
+    assert len(calls) == call_count + 1
+    assert paths["provenance"].read_text() != '{"tampered": true}'
     (paths["root"] / "unexpected-root-file.txt").write_text("unexpected")
     with pytest.raises(RuntimeError, match="unexpected workflow-root output"):
         workflow_runner.execute(
@@ -610,3 +610,116 @@ def test_generic_sources_contain_no_event_fixture_literal() -> None:
     ]
     for relative in paths:
         assert "casey" not in (ROOT / relative).read_text().lower()
+
+
+def test_preparation_mode_only_relaxes_product_builder_authorization(
+    tmp_path: Path,
+) -> None:
+    config = _config()
+    commands = workflow_runner.build_stage_commands(
+        config,
+        config_path=tmp_path / "event.json",
+        repo_root=ROOT,
+        preparation_only=True,
+    )
+    for stage in ("dsa_audit", "chime_products", "dsa_products"):
+        assert "--preparation-only" in commands[stage]
+    assert "PYTHONPATH=/workflow" in commands["chime_products"]
+    for stage in (
+        "geometry_constraint",
+        "joint_fit",
+        "chime_oracle",
+        "dsa_oracle",
+        "oracle_check",
+        "packet",
+    ):
+        command = commands[stage]
+        if command is not None:
+            assert "--preparation-only" not in command
+
+
+def test_casey_preparation_geometry_is_reviewed() -> None:
+    workflow_runner._require_preparation_geometry(_config())
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda geometry: geometry["timing_uncertainty_provenance"].update(
+            status="unreviewed"
+        ),
+        lambda geometry: geometry["timing_uncertainty_provenance"].pop("clock_basis"),
+        lambda geometry: geometry["timing_uncertainty_provenance"].update(
+            inter_site_clock_sigma_s=2.0e-3
+        ),
+        lambda geometry: geometry["timing_uncertainty_provenance"].update(
+            owner_adoption_date="not-a-date"
+        ),
+        lambda geometry: geometry["timing_uncertainty_provenance"].update(
+            unsupported="value"
+        ),
+        lambda geometry: geometry.update(
+            clock_sigma_s={"chime": 0.6e-3, "dsa": 0.8e-3}
+        ),
+    ],
+)
+def test_preparation_geometry_rejects_malformed_timing_budget(mutate) -> None:
+    config = _config()
+    mutate(config["joint_fit"]["geometry"])
+    with pytest.raises(ValueError, match="no data processing started"):
+        workflow_runner._require_preparation_geometry(config)
+
+
+def test_preparation_geometry_fails_before_execution_without_provenance(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config = _config()
+    del config["joint_fit"]["geometry"]["timing_uncertainty_provenance"]
+    config["event_binding_sha256"] = event_binding_sha256(config)
+    config_path = tmp_path / "missing-timing-provenance.json"
+    config_path.write_text(json.dumps(config))
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("execution started before preparation preflight")
+
+    monkeypatch.setattr(workflow_runner, "execute", forbidden)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "run_one_event_absolute_dm_workflow.py",
+            "--config",
+            str(config_path),
+            "--prepare-reviewed-inputs",
+        ],
+    )
+    with pytest.raises(ValueError, match="no data processing started"):
+        workflow_runner.main()
+
+
+def test_full_execution_geometry_fails_before_execution(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    config = _config()
+    config["joint_fit"]["geometry"]["timing_uncertainty_provenance"][
+        "status"
+    ] = "unreviewed"
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("execution started before timing preflight")
+
+    monkeypatch.setattr(workflow_runner, "load_config", lambda *args, **kwargs: config)
+    monkeypatch.setattr(workflow_runner, "execute", forbidden)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "run_one_event_absolute_dm_workflow.py",
+            "--config",
+            str(CONFIG),
+            "--execute",
+        ],
+    )
+    with pytest.raises(ValueError, match="no data processing started"):
+        workflow_runner.main()

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+
 import numpy as np
 from scipy.ndimage import gaussian_filter1d
 
@@ -14,7 +15,10 @@ from ..config_utils import SamplerConfig, TelescopeConfig
 log = logging.getLogger(__name__)
 
 class BurstDataset:
-    """Loads and preprocesses a burst from a .npy file."""
+    """Compatibility-only loader for historical single-band fit products.
+
+    It is not an input to geometry-constrained joint fitting.
+    """
 
     def __init__(
         self,
@@ -109,7 +113,7 @@ class BurstDataset:
             data = np.load(self.inpath)
             return np.nan_to_num(data.astype(np.float64))
         except Exception as e:
-            raise IOError(f"Failed to load {self.inpath}: {e}")
+            raise OSError(f"Failed to load {self.inpath}: {e}") from e
 
     def _build_axes(self, shape, f_factor=None, t_factor=None):
         f_factor = f_factor if f_factor is not None else self.f_factor
@@ -117,8 +121,6 @@ class BurstDataset:
 
         # Get raw shape from config, not from current array shape
         p = self.telescope
-        n_ch_raw = p.n_ch_raw if p.n_ch_raw is not None else shape[0] * f_factor
-
         df_MHz = p.df_MHz_raw * f_factor
         dt_ms = p.dt_ms_raw * t_factor
 
