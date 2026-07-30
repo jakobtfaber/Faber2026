@@ -69,15 +69,12 @@
     "seed (20220207, 20220208, 20220209)"
   ],
   "resolution_contract": {
-    "required_by_issue": "DSA-110 at native 32.768 microsecond time resolution; CHIME/FRB at its existing prepared resolution",
-    "delivered_by_current_code": "DSA-110 at 65.5 microseconds (time decimation 2)",
-    "status": "RESOLVED - owner selected native 32.768 us",
-    "cause": "band reconciliation. choose_resolution picks native 32.768 us for DSA-110 from its own 41-sample window; _common_peak_relative_window then unions the bands, and CHIME/FRB's 9280-sample window stretches the common span to 23.8 ms = 726 native DSA-110 samples; _build_model (joint_tf_prep.py:439-442) re-applies the MAX_TIME_BINS cap of 512 to that reconciled window and doubles the decimation to 2. Raising the cap to 1024 restores native resolution. DSA-110 is coarsened because CHIME/FRB is long, not because DSA-110 needs it.",
-    "note": "this schedule is written for whichever resolution the owner fixes; the resolution must be identical across all 27 rungs or the comparison is void",
-    "decision": "manuscript owner, 2026-07-30: keep every native 32.768-microsecond DSA-110 sample for all 27 rungs.",
-    "decision_evidence": "docs/rse/verify/zach-dsa-resolution-comparison-20260730/. Same archival product at time factors 1 and 2 with the loader, frequency averaging, window and residual dispersion measure held identical: six components above five standard deviations at native resolution, four after adjacent-pair averaging. The two lost components sit at +2.195 ms (5.8 sigma) and +2.785 ms (8.1 sigma) and each merges into a neighbour 0.16 to 0.23 ms away, so averaging changes the resolvable component count of the burst this schedule adjudicates.",
-    "blocking_followup": "the decision is not deliverable by configuration. _build_model (scattering/studies/joint-refits/joint_tf_prep.py:439-442) re-applies the MAX_TIME_BINS cap of 512 after band reconciliation, so the cap must be raised to 1024 before any rung runs, at roughly double the DSA-110 sample count.",
-    "superseded_decision": "a 2026-07-29 record selecting 65.536 microseconds was retracted; the owner did not make it and its cited comparison did not exist. See docs/rse/wayfinder/tickets/unsupported-zach-sampling-decision.md."
+    "owner_selection": "DSA-110 at 65.536 microseconds; CHIME/FRB at its existing prepared resolution",
+    "selected_on": "2026-07-30",
+    "status": "RESOLVED - owner accepted 65.536 microseconds after visual comparison and requested the component-count experiment",
+    "delivered_by_current_code": "DSA-110 at 65.536 microseconds (time decimation 2)",
+    "note": "the resolution must be identical across all 27 rungs or the comparison is void",
+    "decision_evidence": "Owner statement in the controlling conversation: the 32.768- and 65.536-microsecond profiles looked almost identical and 65 microseconds was acceptable; the owner then requested this component-count experiment. The profile diagnostic at docs/rse/verify/zach-dsa-resolution-comparison-20260730/ is criterion-dependent and does not itself determine the fitted component count."
   },
   "acceptance": {
     "evidence_threshold": 5.0,

@@ -1,26 +1,52 @@
 {
   "arms": {
     "adjacent_pair": {
-      "components_above_5sigma": 4,
       "dt_us": 65.536,
       "offpulse_sigma": 0.26836501826713666,
       "peak_snr": 66.03236519985657,
+      "profile_peaks_above_5sigma": 4,
       "samples": 1250,
       "t_factor": 2
     },
     "native": {
-      "components_above_5sigma": 6,
       "dt_us": 32.768,
       "offpulse_sigma": 0.3097242793038806,
       "peak_snr": 58.78297260416505,
+      "profile_peaks_above_5sigma": 6,
       "samples": 2500,
       "t_factor": 1
     }
   },
   "averaging_identity_max_abs_difference": 0.09967517852783203,
   "averaging_identity_note": "NOT round-off. The coarse arm differs from a literal adjacent-pair mean of the native arm by a near-constant 0.0997, about 0.37 off-pulse sigma, so load_band's t_factor path is not a bare pairwise average. A previously claimed 2.22e-15 identity is not reproducible through this production loader; it presumably came from an independent averaging step rather than from the path the fits actually use.",
-  "component_structure_differs": true,
-  "components": {
+  "held_identical": {
+    "f_factor": 12,
+    "loader": "plot_codetection_gallery.load_band",
+    "residual_dm": 0.0,
+    "telescope": "dsa"
+  },
+  "input": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
+  "input_sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01",
+  "outputs": {
+    "zach_dsa_resolution_comparison.pdf": "7de2574997f2ceaa8c1f8e3d6fa37839fd19f3cdbf3b514d9a77601c85f559c4",
+    "zach_dsa_resolution_comparison.png": "a4ef354b2d86bbbfd569ca7ae07a24817d481ebb34d0f951d61f595991ebf0a5"
+  },
+  "peak_snr_ratio_coarse_over_native": 1.1233247022825428,
+  "producer": {
+    "argv": [
+      "docs/rse/verify/zach-dsa-resolution-comparison-20260730/compare_resolution.py",
+      "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis",
+      "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/docs/rse/verify/zach-dsa-resolution-comparison-20260730",
+      "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy"
+    ],
+    "matplotlib": "3.10.6",
+    "numpy": "2.5.1",
+    "producer_revision": "77231aedb34f61056d174c4fbfbff0ad01948465",
+    "python": "3.12.13",
+    "script_sha256": "0824eaf8b4072e4f04e7074922219b1e92eb9d9fd59b675fcb9004f90615984e",
+    "working_directory": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis"
+  },
+  "profile_peaks": {
     "adjacent_pair_ms_from_peak_and_snr": [
       [
         0.0,
@@ -66,40 +92,10 @@
       ]
     ]
   },
-  "held_identical": {
-    "f_factor": 12,
-    "loader": "plot_codetection_gallery.load_band",
-    "residual_dm": 0.0,
-    "telescope": "dsa"
-  },
-  "independent_recheck": {
-    "differences": "reads the archival array directly rather than through load_band; stricter dead-channel rule; own block averaging; one off-pulse baseline fixed in native time for both arms instead of each arm's own quartiles; scipy.signal.find_peaks instead of a hand-rolled local-maximum search",
-    "offset_cause_identified": "the 0.0997 constant is load_band recomputing its per-channel baseline from the outer quartiles of each already-decimated array (scripts/plot_codetection_gallery.py:227-232), so the two time factors do not share a zero point. Intended behaviour.",
-    "qualification": "requiring a peak prominence of two standard deviations above the neighbouring troughs collapses both arms to four. The two components averaging destroys are low-prominence shoulders, prominence between one and two standard deviations. The ordering native > coarse survives at prominence 0 and 1 and at every height threshold tested; it does not survive a prominence requirement of 2.",
-    "reproduces": "six versus four above five standard deviations, with every component time and significance identical, and separations of 0.163 and 0.230 ms for the two lost components",
-    "script": "independent_recheck.py",
-    "shares_no_code_with": "compare_resolution.py",
-    "threshold_sweep": {
-      "4_sigma": {
-        "adjacent_pair": 4,
-        "native": 6
-      },
-      "5_sigma": {
-        "adjacent_pair": 4,
-        "native": 6
-      },
-      "6_sigma": {
-        "adjacent_pair": 4,
-        "native": 5
-      }
-    }
-  },
-  "input": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
-  "input_sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01",
-  "peak_snr_ratio_coarse_over_native": 1.1233247022825428,
   "raw_peak_amplitude": {
     "adjacent_pair": 17.980180740356445,
     "native": 18.565961837768555,
     "ratio_coarse_over_native": 0.9684486533727297
-  }
+  },
+  "threshold_peak_count_differs": true
 }

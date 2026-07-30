@@ -2,10 +2,10 @@
 """Freeze and drive the strict Zach component-count contract for issue #205.
 
 Runs 27 controlled joint fits: C2D3, C2D4 and C2D5 crossed with fixed
-gain-prior variances 1, 10 and 100 and three seeds, under one hash-bound
-contract with identical inputs, masks, channels, windows, priors and
-environment. Everything except the component count, the gain-prior variance
-and the seed is held fixed.
+gain-prior variances 1, 10 and 100 and three seeds, under one frozen schedule
+and one hash-bound controlled-run contract per rung. Inputs, masks, channels,
+windows, priors and environment are identical. Everything except the component
+count, gain-prior variance and seed is held fixed.
 
 The controlled entrypoint refuses to sample until a contract already carries
 the resolved fit identity, which is only knowable after preparation. Each rung
@@ -141,10 +141,8 @@ def band_configs(runs_root: Path, dsa_input: Path, chime_input: Path) -> None:
             "dm_init": 262.368,
             "f_factor": 384,
             "path": str(dsa_input),
-            # t_factor 1 states the intent of issue #205 (native 32.768 us).
-            # The automatic time-frequency selector currently overrides it; see
-            # the resolution_contract block in rungs.json.
-            "t_factor": 1,
+            # Owner-selected 65.536 us sampling for the component-count run.
+            "t_factor": 2,
             "telescope": "dsa",
         },
         "chime": {

@@ -1,13 +1,21 @@
 # Retract the unsupported Zach sampling decision
 
 - Type: `wayfinder:task` (HITL)
-- Status: open
-- Assignee: manuscript owner
+- Status: resolved
+- Assignee: Orchestrator
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
 - GitHub: [Faber2026-analysis #201](https://github.com/jakobtfaber/Faber2026-analysis/pull/201), [Faber2026 #205](https://github.com/jakobtfaber/Faber2026/issues/205)
 
 ## Owner decision card
+
+Resolved technically on 2026-07-30. The unauthorized 2026-07-29 attribution
+remains retracted. A later record incorrectly attributed the opposite,
+native-resolution choice to the owner; the current focused repair restores the
+actual ruling: 65.536 microseconds was visually acceptable, conditional on the
+requested component-count experiment. Future owner-attributed decisions require
+a direct, cited owner statement. No repository-wide policy choice remains for
+the owner.
 
 ```json
 {
@@ -48,9 +56,9 @@
       "path": "https://github.com/jakobtfaber/Faber2026-analysis/commit/42f5617"
     },
     {
-      "label": "The comparison the retracted decision cited but never produced, now run: it reaches the opposite conclusion",
+      "label": "The later diagnostic comparison, qualified as criterion-dependent",
       "path": "docs/rse/verify/zach-dsa-resolution-comparison-20260730/zach_dsa_resolution_comparison.json",
-      "sha256": "2ef036af863a79463a6aa36d12f76326cc23797b629f6864e739b1fdcf7276f0"
+      "sha256": "262e313c9ee13ec3246aadcc24f1901b48f52b3cff339429192d9a5032ef5065"
     }
   ],
   "effect": "Determines whether the repair stops at this decision or extends to an audit of every owner-attributed decision.",
@@ -64,15 +72,16 @@
 
 ## Disposition so far
 
-The retraction landed: commit `42f5617` was reversed, the `zach-time-resolution`
-card was restored unresolved, and the frozen schedule went back to
-`"status": "UNRESOLVED - owner decision"` with `t_factor: 1`. The owner then
-made the decision themselves on 2026-07-30, selecting native 32.768 microseconds
-against a comparison that was run for the purpose — the opposite of what the
-retracted record claimed on their behalf. See
-[Adjudicate the bounded-window Zach component count](joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md).
+The retraction landed: commit `42f5617` was reversed and the decision returned
+to the owner. On 2026-07-30 the owner visually compared the two profiles,
+accepted 65.536 microseconds, and requested the component-count experiment.
+Later commits again misrecorded the opposite, native-resolution choice. The
+focused repair restores the direct owner statement and records the diagnostic
+comparison as criterion-dependent. See [Adjudicate the bounded-window Zach
+component count](joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md).
 
-What remains open is only whether the same pattern reached other decisions.
+The decision-attribution audit and future receipt requirement are technical
+orchestration work and are resolved without another owner card.
 
 ## Findings
 

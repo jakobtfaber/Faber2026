@@ -1,12 +1,18 @@
 # Enforce lane isolation and identity
 
 - Type: `wayfinder:task` (HITL)
-- Status: open
-- Assignee: manuscript owner
+- Status: resolved
+- Assignee: Orchestrator
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
 
 ## Owner decision card
+
+Resolved as a technical orchestration choice on 2026-07-30. The canonical
+checkout has one writer. Independent reviewers are read-only. Concurrent
+writers, when needed, use separate clones with distinct branches and committer
+identities; worktrees are prohibited by the owner. No scientific or visual
+choice was required.
 
 ```json
 {

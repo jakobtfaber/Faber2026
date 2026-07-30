@@ -1,4 +1,4 @@
-"""Independent re-derivation of the native-versus-averaged component count.
+"""Independent re-derivation of the native-versus-averaged profile-peak count.
 
 Deliberately shares no code with compare_resolution.py: it reads the archival
 array directly, does its own dead-channel handling and its own block averaging,
@@ -8,12 +8,25 @@ hand-rolled local-maximum loop. If "six at native, four after averaging" is an
 artifact of the first implementation's choices, this should disagree.
 """
 
+import hashlib
+import json
+import platform
+import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
 from scipy.signal import find_peaks
 
-RAW = Path("~/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy").expanduser()
+ANALYSIS = Path(sys.argv[1])
+OUT = Path(sys.argv[2])
+RAW = (
+    Path(sys.argv[3])
+    if len(sys.argv) > 3
+    else Path(
+        "~/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy"
+    ).expanduser()
+)
 DT_MS = 0.032768
 F_FACTOR = 12
 
@@ -56,6 +69,7 @@ def detect(prof, t_factor, sigma_thresh, min_prominence_sigma):
 native = band_profile(1)
 coarse = band_profile(2)
 
+rows = []
 print(f"{'threshold':>9} {'prominence':>11} {'native':>7} {'coarse':>7}  verdict")
 for thresh in (4.0, 5.0, 6.0):
     for prom in (0.0, 1.0, 2.0):
@@ -66,17 +80,71 @@ for thresh in (4.0, 5.0, 6.0):
             if len(n) > len(c)
             else ("EQUAL" if len(n) == len(c) else "COARSE MORE (!)")
         )
+        rows.append(
+            {
+                "threshold_sigma": thresh,
+                "prominence_sigma": prom,
+                "native_count": len(n),
+                "coarse_count": len(c),
+            }
+        )
         print(f"{thresh:>9} {prom:>11} {len(n):>7} {len(c):>7}  {verdict}")
 
 print("\nAt the recorded criterion (5 sigma, no prominence requirement):")
-n, _ = detect(native, 1, 5.0, 0.0)
-c, _ = detect(coarse, 2, 5.0, 0.0)
-print("  native:", n)
-print("  coarse:", c)
-for t, s in n:
-    if not any(abs(t - y) < 0.07 for y, _ in c):
-        near = min((y for y, _ in c), key=lambda y: abs(t - y))
+n_recorded, _ = detect(native, 1, 5.0, 0.0)
+c_recorded, _ = detect(coarse, 2, 5.0, 0.0)
+print("  native:", n_recorded)
+print("  coarse:", c_recorded)
+for t, s in n_recorded:
+    if not any(abs(t - y) < 0.07 for y, _ in c_recorded):
+        near = min((y for y, _ in c_recorded), key=lambda y: abs(t - y))
         print(
             f"  LOST {t:+.3f} ms ({s} sigma) -> nearest surviving {near:+.3f}, "
             f"separation {abs(t - near):.3f} ms"
         )
+
+receipt = {
+    "producer": {
+        "argv": sys.argv,
+        "working_directory": str(Path.cwd()),
+        "producer_revision": subprocess.check_output(
+            [
+                "git",
+                "-C",
+                str(ANALYSIS),
+                "log",
+                "-1",
+                "--format=%H",
+                "--",
+                str(Path(__file__).resolve().relative_to(ANALYSIS.resolve())),
+            ],
+            text=True,
+        ).strip(),
+        "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "python": platform.python_version(),
+        "numpy": np.__version__,
+    },
+    "input": str(RAW),
+    "input_sha256": hashlib.sha256(RAW.read_bytes()).hexdigest(),
+    "method": {
+        "frequency_factor": F_FACTOR,
+        "shared_code_with_primary": False,
+        "baseline": "same physical off-pulse definition, estimated separately per arm",
+        "detector": "scipy.signal.find_peaks",
+    },
+    "threshold_sweep": rows,
+    "recorded_criterion": {
+        "threshold_sigma": 5.0,
+        "prominence_sigma": 0.0,
+        "native_peaks": n_recorded,
+        "coarse_peaks": c_recorded,
+    },
+    "scientific_limit": (
+        "Counts are local maxima in a one-dimensional profile, not fitted or physical "
+        "component counts. At two-sigma prominence both arms contain four peaks."
+    ),
+}
+OUT.mkdir(parents=True, exist_ok=True)
+(OUT / "independent_recheck.json").write_text(
+    json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+)

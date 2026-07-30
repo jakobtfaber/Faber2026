@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import platform
+import subprocess
 import sys
 from pathlib import Path
 
@@ -19,9 +21,13 @@ matplotlib.use("Agg")
 
 ANALYSIS = Path(sys.argv[1])
 OUT = Path(sys.argv[2])
-INPUT = Path(
-    "~/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy"
-).expanduser()
+INPUT = (
+    Path(sys.argv[3])
+    if len(sys.argv) > 3
+    else Path(
+        "~/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy"
+    ).expanduser()
+)
 
 # The producer is imported by bare name, so the analysis scripts directory must
 # be on sys.path before the import; ruff's ordering rule cannot express that.
@@ -95,6 +101,27 @@ t_native = (np.arange(native.size) - pk_n) * DT_NATIVE_MS
 t_coarse = (np.arange(coarse.size) - pk_c) * DT_NATIVE_MS * 2
 
 receipt = {
+    "producer": {
+        "argv": sys.argv,
+        "working_directory": str(Path.cwd()),
+        "producer_revision": subprocess.check_output(
+            [
+                "git",
+                "-C",
+                str(ANALYSIS),
+                "log",
+                "-1",
+                "--format=%H",
+                "--",
+                str(Path(__file__).resolve().relative_to(ANALYSIS.resolve())),
+            ],
+            text=True,
+        ).strip(),
+        "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "python": platform.python_version(),
+        "numpy": np.__version__,
+        "matplotlib": matplotlib.__version__,
+    },
     "input": str(INPUT),
     "input_sha256": hashlib.sha256(INPUT.read_bytes()).hexdigest(),
     "held_identical": {
@@ -110,7 +137,7 @@ receipt = {
             "samples": int(native.size),
             "peak_snr": float(np.nanmax(snr_native)),
             "offpulse_sigma": sig_n,
-            "components_above_5sigma": len(pk_native),
+            "profile_peaks_above_5sigma": len(pk_native),
         },
         "adjacent_pair": {
             "t_factor": 2,
@@ -118,10 +145,10 @@ receipt = {
             "samples": int(coarse.size),
             "peak_snr": float(np.nanmax(snr_coarse)),
             "offpulse_sigma": sig_c,
-            "components_above_5sigma": len(pk_coarse),
+            "profile_peaks_above_5sigma": len(pk_coarse),
         },
     },
-    "components": {
+    "profile_peaks": {
         "native_ms_from_peak_and_snr": [
             [round(float((i - pk_n) * DT_NATIVE_MS), 3), round(v, 1)] for i, v in pk_native
         ],
@@ -143,7 +170,7 @@ receipt = {
         "loader; it presumably came from an independent averaging step rather than "
         "from the path the fits actually use."
     ),
-    "component_structure_differs": len(pk_native) != len(pk_coarse),
+    "threshold_peak_count_differs": len(pk_native) != len(pk_coarse),
     "peak_snr_ratio_coarse_over_native": float(np.nanmax(snr_coarse) / np.nanmax(snr_native)),
 }
 
@@ -158,13 +185,28 @@ for ax, t, snr, lab, marks in (
         ax.plot(t[i], v, "v", ms=6, color="crimson")
     ax.set_ylabel("signal to noise")
     ax.set_xlim(-6, 6)
-    ax.text(0.02, 0.88, f"{lab}: {len(marks)} components above 5 sigma", transform=ax.transAxes)
+    ax.text(
+        0.02,
+        0.88,
+        f"{lab}: {len(marks)} profile peaks above 5 sigma",
+        transform=ax.transAxes,
+    )
 axes[1].set_xlabel("time from peak (ms)")
 fig.tight_layout()
 
 OUT.mkdir(parents=True, exist_ok=True)
-fig.savefig(OUT / "zach_dsa_resolution_comparison.pdf")
+fig.savefig(
+    OUT / "zach_dsa_resolution_comparison.pdf",
+    metadata={"CreationDate": None, "ModDate": None},
+)
 fig.savefig(OUT / "zach_dsa_resolution_comparison.png", dpi=150)
+receipt["outputs"] = {
+    name: hashlib.sha256((OUT / name).read_bytes()).hexdigest()
+    for name in (
+        "zach_dsa_resolution_comparison.pdf",
+        "zach_dsa_resolution_comparison.png",
+    )
+}
 (OUT / "zach_dsa_resolution_comparison.json").write_text(
     json.dumps(receipt, indent=2, sort_keys=True) + "\n"
 )
