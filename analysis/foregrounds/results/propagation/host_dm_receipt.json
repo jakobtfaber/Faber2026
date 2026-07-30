@@ -7,10 +7,10 @@
   "manuscript_budget_mutated": false,
   "manuscript_budget_sha256": "27d3404fa2c73fc98ac89651b71250137dc2aee9d8f72f117f8659a8fee01654",
   "outputs": {
-    "foregrounds/results/propagation/host_dm_results.json": "bb63a36998e844ad6249c168d99eefe279e56c20dfbecb728aafbf5a31cf8210",
-    "scripts/dm_budget_uncertainty.csv": "3439692ead56f4890f1dd48090696fd0480cc772a128b78d806b86205f997d8f"
+    "foregrounds/results/propagation/host_dm_diagnostic.csv": "3439692ead56f4890f1dd48090696fd0480cc772a128b78d806b86205f997d8f",
+    "foregrounds/results/propagation/host_dm_results.json": "bb63a36998e844ad6249c168d99eefe279e56c20dfbecb728aafbf5a31cf8210"
   },
-  "producer": "37fc9b18adf31aebac5218c0033fd60110eb6e99f17a831d4611c527c86f90e1",
+  "producer": "43823c73ee30a1c350308575a4f4649e7b4a92b7aeacceb0eed98532b1f829a8",
   "schema_version": 1,
   "status": "fail_closed",
   "tng_calibration": "provisional_transcribed_grid_source_artifact_missing"

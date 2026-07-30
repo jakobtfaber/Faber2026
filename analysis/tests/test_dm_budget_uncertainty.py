@@ -331,7 +331,7 @@ def test_convolution_matches_independent_monte_carlo_oracle():
 
 def test_committed_host_csv_matches_deterministic_summaries():
     """Artifact criterion: admitted committed host rows match the live engine."""
-    path = Path(__file__).resolve().parent.parent / "scripts" / "dm_budget_uncertainty.csv"
+    path = dbu.OUT_CSV
     with path.open(newline="") as handle:
         committed = {
             row["burst"]: row

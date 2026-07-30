@@ -82,13 +82,13 @@ try:
     REPO = manuscript_root()
 except RuntimeError:
     REPO = None
-OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
+PROPAGATION_RESULTS = ANALYSIS_ROOT / "foregrounds/results/propagation"
+OUT_CSV = PROPAGATION_RESULTS / "host_dm_diagnostic.csv"
 OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf" if REPO else None
 OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png" if REPO else None
 BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "census" / "budget_table_data.json"
 DM_CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 SYSTEMS_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_intervening_systems.csv"
-PROPAGATION_RESULTS = ANALYSIS_ROOT / "foregrounds/results/propagation"
 HOST_RESULTS_JSON = PROPAGATION_RESULTS / "host_dm_results.json"
 HOST_RECEIPT_JSON = PROPAGATION_RESULTS / "host_dm_receipt.json"
 INTERVENING_RECEIPT = PROPAGATION_RESULTS / "intervening_receipt.json"
