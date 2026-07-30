@@ -31,6 +31,7 @@ for example ``C2D4:s2-100:seed-20220207``.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import os
 import shutil
@@ -75,6 +76,15 @@ def rung_label(count: dict, s2: int, seed: int) -> str:
     return f"{count['label']}:s2-{s2}:seed-{seed}"
 
 
+def rung_directory_name(rung: dict) -> str:
+    return rung_label(rung["count"], rung["gain_s2"], rung["seed"]).replace(":", "_")
+
+
+def rung_runs_root(runs_root: Path, rung: dict) -> Path:
+    """Return the isolated run namespace for one stochastic fit."""
+    return runs_root / "rungs" / rung_directory_name(rung)
+
+
 def rungs() -> list[dict]:
     out = []
     for count in SCHEDULE["component_counts"]:
@@ -82,6 +92,23 @@ def rungs() -> list[dict]:
             for seed in SCHEDULE["seeds"]:
                 out.append({"count": count, "gain_s2": s2, "seed": seed})
     return out
+
+
+def select_rungs(labels: list[str] | None) -> list[dict]:
+    selected = rungs()
+    if not labels:
+        return selected
+    wanted = set(labels)
+    available = {
+        rung_label(rung["count"], rung["gain_s2"], rung["seed"]): rung
+        for rung in selected
+    }
+    missing = sorted(wanted - available.keys())
+    if missing:
+        raise SystemExit(f"unknown rung(s): {', '.join(missing)}")
+    return [rung for rung in selected if rung_label(
+        rung["count"], rung["gain_s2"], rung["seed"]
+    ) in wanted]
 
 
 def band_configs(runs_root: Path, dsa_input: Path, chime_input: Path) -> None:
@@ -265,7 +292,7 @@ def build_contract(
 ) -> dict:
     files = resolved_files(runs_root)
     contract_dir = runs_root / "contracts"
-    label = rung_label(rung["count"], rung["gain_s2"], rung["seed"]).replace(":", "_")
+    label = rung_directory_name(rung)
     receipt = receipt_output or runs_root / "receipts" / f"{label}.json"
     return {
         "schema": "flits-controlled-joint-fit-contract/v1",
@@ -335,7 +362,7 @@ def run(argv: list[str], runs_root: Path, python: Path) -> subprocess.CompletedP
 
 
 def execute(rung: dict, runs_root: Path, python: Path) -> None:
-    label = rung_label(rung["count"], rung["gain_s2"], rung["seed"]).replace(":", "_")
+    label = rung_directory_name(rung)
     contract_dir = runs_root / "contracts"
     receipt_dir = runs_root / "receipts"
     contract_dir.mkdir(parents=True, exist_ok=True)
@@ -345,42 +372,60 @@ def execute(rung: dict, runs_root: Path, python: Path) -> None:
     freeze_receipt = receipt_dir / f"{label}.freeze.json"
     resolved = contract_dir / f"{label}.resolved.json"
 
-    # Freeze pass: a placeholder identity gets us past preflight and stops
-    # before the sampler, emitting the identity the real pass must carry.
-    contract.write_text(
-        json.dumps(
-            build_contract(
-                rung,
-                runs_root,
-                python,
-                "0" * 64,
-                resolved_output=resolved,
-                receipt_output=freeze_receipt,
-            ),
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    freeze_receipt.unlink(missing_ok=True)
-    resolved.unlink(missing_ok=True)
-    run(runner_args(rung, contract, freeze_receipt, resolved), runs_root, python)
-    if not resolved.is_file():
-        raise SystemExit(f"[{label}] freeze pass did not emit a resolved identity")
-    identity = json.loads(resolved.read_text(encoding="utf-8"))["identity_sha256"]
+    lock_path = runs_root / ".stage.lock"
+    with lock_path.open("w", encoding="utf-8") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise SystemExit(f"[{label}] another launcher owns this rung") from exc
 
-    # Real pass: the incomplete freeze receipt must not survive into it.
-    freeze_receipt.unlink(missing_ok=True)
-    receipt.unlink(missing_ok=True)
-    contract.write_text(
-        json.dumps(build_contract(rung, runs_root, python, identity), indent=2, sort_keys=True)
-        + "\n",
-        encoding="utf-8",
-    )
-    completed = run(runner_args(rung, contract, receipt, None), runs_root, python)
-    if completed.returncode != 0:
-        raise SystemExit(f"[{label}] controlled run failed with code {completed.returncode}")
+        existing = [path for path in (contract, receipt, freeze_receipt, resolved) if path.exists()]
+        output_dir = runs_root / "data" / "joint"
+        if output_dir.exists():
+            existing.extend(path for path in output_dir.iterdir() if path.is_file())
+        if existing:
+            names = ", ".join(str(path.relative_to(runs_root)) for path in sorted(existing))
+            raise SystemExit(
+                f"[{label}] rung directory is not empty; use a new run root: {names}"
+            )
+
+        # Freeze pass: a placeholder identity gets us past preflight and stops
+        # before the sampler, emitting the identity the real pass must carry.
+        contract.write_text(
+            json.dumps(
+                build_contract(
+                    rung,
+                    runs_root,
+                    python,
+                    "0" * 64,
+                    resolved_output=resolved,
+                    receipt_output=freeze_receipt,
+                ),
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        run(runner_args(rung, contract, freeze_receipt, resolved), runs_root, python)
+        if not resolved.is_file():
+            raise SystemExit(f"[{label}] freeze pass did not emit a resolved identity")
+        identity = json.loads(resolved.read_text(encoding="utf-8"))["identity_sha256"]
+
+        # Real pass: the incomplete freeze receipt must not survive into it.
+        freeze_receipt.unlink(missing_ok=True)
+        contract.write_text(
+            json.dumps(
+                build_contract(rung, runs_root, python, identity),
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        completed = run(runner_args(rung, contract, receipt, None), runs_root, python)
+        if completed.returncode != 0:
+            raise SystemExit(f"[{label}] controlled run failed with code {completed.returncode}")
 
 
 def main() -> None:
@@ -393,14 +438,7 @@ def main() -> None:
     ap.add_argument("--plan-only", action="store_true", help="print the schedule and stop")
     args = ap.parse_args()
 
-    selected = rungs()
-    if args.rung:
-        wanted = set(args.rung)
-        selected = [
-            r for r in selected if rung_label(r["count"], r["gain_s2"], r["seed"]) in wanted
-        ]
-        if not selected:
-            raise SystemExit("no rung matched")
+    selected = select_rungs(args.rung)
 
     if args.plan_only:
         for rung in selected:
@@ -418,11 +456,17 @@ def main() -> None:
         )
 
     args.runs_root.mkdir(parents=True, exist_ok=True)
-    band_configs(args.runs_root, args.dsa_input.resolve(), args.chime_input.resolve())
     for rung in selected:
         label = rung_label(rung["count"], rung["gain_s2"], rung["seed"])
         print(f"=== {label} ===", flush=True)
-        execute(rung, args.runs_root, args.python)
+        isolated_root = rung_runs_root(args.runs_root, rung)
+        isolated_root.mkdir(parents=True, exist_ok=True)
+        band_configs(
+            isolated_root,
+            args.dsa_input.resolve(),
+            args.chime_input.resolve(),
+        )
+        execute(rung, isolated_root, args.python)
 
 
 if __name__ == "__main__":

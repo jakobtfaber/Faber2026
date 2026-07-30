@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import fcntl
 import importlib.util
 import json
 import sys
@@ -77,6 +78,71 @@ def test_rung_labels_are_unique(stager):
         stager.rung_label(r["count"], r["gain_s2"], r["seed"]) for r in stager.rungs()
     ]
     assert len(set(labels)) == len(labels)
+
+
+def test_every_seed_has_an_isolated_output_namespace(stager, tmp_path):
+    """All 27 stochastic fits must export distinct paths for all five outputs."""
+    outputs = []
+    for rung in stager.rungs():
+        root = stager.rung_runs_root(tmp_path, rung)
+        assert stager.subprocess_env(root)["FABER2026_RUNS"] == str(root.resolve())
+        tag = f"_C{rung['count']['components_C']}D{rung['count']['components_D']}"
+        tag += f"_s2-{rung['gain_s2']}"
+        joint = root / "data" / "joint"
+        outputs.extend(
+            [
+                joint / f"zach_joint_fit{tag}.json",
+                joint / f"zach_joint_samples{tag}.npz",
+                joint / f"zach_jointmodel{tag}.npz",
+                joint / f"zach_joint_diagnostics{tag}.json",
+                joint / f"zach_joint_panel{tag}.svg",
+            ]
+        )
+    assert len(outputs) == 135
+    assert len(set(outputs)) == 135
+
+
+def test_unknown_requested_rung_fails_closed(stager):
+    valid = stager.rung_label(
+        stager.rungs()[0]["count"],
+        stager.rungs()[0]["gain_s2"],
+        stager.rungs()[0]["seed"],
+    )
+    with pytest.raises(SystemExit, match="unknown rung"):
+        stager.select_rungs([valid, "C2D9:s2-1:seed-20220207"])
+
+
+def test_existing_rung_artifact_blocks_restart(stager, tmp_path, monkeypatch):
+    rung = stager.rungs()[0]
+    root = stager.rung_runs_root(tmp_path, rung)
+    stager.band_configs(root, Path("/nonexistent/dsa.npy"), Path("/nonexistent/chime.npy"))
+    receipt_dir = root / "receipts"
+    receipt_dir.mkdir(parents=True)
+    receipt = receipt_dir / f"{stager.rung_directory_name(rung)}.json"
+    receipt.write_text("{}\n", encoding="utf-8")
+    monkeypatch.setattr(
+        stager,
+        "build_contract",
+        lambda *_args, **_kwargs: pytest.fail("must refuse before rebuilding"),
+    )
+    with pytest.raises(SystemExit, match="rung directory is not empty"):
+        stager.execute(rung, root, Path(sys.executable))
+
+
+def test_duplicate_rung_launcher_is_rejected(stager, tmp_path, monkeypatch):
+    rung = stager.rungs()[0]
+    root = stager.rung_runs_root(tmp_path, rung)
+    stager.band_configs(root, Path("/nonexistent/dsa.npy"), Path("/nonexistent/chime.npy"))
+    lock_path = root / ".stage.lock"
+    with lock_path.open("w", encoding="utf-8") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        monkeypatch.setattr(
+            stager,
+            "build_contract",
+            lambda *_args, **_kwargs: pytest.fail("must refuse before rebuilding"),
+        )
+        with pytest.raises(SystemExit, match="another launcher owns this rung"):
+            stager.execute(rung, root, Path(sys.executable))
 
 
 def test_only_count_variance_and_seed_vary(stager):
