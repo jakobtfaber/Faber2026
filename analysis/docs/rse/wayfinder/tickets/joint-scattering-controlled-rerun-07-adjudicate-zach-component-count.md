@@ -21,7 +21,7 @@
   samples to 65.536 microseconds destroys two components that exceed five
   standard deviations at native resolution — one at +2.195 milliseconds from
   the peak at 5.8 standard deviations, one at +2.785 milliseconds at 8.1 — each
-  by merging it into a neighbour 0.13 to 0.26 milliseconds away. Six components
+  by merging it into a neighbour 0.16 to 0.23 milliseconds away. Six components
   above five standard deviations survive at native resolution; four survive
   after averaging. Averaging therefore changes the count of resolvable
   components in the very burst whose count this ticket adjudicates.

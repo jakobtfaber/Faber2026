@@ -48,7 +48,7 @@ residual dispersion measure held identical. Only the time factor varies.
 | adjacent-pair | 65.536 us | **4** |
 
 The two that disappear sit at +2.195 milliseconds from the peak (5.8 sigma) and
-+2.785 milliseconds (8.1 sigma). Each merges into a neighbour 0.13 to 0.26
++2.785 milliseconds (8.1 sigma). Each merges into a neighbour 0.16 to 0.23
 milliseconds away, below the coarse sample spacing. Averaging changes the count
 of resolvable components in the burst whose component count issue #205 exists to
 adjudicate, so it cannot be used for that adjudication.
@@ -69,9 +69,10 @@ The ratified choice is **not deliverable by configuration**. `choose_resolution`
 does pick native resolution for DSA-110 from its own window, but
 `_common_peak_relative_window` then unions the bands, CHIME/FRB's window
 stretches the common span to 23.8 milliseconds — 726 native DSA-110 samples —
-and `_build_model` (`joint_tf_prep.py:439-442`) re-applies the `MAX_TIME_BINS`
-cap of 512 to the reconciled window, doubling the decimation. No band setting
-overrides that.
+and `_build_model` re-applies the `MAX_TIME_BINS` cap of 512 to that
+reconciled window, doubling the decimation. The cap and the loop that applies
+it are at `scattering/studies/joint-refits/joint_tf_prep.py:82` and
+`:439-442`. No band setting overrides that.
 
 **Raising the cap to 1024 is the remaining work on ticket 07.** It roughly
 doubles the DSA-110 sample count, so fit time rises correspondingly — the
@@ -131,6 +132,18 @@ Separately, the scratch worktree used to prepare this work was deleted from disk
 and pruned from `git worktree list` by another lane **while a test run was using
 it**. The commits survived in the shared object store, so nothing was lost, and
 the background suite died with `FileNotFoundError` rather than a test result.
+
+## Correction to the first version of this handoff
+
+The merged-neighbour separations were first written as "0.13 to 0.26
+milliseconds". Recomputed from the receipt they are **0.163 and 0.230
+milliseconds** — native +2.195 to coarse +2.032, and native +2.785 to coarse
++3.015. The corrected range is 0.16 to 0.23 milliseconds, and it is fixed here,
+in ticket 07, and in `rungs.json`. The conclusion is unaffected: both
+separations remain below the 65.536-microsecond coarse sample spacing, which is
+why the components merge. The comments already posted to issue #205 and pull
+request 204 carry the superseded figures and are corrected in follow-up
+comments rather than edited, so the trail stays intact.
 
 ## Verification
 
