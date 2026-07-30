@@ -6,12 +6,32 @@
   "frozen_on": "2026-07-29",
   "pulse_broadening_family": "all-exponential exponentially modified Gaussian (canonical)",
   "component_counts": [
-    {"label": "C2D3", "components_C": 2, "components_D": 3},
-    {"label": "C2D4", "components_C": 2, "components_D": 4},
-    {"label": "C2D5", "components_C": 2, "components_D": 5}
+    {
+      "label": "C2D3",
+      "components_C": 2,
+      "components_D": 3
+    },
+    {
+      "label": "C2D4",
+      "components_C": 2,
+      "components_D": 4
+    },
+    {
+      "label": "C2D5",
+      "components_C": 2,
+      "components_D": 5
+    }
   ],
-  "gain_prior_variances": [1, 10, 100],
-  "seeds": [20220207, 20220208, 20220209],
+  "gain_prior_variances": [
+    1,
+    10,
+    100
+  ],
+  "seeds": [
+    20220207,
+    20220208,
+    20220209
+  ],
   "seed_schedule_note": "20220207 is the seed the 2026-07-23 C2D4 run used; the two successors are its immediate increments. The three seeds exist only to measure the sampler's own log-evidence scatter, which enters the acceptance test as a numerical uncertainty. Chosen by this lane as a reversible default and recorded here so it is reproducible.",
   "total_rungs": 27,
   "sampler": {
@@ -19,7 +39,10 @@
     "nproc": 4,
     "dlogz": 0.5,
     "sample": "rwalk",
-    "alpha_bounds": [2.0, 6.0],
+    "alpha_bounds": [
+      2.0,
+      6.0
+    ],
     "beta_bounds": null,
     "mu_degree": 1,
     "marginalize_gain": false,
@@ -46,12 +69,15 @@
     "seed (20220207, 20220208, 20220209)"
   ],
   "resolution_contract": {
-    "owner_selection": "DSA-110 at 65.536 microseconds by averaging adjacent native samples; CHIME/FRB at its existing prepared resolution",
-    "selected_on": "2026-07-29",
-    "status": "RESOLVED - owner accepted adjacent-pair averaging",
+    "required_by_issue": "DSA-110 at native 32.768 microsecond time resolution; CHIME/FRB at its existing prepared resolution",
+    "delivered_by_current_code": "DSA-110 at 65.5 microseconds (time decimation 2)",
+    "status": "RESOLVED - owner selected native 32.768 us",
     "cause": "band reconciliation. choose_resolution picks native 32.768 us for DSA-110 from its own 41-sample window; _common_peak_relative_window then unions the bands, and CHIME/FRB's 9280-sample window stretches the common span to 23.8 ms = 726 native DSA-110 samples; _build_model (joint_tf_prep.py:439-442) re-applies the MAX_TIME_BINS cap of 512 to that reconciled window and doubles the decimation to 2. Raising the cap to 1024 restores native resolution. DSA-110 is coarsened because CHIME/FRB is long, not because DSA-110 needs it.",
-    "decision_evidence": "Direct comparison on input SHA-256 be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01, with identical 24-channel frequency averaging and 23.8 ms window: the averaged profile retained the visible burst structure, reduced the peak by 2.7%, and reduced outer-window noise by 14%. The prepared 65.536 us array matched the direct adjacent-pair mean to 2.22e-15 maximum absolute difference.",
-    "note": "65.536 microseconds must be identical across all 27 DSA-110 rungs or the comparison is void"
+    "note": "this schedule is written for whichever resolution the owner fixes; the resolution must be identical across all 27 rungs or the comparison is void",
+    "decision": "manuscript owner, 2026-07-30: keep every native 32.768-microsecond DSA-110 sample for all 27 rungs.",
+    "decision_evidence": "docs/rse/verify/zach-dsa-resolution-comparison-20260730/. Same archival product at time factors 1 and 2 with the loader, frequency averaging, window and residual dispersion measure held identical: six components above five standard deviations at native resolution, four after adjacent-pair averaging. The two lost components sit at +2.195 ms (5.8 sigma) and +2.785 ms (8.1 sigma) and each merges into a neighbour 0.13 to 0.26 ms away, so averaging changes the resolvable component count of the burst this schedule adjudicates.",
+    "blocking_followup": "the decision is not deliverable by configuration. _build_model (joint_tf_prep.py:439-442) re-applies the MAX_TIME_BINS cap of 512 after band reconciliation, so the cap must be raised to 1024 before any rung runs, at roughly double the DSA-110 sample count.",
+    "superseded_decision": "a 2026-07-29 record selecting 65.536 microseconds was retracted; the owner did not make it and its cited comparison did not exist. See docs/rse/wayfinder/tickets/unsupported-zach-sampling-decision.md."
   },
   "acceptance": {
     "evidence_threshold": 5.0,

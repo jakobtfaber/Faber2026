@@ -11,19 +11,38 @@
 
 ## Owner decision
 
-- Decision: average adjacent DSA-110 samples to 65.536 microseconds for all 27
-  controlled component-count fits.
-- Recorded: manuscript owner, 2026-07-29.
-- Basis: the direct 32.768-versus-65.536-microsecond comparison used the same
-  24 frequency channels and 23.8-millisecond fitting window. The averaged
-  profile retained the main pulse and later 2–3-millisecond structure, reduced
-  the peak by 2.7%, and reduced outer-window noise by 14%.
+- Decision: keep every native 32.768-microsecond DSA-110 sample for all 27
+  controlled component-count fits. Choice `native` on card
+  `zach-time-resolution`.
+- Recorded: manuscript owner, 2026-07-30.
+- Basis: a like-for-like comparison of the same archival product at time
+  factors 1 and 2, holding the loader, the 12-channel frequency averaging, the
+  window and the zero residual dispersion measure identical. Averaging adjacent
+  samples to 65.536 microseconds destroys two components that exceed five
+  standard deviations at native resolution — one at +2.195 milliseconds from
+  the peak at 5.8 standard deviations, one at +2.785 milliseconds at 8.1 — each
+  by merging it into a neighbour 0.13 to 0.26 milliseconds away. Six components
+  above five standard deviations survive at native resolution; four survive
+  after averaging. Averaging therefore changes the count of resolvable
+  components in the very burst whose count this ticket adjudicates.
+- Evidence: `docs/rse/verify/zach-dsa-resolution-comparison-20260730/`
+  (`zach_dsa_resolution_comparison.json`, the figure, and the script that
+  regenerates both).
 - Input: `zach_dsa_I_262_368_2500b_cntr_bpc.npy`, SHA-256
   `be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01`.
-- Reproduction check: the 65.536-microsecond array agreed with the direct mean
-  of adjacent 32.768-microsecond samples to a maximum absolute difference of
-  `2.22e-15`.
-- Effect: time sampling is fixed and no longer blocks technical execution.
+- Effect: the time sampling is fixed at 32.768 microseconds and is no longer an
+  owner decision. It does **not** unblock technical execution on its own: the
+  preparation code still delivers 65.5 microseconds because `_build_model`
+  re-applies the `MAX_TIME_BINS` cap of 512 after band reconciliation, and no
+  band configuration setting overrides that. Delivering this decision requires
+  raising the cap to 1024, at roughly double the DSA-110 sample count and a
+  corresponding increase in fit time. That code change is the remaining work on
+  this ticket.
+- Supersedes: the decision recorded on 2026-07-29 selecting 65.536 microseconds,
+  which the owner did not make. See
+  [Retract the unsupported Zach sampling decision](unsupported-zach-sampling-decision.md).
+  The present ratification reaches the opposite conclusion on evidence that now
+  exists.
 
 ## What to build
 
@@ -32,7 +51,7 @@ morphology rerun. This is a new experiment, not recovery of job 180 and not a
 substitute for the injection-calibrated sample-wide statistic in ticket 20.
 
 Use the canonical all-exponential exponentially modified Gaussian family,
-65.536-microsecond DSA-110 time resolution, unchanged prepared CHIME/FRB
+native 32.8 microsecond DSA-110 time resolution, unchanged prepared CHIME/FRB
 resolution, identical masks, channels, fitted support, prior version, and a
 frozen multi-seed schedule. Compare fixed gain-prior variances
 `s2 = {1, 10, 100}` only within the same pulse-broadening family and sampler
