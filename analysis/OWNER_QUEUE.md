@@ -29,7 +29,33 @@ _Only scientific and visual decisions. Silence leaves every item blocked._
 
 **Record:** `docs/rse/wayfinder/tickets/figure3-installed-owner-approval.md` — Record the owner choice and bind any approval receipt to the exact PDF hash.
 
-## 2. Figure 1 disposition
+## 2. Close dm-toa worktree loss audit
+
+**Decision:** Accept the nine unrecovered tracked-file modifications as superseded, or keep recovery open?
+
+**Recommended:** `require-accounting` — Generated products and phase-B configurations are accounted for, but the exact bytes of 1918 reported uncommitted insertions remain unavailable.
+
+**Choose:**
+
+- `require-accounting` — Keep recovery open until the nine tracked-file modifications are accounted for.
+- `accept-superseded` — Accept the remaining uncertainty and close the audit.
+
+**Context:**
+
+- The generated dm-toa-geometry products were preserved with checksums before retirement.
+- The 13 phase-b configuration filenames are tracked in origin/main at analysis-configs/absolute-dm/phase-b/.
+- A targeted search found no snapshot of 1918 reported uncommitted insertions across nine tracked one-event workflow files.
+
+**Evidence:**
+
+- [Scope and worktree audit receipt](docs/rse/specs/receipt-branch-scope-and-worktree-audit-2026-07-29.md) — `eaa6371f…`
+- [Pull request 167, which landed the phase-b controls](https://github.com/jakobtfaber/Faber2026-analysis/pull/167)
+
+**Effect:** Settles only the remaining uncertainty around nine unrecovered tracked-file modifications.
+
+**Record:** `docs/rse/wayfinder/tickets/dm-toa-worktree-loss-audit.md` — Record the owner choice here, with the accounting or the explicit acceptance that closes it.
+
+## 3. Figure 1 disposition
 
 **Decision:** How should the data-only Figure 1 candidate handle the unmet residual-drift gate?
 
@@ -57,7 +83,7 @@ _Only scientific and visual decisions. Silence leaves every item blocked._
 
 **Record:** `figure_review/artifacts/batches/2026-07-17-fig1-observed-peak-audit/manifest.json` — Record the scientific disposition, then use figure_review.py for exact-byte approval.
 
-## 3. Zach time resolution
+## 4. Zach time resolution
 
 **Decision:** Which DSA-110 time resolution should govern the Zach component-count comparison?
 
@@ -83,7 +109,7 @@ _Only scientific and visual decisions. Silence leaves every item blocked._
 
 **Record:** `docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md` — Record the selected resolution and update the controlled-run contract.
 
-## 4. Scattering escalation trigger
+## 5. Scattering escalation trigger
 
 **Decision:** May posterior-predictive residuals alone trigger a second broadening component?
 
