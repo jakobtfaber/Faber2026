@@ -59,7 +59,7 @@ jobs:
       - name: Verify manuscript, registry, figures, and tables
         run: make check-provenance
       - name: Validate workflow files
-        uses: rhysd/actionlint@03d0035246f3e81f36aed592ffb4bebf33a03106 # v1.7.7
+        uses: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
       - name: Scan workflow security
         run: uv run --project analysis --group test --frozen zizmor --pedantic .github/workflows
       - name: Compile manuscript
