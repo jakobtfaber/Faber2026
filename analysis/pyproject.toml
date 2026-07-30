@@ -9,6 +9,7 @@ dependencies = [
   "astroquery",
   "chainconsumer>=0.34",
   "corner>=2.2",
+  "dynesty==3.1.0",
   "emcee>=3.1",
   "healpy>=1.18",
   "h5py>=3.9",
