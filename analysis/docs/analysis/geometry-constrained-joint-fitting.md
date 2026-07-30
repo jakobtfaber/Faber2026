@@ -103,6 +103,26 @@ station-delay uncertainties are absent. It performs one CHIME/FRB coherent
 anchor evaluation. Fully coherent bracketing evaluations remain a post-fit
 acceptance step.
 
+Review uses three immutable configuration states:
+
+1. Blocked: only high-resolution preparation and proposals are allowed.
+2. Reviewed: fit grids, component windows, associations, priors, and array
+   hashes are locked; execution remains disabled.
+3. Authorized: an explicit note creates a new binding and enables execution.
+
+Transitions always write a new configuration. Authorization changes the event
+binding, so preflight, DSA-110 audit, both high-resolution product builders,
+fit-grid materialization, and geometry are rebuilt before fitting.
+
+Preparation is two-pass. A high-resolution diagnostic establishes the
+component widths needed to review frequency averaging. Reviewed factors then
+materialize separate fit-grid observations; only those observations define the
+final component sample coordinates. Formal time averaging is forbidden because
+the likelihood evaluates bin centers and does not integrate over averaged-bin
+duration. Frequency averaging requires complete rectangular support and
+analytic residual intra-bin smearing below 0.10 fit sample and 0.05 of the
+narrowest reviewed component width.
+
 Canonical outputs are `fit-result.json`, `posterior.npz`,
 `model-products.npz`, `geometry-constraint.json`, `run-provenance.json`, and
 `review-packet.pdf`. `oracle-verification.json` is the compact fail-closed
@@ -120,5 +140,11 @@ fully coherent CHIME/FRB evaluations and exactly-once DSA-110 corrections.
 The packet shows the posterior-median spectra separately from the fit-coordinate
 data, model, and residual so unlike time coordinates are never overplotted.
 
-Rollout order is injected data, Casey, then Oran and Isha. No other event may
-run before those owner reviews.
+Post-fit resolution convergence is mandatory. The proposed frequency factor is
+compared with half that factor. Both fits must pass; dispersion-measure medians
+must differ by at most 0.5 combined posterior standard deviations and
+0.005 pc cm^-3; arrival times by at most 0.5 combined posterior standard
+deviations; 68% interval-width ratio must lie in 0.8–1.25; morphology and
+association weights may differ by at most 0.10 in summed absolute weight.
+Material movement becomes a systematic uncertainty; it is never silently
+accepted.

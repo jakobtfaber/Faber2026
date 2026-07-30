@@ -13,6 +13,7 @@ from typing import Any
 import h5py
 import numpy as np
 from absolute_dm_voltage import (
+    authoritative_fine_frequency_centres,
     package_dm_argument,
     physical_dm_from_package_coordinate,
     sha256,
@@ -77,7 +78,7 @@ def _upchannel_intensity(
     accepted_live_h5: np.ndarray,
     upchannel_factor: int,
 ) -> dict[str, np.ndarray]:
-    spectrum, fine_frequency_mhz, fine_id = _upchannel(
+    spectrum, _package_fine_frequency_mhz, fine_id = _upchannel(
         voltage,
         freq_id=frequency_id,
         fftsize=2 * upchannel_factor,
@@ -90,11 +91,16 @@ def _upchannel_intensity(
     fine_id = np.asarray(fine_id, dtype=np.int64)
     if not np.array_equal(fine_id, expected_fine_id):
         raise RuntimeError("upchannelized IDs do not map onto authoritative H5 IDs")
+    fine_frequency_mhz = authoritative_fine_frequency_centres(
+        frequency_id,
+        coarse_frequency_mhz,
+        upchannel_factor,
+    )
     intensity = np.abs(spectrum[0]) ** 2 + np.abs(spectrum[1]) ** 2
     intensity = np.asarray(intensity.T, dtype=np.float32)
     result = {
         "waterfall": intensity,
-        "fine_frequency_mhz": np.asarray(fine_frequency_mhz, dtype=float),
+        "fine_frequency_mhz": fine_frequency_mhz,
         "fine_id": fine_id,
         "coarse_frequency_mhz": np.repeat(
             np.asarray(coarse_frequency_mhz, dtype=float),

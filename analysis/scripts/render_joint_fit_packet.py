@@ -83,6 +83,8 @@ def render(
     model_path: Path,
     geometry_path: Path,
     oracle_path: Path,
+    resolution_convergence_path: Path,
+    resolution_convergence_inputs: dict[str, Path],
     output: Path,
 ) -> None:
     if output.suffix.lower() != ".pdf":
@@ -106,6 +108,32 @@ def render(
     oracle = json.loads(oracle_path.read_text())
     if oracle["status"] != "passed_pending_owner_visual_approval":
         raise RuntimeError("physical oracle verification has not passed")
+    convergence = json.loads(resolution_convergence_path.read_text())
+    if convergence.get("status") != "passed" or convergence.get("passed") is not True:
+        raise RuntimeError("fit-resolution convergence has not passed")
+    if not fit.get("event"):
+        raise RuntimeError("fit_result lacks event identity")
+    if convergence.get("event") != fit["event"]:
+        raise RuntimeError("fit-resolution convergence belongs to another event")
+    expected_convergence_inputs = {
+        name: sha256_file(path)
+        for name, path in resolution_convergence_inputs.items()
+    }
+    if (
+        set(expected_convergence_inputs)
+        != {
+            "coarse_fit_result",
+            "fine_fit_result",
+            "coarse_config",
+            "fine_config",
+            "coarse_chime_receipt",
+            "coarse_dsa_receipt",
+            "fine_chime_receipt",
+            "fine_dsa_receipt",
+        }
+        or convergence.get("input_sha256") != expected_convergence_inputs
+    ):
+        raise RuntimeError("fit-resolution convergence input binding is incomplete or stale")
     consumed = {
         "fit_result": fit_result_path,
         "posterior": posterior_path,
@@ -224,6 +252,14 @@ def main() -> None:
     parser.add_argument("--model-products", type=Path, required=True)
     parser.add_argument("--geometry-constraint", type=Path, required=True)
     parser.add_argument("--oracle-verification", type=Path, required=True)
+    parser.add_argument("--resolution-convergence", type=Path, required=True)
+    parser.add_argument("--fine-fit-result", type=Path, required=True)
+    parser.add_argument("--coarse-config", type=Path, required=True)
+    parser.add_argument("--fine-config", type=Path, required=True)
+    parser.add_argument("--coarse-chime-receipt", type=Path, required=True)
+    parser.add_argument("--coarse-dsa-receipt", type=Path, required=True)
+    parser.add_argument("--fine-chime-receipt", type=Path, required=True)
+    parser.add_argument("--fine-dsa-receipt", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     render(
@@ -236,6 +272,17 @@ def main() -> None:
         model_path=args.model_products,
         geometry_path=args.geometry_constraint,
         oracle_path=args.oracle_verification,
+        resolution_convergence_path=args.resolution_convergence,
+        resolution_convergence_inputs={
+            "coarse_fit_result": args.fit_result,
+            "fine_fit_result": args.fine_fit_result,
+            "coarse_config": args.coarse_config,
+            "fine_config": args.fine_config,
+            "coarse_chime_receipt": args.coarse_chime_receipt,
+            "coarse_dsa_receipt": args.coarse_dsa_receipt,
+            "fine_chime_receipt": args.fine_chime_receipt,
+            "fine_dsa_receipt": args.fine_dsa_receipt,
+        },
         output=args.output,
     )
     print(args.output)

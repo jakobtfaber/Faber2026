@@ -320,25 +320,18 @@ def test_driver_does_not_set_the_bytecode_variable_in_its_own_environment(stager
     assert '"PYTHONDONTWRITEBYTECODE": "1"' in source  # still set for children
 
 
-def test_resolution_contract_records_the_ratified_owner_decision(schedule, stager, tmp_path):
-    """Guards against quietly shipping 65.5 us as if it were the requirement.
-
-    The owner fixed native 32.768 microseconds on 2026-07-30 against the
-    comparison receipt under docs/rse/verify/. A prior record selecting 65.536
-    was retracted as unratified, so this asserts both the ratified choice and
-    that the decision still names its evidence.
-    """
+def test_resolution_contract_records_the_actual_owner_decision(schedule, stager, tmp_path):
+    """Guard the accepted 65.536-us experiment against false owner attribution."""
     contract = schedule["resolution_contract"]
     assert contract["status"].startswith("RESOLVED")
-    assert "32.768" in contract["status"]
-    assert "32.768" in contract["required_by_issue"]
-    assert "zach-dsa-resolution-comparison-20260730" in contract["decision_evidence"]
-    # The choice is not deliverable by configuration alone; the cap must move.
-    assert "MAX_TIME_BINS" in contract["blocking_followup"]
+    assert "65.536" in contract["owner_selection"]
+    assert "65.536" in contract["delivered_by_current_code"]
+    assert "component-count experiment" in contract["status"]
+    assert "does not itself determine" in contract["decision_evidence"]
 
     stager.band_configs(tmp_path, Path("/nonexistent/dsa.npy"), Path("/nonexistent/chime.npy"))
     dsa_config = (tmp_path / "configs/zach_dsa_run.yaml").read_text(encoding="utf-8")
-    assert "t_factor: 1" in dsa_config
+    assert "t_factor: 2" in dsa_config
 
 
 def test_parallel_stagers_leave_complete_identical_band_configs(stager, tmp_path):
@@ -357,6 +350,6 @@ def test_parallel_stagers_leave_complete_identical_band_configs(stager, tmp_path
     assert f"path: {json.dumps(str(chime))}" in chime_config
     # Sampling is the owner's accepted experiment resolution; this test also
     # guards against a silent return to the falsely attributed native choice.
-    assert "t_factor: 1" in dsa_config
+    assert "t_factor: 2" in dsa_config
     assert "t_factor: 24" in chime_config
     assert list(config_dir.glob(".*.yaml.*")) == []

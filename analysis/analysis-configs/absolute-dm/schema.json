@@ -331,11 +331,23 @@
         "reference_frequency_mhz",
         "blockers",
         "geometry",
-        "resolution"
+        "resolution",
+        "review_plan",
+        "dm_bounds_pc_cm3",
+        "morphologies",
+        "scattering_tau_1ghz_bounds_s",
+        "scattering_alpha_bounds",
+        "gain_variance",
+        "sampler",
+        "acceptance"
       ],
       "properties": {
         "status": {
-          "enum": ["blocked_pending_reviewed_inputs", "ready"]
+          "enum": [
+            "blocked_pending_reviewed_inputs",
+            "reviewed_execution_disabled",
+            "ready"
+          ]
         },
         "execution_authorized": {
           "type": "boolean"
@@ -427,12 +439,124 @@
             "dsa_valid_mask_sha256": {"$ref": "#/$defs/sha256"},
             "chime_off_pulse_mask_sha256": {"$ref": "#/$defs/sha256"},
             "dsa_off_pulse_mask_sha256": {"$ref": "#/$defs/sha256"},
+            "chime_waterfall_sha256": {"$ref": "#/$defs/sha256"},
+            "dsa_waterfall_sha256": {"$ref": "#/$defs/sha256"},
+            "chime_noise_std_sha256": {"$ref": "#/$defs/sha256"},
+            "dsa_noise_std_sha256": {"$ref": "#/$defs/sha256"},
+            "chime_time_axis_sha256": {"$ref": "#/$defs/sha256"},
+            "dsa_time_axis_sha256": {"$ref": "#/$defs/sha256"},
+            "chime_fit_frequency_average_factor": {
+              "type": ["integer", "null"],
+              "minimum": 1
+            },
+            "chime_fit_time_average_factor": {
+              "type": ["integer", "null"],
+              "minimum": 1
+            },
+            "dsa_fit_frequency_average_factor": {
+              "type": ["integer", "null"],
+              "minimum": 1
+            },
+            "dsa_fit_time_average_factor": {
+              "type": ["integer", "null"],
+              "minimum": 1
+            },
+            "chime_fit_observation_sha256": {
+              "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+            },
+            "dsa_fit_observation_sha256": {
+              "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+            },
+            "chime_max_residual_intra_bin_smearing_s": {
+              "type": ["number", "null"],
+              "minimum": 0
+            },
+            "dsa_max_residual_intra_bin_smearing_s": {
+              "type": ["number", "null"],
+              "minimum": 0
+            },
+            "chime_smearing_calculation_sha256": {
+              "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+            },
+            "dsa_smearing_calculation_sha256": {
+              "anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+            },
             "chime_time0_unix_ns": {"type": ["integer", "null"]},
             "dsa_time0_unix_ns": {"type": ["integer", "null"]}
           }
         },
-        "components": {"type": "array", "minItems": 2},
-        "associations": {"type": "array", "minItems": 1},
+        "review_plan": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "component_count",
+            "association_hypotheses",
+            "fit_resolution"
+          ],
+          "properties": {
+            "component_count": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["chime", "dsa"],
+              "properties": {
+                "chime": {"type": "integer", "minimum": 1},
+                "dsa": {"type": "integer", "minimum": 1}
+              }
+            },
+            "association_hypotheses": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"$ref": "#/$defs/associationHypothesis"}
+            },
+            "fit_resolution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "minimum_valid_fraction",
+                "minimum_samples_per_component",
+                "time_average_factor",
+                "maximum_residual_smearing_fraction_of_fit_sample",
+                "maximum_residual_smearing_fraction_of_component_width",
+                "exact_divisor_required"
+              ],
+              "properties": {
+                "status": {"const": "pending_data_driven_proposal"},
+                "minimum_valid_fraction": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                },
+                "minimum_samples_per_component": {
+                  "type": "integer",
+                  "minimum": 2
+                },
+                "time_average_factor": {"const": 1},
+                "maximum_residual_smearing_fraction_of_fit_sample": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                },
+                "maximum_residual_smearing_fraction_of_component_width": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                },
+                "exact_divisor_required": {"const": true}
+              }
+            }
+          }
+        },
+        "components": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"$ref": "#/$defs/componentWindow"}
+        },
+        "associations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/associationHypothesis"}
+        },
         "dm_bounds_pc_cm3": {"$ref": "#/$defs/numberPair"},
         "morphologies": {
           "type": "array",
@@ -463,7 +587,13 @@
             "maximum_reduced_residual_power",
             "maximum_structured_residual_correlation",
             "posterior_edge_fraction",
-            "maximum_prior_edge_mass"
+            "maximum_prior_edge_mass",
+            "resolution_convergence_required",
+            "maximum_resolution_dm_shift_combined_sigma",
+            "maximum_resolution_dm_shift_pc_cm3",
+            "maximum_resolution_toa_shift_combined_sigma",
+            "resolution_interval_width_ratio",
+            "maximum_resolution_model_weight_l1_difference"
           ],
           "properties": {
             "maximum_reduced_residual_power": {
@@ -484,27 +614,111 @@
               "type": "number",
               "exclusiveMinimum": 0,
               "exclusiveMaximum": 0.5
+            },
+            "resolution_convergence_required": {"const": true},
+            "maximum_resolution_dm_shift_combined_sigma": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maximum_resolution_dm_shift_pc_cm3": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maximum_resolution_toa_shift_combined_sigma": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "resolution_interval_width_ratio": {
+              "type": "array",
+              "prefixItems": [
+                {"type": "number", "exclusiveMinimum": 0},
+                {"type": "number", "minimum": 1}
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "maximum_resolution_model_weight_l1_difference": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 2
+            }
+          }
+        },
+        "review_decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "event",
+            "source_event_binding_sha256",
+            "component_proposal_sha256",
+            "resolution_proposal_sha256",
+            "fit_settings_sha256",
+            "components_sha256",
+            "associations_sha256",
+            "approved_resolution_sha256",
+            "reviewer",
+            "review_date",
+            "note"
+          ],
+          "properties": {
+            "status": {"const": "approved"},
+            "event": {"type": "string", "minLength": 1},
+            "source_event_binding_sha256": {"$ref": "#/$defs/sha256"},
+            "component_proposal_sha256": {"$ref": "#/$defs/sha256"},
+            "resolution_proposal_sha256": {"$ref": "#/$defs/sha256"},
+            "fit_settings_sha256": {"$ref": "#/$defs/sha256"},
+            "components_sha256": {"$ref": "#/$defs/sha256"},
+            "associations_sha256": {"$ref": "#/$defs/sha256"},
+            "approved_resolution_sha256": {"$ref": "#/$defs/sha256"},
+            "reviewer": {"type": "string", "minLength": 1},
+            "review_date": {"type": "string", "format": "date"},
+            "note": {"type": "string", "minLength": 1}
+          }
+        },
+        "authorization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "source_reviewed_event_binding_sha256",
+            "date",
+            "note",
+            "requires_receipt_rebuild"
+          ],
+          "properties": {
+            "status": {"const": "explicitly_authorized"},
+            "source_reviewed_event_binding_sha256": {"$ref": "#/$defs/sha256"},
+            "date": {"type": "string", "format": "date"},
+            "note": {"type": "string", "minLength": 1},
+            "requires_receipt_rebuild": {
+              "const": [
+                "preflight",
+                "dsa_audit",
+                "chime_products",
+                "dsa_products",
+                "geometry_constraint"
+              ]
             }
           }
         }
       },
       "allOf": [
         {
-          "if": {"properties": {"status": {"const": "ready"}}},
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["reviewed_execution_disabled", "ready"]
+              }
+            }
+          },
           "then": {
             "required": [
               "components",
               "associations",
-              "dm_bounds_pc_cm3",
-              "morphologies",
-              "scattering_tau_1ghz_bounds_s",
-              "scattering_alpha_bounds",
-              "gain_variance",
-              "sampler",
-              "acceptance"
+              "review_decision"
             ],
             "properties": {
-              "execution_authorized": {"const": true},
               "blockers": {"maxItems": 0},
               "geometry": {
                 "required": [
@@ -529,6 +743,22 @@
                   "dsa_valid_mask_sha256",
                   "chime_off_pulse_mask_sha256",
                   "dsa_off_pulse_mask_sha256",
+                  "chime_waterfall_sha256",
+                  "dsa_waterfall_sha256",
+                  "chime_noise_std_sha256",
+                  "dsa_noise_std_sha256",
+                  "chime_time_axis_sha256",
+                  "dsa_time_axis_sha256",
+                  "chime_fit_frequency_average_factor",
+                  "chime_fit_time_average_factor",
+                  "dsa_fit_frequency_average_factor",
+                  "dsa_fit_time_average_factor",
+                  "chime_fit_observation_sha256",
+                  "dsa_fit_observation_sha256",
+                  "chime_max_residual_intra_bin_smearing_s",
+                  "dsa_max_residual_intra_bin_smearing_s",
+                  "chime_smearing_calculation_sha256",
+                  "dsa_smearing_calculation_sha256",
                   "chime_time0_unix_ns",
                   "dsa_time0_unix_ns"
                 ],
@@ -537,12 +767,46 @@
                   "chime_frequency_bin_factor": {"type": "integer"},
                   "chime_time_bin_factor": {"type": "integer"},
                   "dsa_frequency_bin_factor": {"type": "integer"},
-                  "dsa_time_bin_factor": {"type": "integer"}
-                  ,
+                  "dsa_time_bin_factor": {"type": "integer"},
+                  "chime_fit_time_average_factor": {"const": 1},
+                  "dsa_fit_time_average_factor": {"const": 1},
+                  "chime_fit_observation_sha256": {"$ref": "#/$defs/sha256"},
+                  "dsa_fit_observation_sha256": {"$ref": "#/$defs/sha256"},
+                  "chime_max_residual_intra_bin_smearing_s": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "dsa_max_residual_intra_bin_smearing_s": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "chime_smearing_calculation_sha256": {
+                    "$ref": "#/$defs/sha256"
+                  },
+                  "dsa_smearing_calculation_sha256": {
+                    "$ref": "#/$defs/sha256"
+                  },
                   "chime_time0_unix_ns": {"type": "integer"},
                   "dsa_time0_unix_ns": {"type": "integer"}
                 }
               }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "reviewed_execution_disabled"}}},
+          "then": {
+            "properties": {
+              "execution_authorized": {"const": false}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "ready"}}},
+          "then": {
+            "required": ["authorization"],
+            "properties": {
+              "execution_authorized": {"const": true}
             }
           }
         }
@@ -581,9 +845,11 @@
                 "dsa_audit",
                 "chime_products",
                 "dsa_products",
-                "geometry_constraint",
-                "joint_fit",
-                "chime_oracle",
+            "geometry_constraint",
+            "joint_fit",
+            "resolution_fit",
+            "resolution_check",
+            "chime_oracle",
                 "dsa_oracle",
                 "oracle_check",
                 "packet",
@@ -745,6 +1011,52 @@
       "items": false,
       "minItems": 2,
       "maxItems": 2
+    },
+    "associationHypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "matches"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "matches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "latent_id",
+              "chime_component_id",
+              "dsa_component_id"
+            ],
+            "properties": {
+              "latent_id": {"type": "string", "minLength": 1},
+              "chime_component_id": {"type": "string", "minLength": 1},
+              "dsa_component_id": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "componentWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instrument",
+        "component_id",
+        "center_sample",
+        "half_width_samples",
+        "width_bounds_s",
+        "width_index_bounds"
+      ],
+      "properties": {
+        "instrument": {"enum": ["chime", "dsa"]},
+        "component_id": {"type": "string", "minLength": 1},
+        "center_sample": {"type": "number", "minimum": 0},
+        "half_width_samples": {"type": "number", "exclusiveMinimum": 0},
+        "width_bounds_s": {"$ref": "#/$defs/numberPair"},
+        "width_index_bounds": {"$ref": "#/$defs/numberPair"}
+      }
     },
     "arrayShape": {
       "type": "array",

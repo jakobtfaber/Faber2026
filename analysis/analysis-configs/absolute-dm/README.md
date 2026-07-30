@@ -35,6 +35,37 @@ fully coherent checks run only after formal inference.
 Its proposed locks remain unapproved until the owner records them in the event
 configuration.
 
+Preparation is incremental. The first pass writes a high-resolution component
+diagnostic and an inert resolution template. The reviewed template must specify
+independent frequency-averaging factors, retain time factor 1, require complete
+rectangular support, and carry the analytic residual-smearing receipt. The
+second pass materializes separate fit-grid products, then writes
+`component-proposal.json`, `component-proposal.pdf`,
+`resolution-lock-proposal.json`, and `review-decision-template.json`.
+Component windows therefore always use fit-grid sample coordinates.
+
+Review and execution authorization are separate, source-preserving operations:
+
+```bash
+python scripts/run_one_event_absolute_dm_workflow.py \
+  --config analysis-configs/absolute-dm/casey.json \
+  --apply-review-decision /path/to/approved-review-decision.json \
+  --component-proposal /path/to/component-proposal.json \
+  --resolution-proposal /path/to/resolution-lock-proposal.json \
+  --output-config /path/to/casey-reviewed.json
+
+python scripts/run_one_event_absolute_dm_workflow.py \
+  --config /path/to/casey-reviewed.json \
+  --authorize-reviewed-config \
+  --authorization-note "explicit science-execution authorization" \
+  --output-config /path/to/casey-authorized.json
+```
+
+Neither command overwrites its source. Review produces a fully locked but
+execution-disabled configuration. Authorization creates another binding.
+Execution must rebuild preflight through geometry and deterministically
+recreate the approved fit grids under that binding before sampling.
+
 The declared runtime is Python 3.12 or newer. On h17 use the locked environment:
 
 ```bash
@@ -50,6 +81,13 @@ uncertainty, priors, and acceptance thresholds. See
 After sampling, mandatory CHIME/FRB coherent and DSA-110 exactly-once oracle
 stages evaluate the posterior lower bound, median, and upper bound before the
 PDF review packet can be written.
+
+Time averaging is currently forbidden because the likelihood samples bin
+centers rather than integrating across averaged time bins. Frequency averaging
+must keep residual intra-bin smearing below 0.10 fit sample and 0.05 of the
+narrowest reviewed component width. A post-fit factor-versus-half-factor
+comparison is mandatory; its dispersion measure, arrival-time, interval-width,
+and model-weight thresholds are explicit in every event configuration.
 
 Casey remains blocked before execution. Its timing bounds are recorded;
 component windows and associations and strict regenerated observation products

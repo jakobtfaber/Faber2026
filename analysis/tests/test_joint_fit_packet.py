@@ -94,6 +94,7 @@ def test_review_packet_regenerates_as_pdf_only(tmp_path) -> None:
         json.dumps(
             {
                 "status": "provisional_pending_owner_approval",
+                "event": "injected",
                 "shared_absolute_dm_pc_cm3": {
                     "median": 100.0,
                     "error_plus": 0.01,
@@ -157,6 +158,33 @@ def test_review_packet_regenerates_as_pdf_only(tmp_path) -> None:
             }
         )
     )
+    convergence_path = tmp_path / "resolution-convergence.json"
+    convergence_inputs = {"coarse_fit_result": fit_path}
+    for name in (
+        "fine_fit_result",
+        "coarse_config",
+        "fine_config",
+        "coarse_chime_receipt",
+        "coarse_dsa_receipt",
+        "fine_chime_receipt",
+        "fine_dsa_receipt",
+    ):
+        path = tmp_path / f"{name}.json"
+        path.write_text(json.dumps({"name": name}))
+        convergence_inputs[name] = path
+    convergence_hashes = {
+        name: sha256_file(path) for name, path in convergence_inputs.items()
+    }
+    convergence_path.write_text(
+        json.dumps(
+            {
+                "status": "passed",
+                "passed": True,
+                "event": "injected",
+                "input_sha256": convergence_hashes,
+            }
+        )
+    )
     output = tmp_path / "review-packet.pdf"
     render(
         chime_path=product_paths["chime"],
@@ -168,11 +196,64 @@ def test_review_packet_regenerates_as_pdf_only(tmp_path) -> None:
         model_path=model_path,
         geometry_path=geometry_path,
         oracle_path=oracle_path,
+        resolution_convergence_path=convergence_path,
+        resolution_convergence_inputs=convergence_inputs,
         output=output,
     )
     assert output.read_bytes().startswith(b"%PDF-")
     assert not list(tmp_path.glob("*.svg"))
     assert not list(tmp_path.glob("*.png"))
+    convergence_path.write_text(json.dumps({"status": "failed", "passed": False}))
+    with pytest.raises(RuntimeError, match="fit-resolution convergence"):
+        render(
+            chime_path=product_paths["chime"],
+            dsa_path=product_paths["dsa"],
+            chime_posterior_path=product_paths["chime"],
+            dsa_posterior_path=product_paths["dsa"],
+            fit_result_path=fit_path,
+            posterior_path=posterior_path,
+            model_path=model_path,
+            geometry_path=geometry_path,
+            oracle_path=oracle_path,
+            resolution_convergence_path=convergence_path,
+            resolution_convergence_inputs=convergence_inputs,
+            output=output,
+        )
+    convergence_path.write_text(
+        json.dumps(
+            {
+                "status": "passed",
+                "passed": True,
+                "event": "injected",
+                "input_sha256": {"coarse_fit_result": sha256_file(fit_path)},
+            }
+        )
+    )
+    with pytest.raises(RuntimeError, match="input binding is incomplete"):
+        render(
+            chime_path=product_paths["chime"],
+            dsa_path=product_paths["dsa"],
+            chime_posterior_path=product_paths["chime"],
+            dsa_posterior_path=product_paths["dsa"],
+            fit_result_path=fit_path,
+            posterior_path=posterior_path,
+            model_path=model_path,
+            geometry_path=geometry_path,
+            oracle_path=oracle_path,
+            resolution_convergence_path=convergence_path,
+            resolution_convergence_inputs=convergence_inputs,
+            output=output,
+        )
+    convergence_path.write_text(
+        json.dumps(
+            {
+                "status": "passed",
+                "passed": True,
+                "event": "injected",
+                "input_sha256": convergence_hashes,
+            }
+        )
+    )
     fit_path.write_text("{}")
     with pytest.raises(RuntimeError, match="fit_result"):
         render(
@@ -185,6 +266,8 @@ def test_review_packet_regenerates_as_pdf_only(tmp_path) -> None:
             model_path=model_path,
             geometry_path=geometry_path,
             oracle_path=oracle_path,
+            resolution_convergence_path=convergence_path,
+            resolution_convergence_inputs=convergence_inputs,
             output=output,
         )
 
@@ -201,5 +284,7 @@ def test_review_packet_rejects_non_pdf_output(tmp_path) -> None:
             model_path=tmp_path / "unused",
             geometry_path=tmp_path / "unused",
             oracle_path=tmp_path / "unused",
+            resolution_convergence_path=tmp_path / "unused",
+            resolution_convergence_inputs={},
             output=tmp_path / "review-packet.svg",
         )

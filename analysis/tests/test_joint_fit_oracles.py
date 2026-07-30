@@ -12,11 +12,45 @@ from radio_pipeline.fitting.products import (
     sha256_file,
     write_band_observation_product,
 )
+from scripts.one_event_hybrid_dm import score_crop
 from scripts.verify_joint_fit_oracles import verify
 
 
 def _write_json(path, value) -> None:
     path.write_text(json.dumps(value))
+
+
+def _apply_residual(
+    waterfall: np.ndarray,
+    frequency_mhz: np.ndarray,
+    sample_interval_s: float,
+    residual_dm_pc_cm3: float,
+) -> np.ndarray:
+    sample = np.arange(waterfall.shape[1], dtype=float)
+    shift = (
+        -4148.808
+        * residual_dm_pc_cm3
+        * (frequency_mhz**-2 - 400.0**-2)
+        / sample_interval_s
+    )
+    return np.asarray(
+        [
+            np.interp(sample - row_shift, sample, row, left=np.nan, right=np.nan)
+            for row, row_shift in zip(waterfall, shift, strict=True)
+        ]
+    )
+
+
+def _burst_waterfall(
+    rng: np.random.Generator,
+    frequency_mhz: np.ndarray,
+    ntime: int,
+) -> np.ndarray:
+    sample = np.arange(ntime, dtype=float)
+    noise = rng.normal(scale=0.25, size=(frequency_mhz.size, ntime))
+    pulse = np.exp(-0.5 * ((sample - 0.52 * ntime) / 3.0) ** 2)
+    spectrum = 1.0 + 0.25 * np.sin(np.linspace(0.0, np.pi, frequency_mhz.size))
+    return noise + 5.0 * spectrum[:, None] * pulse[None, :]
 
 
 def _fixture(tmp_path):
@@ -34,17 +68,28 @@ def _fixture(tmp_path):
         },
     )
     rng = np.random.default_rng(4)
+    sample_interval_s = 1.0e-3
+    chime_frequency = np.linspace(400.0, 800.0, 20)
+    chime_anchor_waterfall = _burst_waterfall(rng, chime_frequency, 256)
     chime_products = {}
+    chime_rows = []
     for label, dm in dms.items():
         path = tmp_path / f"chime_fully_coherent_posterior_{label}.npz"
+        waterfall = _apply_residual(
+            chime_anchor_waterfall,
+            chime_frequency,
+            sample_interval_s,
+            dm - dms["median"],
+        )
+        frequency_id = np.arange(20)
         receipt = write_band_observation_product(
             path,
             instrument="chime",
-            waterfall=rng.normal(size=(4, 64)),
-            valid=np.ones((4, 64), dtype=bool),
-            frequency_mhz=np.linspace(400.0, 800.0, 4),
+            waterfall=waterfall,
+            valid=np.isfinite(waterfall),
+            frequency_mhz=chime_frequency,
             channel_width_mhz=0.1,
-            sample_interval_s=1.0e-5,
+            sample_interval_s=sample_interval_s,
             time0_unix_ns=1_700_000_000_000_000_000,
             dispersion=DispersionState(
                 0.0,
@@ -57,11 +102,34 @@ def _fixture(tmp_path):
                 "raw_chime_h5": "c" * 64,
                 "accepted_chime_reference": "d" * 64,
             },
+            extra={
+                "fine_frequency_id": frequency_id,
+                "residual_shift_frequency_mhz": chime_frequency,
+            },
+        )
+        chime_rows.append(
+            score_crop(waterfall, sample_interval_s, frequency_id=frequency_id)
         )
         chime_products[f"fully_coherent_posterior_{label}"] = {
             "path": str(path),
             "sha256": receipt["sha256"],
         }
+    with np.load(
+        chime_products["fully_coherent_posterior_median"]["path"],
+        allow_pickle=False,
+    ) as anchor_product:
+        stored_chime_anchor = np.asarray(anchor_product["waterfall"], dtype=float)
+    chime_hybrid_rows = []
+    for dm in dms.values():
+        hybrid = _apply_residual(
+            stored_chime_anchor,
+            chime_frequency,
+            sample_interval_s,
+            dm - dms["median"],
+        )
+        chime_hybrid_rows.append(
+            score_crop(hybrid, sample_interval_s, frequency_id=np.arange(20))
+        )
     chime_path = tmp_path / "chime_hybrid_result.json"
     _write_json(
         chime_path,
@@ -72,24 +140,46 @@ def _fixture(tmp_path):
             "full_coherent_oracle": {
                 "role": "joint_posterior_lower_median_upper",
                 "dm_pc_cm3": list(dms.values()),
+                "selected_cutoff_hz": 2500.0,
+                "hybrid_rows": chime_hybrid_rows,
+                "fully_coherent_rows": chime_rows,
+                "hybrid_normalised_score": (
+                    np.asarray(
+                        [row["score"]["2500.0"] for row in chime_hybrid_rows]
+                    )
+                    / chime_hybrid_rows[1]["score"]["2500.0"]
+                ).tolist(),
+                "fully_coherent_normalised_score": (
+                    np.asarray([row["score"]["2500.0"] for row in chime_rows])
+                    / chime_rows[1]["score"]["2500.0"]
+                ).tolist(),
                 "passed": True,
                 "maximum_normalised_score_absolute_difference": 0.01,
+                "normalised_curve_tolerance": 0.1,
                 "absolute_peak_difference_pc_cm3": 0.001,
             },
             "products": chime_products,
         },
     )
     products = {}
+    dsa_frequency = np.linspace(1300.0, 1500.0, 12)
+    dsa_anchor_waterfall = _burst_waterfall(rng, dsa_frequency, 256)
     for label, dm in dms.items():
         path = tmp_path / f"dsa_posterior_{label}.npz"
+        waterfall = _apply_residual(
+            dsa_anchor_waterfall,
+            dsa_frequency,
+            sample_interval_s,
+            dm - dms["median"],
+        )
         receipt = write_band_observation_product(
             path,
             instrument="dsa",
-            waterfall=rng.normal(size=(4, 64)),
-            valid=np.ones((4, 64), dtype=bool),
-            frequency_mhz=np.linspace(1300.0, 1500.0, 4),
+            waterfall=waterfall,
+            valid=np.isfinite(waterfall),
+            frequency_mhz=dsa_frequency,
             channel_width_mhz=1.0,
-            sample_interval_s=1.0e-5,
+            sample_interval_s=sample_interval_s,
             time0_unix_ns=1_700_000_000_000_000_000,
             dispersion=DispersionState(
                 99.8,
@@ -121,6 +211,11 @@ def _fixture(tmp_path):
     config = {
         "event": event,
         "event_binding_sha256": binding,
+        "chime": {
+            "gates": {
+                "oracle_normalised_curve_max_abs_difference": 0.1,
+            }
+        },
         "input_sha256": {
             "raw_chime_h5": "c" * 64,
             "accepted_chime_reference": "d" * 64,
@@ -275,6 +370,140 @@ def test_posterior_oracle_rejects_dsa_coherent_substitution(tmp_path) -> None:
     receipt["sha256"] = sha256_file(product_path)
     _write_json(dsa_path, dsa)
     with pytest.raises(RuntimeError, match="exactly one residual"):
+        verify(
+            config,
+            fit_result_path=fit_path,
+            chime_result_path=chime_path,
+            dsa_result_path=dsa_path,
+            **support,
+        )
+
+
+def test_posterior_oracle_rejects_target_support_loss(tmp_path) -> None:
+    config, fit_path, chime_path, dsa_path, support = _fixture(tmp_path)
+    dsa = json.loads(dsa_path.read_text())
+    receipt = dsa["products"]["posterior_lower"]
+    product_path = Path(receipt["path"])
+    with np.load(product_path, allow_pickle=False) as product:
+        payload = {key: product[key] for key in product.files}
+    payload["pixel_valid"] = np.asarray(payload["pixel_valid"], dtype=bool)
+    payload["pixel_valid"][4:] = False
+    payload["noise_estimation_mask"] = np.asarray(
+        payload["noise_estimation_mask"], dtype=bool
+    )
+    payload["noise_estimation_mask"][4:] = False
+    payload["waterfall"] = np.asarray(payload["waterfall"])
+    payload["waterfall"][4:] = np.nan
+    np.savez_compressed(product_path, **payload)
+    receipt["sha256"] = sha256_file(product_path)
+    _write_json(dsa_path, dsa)
+    with pytest.raises(RuntimeError, match="numerical residual correction"):
+        verify(
+            config,
+            fit_result_path=fit_path,
+            chime_result_path=chime_path,
+            dsa_result_path=dsa_path,
+            **support,
+        )
+
+
+def test_posterior_oracle_rejects_mutable_upstream_tolerance(tmp_path) -> None:
+    config, fit_path, chime_path, dsa_path, support = _fixture(tmp_path)
+    chime = json.loads(chime_path.read_text())
+    chime["full_coherent_oracle"]["normalised_curve_tolerance"] = 1.0e9
+    _write_json(chime_path, chime)
+    with pytest.raises(RuntimeError, match="reviewed configuration"):
+        verify(
+            config,
+            fit_result_path=fit_path,
+            chime_result_path=chime_path,
+            dsa_result_path=dsa_path,
+            **support,
+        )
+
+
+def test_posterior_oracle_rejects_random_arrays_with_forged_metadata(tmp_path) -> None:
+    config, fit_path, chime_path, dsa_path, support = _fixture(tmp_path)
+    chime = json.loads(chime_path.read_text())
+    rng = np.random.default_rng(912)
+    for receipt in chime["products"].values():
+        product_path = Path(receipt["path"])
+        with np.load(product_path, allow_pickle=False) as product:
+            payload = {key: product[key] for key in product.files}
+        payload["waterfall"] = rng.normal(size=payload["waterfall"].shape).astype(np.float32)
+        np.savez_compressed(product_path, **payload)
+        receipt["sha256"] = sha256_file(product_path)
+    _write_json(chime_path, chime)
+
+    with pytest.raises(RuntimeError, match="numerical"):
+        verify(
+            config,
+            fit_result_path=fit_path,
+            chime_result_path=chime_path,
+            dsa_result_path=dsa_path,
+            **support,
+        )
+
+
+def test_posterior_oracle_rejects_dsa_pixels_unrelated_to_declared_residual(
+    tmp_path,
+) -> None:
+    config, fit_path, chime_path, dsa_path, support = _fixture(tmp_path)
+    dsa = json.loads(dsa_path.read_text())
+    rng = np.random.default_rng(614)
+    for receipt in dsa["products"].values():
+        product_path = Path(receipt["path"])
+        with np.load(product_path, allow_pickle=False) as product:
+            payload = {key: product[key] for key in product.files}
+        payload["waterfall"] = rng.normal(size=payload["waterfall"].shape).astype(np.float32)
+        np.savez_compressed(product_path, **payload)
+        receipt["sha256"] = sha256_file(product_path)
+    _write_json(dsa_path, dsa)
+
+    with pytest.raises(RuntimeError, match="DSA numerical residual"):
+        verify(
+            config,
+            fit_result_path=fit_path,
+            chime_result_path=chime_path,
+            dsa_result_path=dsa_path,
+            **support,
+        )
+
+
+def test_posterior_oracle_rejects_wrong_sign_dsa_pixels_with_correct_labels(
+    tmp_path,
+) -> None:
+    config, fit_path, chime_path, dsa_path, support = _fixture(tmp_path)
+    dsa = json.loads(dsa_path.read_text())
+    anchor_path = support["dsa_observation_path"]
+    with np.load(anchor_path, allow_pickle=False) as anchor_product:
+        anchor = np.asarray(anchor_product["waterfall"], dtype=float)
+        frequency = np.asarray(anchor_product["frequency_mhz"], dtype=float)
+        sample_interval_s = float(anchor_product["sample_interval_s"])
+        anchor_dm = float(anchor_product["product_dm_pc_cm3"])
+    receipt = dsa["products"]["posterior_lower"]
+    product_path = Path(receipt["path"])
+    with np.load(product_path, allow_pickle=False) as product:
+        payload = {key: product[key] for key in product.files}
+        target_dm = float(product["product_dm_pc_cm3"])
+    wrong_sign = _apply_residual(
+        anchor,
+        frequency,
+        sample_interval_s,
+        -(target_dm - anchor_dm),
+    ).astype(np.float32)
+    payload["waterfall"] = wrong_sign
+    payload["pixel_valid"] = np.asarray(payload["pixel_valid"], dtype=bool) & np.isfinite(
+        wrong_sign
+    )
+    payload["noise_estimation_mask"] = (
+        np.asarray(payload["noise_estimation_mask"], dtype=bool) & payload["pixel_valid"]
+    )
+    np.savez_compressed(product_path, **payload)
+    receipt["sha256"] = sha256_file(product_path)
+    _write_json(dsa_path, dsa)
+
+    with pytest.raises(RuntimeError, match="DSA numerical residual"):
         verify(
             config,
             fit_result_path=fit_path,

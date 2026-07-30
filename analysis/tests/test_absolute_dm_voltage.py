@@ -48,6 +48,49 @@ def test_h5_package_dm_attribute_maps_to_physical_phase_coordinate() -> None:
     assert physical * MODULE.K_DM_S_MHZ2 == pytest.approx(491.2 * package_constant)
 
 
+def test_fine_frequency_centres_follow_authoritative_h5_centres() -> None:
+    frequency_id = np.asarray([3, 4], dtype=np.int64)
+    frequency_mhz = np.asarray([798.828125, 798.4375])
+
+    fine = MODULE.authoritative_fine_frequency_centres(
+        frequency_id,
+        frequency_mhz,
+        16,
+    ).reshape(2, 16)
+
+    fft_bin = np.arange(-16, 16, dtype=float)
+    grouped_fft_bin_centres = fft_bin.reshape(16, 2).mean(axis=1)
+    expected_offsets = -grouped_fft_bin_centres * 0.390625 / 32.0
+    np.testing.assert_allclose(fine[0], frequency_mhz[0] + expected_offsets)
+    np.testing.assert_allclose(
+        fine.mean(axis=1),
+        frequency_mhz + 0.390625 / 64.0,
+        atol=1.0e-12,
+    )
+    np.testing.assert_allclose(np.diff(fine[0]), -0.390625 / 16.0)
+    assert fine[0, -1] - fine[1, 0] == pytest.approx(0.390625 / 16.0)
+
+
+def test_fine_frequency_centres_preserve_authoritative_h5_id_gaps() -> None:
+    frequency_id = np.asarray([3, 5, 37], dtype=np.int64)
+    frequency_mhz = 800.0 - 0.390625 * frequency_id
+
+    fine = MODULE.authoritative_fine_frequency_centres(
+        frequency_id,
+        frequency_mhz,
+        16,
+    ).reshape(3, 16)
+
+    assert fine[0, -1] - fine[1, 0] == pytest.approx(
+        (frequency_id[1] - frequency_id[0] - 1) * 0.390625
+        + 0.390625 / 16.0
+    )
+    assert fine[1, -1] - fine[2, 0] == pytest.approx(
+        (frequency_id[2] - frequency_id[1] - 1) * 0.390625
+        + 0.390625 / 16.0
+    )
+
+
 def test_nonzero_h5_dm0_is_subtracted_once_by_coherent_pipeline() -> None:
     package_constant = 4149.377593360996
     package_input_dm = 491.2

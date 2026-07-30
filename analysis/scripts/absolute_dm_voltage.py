@@ -97,6 +97,48 @@ def validate_frequency_map(
     return np.argsort(centres)
 
 
+def authoritative_fine_frequency_centres(
+    frequency_id: np.ndarray,
+    frequency_mhz: np.ndarray,
+    upchannel_factor: int,
+) -> np.ndarray:
+    """Place fine FFT bins inside the authoritative H5 coarse channels."""
+
+    channel_id = np.asarray(frequency_id, dtype=np.int64)
+    centre = np.asarray(frequency_mhz, dtype=float)
+    if (
+        channel_id.ndim != 1
+        or centre.ndim != 1
+        or channel_id.size != centre.size
+        or channel_id.size < 2
+    ):
+        raise ValueError("authoritative coarse frequency map must be paired 1D arrays")
+    if (
+        isinstance(upchannel_factor, bool)
+        or not isinstance(upchannel_factor, int)
+        or upchannel_factor < 1
+    ):
+        raise ValueError("upchannel_factor must be a positive integer")
+    order = np.argsort(channel_id)
+    id_step = np.diff(channel_id[order])
+    centre_step = np.diff(centre[order])
+    if np.any(id_step <= 0) or np.any(~np.isfinite(centre_step)):
+        raise ValueError("authoritative channel IDs and centres must be ordered and finite")
+    slope = centre_step / id_step
+    channel_slope_mhz = float(np.median(slope))
+    if not np.allclose(slope, channel_slope_mhz, rtol=0.0, atol=1.0e-9):
+        raise ValueError("authoritative H5 channel-centre spacing is not uniform")
+    # The production transform averages adjacent bins from a 2U-point FFT.
+    # Pair j has mean FFT index -U + 2j + 0.5, hence the quarter-bin term.
+    fractional_id = (
+        (np.arange(upchannel_factor, dtype=float) + 0.25) / upchannel_factor
+        - 0.5
+    )
+    return (
+        centre[:, None] + channel_slope_mhz * fractional_id[None, :]
+    ).reshape(-1)
+
+
 def trusted_notebook_rfi_mask(
     intensity: np.ndarray,
     *,

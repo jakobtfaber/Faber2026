@@ -14,6 +14,220 @@ from radio_pipeline.fitting import load_band_observation_product
 from radio_pipeline.fitting.products import sha256_file
 
 LABELS = ("lower", "median", "upper")
+K_DM_S_MHZ2 = 4148.808
+MINIMUM_RESIDUAL_PROFILE_CORRELATION = 0.50
+MINIMUM_DSA_RESIDUAL_PROFILE_CORRELATION = 0.80
+MINIMUM_DSA_RESIDUAL_ROW_CORRELATION = 0.80
+MAXIMUM_PROFILE_PEAK_SEPARATION_SAMPLES = 8
+MAXIMUM_DSA_PROFILE_PEAK_SEPARATION_SAMPLES = 2
+MINIMUM_COMMON_VALID_PIXEL_FRACTION = 0.80
+
+
+def _phase_coherence_score(
+    values: np.ndarray,
+    valid: np.ndarray,
+    *,
+    sample_interval_s: float,
+    frequency_id: np.ndarray,
+    cutoff_hz: float,
+) -> tuple[float, int]:
+    """Recompute the CHIME phase-coherence objective from saved pixels."""
+
+    masked = np.where(valid, values, np.nan)
+    finite_fraction = np.isfinite(masked).mean(axis=1)
+    median = np.nanmedian(masked, axis=1)
+    mad = np.nanmedian(np.abs(masked - median[:, None]), axis=1)
+    sigma = 1.4826 * mad
+    use_row = (finite_fraction >= 0.90) & np.isfinite(sigma) & (sigma > 0)
+    if int(use_row.sum()) < 4:
+        raise RuntimeError("CHIME numerical oracle has too few usable channels")
+    identifiers = np.asarray(frequency_id)
+    if identifiers.shape != (masked.shape[0],):
+        raise RuntimeError("CHIME numerical oracle frequency identifiers changed")
+    order = np.argsort(identifiers[use_row])
+    standardized = np.nan_to_num(
+        (masked[use_row] - median[use_row, None]) / sigma[use_row, None]
+    )[order]
+    spectrum = np.fft.rfft(standardized, axis=1)
+    amplitude = np.abs(spectrum)
+    phase = np.divide(
+        spectrum,
+        amplitude,
+        out=np.zeros_like(spectrum),
+        where=amplitude > np.finfo(float).tiny,
+    )
+    fluctuation_hz = np.fft.rfftfreq(
+        standardized.shape[1], sample_interval_s
+    )
+    use_frequency = (fluctuation_hz >= 50.0) & (fluctuation_hz <= cutoff_hz)
+    weight = fluctuation_hz[use_frequency] ** 2
+    coherent = np.sum(phase[:, use_frequency], axis=0)
+    return float(np.sum(np.abs(coherent) ** 2 * weight)), int(use_row.sum())
+
+
+def _npz_array(path: Path, key: str) -> np.ndarray:
+    with np.load(path, allow_pickle=False) as archive:
+        if key not in archive.files:
+            raise RuntimeError(f"numerical oracle product lacks {key}")
+        return np.asarray(archive[key])
+
+
+def _fractional_residual_shift(
+    values: np.ndarray,
+    valid: np.ndarray,
+    *,
+    frequency_mhz: np.ndarray,
+    sample_interval_s: float,
+    residual_dm_pc_cm3: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Apply an independent non-wrapping residual correction."""
+
+    data = np.asarray(values, dtype=float)
+    mask = np.asarray(valid, dtype=bool)
+    frequency = np.asarray(frequency_mhz, dtype=float)
+    if data.ndim != 2 or mask.shape != data.shape or frequency.shape != (data.shape[0],):
+        raise RuntimeError("numerical residual oracle dimensions changed")
+    if (
+        sample_interval_s <= 0
+        or np.any(~np.isfinite(frequency))
+        or np.any(frequency <= 0)
+    ):
+        raise RuntimeError("numerical residual oracle coordinates changed")
+    shift_samples = (
+        -K_DM_S_MHZ2
+        * float(residual_dm_pc_cm3)
+        * (frequency**-2 - 400.0**-2)
+        / float(sample_interval_s)
+    )
+    sample = np.arange(data.shape[1], dtype=float)
+    shifted = np.full(data.shape, np.nan, dtype=float)
+    shifted_support = np.zeros(data.shape, dtype=bool)
+    for row, shift in enumerate(shift_samples):
+        coordinate = sample - shift
+        shifted[row] = np.interp(
+            coordinate,
+            sample,
+            data[row],
+            left=np.nan,
+            right=np.nan,
+        )
+        shifted_support[row] = (
+            np.interp(
+                coordinate,
+                sample,
+                mask[row].astype(float),
+                left=0.0,
+                right=0.0,
+            )
+            >= 1.0 - 1.0e-12
+        )
+    return shifted, shifted_support & np.isfinite(shifted)
+
+
+def _standardize_rows(values: np.ndarray, valid: np.ndarray) -> np.ndarray:
+    masked = np.where(valid, values, np.nan)
+    median = np.nanmedian(masked, axis=1)
+    mad = np.nanmedian(np.abs(masked - median[:, None]), axis=1)
+    scale = 1.4826 * mad
+    usable = np.isfinite(scale) & (scale > 0)
+    output = np.full(masked.shape, np.nan, dtype=float)
+    output[usable] = (masked[usable] - median[usable, None]) / scale[usable, None]
+    return output
+
+
+def _residual_numerical_agreement(
+    anchor,
+    target,
+    *,
+    shift_frequency_mhz: np.ndarray,
+    residual_dm_pc_cm3: float,
+) -> dict[str, float]:
+    """Compare saved target pixels with an independently shifted anchor."""
+
+    if (
+        anchor.waterfall.shape != target.waterfall.shape
+        or not np.array_equal(anchor.frequency_mhz, target.frequency_mhz)
+        or anchor.sample_interval_s != target.sample_interval_s
+        or anchor.time0_unix_ns != target.time0_unix_ns
+    ):
+        raise RuntimeError("numerical residual oracle grid changed")
+    predicted, predicted_valid = _fractional_residual_shift(
+        anchor.waterfall,
+        anchor.valid,
+        frequency_mhz=shift_frequency_mhz,
+        sample_interval_s=anchor.sample_interval_s,
+        residual_dm_pc_cm3=residual_dm_pc_cm3,
+    )
+    common = predicted_valid & target.valid
+    predicted_z = _standardize_rows(predicted, common)
+    target_z = _standardize_rows(target.waterfall, common)
+    row_correlation = []
+    for row in range(common.shape[0]):
+        use = common[row] & np.isfinite(predicted_z[row]) & np.isfinite(target_z[row])
+        if int(use.sum()) < 16:
+            continue
+        correlation = float(np.corrcoef(predicted_z[row, use], target_z[row, use])[0, 1])
+        if np.isfinite(correlation):
+            row_correlation.append(correlation)
+    if len(row_correlation) < 4:
+        raise RuntimeError("numerical residual oracle has too few comparable rows")
+    time_support = np.sum(common, axis=0)
+    use_time = time_support >= max(4, int(0.5 * np.max(time_support)))
+    predicted_sum = np.nansum(np.where(common, predicted_z, np.nan), axis=0)
+    target_sum = np.nansum(np.where(common, target_z, np.nan), axis=0)
+    predicted_profile = np.divide(
+        predicted_sum,
+        time_support,
+        out=np.full(time_support.shape, np.nan, dtype=float),
+        where=time_support > 0,
+    )
+    target_profile = np.divide(
+        target_sum,
+        time_support,
+        out=np.full(time_support.shape, np.nan, dtype=float),
+        where=time_support > 0,
+    )
+    profile_correlation = float(
+        np.corrcoef(predicted_profile[use_time], target_profile[use_time])[0, 1]
+    )
+    predicted_peak = int(np.nanargmax(np.where(use_time, predicted_profile, np.nan)))
+    target_peak = int(np.nanargmax(np.where(use_time, target_profile, np.nan)))
+    return {
+        "median_row_correlation": float(np.median(row_correlation)),
+        "profile_correlation": profile_correlation,
+        "profile_peak_separation_samples": float(abs(predicted_peak - target_peak)),
+        "predicted_valid_pixel_retention": float(common.sum() / predicted_valid.sum()),
+        "target_valid_pixel_retention": float(common.sum() / target.valid.sum()),
+    }
+
+
+def _require_residual_agreement(instrument: str, agreement: dict[str, float]) -> None:
+    profile_minimum = (
+        MINIMUM_DSA_RESIDUAL_PROFILE_CORRELATION
+        if instrument == "DSA"
+        else MINIMUM_RESIDUAL_PROFILE_CORRELATION
+    )
+    peak_maximum = (
+        MAXIMUM_DSA_PROFILE_PEAK_SEPARATION_SAMPLES
+        if instrument == "DSA"
+        else MAXIMUM_PROFILE_PEAK_SEPARATION_SAMPLES
+    )
+    if not all(np.isfinite(value) for value in agreement.values()):
+        raise RuntimeError(f"{instrument} numerical residual correction is non-finite")
+    if (
+        (
+            instrument == "DSA"
+            and agreement["median_row_correlation"]
+            < MINIMUM_DSA_RESIDUAL_ROW_CORRELATION
+        )
+        or agreement["profile_correlation"] < profile_minimum
+        or agreement["profile_peak_separation_samples"] > peak_maximum
+        or agreement["predicted_valid_pixel_retention"]
+        < MINIMUM_COMMON_VALID_PIXEL_FRACTION
+        or agreement["target_valid_pixel_retention"]
+        < MINIMUM_COMMON_VALID_PIXEL_FRACTION
+    ):
+        raise RuntimeError(f"{instrument} numerical residual correction disagrees with pixels")
 
 
 def _posterior_dm_quantiles(path: Path) -> np.ndarray:
@@ -128,13 +342,32 @@ def verify(
         raise RuntimeError("CHIME coherent oracle DMs changed")
     if not chime_oracle.get("passed", False):
         raise RuntimeError("CHIME coherent oracle failed")
+    selected_cutoff_hz = float(chime_oracle["selected_cutoff_hz"])
+    stored_rows = chime_oracle.get("fully_coherent_rows")
+    if not isinstance(stored_rows, list) or len(stored_rows) != len(LABELS):
+        raise RuntimeError("CHIME numerical oracle rows are absent")
+    stored_hybrid_rows = chime_oracle.get("hybrid_rows")
+    if not isinstance(stored_hybrid_rows, list) or len(stored_hybrid_rows) != len(LABELS):
+        raise RuntimeError("CHIME numerical hybrid rows are absent")
     if not chime.get("hybrid_method", {}).get("nonwrapping_fractional_sample_shifts", False):
         raise RuntimeError("CHIME non-wrapping processing identity is absent")
     expected_chime_hashes = {
         "raw_chime_h5": config["input_sha256"]["raw_chime_h5"],
         "accepted_chime_reference": config["input_sha256"]["accepted_chime_reference"],
     }
+    chime_anchor = load_band_observation_product(chime_observation_path)
+    if (
+        chime_anchor.instrument != "chime"
+        or chime_anchor.reference_frequency_mhz != 400.0
+        or chime_anchor.input_sha256 != expected_chime_hashes
+    ):
+        raise RuntimeError("CHIME fit observation identity changed")
+    chime_shift_frequency = _npz_array(
+        chime_observation_path, "residual_shift_frequency_mhz"
+    )
     chime_products = {}
+    recomputed_scores = []
+    recomputed_hybrid_scores = []
     for label, target_dm in zip(LABELS, expected, strict=True):
         key = f"fully_coherent_posterior_{label}"
         receipt = chime["products"].get(key)
@@ -170,6 +403,42 @@ def verify(
             or state.incoherent_correction_pc_cm3 != 0.0
         ):
             raise RuntimeError("CHIME oracle is not a coherent-only rerun")
+        frequency_id = _npz_array(product_path, "fine_frequency_id")
+        score, usable_channels = _phase_coherence_score(
+            observation.waterfall,
+            observation.valid,
+            sample_interval_s=observation.sample_interval_s,
+            frequency_id=frequency_id,
+            cutoff_hz=selected_cutoff_hz,
+        )
+        stored_score = float(
+            stored_rows[len(recomputed_scores)]["score"][str(selected_cutoff_hz)]
+        )
+        if not np.isclose(score, stored_score, rtol=2.0e-5, atol=1.0e-6):
+            raise RuntimeError("CHIME numerical objective does not match saved pixels")
+        recomputed_scores.append(score)
+        numerical_agreement = _residual_numerical_agreement(
+            chime_anchor,
+            observation,
+            shift_frequency_mhz=chime_shift_frequency,
+            residual_dm_pc_cm3=target_dm - chime_anchor.dispersion.product_dm_pc_cm3,
+        )
+        _require_residual_agreement("CHIME", numerical_agreement)
+        predicted, predicted_valid = _fractional_residual_shift(
+            chime_anchor.waterfall,
+            chime_anchor.valid,
+            frequency_mhz=chime_shift_frequency,
+            sample_interval_s=chime_anchor.sample_interval_s,
+            residual_dm_pc_cm3=target_dm - chime_anchor.dispersion.product_dm_pc_cm3,
+        )
+        predicted_score, predicted_usable_channels = _phase_coherence_score(
+            predicted,
+            predicted_valid,
+            sample_interval_s=chime_anchor.sample_interval_s,
+            frequency_id=_npz_array(chime_observation_path, "fine_frequency_id"),
+            cutoff_hz=selected_cutoff_hz,
+        )
+        recomputed_hybrid_scores.append(predicted_score)
         chime_products[key] = {
             "path": str(product_path),
             "sha256": product_sha256,
@@ -177,7 +446,49 @@ def verify(
             "input_dm_pc_cm3": observation.dispersion.input_dm_pc_cm3,
             "coherent_correction_pc_cm3": (observation.dispersion.coherent_correction_pc_cm3),
             "valid_pixel_count": int(observation.valid.sum()),
+            "recomputed_objective": score,
+            "recomputed_usable_channel_count": usable_channels,
+            "recomputed_hybrid_objective": predicted_score,
+            "recomputed_hybrid_usable_channel_count": predicted_usable_channels,
+            "numerical_residual_agreement": numerical_agreement,
         }
+    recomputed_scores_array = np.asarray(recomputed_scores, dtype=float)
+    recomputed_normalised = recomputed_scores_array / recomputed_scores_array[1]
+    stored_normalised = np.asarray(
+        chime_oracle["fully_coherent_normalised_score"], dtype=float
+    )
+    if not np.allclose(
+        recomputed_normalised,
+        stored_normalised,
+        rtol=2.0e-5,
+        atol=2.0e-5,
+    ):
+        raise RuntimeError("CHIME numerical objective curve does not match saved pixels")
+    recomputed_hybrid_array = np.asarray(recomputed_hybrid_scores, dtype=float)
+    recomputed_hybrid_normalised = recomputed_hybrid_array / recomputed_hybrid_array[1]
+    stored_hybrid_normalised = np.asarray(
+        chime_oracle["hybrid_normalised_score"], dtype=float
+    )
+    hybrid_curve_difference = float(
+        np.max(np.abs(recomputed_hybrid_normalised - stored_hybrid_normalised))
+    )
+    hybrid_curve_tolerance = float(
+        config["chime"]["gates"]["oracle_normalised_curve_max_abs_difference"]
+    )
+    if not np.isclose(
+        float(chime_oracle["normalised_curve_tolerance"]),
+        hybrid_curve_tolerance,
+        rtol=0.0,
+        atol=0.0,
+    ):
+        raise RuntimeError("CHIME oracle tolerance differs from reviewed configuration")
+    if hybrid_curve_difference > hybrid_curve_tolerance:
+        raise RuntimeError("CHIME numerical hybrid objective curve disagrees with anchor pixels")
+    coherent_hybrid_curve_difference = float(
+        np.max(np.abs(recomputed_normalised - recomputed_hybrid_normalised))
+    )
+    if coherent_hybrid_curve_difference > hybrid_curve_tolerance:
+        raise RuntimeError("CHIME coherent and hybrid objective curves disagree")
 
     if not dsa.get("dedispersion", {}).get("nonwrapping_fractional_sample_interpolation", False):
         raise RuntimeError("DSA non-wrapping processing identity is absent")
@@ -185,6 +496,13 @@ def verify(
         "raw_dsa_filterbank": config["input_sha256"]["raw_dsa_filterbank"],
         "accepted_dsa_reference": config["input_sha256"]["accepted_dsa_reference"],
     }
+    dsa_anchor = load_band_observation_product(dsa_observation_path)
+    if (
+        dsa_anchor.instrument != "dsa"
+        or dsa_anchor.reference_frequency_mhz != 400.0
+        or dsa_anchor.input_sha256 != expected_dsa_hashes
+    ):
+        raise RuntimeError("DSA fit observation identity changed")
     dsa_products = {}
     for label, target_dm in zip(LABELS, expected, strict=True):
         key = f"posterior_{label}"
@@ -221,6 +539,13 @@ def verify(
             )
         ):
             raise RuntimeError("DSA oracle is not exactly one residual correction")
+        numerical_agreement = _residual_numerical_agreement(
+            dsa_anchor,
+            observation,
+            shift_frequency_mhz=dsa_anchor.frequency_mhz,
+            residual_dm_pc_cm3=target_dm - dsa_anchor.dispersion.product_dm_pc_cm3,
+        )
+        _require_residual_agreement("DSA", numerical_agreement)
         dsa_products[key] = {
             "path": str(product_path),
             "sha256": product_sha256,
@@ -228,6 +553,7 @@ def verify(
             "input_dm_pc_cm3": observation.dispersion.input_dm_pc_cm3,
             "applied_residual_dm_pc_cm3": (observation.dispersion.incoherent_correction_pc_cm3),
             "valid_pixel_count": int(observation.valid.sum()),
+            "numerical_residual_agreement": numerical_agreement,
         }
     if dsa.get("target_role") != "joint_posterior_lower_median_upper":
         raise RuntimeError("DSA oracle did not evaluate the joint posterior")
@@ -259,6 +585,14 @@ def verify(
                 "maximum_normalised_score_absolute_difference"
             ],
             "absolute_peak_difference_pc_cm3": chime_oracle["absolute_peak_difference_pc_cm3"],
+            "recomputed_normalised_score": recomputed_normalised.tolist(),
+            "recomputed_hybrid_normalised_score": (
+                recomputed_hybrid_normalised.tolist()
+            ),
+            "maximum_recomputed_hybrid_curve_difference": hybrid_curve_difference,
+            "maximum_coherent_hybrid_curve_difference": (
+                coherent_hybrid_curve_difference
+            ),
             "products": chime_products,
             "passed": True,
         },

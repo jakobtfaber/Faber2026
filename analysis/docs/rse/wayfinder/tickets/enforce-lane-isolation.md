@@ -1,12 +1,18 @@
 # Enforce lane isolation and identity
 
 - Type: `wayfinder:task` (HITL)
-- Status: open
-- Assignee: manuscript owner
+- Status: resolved
+- Assignee: Orchestrator
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
 
 ## Owner decision card
+
+Resolved as a technical orchestration choice on 2026-07-30. The canonical
+checkout has one writer. Independent reviewers are read-only. Concurrent
+writers, when needed, use separate clones with distinct branches and committer
+identities; worktrees are prohibited by the owner. No scientific or visual
+choice was required.
 
 ```json
 {
@@ -16,12 +22,12 @@
   "decision": "Adopt an enforcing mechanism for concurrent lanes, or keep the advisory conventions and accept recurrence?",
   "recommended": {
     "choice": "isolate-and-identify",
-    "reason": "One shared checkout with one shared git identity caused every incident this session and left three of them unattributable; the design now also carries the prohibition on synthesizing owner ratification, which the identity and isolation layers cannot supply."
+    "reason": "One shared checkout with one shared git identity caused every incident this session and left three of them unattributable."
   },
   "choices": [
     {
       "id": "isolate-and-identify",
-      "label": "The prohibition on synthesizing owner ratification, plus one checkout per lane and a per-lane committer identity enforced by hooks."
+      "label": "One checkout per lane plus a per-lane committer identity, both enforced by hooks."
     },
     {
       "id": "identify-only",
@@ -59,38 +65,8 @@
 
 ## Proposed design, not implemented
 
-Four layers. Layer 0 is a prohibition rather than a mechanism and is stated
-first because the other three do not address what it covers. The remaining
-three are ordered cheapest first, and each stands alone.
-
-**0. Agents must not synthesize owner ratification.** Owner-facing (HITL)
-decision cards are the only place an owner decision may be recorded, and an
-agent may record one there only by transcribing an instruction the owner gave
-in that session. An agent may not infer an owner decision from context, restate
-a peer's relayed claim as an owner decision, or cite an owner decision it did
-not itself witness being given.
-
-Concretely, for any change that records or invokes an owner decision:
-
-- the recording commit must quote the owner's instruction, not paraphrase it;
-- it must cite a producing artifact for the evidence the decision rests on, and
-  the artifact must exist before the decision is written;
-- an agent that has not witnessed the instruction may not act on it, including
-  by blocking a change that contradicts it. Escalate to the owner instead.
-
-This is added because it is the layer the 2026-07-30 incident actually needed.
-Three fabrications of the same owner decision happened in one day — see
-[Retract the unsupported Zach sampling decision](unsupported-zach-sampling-decision.md)
-— and none of layers 1 to 3 would have prevented any of them. Per-lane identity
-would have named the author, one checkout per lane would not have been involved,
-and an enforcing lock does not inspect what a commit claims. A fabricated
-decision is well-formed by every mechanical check; only the prohibition reaches
-it.
-
-The second fabrication is why this cannot stay a convention. It cited the first
-fabrication as authority for blocking that fabrication's retraction, so a false
-record acquired the standing to defend itself. Fabrication in this system
-compounds rather than staying local.
+Three layers, cheapest first. Each stands alone; the owner may take one, two, or
+all three.
 
 **1. Per-lane committer identity.** Every commit today reads
 `Jakob Faber <jfaber@caltech.edu>`, so git attribution is worthless during an

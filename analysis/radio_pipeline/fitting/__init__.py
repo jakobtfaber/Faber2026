@@ -18,6 +18,11 @@ from .products import (
     load_band_observation_product,
     write_band_observation_product,
 )
+from .resolution import (
+    FitResolution,
+    materialize_fit_resolution,
+    resolve_fit_resolution,
+)
 
 __all__ = [
     "AssociationHypothesis",
@@ -26,6 +31,7 @@ __all__ = [
     "ComponentWindow",
     "DispersionState",
     "FitSettings",
+    "FitResolution",
     "GeometryConstraint",
     "JointFitRequest",
     "JointFitResult",
@@ -34,5 +40,7 @@ __all__ = [
     "analyze_residuals",
     "fit_joint_event",
     "load_band_observation_product",
+    "materialize_fit_resolution",
+    "resolve_fit_resolution",
     "write_band_observation_product",
 ]

@@ -163,6 +163,8 @@
     "reference_frequency_mhz": 400.0,
     "blockers": [
       "component_windows_and_associations_not_reviewed",
+      "fit_resolution_averaging_not_reviewed_or_materialized",
+      "resolution_crop_and_off_pulse_padding_not_reviewed",
       "strict_observation_products_not_regenerated"
     ],
     "geometry": {
@@ -193,7 +195,84 @@
       "chime_time_bin_factor": null,
       "dsa_frequency_bin_factor": null,
       "dsa_time_bin_factor": null,
+      "chime_fit_frequency_average_factor": null,
+      "chime_fit_time_average_factor": null,
+      "dsa_fit_frequency_average_factor": null,
+      "dsa_fit_time_average_factor": null,
+      "chime_fit_observation_sha256": null,
+      "dsa_fit_observation_sha256": null,
+      "chime_max_residual_intra_bin_smearing_s": null,
+      "dsa_max_residual_intra_bin_smearing_s": null,
+      "chime_smearing_calculation_sha256": null,
+      "dsa_smearing_calculation_sha256": null,
       "crop_and_off_pulse_padding_locked": false
+    },
+    "review_plan": {
+      "component_count": {
+        "chime": 1,
+        "dsa": 1
+      },
+      "association_hypotheses": [
+        {
+          "name": "c1d1",
+          "matches": [
+            {
+              "latent_id": "c1",
+              "chime_component_id": "chime_c1",
+              "dsa_component_id": "dsa_c1"
+            }
+          ]
+        }
+      ],
+      "fit_resolution": {
+        "status": "pending_data_driven_proposal",
+        "minimum_valid_fraction": 1.0,
+        "minimum_samples_per_component": 8,
+        "time_average_factor": 1,
+        "maximum_residual_smearing_fraction_of_fit_sample": 0.1,
+        "maximum_residual_smearing_fraction_of_component_width": 0.05,
+        "exact_divisor_required": true
+      }
+    },
+    "dm_bounds_pc_cm3": [
+      491.18,
+      491.38
+    ],
+    "morphologies": [
+      "gaussian",
+      "scattering"
+    ],
+    "scattering_tau_1ghz_bounds_s": [
+      1e-06,
+      0.005
+    ],
+    "scattering_alpha_bounds": [
+      2.0,
+      6.0
+    ],
+    "gain_variance": 100.0,
+    "sampler": {
+      "seed": 20260729,
+      "nlive": 600,
+      "dlogz": 0.5,
+      "sample": "rwalk",
+      "pool_size": 16,
+      "resume": true
+    },
+    "acceptance": {
+      "maximum_reduced_residual_power": 2.0,
+      "maximum_structured_residual_correlation": 0.2,
+      "posterior_edge_fraction": 0.01,
+      "maximum_prior_edge_mass": 0.05,
+      "resolution_convergence_required": true,
+      "maximum_resolution_dm_shift_combined_sigma": 0.5,
+      "maximum_resolution_dm_shift_pc_cm3": 0.005,
+      "maximum_resolution_toa_shift_combined_sigma": 0.5,
+      "resolution_interval_width_ratio": [
+        0.8,
+        1.25
+      ],
+      "maximum_resolution_model_weight_l1_difference": 0.1
     }
   },
   "workflow": {
@@ -208,6 +287,8 @@
       "dsa_products",
       "geometry_constraint",
       "joint_fit",
+      "resolution_fit",
+      "resolution_check",
       "chime_oracle",
       "dsa_oracle",
       "oracle_check",
@@ -215,5 +296,5 @@
       "manifests"
     ]
   },
-  "event_binding_sha256": "d47955732f1191597eecd14ef1f379ce10e827cc29aa3c1a83ed4836be66853f"
+  "event_binding_sha256": "18572c3f5d0be37c639824014dfa1ef3718205c11c73ccca0347d339c1e4ef5f"
 }

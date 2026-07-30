@@ -18,9 +18,14 @@ from typing import Any
 
 from one_event_workflow import (
     STAGES,
+    apply_review_decision,
+    arrays_sha256,
+    authorize_reviewed_config,
+    build_review_decision_template,
     canonical_json,
     event_binding_sha256,
     load_config,
+    sample_time_axis_ns,
     sha256_file,
     validate_timing_uncertainties,
 )
@@ -74,16 +79,54 @@ def _output_paths(config: dict[str, Any]) -> dict[str, Path]:
         "chime_result": root / "products" / "chime" / "chime_hybrid_result.json",
         "dsa_dir": root / "products" / "dsa",
         "dsa_result": root / "products" / "dsa" / "dsa_hybrid_result.json",
+        "fit_dir": root / "products" / "fit",
+        "chime_fit_observation": root / "products" / "fit" / "chime-fit-observation.npz",
+        "dsa_fit_observation": root / "products" / "fit" / "dsa-fit-observation.npz",
+        "chime_fit_resolution": root / "products" / "fit" / "chime-fit-resolution.json",
+        "dsa_fit_resolution": root / "products" / "fit" / "dsa-fit-resolution.json",
         "geometry_constraint": root / "geometry-constraint.json",
         "fit_result": root / "fit-result.json",
         "posterior": root / "posterior.npz",
         "model_products": root / "model-products.npz",
+        "fine_config": root / "resolution-convergence" / "fine-config.json",
+        "fine_fit_dir": root / "resolution-convergence" / "fine-fit",
+        "fine_fit_result": root / "resolution-convergence" / "fine-fit" / "fit-result.json",
+        "fine_posterior": root / "resolution-convergence" / "fine-fit" / "posterior.npz",
+        "fine_model_products": (
+            root / "resolution-convergence" / "fine-fit" / "model-products.npz"
+        ),
+        "fine_provenance": (
+            root / "resolution-convergence" / "fine-fit" / "run-provenance.json"
+        ),
+        "fine_chime_fit_observation": (
+            root / "resolution-convergence" / "fit" / "chime-fit-observation.npz"
+        ),
+        "fine_dsa_fit_observation": (
+            root / "resolution-convergence" / "fit" / "dsa-fit-observation.npz"
+        ),
+        "fine_chime_fit_resolution": (
+            root / "resolution-convergence" / "fit" / "chime-fit-resolution.json"
+        ),
+        "fine_dsa_fit_resolution": (
+            root / "resolution-convergence" / "fit" / "dsa-fit-resolution.json"
+        ),
+        "resolution_convergence": root / "resolution-convergence.json",
         "chime_oracle_dir": root / "oracles" / "chime",
         "chime_oracle_result": root / "oracles" / "chime" / "chime_hybrid_result.json",
         "dsa_oracle_dir": root / "oracles" / "dsa",
         "dsa_oracle_result": root / "oracles" / "dsa" / "dsa_hybrid_result.json",
         "oracle_verification": root / "oracle-verification.json",
         "packet_pdf": root / "review-packet.pdf",
+        "component_proposal": root / "component-proposal.json",
+        "component_proposal_pdf": root / "component-proposal.pdf",
+        "high_resolution_component_diagnostic": (
+            root / "high-resolution-component-diagnostic.json"
+        ),
+        "high_resolution_component_diagnostic_pdf": (
+            root / "high-resolution-component-diagnostic.pdf"
+        ),
+        "resolution_proposal": root / "resolution-lock-proposal.json",
+        "review_decision_template": root / "review-decision-template.json",
         "manifest": root / "manifests" / "workflow-manifest.json",
     }
 
@@ -178,13 +221,51 @@ def build_stage_commands(
             "--config",
             str(config_path),
             "--chime-observation",
-            str(paths["chime_dir"] / "chime_anchor_before_residual.npz"),
+            str(paths["chime_fit_observation"]),
             "--dsa-observation",
-            str(paths["dsa_dir"] / "dsa_anchor_dm.npz"),
+            str(paths["dsa_fit_observation"]),
             "--geometry-constraint",
             str(paths["geometry_constraint"]),
             "--output-dir",
             str(paths["root"]),
+        ],
+        "resolution_fit": [
+            python,
+            str(repo_root / "scripts/fit_resolution_variant.py"),
+            "--base-config",
+            str(config_path),
+            "--variant-config",
+            str(paths["fine_config"]),
+            "--chime-observation",
+            str(paths["fine_chime_fit_observation"]),
+            "--dsa-observation",
+            str(paths["fine_dsa_fit_observation"]),
+            "--geometry-constraint",
+            str(paths["geometry_constraint"]),
+            "--output-dir",
+            str(paths["fine_fit_dir"]),
+        ],
+        "resolution_check": [
+            python,
+            str(repo_root / "scripts/verify_joint_fit_resolution_convergence.py"),
+            "--coarse-fit-result",
+            str(paths["fit_result"]),
+            "--fine-fit-result",
+            str(paths["fine_fit_result"]),
+            "--coarse-config",
+            str(config_path),
+            "--fine-config",
+            str(paths["fine_config"]),
+            "--coarse-chime-receipt",
+            str(paths["chime_fit_resolution"]),
+            "--coarse-dsa-receipt",
+            str(paths["dsa_fit_resolution"]),
+            "--fine-chime-receipt",
+            str(paths["fine_chime_fit_resolution"]),
+            "--fine-dsa-receipt",
+            str(paths["fine_dsa_fit_resolution"]),
+            "--output",
+            str(paths["resolution_convergence"]),
         ],
         "chime_oracle": [
             *chime_command[:-2],
@@ -252,6 +333,22 @@ def build_stage_commands(
             str(paths["geometry_constraint"]),
             "--oracle-verification",
             str(paths["oracle_verification"]),
+            "--resolution-convergence",
+            str(paths["resolution_convergence"]),
+            "--fine-fit-result",
+            str(paths["fine_fit_result"]),
+            "--coarse-config",
+            str(config_path),
+            "--fine-config",
+            str(paths["fine_config"]),
+            "--coarse-chime-receipt",
+            str(paths["chime_fit_resolution"]),
+            "--coarse-dsa-receipt",
+            str(paths["dsa_fit_resolution"]),
+            "--fine-chime-receipt",
+            str(paths["fine_chime_fit_resolution"]),
+            "--fine-dsa-receipt",
+            str(paths["fine_dsa_fit_resolution"]),
             "--output",
             str(paths["packet_pdf"]),
         ],
@@ -291,11 +388,29 @@ def expected_stage_outputs(
         return [paths["geometry_constraint"]]
     if stage == "joint_fit":
         return [
+            paths["chime_fit_observation"],
+            paths["dsa_fit_observation"],
+            paths["chime_fit_resolution"],
+            paths["dsa_fit_resolution"],
             paths["fit_result"],
             paths["posterior"],
             paths["model_products"],
             paths["provenance"],
         ]
+    if stage == "resolution_fit":
+        return [
+            paths["fine_config"],
+            paths["fine_chime_fit_observation"],
+            paths["fine_dsa_fit_observation"],
+            paths["fine_chime_fit_resolution"],
+            paths["fine_dsa_fit_resolution"],
+            paths["fine_fit_result"],
+            paths["fine_posterior"],
+            paths["fine_model_products"],
+            paths["fine_provenance"],
+        ]
+    if stage == "resolution_check":
+        return [paths["resolution_convergence"]]
     if stage == "chime_oracle":
         outputs = [
             paths["chime_oracle_result"],
@@ -361,18 +476,14 @@ def _hash_payload(value: Any) -> str:
 
 
 def _array_sha256(*arrays: Any) -> str:
-    import numpy as np
-
-    digest = hashlib.sha256()
-    for array in arrays:
-        value = np.ascontiguousarray(array)
-        digest.update(value.dtype.str.encode())
-        digest.update(repr(value.shape).encode())
-        digest.update(value.view(np.uint8))
-    return digest.hexdigest()
+    return arrays_sha256(*arrays)
 
 
-def resolution_lock_proposal(paths: dict[str, Path]) -> dict[str, Any]:
+def resolution_lock_proposal(
+    paths: dict[str, Path],
+    *,
+    observation_paths: dict[str, Path] | None = None,
+) -> dict[str, Any]:
     """Read-only proposal for owner-reviewed locks after product preparation."""
 
     import numpy as np
@@ -380,16 +491,30 @@ def resolution_lock_proposal(paths: dict[str, Path]) -> dict[str, Any]:
     proposal: dict[str, Any] = {
         "status": "pending_owner_review",
         "crop_and_off_pulse_padding_locked": False,
+        "chime_fit_frequency_average_factor": None,
+        "chime_fit_time_average_factor": None,
+        "dsa_fit_frequency_average_factor": None,
+        "dsa_fit_time_average_factor": None,
+        "chime_fit_observation_sha256": None,
+        "dsa_fit_observation_sha256": None,
+        "chime_max_residual_intra_bin_smearing_s": None,
+        "dsa_max_residual_intra_bin_smearing_s": None,
+        "chime_smearing_calculation_sha256": None,
+        "dsa_smearing_calculation_sha256": None,
     }
-    for instrument, path in (
-        ("chime", paths["chime_dir"] / "chime_anchor_before_residual.npz"),
-        ("dsa", paths["dsa_dir"] / "dsa_anchor_dm.npz"),
-    ):
+    observation_paths = observation_paths or {
+        "chime": paths["chime_dir"] / "chime_anchor_before_residual.npz",
+        "dsa": paths["dsa_dir"] / "dsa_anchor_dm.npz",
+    }
+    for instrument, path in observation_paths.items():
         with np.load(path, allow_pickle=False) as product:
+            waterfall = product["waterfall"]
+            sample_interval_s = float(product["sample_interval_s"])
+            time0_unix_ns = int(product["time0_unix_ns"])
             proposal.update(
                 {
-                    f"{instrument}_shape": list(product["waterfall"].shape),
-                    f"{instrument}_sample_interval_s": float(product["sample_interval_s"]),
+                    f"{instrument}_shape": list(waterfall.shape),
+                    f"{instrument}_sample_interval_s": sample_interval_s,
                     f"{instrument}_frequency_bin_factor": int(product["frequency_bin_factor"]),
                     f"{instrument}_time_bin_factor": int(product["time_bin_factor"]),
                     f"{instrument}_frequency_grid_sha256": _array_sha256(
@@ -400,10 +525,277 @@ def resolution_lock_proposal(paths: dict[str, Path]) -> dict[str, Any]:
                     f"{instrument}_off_pulse_mask_sha256": _array_sha256(
                         product["noise_estimation_mask"]
                     ),
-                    f"{instrument}_time0_unix_ns": int(product["time0_unix_ns"]),
+                    f"{instrument}_waterfall_sha256": _array_sha256(waterfall),
+                    f"{instrument}_noise_std_sha256": _array_sha256(product["noise_std"]),
+                    f"{instrument}_time_axis_sha256": _array_sha256(
+                        sample_time_axis_ns(
+                            time0_unix_ns=time0_unix_ns,
+                            sample_interval_s=sample_interval_s,
+                            sample_count=waterfall.shape[1],
+                        )
+                    ),
+                    f"{instrument}_time0_unix_ns": time0_unix_ns,
                 }
             )
     return proposal
+
+
+def materialize_reviewed_fit_observations(
+    resolution: dict[str, Any],
+    *,
+    repo_root: Path,
+    paths: dict[str, Path],
+) -> tuple[dict[str, Path], dict[str, Path]]:
+    """Build separate fit-grid products and enforce any approved identities."""
+
+    source_observations = {
+        "chime": paths["chime_dir"] / "chime_anchor_before_residual.npz",
+        "dsa": paths["dsa_dir"] / "dsa_anchor_dm.npz",
+    }
+    fit_observations = {
+        "chime": paths["chime_fit_observation"],
+        "dsa": paths["dsa_fit_observation"],
+    }
+    fit_receipts = {
+        "chime": paths["chime_fit_resolution"],
+        "dsa": paths["dsa_fit_resolution"],
+    }
+    for instrument in ("chime", "dsa"):
+        frequency_factor = resolution.get(
+            f"{instrument}_fit_frequency_average_factor"
+        )
+        time_factor = resolution.get(f"{instrument}_fit_time_average_factor")
+        if not isinstance(frequency_factor, int) or frequency_factor < 1:
+            raise ValueError(f"{instrument} fit frequency factor is not reviewed")
+        if time_factor != 1:
+            raise ValueError("formal fit grids must retain native time sampling")
+        subprocess.run(
+            [
+                sys.executable,
+                str(repo_root / "scripts/materialize_joint_fit_observations.py"),
+                "--source-observation",
+                str(source_observations[instrument]),
+                "--frequency-bin-factor",
+                str(frequency_factor),
+                "--time-bin-factor",
+                "1",
+                "--minimum-valid-fraction",
+                "1.0",
+                "--output-observation",
+                str(fit_observations[instrument]),
+                "--output-receipt",
+                str(fit_receipts[instrument]),
+            ],
+            check=True,
+            cwd=repo_root,
+            env=_stage_environment(repo_root),
+        )
+        expected = resolution.get(f"{instrument}_fit_observation_sha256")
+        if expected is not None and sha256_file(fit_observations[instrument]) != expected:
+            raise ValueError(f"{instrument} materialized fit-grid identity changed")
+    return fit_observations, fit_receipts
+
+
+def materialize_resolution_variant(
+    config: dict[str, Any],
+    *,
+    repo_root: Path,
+    paths: dict[str, Path],
+) -> None:
+    """Materialize the mandatory factor-halved grids and bind a fit variant."""
+
+    from radio_pipeline.fitting import load_band_observation_product
+    from radio_pipeline.fitting.resolution import residual_smearing_calculation
+
+    coarse = config["joint_fit"]["resolution"]
+    fine_seed = copy.deepcopy(coarse)
+    for instrument in ("chime", "dsa"):
+        factor = int(coarse[f"{instrument}_fit_frequency_average_factor"])
+        if factor > 1 and factor % 2:
+            raise ValueError(
+                f"{instrument} reviewed frequency factor cannot be exactly halved"
+            )
+        fine_seed[f"{instrument}_fit_frequency_average_factor"] = (
+            1 if factor == 1 else factor // 2
+        )
+        fine_seed[f"{instrument}_fit_observation_sha256"] = None
+    fine_paths = dict(paths)
+    fine_paths.update(
+        {
+            "chime_fit_observation": paths["fine_chime_fit_observation"],
+            "dsa_fit_observation": paths["fine_dsa_fit_observation"],
+            "chime_fit_resolution": paths["fine_chime_fit_resolution"],
+            "dsa_fit_resolution": paths["fine_dsa_fit_resolution"],
+        }
+    )
+    observations, _ = materialize_reviewed_fit_observations(
+        fine_seed,
+        repo_root=repo_root,
+        paths=fine_paths,
+    )
+    fine = resolution_lock_proposal(paths, observation_paths=observations)
+    fine["status"] = coarse["status"]
+    fine["crop_and_off_pulse_padding_locked"] = coarse[
+        "crop_and_off_pulse_padding_locked"
+    ]
+    source_paths = {
+        "chime": paths["chime_dir"] / "chime_anchor_before_residual.npz",
+        "dsa": paths["dsa_dir"] / "dsa_anchor_dm.npz",
+    }
+    for instrument in ("chime", "dsa"):
+        factor = fine_seed[f"{instrument}_fit_frequency_average_factor"]
+        fine[f"{instrument}_fit_frequency_average_factor"] = factor
+        fine[f"{instrument}_fit_time_average_factor"] = 1
+        fine[f"{instrument}_fit_observation_sha256"] = sha256_file(
+            observations[instrument]
+        )
+        calculation = residual_smearing_calculation(
+            load_band_observation_product(source_paths[instrument]),
+            absolute_dm_bounds_pc_cm3=tuple(config["joint_fit"]["dm_bounds_pc_cm3"]),
+            frequency_bin_factor=factor,
+        )
+        fine[f"{instrument}_max_residual_intra_bin_smearing_s"] = calculation[
+            "maximum_smearing_s"
+        ]
+        fine[f"{instrument}_smearing_calculation_sha256"] = hashlib.sha256(
+            canonical_json(calculation).encode()
+        ).hexdigest()
+    variant = copy.deepcopy(config)
+    variant["joint_fit"]["resolution"] = fine
+    _write_json(paths["fine_config"], variant)
+
+
+def prepare_review_artifacts(
+    config: dict[str, Any],
+    *,
+    config_path: Path,
+    repo_root: Path,
+    paths: dict[str, Path],
+) -> dict[str, Any]:
+    """Materialize a reviewed fit grid before proposing fit-grid components."""
+
+    def run_component_proposal(
+        chime_observation: Path,
+        dsa_observation: Path,
+        output_json: Path,
+        output_pdf: Path,
+    ) -> None:
+        subprocess.run(
+            [
+                sys.executable,
+                str(repo_root / "scripts/propose_joint_fit_components.py"),
+                "--config",
+                str(config_path),
+                "--event",
+                config["event"],
+                "--chime-observation",
+                str(chime_observation),
+                "--dsa-observation",
+                str(dsa_observation),
+                "--output-json",
+                str(output_json),
+                "--output-pdf",
+                str(output_pdf),
+            ],
+            check=True,
+            cwd=repo_root,
+            env=_stage_environment(repo_root),
+        )
+
+    high_resolution_observations = {
+        "chime": paths["chime_dir"] / "chime_anchor_before_residual.npz",
+        "dsa": paths["dsa_dir"] / "dsa_anchor_dm.npz",
+    }
+    if not paths["resolution_proposal"].is_file():
+        _write_json(paths["resolution_proposal"], resolution_lock_proposal(paths))
+    if not paths["high_resolution_component_diagnostic"].is_file():
+        run_component_proposal(
+            high_resolution_observations["chime"],
+            high_resolution_observations["dsa"],
+            paths["high_resolution_component_diagnostic"],
+            paths["high_resolution_component_diagnostic_pdf"],
+        )
+
+    reviewed_resolution = json.loads(paths["resolution_proposal"].read_text())
+    required_reviewed_fields = [
+        f"{instrument}_{suffix}"
+        for instrument in ("chime", "dsa")
+        for suffix in (
+            "fit_frequency_average_factor",
+            "fit_time_average_factor",
+            "max_residual_intra_bin_smearing_s",
+            "smearing_calculation_sha256",
+        )
+    ]
+    if any(reviewed_resolution.get(key) is None for key in required_reviewed_fields):
+        return {
+            "status": "fit_resolution_review_required",
+            "resolution_lock_proposal": reviewed_resolution,
+            "high_resolution_component_diagnostic": {
+                "path": str(paths["high_resolution_component_diagnostic"]),
+                "sha256": sha256_file(paths["high_resolution_component_diagnostic"]),
+            },
+            "high_resolution_component_diagnostic_pdf": {
+                "path": str(paths["high_resolution_component_diagnostic_pdf"]),
+                "sha256": sha256_file(
+                    paths["high_resolution_component_diagnostic_pdf"]
+                ),
+            },
+        }
+    if any(
+        int(reviewed_resolution[f"{instrument}_fit_time_average_factor"]) != 1
+        for instrument in ("chime", "dsa")
+    ):
+        raise ValueError("formal fit-grid review must retain native time sampling")
+
+    fit_observations, _ = materialize_reviewed_fit_observations(
+        reviewed_resolution,
+        repo_root=repo_root,
+        paths=paths,
+    )
+
+    resolution = resolution_lock_proposal(
+        paths,
+        observation_paths=fit_observations,
+    )
+    for key in required_reviewed_fields:
+        resolution[key] = reviewed_resolution[key]
+    for instrument in ("chime", "dsa"):
+        resolution[f"{instrument}_fit_observation_sha256"] = sha256_file(
+            fit_observations[instrument]
+        )
+    _write_json(paths["resolution_proposal"], resolution)
+    run_component_proposal(
+        fit_observations["chime"],
+        fit_observations["dsa"],
+        paths["component_proposal"],
+        paths["component_proposal_pdf"],
+    )
+    component_proposal = json.loads(paths["component_proposal"].read_text())
+    decision = build_review_decision_template(
+        config,
+        component_proposal=component_proposal,
+        component_proposal_sha256=sha256_file(paths["component_proposal"]),
+        resolution_proposal=resolution,
+        resolution_proposal_sha256=sha256_file(paths["resolution_proposal"]),
+    )
+    _write_json(paths["review_decision_template"], decision)
+    return {
+        "status": "component_and_resolution_review_required",
+        "resolution_lock_proposal": resolution,
+        "component_proposal": {
+            "path": str(paths["component_proposal"]),
+            "sha256": sha256_file(paths["component_proposal"]),
+        },
+        "component_proposal_pdf": {
+            "path": str(paths["component_proposal_pdf"]),
+            "sha256": sha256_file(paths["component_proposal_pdf"]),
+        },
+        "review_decision_template": {
+            "path": str(paths["review_decision_template"]),
+            "sha256": sha256_file(paths["review_decision_template"]),
+        },
+    }
 
 
 def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]:
@@ -429,10 +821,24 @@ def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]
         ],
         "geometry_constraint": [repo_root / "scripts/build_geometry_constraint.py"],
         "joint_fit": [
+            repo_root / "scripts/materialize_joint_fit_observations.py",
             repo_root / "scripts/fit_one_event_joint_burst.py",
             repo_root / "radio_pipeline/fitting/joint_burst.py",
             repo_root / "radio_pipeline/fitting/products.py",
             repo_root / "radio_pipeline/fitting/_pulse_kernels.py",
+            repo_root / "radio_pipeline/fitting/resolution.py",
+        ],
+        "resolution_fit": [
+            repo_root / "scripts/materialize_joint_fit_observations.py",
+            repo_root / "scripts/fit_resolution_variant.py",
+            repo_root / "scripts/fit_one_event_joint_burst.py",
+            repo_root / "radio_pipeline/fitting/joint_burst.py",
+            repo_root / "radio_pipeline/fitting/products.py",
+            repo_root / "radio_pipeline/fitting/_pulse_kernels.py",
+            repo_root / "radio_pipeline/fitting/resolution.py",
+        ],
+        "resolution_check": [
+            repo_root / "scripts/verify_joint_fit_resolution_convergence.py",
         ],
         "chime_oracle": [
             repo_root / "scripts/run_one_event_hybrid_absolute_dm_h17.py",
@@ -450,6 +856,7 @@ def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]
         ],
         "packet": [
             repo_root / "scripts/render_joint_fit_packet.py",
+            repo_root / "scripts/verify_joint_fit_resolution_convergence.py",
         ],
         "manifests": [repo_root / "analysis-configs/absolute-dm/schema.json"],
     }
@@ -504,7 +911,28 @@ def _stage_input_files(
         return [
             paths["chime_dir"] / "chime_anchor_before_residual.npz",
             paths["dsa_dir"] / "dsa_anchor_dm.npz",
+            paths["chime_fit_observation"],
+            paths["dsa_fit_observation"],
+            paths["chime_fit_resolution"],
+            paths["dsa_fit_resolution"],
             paths["geometry_constraint"],
+        ]
+    if stage == "resolution_fit":
+        return [
+            paths["chime_dir"] / "chime_anchor_before_residual.npz",
+            paths["dsa_dir"] / "dsa_anchor_dm.npz",
+            paths["fit_result"],
+            paths["geometry_constraint"],
+        ]
+    if stage == "resolution_check":
+        return [
+            paths["fit_result"],
+            paths["fine_fit_result"],
+            paths["fine_config"],
+            paths["chime_fit_resolution"],
+            paths["dsa_fit_resolution"],
+            paths["fine_chime_fit_resolution"],
+            paths["fine_dsa_fit_resolution"],
         ]
     if stage == "chime_oracle":
         return [
@@ -552,6 +980,13 @@ def _stage_input_files(
             paths["model_products"],
             paths["geometry_constraint"],
             paths["oracle_verification"],
+            paths["resolution_convergence"],
+            paths["fine_fit_result"],
+            paths["fine_config"],
+            paths["chime_fit_resolution"],
+            paths["dsa_fit_resolution"],
+            paths["fine_chime_fit_resolution"],
+            paths["fine_dsa_fit_resolution"],
         ]
         return inputs
     if stage == "manifests":
@@ -596,6 +1031,20 @@ def _output_schema_matches(
         json_path = paths["geometry_constraint"]
     elif stage == "joint_fit":
         json_path = paths["fit_result"]
+    elif stage == "resolution_fit":
+        json_path = paths["fine_fit_result"]
+    elif stage == "resolution_check":
+        try:
+            value = json.loads(paths["resolution_convergence"].read_text())
+        except (OSError, ValueError):
+            return False
+        return (
+            value.get("event") == config["event"]
+            and value.get("status") == "passed"
+            and value.get("passed") is True
+            and value.get("input_sha256", {}).get("coarse_fit_result")
+            == sha256_file(paths["fit_result"])
+        )
     elif stage == "chime_oracle":
         json_path = paths["chime_oracle_result"]
     elif stage == "dsa_oracle":
@@ -641,6 +1090,20 @@ def _all_workflow_files(
     expected = {paths["state"], paths["provenance"]}
     if paths["preparation_state"].is_file():
         expected.add(paths["preparation_state"])
+    for key in (
+        "component_proposal",
+        "component_proposal_pdf",
+        "resolution_proposal",
+        "review_decision_template",
+        "high_resolution_component_diagnostic",
+        "high_resolution_component_diagnostic_pdf",
+        "chime_fit_observation",
+        "dsa_fit_observation",
+        "chime_fit_resolution",
+        "dsa_fit_resolution",
+    ):
+        if paths[key].is_file():
+            expected.add(paths[key])
     for stage in STAGES:
         expected.update(expected_stage_outputs(stage, paths, config))
     return expected
@@ -852,6 +1315,9 @@ def _write_manifest(
         repo_root / "scripts/build_one_event_dsa_hybrid_h17.py",
         repo_root / "scripts/build_geometry_constraint.py",
         repo_root / "scripts/fit_one_event_joint_burst.py",
+        repo_root / "scripts/fit_resolution_variant.py",
+        repo_root / "scripts/materialize_joint_fit_observations.py",
+        repo_root / "scripts/verify_joint_fit_resolution_convergence.py",
         repo_root / "scripts/render_joint_fit_packet.py",
         repo_root / "radio_pipeline/fitting/joint_burst.py",
         repo_root / "radio_pipeline/fitting/products.py",
@@ -1023,6 +1489,18 @@ def execute(
         state["active_stage"] = stage
         _write_json(paths["state"], state)
         try:
+            if stage == "joint_fit":
+                materialize_reviewed_fit_observations(
+                    config["joint_fit"]["resolution"],
+                    repo_root=repo_root,
+                    paths=paths,
+                )
+            elif stage == "resolution_fit":
+                materialize_resolution_variant(
+                    config,
+                    repo_root=repo_root,
+                    paths=paths,
+                )
             record.update(
                 {
                     "control_sha256": stage_control_sha256(
@@ -1130,6 +1608,22 @@ def main() -> None:
         ),
     )
     mode.add_argument("--print-binding", action="store_true")
+    mode.add_argument(
+        "--apply-review-decision",
+        type=Path,
+        metavar="DECISION_JSON",
+        help="write a reviewed execution-disabled config from exact approved proposals",
+    )
+    mode.add_argument(
+        "--authorize-reviewed-config",
+        action="store_true",
+        help="write a separately bound execution-authorized config",
+    )
+    parser.add_argument("--component-proposal", type=Path)
+    parser.add_argument("--resolution-proposal", type=Path)
+    parser.add_argument("--output-config", type=Path)
+    parser.add_argument("--authorization-note")
+    parser.add_argument("--authorization-date")
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).parents[1])
     parser.add_argument("--from-stage", choices=STAGES, default=STAGES[0])
     parser.add_argument("--through-stage", choices=STAGES, default=STAGES[-1])
@@ -1161,6 +1655,72 @@ def main() -> None:
             "historical anchored-hybrid configuration is compatibility-only; "
             "add a reviewed joint_fit section before using the active command"
         )
+    if args.apply_review_decision is not None:
+        required_paths = {
+            "--component-proposal": args.component_proposal,
+            "--resolution-proposal": args.resolution_proposal,
+            "--output-config": args.output_config,
+        }
+        missing = [name for name, value in required_paths.items() if value is None]
+        if missing:
+            raise ValueError(
+                "--apply-review-decision requires " + ", ".join(missing)
+            )
+        assert args.component_proposal is not None
+        assert args.resolution_proposal is not None
+        assert args.output_config is not None
+        if args.output_config.resolve() == config_path:
+            raise ValueError("review transition must not overwrite its source config")
+        component_proposal = json.loads(args.component_proposal.read_text())
+        resolution_proposal = json.loads(args.resolution_proposal.read_text())
+        reviewed = apply_review_decision(
+            config,
+            json.loads(args.apply_review_decision.read_text()),
+            component_proposal=component_proposal,
+            component_proposal_sha256=sha256_file(args.component_proposal),
+            resolution_proposal=resolution_proposal,
+            resolution_proposal_sha256=sha256_file(args.resolution_proposal),
+        )
+        _write_json(args.output_config, reviewed)
+        print(
+            canonical_json(
+                {
+                    "status": reviewed["joint_fit"]["status"],
+                    "execution_authorized": False,
+                    "output_config": str(args.output_config),
+                    "event_binding_sha256": reviewed["event_binding_sha256"],
+                }
+            )
+        )
+        return
+    if args.authorize_reviewed_config:
+        if args.output_config is None or not args.authorization_note:
+            raise ValueError(
+                "--authorize-reviewed-config requires --output-config and "
+                "--authorization-note"
+            )
+        if args.output_config.resolve() == config_path:
+            raise ValueError("authorization must not overwrite its source config")
+        authorized = authorize_reviewed_config(
+            config,
+            note=args.authorization_note,
+            authorization_date=args.authorization_date,
+        )
+        _write_json(args.output_config, authorized)
+        print(
+            canonical_json(
+                {
+                    "status": authorized["joint_fit"]["status"],
+                    "execution_authorized": True,
+                    "output_config": str(args.output_config),
+                    "event_binding_sha256": authorized["event_binding_sha256"],
+                    "receipt_rebuild_required": authorized["joint_fit"]["authorization"][
+                        "requires_receipt_rebuild"
+                    ],
+                }
+            )
+        )
+        return
     if args.prepare_reviewed_inputs:
         if args.from_stage != STAGES[0] or args.through_stage != STAGES[-1]:
             raise ValueError("input preparation owns its fixed pre-fit stage window")
@@ -1175,11 +1735,17 @@ def main() -> None:
             retry_failed_stage=set(args.retry_failed_stage),
             preparation_only=True,
         )
+        review_artifacts = prepare_review_artifacts(
+            config,
+            config_path=config_path,
+            repo_root=repo_root,
+            paths=_output_paths(config),
+        )
         print(
             json.dumps(
                 {
                     "state": state,
-                    "resolution_lock_proposal": resolution_lock_proposal(_output_paths(config)),
+                    **review_artifacts,
                     "owner_review_required": True,
                 },
                 indent=2,

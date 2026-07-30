@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import shutil
 import sys
@@ -12,7 +11,7 @@ from pathlib import Path
 
 import dynesty
 import numpy as np
-from one_event_workflow import load_config
+from one_event_workflow import arrays_sha256, load_config, sample_time_axis_ns
 
 import radio_pipeline
 from radio_pipeline.fitting import (
@@ -34,13 +33,7 @@ def _require_accepted_status(status: str) -> None:
 
 
 def _arrays_sha256(*arrays: np.ndarray) -> str:
-    digest = hashlib.sha256()
-    for array in arrays:
-        value = np.ascontiguousarray(array)
-        digest.update(value.dtype.str.encode())
-        digest.update(repr(value.shape).encode())
-        digest.update(value.view(np.uint8))
-    return digest.hexdigest()
+    return arrays_sha256(*arrays)
 
 
 def _require_locked_array_identity(observation, resolution: dict) -> None:
@@ -72,6 +65,26 @@ def _require_locked_product_metadata(
         != resolution[f"{instrument}_off_pulse_mask_sha256"]
     ):
         raise ValueError(f"{instrument} locked off-pulse support changed")
+    if (
+        _arrays_sha256(product["waterfall"])
+        != resolution[f"{instrument}_waterfall_sha256"]
+    ):
+        raise ValueError(f"{instrument} locked waterfall pixels changed")
+    if (
+        _arrays_sha256(product["noise_std"])
+        != resolution[f"{instrument}_noise_std_sha256"]
+    ):
+        raise ValueError(f"{instrument} locked noise estimates changed")
+    time_axis_ns = sample_time_axis_ns(
+        time0_unix_ns=int(product["time0_unix_ns"]),
+        sample_interval_s=float(product["sample_interval_s"]),
+        sample_count=int(product["waterfall"].shape[1]),
+    )
+    if (
+        _arrays_sha256(time_axis_ns)
+        != resolution[f"{instrument}_time_axis_sha256"]
+    ):
+        raise ValueError(f"{instrument} locked time axis changed")
 
 
 def _runtime_preflight(repo_root: Path) -> dict[str, str]:
@@ -91,6 +104,24 @@ def _runtime_preflight(repo_root: Path) -> dict[str, str]:
     }
 
 
+def _load_locked_fit_observations(
+    settings: dict,
+    chime_path: Path,
+    dsa_path: Path,
+):
+    resolution = settings["resolution"]
+    return (
+        load_band_observation_product(
+            chime_path,
+            expected_sha256=resolution["chime_fit_observation_sha256"],
+        ),
+        load_band_observation_product(
+            dsa_path,
+            expected_sha256=resolution["dsa_fit_observation_sha256"],
+        ),
+    )
+
+
 def _request(
     config: dict,
     chime_path: Path,
@@ -98,10 +129,7 @@ def _request(
     geometry_path: Path,
 ) -> JointFitRequest:
     settings = config["joint_fit"]
-    observations = (
-        load_band_observation_product(chime_path),
-        load_band_observation_product(dsa_path),
-    )
+    observations = _load_locked_fit_observations(settings, chime_path, dsa_path)
     expected_inputs = config["input_sha256"]
     if observations[0].input_sha256 != {
         "raw_chime_h5": expected_inputs["raw_chime_h5"],
@@ -247,6 +275,14 @@ def run(
         },
     )
     np.savez_compressed(model_path, **result.model_products)
+    code_hashes = {
+        "joint_burst": sha256_file(repo_root / "radio_pipeline/fitting/joint_burst.py"),
+        "products": sha256_file(repo_root / "radio_pipeline/fitting/products.py"),
+        "pulse_kernels": sha256_file(
+            repo_root / "radio_pipeline/fitting/_pulse_kernels.py"
+        ),
+        "runner": sha256_file(Path(__file__)),
+    }
     fit_payload = {
         "schema_version": 1,
         "status": result.status,
@@ -276,6 +312,7 @@ def run(
             "chime_observation": sha256_file(chime_path),
             "dsa_observation": sha256_file(dsa_path),
         },
+        "provenance_code_sha256": code_hashes,
     }
     fit_result_path.write_text(json.dumps(fit_payload, indent=2, allow_nan=False) + "\n")
     provenance = {
@@ -289,12 +326,7 @@ def run(
             "dsa_observation": sha256_file(dsa_path),
             "geometry_constraint": sha256_file(geometry_path),
         },
-        "code": {
-            "joint_burst": sha256_file(repo_root / "radio_pipeline/fitting/joint_burst.py"),
-            "products": sha256_file(repo_root / "radio_pipeline/fitting/products.py"),
-            "pulse_kernels": sha256_file(repo_root / "radio_pipeline/fitting/_pulse_kernels.py"),
-            "runner": sha256_file(Path(__file__)),
-        },
+        "code": code_hashes,
         "runtime": runtime,
         "outputs": {
             "fit-result.json": sha256_file(fit_result_path),

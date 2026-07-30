@@ -25,6 +25,8 @@ STAGES = (
     "dsa_products",
     "geometry_constraint",
     "joint_fit",
+    "resolution_fit",
+    "resolution_check",
     "chime_oracle",
     "dsa_oracle",
     "oracle_check",
@@ -47,6 +49,36 @@ def sha256_file(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+def arrays_sha256(*arrays: Any) -> str:
+    """Hash array values together with their exact dtype and shape."""
+
+    import numpy as np
+
+    digest = hashlib.sha256()
+    for array in arrays:
+        value = np.ascontiguousarray(array)
+        digest.update(value.dtype.str.encode())
+        digest.update(repr(value.shape).encode())
+        digest.update(value.view(np.uint8))
+    return digest.hexdigest()
+
+
+def sample_time_axis_ns(
+    *,
+    time0_unix_ns: int,
+    sample_interval_s: float,
+    sample_count: int,
+) -> Any:
+    """Construct the reviewed integer-nanosecond sample centers."""
+
+    import numpy as np
+
+    offsets_ns = np.rint(
+        np.arange(sample_count, dtype=np.float64) * float(sample_interval_s) * 1.0e9
+    ).astype(np.int64)
+    return np.asarray(int(time0_unix_ns), dtype=np.int64) + offsets_ns
+
+
 def event_binding_payload(config: dict[str, Any]) -> dict[str, Any]:
     """Bind the complete canonical config except the binding's own value."""
 
@@ -57,6 +89,386 @@ def event_binding_payload(config: dict[str, Any]) -> dict[str, Any]:
 
 def event_binding_sha256(config: dict[str, Any]) -> str:
     return hashlib.sha256(canonical_json(event_binding_payload(config)).encode("utf-8")).hexdigest()
+
+
+FIT_SETTING_KEYS = (
+    "dm_bounds_pc_cm3",
+    "morphologies",
+    "scattering_tau_1ghz_bounds_s",
+    "scattering_alpha_bounds",
+    "gain_variance",
+    "sampler",
+    "acceptance",
+)
+
+
+def _fit_settings_payload(joint_fit: dict[str, Any]) -> dict[str, Any]:
+    return {key: deepcopy(joint_fit[key]) for key in FIT_SETTING_KEYS}
+
+
+def fit_settings_sha256(joint_fit: dict[str, Any]) -> str:
+    return hashlib.sha256(
+        canonical_json(_fit_settings_payload(joint_fit)).encode("utf-8")
+    ).hexdigest()
+
+
+def _payload_sha256(value: Any) -> str:
+    return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
+
+
+def validate_review_plan(review_plan: dict[str, Any]) -> None:
+    """Validate the owner-selected component counts and explicit hypotheses."""
+
+    _require_keys(
+        review_plan,
+        ("component_count", "association_hypotheses", "fit_resolution"),
+        "joint_fit.review_plan",
+    )
+    counts = review_plan["component_count"]
+    if (
+        not isinstance(counts, dict)
+        or set(counts) != {"chime", "dsa"}
+        or any(not isinstance(counts[key], int) or counts[key] < 1 for key in counts)
+    ):
+        raise ValueError("review plan needs positive CHIME and DSA component counts")
+    hypotheses = review_plan["association_hypotheses"]
+    if not isinstance(hypotheses, list) or not hypotheses:
+        raise ValueError("review plan needs association hypotheses")
+    expected_ids = {
+        "chime": {f"chime_c{index}" for index in range(1, counts["chime"] + 1)},
+        "dsa": {f"dsa_c{index}" for index in range(1, counts["dsa"] + 1)},
+    }
+    names: set[str] = set()
+    for hypothesis in hypotheses:
+        _require_keys(hypothesis, ("name", "matches"), "review plan hypothesis")
+        name = hypothesis["name"]
+        if not isinstance(name, str) or not name or name in names:
+            raise ValueError("review plan hypothesis names must be unique")
+        names.add(name)
+        matches = hypothesis["matches"]
+        if not isinstance(matches, list) or not matches:
+            raise ValueError("review plan hypothesis needs matches")
+        latent_ids: set[str] = set()
+        chime_ids: set[str] = set()
+        dsa_ids: set[str] = set()
+        for match in matches:
+            _require_keys(
+                match,
+                ("latent_id", "chime_component_id", "dsa_component_id"),
+                "review plan match",
+            )
+            latent_id = match["latent_id"]
+            chime_id = match["chime_component_id"]
+            dsa_id = match["dsa_component_id"]
+            if (
+                not all(isinstance(value, str) and value for value in (latent_id, chime_id, dsa_id))
+                or latent_id in latent_ids
+                or chime_id in chime_ids
+                or dsa_id in dsa_ids
+                or chime_id not in expected_ids["chime"]
+                or dsa_id not in expected_ids["dsa"]
+            ):
+                raise ValueError("review plan match is duplicate or names an unknown component")
+            latent_ids.add(latent_id)
+            chime_ids.add(chime_id)
+            dsa_ids.add(dsa_id)
+    fit_resolution = review_plan["fit_resolution"]
+    _require_keys(
+        fit_resolution,
+        (
+            "status",
+            "minimum_valid_fraction",
+            "minimum_samples_per_component",
+            "time_average_factor",
+            "maximum_residual_smearing_fraction_of_fit_sample",
+            "maximum_residual_smearing_fraction_of_component_width",
+            "exact_divisor_required",
+        ),
+        "joint_fit.review_plan.fit_resolution",
+    )
+    if fit_resolution["status"] != "pending_data_driven_proposal":
+        raise ValueError("fit-resolution review plan must remain proposal-only")
+    if float(fit_resolution["minimum_valid_fraction"]) != 1.0:
+        raise ValueError("fit-resolution products require complete rectangular support")
+    if int(fit_resolution["time_average_factor"]) != 1:
+        raise ValueError("formal fitting does not permit time averaging")
+    if int(fit_resolution["minimum_samples_per_component"]) < 2:
+        raise ValueError("fit-resolution plan needs at least two samples per component")
+    if any(
+        not 0 < float(fit_resolution[key]) <= 1
+        for key in (
+            "maximum_residual_smearing_fraction_of_fit_sample",
+            "maximum_residual_smearing_fraction_of_component_width",
+        )
+    ):
+        raise ValueError("fit-resolution smearing limits must lie in (0, 1]")
+    if fit_resolution["exact_divisor_required"] is not True:
+        raise ValueError("fit-resolution averaging must use exact divisors")
+
+
+def build_review_decision_template(
+    config: dict[str, Any],
+    *,
+    component_proposal: dict[str, Any],
+    component_proposal_sha256: str,
+    resolution_proposal: dict[str, Any],
+    resolution_proposal_sha256: str,
+) -> dict[str, Any]:
+    """Build an inert owner decision form bound to exact preparation products."""
+
+    validate_config(config)
+    joint_fit = config["joint_fit"]
+    if joint_fit["status"] != "blocked_pending_reviewed_inputs":
+        raise ValueError("review template requires a blocked joint-fit config")
+    if component_proposal.get("event") != config["event"]:
+        raise ValueError("component proposal belongs to another event")
+    if component_proposal.get("event_binding_sha256") != config["event_binding_sha256"]:
+        raise ValueError("component proposal belongs to another event binding")
+    if component_proposal.get("review_plan") != joint_fit["review_plan"]:
+        raise ValueError("component proposal differs from the configured review plan")
+    _require_sha256(component_proposal_sha256, "component proposal SHA-256")
+    _require_sha256(resolution_proposal_sha256, "resolution proposal SHA-256")
+    return {
+        "schema_version": 1,
+        "status": "pending_owner_review",
+        "approved": False,
+        "event": config["event"],
+        "source_event_binding_sha256": config["event_binding_sha256"],
+        "component_proposal_sha256": component_proposal_sha256,
+        "resolution_proposal_sha256": resolution_proposal_sha256,
+        "fit_settings_sha256": fit_settings_sha256(joint_fit),
+        "resolution_lock": deepcopy(resolution_proposal),
+        "reviewer": "",
+        "review_date": "",
+        "note": "",
+    }
+
+
+def apply_review_decision(
+    config: dict[str, Any],
+    decision: dict[str, Any],
+    *,
+    component_proposal: dict[str, Any],
+    component_proposal_sha256: str,
+    resolution_proposal: dict[str, Any],
+    resolution_proposal_sha256: str,
+) -> dict[str, Any]:
+    """Create a locked, reviewed, execution-disabled config."""
+
+    validate_config(config)
+    joint_fit = config["joint_fit"]
+    if joint_fit["status"] != "blocked_pending_reviewed_inputs":
+        raise ValueError("review decisions apply only to blocked configs")
+    expected_identity = {
+        "event": config["event"],
+        "source_event_binding_sha256": config["event_binding_sha256"],
+        "component_proposal_sha256": component_proposal_sha256,
+        "resolution_proposal_sha256": resolution_proposal_sha256,
+        "fit_settings_sha256": fit_settings_sha256(joint_fit),
+    }
+    for key, expected in expected_identity.items():
+        if decision.get(key) != expected:
+            raise ValueError(f"review decision {key} differs from reviewed inputs")
+    if decision.get("status") != "approved" or decision.get("approved") is not True:
+        raise PermissionError("review decision is not explicitly approved")
+    for field in ("reviewer", "review_date", "note"):
+        if not isinstance(decision.get(field), str) or not decision[field].strip():
+            raise ValueError(f"approved review decision needs {field}")
+    try:
+        date.fromisoformat(decision["review_date"])
+    except ValueError as exc:
+        raise ValueError("review decision date must use YYYY-MM-DD") from exc
+    if component_proposal.get("event_binding_sha256") != config["event_binding_sha256"]:
+        raise ValueError("component proposal belongs to another event binding")
+    if component_proposal.get("review_plan") != joint_fit["review_plan"]:
+        raise ValueError("component proposal differs from configured review plan")
+    if component_proposal.get("status") != "proposal_pending_owner_review":
+        raise ValueError("component proposal status is invalid")
+    components = component_proposal.get("components")
+    associations = component_proposal.get("association_hypotheses")
+    counts = joint_fit["review_plan"]["component_count"]
+    if (
+        not isinstance(components, list)
+        or len(components) != counts["chime"] + counts["dsa"]
+        or associations != joint_fit["review_plan"]["association_hypotheses"]
+    ):
+        raise ValueError("component proposal does not implement the review plan")
+
+    approved_resolution = deepcopy(resolution_proposal)
+    approved_resolution["status"] = "reviewed"
+    approved_resolution["crop_and_off_pulse_padding_locked"] = True
+    if decision.get("resolution_lock") != approved_resolution:
+        raise ValueError("review decision does not exactly approve the proposed resolution lock")
+    resolution_policy = joint_fit["review_plan"]["fit_resolution"]
+    observation_contracts = component_proposal.get("observation_contracts", {})
+    reviewed_components: list[dict[str, Any]] = []
+    for instrument in ("chime", "dsa"):
+        instrument_components = [
+            row for row in components if row.get("instrument") == instrument
+        ]
+        expected_component_ids = {
+            f"{instrument}_c{index}"
+            for index in range(
+                1,
+                joint_fit["review_plan"]["component_count"][instrument] + 1,
+            )
+        }
+        if {row.get("component_id") for row in instrument_components} != (
+            expected_component_ids
+        ):
+            raise ValueError(f"{instrument} component IDs differ from the review plan")
+        try:
+            contract = observation_contracts[instrument]
+            fit_sample_s = float(contract["sample_interval_s"])
+            fit_shape = [int(value) for value in contract["shape"]]
+            narrowest_fwhm_s = min(
+                float(row["matched_filter_width_samples"]) * fit_sample_s
+                for row in instrument_components
+            )
+            smearing_s = float(
+                approved_resolution[
+                    f"{instrument}_max_residual_intra_bin_smearing_s"
+                ]
+            )
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError(
+                f"{instrument} lacks analytic fit-resolution smearing evidence"
+            ) from exc
+        if (
+            fit_shape != approved_resolution[f"{instrument}_shape"]
+            or not math.isclose(
+                fit_sample_s,
+                float(approved_resolution[f"{instrument}_sample_interval_s"]),
+                rel_tol=0.0,
+                abs_tol=1.0e-15,
+            )
+            or contract["frequency_grid_sha256"]
+            != approved_resolution[f"{instrument}_frequency_grid_sha256"]
+            or contract["valid_mask_sha256"]
+            != approved_resolution[f"{instrument}_valid_mask_sha256"]
+        ):
+            raise ValueError(
+                f"{instrument} component proposal belongs to another fit grid"
+            )
+        if smearing_s > (
+            float(
+                resolution_policy[
+                    "maximum_residual_smearing_fraction_of_fit_sample"
+                ]
+            )
+            * fit_sample_s
+        ) or smearing_s > (
+            float(
+                resolution_policy[
+                    "maximum_residual_smearing_fraction_of_component_width"
+                ]
+            )
+            * narrowest_fwhm_s
+        ):
+            raise ValueError(
+                f"{instrument} fit-resolution smearing exceeds reviewed limits"
+            )
+        sample_count = fit_shape[1]
+        for row in instrument_components:
+            center = float(row["center_sample"])
+            half_width = float(row["half_width_samples"])
+            width_bounds = [float(value) for value in row["width_bounds_s"]]
+            if (
+                not math.isfinite(center)
+                or not math.isfinite(half_width)
+                or half_width <= 0
+                or center - half_width < 0
+                or center + half_width > sample_count
+                or len(width_bounds) != 2
+                or not 0 < width_bounds[0] < width_bounds[1]
+            ):
+                raise ValueError(
+                    f"{instrument} component window lies outside the approved fit grid"
+                )
+            reviewed_components.append(
+                {
+                    "instrument": instrument,
+                    "component_id": row["component_id"],
+                    "center_sample": center,
+                    "half_width_samples": half_width,
+                    "width_bounds_s": width_bounds,
+                    "width_index_bounds": [
+                        float(value)
+                        for value in row.get("width_index_bounds", [-2.0, 2.0])
+                    ],
+                }
+            )
+    validate_resolution_lock(approved_resolution)
+
+    reviewed = deepcopy(config)
+    reviewed_joint = reviewed["joint_fit"]
+    reviewed_joint.update(
+        {
+            "status": "reviewed_execution_disabled",
+            "execution_authorized": False,
+            "blockers": [],
+            "resolution": approved_resolution,
+            "components": reviewed_components,
+            "associations": deepcopy(associations),
+            "review_decision": {
+                "status": "approved",
+                **expected_identity,
+                "components_sha256": _payload_sha256(reviewed_components),
+                "associations_sha256": _payload_sha256(associations),
+                "approved_resolution_sha256": _payload_sha256(approved_resolution),
+                "reviewer": decision["reviewer"],
+                "review_date": decision["review_date"],
+                "note": decision["note"],
+            },
+        }
+    )
+    reviewed["workflow"]["execution_authorized"] = False
+    reviewed["result_status"] = "geometry_constrained_joint_fit_reviewed_execution_disabled"
+    if reviewed["workflow"]["regression_fixture"] is not True and "review" in reviewed:
+        reviewed["review"]["configuration_status"] = "reviewed"
+        reviewed["review"]["blockers"] = []
+    reviewed["event_binding_sha256"] = event_binding_sha256(reviewed)
+    return validate_config(reviewed)
+
+
+def authorize_reviewed_config(
+    config: dict[str, Any],
+    *,
+    note: str,
+    authorization_date: str | None = None,
+) -> dict[str, Any]:
+    """Create a separately bound config that explicitly permits execution."""
+
+    validate_config(config)
+    if config["joint_fit"]["status"] != "reviewed_execution_disabled":
+        raise ValueError("authorization requires a reviewed execution-disabled config")
+    if not note.strip():
+        raise ValueError("authorization note must not be empty")
+    authorization_date = authorization_date or date.today().isoformat()
+    try:
+        date.fromisoformat(authorization_date)
+    except ValueError as exc:
+        raise ValueError("authorization date must use YYYY-MM-DD") from exc
+    authorized = deepcopy(config)
+    authorized["joint_fit"]["status"] = "ready"
+    authorized["joint_fit"]["execution_authorized"] = True
+    authorized["joint_fit"]["authorization"] = {
+        "status": "explicitly_authorized",
+        "source_reviewed_event_binding_sha256": config["event_binding_sha256"],
+        "date": authorization_date,
+        "note": note,
+        "requires_receipt_rebuild": [
+            "preflight",
+            "dsa_audit",
+            "chime_products",
+            "dsa_products",
+            "geometry_constraint",
+        ],
+    }
+    authorized["workflow"]["execution_authorized"] = True
+    authorized["result_status"] = "geometry_constrained_joint_fit_ready_for_science_execution"
+    authorized["event_binding_sha256"] = event_binding_sha256(authorized)
+    return validate_config(authorized, require_execution_authorized=True)
 
 
 def validate_timing_uncertainties(geometry: dict[str, Any]) -> None:
@@ -157,6 +569,64 @@ def _require_keys(mapping: dict[str, Any], keys: tuple[str, ...], label: str) ->
 def _require_sha256(value: Any, label: str) -> None:
     if not isinstance(value, str) or SHA256_RE.fullmatch(value) is None:
         raise ValueError(f"{label}: expected lowercase SHA-256")
+
+
+def validate_resolution_lock(resolution: dict[str, Any]) -> None:
+    """Require every reviewed grid, support, and science-array identity."""
+
+    keys = (
+        "chime_shape",
+        "dsa_shape",
+        "chime_sample_interval_s",
+        "dsa_sample_interval_s",
+        "chime_frequency_bin_factor",
+        "chime_time_bin_factor",
+        "dsa_frequency_bin_factor",
+        "dsa_time_bin_factor",
+        "chime_frequency_grid_sha256",
+        "dsa_frequency_grid_sha256",
+        "chime_valid_mask_sha256",
+        "dsa_valid_mask_sha256",
+        "chime_off_pulse_mask_sha256",
+        "dsa_off_pulse_mask_sha256",
+        "chime_waterfall_sha256",
+        "dsa_waterfall_sha256",
+        "chime_noise_std_sha256",
+        "dsa_noise_std_sha256",
+        "chime_time_axis_sha256",
+        "dsa_time_axis_sha256",
+        "chime_time0_unix_ns",
+        "dsa_time0_unix_ns",
+        "chime_fit_frequency_average_factor",
+        "chime_fit_time_average_factor",
+        "dsa_fit_frequency_average_factor",
+        "dsa_fit_time_average_factor",
+        "chime_fit_observation_sha256",
+        "dsa_fit_observation_sha256",
+        "chime_max_residual_intra_bin_smearing_s",
+        "dsa_max_residual_intra_bin_smearing_s",
+        "chime_smearing_calculation_sha256",
+        "dsa_smearing_calculation_sha256",
+    )
+    _require_keys(resolution, keys, "joint_fit.resolution")
+    if resolution.get("crop_and_off_pulse_padding_locked") is not True:
+        raise ValueError("joint fit requires locked crop and padding")
+    for key in keys:
+        if key.endswith("_sha256"):
+            _require_sha256(resolution[key], f"joint_fit.resolution.{key}")
+        elif key.endswith("_average_factor") and (
+            not isinstance(resolution[key], int) or resolution[key] < 1
+        ):
+            raise ValueError(f"joint_fit.resolution.{key} must be a positive integer")
+        elif key.endswith("_smearing_s") and (
+            not math.isfinite(float(resolution[key])) or float(resolution[key]) < 0
+        ):
+            raise ValueError(f"joint_fit.resolution.{key} must be finite and non-negative")
+    if (
+        resolution["chime_fit_time_average_factor"] != 1
+        or resolution["dsa_fit_time_average_factor"] != 1
+    ):
+        raise ValueError("formal fit-resolution products must retain native time sampling")
 
 
 def _path_mentions_event(value: str, event: str) -> bool:
@@ -536,11 +1006,14 @@ def validate_config(
                 "blockers",
                 "geometry",
                 "resolution",
+                "review_plan",
+                *FIT_SETTING_KEYS,
             ),
             "joint_fit",
         )
         if float(joint_fit["reference_frequency_mhz"]) != REFERENCE_FREQUENCY_MHZ:
             raise ValueError("joint_fit reference frequency must remain 400 MHz")
+        validate_review_plan(joint_fit["review_plan"])
         blockers = joint_fit["blockers"]
         if (
             not isinstance(blockers, list)
@@ -548,21 +1021,45 @@ def validate_config(
             or any(not isinstance(value, str) or not value for value in blockers)
         ):
             raise ValueError("joint_fit blockers must be sorted unique strings")
-        if joint_fit["status"] == "ready":
-            if blockers or joint_fit["execution_authorized"] is not True:
-                raise ValueError("ready joint fit must be unblocked and authorized")
+        _require_keys(joint_fit["sampler"], ("seed", "nlive", "dlogz"), "joint_fit.sampler")
+        _require_keys(
+            joint_fit["acceptance"],
+            (
+                "maximum_reduced_residual_power",
+                "maximum_structured_residual_correlation",
+                "posterior_edge_fraction",
+                "maximum_prior_edge_mass",
+                "resolution_convergence_required",
+                "maximum_resolution_dm_shift_combined_sigma",
+                "maximum_resolution_dm_shift_pc_cm3",
+                "maximum_resolution_toa_shift_combined_sigma",
+                "resolution_interval_width_ratio",
+                "maximum_resolution_model_weight_l1_difference",
+            ),
+            "joint_fit.acceptance",
+        )
+        acceptance = joint_fit["acceptance"]
+        if acceptance["resolution_convergence_required"] is not True:
+            raise ValueError("post-fit resolution convergence must remain required")
+        width_ratio = acceptance["resolution_interval_width_ratio"]
+        if (
+            not isinstance(width_ratio, list)
+            or len(width_ratio) != 2
+            or not 0 < float(width_ratio[0]) <= 1 <= float(width_ratio[1])
+        ):
+            raise ValueError("resolution interval-width ratio must bracket one")
+        if joint_fit["status"] in {"reviewed_execution_disabled", "ready"}:
+            if blockers:
+                raise ValueError("reviewed joint fit must be unblocked")
+            expected_authorization = joint_fit["status"] == "ready"
+            if joint_fit["execution_authorized"] is not expected_authorization:
+                raise ValueError("joint-fit authorization contradicts its status")
             _require_keys(
                 joint_fit,
                 (
                     "components",
                     "associations",
-                    "dm_bounds_pc_cm3",
-                    "morphologies",
-                    "scattering_tau_1ghz_bounds_s",
-                    "scattering_alpha_bounds",
-                    "gain_variance",
-                    "sampler",
-                    "acceptance",
+                    "review_decision",
                 ),
                 "joint_fit",
             )
@@ -578,55 +1075,92 @@ def validate_config(
                 "joint_fit.geometry",
             )
             validate_timing_uncertainties(joint_fit["geometry"])
-            if joint_fit["resolution"].get("crop_and_off_pulse_padding_locked") is not True:
-                raise ValueError("joint fit requires locked crop and padding")
+            validate_resolution_lock(joint_fit["resolution"])
+            review_decision = joint_fit["review_decision"]
             _require_keys(
-                joint_fit["resolution"],
+                review_decision,
                 (
-                    "chime_shape",
-                    "dsa_shape",
-                    "chime_sample_interval_s",
-                    "dsa_sample_interval_s",
-                    "chime_frequency_bin_factor",
-                    "chime_time_bin_factor",
-                    "dsa_frequency_bin_factor",
-                    "dsa_time_bin_factor",
-                    "chime_frequency_grid_sha256",
-                    "dsa_frequency_grid_sha256",
-                    "chime_valid_mask_sha256",
-                    "dsa_valid_mask_sha256",
-                    "chime_off_pulse_mask_sha256",
-                    "dsa_off_pulse_mask_sha256",
-                    "chime_time0_unix_ns",
-                    "dsa_time0_unix_ns",
+                    "status",
+                    "event",
+                    "source_event_binding_sha256",
+                    "component_proposal_sha256",
+                    "resolution_proposal_sha256",
+                    "fit_settings_sha256",
+                    "components_sha256",
+                    "associations_sha256",
+                    "approved_resolution_sha256",
+                    "reviewer",
+                    "review_date",
+                    "note",
                 ),
-                "joint_fit.resolution",
+                "joint_fit.review_decision",
             )
+            if review_decision["status"] != "approved":
+                raise ValueError("joint-fit review decision is not approved")
+            if review_decision["event"] != event:
+                raise ValueError("joint-fit review decision belongs to another event")
             for key in (
-                "chime_frequency_grid_sha256",
-                "dsa_frequency_grid_sha256",
-                "chime_valid_mask_sha256",
-                "dsa_valid_mask_sha256",
-                "chime_off_pulse_mask_sha256",
-                "dsa_off_pulse_mask_sha256",
+                "source_event_binding_sha256",
+                "component_proposal_sha256",
+                "resolution_proposal_sha256",
+                "fit_settings_sha256",
+                "components_sha256",
+                "associations_sha256",
+                "approved_resolution_sha256",
             ):
-                if SHA256_RE.fullmatch(joint_fit["resolution"][key]) is None:
-                    raise ValueError(f"joint_fit.resolution.{key} must be SHA-256")
-            _require_keys(
-                joint_fit["sampler"],
-                ("seed", "nlive", "dlogz"),
-                "joint_fit.sampler",
-            )
-            _require_keys(
-                joint_fit["acceptance"],
-                (
-                    "maximum_reduced_residual_power",
-                    "maximum_structured_residual_correlation",
-                    "posterior_edge_fraction",
-                    "maximum_prior_edge_mass",
-                ),
-                "joint_fit.acceptance",
-            )
+                _require_sha256(review_decision[key], f"joint_fit.review_decision.{key}")
+            if review_decision["fit_settings_sha256"] != fit_settings_sha256(joint_fit):
+                raise ValueError("reviewed fit settings changed after approval")
+            for key, value in (
+                ("components_sha256", joint_fit["components"]),
+                ("associations_sha256", joint_fit["associations"]),
+                ("approved_resolution_sha256", joint_fit["resolution"]),
+            ):
+                if review_decision[key] != _payload_sha256(value):
+                    raise ValueError(f"reviewed {key.removesuffix('_sha256')} changed")
+            if joint_fit["status"] == "ready":
+                _require_keys(joint_fit, ("authorization",), "joint_fit")
+                authorization = joint_fit["authorization"]
+                _require_keys(
+                    authorization,
+                    (
+                        "status",
+                        "source_reviewed_event_binding_sha256",
+                        "date",
+                        "note",
+                        "requires_receipt_rebuild",
+                    ),
+                    "joint_fit.authorization",
+                )
+                if (
+                    authorization["status"] != "explicitly_authorized"
+                    or not authorization["note"]
+                    or authorization["requires_receipt_rebuild"]
+                    != [
+                        "preflight",
+                        "dsa_audit",
+                        "chime_products",
+                        "dsa_products",
+                        "geometry_constraint",
+                    ]
+                ):
+                    raise ValueError("joint-fit authorization receipt is invalid")
+                reviewed_source = deepcopy(config)
+                reviewed_source["joint_fit"].pop("authorization")
+                reviewed_source["joint_fit"]["status"] = "reviewed_execution_disabled"
+                reviewed_source["joint_fit"]["execution_authorized"] = False
+                reviewed_source["workflow"]["execution_authorized"] = False
+                reviewed_source["result_status"] = (
+                    "geometry_constrained_joint_fit_reviewed_execution_disabled"
+                )
+                reviewed_source["event_binding_sha256"] = event_binding_sha256(
+                    reviewed_source
+                )
+                if (
+                    authorization["source_reviewed_event_binding_sha256"]
+                    != reviewed_source["event_binding_sha256"]
+                ):
+                    raise ValueError("authorization belongs to another reviewed binding")
         elif joint_fit["status"] != "blocked_pending_reviewed_inputs":
             raise ValueError("joint_fit status is invalid")
         elif not blockers or joint_fit["execution_authorized"] is not False:
@@ -660,6 +1194,10 @@ def validate_config(
         raise ValueError(f"workflow.stages must equal one of {allowed_stages}")
     if not isinstance(workflow["execution_authorized"], bool):
         raise ValueError("workflow.execution_authorized must be boolean")
+    if joint_fit is not None:
+        expected_workflow_authorization = joint_fit["status"] == "ready"
+        if workflow["execution_authorized"] is not expected_workflow_authorization:
+            raise ValueError("workflow authorization contradicts joint-fit status")
     if (
         not isinstance(workflow["chime_container_image"], str)
         or "@sha256:" not in workflow["chime_container_image"]

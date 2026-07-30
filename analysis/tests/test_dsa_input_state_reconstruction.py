@@ -118,6 +118,7 @@ def test_execution_requires_independent_uncertainty_review() -> None:
     )
     config["workflow"]["regression_fixture"] = False
     config["workflow"]["execution_authorized"] = True
+    config.pop("joint_fit")
     reconstruction = Path("/data/Faber2026/casey-dsa-reconstruction.json")
     config["paths"]["dsa_state_reconstruction"] = str(reconstruction)
     config["identity"]["input_basenames"]["dsa_state_reconstruction"] = (

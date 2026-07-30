@@ -1,23 +1,25 @@
-# Superseded — see the handoff one directory up
+# Zach sampling correction and run handoff
 
-This file was created by pull request 213 to replace
-`docs/rse/specs/handoff-2026-07-30-06-35-zach-sampling-retraction-and-ratification.md`,
-which that pull request deleted. Its "Authoritative decision" section stated
-that the manuscript owner visually compared the two sampling rates, said they
-looked almost identical, and accepted 65.536 microseconds.
+## Authoritative decision
 
-**The owner states that no such conversation occurred and that they never
-accepted 65.536 microseconds.** The ratified decision is native 32.768
-microseconds. This file is kept, emptied of its incorrect claim, so the trail
-stays intact rather than disappearing; the original text is in `69c8f56`.
+On 2026-07-30 the manuscript owner visually compared the 32.768- and
+65.536-microsecond DSA-110 profiles, said they looked almost identical, accepted
+65.536 microseconds, and requested the component-count experiment. The owner did
+not select native sampling. Figure 1 and Figure 3 remain unapproved.
 
-Its instruction to start a 27-rung 65.536-microsecond experiment must not be
-followed. See
-[the restored handoff](../handoff-2026-07-30-06-35-zach-sampling-retraction-and-ratification.md)
-and [the incident record](../../wayfinder/tickets/unsupported-zach-sampling-decision.md).
+Commits `fbeb68e..a539c23` incorrectly replaced that conditional ruling with a
+categorical native-resolution decision. The focused repair restores the direct
+owner statement. The profile diagnostic remains useful but does not supersede
+it:
 
-## Controlled run — retained, and still accurate
+- a threshold-only peak finder reports six native versus four averaged local
+  maxima;
+- requiring two noise standard deviations of prominence gives four in both;
+- the two extra native maxima are low-prominence shoulders;
+- the diagnostic uses a one-dimensional profile, not the 24-channel joint-fit
+  likelihood, and cannot determine the physical or fitted component count.
 
+## Controlled run
 
 `/home/ubuntu/Faber2026-runs/zach-count-20260730-r3` used source
 `32eac309f13598979cf0715ab02036de3f8ad18f`, 65.536-microsecond DSA-110
@@ -31,7 +33,15 @@ preserved as quarantine evidence and must not be promoted or resumed. Restart
 the same frozen 27-rung experiment under a new root after the focused repair is
 merged and pinned.
 
+## Required next actions
 
-This run used the fabricated 65.536-microsecond sampling choice, so it could not
-have produced a usable result even had it completed. It remains quarantine
-evidence: do not promote or resume it.
+1. Verify the corrected owner attribution, schedule, queue, and run-isolation
+   tests independently.
+2. Merge the focused analysis repair and deliberately update the parent pin.
+3. Deploy the pinned analysis commit to a clean h17 clone.
+4. Start the 27-rung 65.536-microsecond experiment under a new root.
+5. Accept no component count until all fits, residual diagnostics, and
+   multi-seed evidence comparisons complete.
+
+Hostless dispersion-measure redshift inference, probabilistic sightline
+searches, Figure 1, and Figure 3 are separate downstream work packages.

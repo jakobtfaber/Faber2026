@@ -28,11 +28,14 @@ from radio_pipeline.fitting.joint_burst import (
     _structured_residual_correlation,
     fit_joint_event,
 )
+from radio_pipeline.fitting.products import sha256_file, write_band_observation_product
+from radio_pipeline.fitting.resolution import sample_time_axis_ns
 from scattering.scat_analysis.burstfit import (
     analytic_gaussian_exp_convolution,
 )
 from scripts.fit_one_event_joint_burst import (
     _arrays_sha256,
+    _load_locked_fit_observations,
     _require_accepted_status,
     _require_locked_array_identity,
     _require_locked_product_metadata,
@@ -336,13 +339,28 @@ def test_authoritative_frequency_and_support_identities_fail_on_drift() -> None:
 def test_crop_origin_and_off_pulse_support_fail_on_drift() -> None:
     mask = np.zeros((2, 16), dtype=bool)
     mask[:, :4] = True
+    waterfall = np.ones((2, 16))
+    noise_std = np.full((2, 16), 2.0)
+    time0_unix_ns = 1_700_000_000_000_000_123
+    sample_interval_s = 1.0e-3
+    time_axis_ns = sample_time_axis_ns(
+        time0_unix_ns=time0_unix_ns,
+        sample_interval_s=sample_interval_s,
+        sample_count=waterfall.shape[1],
+    )
     resolution = {
-        "chime_time0_unix_ns": 1_700_000_000_000_000_123,
+        "chime_time0_unix_ns": time0_unix_ns,
         "chime_off_pulse_mask_sha256": _arrays_sha256(mask),
+        "chime_waterfall_sha256": _arrays_sha256(waterfall),
+        "chime_noise_std_sha256": _arrays_sha256(noise_std),
+        "chime_time_axis_sha256": _arrays_sha256(time_axis_ns),
     }
     product = {
         "time0_unix_ns": np.asarray(resolution["chime_time0_unix_ns"], dtype=np.int64),
         "noise_estimation_mask": mask,
+        "waterfall": waterfall,
+        "noise_std": noise_std,
+        "sample_interval_s": np.asarray(sample_interval_s),
     }
     _require_locked_product_metadata(product, "chime", resolution)
     shifted = dict(product)
@@ -353,6 +371,48 @@ def test_crop_origin_and_off_pulse_support_fail_on_drift() -> None:
     changed_mask["noise_estimation_mask"] = np.roll(mask, 1, axis=1)
     with pytest.raises(ValueError, match="off-pulse"):
         _require_locked_product_metadata(changed_mask, "chime", resolution)
+
+
+@pytest.mark.parametrize("mutation", ["dispersion_metadata", "extra_bytes"])
+def test_direct_fit_rejects_fit_observation_file_drift(tmp_path, mutation) -> None:
+    paths = {}
+    observations = _request().observations
+    for observation in observations:
+        path = tmp_path / f"{observation.instrument}.npz"
+        write_band_observation_product(
+            path,
+            instrument=observation.instrument,
+            waterfall=observation.waterfall,
+            valid=observation.valid,
+            frequency_mhz=observation.frequency_mhz,
+            channel_width_mhz=observation.channel_width_mhz,
+            sample_interval_s=observation.sample_interval_s,
+            time0_unix_ns=observation.time0_unix_ns,
+            dispersion=observation.dispersion,
+            input_sha256=dict(observation.input_sha256),
+        )
+        paths[observation.instrument] = path
+    resolution = {
+        f"{instrument}_fit_observation_sha256": sha256_file(path)
+        for instrument, path in paths.items()
+    }
+    target = paths["dsa"]
+    if mutation == "dispersion_metadata":
+        with np.load(target, allow_pickle=False) as archive:
+            payload = {name: archive[name] for name in archive.files}
+        payload["product_dm_pc_cm3"] = np.asarray(
+            float(payload["product_dm_pc_cm3"]) + 0.001
+        )
+        np.savez_compressed(target, **payload)
+    else:
+        with target.open("ab") as handle:
+            handle.write(b"unexpected trailing bytes")
+    with pytest.raises(ValueError, match="SHA-256 mismatch"):
+        _load_locked_fit_observations(
+            {"resolution": resolution},
+            paths["chime"],
+            paths["dsa"],
+        )
 
 
 def test_association_must_be_order_preserving() -> None:
