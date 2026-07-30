@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "coordinate_geometry": true,
+    "registry_admission": "budget_eligible and confirmed",
+    "unique_system_identity": true
+  },
+  "inputs": {
+    "foregrounds/census/data/census_masses/census_duplicates.csv": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
+    "foregrounds/census/data/expanded_catalog_cross_references.csv": "017a03147b058a500427b54b4b89c374379242091a45171fca68732c599061aa",
+    "foregrounds/census/data/frozen_census/bursts.csv": "6610aabb1527137c647149b86f6f65a3a1c4782680d618dd5c5f712b9f3c4536",
+    "foregrounds/census/data/intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+    "scripts/phineas_halo_crossing_inputs.csv": "2657115881a91261b547c1c1233508e8c03b2758d2aa365b30f89f944b507891",
+    "scripts/phineas_halo_crossing_probability.json": "3362019a776cf799bcb53f6b7bfda2363217f130323a57351fd9ff9f029c6951"
+  },
+  "outputs": {
+    "foregrounds/results/propagation/intervening_systems.json": "c5ec471a782deb2ac445bba16ec7c006abea0af0f16de3111ba1f24fe3c51774",
+    "scripts/dm_budget_intervening_systems.csv": "0dd74d3c485a518ab4ce2127da2f2cb325ecaf2e4488b73e50bd79682e58460c"
+  },
+  "producer": "dddd9dde11b7845e9be2b997c5a9342ed7d0f46984a3f2517969702b6fbdbac7",
+  "schema_version": 1
+}

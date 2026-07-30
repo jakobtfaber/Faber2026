@@ -1,0 +1,22 @@
+{
+  "facts": {
+    "empty_sightline_claims": 0,
+    "established_redshifts": 9,
+    "inferred_redshifts": 3,
+    "sightlines": 12
+  },
+  "inputs": {
+    "foregrounds/census/data/expanded_catalog_cross_references.csv": "017a03147b058a500427b54b4b89c374379242091a45171fca68732c599061aa",
+    "foregrounds/census/data/frozen_census/bursts.csv": "6610aabb1527137c647149b86f6f65a3a1c4782680d618dd5c5f712b9f3c4536",
+    "foregrounds/census/data/hostless_sightlines/receipt.json": "6ffc91d17839c41238b780b798b3aa2aaa695f0c31857dfefe09f5cbeb2681a5",
+    "foregrounds/census/data/survey_coverage/all_12_sightlines.csv": "4a95273417cdf24bcf61d6c8b704109e481d7e11f53f8465ebdef84dd0e5b3e7",
+    "foregrounds/results/dm_redshift/posterior.json": "192c271955e4de0fa21303d927bd899eb62e6b31fa992a91febafaeb2cf369a4",
+    "foregrounds/results/dm_redshift/receipt.json": "23973262d705829f69d93747cc5cb1a3c57f6fb9d878b1058a9c37c9e976417d"
+  },
+  "manuscript_promotion": "blocked_pending_owner_visual_approval",
+  "output": {
+    "foregrounds/census/data/sightline_halo_grid.csv": "ca115a3dd2df7f77c13b8ae9beb339644f6826a24cfa4127f71d96f896762a71"
+  },
+  "schema_version": 1,
+  "status": "validated_review_candidate_input"
+}

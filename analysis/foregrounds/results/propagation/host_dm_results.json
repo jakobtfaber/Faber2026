@@ -1,0 +1,458 @@
+{
+  "blocked_sightlines": {
+    "FRB 20240203D": "budget DM_int is nonzero but no registry-confirmed system is admitted; host result withheld"
+  },
+  "cluster_profiles": "conditional outputs; no profile averaging",
+  "host_priors": "conditional 50/100/200 rest-frame medians; no averaging",
+  "hostless": "diagnostic DM-redshift only; no host-DM promotion",
+  "observed_dm_likelihood": "Gaussian using adopted_sigma",
+  "schema_version": 1,
+  "shared_figm": {
+    "model": "one shared nuisance draw across sightlines",
+    "shared_figm_covariance": [
+      [
+        21.522592322,
+        248.296073314,
+        152.189903134,
+        127.110159588,
+        137.345880562,
+        289.674972394,
+        153.220986449,
+        145.519627343
+      ],
+      [
+        248.296073314,
+        2864.475575326,
+        1755.743675361,
+        1466.410413406,
+        1584.49513514,
+        3341.844565365,
+        1767.638800943,
+        1678.791825783
+      ],
+      [
+        152.189903134,
+        1755.743675361,
+        1076.16063482,
+        898.817511659,
+        971.196031876,
+        2048.340893607,
+        1083.451599941,
+        1028.993982618
+      ],
+      [
+        127.110159588,
+        1466.410413406,
+        898.817511659,
+        750.699192225,
+        811.150280413,
+        1710.78982584,
+        904.90698094,
+        859.42356656
+      ],
+      [
+        137.345880562,
+        1584.49513514,
+        971.196031876,
+        811.150280413,
+        876.46927588,
+        1848.553536929,
+        977.775864072,
+        928.629834996
+      ],
+      [
+        289.674972394,
+        3341.844565365,
+        2048.340893607,
+        1710.78982584,
+        1848.553536929,
+        3898.767786765,
+        2062.21835904,
+        1958.564907202
+      ],
+      [
+        153.220986449,
+        1767.638800943,
+        1083.451599941,
+        904.90698094,
+        977.775864072,
+        2062.21835904,
+        1090.791961193,
+        1035.965394686
+      ],
+      [
+        145.519627343,
+        1678.791825783,
+        1028.993982618,
+        859.42356656,
+        928.629834996,
+        1958.564907202,
+        1035.965394686,
+        983.894580423
+      ]
+    ],
+    "sightline_order": [
+      "FRB 20220207C",
+      "FRB 20220310F",
+      "FRB 20220506D",
+      "FRB 20221113A",
+      "FRB 20230307A",
+      "FRB 20230814B",
+      "FRB 20230913G",
+      "FRB 20240229A"
+    ]
+  },
+  "sightlines": {
+    "FRB 20220207C": {
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": 115.361665,
+        "dm_host_p16": 82.541846716,
+        "dm_host_p50": 114.790810797,
+        "dm_host_p84": 141.117487579,
+        "dm_host_rest_p16": 86.091146125,
+        "dm_host_rest_p50": 119.726815662,
+        "dm_host_rest_p84": 147.185539545,
+        "dm_int": 0.0,
+        "dm_int_p16": 0.0,
+        "dm_int_p50": 0.0,
+        "dm_int_p84": 0.0,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 74.021984003,
+            "observer_p50": 106.16867049,
+            "observer_p84": 134.085930439,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 85.925628953,
+            "observer_p50": 114.898313399,
+            "observer_p84": 140.22147821,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 56.796501181,
+            "observer_p50": 93.556000903,
+            "observer_p84": 125.629095759,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20220207C",
+        "p_host_neg": 0.002088235,
+        "z": 0.043
+      }
+    },
+    "FRB 20220310F": {
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": -54.059819433,
+        "dm_host_p16": -121.273034899,
+        "dm_host_p50": -14.210945782,
+        "dm_host_p84": 73.707903497,
+        "dm_host_rest_p16": -179.362818616,
+        "dm_host_rest_p50": -21.017988811,
+        "dm_host_rest_p84": 109.013989272,
+        "dm_int": 8.248592433,
+        "dm_int_p16": 0.0,
+        "dm_int_p50": 8.248592433,
+        "dm_int_p84": 20.149958614,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 24.659015841,
+            "observer_p50": 48.316137801,
+            "observer_p84": 85.952257398,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 38.82033094,
+            "observer_p50": 69.596461971,
+            "observer_p84": 111.904318421,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 14.058497292,
+            "observer_p50": 29.545427688,
+            "observer_p84": 58.322394432,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20220310F",
+        "p_host_neg": 0.558891403,
+        "z": 0.479
+      }
+    },
+    "FRB 20220506D": {
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": 17.015535,
+        "dm_host_p16": -39.018131816,
+        "dm_host_p50": 42.425681073,
+        "dm_host_p84": 107.775186335,
+        "dm_host_rest_p16": -50.723571361,
+        "dm_host_rest_p50": 55.153385395,
+        "dm_host_rest_p84": 140.107742236,
+        "dm_int": 0.0,
+        "dm_int_p16": 0.0,
+        "dm_int_p50": 0.0,
+        "dm_int_p84": 0.0,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 30.936921728,
+            "observer_p50": 59.357849373,
+            "observer_p84": 99.791057695,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 47.021917195,
+            "observer_p50": 80.73480799,
+            "observer_p84": 121.900112553,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 17.700869254,
+            "observer_p50": 37.518819189,
+            "observer_p84": 72.282409316,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20220506D",
+        "p_host_neg": 0.292579277,
+        "z": 0.3
+      }
+    },
+    "FRB 20221113A": {
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": 71.435717,
+        "dm_host_p16": 16.31410839,
+        "dm_host_p50": 90.29102891,
+        "dm_host_p84": 149.486100526,
+        "dm_host_rest_p16": 20.408949596,
+        "dm_host_rest_p50": 112.954077166,
+        "dm_host_rest_p84": 187.007111759,
+        "dm_int": 0.0,
+        "dm_int_p16": 0.0,
+        "dm_int_p50": 0.0,
+        "dm_int_p84": 0.0,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 39.830895875,
+            "observer_p50": 76.96697941,
+            "observer_p84": 125.56999031,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 60.639394673,
+            "observer_p50": 102.114113136,
+            "observer_p84": 148.458677259,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 21.82173283,
+            "observer_p50": 48.174366153,
+            "observer_p84": 93.492349065,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20221113A",
+        "p_host_neg": 0.117838578,
+        "z": 0.251
+      }
+    },
+    "FRB 20230307A": {
+      "beta": {
+        "cluster_profile": "beta",
+        "dm_host_arith": 36.862197314,
+        "dm_host_p16": -40.601772185,
+        "dm_host_p50": 55.695209317,
+        "dm_host_p84": 142.406694708,
+        "dm_host_rest_p16": -51.604852447,
+        "dm_host_rest_p50": 70.788611042,
+        "dm_host_rest_p84": 180.998908974,
+        "dm_int": 264.426872686,
+        "dm_int_p16": 201.674704531,
+        "dm_int_p50": 264.426872686,
+        "dm_int_p84": 330.200300657,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 32.965415287,
+            "observer_p50": 65.569113393,
+            "observer_p84": 116.56397887,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 52.694108991,
+            "observer_p50": 94.543756558,
+            "observer_p84": 150.489539812,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 18.17780022,
+            "observer_p50": 39.188894801,
+            "observer_p84": 78.748200635,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20230307A",
+        "p_host_neg": 0.278212673,
+        "z": 0.271
+      },
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": 59.123517444,
+        "dm_host_p16": -33.446750988,
+        "dm_host_p50": 74.438054537,
+        "dm_host_p84": 164.357009742,
+        "dm_host_rest_p16": -42.510820506,
+        "dm_host_rest_p50": 94.610767317,
+        "dm_host_rest_p84": 208.897759382,
+        "dm_int": 242.165552556,
+        "dm_int_p16": 179.142855848,
+        "dm_int_p50": 242.165552556,
+        "dm_int_p84": 323.068406073,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 35.397635207,
+            "observer_p50": 71.681467831,
+            "observer_p84": 128.213572522,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 57.658689462,
+            "observer_p50": 104.148528678,
+            "observer_p84": 164.415526817,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 18.976269192,
+            "observer_p50": 41.705564444,
+            "observer_p84": 85.629690141,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20230307A",
+        "p_host_neg": 0.240274184,
+        "z": 0.271
+      }
+    },
+    "FRB 20230814B": {
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": 62.518001,
+        "dm_host_p16": -13.054233942,
+        "dm_host_p50": 108.153243718,
+        "dm_host_p84": 209.767887387,
+        "dm_host_rest_p16": -20.279752429,
+        "dm_host_rest_p50": 168.016064116,
+        "dm_host_rest_p84": 325.874413056,
+        "dm_int": 0.0,
+        "dm_int_p16": 0.0,
+        "dm_int_p50": 0.0,
+        "dm_int_p84": 0.0,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 31.914565447,
+            "observer_p50": 68.559988253,
+            "observer_p84": 132.248765229,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 56.589784886,
+            "observer_p50": 108.720773339,
+            "observer_p84": 180.95342002,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 16.005614262,
+            "observer_p50": 36.26815307,
+            "observer_p84": 79.412334786,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20230814B",
+        "p_host_neg": 0.185255991,
+        "z": 0.5535
+      }
+    },
+    "FRB 20230913G": {
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": 144.796993,
+        "dm_host_p16": 90.069429481,
+        "dm_host_p50": 171.032562757,
+        "dm_host_p84": 235.755734045,
+        "dm_host_rest_p16": 117.270397185,
+        "dm_host_rest_p50": 222.68439671,
+        "dm_host_rest_p84": 306.953965727,
+        "dm_int": 0.0,
+        "dm_int_p16": 0.0,
+        "dm_int_p50": 0.0,
+        "dm_int_p84": 0.0,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 54.81873991,
+            "observer_p50": 113.030566965,
+            "observer_p84": 184.639153532,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 89.195875836,
+            "observer_p50": 151.506635677,
+            "observer_p84": 215.142482028,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 25.924973086,
+            "observer_p50": 63.700979073,
+            "observer_p84": 134.562940136,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20230913G",
+        "p_host_neg": 0.029967232,
+        "z": 0.302
+      }
+    },
+    "FRB 20240229A": {
+      "mnfw": {
+        "cluster_profile": "mnfw",
+        "dm_host_arith": 44.013771394,
+        "dm_host_p16": -23.55582121,
+        "dm_host_p50": 63.515232923,
+        "dm_host_p84": 134.572501256,
+        "dm_host_rest_p16": -30.316341897,
+        "dm_host_rest_p50": 81.744104772,
+        "dm_host_rest_p84": 173.194809116,
+        "dm_int": 123.194054606,
+        "dm_int_p16": 91.332259113,
+        "dm_int_p50": 123.194054606,
+        "dm_int_p84": 167.126726033,
+        "host_prior_conditionals": {
+          "100": {
+            "observer_p16": 34.003772229,
+            "observer_p50": 66.704482621,
+            "observer_p84": 114.066384579,
+            "rest_median": 100.0
+          },
+          "200": {
+            "observer_p16": 53.033186384,
+            "observer_p50": 92.420678881,
+            "observer_p84": 140.709509176,
+            "rest_median": 200.0
+          },
+          "50": {
+            "observer_p16": 18.820426714,
+            "observer_p50": 40.784448724,
+            "observer_p84": 80.695201442,
+            "rest_median": 50.0
+          }
+        },
+        "name": "FRB 20240229A",
+        "p_host_neg": 0.228078576,
+        "z": 0.287
+      }
+    }
+  },
+  "status": "provisional_not_science_admitted",
+  "tng_calibration_status": "provisional_transcribed_grid_source_artifact_missing"
+}

@@ -19,7 +19,7 @@ Six assertions, one per subcommand of the science question:
    redshift are explicitly labelled, are excluded from the budget, and never
    reach a ``confirmed`` verdict.
 3. ``deterministic_matching`` - the Figure 3 input values reproduce
-   canonically from committed inputs, the approved input bytes remain pinned,
+   canonically from committed inputs and match their reproduction receipt,
    cross-listing duplicates are removed by an auditable rule, and every
    recorded separation reproduces from the coordinates.
 4. ``survey_coverage`` - all twelve sightlines carry a coverage row per survey,
@@ -28,11 +28,11 @@ Six assertions, one per subcommand of the science question:
 5. ``mass_radius_conventions`` - halo and cluster rows use distinct, declared
    mass and radius definitions that are never mixed, and the halo radius
    reproduces from the halo mass under the declared overdensity and cosmology.
-6. ``census_matches_figure3`` - the twelve-sightline census and the installed
-   manuscript Figure 3 describe the same systems.
+6. ``census_matches_figure3`` - the twelve-sightline census and the unapproved
+   Figure 3 review candidate describe the same systems and diagnostics.
 
 Exit status is 0 only when every assertion passes.  A JSON receipt binding all
-input hashes and the installed Figure 3 bytes is written with ``--output``.
+input hashes and the review-candidate bytes is written with ``--output``.
 """
 
 from __future__ import annotations
@@ -61,9 +61,10 @@ MANUSCRIPT_FIGURE = ROOT.parent / "figures/sightline_halo_grid.pdf"
 # the manuscript installs, which a re-render on a different renderer version
 # cannot provide.
 STAGED_FIGURE = ROOT / "figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
-APPROVED_HALO_GRID_SHA256 = (
-    "2a59fb28bfe196fde63f2335548030ff911dfbeda9e07e133823ca511fdf79e9"
-)
+HALO_GRID_RECEIPT = CENSUS / "sightline_halo_grid.receipt.json"
+HOSTLESS_RECEIPT = CENSUS / "hostless_sightlines/receipt.json"
+DM_Z_POSTERIOR = ROOT / "foregrounds/results/dm_redshift/posterior.json"
+DM_Z_RECEIPT = ROOT / "foregrounds/results/dm_redshift/receipt.json"
 
 # Sightlines with no established host redshift.  These must stay diagnostic-only
 # everywhere: no point-estimate redshift, no confirmed foreground system, no
@@ -429,6 +430,12 @@ def check_hostless_fail_closed(data: Inputs) -> CheckResult:
         f"{sorted(DIAGNOSTIC_ONLY_SIGHTLINES)}",
     )
 
+    posterior = json.loads(DM_Z_POSTERIOR.read_text(encoding="utf-8"))
+    posterior_hash = sha256_file(DM_Z_POSTERIOR)
+    posterior_rows = {
+        str(row["nickname"]).lower(): row["coupled_fiducial"]
+        for row in posterior["rows"]
+    }
     for nickname in sorted(roster_without_redshift):
         result.require(
             coverage_status.get(nickname) == "dm_z_diagnostic",
@@ -445,21 +452,63 @@ def check_hostless_fail_closed(data: Inputs) -> CheckResult:
             f"{nickname}: expected exactly one Figure 3 host row, found {len(host_rows)}",
         )
         for row in host_rows:
+            estimate = posterior_rows[nickname]
+            lower = number(row.get("frb_z_lower"))
+            central = number(row.get("frb_z"))
+            upper = number(row.get("frb_z_upper"))
             result.require(
-                number(row.get("frb_z")) is None,
-                f"{nickname}: Figure 3 host row carries a point-estimate redshift "
-                "for a sightline with no established host redshift",
+                row.get("redshift_class", "").strip() == "inferred_dm_z",
+                f"{nickname}: Figure 3 does not label the host redshift as inferred",
+            )
+            result.require(
+                lower is not None
+                and central is not None
+                and upper is not None
+                and lower < central < upper,
+                f"{nickname}: Figure 3 lacks a full ordered diagnostic redshift interval",
+            )
+            result.require(
+                central is not None
+                and abs(central - float(estimate["z50"])) <= REDSHIFT_ABSOLUTE_TOLERANCE
+                and lower is not None
+                and abs(lower - float(estimate["z16"])) <= REDSHIFT_ABSOLUTE_TOLERANCE
+                and upper is not None
+                and abs(upper - float(estimate["z84"])) <= REDSHIFT_ABSOLUTE_TOLERANCE,
+                f"{nickname}: Figure 3 diagnostic interval differs from the posterior",
+            )
+            result.require(
+                row.get("frb_posterior_sha256", "").strip() == posterior_hash,
+                f"{nickname}: Figure 3 posterior hash is absent or has drifted",
+            )
+            result.require(
+                "coupled" in row.get("frb_redshift_basis", "").lower(),
+                f"{nickname}: Figure 3 does not state the coupled diagnostic basis",
+            )
+            result.require(
+                bool(row.get("coverage_limitations", "").strip())
+                and bool(row.get("query_limitations", "").strip()),
+                f"{nickname}: Figure 3 omits coverage or query limitations",
+            )
+            result.require(
+                not truthy(row.get("empty_sightline_claim")),
+                f"{nickname}: Figure 3 makes an unsupported foreground-free claim",
             )
         systems = [
             row
             for row in grid
             if row["nickname"].strip().lower() == nickname and row["row_kind"] == "system"
         ]
-        result.require(
-            not systems,
-            f"{nickname}: {len(systems)} foreground systems are drawn on a sightline "
-            "whose host redshift is diagnostic only",
-        )
+        for row in systems:
+            result.require(
+                row.get("evidence_class", "").strip() == "probabilistic_candidate",
+                f"{nickname}/{row.get('object_id')}: diagnostic sightline system is "
+                "not labelled as a probabilistic candidate",
+            )
+            result.require(
+                not truthy(row.get("candidate_science_admitted"))
+                and not truthy(row.get("budget_eligible")),
+                f"{nickname}/{row.get('object_id')}: probabilistic candidate was promoted",
+            )
 
     for burst in data["bursts"]:
         nickname = burst["nickname"].strip().lower()
@@ -473,8 +522,9 @@ def check_hostless_fail_closed(data: Inputs) -> CheckResult:
 
     # --- a fail-closed geometry flag must state a reason that is actually true
     host_redshifts = {
-        burst["nickname"].strip().lower(): number(burst.get("z_spec"))
-        for burst in data["bursts"]
+        row["nickname"].strip().lower(): number(row.get("frb_z"))
+        for row in grid
+        if row["row_kind"] == "host"
     }
     flagged: list[dict[str, Any]] = []
     for row in grid:
@@ -520,6 +570,12 @@ def check_hostless_fail_closed(data: Inputs) -> CheckResult:
     result.facts = {
         "redshiftless_candidate_rows": redshiftless,
         "diagnostic_only_sightlines": sorted(roster_without_redshift),
+        "diagnostic_posterior_sha256": posterior_hash,
+        "diagnostic_candidates": sum(
+            row["row_kind"] == "system"
+            and row.get("evidence_class", "").strip() == "probabilistic_candidate"
+            for row in grid
+        ),
         "geometry_flagged_systems": flagged,
     }
     return result
@@ -536,7 +592,7 @@ def check_deterministic_matching(data: Inputs) -> CheckResult:
         "Matching and deduplication are deterministic and auditable",
     )
 
-    # --- Figure 3 values reproduce canonically; approved bytes stay pinned -
+    # --- Figure 3 values reproduce canonically and match their receipt -----
     try:
         import pandas as pd
 
@@ -568,9 +624,19 @@ def check_deterministic_matching(data: Inputs) -> CheckResult:
         first == checked_in,
         "the committed Figure 3 input values do not reproduce from committed sources",
     )
+    receipt = json.loads(HALO_GRID_RECEIPT.read_text(encoding="utf-8"))
+    receipt_hash = receipt.get("output", {}).get(
+        str(checked_path.relative_to(ROOT))
+    )
     result.require(
-        sha256_file(checked_path) == APPROVED_HALO_GRID_SHA256,
-        "the approved Figure 3 input bytes have drifted",
+        receipt.get("status") == "validated_review_candidate_input"
+        and receipt.get("manuscript_promotion")
+        == "blocked_pending_owner_visual_approval",
+        "the Figure 3 input receipt does not preserve review-only status",
+    )
+    result.require(
+        receipt_hash == sha256_file(checked_path),
+        "the Figure 3 input bytes differ from their reproduction receipt",
     )
 
     # --- the deduplication rule is auditable ------------------------------
@@ -618,6 +684,7 @@ def check_deterministic_matching(data: Inputs) -> CheckResult:
         (row["nickname"].strip().lower(), str(row["object_id"]).strip())
         for row in data["halo_grid"]
         if row["row_kind"] == "system"
+        and row.get("evidence_class", "").strip() == "confirmed_system"
     }
     confirmed = {
         (row["nickname"].strip().lower(), str(row["obj"]).strip())
@@ -718,9 +785,9 @@ def check_deterministic_matching(data: Inputs) -> CheckResult:
     result.facts = {
         "figure3_input_rebuild_is_canonically_equivalent": first == checked_in,
         "figure3_input_comparison": (
-            "canonical CSV values; approved checked-in bytes remain unchanged"
+            "canonical CSV values; receipt-bound review input"
         ),
-        "approved_figure3_input_sha256": APPROVED_HALO_GRID_SHA256,
+        "figure3_input_sha256": sha256_file(checked_path),
         "duplicate_pairs_reproduced": duplicate_pairs,
         "cross_match_rows_audited": audited,
         "grid_system_rows": len(grid_keys),
@@ -1081,14 +1148,24 @@ def check_census_matches_figure3(
 ) -> CheckResult:
     result = CheckResult(
         "census_matches_figure3",
-        "The twelve-sightline census and the installed Figure 3 describe the same "
-        "systems",
+        "The census and unapproved Figure 3 candidate describe the same evidence",
     )
 
     grid = data["halo_grid"]
     roster = {row["nickname"].strip().lower(): row for row in data["bursts"]}
     hosts = [row for row in grid if row["row_kind"] == "host"]
     systems = [row for row in grid if row["row_kind"] == "system"]
+    posterior = json.loads(DM_Z_POSTERIOR.read_text(encoding="utf-8"))
+    posterior_hash = sha256_file(DM_Z_POSTERIOR)
+    posterior_rows = {
+        str(row["nickname"]).lower(): row["coupled_fiducial"]
+        for row in posterior["rows"]
+    }
+    hostless = json.loads(HOSTLESS_RECEIPT.read_text(encoding="utf-8"))
+    candidate_sources = {
+        (str(row["nickname"]).lower(), str(row["object_id"])): row
+        for row in hostless["candidates"]
+    }
 
     result.require(
         len(hosts) == 12,
@@ -1122,20 +1199,38 @@ def check_census_matches_figure3(
                 f"{nickname}: Figure 3 {column} {drawn} disagrees with the roster "
                 f"{expected}",
             )
-        drawn_z = number(row.get("frb_z"))
         roster_z = number(burst.get("z_spec"))
-        result.require(
-            (drawn_z is None and roster_z is None)
-            or (
-                drawn_z is not None
-                and roster_z is not None
-                and abs(drawn_z - roster_z) <= REDSHIFT_ABSOLUTE_TOLERANCE
-            ),
-            f"{nickname}: Figure 3 host redshift {drawn_z} disagrees with the roster "
-            f"{roster_z}",
-        )
+        drawn_z = number(row.get("frb_z"))
+        if roster_z is not None:
+            result.require(
+                row.get("redshift_class", "").strip() == "established"
+                and drawn_z is not None
+                and abs(drawn_z - roster_z) <= REDSHIFT_ABSOLUTE_TOLERANCE,
+                f"{nickname}: established Figure 3 redshift disagrees with the roster",
+            )
+        else:
+            estimate = posterior_rows.get(nickname)
+            result.require(
+                estimate is not None
+                and row.get("redshift_class", "").strip() == "inferred_dm_z"
+                and drawn_z is not None
+                and abs(drawn_z - float(estimate["z50"]))
+                <= REDSHIFT_ABSOLUTE_TOLERANCE
+                and abs((number(row.get("frb_z_lower")) or math.nan) - float(estimate["z16"]))
+                <= REDSHIFT_ABSOLUTE_TOLERANCE
+                and abs((number(row.get("frb_z_upper")) or math.nan) - float(estimate["z84"]))
+                <= REDSHIFT_ABSOLUTE_TOLERANCE
+                and row.get("frb_posterior_sha256", "").strip() == posterior_hash,
+                f"{nickname}: diagnostic Figure 3 interval disagrees with its posterior",
+            )
+            result.require(
+                bool(row.get("coverage_limitations", "").strip())
+                and bool(row.get("query_limitations", "").strip())
+                and not truthy(row.get("empty_sightline_claim")),
+                f"{nickname}: diagnostic panel lacks limitations or claims an empty sightline",
+            )
 
-    # --- every drawn system is a confirmed, non-duplicate census system ---
+    # --- confirmed and probabilistic evidence remain separate ------------
     confirmed = {
         (row["nickname"].strip().lower(), str(row["obj"]).strip()): row
         for row in data["registry"]
@@ -1147,6 +1242,50 @@ def check_census_matches_figure3(
     }
     for row in systems:
         key = (row["nickname"].strip().lower(), str(row["object_id"]).strip())
+        evidence_class = row.get("evidence_class", "").strip()
+        if evidence_class == "probabilistic_candidate":
+            source = candidate_sources.get(key)
+            result.require(
+                source is not None,
+                f"{key[0]}/{key[1]}: candidate has no hostless-census source",
+            )
+            if source is None:
+                continue
+            result.require(
+                not truthy(row.get("candidate_science_admitted"))
+                and not truthy(row.get("budget_eligible"))
+                and source["science_admitted"] is False,
+                f"{key[0]}/{key[1]}: probabilistic candidate was promoted",
+            )
+            expected_z = source.get("adopted_z")
+            result.require(
+                (expected_z is None and number(row.get("system_z")) is None)
+                or (
+                    expected_z is not None
+                    and number(row.get("system_z")) is not None
+                    and abs(number(row.get("system_z")) - float(expected_z))
+                    <= REDSHIFT_ABSOLUTE_TOLERANCE
+                ),
+                f"{key[0]}/{key[1]}: candidate redshift differs from its source",
+            )
+            expected_probability = posterior_rows[key[0]][
+                "candidate_foreground_probability"
+            ].get(key[1])
+            drawn_probability = number(row.get("candidate_foreground_probability"))
+            result.require(
+                (expected_probability is None and drawn_probability is None)
+                or (
+                    expected_probability is not None
+                    and drawn_probability is not None
+                    and abs(drawn_probability - float(expected_probability)) <= 1.0e-6
+                ),
+                f"{key[0]}/{key[1]}: foreground probability differs from the posterior",
+            )
+            continue
+        result.require(
+            evidence_class == "confirmed_system",
+            f"{key[0]}/{key[1]}: undeclared Figure 3 evidence class",
+        )
         source = confirmed.get(key)
         if source is None:
             result.failures.append(
@@ -1196,33 +1335,25 @@ def check_census_matches_figure3(
                 "is still drawn",
             )
 
-    missing = sorted((set(confirmed) - duplicates) - {
+    confirmed_grid_keys = {
         (row["nickname"].strip().lower(), str(row["object_id"]).strip())
         for row in systems
-    })
+        if row.get("evidence_class", "").strip() == "confirmed_system"
+    }
+    missing = sorted((set(confirmed) - duplicates) - confirmed_grid_keys)
     result.require(
         not missing,
         f"confirmed census systems absent from Figure 3: {missing}",
     )
 
-    # The census carries twelve sightlines but the figure draws only those with
-    # an established host redshift: without one, neither the host marker nor the
-    # foreground cut can be placed. Assert that the omission is exactly that
-    # rule, so a silently dropped panel cannot hide behind it.
     drawn_panels = {
         row["nickname"].strip().lower()
         for row in hosts
         if number(row.get("frb_z")) is not None
     }
-    established = {
-        burst["nickname"].strip().lower()
-        for burst in data["bursts"]
-        if number(burst.get("z_spec")) is not None
-    }
     result.require(
-        drawn_panels == established,
-        f"Figure 3 draws panels for {sorted(drawn_panels)} but the sightlines with "
-        f"an established host redshift are {sorted(established)}",
+        drawn_panels == set(roster),
+        f"Figure 3 panel roster is incomplete: {sorted(drawn_panels)}",
     )
     drawn_systems = [
         row
@@ -1238,14 +1369,14 @@ def check_census_matches_figure3(
         "a foreground system is drawn on a sightline that has no panel",
     )
 
-    # --- the installed figure carries this content ------------------------
+    # --- the unapproved review candidate carries this content -------------
     rendered_matches: bool | None = None
     render_note = ""
     local_render_sha256: str | None = None
     if not render:
         render_note = "rendering comparison skipped by caller"
     elif not figure.is_file():
-        result.failures.append(f"installed Figure 3 is missing at {figure}")
+        result.failures.append(f"Figure 3 review candidate is missing at {figure}")
     else:
         with tempfile.TemporaryDirectory(prefix="fig3-census-") as tmp:
             out = Path(tmp)
@@ -1289,28 +1420,23 @@ def check_census_matches_figure3(
                 rendered_matches = installed_text == rendered_text
                 result.require(
                     rendered_matches,
-                    "the installed Figure 3 does not carry the same content as a "
+                    "the Figure 3 review candidate does not carry the same content as a "
                     "fresh render of the committed census",
                 )
                 local_render_sha256 = digests[0]
                 if digests[0] != sha256_file(figure):
                     render_note = (
-                        "installed bytes differ from the local render; the extracted "
+                        "candidate bytes differ from the local render; the extracted "
                         "content is identical, so the difference is renderer "
                         "version, not science"
                     )
 
-    # If the producing render is still on disk, the installed figure can be tied
-    # to it byte for byte, which is a stronger statement than content equality
-    # against a re-render on a different renderer version.
-    staged_matches: bool | None = None
+    candidate_matches_staging: bool | None = None
     if figure.is_file() and STAGED_FIGURE.is_file():
-        staged_matches = sha256_file(STAGED_FIGURE) == sha256_file(figure)
+        candidate_matches_staging = sha256_file(STAGED_FIGURE) == sha256_file(figure)
         result.require(
-            staged_matches,
-            "the staged Figure 3 render and the installed manuscript figure are "
-            "different bytes, so the installed figure is not the one the figure "
-            "workflow produced",
+            candidate_matches_staging,
+            "the selected Figure 3 candidate differs from the staged review artifact",
         )
 
     try:
@@ -1330,17 +1456,31 @@ def check_census_matches_figure3(
         "figure3_system_rows": len(systems),
         "figure3_panels_drawn": sorted(drawn_panels),
         "figure3_systems_drawn": len(drawn_systems),
-        "panels_omitted_for_lack_of_a_host_redshift": sorted(
-            {row["nickname"].strip().lower() for row in hosts} - drawn_panels
+        "diagnostic_redshift_panels": sorted(
+            row["nickname"].strip().lower()
+            for row in hosts
+            if row.get("redshift_class", "").strip() == "inferred_dm_z"
+        ),
+        "confirmed_systems_drawn": sum(
+            row.get("evidence_class", "").strip() == "confirmed_system"
+            for row in drawn_systems
+        ),
+        "probabilistic_candidates_drawn": sum(
+            row.get("evidence_class", "").strip() == "probabilistic_candidate"
+            for row in drawn_systems
         ),
         "confirmed_census_systems_after_deduplication": len(set(confirmed) - duplicates),
-        "installed_figure3": display_path,
-        "installed_figure3_sha256": sha256_file(figure) if figure.is_file() else None,
+        "review_candidate_figure3": display_path,
+        "review_candidate_figure3_sha256": sha256_file(figure) if figure.is_file() else None,
+        "manuscript_figure3_sha256": (
+            sha256_file(MANUSCRIPT_FIGURE) if MANUSCRIPT_FIGURE.is_file() else None
+        ),
+        "manuscript_promotion": "blocked_pending_owner_visual_approval",
         "local_render_sha256": local_render_sha256,
         "local_renderer": renderer,
         "staged_render": str(STAGED_FIGURE.relative_to(ROOT)) if STAGED_FIGURE.is_file() else None,
-        "installed_matches_staged_render_byte_for_byte": staged_matches,
-        "installed_content_matches_fresh_render": rendered_matches,
+        "candidate_matches_staged_render_byte_for_byte": candidate_matches_staging,
+        "candidate_content_matches_fresh_render": rendered_matches,
         "byte_note": render_note,
     }
     return result
@@ -1363,7 +1503,7 @@ CHECKS: dict[str, Callable[..., CheckResult]] = {
 
 def run(
     *,
-    figure: Path = MANUSCRIPT_FIGURE,
+    figure: Path = STAGED_FIGURE,
     only: Sequence[str] | None = None,
     render: bool = True,
 ) -> dict[str, Any]:
@@ -1401,8 +1541,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--figure",
         type=Path,
-        default=MANUSCRIPT_FIGURE,
-        help="installed manuscript Figure 3 to compare against",
+        default=STAGED_FIGURE,
+        help="staged Figure 3 review candidate to compare against",
     )
     parser.add_argument(
         "--check",
@@ -1414,7 +1554,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--skip-render",
         action="store_true",
-        help="skip regenerating Figure 3 (leaves the installed figure unchecked)",
+        help="skip regenerating Figure 3 (leaves candidate content unchecked)",
     )
     args = parser.parse_args(argv)
 

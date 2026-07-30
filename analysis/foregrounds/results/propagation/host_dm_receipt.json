@@ -1,0 +1,17 @@
+{
+  "inputs": {
+    "dispersion/results/joint-phase/manuscript_dm_catalog.csv": "3730d486a6857d6a5e7fe8a9d445e5c989b36e57dc71b9fb2e6421079e8b6b4a",
+    "foregrounds/results/propagation/intervening_receipt.json": "33d7a5c6f5f3c320af1a317f4637e93217129486e2439f4429dee685b7ad5fbc",
+    "scripts/dm_budget_intervening_systems.csv": "0dd74d3c485a518ab4ce2127da2f2cb325ecaf2e4488b73e50bd79682e58460c"
+  },
+  "manuscript_budget_mutated": false,
+  "manuscript_budget_sha256": "27d3404fa2c73fc98ac89651b71250137dc2aee9d8f72f117f8659a8fee01654",
+  "outputs": {
+    "foregrounds/results/propagation/host_dm_results.json": "bb63a36998e844ad6249c168d99eefe279e56c20dfbecb728aafbf5a31cf8210",
+    "scripts/dm_budget_uncertainty.csv": "3439692ead56f4890f1dd48090696fd0480cc772a128b78d806b86205f997d8f"
+  },
+  "producer": "37fc9b18adf31aebac5218c0033fd60110eb6e99f17a831d4611c527c86f90e1",
+  "schema_version": 1,
+  "status": "fail_closed",
+  "tng_calibration": "provisional_transcribed_grid_source_artifact_missing"
+}

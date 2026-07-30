@@ -113,11 +113,20 @@ figures:
         - foregrounds/census/data/sightline_halo_grid.csv
         - --out-dir
         - figure_review/artifacts/staging/fig3_halo_grid/figures
+        - --review-candidate
       cwd: analysis
     inputs:
       - analysis/foregrounds/census/data/sightline_halo_grid.csv
+      - analysis/foregrounds/census/data/sightline_halo_grid.receipt.json
+      - analysis/foregrounds/census/data/hostless_sightlines/receipt.json
+      - analysis/foregrounds/census/data/survey_coverage/all_12_sightlines.csv
+      - analysis/foregrounds/results/dm_redshift/posterior.json
+      - analysis/foregrounds/results/dm_redshift/receipt.json
     outputs:
       - analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf
+      - analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.svg
+      - analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.png
+      - analysis/figure_review/artifacts/staging/fig3_halo_grid/provenance/figure3-candidate.json
     manuscript_target: figures/sightline_halo_grid.pdf
     candidate_root: analysis/figure_review/artifacts/staging/fig3_halo_grid
     depends_on: []

@@ -15,15 +15,20 @@ spread above and below the sightline as in the reference figure -- the catalog
 stores only the unsigned impact parameter b_kpc, which we use for the magnitude
 and R_vir geometry and sign by sky position.
 
-Data: the checked-in ``foregrounds/census/data/sightline_halo_grid.csv`` built
-from the expanded foreground catalog. Only confirmed, deduplicated systems with
-source-bearing geometry are drawn.
+Data: the checked-in ``foregrounds/census/data/sightline_halo_grid.csv``. All
+twelve sightlines are shown. Diagnostic DM-redshift intervals and unadmitted
+foreground candidates are visually distinct from established host redshifts and
+confirmed systems.
 """
 
 from __future__ import annotations
 
+import hashlib
+import json
 import math
 import os
+import sys
+from pathlib import Path
 
 import matplotlib
 import numpy as np
@@ -33,10 +38,15 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from matplotlib.colors import ListedColormap
+from matplotlib.lines import Line2D
 from matplotlib.patches import Ellipse
 from matplotlib.path import Path as MplPath
 
 _REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if _REPO not in sys.path:
+    sys.path.insert(0, _REPO)
+
+from foregrounds.census.build_sightline_halo_grid_input import validate_frame  # noqa: E402
 
 # Deterministic style regardless of run location. matplotlib auto-loads the
 # repository matplotlibrc (serif/CM fonts, savefig.bbox=tight, ...) only when the
@@ -52,10 +62,17 @@ if os.path.exists(_RC):
 plt.rcParams["savefig.bbox"] = "standard"
 plt.rcParams["savefig.pad_inches"] = 0.05
 DEFAULT_RESULTS_DIR = os.path.join(_REPO, "results")
-# Derived from this file's location, not a machine path. The analysis repository
-# is nested in the manuscript checkout, so this resolves to its `figures/`.
-# Override with --out-dir for an independent analysis checkout.
-DEFAULT_OUT_DIR = os.path.join(os.path.dirname(_REPO), "figures")
+DEFAULT_OUT_DIR = os.path.join(
+    _REPO,
+    "figure_review",
+    "artifacts",
+    "staging",
+    "fig3_halo_grid",
+    "figures",
+)
+MANUSCRIPT_FIGURES_DIR = Path(_REPO).parent / "figures"
+CANONICAL_INPUT = Path(_REPO) / "foregrounds" / "census" / "data" / "sightline_halo_grid.csv"
+CANONICAL_RECEIPT = CANONICAL_INPUT.with_suffix(".receipt.json")
 
 # Colorbar range for log10(M_halo/Msun). Tuned to the recovered halo population
 # (bulk 11-13.2, tail to 14.4) so magma's full sweep is used instead of pinning
@@ -79,26 +96,25 @@ def _contributor_mask(frame: pd.DataFrame) -> pd.Series:
 
 
 def _load(halo_csv: str):
-    """Return (foreground-halo frame, {frb_name: frb_z} for all z-known sightlines).
-
-    The panel roster is every sightline with a known FRB redshift -- including
-    those with zero foreground halos (a clean sightline is an informative null),
-    matching the reference figure which shows empty panels. Sightlines without a
-    spectroscopic FRB redshift cannot be placed (no host marker, no z<z_frb cut) and are
-    dropped.
-    """
+    """Return validated drawable systems and metadata for all twelve panels."""
     df = pd.read_csv(halo_csv)
-    z_known = df[(df["row_kind"] == "host") & df["frb_z"].notna()].drop_duplicates("frb_name")
-    roster = dict(zip(z_known["frb_name"], z_known["frb_z"].astype(float), strict=False))
+    validate_frame(df)
+    hosts = df[df["row_kind"] == "host"].drop_duplicates("frb_name")
+    roster = {
+        str(row.frb_name): row._asdict()
+        for row in hosts.sort_values("nickname").itertuples(index=False)
+    }
 
-    fg = df[(df["row_kind"] == "system") & (df["geometry_status"] == "pass")].copy()
+    fg = df[
+        (df["row_kind"] == "system") & (df["geometry_status"] == "pass")
+    ].copy()
     fg = fg[
         fg["system_z"].notna()
         & fg["impact_kpc"].notna()
         & fg["mass_msun"].notna()
         & fg["radius_kpc"].notna()
     ]
-    fg = fg[fg["frb_name"].isin(roster)]
+    fg = fg[fg["frb_name"].isin(roster)].copy()
     # Signed projected offset: magnitude = b_kpc, sign from declination diff.
     ddec = fg["candidate_dec_deg"].to_numpy(float) - fg["frb_dec_deg"].to_numpy(float)
     fg["b_signed"] = np.where(ddec >= 0, 1.0, -1.0) * fg["impact_kpc"].to_numpy(float)
@@ -158,12 +174,23 @@ def _crossing_mask(sub: pd.DataFrame) -> np.ndarray:
     return cluster & intersects
 
 
+def _diagnostic_limitations(metadata: dict) -> str:
+    """Return compact panel text while retaining every recorded limitation."""
+    query = str(metadata["query_limitations"]).replace(
+        "exact query receipts missing: ", "missing queries: "
+    )
+    coverage = str(metadata["coverage_limitations"]).replace(
+        "outside footprint: ", "coverage gaps: "
+    ).replace("footprint evidence incomplete: ", "missing footprint: ")
+    return "diagnostic only\n" + query + "\n" + coverage.replace("; ", "\n")
+
+
 def make_grid(halo_csv: str):
     fg, roster = _load(halo_csv)
-    # One panel per z-known sightline, ordered by FRB redshift.
-    order = sorted(roster, key=lambda k: roster[k])
+    # All twelve panels, ordered by their established or diagnostic central z.
+    order = sorted(roster, key=lambda key: float(roster[key]["frb_z"]))
     n = len(order)
-    ncols = 2
+    ncols = 3
     nrows = math.ceil(n / ncols)
 
     ink = "#22252b"       # near-black ink for text/spines (softer than pure black)
@@ -175,11 +202,11 @@ def make_grid(halo_csv: str):
     # figure* + its long caption fit one manuscript page (a taller grid overflows
     # and sends latexmk into an output dead-cycle loop).
     fig, axes = plt.subplots(
-        nrows, ncols, figsize=(12.0, 1.95 * nrows), sharex=True, sharey=True,
+        nrows, ncols, figsize=(12.0, 2.15 * nrows), sharex=True, sharey=True,
     )
     axes = np.atleast_1d(axes).ravel()
-    fig.subplots_adjust(top=0.885, bottom=0.085, left=0.115, right=0.975,
-                        hspace=0.42, wspace=0.06)
+    fig.subplots_adjust(top=0.86, bottom=0.09, left=0.105, right=0.985,
+                        hspace=0.42, wspace=0.08)
 
     norm = plt.Normalize(vmin=MASS_MIN, vmax=MASS_MAX)
     # magma matches the burst waterfalls; drop the near-black bottom so low-mass
@@ -187,25 +214,65 @@ def make_grid(halo_csv: str):
     base = plt.get_cmap(CMAP)
     cmap = ListedColormap(base(np.linspace(0.18, 1.0, 256)))
 
-    z_max = max(roster.values())
+    z_max = max(float(row["frb_z_upper"]) for row in roster.values())
     x_hi = 0.05 * math.ceil((z_max + 0.02) / 0.05)
 
     for _i, (ax, name) in enumerate(zip(axes, order, strict=False)):
-        z_frb = roster[name]
+        metadata = roster[name]
+        z_frb = float(metadata["frb_z"])
+        inferred = metadata["redshift_class"] == "inferred_dm_z"
         # Faint impact corridor (|b| < 300 kpc), a soft depth band around the LOS.
         ax.axhspan(-300, 300, color=corridor_c, zorder=0)
         ax.axhline(0.0, color=sightline_c, lw=0.9, zorder=1)
 
-        # FRB host: a haloed spiral-galaxy glyph so it reads over any
-        # overlapping disk.
-        ax.scatter([z_frb], [0.0], marker=GALAXY_MARKER, s=900, color="white",
-                   edgecolors="none", zorder=5)
-        ax.scatter([z_frb], [0.0], marker=GALAXY_MARKER, s=680, color=ink,
-                   edgecolors="none", zorder=6)
+        if inferred:
+            z_lower = float(metadata["frb_z_lower"])
+            z_upper = float(metadata["frb_z_upper"])
+            ax.axvspan(z_lower, z_upper, color="#3977a8", alpha=0.09, zorder=0)
+            ax.errorbar(
+                [z_frb],
+                [0.0],
+                xerr=[[z_frb - z_lower], [z_upper - z_frb]],
+                fmt="none",
+                ecolor="#3977a8",
+                elinewidth=1.4,
+                capsize=3,
+                zorder=5,
+            )
+            ax.scatter(
+                [z_frb],
+                [0.0],
+                marker=GALAXY_MARKER,
+                s=680,
+                facecolors="white",
+                edgecolors="#245b83",
+                linewidths=1.3,
+                zorder=6,
+            )
+            z_label = (
+                r"$z_{\rm DM}=$"
+                f"{z_frb:.3f}\n[{z_lower:.3f}, {z_upper:.3f}]"
+            )
+            ax.text(
+                0.98, 0.035, _diagnostic_limitations(metadata),
+                transform=ax.transAxes,
+                fontsize=5.4,
+                color="#245b83",
+                va="bottom",
+                ha="right",
+                linespacing=1.15,
+                zorder=7,
+            )
+        else:
+            ax.scatter([z_frb], [0.0], marker=GALAXY_MARKER, s=900, color="white",
+                       edgecolors="none", zorder=5)
+            ax.scatter([z_frb], [0.0], marker=GALAXY_MARKER, s=680, color=ink,
+                       edgecolors="none", zorder=6)
+            z_label = r"$z_{\rm spec}=$" + f"{z_frb:.4f}"
 
         # Title in a translucent chip so it stays legible over any halo disk.
         ax.text(0.025, 0.93,
-                f"{name}\n" + r"$z=$" + f"{z_frb:.4f}",
+                f"{name}\n{z_label}",
                 transform=ax.transAxes, fontsize=9.8, color=ink,
                 va="top", ha="left", linespacing=1.4,
                 bbox=dict(boxstyle="round,pad=0.32", facecolor="white",
@@ -243,11 +310,15 @@ def make_grid(halo_csv: str):
         x_per_px = (x1 - x0) / bbox.width
         y_per_px = (y1 - y0) / bbox.height
         sub = fg[fg["frb_name"] == name].reset_index(drop=True)
-        cross = _crossing_mask(sub)
+        confirmed = sub[sub["evidence_class"] == "confirmed_system"].reset_index(drop=True)
+        candidates = sub[
+            sub["evidence_class"] == "probabilistic_candidate"
+        ].reset_index(drop=True)
+        cross = _crossing_mask(confirmed)
         # Draw largest disks first so small halos sit on top (readability).
-        draw_order = sub["radius_kpc"].astype(float).fillna(0).argsort()[::-1]
+        draw_order = confirmed["radius_kpc"].astype(float).fillna(0).argsort()[::-1]
         for idx in draw_order:
-            row = sub.iloc[idx]
+            row = confirmed.iloc[idx]
             r_kpc = float(row.get("radius_kpc", float("nan")))
             y = float(row["b_signed"])
             x = float(row["system_z"])
@@ -269,51 +340,112 @@ def make_grid(halo_csv: str):
                            linewidths=1.1, zorder=6)
             ax.scatter([x], [y], c=[col], s=26, edgecolors=ink,
                        linewidths=0.4, zorder=4)
+        for _, row in candidates.iterrows():
+            x = float(row["system_z"])
+            y = float(row["b_signed"])
+            lower = float(row["system_z_lower"])
+            upper = float(row["system_z_upper"])
+            probability = float(row["candidate_foreground_probability"])
+            ax.errorbar(
+                [x],
+                [y],
+                xerr=[[x - lower], [upper - x]],
+                fmt="D",
+                markersize=4.4,
+                markerfacecolor="white",
+                markeredgecolor="#176f9f",
+                ecolor="#176f9f",
+                elinewidth=0.9,
+                capsize=2,
+                alpha=0.9,
+                zorder=6,
+            )
+            ax.annotate(
+                rf"$P_{{\rm fg}}={probability:.2f}$",
+                (x, y),
+                xytext=(4, 4),
+                textcoords="offset points",
+                fontsize=6.4,
+                color="#176f9f",
+                zorder=7,
+            )
+        if sub.empty and roster[name]["redshift_class"] == "established":
+            ax.text(
+                0.5,
+                0.52,
+                "no systems plotted\nnot a foreground-free claim",
+                transform=ax.transAxes,
+                ha="center",
+                va="center",
+                fontsize=7.5,
+                color=faint,
+            )
 
-    # Legend key in the leftover slot (odd panel count). It must NOT be one of
-    # the shared axes: clearing ticks on a sharex/sharey member propagates to
-    # every panel and wipes the redshift / impact-parameter tick labels. So hide
-    # the shared slot and drop an independent axis in its place.
-    legend_ax = None
-    if n < len(axes):
-        slot = axes[n]
-        slot.set_visible(False)
-        legend_ax = fig.add_axes(slot.get_position())
-        legend_ax.set_xlim(0.0, x_hi)
-        legend_ax.set_ylim(-Y_LIM, Y_LIM)
-        for side in ("top", "right", "left", "bottom"):
-            legend_ax.spines[side].set_visible(False)
-        legend_ax.set_xticks([])
-        legend_ax.set_yticks([])
-        fig.canvas.draw()
-        lb = legend_ax.get_window_extent()
-        xpp = x_hi / lb.width
-        ypp = (2 * Y_LIM) / lb.height
-        # No panel title: the swatch/marker labels are self-explanatory, and a
-        # centered "key" text collided with the 500-kpc swatch circle anyway.
-        # Two R200 swatches side by side (small + large), each with its label
-        # below, so nothing overlaps. Circle radius = R200 on this panel's scale.
-        for cxf, r_kpc in [(0.20, 200), (0.52, 500)]:
-            cx = cxf * x_hi
-            r_px = r_kpc / ypp
-            legend_ax.add_patch(Ellipse((cx, 210), 2 * r_px * xpp, 2 * r_px * ypp,
-                                        facecolor=faint, alpha=0.16,
-                                        edgecolor=faint, lw=0.8, zorder=2))
-            legend_ax.text(cx, -230, r"$R_{200}$" + "\n" + rf"${r_kpc}$ kpc",
-                           fontsize=8.5, color=ink, va="top", ha="center",
-                           linespacing=1.3)
-        # FRB host + cluster-crossing entries, right column.
-        legend_ax.scatter([0.82 * x_hi], [300], s=520, marker=GALAXY_MARKER,
-                          color=ink, zorder=4)
-        legend_ax.text(0.88 * x_hi, 300, "FRB\nhost", fontsize=8.5, color=ink,
-                       va="center", ha="left", linespacing=1.3)
-        legend_ax.scatter([0.82 * x_hi], [-80], s=90, facecolors="none",
-                          edgecolors=ink, linewidths=1.1, zorder=4)
-        legend_ax.text(0.88 * x_hi, -80, "cluster\ncrossing", fontsize=8.5,
-                       color=ink, va="center", ha="left", linespacing=1.3)
-
-    for ax in axes[n + 1 :]:
+    for ax in axes[n:]:
         ax.set_visible(False)
+
+    legend_handles = [
+        Line2D(
+            [],
+            [],
+            marker=GALAXY_MARKER,
+            markersize=9,
+            markerfacecolor=ink,
+            markeredgecolor=ink,
+            linestyle="none",
+            label="established host",
+        ),
+        Line2D(
+            [],
+            [],
+            marker=GALAXY_MARKER,
+            markersize=9,
+            markerfacecolor="white",
+            markeredgecolor="#245b83",
+            linestyle="none",
+            label="diagnostic dispersion-measure redshift",
+        ),
+        Line2D(
+            [],
+            [],
+            marker="o",
+            markersize=5,
+            markerfacecolor=cmap(norm(12.5)),
+            markeredgecolor=ink,
+            linestyle="none",
+            label="confirmed foreground system",
+        ),
+        Line2D(
+            [],
+            [],
+            marker="D",
+            markersize=5,
+            markerfacecolor="white",
+            markeredgecolor="#176f9f",
+            linestyle="none",
+            label="unadmitted candidate",
+        ),
+        Line2D(
+            [],
+            [],
+            marker="o",
+            markersize=7,
+            markerfacecolor="none",
+            markeredgecolor=ink,
+            linestyle="none",
+            label="cluster crossing",
+        ),
+    ]
+    fig.legend(
+        handles=legend_handles,
+        loc="upper left",
+        bbox_to_anchor=(0.105, 0.985),
+        ncol=2,
+        frameon=False,
+        fontsize=8.1,
+        handletextpad=0.5,
+        columnspacing=1.3,
+    )
 
     # Single shared axis labels (supxlabel/supylabel) instead of per-panel labels:
     # the panels are short, so a per-panel rotated y-label would span the panel
@@ -331,7 +463,7 @@ def make_grid(halo_csv: str):
     # Horizontal colorbar, spanning the plot width, ticks on top.
     sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
     sm.set_array([])
-    cax = fig.add_axes([0.30, 0.935, 0.45, 0.016])
+    cax = fig.add_axes([0.63, 0.946, 0.32, 0.014])
     cbar = fig.colorbar(sm, cax=cax, orientation="horizontal")
     cbar.ax.xaxis.set_ticks_position("top")
     cbar.ax.xaxis.set_label_position("top")
@@ -350,19 +482,68 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--halo-csv", required=True)
     p.add_argument("--out-dir", default=DEFAULT_OUT_DIR)
+    p.add_argument(
+        "--review-candidate",
+        action="store_true",
+        help="write a provenance-bound review candidate; never promote it",
+    )
     args = p.parse_args()
 
-    os.makedirs(args.out_dir, exist_ok=True)
+    out_dir = Path(args.out_dir).resolve()
+    if out_dir == MANUSCRIPT_FIGURES_DIR.resolve():
+        p.error("manuscript figures are promotion targets, not generator outputs")
+    if args.review_candidate:
+        if out_dir != Path(DEFAULT_OUT_DIR).resolve():
+            p.error("review candidates may only be written to the declared staging directory")
+        halo_path = Path(args.halo_csv).resolve()
+        if halo_path != CANONICAL_INPUT.resolve():
+            p.error("review candidates require the canonical Figure 3 input")
+        input_hash = hashlib.sha256(halo_path.read_bytes()).hexdigest()
+        input_receipt = json.loads(CANONICAL_RECEIPT.read_text(encoding="utf-8"))
+        recorded_hash = input_receipt["output"][
+            "foregrounds/census/data/sightline_halo_grid.csv"
+        ]
+        if input_hash != recorded_hash:
+            p.error("canonical Figure 3 input differs from its reproduction receipt")
+    out_dir.mkdir(parents=True, exist_ok=True)
     fig = make_grid(args.halo_csv)
+    outputs: dict[str, str] = {}
     for ext in ("pdf", "svg", "png"):
-        path = os.path.join(args.out_dir, f"sightline_halo_grid.{ext}")
+        path = out_dir / f"sightline_halo_grid.{ext}"
         # Save geometry is pinned at import (savefig.bbox='standard') so the
         # output is identical from any working directory. Matplotlib otherwise
         # inserts the current time into each PDF, so omit both PDF timestamps.
         metadata = {"CreationDate": None, "ModDate": None} if ext == "pdf" else None
         fig.savefig(path, metadata=metadata)
+        outputs[path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
         print(f"wrote {path}")
     plt.close(fig)
+    if args.review_candidate:
+        try:
+            input_display = str(halo_path.relative_to(Path(_REPO)))
+        except ValueError:
+            input_display = str(halo_path)
+        provenance_dir = out_dir.parent / "provenance"
+        provenance_dir.mkdir(parents=True, exist_ok=True)
+        receipt = {
+            "schema_version": 1,
+            "status": "review_candidate_generated",
+            "manuscript_promotion": "blocked_pending_owner_visual_approval",
+            "input": {
+                "path": input_display,
+                "sha256": input_hash,
+                "receipt": str(CANONICAL_RECEIPT.relative_to(Path(_REPO))),
+                "receipt_sha256": hashlib.sha256(CANONICAL_RECEIPT.read_bytes()).hexdigest(),
+            },
+            "outputs": outputs,
+            "manuscript_target": "figures/sightline_halo_grid.pdf",
+        }
+        receipt_path = provenance_dir / "figure3-candidate.json"
+        receipt_path.write_text(
+            json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        print(f"wrote {receipt_path}")
 
 
 if __name__ == "__main__":

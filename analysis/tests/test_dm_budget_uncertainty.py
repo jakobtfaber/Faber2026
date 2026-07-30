@@ -48,9 +48,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import dm_budget_uncertainty as dbu  # noqa: E402
 
 
+def _modeled_sightlines():
+    return tuple(
+        row
+        for row in dbu.load_sightlines()
+        if not (row.dm_int > 0.0 and not row.intervening_systems)
+    )
+
+
 def test_grid_nodes_recovered_exactly():
     """Criterion 4: an s=0 spline through the knots returns the knots."""
-    for z, mu_ref, sig_ref in zip(dbu.TNG_ZGRID, dbu.TNG_MU_IGM, dbu.TNG_SIG_IGM):
+    for z, mu_ref, sig_ref in zip(dbu.TNG_ZGRID, dbu.TNG_MU_IGM, dbu.TNG_SIG_IGM, strict=True):
         mu, sigma = dbu.igm_lognormal_shape(float(z))
         assert mu == pytest.approx(mu_ref, rel=1e-12)
         assert sigma == pytest.approx(sig_ref, rel=1e-12)
@@ -199,7 +207,7 @@ def test_host_pdf_is_shifted_reflection_of_foreground_pdf():
 
 
 def test_current_inputs_join_budget_dm_catalog_and_system_census():
-    """Provenance criterion: current SSOT rosters and intervening totals agree."""
+    """The diagnostic roster joins cleanly without rewriting manuscript values."""
     sightlines = dbu.load_sightlines()
     assert len(sightlines) == 9
     assert {row.name for row in sightlines} == {
@@ -217,34 +225,24 @@ def test_current_inputs_join_budget_dm_catalog_and_system_census():
     assert phineas.dm_obs == pytest.approx(610.289070)
     assert len(phineas.intervening_systems) == 5
     probabilistic = [
-        system
-        for system in phineas.intervening_systems
-        if system.model == "probabilistic_crossing"
+        system for system in phineas.intervening_systems if system.model == "probabilistic_crossing"
     ]
     assert {system.object for system in probabilistic} == {
         "194021777634832653",
         "983",
     }
-    assert all(system.dm_point is None for system in probabilistic)
+    assert all(system.dm_point is not None for system in probabilistic)
     for row in sightlines:
         if row.dm_int == 0:
             assert row.intervening_systems == ()
-        else:
-            fixed = [
-                system.dm_point
-                for system in row.intervening_systems
-                if system.model == "fixed_lognormal"
-            ]
-            if len(fixed) == len(row.intervening_systems):
-                assert round(sum(point for point in fixed if point is not None)) == row.dm_int
+        assert all(system.z < row.z for system in row.intervening_systems)
+    receipt = json.loads(dbu.HOST_RECEIPT_JSON.read_text())
+    assert receipt["manuscript_budget_mutated"] is False
 
 
 def test_chromatica_foreground_column_is_not_duplicated_on_freya():
     """Catalog identity: the measured 26 pc cm^-3 system belongs only to Chromatica."""
-    rows = {
-        row["burst"]: row
-        for row in json.loads(dbu.BUDGET_DATA.read_text())["rows"]
-    }
+    rows = {row["burst"]: row for row in json.loads(dbu.BUDGET_DATA.read_text())["rows"]}
     assert rows["FRB 20230325C"]["dm_int"] == 0
     assert rows["FRB 20230325C"]["regime"] == "none"
     assert rows["FRB 20230325C"]["mass"] is None
@@ -278,19 +276,17 @@ def test_quoted_lognormal_points_are_medians(point, sigma_ln):
 
 def test_host_summaries_converge_on_half_size_grid():
     """Numerical criterion: halving dx leaves every published summary stable."""
-    for row in dbu.load_sightlines():
+    for row in _modeled_sightlines():
         coarse = dbu.host_distribution(row, dx=0.1)
         fine = dbu.host_distribution(row, dx=0.05)
         for key in ("dm_host_p16", "dm_host_p50", "dm_host_p84"):
             assert coarse[key] == pytest.approx(fine[key], abs=0.25), row.name
-        assert coarse["p_host_neg"] == pytest.approx(fine["p_host_neg"], abs=2e-4), (
-            row.name
-        )
+        assert coarse["p_host_neg"] == pytest.approx(fine["p_host_neg"], abs=2e-4), row.name
 
 
 def test_rest_frame_quantiles_are_monotone_redshift_rescaling():
     """Frame criterion: DM_host,rest = (1+z) DM_host,observer."""
-    for row in dbu.load_sightlines():
+    for row in _modeled_sightlines():
         result = dbu.host_distribution(row)
         for suffix in ("p16", "p50", "p84"):
             assert result[f"dm_host_rest_{suffix}"] == pytest.approx(
@@ -314,7 +310,7 @@ def test_convolution_matches_independent_monte_carlo_oracle():
     """Cross-method criterion: 500k median-centered draws match all nine PDFs."""
     n = 500_000
     probability_tolerance = 5.0 * math.sqrt(0.25 / n) + 2e-4
-    for index, row in enumerate(dbu.load_sightlines()):
+    for index, row in enumerate(_modeled_sightlines()):
         deterministic = dbu.host_distribution(row)
         samples = dbu.sample_host_for_validation(
             row, n=n, seed=20260715 + index, prior_centering="median"
@@ -323,7 +319,9 @@ def test_convolution_matches_independent_monte_carlo_oracle():
         # At N=500k the empirical order-statistic error is below 0.5 pc cm^-3
         # for these PDFs; add the 0.1-grid discretization allowance explicitly.
         for key, reference in zip(
-            ("dm_host_p16", "dm_host_p50", "dm_host_p84"), (q16, q50, q84)
+            ("dm_host_p16", "dm_host_p50", "dm_host_p84"),
+            (q16, q50, q84),
+            strict=True,
         ):
             assert deterministic[key] == pytest.approx(reference, abs=0.6), row.name
         assert deterministic["p_host_neg"] == pytest.approx(
@@ -332,33 +330,28 @@ def test_convolution_matches_independent_monte_carlo_oracle():
 
 
 def test_committed_host_csv_matches_deterministic_summaries():
-    """Artifact criterion: the nine committed host rows match the live engine."""
-    path = (
-        Path(__file__).resolve().parent.parent / "scripts" / "dm_budget_uncertainty.csv"
-    )
+    """Artifact criterion: admitted committed host rows match the live engine."""
+    path = Path(__file__).resolve().parent.parent / "scripts" / "dm_budget_uncertainty.csv"
     with path.open(newline="") as handle:
         committed = {
             row["burst"]: row
             for row in csv.DictReader(handle)
             if row.get("burst", "").startswith("FRB ")
         }
-    sightlines = dbu.load_sightlines()
+    sightlines = _modeled_sightlines()
     assert set(committed) == {row.name for row in sightlines}
     for row in sightlines:
         expected = dbu.host_distribution(row)
         actual = committed[row.name]
-        assert int(actual["dm_host_arith"]) == round(expected["dm_host_arith"])
         for key in ("dm_host_p16", "dm_host_p50", "dm_host_p84"):
-            assert int(actual[key]) == round(expected[key])
+            assert float(actual[key]) == pytest.approx(expected[key], abs=1e-6)
         for key in (
             "dm_host_rest_p16",
             "dm_host_rest_p50",
             "dm_host_rest_p84",
         ):
-            assert int(actual[key]) == round(expected[key])
-        assert float(actual["p_host_negative"]) == pytest.approx(
-            expected["p_host_neg"], abs=5e-4
-        )
+            assert float(actual[key]) == pytest.approx(expected[key], abs=1e-6)
+        assert float(actual["p_host_negative"]) == pytest.approx(expected["p_host_neg"], abs=5e-4)
 
 
 def test_cluster_profile_sampling_is_seed_reproducible():

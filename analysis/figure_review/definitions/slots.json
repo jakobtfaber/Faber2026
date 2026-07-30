@@ -51,14 +51,15 @@
       "family": "foreground-halo-grid",
       "target": "figures/sightline_halo_grid.pdf",
       "protect_in_manuscript": false,
-      "generator": "cd analysis && uv run --frozen python -m foregrounds.visualization.sightline_halo_grid --halo-csv foregrounds/census/data/sightline_halo_grid.csv",
+      "generator": "cd analysis && uv run --frozen python -m foregrounds.visualization.sightline_halo_grid --halo-csv foregrounds/census/data/sightline_halo_grid.csv --out-dir figure_review/artifacts/staging/fig3_halo_grid/figures --review-candidate",
       "required_provenance": [
         "expanded-catalog build manifest and SHA-256",
-        "versioned Figure 3 input and SHA-256",
-        "Verdi host-redshift source extract and SHA-256",
-        "Law host-redshift source extract and SHA-256",
-        "candidate-redshift ledger and replay receipt SHA-256",
-        "canonical selected source rows and full query responses SHA-256",
+        "twelve-sightline Figure 3 input and reproduction receipt SHA-256",
+        "established host-redshift source extracts and SHA-256",
+        "diagnostic dispersion-measure redshift posterior, interval, basis, and SHA-256",
+        "hostless candidate states and foreground probabilities",
+        "coverage and exact-query limitations for every hostless sightline",
+        "review-candidate output hashes and blocked-promotion state",
         "manuscript-owner visual approval"
       ]
     },

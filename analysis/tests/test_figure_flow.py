@@ -243,7 +243,7 @@ def test_fig1_has_approval_slot():
     assert "fig1-gallery" in hint
 
 
-def test_figure3_is_staged_from_versioned_catalog_input():
+def test_figure3_is_staged_from_provenance_bound_twelve_sightline_input():
     figures = figure_flow.by_id(figure_flow.load_catalog(CATALOG))
     figure = figures["sightline_halo_grid"]
     assert figure["producer"]["argv"].count("--out-dir") == 1
@@ -252,12 +252,18 @@ def test_figure3_is_staged_from_versioned_catalog_input():
         figure["producer"]["argv"].index("--halo-csv") + 1
     ] == "foregrounds/census/data/sightline_halo_grid.csv"
     assert figure["approval_slot"] == "fig3-halo-grid"
-    assert figure["inputs"] == [
-        "analysis/foregrounds/census/data/sightline_halo_grid.csv"
-    ]
-    assert figure["outputs"] == [
-        "analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
-    ]
+    assert "--review-candidate" in figure["producer"]["argv"]
+    assert {
+        "analysis/foregrounds/census/data/sightline_halo_grid.csv",
+        "analysis/foregrounds/census/data/sightline_halo_grid.receipt.json",
+        "analysis/foregrounds/census/data/hostless_sightlines/receipt.json",
+        "analysis/foregrounds/results/dm_redshift/posterior.json",
+        "analysis/foregrounds/results/dm_redshift/receipt.json",
+    } <= set(figure["inputs"])
+    assert {
+        "analysis/figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf",
+        "analysis/figure_review/artifacts/staging/fig3_halo_grid/provenance/figure3-candidate.json",
+    } <= set(figure["outputs"])
     assert figure["manuscript_target"] == "figures/sightline_halo_grid.pdf"
 
 

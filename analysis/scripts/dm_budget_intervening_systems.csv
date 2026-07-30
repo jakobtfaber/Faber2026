@@ -1,10 +1,9 @@
-tns,nickname,object,kind,mass_source,model,z,impact_kpc,dm_point
-FRB 20220310F,whitney,,galaxy,measured,fixed_lognormal,0.3585,100.7265127783341,6.250442692096642
-FRB 20230307A,phineas,194021777634832653,galaxy,measured,probabilistic_crossing,0.1925,144.437,
-FRB 20230307A,phineas,983,galaxy,measured,probabilistic_crossing,0.1649,115.731,
-FRB 20230307A,phineas,,galaxy,measured,fixed_lognormal,0.2146,130.11002833672677,38.27533589889769
-FRB 20230307A,phineas,,galaxy,measured,fixed_lognormal,0.1096,105.44919505748442,12.781510780496761
-FRB 20230307A,phineas,,cluster,cluster_catalog,fixed_lognormal,0.2,603.6,224.719617368599
-FRB 20240203D,chromatica,,galaxy,measured,fixed_lognormal,0.0543,270.21050867078225,26.29184172616958
-FRB 20240229A,casey,,galaxy,measured,fixed_lognormal,0.2028,176.64470168589963,75.93655954444196
-FRB 20240229A,casey,,galaxy,measured,fixed_lognormal,0.2398,242.92325757529773,41.12445260426109
+tns,nickname,object,kind,mass_source,model,z,z_sigma,theta_arcsec,impact_kpc,mass_msun,mass_sigma_dex,dm_point,uncertainty_flags
+FRB 20220310F,whitney,1473,galaxy,measured,redshift_marginalized_lognormal,0.3585,0.1132,19.461992559,100.727191297,276142436070.9615,,8.723579653,photo-z modeled; mass uncertainty unavailable; profile width assumed
+FRB 20230307A,phineas,"J115120.4+714435, 1254337",cluster,cluster_catalog,cluster_conditional,0.2,0.0001,181.549040136,618.746522604,148000000000000.0,0.2,216.915467424,mass scatter modeled; profile choice conditional
+FRB 20230307A,phineas,194021777634832653,galaxy,measured,probabilistic_crossing,0.1925,0.0284,43.671459837,144.436588227,542273443718.04755,,7.977731142,photo-z and photometry propagated by crossing producer
+FRB 20230307A,phineas,194041777780157594,galaxy,measured,redshift_marginalized_lognormal,0.2146,0.0,36.012224554,129.622532745,1707590432605.2102,,40.032382981,photo-z modeled; mass uncertainty unavailable; profile width assumed
+FRB 20230307A,phineas,194051777813062524,galaxy,measured,redshift_marginalized_lognormal,0.1096,0.0,50.887555708,105.160203002,356081744303.46747,,14.273031213,photo-z modeled; mass uncertainty unavailable; profile width assumed
+FRB 20230307A,phineas,983,galaxy,measured,probabilistic_crossing,0.1649,0.0585,39.623102575,115.730554569,112787184570.15146,,0.0,photo-z and photometry propagated by crossing producer
+FRB 20240229A,casey,192821700026167542,galaxy,measured,redshift_marginalized_lognormal,0.2028,0.0001,51.176969304,176.321821262,7077422410797.027,,81.690650841,photo-z modeled; mass uncertainty unavailable; profile width assumed
+FRB 20240229A,casey,192831699797402822,galaxy,measured,redshift_marginalized_lognormal,0.2398,0.012,61.979200062,242.6246802,5544095092280.866,,37.75635897,photo-z modeled; mass uncertainty unavailable; profile width assumed

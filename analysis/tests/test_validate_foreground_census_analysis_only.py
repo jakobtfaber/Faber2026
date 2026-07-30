@@ -73,8 +73,8 @@ def test_the_staged_figure_is_compared_when_rendering_is_enabled(data):
         data, figure=validation.STAGED_FIGURE, render=True
     )
     assert result.passed, result.failures
-    assert result.facts["installed_content_matches_fresh_render"] is True
-    assert result.facts["installed_figure3_sha256"]
+    assert result.facts["candidate_content_matches_fresh_render"] is True
+    assert result.facts["review_candidate_figure3_sha256"]
 
 
 # --------------------------------------------------------------------------
@@ -158,7 +158,7 @@ def test_a_budget_eligible_system_without_a_redshift_is_rejected(data):
     assert any("budget-eligible without an adopted redshift" in f for f in result.failures)
 
 
-def test_a_point_estimate_redshift_on_a_diagnostic_only_sightline_is_rejected(data):
+def test_a_diagnostic_redshift_that_drifts_from_its_posterior_is_rejected(data):
     def invent(rows):
         target = first_matching(
             rows,
@@ -168,7 +168,7 @@ def test_a_point_estimate_redshift_on_a_diagnostic_only_sightline_is_rejected(da
 
     result = validation.check_hostless_fail_closed(mutated(data, "halo_grid", invent))
     assert not result.passed
-    assert any("point-estimate redshift" in f for f in result.failures)
+    assert any("differs from the posterior" in f for f in result.failures)
 
 
 def test_a_foreground_system_on_a_redshiftless_sightline_is_rejected(data):
@@ -180,7 +180,46 @@ def test_a_foreground_system_on_a_redshiftless_sightline_is_rejected(data):
 
     result = validation.check_hostless_fail_closed(mutated(data, "halo_grid", inject))
     assert not result.passed
-    assert any("diagnostic only" in f for f in result.failures)
+    assert any("probabilistic candidate" in f for f in result.failures)
+
+
+def test_a_hostless_panel_without_query_limitations_is_rejected(data):
+    def blank(rows):
+        target = first_matching(
+            rows,
+            lambda r: r["nickname"] == "mahi" and r["row_kind"] == "host",
+        )
+        target["query_limitations"] = ""
+
+    result = validation.check_hostless_fail_closed(mutated(data, "halo_grid", blank))
+    assert not result.passed
+    assert any("omits coverage or query limitations" in f for f in result.failures)
+
+
+def test_a_hostless_panel_with_posterior_hash_drift_is_rejected(data):
+    def drift(rows):
+        target = first_matching(
+            rows,
+            lambda r: r["nickname"] == "freya" and r["row_kind"] == "host",
+        )
+        target["frb_posterior_sha256"] = "0" * 64
+
+    result = validation.check_hostless_fail_closed(mutated(data, "halo_grid", drift))
+    assert not result.passed
+    assert any("posterior hash" in f for f in result.failures)
+
+
+def test_a_probabilistic_candidate_cannot_enter_the_budget(data):
+    def promote(rows):
+        target = first_matching(
+            rows,
+            lambda r: r.get("evidence_class") == "probabilistic_candidate",
+        )
+        target["budget_eligible"] = "True"
+
+    result = validation.check_hostless_fail_closed(mutated(data, "halo_grid", promote))
+    assert not result.passed
+    assert any("was promoted" in f for f in result.failures)
 
 
 def test_a_false_invalid_redshift_flag_is_rejected(data):
@@ -238,17 +277,19 @@ def test_the_figure_input_reproduction_reads_the_committed_files(data):
     of the in-memory tables, so record that it actually ran."""
     result = validation.check_deterministic_matching(data)
     assert result.facts["figure3_input_rebuild_is_canonically_equivalent"] is True
-    assert (
-        result.facts["approved_figure3_input_sha256"]
-        == validation.APPROVED_HALO_GRID_SHA256
-    )
+    assert len(result.facts["figure3_input_sha256"]) == 64
 
 
-def test_approved_figure_input_hash_drift_is_rejected(data, monkeypatch):
-    monkeypatch.setattr(validation, "APPROVED_HALO_GRID_SHA256", "0" * 64)
+def test_figure_input_receipt_hash_drift_is_rejected(data, monkeypatch, tmp_path):
+    receipt = json.loads(validation.HALO_GRID_RECEIPT.read_text(encoding="utf-8"))
+    output_key = next(iter(receipt["output"]))
+    receipt["output"][output_key] = "0" * 64
+    corrupted = tmp_path / "receipt.json"
+    corrupted.write_text(json.dumps(receipt), encoding="utf-8")
+    monkeypatch.setattr(validation, "HALO_GRID_RECEIPT", corrupted)
     result = validation.check_deterministic_matching(data)
     assert not result.passed
-    assert any("approved Figure 3 input bytes have drifted" in f for f in result.failures)
+    assert any("differ from their reproduction receipt" in f for f in result.failures)
 
 
 def test_a_fabricated_duplicate_separation_is_rejected(data):
@@ -522,8 +563,7 @@ def test_a_relabelled_burst_is_rejected(data):
 
 
 def test_a_silently_dropped_panel_is_rejected(data):
-    """Three panels are omitted for lack of a host redshift. A fourth omission
-    for any other reason must not hide behind that rule."""
+    """Every sightline must retain a placed host marker."""
 
     def blank(rows):
         target = first_matching(
@@ -532,7 +572,7 @@ def test_a_silently_dropped_panel_is_rejected(data):
         target["frb_z"] = ""
 
     assert any(
-        "an established host redshift are" in f
+        "panel roster is incomplete" in f
         for f in _figure3(mutated(data, "halo_grid", blank)).failures
     )
 
@@ -540,13 +580,14 @@ def test_a_silently_dropped_panel_is_rejected(data):
 def test_the_panel_accounting_matches_the_installed_figure(data):
     result = _figure3(data)
     assert result.facts["figure3_host_rows"] == 12
-    assert len(result.facts["figure3_panels_drawn"]) == 9
-    assert result.facts["panels_omitted_for_lack_of_a_host_redshift"] == [
+    assert len(result.facts["figure3_panels_drawn"]) == 12
+    assert result.facts["diagnostic_redshift_panels"] == [
         "freya",
         "mahi",
         "wilhelm",
     ]
-    assert result.facts["figure3_systems_drawn"] == 22
+    assert result.facts["confirmed_systems_drawn"] == 22
+    assert result.facts["probabilistic_candidates_drawn"] == 2
 
 
 def test_an_installed_figure_that_is_not_the_staged_render_is_rejected(data, tmp_path):
@@ -558,7 +599,7 @@ def test_an_installed_figure_that_is_not_the_staged_render_is_rejected(data, tmp
         data, figure=impostor, render=False
     )
     assert not result.passed
-    assert any("different bytes" in f for f in result.failures)
+    assert any("differs from the staged review artifact" in f for f in result.failures)
 
 
 def test_a_missing_installed_figure_is_rejected(data, tmp_path):
@@ -566,7 +607,7 @@ def test_a_missing_installed_figure_is_rejected(data, tmp_path):
         data, figure=tmp_path / "absent.pdf", render=True
     )
     assert not result.passed
-    assert any("installed Figure 3 is missing" in f for f in result.failures)
+    assert any("review candidate is missing" in f for f in result.failures)
 
 
 # --------------------------------------------------------------------------
@@ -596,7 +637,7 @@ def test_the_receipt_binds_every_input_and_the_installed_figure_bytes(tmp_path):
     figure_check = next(
         c for c in report["checks"] if c["id"] == "census_matches_figure3"
     )
-    assert len(figure_check["facts"]["installed_figure3_sha256"]) == 64
+    assert len(figure_check["facts"]["review_candidate_figure3_sha256"]) == 64
 
 
 def test_the_gate_reports_failure_through_its_exit_code(monkeypatch, tmp_path):
@@ -622,12 +663,12 @@ def test_the_gate_reports_failure_through_its_exit_code(monkeypatch, tmp_path):
     assert validation.main([]) == 1
 
 
-def test_the_cli_default_fails_closed_without_the_manuscript_figure(
+def test_the_cli_default_fails_closed_without_the_review_candidate(
     monkeypatch, tmp_path
 ):
     monkeypatch.setattr(
         validation,
-        "MANUSCRIPT_FIGURE",
-        tmp_path / "missing-manuscript-figure.pdf",
+        "STAGED_FIGURE",
+        tmp_path / "missing-review-candidate.pdf",
     )
     assert validation.main([]) == 1

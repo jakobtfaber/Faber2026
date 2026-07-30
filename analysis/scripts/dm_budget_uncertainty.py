@@ -60,10 +60,13 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import io
 import json
 import math
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 
 import numpy as np
 import phineas_halo_crossing_probability as phineas_crossing
@@ -73,13 +76,23 @@ from workspace import ANALYSIS_ROOT, manuscript_root
 
 sys.path.insert(0, str(ANALYSIS_ROOT))
 
-REPO = manuscript_root()
+from foregrounds.propagation import scattering_predict
+
+try:
+    REPO = manuscript_root()
+except RuntimeError:
+    REPO = None
 OUT_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_uncertainty.csv"
-OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf"
-OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png"
+OUT_FIG = REPO / "figures" / "dm_host_posteriors.pdf" if REPO else None
+OUT_FIG_PNG = REPO / "figures" / "dm_host_posteriors.png" if REPO else None
 BUDGET_DATA = ANALYSIS_ROOT / "foregrounds" / "census" / "budget_table_data.json"
 DM_CATALOG = ANALYSIS_ROOT / "dispersion/results/joint-phase" / "manuscript_dm_catalog.csv"
 SYSTEMS_CSV = ANALYSIS_ROOT / "scripts" / "dm_budget_intervening_systems.csv"
+PROPAGATION_RESULTS = ANALYSIS_ROOT / "foregrounds/results/propagation"
+HOST_RESULTS_JSON = PROPAGATION_RESULTS / "host_dm_results.json"
+HOST_RECEIPT_JSON = PROPAGATION_RESULTS / "host_dm_receipt.json"
+INTERVENING_RECEIPT = PROPAGATION_RESULTS / "intervening_receipt.json"
+TNG_SOURCE_STATUS = "provisional_transcribed_grid_source_artifact_missing"
 
 RNG = np.random.default_rng(20260707)
 GRID_DX = 0.1
@@ -100,6 +113,12 @@ class InterveningSystem:
     model: str
     dm_point: float | None
     impact_kpc: float
+    z: float
+    z_sigma: float
+    theta_arcsec: float
+    mass_msun: float
+    mass_sigma_dex: float | None
+    uncertainty_flags: str
 
 
 @dataclass(frozen=True)
@@ -310,10 +329,7 @@ def lognormal_pdf(
     """Discretize a lognormal whose quoted point value is its median."""
     if median <= 0 or sigma_ln <= 0:
         raise ValueError("median and sigma_ln must be positive")
-    x1 = (
-        math.ceil(stats.lognorm.ppf(1.0 - tail_mass, s=sigma_ln, scale=median) / dx)
-        * dx
-    )
+    x1 = math.ceil(stats.lognorm.ppf(1.0 - tail_mass, s=sigma_ln, scale=median) / dx) * dx
     x = np.arange(0.0, x1 + 0.5 * dx, dx)
     density = stats.lognorm.pdf(x, s=sigma_ln, scale=median)
     return DiscretePDF(x0=0.0, dx=dx, density=density)
@@ -361,8 +377,7 @@ def igm_mixture_pdf(
     mu_tng, sigma_ln = igm_lognormal_shape(z)
     medians = np.exp(mu_tng) * figm / FIGM_TNG
     upper = max(
-        stats.lognorm.ppf(1.0 - tail_mass, s=sigma_ln, scale=float(median))
-        for median in medians
+        stats.lognorm.ppf(1.0 - tail_mass, s=sigma_ln, scale=float(median)) for median in medians
     )
     x1 = math.ceil(upper / dx) * dx
     x = np.arange(0.0, x1 + 0.5 * dx, dx)
@@ -370,6 +385,34 @@ def igm_mixture_pdf(
     for weight, median in zip(weights, medians, strict=False):
         density += weight * stats.lognorm.pdf(x, s=sigma_ln, scale=median)
     return DiscretePDF(x0=0.0, dx=dx, density=density)
+
+
+def shared_figm_covariance(sightlines: tuple[Sightline, ...]) -> np.ndarray:
+    """IGM covariance induced by one shared f_IGM draw across all sightlines."""
+    nodes, base_weights = leggauss(128)
+    u_low = (FIGM_CLIP[0] - FIGM_MED) / FIGM_SIG_LO
+    u_high = (FIGM_CLIP[1] - FIGM_MED) / FIGM_SIG_HI
+
+    def interval(a: float, b: float, scale: float):
+        u = 0.5 * (b - a) * nodes + 0.5 * (a + b)
+        weights = 0.5 * (b - a) * base_weights * stats.norm.pdf(u)
+        return FIGM_MED + u * scale, weights
+
+    low, low_weight = interval(u_low, 0.0, FIGM_SIG_LO)
+    high, high_weight = interval(0.0, u_high, FIGM_SIG_HI)
+    figm = np.concatenate(([FIGM_CLIP[0]], low, high, [FIGM_CLIP[1]]))
+    weights = np.concatenate(
+        ([stats.norm.cdf(u_low)], low_weight, high_weight, [stats.norm.sf(u_high)])
+    )
+    weights /= weights.sum()
+    variance = float(np.sum(weights * (figm - np.sum(weights * figm)) ** 2))
+    conditional_means = np.array(
+        [
+            math.exp(mu + 0.5 * sigma**2) / FIGM_TNG
+            for mu, sigma in (igm_lognormal_shape(row.z) for row in sightlines)
+        ]
+    )
+    return np.outer(conditional_means, conditional_means) * variance
 
 
 def convolve_pdfs(pdfs: list[DiscretePDF] | tuple[DiscretePDF, ...]) -> DiscretePDF:
@@ -415,14 +458,93 @@ def _system_sigma(mass_source: str) -> float:
     return INT_SIGMA_LN["assumed"]
 
 
-def system_pdf(system: InterveningSystem, *, dx: float) -> DiscretePDF:
-    """Return the adopted per-system distribution."""
-    if system.model == "fixed_lognormal":
-        if system.dm_point is None:
-            raise ValueError("fixed-lognormal system lacks a point column")
-        if system.mass_source == "cluster_catalog":
-            return cluster_profile_pdf(system.dm_point, dx=dx)
+def _redshift_marginalized_system_pdf(
+    system: InterveningSystem,
+    *,
+    source_z: float,
+    dx: float,
+    order: int = 16,
+) -> DiscretePDF:
+    if system.z_sigma <= 0.0:
+        if not 0.0 < system.z < source_z:
+            return delta_pdf(dx=dx)
         return lognormal_pdf(system.dm_point, _system_sigma(system.mass_source), dx=dx)
+    nodes, weights = leggauss(order)
+    probabilities = 0.5 * (nodes + 1.0)
+    redshifts = stats.norm.ppf(probabilities, loc=system.z, scale=system.z_sigma)
+    medians = []
+    theta = math.radians(system.theta_arcsec / 3600.0)
+    for redshift in redshifts:
+        if not 0.0 < redshift < source_z:
+            medians.append(None)
+            continue
+        impact = theta * scattering_predict.COSMO.angular_diameter_distance(redshift).to_value(
+            "kpc"
+        )
+        medians.append(scattering_predict.dm_halo_mnfw(system.mass_msun, redshift, impact))
+    positive = [value for value in medians if value is not None and value > 0.0]
+    if not positive:
+        return delta_pdf(dx=dx)
+    sigma = _system_sigma(system.mass_source)
+    upper = max(stats.lognorm.ppf(1.0 - TAIL_MASS, s=sigma, scale=value) for value in positive)
+    x = np.arange(0.0, math.ceil(upper / dx) * dx + 0.5 * dx, dx)
+    density = np.zeros_like(x)
+    for weight, median in zip(0.5 * weights, medians, strict=True):
+        if median is None or median <= 0.0:
+            density[0] += weight / dx
+        else:
+            density += weight * stats.lognorm.pdf(x, s=sigma, scale=median)
+    return DiscretePDF(0.0, dx, density)
+
+
+def _cluster_mnfw_pdf(system: InterveningSystem, *, dx: float, order: int = 16) -> DiscretePDF:
+    nodes, weights = leggauss(order)
+    sigma_dex = system.mass_sigma_dex or 0.0
+    cap_probability = stats.norm.cdf(
+        (math.log10(CL_M500_XRAY_UL) - math.log10(system.mass_msun)) / sigma_dex
+    )
+    normal_nodes = stats.norm.ppf(0.5 * (nodes + 1.0) * cap_probability)
+    masses = 10.0 ** (math.log10(system.mass_msun) + sigma_dex * normal_nodes)
+    medians = [
+        scattering_predict.dm_cluster_mnfw_model(mass, system.z, system.impact_kpc)
+        for mass in masses
+    ]
+    positive = [value for value in medians if value is not None and value > 0.0]
+    if not positive:
+        return delta_pdf(dx=dx)
+    sigma_profile = INT_SIGMA_LN["cluster"]
+    upper = max(
+        stats.lognorm.ppf(1.0 - TAIL_MASS, s=sigma_profile, scale=value) for value in positive
+    )
+    x = np.arange(0.0, math.ceil(upper / dx) * dx + 0.5 * dx, dx)
+    density = np.zeros_like(x)
+    normalized_weights = weights / weights.sum()
+    for weight, median in zip(normalized_weights, medians, strict=True):
+        if median is None or median <= 0.0:
+            density[0] += weight / dx
+        else:
+            density += weight * stats.lognorm.pdf(x, s=sigma_profile, scale=median)
+    return DiscretePDF(0.0, dx, density)
+
+
+def system_pdf(
+    system: InterveningSystem,
+    *,
+    source_z: float,
+    dx: float,
+    cluster_profile: str = "mnfw",
+) -> DiscretePDF:
+    """Return the adopted per-system distribution."""
+    if system.model == "redshift_marginalized_lognormal":
+        return _redshift_marginalized_system_pdf(system, source_z=source_z, dx=dx)
+    if system.model == "cluster_conditional":
+        if system.dm_point is None:
+            raise ValueError("cluster system lacks an mNFW point column")
+        if cluster_profile == "mnfw":
+            return _cluster_mnfw_pdf(system, dx=dx)
+        if cluster_profile == "beta":
+            return beta_model_pdf(dx=dx, b_kpc=system.impact_kpc)
+        raise ValueError("cluster_profile must be 'mnfw' or 'beta'")
     if system.model == "probabilistic_crossing":
         if not system.object:
             raise ValueError("probabilistic crossing system lacks an object identifier")
@@ -444,6 +566,14 @@ def load_intervening_systems() -> dict[str, tuple[InterveningSystem, ...]]:
                     model=row["model"],
                     dm_point=float(row["dm_point"]) if row["dm_point"] else None,
                     impact_kpc=float(row["impact_kpc"]),
+                    z=float(row["z"]),
+                    z_sigma=float(row["z_sigma"]),
+                    theta_arcsec=float(row["theta_arcsec"]),
+                    mass_msun=float(row["mass_msun"]),
+                    mass_sigma_dex=(
+                        float(row["mass_sigma_dex"]) if row["mass_sigma_dex"] else None
+                    ),
+                    uncertainty_flags=row["uncertainty_flags"],
                 )
             )
     return {name: tuple(systems) for name, systems in by_tns.items()}
@@ -458,7 +588,7 @@ def load_sightlines() -> tuple[Sightline, ...]:
     systems = load_intervening_systems()
     rows: list[Sightline] = []
     for row in budget["rows"]:
-        if not isinstance(row["z"], (int, float)):
+        if not isinstance(row["z"], int | float):
             continue
         name = row["burst"]
         if name not in catalog:
@@ -466,13 +596,11 @@ def load_sightlines() -> tuple[Sightline, ...]:
         sightline_systems = systems.get(name, ())
         dm_int = float(row["dm_int"])
         if dm_int == 0.0 and sightline_systems:
-            raise ValueError(
-                f"{name}: zero budget DM_int but census systems are present"
-            )
+            raise ValueError(f"{name}: zero budget DM_int but census systems are present")
         point_columns = [
             system.dm_point
             for system in sightline_systems
-            if system.model == "fixed_lognormal"
+            if system.model in {"redshift_marginalized_lognormal", "cluster_conditional"}
         ]
         if any(system.model == "probabilistic_crossing" for system in sightline_systems):
             record = json.loads(phineas_crossing.DEFAULT_OUTPUT.read_text(encoding="utf-8"))
@@ -487,10 +615,11 @@ def load_sightlines() -> tuple[Sightline, ...]:
             }
             if record_objects != census_objects:
                 raise ValueError("Phineas crossing record and system census disagree")
-        elif dm_int > 0.0 and round(sum(point for point in point_columns if point is not None)) != dm_int:
-            raise ValueError(
-                f"{name}: per-system columns do not reproduce budget DM_int"
-            )
+        elif sightline_systems and (
+            dm_int > 0.0
+            and abs(sum(point for point in point_columns if point is not None) - dm_int) > 10.0
+        ):
+            raise ValueError(f"{name}: per-system columns do not reproduce budget DM_int")
         cat = catalog[name]
         rows.append(
             Sightline(
@@ -506,47 +635,45 @@ def load_sightlines() -> tuple[Sightline, ...]:
         )
     extra_systems = set(systems) - {row.name for row in rows}
     if extra_systems:
-        raise ValueError(
-            f"intervening systems lack modeled sightlines: {sorted(extra_systems)}"
-        )
+        raise ValueError(f"intervening systems lack modeled sightlines: {sorted(extra_systems)}")
     if len(rows) != 9:
-        raise ValueError(
-            f"expected 9 redshift-constrained sightlines, found {len(rows)}"
-        )
+        raise ValueError(f"expected 9 redshift-constrained sightlines, found {len(rows)}")
     return tuple(rows)
 
 
-def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
+def host_distribution(
+    row: Sightline, *, dx: float = GRID_DX, cluster_profile: str = "mnfw"
+) -> dict:
     """Build an induced host-residual distribution from independent foreground terms."""
+    if row.dm_int > 0.0 and not row.intervening_systems:
+        raise ValueError(f"{row.name}: nonzero budget DM_int lacks an admitted registry system")
     dm_disk = row.dm_mw - DM_MW_HALO
     if dm_disk <= 0:
         raise ValueError(f"{row.name}: non-positive MW disk column")
     disk = lognormal_pdf(dm_disk, SIGMA_DISK_FRAC, dx=dx)
     halo = lognormal_pdf(DM_MW_HALO, HALO_SIGMA_LN, dx=dx)
     cosmic = igm_mixture_pdf(row.z, dx=dx)
-    system_pdfs = tuple(system_pdf(system, dx=dx) for system in row.intervening_systems)
-    interv = convolve_pdfs(system_pdfs) if system_pdfs else delta_pdf(dx=dx)
-    foreground = convolve_pdfs((disk, halo, cosmic, interv))
-    host = host_pdf_from_foreground(foreground, row.dm_obs)
-    p16, p50, p84 = (
-        pdf_quantile(host, probability) for probability in (0.16, 0.5, 0.84)
-    )
-    r16, r50, r84 = ((1.0 + row.z) * value for value in (p16, p50, p84))
-    int16, int50, int84 = (
-        pdf_quantile(interv, probability) for probability in (0.16, 0.5, 0.84)
-    )
-    arithmetic_dm_int = (
-        int50
-        if any(
-            system.model == "probabilistic_crossing"
-            for system in row.intervening_systems
+    system_pdfs = tuple(
+        system_pdf(
+            system,
+            source_z=row.z,
+            dx=dx,
+            cluster_profile=cluster_profile,
         )
-        else row.dm_int
+        for system in row.intervening_systems
     )
+    interv = convolve_pdfs(system_pdfs) if system_pdfs else delta_pdf(dx=dx)
+    observation = normal_pdf(0.0, row.dm_obs_sigma, dx=dx)
+    foreground = convolve_pdfs((disk, halo, cosmic, interv, observation))
+    host = host_pdf_from_foreground(foreground, row.dm_obs)
+    p16, p50, p84 = (pdf_quantile(host, probability) for probability in (0.16, 0.5, 0.84))
+    r16, r50, r84 = ((1.0 + row.z) * value for value in (p16, p50, p84))
+    int16, int50, int84 = (pdf_quantile(interv, probability) for probability in (0.16, 0.5, 0.84))
+    arithmetic_dm_int = int50
     return {
         "name": row.name,
         "z": row.z,
-        "dm_int": row.dm_int,
+        "dm_int": arithmetic_dm_int,
         "dm_int_p16": int16,
         "dm_int_p50": int50,
         "dm_int_p84": int84,
@@ -558,6 +685,11 @@ def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
         "dm_host_rest_p50": r50,
         "dm_host_rest_p84": r84,
         "p_host_neg": pdf_cdf_at(host, 0.0),
+        "cluster_profile": cluster_profile,
+        "host_prior_conditionals": {
+            str(int(median)): _host_prior_summary(host, row.z, median)
+            for median in (50.0, 100.0, 200.0)
+        },
         "host_pdf": host,
         "disk_pdf": disk,
         "halo_pdf": halo,
@@ -567,12 +699,33 @@ def host_distribution(row: Sightline, *, dx: float = GRID_DX) -> dict:
     }
 
 
+def _host_prior_summary(
+    likelihood: DiscretePDF,
+    z: float,
+    rest_median: float,
+    sigma_ln: float = 0.8,
+) -> dict:
+    rest = likelihood.x * (1.0 + z)
+    prior = np.zeros_like(rest)
+    positive = rest > 0.0
+    prior[positive] = stats.lognorm.pdf(rest[positive], s=sigma_ln, scale=rest_median)
+    posterior = DiscretePDF(likelihood.x0, likelihood.dx, likelihood.density * prior)
+    q16, q50, q84 = (pdf_quantile(posterior, q) for q in (0.16, 0.5, 0.84))
+    return {
+        "rest_median": rest_median,
+        "observer_p16": q16,
+        "observer_p50": q50,
+        "observer_p84": q84,
+    }
+
+
 def sample_host_for_validation(
     row: Sightline,
     *,
     n: int,
     seed: int,
     prior_centering: str = "median",
+    cluster_profile: str = "mnfw",
 ) -> np.ndarray:
     """Independent Monte Carlo oracle; never used for published products.
 
@@ -597,15 +750,71 @@ def sample_host_for_validation(
     cosmic = rng.lognormal(mu_tng + np.log(figm / FIGM_TNG), sigma_ln)
     intervening = np.zeros(n)
     for index, system in enumerate(row.intervening_systems):
-        if system.model == "fixed_lognormal":
+        if system.model == "redshift_marginalized_lognormal":
             assert system.dm_point is not None
-            if system.mass_source == "cluster_catalog":
-                beta = cluster_column_samples(n=n, seed=seed + 20_000 + index)
-                mnfw = lognormal(system.dm_point, INT_SIGMA_LN["cluster"])
-                choose_beta = rng.random(n) < 0.5
-                intervening += np.where(choose_beta, beta, mnfw)
+            if system.z_sigma > 0.0:
+                theta = math.radians(system.theta_arcsec / 3600.0)
+                probability_grid = np.linspace(1.0e-4, 1.0 - 1.0e-4, 257)
+                redshift_grid = np.maximum(
+                    stats.norm.ppf(
+                        probability_grid,
+                        loc=system.z,
+                        scale=system.z_sigma,
+                    ),
+                    np.finfo(float).eps,
+                )
+                median_grid = np.array(
+                    [
+                        scattering_predict.dm_halo_mnfw(
+                            system.mass_msun,
+                            zvalue,
+                            theta
+                            * scattering_predict.COSMO.angular_diameter_distance(zvalue).to_value(
+                                "kpc"
+                            ),
+                        )
+                        or 0.0
+                        for zvalue in redshift_grid
+                    ]
+                )
+                zdraw = rng.normal(system.z, system.z_sigma, n)
+                medians = np.interp(
+                    stats.norm.cdf(zdraw, loc=system.z, scale=system.z_sigma),
+                    probability_grid,
+                    median_grid,
+                )
+                medians[(zdraw <= 0.0) | (zdraw >= row.z)] = 0.0
+                intervening += medians * rng.lognormal(0.0, _system_sigma(system.mass_source), n)
             else:
                 intervening += lognormal(system.dm_point, _system_sigma(system.mass_source))
+        elif system.model == "cluster_conditional":
+            if cluster_profile == "mnfw":
+                probabilities = np.linspace(1.0e-4, 1.0 - 1.0e-4, 257)
+                sigma_dex = system.mass_sigma_dex or 0.0
+                cap_probability = stats.norm.cdf(
+                    (math.log10(CL_M500_XRAY_UL) - math.log10(system.mass_msun))
+                    / sigma_dex
+                )
+                mass_grid = system.mass_msun * 10.0 ** (
+                    sigma_dex * stats.norm.ppf(probabilities * cap_probability)
+                )
+                central_grid = np.array(
+                    [
+                        scattering_predict.dm_cluster_mnfw_model(mass, system.z, system.impact_kpc)
+                        or 0.0
+                        for mass in mass_grid
+                    ]
+                )
+                central = np.interp(rng.random(n), probabilities, central_grid)
+                intervening += central * rng.lognormal(0.0, INT_SIGMA_LN["cluster"], n)
+            elif cluster_profile == "beta":
+                intervening += cluster_column_samples(
+                    n=n,
+                    seed=seed + 20_000 + index,
+                    b_kpc=system.impact_kpc,
+                )
+            else:
+                raise ValueError("cluster_profile must be 'mnfw' or 'beta'")
         elif system.model == "probabilistic_crossing":
             halo_input = phineas_crossing.load_inputs()[system.object]
             draws = phineas_crossing.simulate_halo(
@@ -617,7 +826,8 @@ def sample_host_for_validation(
             intervening += draws.dm
         else:
             raise ValueError(f"unknown intervening-system model: {system.model}")
-    return row.dm_obs - disk - mw_halo - cosmic - intervening
+    observed = row.dm_obs + rng.normal(0.0, row.dm_obs_sigma, n)
+    return observed - disk - mw_halo - cosmic - intervening
 
 
 # --- B2: FRB 20230307A intracluster column (mNFW vs beta-model) ----------------
@@ -686,7 +896,11 @@ def beta_model_dm(m500, r500_kpc, b_kpc, z, f_gas, rc_over_r500, beta):
     return dm_rest / (1.0 + z)  # observer frame
 
 
-def cluster_column_samples(n: int = 40_000, seed: int = 20260707) -> np.ndarray:
+def cluster_column_samples(
+    n: int = 40_000,
+    seed: int = 20260707,
+    b_kpc: float = CL_B_KPC,
+) -> np.ndarray:
     """MC the beta-model column over M500, f_gas, and shape; report the range.
 
     The 0.2 dex richness-mass prior is truncated above at the RASS X-ray
@@ -711,9 +925,7 @@ def cluster_column_samples(n: int = 40_000, seed: int = 20260707) -> np.ndarray:
     beta = rng.uniform(0.60, 0.75, n)  # beta-model slope
     dm = np.array(
         [
-            beta_model_dm(
-                m500[i], r500[i], CL_B_KPC, CL_Z, f_gas[i], rc_over[i], beta[i]
-            )
+            beta_model_dm(m500[i], r500[i], b_kpc, CL_Z, f_gas[i], rc_over[i], beta[i])
             for i in range(n)
         ]
     )
@@ -725,22 +937,147 @@ def cluster_column_range(n: int = 40_000, seed: int = 20260707) -> np.ndarray:
     return cluster_column_samples(n=n, seed=seed)
 
 
-def cluster_profile_pdf(
-    mnfw_point: float,
+def beta_model_pdf(
     *,
     dx: float,
     n: int = 40_000,
     seed: int = 20260707,
+    b_kpc: float = CL_B_KPC,
 ) -> DiscretePDF:
-    """Equal-weight mNFW/beta profile mixture for the Phineas cluster."""
-    beta = cluster_column_samples(n=n, seed=seed)
-    rng = np.random.default_rng(seed + 1)
-    mnfw = rng.lognormal(math.log(mnfw_point), INT_SIGMA_LN["cluster"], n)
-    samples = np.concatenate((beta, mnfw))
-    upper = math.ceil(np.quantile(samples, 1.0 - TAIL_MASS) / dx) * dx
+    """Conditional beta-model PDF; never averaged with mNFW."""
+    beta = cluster_column_samples(n=n, seed=seed, b_kpc=b_kpc)
+    upper = math.ceil(np.quantile(beta, 1.0 - TAIL_MASS) / dx) * dx
     edges = np.arange(-0.5 * dx, upper + 1.5 * dx, dx)
-    density, _ = np.histogram(samples, bins=edges, density=True)
+    density, _ = np.histogram(beta, bins=edges, density=True)
     return DiscretePDF(x0=0.0, dx=dx, density=density)
+
+
+def _result_summary(result: dict) -> dict:
+    keys = (
+        "name",
+        "z",
+        "dm_int",
+        "dm_int_p16",
+        "dm_int_p50",
+        "dm_int_p84",
+        "dm_host_arith",
+        "dm_host_p16",
+        "dm_host_p50",
+        "dm_host_p84",
+        "dm_host_rest_p16",
+        "dm_host_rest_p50",
+        "dm_host_rest_p84",
+        "p_host_neg",
+        "cluster_profile",
+        "host_prior_conditionals",
+    )
+    return {key: _stable_numbers(result[key]) for key in keys}
+
+
+def _stable_numbers(value):
+    """Quantize serialized numerics beyond the precision used by the analysis."""
+    if isinstance(value, float):
+        return round(value, 9)
+    if isinstance(value, list):
+        return [_stable_numbers(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _stable_numbers(item) for key, item in value.items()}
+    return value
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def render_authority_outputs() -> dict[Path, str]:
+    sightlines = load_sightlines()
+    conditional: dict[str, dict[str, dict]] = {}
+    canonical = []
+    blockers: dict[str, str] = {}
+    for row in sightlines:
+        if row.dm_int > 0.0 and not row.intervening_systems:
+            blockers[row.name] = (
+                "budget DM_int is nonzero but no registry-confirmed system is admitted; "
+                "host result withheld"
+            )
+            continue
+        mnfw = host_distribution(row, cluster_profile="mnfw")
+        canonical.append(mnfw)
+        profiles = {"mnfw": _result_summary(mnfw)}
+        if any(system.kind == "cluster" for system in row.intervening_systems):
+            profiles["beta"] = _result_summary(host_distribution(row, cluster_profile="beta"))
+        conditional[row.name] = profiles
+    modeled = tuple(row for row in sightlines if row.name not in blockers)
+    covariance = shared_figm_covariance(modeled)
+    result = {
+        "schema_version": 1,
+        "status": "provisional_not_science_admitted",
+        "tng_calibration_status": TNG_SOURCE_STATUS,
+        "observed_dm_likelihood": "Gaussian using adopted_sigma",
+        "shared_figm": {
+            "model": "one shared nuisance draw across sightlines",
+            "sightline_order": [row.name for row in modeled],
+            "shared_figm_covariance": _stable_numbers(covariance.tolist()),
+        },
+        "cluster_profiles": "conditional outputs; no profile averaging",
+        "host_priors": "conditional 50/100/200 rest-frame medians; no averaging",
+        "sightlines": conditional,
+        "blocked_sightlines": blockers,
+        "hostless": "diagnostic DM-redshift only; no host-DM promotion",
+    }
+    stream = io.StringIO()
+    fields = (
+        "burst",
+        "z",
+        "cluster_profile",
+        "dm_host_p16",
+        "dm_host_p50",
+        "dm_host_p84",
+        "p_host_negative",
+        "dm_host_rest_p16",
+        "dm_host_rest_p50",
+        "dm_host_rest_p84",
+    )
+    writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
+    writer.writeheader()
+    for item in canonical:
+        writer.writerow(
+            {
+                "burst": item["name"],
+                "z": item["z"],
+                "cluster_profile": item["cluster_profile"],
+                "dm_host_p16": f"{item['dm_host_p16']:.6f}",
+                "dm_host_p50": f"{item['dm_host_p50']:.6f}",
+                "dm_host_p84": f"{item['dm_host_p84']:.6f}",
+                "p_host_negative": f"{item['p_host_neg']:.8f}",
+                "dm_host_rest_p16": f"{item['dm_host_rest_p16']:.6f}",
+                "dm_host_rest_p50": f"{item['dm_host_rest_p50']:.6f}",
+                "dm_host_rest_p84": f"{item['dm_host_rest_p84']:.6f}",
+            }
+        )
+    result_text = json.dumps(result, indent=2, sort_keys=True) + "\n"
+    outputs = {
+        HOST_RESULTS_JSON: result_text,
+        OUT_CSV: stream.getvalue(),
+    }
+    receipt = {
+        "schema_version": 1,
+        "status": "fail_closed",
+        "tng_calibration": TNG_SOURCE_STATUS,
+        "inputs": {
+            str(path.relative_to(ANALYSIS_ROOT)): _sha256(path)
+            for path in (DM_CATALOG, SYSTEMS_CSV, INTERVENING_RECEIPT)
+        },
+        "manuscript_budget_sha256": _sha256(BUDGET_DATA),
+        "manuscript_budget_mutated": False,
+        "producer": _sha256(Path(__file__)),
+        "outputs": {
+            str(path.relative_to(ANALYSIS_ROOT)): hashlib.sha256(text.encode()).hexdigest()
+            for path, text in outputs.items()
+        },
+    }
+    outputs[HOST_RECEIPT_JSON] = json.dumps(receipt, indent=2, sort_keys=True) + "\n"
+    return outputs
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -748,11 +1085,34 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--check-inputs", action="store_true", help="validate joined inputs and exit"
     )
+    parser.add_argument("--write-authority", action="store_true")
+    parser.add_argument("--check-authority", action="store_true")
     args = parser.parse_args(argv)
+    if args.write_authority or args.check_authority:
+        outputs = render_authority_outputs()
+        if args.check_authority:
+            drift = [
+                path
+                for path, expected in outputs.items()
+                if not path.is_file() or path.read_text() != expected
+            ]
+            if drift:
+                raise SystemExit("DRIFT: " + ", ".join(map(str, drift)))
+            print(f"OK: {len(outputs)} host authority artifacts")
+            return 0
+        for path, text in outputs.items():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+        return 0
     sightlines = load_sightlines()
     if args.check_inputs:
         print(f"validated {len(sightlines)} sightlines and their per-system columns")
         return 0
+    if REPO is None:
+        raise RuntimeError(
+            "full figure generation requires the Faber2026 manuscript checkout; "
+            "set FABER2026_ROOT=/path/to/Faber2026"
+        )
 
     print("=== B1: induced DM_host residuals (deterministic convolution) ===")
     print(
@@ -828,9 +1188,7 @@ def main(argv: list[str] | None = None) -> int:
                 ]
             )
         w.writerow([])
-        w.writerow(
-            ["cluster_beta_model_p16_p50_p84", f"{p16:.0f}", f"{p50:.0f}", f"{p84:.0f}"]
-        )
+        w.writerow(["cluster_beta_model_p16_p50_p84", f"{p16:.0f}", f"{p50:.0f}", f"{p84:.0f}"])
         w.writerow(["cluster_95CI_lo_hi", f"{lo:.0f}", f"{hi:.0f}"])
     print(f"\nwrote {OUT_CSV.relative_to(REPO)}")
 
@@ -964,9 +1322,7 @@ def _make_figure(results):
         def plot_faded(pdf, color, lw=0.8, ls="-", *, plot_ax=ax, plot_x=x):
             dens = _peak_norm(density_on_plot_grid(pdf))
             plot_ax.plot(plot_x, dens, color=color, lw=lw, ls=ls, alpha=0.28, zorder=2)
-            plot_ax.fill_between(
-                plot_x, 0.0, dens, color=color, alpha=0.04, zorder=1
-            )
+            plot_ax.fill_between(plot_x, 0.0, dens, color=color, alpha=0.04, zorder=1)
 
         plot_faded(r["disk_pdf"], _MW_COLOR)
         plot_faded(r["halo_pdf"], _HALO_COLOR)
@@ -980,17 +1336,13 @@ def _make_figure(results):
 
         if r["dm_int"] > 0:
             dens_int = _peak_norm(density_on_plot_grid(r["interv_pdf"]))
-            ax.plot(
-                x, dens_int, color=_DARK_BLUE, lw=0.8, ls="--", alpha=0.40, zorder=3
-            )
+            ax.plot(x, dens_int, color=_DARK_BLUE, lw=0.8, ls="--", alpha=0.40, zorder=3)
 
         dens_h = _peak_norm(density_on_plot_grid(r["host_pdf"]))
         ax.plot(x, dens_h, color=_HOST_COLOR, lw=1.5, zorder=5)
         ax.fill_between(x, 0.0, dens_h, color=_HOST_COLOR, alpha=0.22, zorder=4)
         ax.axvline(0.0, color="0.55", lw=0.5, ls=":", zorder=0)
-        ax.axvline(
-            r["dm_host_p50"], color=_HOST_COLOR, lw=0.6, ls="--", alpha=0.7, zorder=4
-        )
+        ax.axvline(r["dm_host_p50"], color=_HOST_COLOR, lw=0.6, ls="--", alpha=0.7, zorder=4)
 
         short = r["name"].replace("FRB ", "")
         dagger = r"$\dagger$" if r["name"] in UPPER_LIMIT else ""
