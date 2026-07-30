@@ -36,6 +36,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -85,7 +86,7 @@ def rungs() -> list[dict]:
 
 
 def band_configs(runs_root: Path, dsa_input: Path, chime_input: Path) -> None:
-    """Write the two band run configurations shared by every rung."""
+    """Write shared band configurations safely for parallel rung launchers."""
     cfg_dir = runs_root / "configs"
     cfg_dir.mkdir(parents=True, exist_ok=True)
     telescopes = ANALYSIS / "radio_pipeline" / "resources" / "scattering_telescopes.yaml"
@@ -129,7 +130,23 @@ def band_configs(runs_root: Path, dsa_input: Path, chime_input: Path) -> None:
     }
     for band, cfg in bands.items():
         lines = [f"{key}: {json.dumps(value)}" for key, value in sorted(cfg.items())]
-        (cfg_dir / f"{BURST}_{band}_run.yaml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        target = cfg_dir / f"{BURST}_{band}_run.yaml"
+        content = "\n".join(lines) + "\n"
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=cfg_dir,
+            prefix=f".{target.name}.",
+            delete=False,
+        ) as handle:
+            temporary = Path(handle.name)
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        try:
+            os.replace(temporary, target)
+        finally:
+            temporary.unlink(missing_ok=True)
 
 
 def invocation(rung: dict) -> dict:

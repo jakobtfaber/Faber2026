@@ -12,6 +12,7 @@ catches that at test time instead.
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import importlib.util
 import json
 import sys
@@ -194,3 +195,22 @@ def test_resolution_contract_records_the_owner_selected_sampling(schedule, stage
     stager.band_configs(tmp_path, Path("/nonexistent/dsa.npy"), Path("/nonexistent/chime.npy"))
     dsa_config = (tmp_path / "configs/zach_dsa_run.yaml").read_text(encoding="utf-8")
     assert "t_factor: 2" in dsa_config
+
+
+def test_parallel_stagers_leave_complete_identical_band_configs(stager, tmp_path):
+    """Parallel rung launchers must not expose truncated shared configurations."""
+    dsa = Path("/science-inputs/dsa.npy")
+    chime = Path("/science-inputs/chime.npy")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
+        futures = [pool.submit(stager.band_configs, tmp_path, dsa, chime) for _ in range(48)]
+        for future in futures:
+            future.result()
+
+    config_dir = tmp_path / "configs"
+    dsa_config = (config_dir / "zach_dsa_run.yaml").read_text(encoding="utf-8")
+    chime_config = (config_dir / "zach_chime_run.yaml").read_text(encoding="utf-8")
+    assert f"path: {json.dumps(str(dsa))}" in dsa_config
+    assert f"path: {json.dumps(str(chime))}" in chime_config
+    assert "t_factor: 2" in dsa_config
+    assert "t_factor: 24" in chime_config
+    assert list(config_dir.glob(".*.yaml.*")) == []
