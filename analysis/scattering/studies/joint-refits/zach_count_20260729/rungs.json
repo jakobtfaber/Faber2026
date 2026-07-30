@@ -46,11 +46,12 @@
     "seed (20220207, 20220208, 20220209)"
   ],
   "resolution_contract": {
-    "required_by_issue": "DSA-110 at native 32.768 microsecond time resolution; CHIME/FRB at its existing prepared resolution",
-    "delivered_by_current_code": "DSA-110 at 65.5 microseconds (time decimation 2)",
-    "status": "UNRESOLVED - owner decision",
+    "owner_selection": "DSA-110 at 65.536 microseconds by averaging adjacent native samples; CHIME/FRB at its existing prepared resolution",
+    "selected_on": "2026-07-29",
+    "status": "RESOLVED - owner accepted adjacent-pair averaging",
     "cause": "band reconciliation. choose_resolution picks native 32.768 us for DSA-110 from its own 41-sample window; _common_peak_relative_window then unions the bands, and CHIME/FRB's 9280-sample window stretches the common span to 23.8 ms = 726 native DSA-110 samples; _build_model (joint_tf_prep.py:439-442) re-applies the MAX_TIME_BINS cap of 512 to that reconciled window and doubles the decimation to 2. Raising the cap to 1024 restores native resolution. DSA-110 is coarsened because CHIME/FRB is long, not because DSA-110 needs it.",
-    "note": "this schedule is written for whichever resolution the owner fixes; the resolution must be identical across all 27 rungs or the comparison is void"
+    "decision_evidence": "Direct comparison on input SHA-256 be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01, with identical 24-channel frequency averaging and 23.8 ms window: the averaged profile retained the visible burst structure, reduced the peak by 2.7%, and reduced outer-window noise by 14%. The prepared 65.536 us array matched the direct adjacent-pair mean to 2.22e-15 maximum absolute difference.",
+    "note": "65.536 microseconds must be identical across all 27 DSA-110 rungs or the comparison is void"
   },
   "acceptance": {
     "evidence_threshold": 5.0,

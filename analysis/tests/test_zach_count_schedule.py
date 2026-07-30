@@ -184,8 +184,13 @@ def test_driver_does_not_set_the_bytecode_variable_in_its_own_environment(stager
     assert '"PYTHONDONTWRITEBYTECODE": "1"' in source  # still set for children
 
 
-def test_resolution_contract_records_the_unresolved_owner_decision(schedule):
-    """Guards against quietly shipping 65.5 us as if it were the requirement."""
+def test_resolution_contract_records_the_owner_selected_sampling(schedule, stager, tmp_path):
+    """The accepted 65.536-us sampling is explicit in schedule and band config."""
     contract = schedule["resolution_contract"]
-    assert contract["status"].startswith("UNRESOLVED")
-    assert "32.768" in contract["required_by_issue"]
+    assert contract["status"].startswith("RESOLVED")
+    assert "65.536" in contract["owner_selection"]
+    assert "adjacent-pair" in contract["decision_evidence"]
+
+    stager.band_configs(tmp_path, Path("/nonexistent/dsa.npy"), Path("/nonexistent/chime.npy"))
+    dsa_config = (tmp_path / "configs/zach_dsa_run.yaml").read_text(encoding="utf-8")
+    assert "t_factor: 2" in dsa_config

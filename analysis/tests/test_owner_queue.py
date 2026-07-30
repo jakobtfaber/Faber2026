@@ -118,8 +118,9 @@ def test_owner_queue_cli_regenerates_from_authoritative_frontier(tmp_path):
     )
     assert result.returncode == 0, result.stderr
     rendered = output.read_text(encoding="utf-8")
-    assert "**Decision:**" in rendered
-    assert "**Recommended:**" in rendered
+    from scripts.owner_queue import render_owner_queue
+
+    assert rendered == render_owner_queue(ROOT)
     assert "Obtain the authoritative host-redshift ledger" not in rendered
 
 

@@ -1,65 +1,29 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:task` (HITL)
+- Type: `wayfinder:task`
 - Status: open
-- Assignee: —
+- Assignee: Orchestrator
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Plan: [Controlled joint-scattering reruns](../../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md)
 - GitHub: [Issue #205](https://github.com/jakobtfaber/Faber2026/issues/205)
 - Authorization: manuscript-owner approval, 2026-07-22
 
-## Owner decision card
+## Owner decision
 
-```json
-{
-  "id": "zach-time-resolution",
-  "kind": "scientific",
-  "title": "Zach component-count sampling",
-  "decision": "When testing whether Zach has three, four, or five DSA-110 pulse components, should adjacent native time samples be averaged together?",
-  "recommended": {
-    "choice": "native",
-    "reason": "Keep every 32.768-microsecond sample because averaging can blend nearby pulse components and change the inferred count."
-  },
-  "choices": [
-    {
-      "id": "native",
-      "label": "Keep every native 32.768-microsecond DSA-110 sample."
-    },
-    {
-      "id": "coarse",
-      "label": "Average adjacent samples to 65.536 microseconds."
-    },
-    {
-      "id": "stop",
-      "label": "Do not run the three-versus-four-versus-five component comparison."
-    }
-  ],
-  "context": [
-    "This comparison determines how many distinct pulse components are fitted in Zach's DSA-110 burst.",
-    "The current shared-window limit averages adjacent DSA-110 samples, changing 32.768 microseconds to 65.536 microseconds.",
-    "Keeping native samples doubles the fitted bins and computing cost but preserves closely spaced structure."
-  ],
-  "evidence": [
-    {
-      "label": "Readiness audit",
-      "path": "docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/readiness-audit.json",
-      "sha256": "c1894081a9fbf98e5b6d90fd87651bab88601c8b37c064f799f70145a4213294"
-    },
-    {
-      "label": "Readiness explanation",
-      "path": "docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/README.md",
-      "sha256": "974aac68ba78589322c6f9aee5cacd0124fd380995997fd24470536dcd214548"
-    }
-  ],
-  "effect": "The choice fixes the time sampling for the 27 controlled component-count fits.",
-  "recorder": {
-    "path": "docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
-    "action": "Record the selected resolution and update the controlled-run contract."
-  },
-  "priority": 30
-}
-```
+- Decision: average adjacent DSA-110 samples to 65.536 microseconds for all 27
+  controlled component-count fits.
+- Recorded: manuscript owner, 2026-07-29.
+- Basis: the direct 32.768-versus-65.536-microsecond comparison used the same
+  24 frequency channels and 23.8-millisecond fitting window. The averaged
+  profile retained the main pulse and later 2–3-millisecond structure, reduced
+  the peak by 2.7%, and reduced outer-window noise by 14%.
+- Input: `zach_dsa_I_262_368_2500b_cntr_bpc.npy`, SHA-256
+  `be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01`.
+- Reproduction check: the 65.536-microsecond array agreed with the direct mean
+  of adjacent 32.768-microsecond samples to a maximum absolute difference of
+  `2.22e-15`.
+- Effect: time sampling is fixed and no longer blocks technical execution.
 
 ## What to build
 
@@ -68,7 +32,7 @@ morphology rerun. This is a new experiment, not recovery of job 180 and not a
 substitute for the injection-calibrated sample-wide statistic in ticket 20.
 
 Use the canonical all-exponential exponentially modified Gaussian family,
-native 32.8 microsecond DSA-110 time resolution, unchanged prepared CHIME/FRB
+65.536-microsecond DSA-110 time resolution, unchanged prepared CHIME/FRB
 resolution, identical masks, channels, fitted support, prior version, and a
 frozen multi-seed schedule. Compare fixed gain-prior variances
 `s2 = {1, 10, 100}` only within the same pulse-broadening family and sampler

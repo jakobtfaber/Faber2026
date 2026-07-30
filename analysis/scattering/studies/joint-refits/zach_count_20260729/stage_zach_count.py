@@ -114,10 +114,8 @@ def band_configs(runs_root: Path, dsa_input: Path, chime_input: Path) -> None:
             "dm_init": 262.368,
             "f_factor": 384,
             "path": str(dsa_input),
-            # t_factor 1 states the intent of issue #205 (native 32.768 us).
-            # The automatic time-frequency selector currently overrides it; see
-            # the resolution_contract block in rungs.json.
-            "t_factor": 1,
+            # Owner-selected adjacent-pair average: 65.536 us.
+            "t_factor": 2,
             "telescope": "dsa",
         },
         "chime": {

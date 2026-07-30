@@ -16,7 +16,7 @@ Nothing here has been run. The readiness audit that explains why is
 
 ## Before this can run
 
-Four things must be true. None of them is true today.
+Three technical conditions remain.
 
 1. **The sampler must be a declared dependency.** `dynesty` is imported by
    `scattering/scat_analysis/burstfit_joint.py` and demanded by the
@@ -33,23 +33,19 @@ Four things must be true. None of them is true today.
    and wins. The driver sets `PYTHONPATH` to the analysis root on every
    subprocess, which is verified to defeat it, but removing the editable
    install is the durable fix.
-4. **The time resolution must be decided by the owner.** Issue #205 requires
-   DSA-110 at its native 32.768 microseconds. The preparation code delivers
-   65.5 microseconds, and no configuration setting changes it.
 
-   `choose_resolution` does pick native resolution for DSA-110 from its own
-   41-sample on-pulse window. The coarsening happens later, in band
-   reconciliation: `_common_peak_relative_window` unions the two bands'
-   windows, CHIME/FRB's own window is 9280 native CHIME samples, so the common
-   span becomes 23.8 milliseconds — 726 native DSA-110 samples — and
-   `_build_model` (`joint_tf_prep.py:439-442`) re-applies the `MAX_TIME_BINS`
-   cap of 512 to that reconciled window, doubling the decimation.
+## Fixed time resolution
 
-   So DSA-110 is coarsened because CHIME/FRB's window is long, not because
-   DSA-110 needs it, and `t_factor: 1` in the band configuration cannot help
-   because the cap runs after the per-band choice. Raising `MAX_TIME_BINS` to
-   1024 restores 32.8 microseconds, at roughly double the DSA-110 sample count.
-   See `resolution_contract` in `rungs.json`.
+The manuscript owner accepted 65.536-microsecond DSA-110 sampling on
+2026-07-29 after comparing it directly with the native 32.768-microsecond
+profile. Both used the same 24 frequency channels and 23.8-millisecond fitting
+window. Adjacent-pair averaging retained the visible main pulse and later
+2–3-millisecond structure, reduced the peak by 2.7%, and reduced outer-window
+noise by 14%. The averaged array matched a direct adjacent-pair mean to
+`2.22e-15` maximum absolute difference.
+
+This resolution is fixed across all 27 DSA-110 rungs. See
+`resolution_contract` in `rungs.json`.
 
 ## Running it
 
@@ -162,8 +158,8 @@ converged in 5658 iterations over 4 minutes 34 seconds on four cores. Iteration
 count scales roughly linearly with live points, so a contract rung at 1000 live
 points is of order 100,000 iterations — **about 1.5 to 3 hours per fit**, or 40
 to 80 hours for all 27 run one after another. Run them in parallel on a compute
-host. Raising `MAX_TIME_BINS` to reach native DSA-110 resolution roughly doubles
-the sample count and will increase this further.
+host. The accepted 65.536-microsecond resolution retains the measured cost
+basis; no native-resolution cost increase applies.
 
 ## Note on the uncontrolled entrypoint
 
