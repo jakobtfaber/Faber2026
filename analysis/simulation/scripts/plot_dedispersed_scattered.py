@@ -1,11 +1,20 @@
-import matplotlib.pyplot as plt
-import numpy as np
+import sys
+from pathlib import Path
 from types import SimpleNamespace
 
-from radio_pipeline.common.constants import K_DM_MS as K_DM
-from radio_pipeline.plotting import use_flits_style  # noqa: F401 (applies style on import)
-from radio_pipeline.scattering import tau_per_freq
-from scattering.scat_analysis.burstfit import DM_DELAY_MS, FRBModel, FRBParams
+ANALYSIS_ROOT = Path(__file__).resolve().parents[2]
+if str(ANALYSIS_ROOT) not in sys.path:
+    sys.path.insert(0, str(ANALYSIS_ROOT))
+
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
+
+from plotting.style import use_manuscript_style  # noqa: E402
+from radio_pipeline.common.constants import K_DM_MS as K_DM  # noqa: E402
+from radio_pipeline.scattering import tau_per_freq  # noqa: E402
+from scattering.scat_analysis.burstfit import DM_DELAY_MS, FRBModel, FRBParams  # noqa: E402
+
+use_manuscript_style()
 
 
 def simulate_and_dedisperse(params, t, freqs):

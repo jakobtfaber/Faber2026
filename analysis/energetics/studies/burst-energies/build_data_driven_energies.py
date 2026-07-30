@@ -14,7 +14,7 @@ def main() -> int:
     parser.add_argument("--fluences", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    repo = Path(__file__).resolve().parents[2]
+    repo = Path(__file__).resolve().parents[3]
     artifact = build_artifact(repo, args.fluences.resolve())
     dump_artifact(artifact, args.output)
     print(f"wrote {args.output}: {len(artifact['results'])} calculated, "

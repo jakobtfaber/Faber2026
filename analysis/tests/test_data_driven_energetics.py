@@ -1,6 +1,8 @@
 import csv
 import importlib.util
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -20,7 +22,8 @@ VERIFY_SPEC.loader.exec_module(VERIFY)
 FIELDS = [
     "nickname", "band", "fluence_jy_ms_hz", "stat_err_jy_ms_hz",
     "window_status", "window_sensitivity_frac", "calibration_status",
-    "noise_status", "review_status", "input_sha256", "calibration_sha256",
+    "calibration_systematic_dex", "noise_status", "review_status",
+    "input_sha256", "calibration_sha256",
     "input_path", "calibration_paths",
 ]
 
@@ -30,6 +33,7 @@ def accepted_row(nickname="zach", band="CHIME"):
         nickname=nickname, band=band, fluence_jy_ms_hz=1.0e9,
         stat_err_jy_ms_hz=1.0e8, window_status="accepted",
         window_sensitivity_frac=0.01, calibration_status="accepted",
+        calibration_systematic_dex=0.1,
         noise_status="accepted", review_status="accepted",
         input_sha256="a" * 64, calibration_sha256="b" * 64,
         input_path="", calibration_paths="",
@@ -84,6 +88,7 @@ def test_receipt_fails_closed_on_unreviewed_or_unstable(tmp_path):
         ("fluence_jy_ms_hz", "nan"),
         ("stat_err_jy_ms_hz", -1),
         ("window_sensitivity_frac", "inf"),
+        ("calibration_systematic_dex", 0),
         ("input_sha256", "abc"),
         ("calibration_sha256", "g" * 64),
     ],
@@ -104,11 +109,10 @@ def test_energy_conversion_oracle():
 
 def test_builds_exact_eight_row_artifact_from_accepted_receipts(tmp_path):
     roster = CORE.load_energy_roster(HERE)
-    included = [nick for nick, row in roster.items() if row["eligible"]]
     path = tmp_path / "accepted.csv"
     rows = [
         accepted_row(nick, band)
-        for nick in included
+        for nick in roster
         for band in ("CHIME", "DSA")
     ]
     bind_real_files(tmp_path, rows)
@@ -116,16 +120,57 @@ def test_builds_exact_eight_row_artifact_from_accepted_receipts(tmp_path):
     artifact = CORE.build_artifact(HERE, path)
     assert len(artifact["results"]) == 8
     assert len(artifact["dispositions"]) == 4
-    assert {row["nickname"] for row in artifact["results"]} == set(included)
+    assert {row["nickname"] for row in artifact["results"]} == {
+        nick for nick, row in roster.items() if row["eligible"]
+    }
     assert all(row["energy_erg"] > 0 for row in artifact["results"])
+    assert all(row["total_err_erg"] > row["stat_err_erg"] for row in artifact["results"])
+
+
+def test_measurement_cli_imports_after_repository_migration():
+    result = subprocess.run(
+        [sys.executable, str(STUDY_ROOT / "measure_data_fluences.py"), "--help"],
+        cwd=HERE,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+
+
+def test_builder_cli_resolves_analysis_root(tmp_path):
+    roster = CORE.load_energy_roster(HERE)
+    rows = [
+        accepted_row(nick, band)
+        for nick in roster
+        for band in ("CHIME", "DSA")
+    ]
+    bind_real_files(tmp_path, rows)
+    receipts = tmp_path / "accepted.csv"
+    output = tmp_path / "energies.json"
+    write_receipts(receipts, rows)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(STUDY_ROOT / "build_data_driven_energies.py"),
+            "--fluences",
+            str(receipts),
+            "--output",
+            str(output),
+        ],
+        cwd=HERE,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    assert len(json.loads(output.read_text())["results"]) == 8
 
 
 def test_independent_verifier_rejects_tampered_energy(tmp_path):
     roster = CORE.load_energy_roster(HERE)
     rows = [
         accepted_row(nick, band)
-        for nick, meta in roster.items()
-        if meta["eligible"]
+        for nick in roster
         for band in ("CHIME", "DSA")
     ]
     bind_real_files(tmp_path, rows)
@@ -139,12 +184,66 @@ def test_independent_verifier_rejects_tampered_energy(tmp_path):
         VERIFY.verify(artifact_path)
 
 
+def test_independent_verifier_rejects_tampered_total_uncertainty(tmp_path):
+    roster = CORE.load_energy_roster(HERE)
+    rows = [
+        accepted_row(nick, band)
+        for nick in roster
+        for band in ("CHIME", "DSA")
+    ]
+    bind_real_files(tmp_path, rows)
+    receipts = tmp_path / "accepted.csv"
+    write_receipts(receipts, rows)
+    artifact = CORE.build_artifact(HERE, receipts)
+    artifact["results"][0]["total_err_erg"] *= 2
+    artifact_path = tmp_path / "tampered-uncertainty.json"
+    artifact_path.write_text(json.dumps(artifact))
+
+    with pytest.raises(ValueError, match="total_err_erg mismatch"):
+        VERIFY.verify(artifact_path)
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (
+            lambda artifact: artifact["results"][0].update(energy_erg=float("nan")),
+            "energy mismatch",
+        ),
+        (
+            lambda artifact: artifact["results"][0]["bands"]["CHIME"].update(
+                window_sensitivity_frac=0.09
+            ),
+            "window sensitivity mismatch",
+        ),
+    ],
+)
+def test_independent_verifier_rejects_nonfinite_or_substituted_fields(
+    tmp_path, mutate, message
+):
+    roster = CORE.load_energy_roster(HERE)
+    rows = [
+        accepted_row(nick, band)
+        for nick in roster
+        for band in ("CHIME", "DSA")
+    ]
+    bind_real_files(tmp_path, rows)
+    receipts = tmp_path / "accepted.csv"
+    write_receipts(receipts, rows)
+    artifact = CORE.build_artifact(HERE, receipts)
+    mutate(artifact)
+    artifact_path = tmp_path / "tampered-field.json"
+    artifact_path.write_text(json.dumps(artifact))
+
+    with pytest.raises(ValueError, match=message):
+        VERIFY.verify(artifact_path)
+
+
 def test_independent_verifier_rejects_receipt_hash_substitution(tmp_path):
     roster = CORE.load_energy_roster(HERE)
     rows = [
         accepted_row(nick, band)
-        for nick, meta in roster.items()
-        if meta["eligible"]
+        for nick in roster
         for band in ("CHIME", "DSA")
     ]
     bind_real_files(tmp_path, rows)
@@ -162,8 +261,7 @@ def test_independent_verifier_rejects_self_consistent_wrong_redshift(tmp_path):
     roster = CORE.load_energy_roster(HERE)
     rows = [
         accepted_row(nick, band)
-        for nick, meta in roster.items()
-        if meta["eligible"]
+        for nick in roster
         for band in ("CHIME", "DSA")
     ]
     bind_real_files(tmp_path, rows)

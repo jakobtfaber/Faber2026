@@ -21,6 +21,7 @@ EXPECTED_RESULTS = {
     "oran", "phineas", "whitney", "zach",
 }
 EXPECTED_EXCLUDED = {"casey", "freya", "mahi", "wilhelm"}
+EXPECTED_SAMPLE = EXPECTED_RESULTS | EXPECTED_EXCLUDED
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 REPO = Path(__file__).resolve().parents[3]
 
@@ -57,12 +58,23 @@ def verify(path: Path) -> None:
         distance_m = Planck18.luminosity_distance(z).to(u.m).value
         prefactor = 4.0 * 3.141592653589793 * distance_m**2 * CONVERSION / (1.0 + z)
         expected = 0.0
-        variance = 0.0
+        stat_variance = 0.0
+        window_variance = 0.0
+        calibration_variance = 0.0
         for band, band_row in row["bands"].items():
             receipt_row = receipts[(row["nickname"], band)]
             for key in ("input_sha256", "calibration_sha256"):
                 if band_row[key] != receipt_row[key] or not SHA256_RE.fullmatch(band_row[key]):
                     raise ValueError(f"{key} mismatch: {row['nickname']} {band}")
+            calibration_dex = float(receipt_row["calibration_systematic_dex"])
+            if (
+                not math.isfinite(calibration_dex)
+                or not 0 < calibration_dex <= 1
+                or band_row["calibration_systematic_dex"] != calibration_dex
+            ):
+                raise ValueError(
+                    f"calibration systematic mismatch: {row['nickname']} {band}"
+                )
             if band_row["input_path"] != receipt_row["input_path"]:
                 raise ValueError(f"input path mismatch: {row['nickname']} {band}")
             if band_row["calibration_paths"] != receipt_row["calibration_paths"]:
@@ -71,20 +83,71 @@ def verify(path: Path) -> None:
             stat = float(receipt_row["stat_err_jy_ms_hz"])
             if not all(math.isfinite(value) and value > 0 for value in (fluence, stat)):
                 raise ValueError(f"invalid receipt numeric: {row['nickname']} {band}")
-            if abs(float(band_row["fluence_jy_ms_hz"]) - fluence) > 1e-12 * fluence:
-                raise ValueError(f"fluence mismatch: {row['nickname']} {band}")
-            if abs(float(band_row["stat_err_jy_ms_hz"]) - stat) > 1e-12 * stat:
-                raise ValueError(f"statistical error mismatch: {row['nickname']} {band}")
+            _assert_close(
+                band_row["fluence_jy_ms_hz"],
+                fluence,
+                f"fluence mismatch: {row['nickname']} {band}",
+            )
+            _assert_close(
+                band_row["stat_err_jy_ms_hz"],
+                stat,
+                f"statistical error mismatch: {row['nickname']} {band}",
+            )
+            _assert_close(
+                band_row["window_sensitivity_frac"],
+                float(receipt_row["window_sensitivity_frac"]),
+                f"window sensitivity mismatch: {row['nickname']} {band}",
+                allow_zero=True,
+            )
             band_energy = prefactor * fluence
-            if abs(float(band_row["energy_erg"]) - band_energy) > 1e-12 * band_energy:
-                raise ValueError(f"band energy mismatch: {row['nickname']} {band}")
+            _assert_close(
+                band_row["energy_erg"],
+                band_energy,
+                f"band energy mismatch: {row['nickname']} {band}",
+            )
             expected += band_energy
-            variance += (prefactor * stat) ** 2
-        if abs(expected - row["energy_erg"]) > 1e-12 * expected:
-            raise ValueError(f"energy mismatch: {row['nickname']}")
-        expected_stat = variance**0.5
-        if abs(expected_stat - row["stat_err_erg"]) > 1e-12 * expected_stat:
-            raise ValueError(f"statistical error mismatch: {row['nickname']}")
+            stat_energy = prefactor * stat
+            _assert_close(
+                band_row["stat_err_erg"],
+                stat_energy,
+                f"stat_err_erg mismatch: {row['nickname']} {band}",
+            )
+            window_energy = band_energy * float(receipt_row["window_sensitivity_frac"])
+            calibration_energy = band_energy * (10**calibration_dex - 1)
+            for key, expected_value in (
+                ("window_err_erg", window_energy),
+                ("calibration_err_erg", calibration_energy),
+                (
+                    "total_err_erg",
+                    math.sqrt(
+                        stat_energy**2 + window_energy**2 + calibration_energy**2
+                    ),
+                ),
+            ):
+                _assert_close(
+                    band_row[key],
+                    expected_value,
+                    f"{key} mismatch: {row['nickname']} {band}",
+                )
+            stat_variance += stat_energy**2
+            window_variance += window_energy**2
+            calibration_variance += calibration_energy**2
+        _assert_close(row["energy_erg"], expected, f"energy mismatch: {row['nickname']}")
+        expected_stat = stat_variance**0.5
+        _assert_close(
+            row["stat_err_erg"],
+            expected_stat,
+            f"statistical error mismatch: {row['nickname']}",
+        )
+        for key, expected_value in (
+            ("window_err_erg", window_variance**0.5),
+            ("calibration_err_erg", calibration_variance**0.5),
+            (
+                "total_err_erg",
+                math.sqrt(stat_variance + window_variance + calibration_variance),
+            ),
+        ):
+            _assert_close(row[key], expected_value, f"{key} mismatch: {row['nickname']}")
     for row in dispositions:
         _check_roster_metadata(row, roster[row["nickname"]])
         if row["status"] != "excluded":
@@ -95,6 +158,14 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _assert_close(actual, expected: float, message: str, *, allow_zero: bool = False) -> None:
+    value = float(actual)
+    if not math.isfinite(value) or value < 0 or (value == 0 and not allow_zero):
+        raise ValueError(message)
+    if abs(value - expected) > 1e-12 * max(abs(expected), 1.0):
+        raise ValueError(message)
+
+
 def _load_receipts(path: Path) -> dict[tuple[str, str], dict]:
     rows = {}
     with path.open() as handle:
@@ -102,7 +173,7 @@ def _load_receipts(path: Path) -> dict[tuple[str, str], dict]:
             key = (row["nickname"].lower(), row["band"])
             if key in rows:
                 raise ValueError(f"duplicate receipt: {key}")
-            if key[0] not in EXPECTED_RESULTS or key[1] not in {"CHIME", "DSA"}:
+            if key[0] not in EXPECTED_SAMPLE or key[1] not in {"CHIME", "DSA"}:
                 raise ValueError(f"unexpected accepted receipt: {key}")
             for field in (
                 "window_status", "calibration_status", "noise_status", "review_status"
@@ -112,6 +183,9 @@ def _load_receipts(path: Path) -> dict[tuple[str, str], dict]:
             sensitivity = float(row["window_sensitivity_frac"])
             if not math.isfinite(sensitivity) or not 0 <= sensitivity <= 0.10:
                 raise ValueError(f"invalid window sensitivity: {key}")
+            calibration_dex = float(row["calibration_systematic_dex"])
+            if not math.isfinite(calibration_dex) or not 0 < calibration_dex <= 1:
+                raise ValueError(f"invalid calibration systematic: {key}")
             input_path = Path(row["input_path"])
             if not input_path.is_file() or _sha256(input_path) != row["input_sha256"]:
                 raise ValueError(f"input file missing or SHA-256 mismatch: {key}")
@@ -123,7 +197,7 @@ def _load_receipts(path: Path) -> dict[tuple[str, str], dict]:
             ):
                 raise ValueError(f"calibration files missing or SHA-256 mismatch: {key}")
             rows[key] = row
-    expected = {(nick, band) for nick in EXPECTED_RESULTS for band in ("CHIME", "DSA")}
+    expected = {(nick, band) for nick in EXPECTED_SAMPLE for band in ("CHIME", "DSA")}
     if set(rows) != expected:
         raise ValueError("accepted receipt roster/bands incomplete")
     return rows

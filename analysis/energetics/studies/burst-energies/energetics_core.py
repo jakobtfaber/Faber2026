@@ -98,7 +98,8 @@ def load_accepted_fluences(path: Path) -> dict[tuple[str, str], dict]:
     required = {
         "nickname", "band", "fluence_jy_ms_hz", "stat_err_jy_ms_hz",
         "window_status", "window_sensitivity_frac", "calibration_status",
-        "noise_status", "review_status", "input_sha256", "calibration_sha256",
+        "calibration_systematic_dex", "noise_status", "review_status",
+        "input_sha256", "calibration_sha256",
         "input_path", "calibration_paths",
     }
     rows = {}
@@ -123,6 +124,7 @@ def load_accepted_fluences(path: Path) -> dict[tuple[str, str], dict]:
                     "fluence_jy_ms_hz",
                     "stat_err_jy_ms_hz",
                     "window_sensitivity_frac",
+                    "calibration_systematic_dex",
                 )
             }
             failures = []
@@ -136,6 +138,8 @@ def load_accepted_fluences(path: Path) -> dict[tuple[str, str], dict]:
                 failures.append("window sensitivity > 0.10")
             if row["calibration_status"] != "accepted":
                 failures.append(f"calibration={row['calibration_status']}")
+            if not 0 < numeric["calibration_systematic_dex"] <= 1:
+                failures.append("calibration systematic must be in (0, 1] dex")
             if row["noise_status"] != "accepted":
                 failures.append(f"noise={row['noise_status']}")
             if row["review_status"] != "accepted":
@@ -162,15 +166,11 @@ def load_accepted_fluences(path: Path) -> dict[tuple[str, str], dict]:
 def build_artifact(repo: Path, fluence_path: Path) -> dict:
     roster = load_energy_roster(repo)
     fluences = load_accepted_fluences(fluence_path)
-    expected_keys = {
-        (nick, band)
-        for nick, meta in roster.items()
-        if meta["eligible"]
-        for band in ("CHIME", "DSA")
-    }
-    extra = set(fluences) - expected_keys
-    if extra:
-        raise ValueError(f"accepted receipt contains ineligible/extra bands: {sorted(extra)}")
+    expected_keys = {(nick, band) for nick in SAMPLE for band in ("CHIME", "DSA")}
+    if set(fluences) != expected_keys:
+        missing = sorted(expected_keys - set(fluences))
+        extra = sorted(set(fluences) - expected_keys)
+        raise ValueError(f"accepted receipt roster mismatch: missing={missing}, extra={extra}")
     results, dispositions = [], []
     for nick in SAMPLE:
         meta = roster[nick]
@@ -185,28 +185,50 @@ def build_artifact(repo: Path, fluence_path: Path) -> dict:
             bands.append(fluences[key])
         z = float(meta["redshift"])
         band_rows = {}
-        variance = 0.0
+        stat_variance = 0.0
+        window_variance = 0.0
+        calibration_variance = 0.0
         for band, row in zip(("CHIME", "DSA"), bands, strict=True):
             fluence = float(row["fluence_jy_ms_hz"])
             stat = float(row["stat_err_jy_ms_hz"])
+            window_frac = float(row["window_sensitivity_frac"])
+            calibration_dex = float(row["calibration_systematic_dex"])
             e = energy_erg(fluence, z)
+            stat_energy = energy_erg(stat, z)
+            window_energy = e * window_frac
+            calibration_energy = e * (10**calibration_dex - 1)
             band_rows[band] = {
                 "fluence_jy_ms_hz": fluence,
                 "stat_err_jy_ms_hz": stat,
+                "stat_err_erg": stat_energy,
                 "energy_erg": e,
+                "window_sensitivity_frac": window_frac,
+                "window_err_erg": window_energy,
                 "input_sha256": row["input_sha256"],
                 "calibration_sha256": row["calibration_sha256"],
+                "calibration_systematic_dex": calibration_dex,
+                "calibration_err_erg": calibration_energy,
+                "total_err_erg": math.sqrt(
+                    stat_energy**2 + window_energy**2 + calibration_energy**2
+                ),
                 "input_path": row["input_path"],
                 "calibration_paths": row["calibration_paths"],
             }
-            variance += energy_erg(stat, z) ** 2
+            stat_variance += stat_energy**2
+            window_variance += window_energy**2
+            calibration_variance += calibration_energy**2
         results.append(
             {
                 **meta,
                 "status": "calculated_not_manuscript_admitted",
                 "bands": band_rows,
                 "energy_erg": sum(v["energy_erg"] for v in band_rows.values()),
-                "stat_err_erg": variance**0.5,
+                "stat_err_erg": stat_variance**0.5,
+                "window_err_erg": window_variance**0.5,
+                "calibration_err_erg": calibration_variance**0.5,
+                "total_err_erg": math.sqrt(
+                    stat_variance + window_variance + calibration_variance
+                ),
             }
         )
     return {

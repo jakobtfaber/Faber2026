@@ -31,8 +31,30 @@ python energetics/studies/burst-energies/verify_data_driven_energies.py \
 
 Candidate receipts never become accepted by renaming alone. Review the dynamic
 spectra and window diagnostics, validate the correlated-noise uncertainty, then
-record `review_status=accepted` and `noise_status=accepted` explicitly.
+record `review_status=accepted` and `noise_status=accepted` explicitly. Accepted
+rows also require a reviewed, positive `calibration_systematic_dex`; the
+measurement command leaves it blank rather than inventing a missing beam-scale
+uncertainty.
 The builder fails closed on missing, unstable, uncalibrated, or unreviewed bands.
+One accepted receipt covers all 24 event-band measurements; the builder consumes
+the 16 bands with eligible redshifts and records dispositions for the other four
+events. Its artifact separates statistical, window, calibration, and total
+energy uncertainty.
+
+The all-event manuscript candidate is likewise fail-closed. The current
+catalog command uses `--candidate`, writes only to figure-review staging, and
+marks stable, failed, and unavailable band measurements explicitly:
+
+```bash
+uv run --frozen python \
+  energetics/studies/burst-energies/plot_all_event_energetics.py \
+  --fluences energetics/studies/burst-energies/data_fluences.candidate.csv \
+  --output figure_review/staging/energetics_all_events/figures/energetics_all_events.pdf \
+  --candidate
+```
+
+Without `--candidate`, every row must have accepted window, calibration,
+correlated-noise, and review status. The candidate is not manuscript-admitted.
 
 The methods figure uses the actual central-window dynamic spectra and calibrated
 fluence spectra for one stable example:
@@ -42,7 +64,7 @@ uv run python energetics/studies/burst-energies/plot_measurement_method.py \
   --dsa-beam-cube ~/Documents/DSA110_beam_1.h5
 ```
 
-It writes SVG, PDF, and a hash-bound provenance receipt under `figures/`.
+It writes a PDF and a hash-bound provenance receipt under `figures/`.
 The figure is a candidate-method illustration, not an admitted energy result.
 
 `burst_energies.json`, `burst_energies.tex`, and

@@ -12,7 +12,7 @@ inventory record does not promote a scientific claim.
 - Provenance metadata: 8 complete; 19 pending
 - Input certificates: 36 (0 trusted; 36 pending; 0 revoked)
 - Input-certificate provenance: 0 complete; 36 pending
-- Numeric prose coverage: 595 individually owned or excluded claims across 13 compiled source files
+- Numeric prose coverage: 592 individually owned or excluded claims across 13 compiled source files
 - Explicit input-lineage exceptions: 15
 
 ## Manuscript-facing inventory

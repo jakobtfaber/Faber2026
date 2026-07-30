@@ -40,7 +40,7 @@ from pathlib import Path
 import numpy as np
 from workspace import ANALYSIS_ROOT, manuscript_root
 
-from radio_pipeline.resources import path as resource_path
+sys.path.insert(0, str(ANALYSIS_ROOT))
 
 ROOT = manuscript_root()
 
@@ -188,33 +188,10 @@ def discover_products(
 
 
 def _apply_style() -> None:
-    """radio_pipeline.plotting.use_flits_style() (the repo standard), with a fallback
-    that replicates its rcParams if the shared plotting import is unavailable."""
-    import matplotlib.pyplot as plt
+    """Apply the required shared manuscript style."""
+    from plotting.style import use_manuscript_style
 
-    try:
-        from radio_pipeline.plotting import use_flits_style  # applies on import too
-
-        use_flits_style()
-        return
-    except Exception:
-        pass
-    try:
-        import scienceplots  # noqa: F401
-
-        plt.style.use(["science", "notebook"])
-    except Exception:
-        import matplotlib
-
-        rc = resource_path("matplotlibrc")
-        if rc.exists():
-            matplotlib.rc_file(str(rc))
-    plt.rcParams["text.usetex"] = False
-    plt.rcParams["font.family"] = "serif"
-    plt.rcParams["font.serif"] = ["cmr10"]
-    plt.rcParams["mathtext.fontset"] = "cm"
-    plt.rcParams["axes.formatter.use_mathtext"] = True
-    plt.rcParams["axes.unicode_minus"] = False
+    use_manuscript_style()
 
 
 def load_band(

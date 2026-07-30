@@ -2,6 +2,22 @@
   "schema_version": 1,
   "groups": [
     {
+      "id": "fig-energetics-summary",
+      "title": "All-event band fluence and isotropic-equivalent energy",
+      "family": "energetics/summary",
+      "target": "figures/energetics_all_events.pdf",
+      "protect_in_manuscript": true,
+      "generator": "energetics/studies/burst-energies/plot_all_event_energetics.py",
+      "required_provenance": [
+        "accepted per-band fluence receipt and SHA-256",
+        "accepted on-pulse window and window-sensitivity result for every band",
+        "accepted calibration and correlated-noise review for every band",
+        "host-redshift source extracts and SHA-256",
+        "equation and independent numerical verification",
+        "manuscript-owner visual approval"
+      ]
+    },
+    {
       "id": "fig1-gallery",
       "title": "Figure 1: twelve-burst CHIME/FRB and DSA-110 gallery",
       "family": "gallery",

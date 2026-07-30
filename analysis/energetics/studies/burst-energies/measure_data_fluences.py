@@ -12,17 +12,13 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-
 REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scattering"))
 
-from scattering.scat_analysis.config_utils import load_telescope_block  # noqa: E402
-from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
-
-from analysis import dsa_beam  # noqa: E402
-from analysis.chime_beam import chime_sigma_jy, load_chime_sefd  # noqa: E402
-from analysis.flux_cal import (  # noqa: E402
+from energetics.methods import dsa_beam  # noqa: E402
+from energetics.methods.chime_beam import chime_sigma_jy, load_chime_sefd  # noqa: E402
+from energetics.methods.flux_cal import (  # noqa: E402
     burst_epoch_position,
     calibrated_band_integral_jy_ms_hz,
     dsa_beam_offset,
@@ -30,6 +26,8 @@ from analysis.flux_cal import (  # noqa: E402
     dsa_sigma_jy,
     load_dsa_sefd_beam,
 )
+from scattering.scat_analysis.config_utils import load_telescope_block  # noqa: E402
+from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
 
 NICKNAMES = (
     "casey", "chromatica", "freya", "hamilton", "isha", "johndoeii",
@@ -38,7 +36,8 @@ NICKNAMES = (
 FIELDS = (
     "nickname", "band", "fluence_jy_ms_hz", "stat_err_jy_ms_hz",
     "window_status", "window_sensitivity_frac", "calibration_status",
-    "noise_status", "review_status", "input_path", "input_sha256",
+    "calibration_systematic_dex", "noise_status", "review_status",
+    "input_path", "input_sha256",
     "calibration_paths", "calibration_sha256", "thresholds_sigma", "pad_factors",
 )
 DSA_BEAM_CUBE = dsa_beam.DEFAULT_BEAM
@@ -55,12 +54,12 @@ def digest(path: Path) -> str:
 
 def calibration_paths(band: str) -> list[Path]:
     return (
-        [REPO / "analysis" / "burst_energies" / "chime_sefd.csv"]
+        [REPO / "energetics" / "studies" / "burst-energies" / "chime_sefd.csv"]
         if band == "CHIME"
         else [
             DSA_BEAM_CUBE,
-            REPO / "analysis" / "burst_energies" / "dsa_sefd.csv",
-            REPO / "analysis" / "burst_energies" / "dsa_pointing.csv",
+            REPO / "energetics" / "studies" / "burst-energies" / "dsa_sefd.csv",
+            REPO / "energetics" / "studies" / "burst-energies" / "dsa_pointing.csv",
         ]
     )
 
@@ -156,6 +155,7 @@ def measure(nick: str, band: str, data_dir: Path) -> dict:
             "window_status": "failed:" + ";".join(failures),
             "window_sensitivity_frac": "",
             "calibration_status": "pending_review",
+            "calibration_systematic_dex": "",
             "noise_status": "pending_validation",
             "review_status": "pending",
             "input_path": "",
@@ -179,6 +179,7 @@ def measure(nick: str, band: str, data_dir: Path) -> dict:
         "window_status": "candidate" if spread <= 0.10 else "failed_unstable",
         "window_sensitivity_frac": f"{spread:.8g}",
         "calibration_status": "pending_review",
+        "calibration_systematic_dex": "",
         "noise_status": "pending_validation",
         "review_status": "pending",
         "input_path": str(central["source"]),

@@ -3,6 +3,9 @@
 Goal: reserve manuscript-owner attention for scientific judgment. Agents do
 the provenance trace and exact regeneration first.
 
+Formatting is defined by
+[`../ops/manuscript-figure-style.md`](../ops/manuscript-figure-style.md).
+
 ## Hard gate
 
 Do not show a figure to the owner until all are recorded and verified:

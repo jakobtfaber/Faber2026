@@ -10,7 +10,7 @@ from adjustText import adjust_text
 from foregrounds.census.config import TARGETS
 from foregrounds.census.utils import get_angular_radius, parse_coord
 from foregrounds.propagation.scattering_predict import m200_from_m500_nfw, r_delta_kpc
-from radio_pipeline.plotting import use_flits_style
+from plotting.style import use_manuscript_style
 
 # Mirror of search._CLUSTER_RE / CLASSIFICATION_COLUMNS, kept local so this plotting
 # util need not import the astroquery-heavy search module. Keep in sync with search.py.
@@ -37,7 +37,7 @@ def plot_impact_vs_redshift(
     """
     Plot impact parameter vs redshift for all identified foreground galaxies.
     """
-    use_flits_style()
+    use_manuscript_style()
     fig, ax = plt.subplots(figsize=(10, 6))
 
     # Plot galaxies
@@ -126,7 +126,7 @@ def plot_sightline(target_info: dict, galaxies_df: pd.DataFrame, output_path: st
     Concentric rings mark physical impact parameters at the mean foreground z; the
     frame auto-scales to enclose the outermost object so far clusters stay visible.
     """
-    use_flits_style()
+    use_manuscript_style()
     fig, ax = plt.subplots(figsize=(8, 8))
 
     target_coord = parse_coord(target_info["ra"], target_info["dec"])

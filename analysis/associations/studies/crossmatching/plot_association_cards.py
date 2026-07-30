@@ -6,7 +6,6 @@ import json
 import math
 import shutil
 from pathlib import Path
-ROOT = Path(__file__).resolve().parents[3]
 
 import astropy.units as u
 import matplotlib as mpl
@@ -15,12 +14,17 @@ import numpy as np
 from astropy.coordinates import SkyCoord
 from scipy.interpolate import RegularGridInterpolator
 
-from radio_pipeline.plotting import use_flits_style
+from energetics.methods.chime_beam import FWHM_EW_400, FWHM_NS_400
+from energetics.methods.dsa_beam import DEFAULT_BEAM, load_power_beam
+from energetics.methods.flux_cal import dsa_pointing_dec
+from plotting.style import use_manuscript_style
 
-# Adopt the shared FLITS style (Computer Modern serif, cmr10) so these cards
+ROOT = Path(__file__).resolve().parents[3]
+
+# Adopt the shared manuscript style (Computer Modern serif, cmr10) so these cards
 # match every other manuscript figure and the paper body font; then re-pin the
 # card-specific small sizes and TrueType embedding the standard doesn't set.
-use_flits_style()
+use_manuscript_style()
 mpl.rcParams.update(
     {
         "font.size": 8,
@@ -35,10 +39,6 @@ mpl.rcParams.update(
         "ps.fonttype": 42,
     }
 )
-
-from energetics.methods.chime_beam import FWHM_EW_400, FWHM_NS_400
-from energetics.methods.dsa_beam import DEFAULT_BEAM, load_power_beam
-from energetics.methods.flux_cal import dsa_pointing_dec
 
 
 HERE = Path(__file__).resolve().parent

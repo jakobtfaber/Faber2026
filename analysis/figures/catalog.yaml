@@ -4,6 +4,42 @@
 schema_version: 1
 
 figures:
+  - id: energetics_all_events
+    tex: fig:energetics
+    manuscript: true
+    clone_ok: true
+    repro_output: figures/energetics_all_events.pdf
+    notes: >-
+      Current producer renders the tracked candidate fluence receipt into
+      figure-review staging only. Promotion remains blocked until every plotted
+      band is accepted for window, calibration, correlated noise, and review.
+    producer:
+      argv:
+        - uv
+        - run
+        - --project
+        - analysis
+        - --frozen
+        - python
+        - analysis/energetics/studies/burst-energies/plot_all_event_energetics.py
+        - --fluences
+        - analysis/energetics/studies/burst-energies/data_fluences.candidate.csv
+        - --output
+        - analysis/figure_review/staging/energetics_all_events/figures/energetics_all_events.pdf
+        - --candidate
+      cwd: .
+    inputs:
+      - analysis/energetics/studies/burst-energies/data_fluences.candidate.csv
+      - analysis/foregrounds/census/data/frozen_census/law2024_host_redshift_extract.csv
+      - analysis/foregrounds/census/data/frozen_census/verdi2025_host_redshift_extract.csv
+    outputs:
+      - analysis/figure_review/staging/energetics_all_events/figures/energetics_all_events.pdf
+      - analysis/figure_review/staging/energetics_all_events/figures/energetics_all_events.provenance.json
+    manuscript_target: figures/energetics_all_events.pdf
+    candidate_root: analysis/figure_review/staging/energetics_all_events
+    depends_on: []
+    approval_slot: fig-energetics-summary
+
   - id: dm_host_posteriors
     tex: fig:dm_host_posteriors
     manuscript: true

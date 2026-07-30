@@ -31,6 +31,10 @@ from energetics.methods.flux_cal import (  # noqa: E402
     dsa_sigma_jy,
     load_dsa_sefd_beam,
 )
+from plotting.style import (  # noqa: E402
+    bundled_computer_modern_font_paths,
+    use_manuscript_style,
+)
 from radio_pipeline.resources import path as resource_path  # noqa: E402
 from scattering.scat_analysis.config_utils import load_telescope_block  # noqa: E402
 from scattering.scat_analysis.pipeline.io import BurstDataset  # noqa: E402
@@ -39,10 +43,20 @@ BANDS = {
     "CHIME": ("chime", "CHIME/FRB", "#2878B5"),
     "DSA": ("dsa", "DSA-110", "#D55E00"),
 }
+STYLE_SOURCE = ROOT / "plotting" / "style.py"
 
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def portable_path(path: Path) -> str:
+    """Use a repository-relative path when the artifact belongs to this checkout."""
+    resolved = path.resolve()
+    try:
+        return str(resolved.relative_to(ROOT))
+    except ValueError:
+        return str(resolved)
 
 
 def receipt_rows(path: Path, nickname: str) -> dict[str, dict[str, str]]:
@@ -217,6 +231,7 @@ def make_figure(
                 f"({relative_error:.3g} relative)"
             )
 
+    use_manuscript_style()
     plt.rcParams.update(
         {
             "font.size": 9,
@@ -343,13 +358,21 @@ def make_figure(
 
     provenance = {
         "schema_version": 1,
-        "figure": [str(output_stem.with_suffix(".pdf"))],
+        "figure": [portable_path(output_stem.with_suffix(".pdf"))],
+        "figure_sha256": sha256(output_stem.with_suffix(".pdf")),
         "status": "candidate_method_illustration_not_manuscript_admitted",
         "nickname": nickname,
         "receipt": str(receipt),
         "receipt_sha256": sha256(receipt),
-        "producer": str(Path(__file__).resolve()),
+        "producer": portable_path(Path(__file__)),
         "producer_sha256": sha256(Path(__file__).resolve()),
+        "style_source": portable_path(STYLE_SOURCE),
+        "style_source_sha256": sha256(STYLE_SOURCE),
+        "style_fonts": [
+            {"name": path.name, "sha256": sha256(path)}
+            for path in bundled_computer_modern_font_paths()
+        ],
+        "matplotlib_version": matplotlib.__version__,
         "dsa_beam_cube": str(dsa_beam_cube),
         "dsa_beam_cube_sha256": sha256(dsa_beam_cube),
         "bands": {

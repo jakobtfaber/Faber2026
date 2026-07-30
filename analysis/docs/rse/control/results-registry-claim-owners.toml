@@ -202,10 +202,7 @@ claims = [
   { fingerprint = "ee4ba64338820bbb", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
   { fingerprint = "1937e40a2e359b6b", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
   { fingerprint = "0ac390b073f9cf6c", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
-  { fingerprint = "3aec188b5b8c8370", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
-  { fingerprint = "ed6bc57fabd8f9eb", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
-  { fingerprint = "5b7a9f633387db2c", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
-  { fingerprint = "6b0254da39d96325", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
+  { fingerprint = "ec49cb1e24c55621", occurrence = 1, owner_result_id = "energies.burst_energies_table" },
 ]
 
 [[source]]

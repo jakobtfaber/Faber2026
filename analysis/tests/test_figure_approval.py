@@ -38,8 +38,9 @@ def test_review_slots_are_unique_and_cover_requested_families() -> None:
         "joint-model",
         "codetection-triptych",
         "scintillation-qualification",
-        "foreground-halo-grid",
-    }
+            "foreground-halo-grid",
+            "energetics/summary",
+        }
 
 
 def test_new_batch_can_select_one_stable_candidate() -> None:

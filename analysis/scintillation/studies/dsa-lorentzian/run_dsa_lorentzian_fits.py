@@ -18,16 +18,14 @@ import os
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
-REPO_ROOT = Path(__file__).resolve().parents[3]
 from typing import Any
 
 import numpy as np
 
-# Use the checked-out pipeline source for this analysis, even if another FLITS
-# checkout is installed editable in the active Python environment. Disable numba
-# JIT before importing scintillation modules; old cross-checkout numba caches can
-# try to resurrect modules by the stale top-level name ``scint_analysis``.
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
+# Use this analysis checkout. Disable numba JIT before importing scintillation
+# modules so old cross-checkout caches cannot restore a stale top-level module.
 sys.path.insert(0, str(REPO_ROOT))
 os.environ.setdefault("NUMBA_DISABLE_JIT", "1")
 
@@ -530,9 +528,9 @@ def plot_burst_acf_diagnostic(
     import matplotlib.pyplot as plt  # noqa: PLC0415
     from matplotlib.ticker import FuncFormatter, MaxNLocator, NullFormatter  # noqa: PLC0415
 
-    from radio_pipeline.plotting import use_flits_style  # noqa: PLC0415
+    from plotting.style import use_manuscript_style  # noqa: PLC0415
 
-    use_flits_style()
+    use_manuscript_style()
     plt.rcParams.update(
         {
             "axes.linewidth": 0.9,
@@ -987,13 +985,13 @@ def _plot_sample_summary(results: list[dict[str, Any]], *, figure_dir: Path) -> 
     from matplotlib.lines import Line2D  # noqa: PLC0415
     from matplotlib.ticker import FuncFormatter, NullFormatter  # noqa: PLC0415
 
-    from radio_pipeline.plotting import use_flits_style  # noqa: PLC0415
+    from plotting.style import use_manuscript_style  # noqa: PLC0415
 
     rows = _summary_component_rows(results)
     clean_rows = [row for row in rows if row["usable"]]
     plot_rows = clean_rows or rows
 
-    use_flits_style()
+    use_manuscript_style()
     plt.rcParams.update(
         {
             "axes.linewidth": 0.9,
