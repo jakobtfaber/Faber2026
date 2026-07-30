@@ -56,14 +56,14 @@ is less accurate than Monte Carlo.
 
 ## Artifact and manuscript checks
 
-- `scripts/dm_budget_uncertainty.py --check-inputs`: nine sightlines validated.
+- `analysis/scripts/dm_budget_uncertainty.py --check-inputs`: nine sightlines validated.
 - Host CSV parity test: exact integer summaries and probabilities within the
   three-decimal serialization tolerance.
 - Rest-frame p16/p50/p84 parity: exact `(1+z)` scaling from the unrounded
   observer-frame quantiles for all nine sightlines.
 - Upper-limit roster parity: all and only the six modeled note-u sightlines are
   flagged in the figure and appendix interpretation.
-- `scripts/render_budget_table.py --check`: byte-exact pass.
+- `analysis/scripts/render_budget_table.py --check`: byte-exact pass.
 - `latexmk -pdf -g -interaction=nonstopmode -halt-on-error main.tex`: pass,
   producing a 54-page PDF after integration with current `main`.
 - Rendered page 33: updated observer/rest-frame host table is legible and numerically
