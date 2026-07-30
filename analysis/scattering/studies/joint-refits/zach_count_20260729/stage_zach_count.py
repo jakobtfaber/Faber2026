@@ -61,7 +61,6 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(ANALYSIS))
 
 from scattering.scat_analysis.controlled_run import (  # noqa: E402
-    environment_identity,
     processing_environment_identity,
     sha256,
 )
@@ -238,10 +237,36 @@ def git(*args: str) -> str:
     ).stdout.strip()
 
 
-def build_contract(rung: dict, runs_root: Path, python: Path, resolved_identity: str) -> dict:
+def controlled_environment_identity(runs_root: Path, python: Path, lock: Path) -> dict:
+    """Measure the runtime identity inside the exact controlled child environment."""
+    code = (
+        "import json,sys; from pathlib import Path; "
+        "from scattering.scat_analysis.controlled_run import environment_identity; "
+        "print(json.dumps(environment_identity(Path(sys.argv[1])), sort_keys=True))"
+    )
+    completed = subprocess.run(
+        [str(python.absolute()), "-c", code, str(lock)],
+        cwd=ANALYSIS,
+        env=subprocess_env(runs_root),
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return json.loads(completed.stdout)
+
+
+def build_contract(
+    rung: dict,
+    runs_root: Path,
+    python: Path,
+    resolved_identity: str,
+    resolved_output: Path | None = None,
+    receipt_output: Path | None = None,
+) -> dict:
     files = resolved_files(runs_root)
     contract_dir = runs_root / "contracts"
     label = rung_label(rung["count"], rung["gain_s2"], rung["seed"]).replace(":", "_")
+    receipt = receipt_output or runs_root / "receipts" / f"{label}.json"
     return {
         "schema": "flits-controlled-joint-fit-contract/v1",
         "burst": BURST,
@@ -252,15 +277,15 @@ def build_contract(rung: dict, runs_root: Path, python: Path, resolved_identity:
                 *runner_args(
                     rung,
                     contract_dir / f"{label}.json",
-                    runs_root / "receipts" / f"{label}.json",
-                    None,
+                    receipt,
+                    resolved_output,
                 ),
             ],
             "working_directory": str(JOINT_REFITS),
         },
-        "environment_identity_sha256": environment_identity(files["environment_lock"])[
-            "identity_sha256"
-        ],
+        "environment_identity_sha256": controlled_environment_identity(
+            runs_root, python, files["environment_lock"]
+        )["identity_sha256"],
         "resolved_fit_identity_sha256": resolved_identity,
         "executed_source_files": [
             "controlled_entrypoint",
@@ -317,16 +342,27 @@ def execute(rung: dict, runs_root: Path, python: Path) -> None:
     receipt_dir.mkdir(parents=True, exist_ok=True)
     contract = contract_dir / f"{label}.json"
     receipt = receipt_dir / f"{label}.json"
+    freeze_receipt = receipt_dir / f"{label}.freeze.json"
     resolved = contract_dir / f"{label}.resolved.json"
 
     # Freeze pass: a placeholder identity gets us past preflight and stops
     # before the sampler, emitting the identity the real pass must carry.
     contract.write_text(
-        json.dumps(build_contract(rung, runs_root, python, "0" * 64), indent=2, sort_keys=True)
+        json.dumps(
+            build_contract(
+                rung,
+                runs_root,
+                python,
+                "0" * 64,
+                resolved_output=resolved,
+                receipt_output=freeze_receipt,
+            ),
+            indent=2,
+            sort_keys=True,
+        )
         + "\n",
         encoding="utf-8",
     )
-    freeze_receipt = receipt_dir / f"{label}.freeze.json"
     freeze_receipt.unlink(missing_ok=True)
     resolved.unlink(missing_ok=True)
     run(runner_args(rung, contract, freeze_receipt, resolved), runs_root, python)

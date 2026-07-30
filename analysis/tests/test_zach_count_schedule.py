@@ -140,6 +140,75 @@ def test_contract_file_set_matches_the_controlled_source_set(stager, tmp_path):
         assert files[name].is_file(), name
 
 
+def test_freeze_contract_records_the_resolved_identity_output_argument(
+    stager, tmp_path, monkeypatch
+):
+    """The freeze command must exactly match the command bound in its contract."""
+    files = {}
+    for name in (
+        "chime_config",
+        "dsa_config",
+        "chime_input",
+        "dsa_input",
+        "chime_telescope_config",
+        "dsa_telescope_config",
+        "environment_lock",
+        "controlled_entrypoint",
+        "fit_driver",
+        "joint_tf_prep_source",
+        "burstfit_joint_source",
+        "controlled_run_source",
+        "model_grid_source",
+        "diagnostic_source",
+    ):
+        path = tmp_path / name
+        path.write_text(name, encoding="utf-8")
+        files[name] = path
+    monkeypatch.setattr(stager, "resolved_files", lambda _root: files)
+    monkeypatch.setattr(stager, "git", lambda *_args: "revision")
+    monkeypatch.setattr(
+        stager,
+        "controlled_environment_identity",
+        lambda _root, _python, _path: {"identity_sha256": "environment"},
+    )
+    monkeypatch.setattr(stager, "processing_environment_identity", lambda *_args: {})
+
+    rung = stager.rungs()[0]
+    resolved = tmp_path / "resolved.json"
+    freeze_receipt = tmp_path / "freeze.json"
+    python = Path("/runtime/python")
+    contract = stager.build_contract(
+        rung,
+        tmp_path,
+        python,
+        "0" * 64,
+        resolved_output=resolved,
+        receipt_output=freeze_receipt,
+    )
+    label = stager.rung_label(rung["count"], rung["gain_s2"], rung["seed"]).replace(":", "_")
+    expected = [
+        str(python.absolute()),
+        *stager.runner_args(
+            rung,
+            tmp_path / "contracts" / f"{label}.json",
+            freeze_receipt,
+            resolved,
+        ),
+    ]
+    assert contract["command"]["argv"] == expected
+    assert "--resolved-identity-output" in contract["command"]["argv"]
+
+
+def test_controlled_environment_identity_uses_the_child_environment(stager, tmp_path):
+    identity = stager.controlled_environment_identity(
+        tmp_path,
+        Path(sys.executable),
+        ANALYSIS / "uv.lock",
+    )
+    assert identity["python_runtime_options"]["flags"]["dont_write_bytecode"] == 1
+    assert identity["numerical_environment"]["PYTHONPATH"] == str(ANALYSIS)
+
+
 def test_subprocess_env_keeps_the_source_tree_clean(stager, tmp_path):
     """Regression: bytecode writes used to poison the tree between rungs.
 
