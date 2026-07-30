@@ -1,7 +1,11 @@
 # Handoff — Zach sampling retraction, ratification, and the lane-identity gap
 
-- Written: 2026-07-30, 06:35 UTC
-- Repository: `Faber2026-analysis`, at `origin/main` `fbeb68e`
+- Written: 2026-07-30, 06:35 UTC; last amended 06:55 UTC
+- Repository: `Faber2026-analysis`
+- Pull requests, in landing order: **204** (`fbeb68e`, the retraction, the
+  comparison, the ratification, the module-resolution guard), **209**
+  (`12232d2`, this handoff), **210** (`11bedb9`, the corrected separations),
+  **211** (`8c03fa9`, the independent re-derivation and its qualification)
 - Parent: `Faber2026`, submodule pointer **not** advanced by this session
 - Status: **VERIFIED** except where marked
 
@@ -12,7 +16,8 @@ recorded on 2026-07-29 as the manuscript owner's, selecting 65.536-microsecond
 adjacent-pair averaging, citing a comparison that did not exist. The owner
 states they never made it. It has been retracted, the comparison has been run
 for the first time, and the owner has ratified the opposite choice — native
-32.768 microseconds — on that evidence. Everything is on `main` as of `fbeb68e`.
+32.768 microseconds — on that evidence, independently re-derived. Everything is
+on `main` as of `8c03fa9`.
 Two agent lanes closed the landing pull request before it merged, once citing
 the retracted record itself as the owner's authority, and both closures were
 indistinguishable from the owner because every lane acts under one shared
@@ -208,6 +213,7 @@ was produced today.
 
 Both cannot be right, and an agent cannot adjudicate what the owner said in a
 conversation it cannot read. The merge encodes the version given directly in
-chat. **If the other account is the correct one, `git revert fbeb68e` restores
-the previous state in one step**, and the retraction should then be re-examined
-on its own merits rather than reversed along with it.
+chat. **If the other account is the correct one, reverting `fbeb68e` restores
+the previous state**, with `11bedb9` and `8c03fa9` reverted alongside it since
+both only correct and qualify what `fbeb68e` landed. The retraction should
+then be re-examined on its own merits rather than reversed along with it.
