@@ -142,7 +142,7 @@ def band_configs(runs_root: Path, dsa_input: Path, chime_input: Path) -> None:
             "f_factor": 384,
             "path": str(dsa_input),
             # Owner-selected 65.536 us sampling for the component-count run.
-            "t_factor": 2,
+            "t_factor": 1,
             "telescope": "dsa",
         },
         "chime": {

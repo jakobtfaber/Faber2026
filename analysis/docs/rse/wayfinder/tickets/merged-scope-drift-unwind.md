@@ -1,19 +1,13 @@
 # Unwind the merged scope drift
 
 - Type: `wayfinder:task` (HITL)
-- Status: resolved
-- Assignee: Orchestrator
+- Status: open
+- Assignee: manuscript owner
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
 - GitHub: [Faber2026-analysis #194](https://github.com/jakobtfaber/Faber2026-analysis/pull/194)
 
 ## Owner decision card
-
-Resolved technically on 2026-07-30: keep the published history, audit the
-landed content in place, and repair defects through focused pull requests.
-Independent standards, specification, and science-evidence reviews found
-blocking defects in the later Zach records; this ticket does not treat a green
-suite as scientific acceptance.
 
 ```json
 {
