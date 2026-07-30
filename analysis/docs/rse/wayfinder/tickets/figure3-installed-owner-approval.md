@@ -1,7 +1,7 @@
 # Approve the installed Figure 3
 
 - Type: `wayfinder:task` (HITL)
-- Status: open
+- Status: resolved — owner returned `needs_revision`, 2026-07-29
 - Assignee: manuscript owner
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -62,4 +62,14 @@
 
 ## Resolution
 
-Open. Silence leaves the figure unapproved.
+Owner decision, 2026-07-29: **not approved**.
+
+The installed figure contains six empty sightlines. For the three events
+without established spectroscopic host redshifts, infer redshift distributions
+from the dispersion-measure--redshift relation and repeat the foreground search
+out to those inferred redshifts. The revised figure must show the inference and
+its uncertainty explicitly, avoid implying a measured host redshift, and return
+as a new exact-byte candidate with renewed scientific and visual validation.
+
+The rejection applies to SHA-256 `281e4bf4c9d910c0…`; it grants no approval to
+later bytes.

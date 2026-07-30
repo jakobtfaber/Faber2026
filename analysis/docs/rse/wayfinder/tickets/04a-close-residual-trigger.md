@@ -12,25 +12,26 @@
 {
   "id": "scattering-residual-trigger",
   "kind": "scientific",
-  "title": "Scattering escalation trigger",
-  "decision": "May posterior-predictive residuals alone trigger a second broadening component?",
+  "title": "Second-screen fitting rule",
+  "decision": "If the observed burst profile has a mismatch at the delay expected for a second screen, and one-screen simulations do not reproduce it, may that result alone justify fitting a second scattering screen?",
   "recommended": {
     "choice": "calibrate",
-    "reason": "Require a false-escalation calibration before residuals become the sole trigger."
+    "reason": "First test the rule on known one-screen and two-screen examples, so we know how often it requests a second screen incorrectly and how often it detects one when present."
   },
   "choices": [
     {
       "id": "accept",
-      "label": "Accept posterior-predictive residuals as the sole trigger."
+      "label": "Allow this predicted-delay mismatch test alone to start a second-screen fit."
     },
     {
       "id": "calibrate",
-      "label": "Require false-escalation calibration before accepting the trigger."
+      "label": "Validate the predicted-delay mismatch rule on known one-screen and two-screen examples before use."
     }
   ],
   "context": [
-    "The autocorrelation model-comparison trigger was retired because it had no usable operating point.",
-    "Posterior-predictive residuals are the only remaining proposed escalation trigger."
+    "The autocorrelation-based rule was retired: its conservative threshold rejected all eight simulated two-screen cases.",
+    "The remaining proposal compares the observed burst profile with profiles simulated from the fitted one-screen model, specifically at the delay predicted for a second screen.",
+    "No measured error rate currently shows how often that predicted-delay test invents or misses a second screen."
   ],
   "evidence": [
     {
@@ -44,7 +45,7 @@
       "sha256": "d2ae8ecc6eb7a3741ae7c208a0ec5e135d1f0ee68879b5c020a289840c787237"
     }
   ],
-  "effect": "The choice fixes the trigger used by later scattering model selection.",
+  "effect": "The choice determines whether and when the analysis may fit a second scattering screen.",
   "recorder": {
     "path": "docs/rse/wayfinder/tickets/04a-close-residual-trigger.md",
     "action": "Record the trigger decision and resolve this ticket."

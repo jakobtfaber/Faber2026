@@ -57,11 +57,11 @@
         "priority": 20
       },
       "decision": {
-        "notes": "Unreviewed observed-peak candidate. Science validation remains blocked because the requested per-panel residual-drift zero-consistency gate is not met; exact-byte owner approval is still required.",
-        "reviewed_at": null,
-        "reviewer": null,
-        "reviewer_role": null,
-        "status": "pending"
+        "notes": "Not approved. Re-measure the dispersion measures using the expected geometric arrival-time offset, regenerate both instruments' dynamic spectra, and rebuild the triptych gallery so corresponding DSA-110 and CHIME/FRB burst components transition continuously across the bands where physically expected. The current residual-drift disposition is superseded by this remeasurement workflow; return a new exact-byte candidate for review.",
+        "reviewed_at": "2026-07-30T00:25:10Z",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "status": "needs_revision"
       },
       "dm_measurements": [
         {

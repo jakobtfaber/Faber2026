@@ -15,29 +15,30 @@
 {
   "id": "zach-time-resolution",
   "kind": "scientific",
-  "title": "Zach time resolution",
-  "decision": "Which DSA-110 time resolution should govern the Zach component-count comparison?",
+  "title": "Zach component-count sampling",
+  "decision": "When testing whether Zach has three, four, or five DSA-110 pulse components, should adjacent native time samples be averaged together?",
   "recommended": {
     "choice": "native",
-    "reason": "Retain 32.768 microseconds because the issue requires native resolution and the earlier failed comparison used coarse binning."
+    "reason": "Keep every 32.768-microsecond sample because averaging can blend nearby pulse components and change the inferred count."
   },
   "choices": [
     {
       "id": "native",
-      "label": "Retain 32.768 microseconds and raise the reconciled-bin cap."
+      "label": "Keep every native 32.768-microsecond DSA-110 sample."
     },
     {
       "id": "coarse",
-      "label": "Permit 65.536 microseconds and amend the scientific contract."
+      "label": "Average adjacent samples to 65.536 microseconds."
     },
     {
       "id": "stop",
-      "label": "Stop the component-count comparison."
+      "label": "Do not run the three-versus-four-versus-five component comparison."
     }
   ],
   "context": [
-    "The per-band preparation selects native DSA-110 resolution, but the later shared-window cap doubles the time bin.",
-    "Raising the cap to 1024 restores native resolution and increases sampler cost."
+    "This comparison determines how many distinct pulse components are fitted in Zach's DSA-110 burst.",
+    "The current shared-window limit averages adjacent DSA-110 samples, changing 32.768 microseconds to 65.536 microseconds.",
+    "Keeping native samples doubles the fitted bins and computing cost but preserves closely spaced structure."
   ],
   "evidence": [
     {
@@ -51,7 +52,7 @@
       "sha256": "974aac68ba78589322c6f9aee5cacd0124fd380995997fd24470536dcd214548"
     }
   ],
-  "effect": "The choice freezes the processing contract so the 27 controlled fits can run.",
+  "effect": "The choice fixes the time sampling for the 27 controlled component-count fits.",
   "recorder": {
     "path": "docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
     "action": "Record the selected resolution and update the controlled-run contract."

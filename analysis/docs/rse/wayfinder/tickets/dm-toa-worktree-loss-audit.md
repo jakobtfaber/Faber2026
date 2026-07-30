@@ -1,8 +1,8 @@
 # Close the dm-toa worktree loss audit
 
-- Type: `wayfinder:task` (HITL)
+- Type: `wayfinder:task` (AFK)
 - Status: open
-- Assignee: manuscript owner
+- Assignee: orchestrator
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
 - GitHub: [Faber2026-analysis #167](https://github.com/jakobtfaber/Faber2026-analysis/pull/167)
@@ -14,52 +14,12 @@ configuration files landed under a new path. The only unresolved item is the
 reported 1,918 uncommitted inserted lines across nine tracked files. No snapshot
 of those exact bytes has been found.
 
-## Owner decision card
+## Orchestrator disposition
 
-```json
-{
-  "id": "dm-toa-worktree-loss",
-  "kind": "scientific",
-  "title": "Close dm-toa worktree loss audit",
-  "decision": "Accept the nine unrecovered tracked-file modifications as superseded, or keep recovery open?",
-  "recommended": {
-    "choice": "require-accounting",
-    "reason": "Generated products and phase-B configurations are accounted for, but the exact bytes of 1918 reported uncommitted insertions remain unavailable."
-  },
-  "choices": [
-    {
-      "id": "require-accounting",
-      "label": "Keep recovery open until the nine tracked-file modifications are accounted for."
-    },
-    {
-      "id": "accept-superseded",
-      "label": "Accept the remaining uncertainty and close the audit."
-    }
-  ],
-  "context": [
-    "The generated dm-toa-geometry products were preserved with checksums before retirement.",
-    "The 13 phase-b configuration filenames are tracked in origin/main at analysis-configs/absolute-dm/phase-b/.",
-    "A targeted search found no snapshot of 1918 reported uncommitted insertions across nine tracked one-event workflow files."
-  ],
-  "evidence": [
-    {
-      "label": "Scope and worktree audit receipt",
-      "path": "docs/rse/specs/receipt-branch-scope-and-worktree-audit-2026-07-29.md",
-      "sha256": "eaa6371fd4f87d6e74b19bdcae5f8b06a77f7744fbc44209f98789f27425abea"
-    },
-    {
-      "label": "Pull request 167, which landed the phase-b controls",
-      "path": "https://github.com/jakobtfaber/Faber2026-analysis/pull/167"
-    }
-  ],
-  "effect": "Settles only the remaining uncertainty around nine unrecovered tracked-file modifications.",
-  "recorder": {
-    "path": "docs/rse/wayfinder/tickets/dm-toa-worktree-loss-audit.md",
-    "action": "Record the owner choice here, with the accounting or the explicit acceptance that closes it."
-  },
-  "priority": 15
-}
-```
+This is a technical preservation audit, not a scientific or visual decision.
+Recovery remains open until the nine tracked-file modifications are accounted
+for or independently proven unrecoverable. No manuscript-owner action is
+required, and the uncertainty does not authorize deletion or scientific use.
 
 ## Corrections recorded
 

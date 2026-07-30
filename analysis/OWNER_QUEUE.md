@@ -2,134 +2,55 @@
 
 _Only scientific and visual decisions. Silence leaves every item blocked._
 
-## 1. Figure 3 approval
+## 1. Zach component-count sampling
 
-**Decision:** Approve the exact installed Figure 3 bytes for the manuscript?
+**Decision:** When testing whether Zach has three, four, or five DSA-110 pulse components, should adjacent native time samples be averaged together?
 
-**Recommended:** `approve` — The independent census validation passes and the staged bytes match the manuscript exactly.
-
-**Choose:**
-
-- `approve` — Approve the exact figure bytes.
-- `revise` — Request a revision and state the required visual change.
-
-**Context:**
-
-- All six independent census, source, matching, coverage, radius, and figure-content checks pass.
-- The staged review artifact and installed manuscript figure are byte-identical.
-- This approval is visual; it does not replace the recorded scientific validation.
-
-**Evidence:**
-
-- [Exact Figure 3 PDF](figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf) — `281e4bf4…`
-- [Independent validation](docs/rse/specs/evidence/foreground-census-analysis-only-2026-07-29/validation.json) — `577ccb27…`
-- [Reproduction receipt](docs/rse/specs/receipt-foreground-census-analysis-only-2026-07-29.md) — `c13404f8…`
-
-**Effect:** Approval closes the Figure 3 visual gate and permits issue #206 closeout.
-
-**Record:** `docs/rse/wayfinder/tickets/figure3-installed-owner-approval.md` — Record the owner choice and bind any approval receipt to the exact PDF hash.
-
-## 2. Close dm-toa worktree loss audit
-
-**Decision:** Accept the nine unrecovered tracked-file modifications as superseded, or keep recovery open?
-
-**Recommended:** `require-accounting` — Generated products and phase-B configurations are accounted for, but the exact bytes of 1918 reported uncommitted insertions remain unavailable.
+**Recommended:** `native` — Keep every 32.768-microsecond sample because averaging can blend nearby pulse components and change the inferred count.
 
 **Choose:**
 
-- `require-accounting` — Keep recovery open until the nine tracked-file modifications are accounted for.
-- `accept-superseded` — Accept the remaining uncertainty and close the audit.
+- `native` — Keep every native 32.768-microsecond DSA-110 sample.
+- `coarse` — Average adjacent samples to 65.536 microseconds.
+- `stop` — Do not run the three-versus-four-versus-five component comparison.
 
 **Context:**
 
-- The generated dm-toa-geometry products were preserved with checksums before retirement.
-- The 13 phase-b configuration filenames are tracked in origin/main at analysis-configs/absolute-dm/phase-b/.
-- A targeted search found no snapshot of 1918 reported uncommitted insertions across nine tracked one-event workflow files.
-
-**Evidence:**
-
-- [Scope and worktree audit receipt](docs/rse/specs/receipt-branch-scope-and-worktree-audit-2026-07-29.md) — `eaa6371f…`
-- [Pull request 167, which landed the phase-b controls](https://github.com/jakobtfaber/Faber2026-analysis/pull/167)
-
-**Effect:** Settles only the remaining uncertainty around nine unrecovered tracked-file modifications.
-
-**Record:** `docs/rse/wayfinder/tickets/dm-toa-worktree-loss-audit.md` — Record the owner choice here, with the accounting or the explicit acceptance that closes it.
-
-## 3. Figure 1 disposition
-
-**Decision:** How should the data-only Figure 1 candidate handle the unmet residual-drift gate?
-
-**Recommended:** `revise-gate` — Keep promotion blocked until the scientific gate is explicitly accepted or replaced.
-
-**Choose:**
-
-- `accept-limitation` — Accept the observed-peak candidate with its stated residual-drift limitation.
-- `revise-gate` — Define and validate a replacement scientific gate before promotion.
-- `defer` — Omit or defer Figure 1.
-
-**Context:**
-
-- The installed figure uses fitted arrival-time shifts and is not a data-only product.
-- The proposed dispersion correction was refuted because it depends on the pulse marker.
-- The surviving candidate has 8 zero-consistent, 7 nonzero, and 9 unconstrained residual-drift measurements.
-
-**Evidence:**
-
-- [Observed-peak candidate](figure_review/artifacts/batches/2026-07-17-fig1-observed-peak-audit/candidates/fig1-gallery.pdf) — `979e616b…`
-- [Scientific validation](docs/rse/specs/validation-fig1-observed-peak-audit.md) — `d9181691…`
-- [Correction refutation](figure_review/artifacts/batches/2026-07-17-fig1-observed-peak-dmcorr/provenance/marker-dependence-refutation.json) — `87a4eff2…`
-
-**Effect:** Selects the final Figure 1 path without admitting an unsupported dispersion correction.
-
-**Record:** `figure_review/artifacts/batches/2026-07-17-fig1-observed-peak-audit/manifest.json` — Record the scientific disposition, then use figure_review.py for exact-byte approval.
-
-## 4. Zach time resolution
-
-**Decision:** Which DSA-110 time resolution should govern the Zach component-count comparison?
-
-**Recommended:** `native` — Retain 32.768 microseconds because the issue requires native resolution and the earlier failed comparison used coarse binning.
-
-**Choose:**
-
-- `native` — Retain 32.768 microseconds and raise the reconciled-bin cap.
-- `coarse` — Permit 65.536 microseconds and amend the scientific contract.
-- `stop` — Stop the component-count comparison.
-
-**Context:**
-
-- The per-band preparation selects native DSA-110 resolution, but the later shared-window cap doubles the time bin.
-- Raising the cap to 1024 restores native resolution and increases sampler cost.
+- This comparison determines how many distinct pulse components are fitted in Zach's DSA-110 burst.
+- The current shared-window limit averages adjacent DSA-110 samples, changing 32.768 microseconds to 65.536 microseconds.
+- Keeping native samples doubles the fitted bins and computing cost but preserves closely spaced structure.
 
 **Evidence:**
 
 - [Readiness audit](docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/readiness-audit.json) — `c1894081…`
 - [Readiness explanation](docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/README.md) — `974aac68…`
 
-**Effect:** The choice freezes the processing contract so the 27 controlled fits can run.
+**Effect:** The choice fixes the time sampling for the 27 controlled component-count fits.
 
 **Record:** `docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md` — Record the selected resolution and update the controlled-run contract.
 
-## 5. Scattering escalation trigger
+## 2. Second-screen fitting rule
 
-**Decision:** May posterior-predictive residuals alone trigger a second broadening component?
+**Decision:** If the observed burst profile has a mismatch at the delay expected for a second screen, and one-screen simulations do not reproduce it, may that result alone justify fitting a second scattering screen?
 
-**Recommended:** `calibrate` — Require a false-escalation calibration before residuals become the sole trigger.
+**Recommended:** `calibrate` — First test the rule on known one-screen and two-screen examples, so we know how often it requests a second screen incorrectly and how often it detects one when present.
 
 **Choose:**
 
-- `accept` — Accept posterior-predictive residuals as the sole trigger.
-- `calibrate` — Require false-escalation calibration before accepting the trigger.
+- `accept` — Allow this predicted-delay mismatch test alone to start a second-screen fit.
+- `calibrate` — Validate the predicted-delay mismatch rule on known one-screen and two-screen examples before use.
 
 **Context:**
 
-- The autocorrelation model-comparison trigger was retired because it had no usable operating point.
-- Posterior-predictive residuals are the only remaining proposed escalation trigger.
+- The autocorrelation-based rule was retired: its conservative threshold rejected all eight simulated two-screen cases.
+- The remaining proposal compares the observed burst profile with profiles simulated from the fitted one-screen model, specifically at the delay predicted for a second screen.
+- No measured error rate currently shows how often that predicted-delay test invents or misses a second screen.
 
 **Evidence:**
 
 - [Trigger calibration](docs/rse/specs/plan-a1-trigger-calibration.md) — `974ec606…`
 - [Current circulation design](docs/rse/specs/plan-circulation-readiness.md) — `d2ae8ecc…`
 
-**Effect:** The choice fixes the trigger used by later scattering model selection.
+**Effect:** The choice determines whether and when the analysis may fit a second scattering screen.
 
 **Record:** `docs/rse/wayfinder/tickets/04a-close-residual-trigger.md` — Record the trigger decision and resolve this ticket.
