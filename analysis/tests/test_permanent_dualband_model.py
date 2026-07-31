@@ -777,6 +777,7 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
     import dynesty
 
     from faber2026.burst_models.joint import (
+        _checkpoint_binding,
         _checkpoint_identity,
         _likelihood_for_request,
         _prior_specs,
@@ -789,6 +790,13 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
         dlogz=0.5,
         checkpoint_directory=str(tmp_path / "checkpoints"),
         checkpoint_identity="test-checkpoint-identity",
+        checkpoint_context={
+            "request_sha256": "request",
+            "environment_sha256": "environment",
+            "schema_version": "1.0.0",
+            "model_version": "joint-burst-v1",
+            "input_hashes": {"synthetic": "input"},
+        },
     )
     checkpoint = tmp_path / "checkpoints" / "one-to-one-gaussian.pkl"
     checkpoint.parent.mkdir()
@@ -807,7 +815,13 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
             break
     interrupted.save(str(checkpoint))
     checkpoint.with_suffix(".json").write_text(
-        json.dumps({"checkpoint_identity": _checkpoint_identity(request, specs)})
+        json.dumps(
+            {
+                "schema_version": "1.0.0",
+                "binding_sha256": _checkpoint_identity(request, specs),
+                "binding": _checkpoint_binding(request, specs),
+            }
+        )
         + "\n"
     )
     resumed = fit_joint_event(request)
@@ -820,12 +834,17 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
 
 
 def test_checkpoint_refuses_another_association_subproblem(tmp_path) -> None:
-    from faber2026.burst_models.joint import _checkpoint_identity, _prior_specs
+    from faber2026.burst_models.joint import (
+        _checkpoint_binding,
+        _checkpoint_identity,
+        _prior_specs,
+    )
 
     request = replace(
         _request(),
         checkpoint_directory=str(tmp_path / "checkpoints"),
         checkpoint_identity="run-identity",
+        checkpoint_context={"request_sha256": "request"},
     )
     alternate = replace(
         request,
@@ -838,7 +857,11 @@ def test_checkpoint_refuses_another_association_subproblem(tmp_path) -> None:
     checkpoint.write_bytes(b"not a sampler")
     checkpoint.with_suffix(".json").write_text(
         json.dumps(
-            {"checkpoint_identity": _checkpoint_identity(request, _prior_specs(request))}
+            {
+                "schema_version": "1.0.0",
+                "binding_sha256": _checkpoint_identity(request, _prior_specs(request)),
+                "binding": _checkpoint_binding(request, _prior_specs(request)),
+            }
         )
         + "\n"
     )
@@ -847,12 +870,17 @@ def test_checkpoint_refuses_another_association_subproblem(tmp_path) -> None:
 
 
 def test_checkpoint_refuses_another_morphology_subproblem(tmp_path) -> None:
-    from faber2026.burst_models.joint import _checkpoint_identity, _prior_specs
+    from faber2026.burst_models.joint import (
+        _checkpoint_binding,
+        _checkpoint_identity,
+        _prior_specs,
+    )
 
     request = replace(
         _request(),
         checkpoint_directory=str(tmp_path / "checkpoints"),
         checkpoint_identity="run-identity",
+        checkpoint_context={"request_sha256": "request"},
     )
     alternate = replace(request, morphology="emg")
     checkpoint = tmp_path / "checkpoints" / "one-to-one-emg.pkl"
@@ -860,7 +888,11 @@ def test_checkpoint_refuses_another_morphology_subproblem(tmp_path) -> None:
     checkpoint.write_bytes(b"not a sampler")
     checkpoint.with_suffix(".json").write_text(
         json.dumps(
-            {"checkpoint_identity": _checkpoint_identity(request, _prior_specs(request))}
+            {
+                "schema_version": "1.0.0",
+                "binding_sha256": _checkpoint_identity(request, _prior_specs(request)),
+                "binding": _checkpoint_binding(request, _prior_specs(request)),
+            }
         )
         + "\n"
     )

@@ -10,6 +10,7 @@ from dataclasses import dataclass, field, replace
 from functools import partial
 from pathlib import Path
 
+import jsonschema
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 from scipy.special import logsumexp, ndtri
@@ -27,6 +28,33 @@ from .kernels import (
 
 _MORPHOLOGIES = {"gaussian", "emg", "powerlaw"}
 _CHECKPOINT_MODEL_VERSION = "joint-burst-v1"
+_CHECKPOINT_RECEIPT_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["schema_version", "binding", "binding_sha256"],
+    "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "binding_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "binding": {
+            "type": "object",
+            "additionalProperties": False,
+            "required": [
+                "run_context", "model_version", "association", "morphology",
+                "parameters", "prior_specs", "nlive", "dlogz"
+            ],
+            "properties": {
+                "run_context": {"type": "object", "minProperties": 1},
+                "model_version": {"const": _CHECKPOINT_MODEL_VERSION},
+                "association": {"type": "string", "minLength": 1},
+                "morphology": {"enum": sorted(_MORPHOLOGIES)},
+                "parameters": {"type": "array", "minItems": 1},
+                "prior_specs": {"type": "array", "minItems": 1},
+                "nlive": {"type": "integer", "minimum": 20},
+                "dlogz": {"type": "number", "exclusiveMinimum": 0},
+            },
+        },
+    },
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -103,6 +131,7 @@ class JointFitRequest:
     component_amplitude_bounds: tuple[float, float] = (1e-3, 1e3)
     checkpoint_directory: str | None = None
     checkpoint_identity: str | None = None
+    checkpoint_context: Mapping[str, object] = field(default_factory=dict)
     band_component_toa_bounds_s: Mapping[
         str, Mapping[str, tuple[float, float]]
     ] = field(default_factory=dict)
@@ -202,7 +231,9 @@ class JointFitRequest:
             raise ValueError("invalid nested-sampling controls")
         if not 0 <= self.maximum_failed_morphology_weight < 1:
             raise ValueError("invalid failed-morphology weight limit")
-        if self.checkpoint_directory is not None and not self.checkpoint_identity:
+        if self.checkpoint_directory is not None and (
+            not self.checkpoint_identity or not self.checkpoint_context
+        ):
             raise ValueError("checkpoint identity is required for resumable inference")
 
 
@@ -637,24 +668,43 @@ def _prior_transform_for_specs(
     return np.asarray(transformed)
 
 
-def _checkpoint_identity(
+def _checkpoint_binding(
     request: JointFitRequest, specs: tuple[tuple[str, float, float], ...]
-) -> str:
+) -> dict[str, object]:
     """Bind a resumable sampler to its exact inference subproblem."""
 
-    payload = {
-        "run_identity": request.checkpoint_identity,
+    return {
+        "run_context": dict(request.checkpoint_context),
         "model_version": _CHECKPOINT_MODEL_VERSION,
         "association": request.associations[0].association_id,
         "morphology": request.morphology,
-        "parameters": _parameter_names(request),
-        "prior_specs": specs,
+        "parameters": list(_parameter_names(request)),
+        "prior_specs": [list(spec) for spec in specs],
         "nlive": request.nlive,
         "dlogz": request.dlogz,
     }
+
+
+def _checkpoint_identity(
+    request: JointFitRequest, specs: tuple[tuple[str, float, float], ...]
+) -> str:
+    payload = _checkpoint_binding(request, specs)
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
+
+
+def _checkpoint_receipt(
+    request: JointFitRequest, specs: tuple[tuple[str, float, float], ...]
+) -> dict[str, object]:
+    binding = _checkpoint_binding(request, specs)
+    receipt = {
+        "schema_version": "1.0.0",
+        "binding": binding,
+        "binding_sha256": _checkpoint_identity(request, specs),
+    }
+    jsonschema.validate(receipt, _CHECKPOINT_RECEIPT_SCHEMA)
+    return receipt
 
 
 def _weighted_summary(values: NDArray[np.floating], weights: NDArray[np.floating]) -> PosteriorSummary:
@@ -678,7 +728,7 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
         raise RuntimeError("dynesty 3.1.0 is required for joint fitting") from error
 
     specs = _prior_specs(request)
-    checkpoint_identity = _checkpoint_identity(request, specs)
+    checkpoint_receipt = _checkpoint_receipt(request, specs)
 
     checkpoint_file = None
     if request.checkpoint_directory is not None:
@@ -694,7 +744,8 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
         if checkpoint_metadata is None or not checkpoint_metadata.exists():
             raise RuntimeError("checkpoint identity receipt is missing")
         identity = json.loads(checkpoint_metadata.read_text())
-        if identity.get("checkpoint_identity") != checkpoint_identity:
+        jsonschema.validate(identity, _CHECKPOINT_RECEIPT_SCHEMA)
+        if identity != checkpoint_receipt:
             raise RuntimeError("checkpoint identity differs from this request")
         sampler = dynesty.utils.restore_sampler(str(checkpoint_file))
     else:
@@ -703,7 +754,7 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
         if checkpoint_metadata:
             checkpoint_metadata.write_text(
                 json.dumps(
-                    {"checkpoint_identity": checkpoint_identity},
+                    checkpoint_receipt,
                     sort_keys=True,
                 )
                 + "\n"

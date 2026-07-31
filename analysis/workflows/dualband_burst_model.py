@@ -1226,6 +1226,27 @@ def _validate_stage_product(
         )
 
 
+def _validate_checkpoint_metadata(directory: Path, receipt: dict[str, Any]) -> None:
+    for name, identity in receipt.get("checkpoint_metadata", {}).items():
+        if identity.get("path") != name:
+            raise WorkflowFailure(
+                "checkpoint metadata path differs from its receipt key",
+                reason_codes=["provenance-checkpoint-metadata-mismatch"],
+            )
+        path = directory / name
+        if not path.exists() or _sha256(path) != identity.get("sha256"):
+            raise WorkflowFailure(
+                "checkpoint metadata changed after fit receipt",
+                reason_codes=["provenance-checkpoint-metadata-mismatch"],
+            )
+        payload = json.loads(path.read_text())
+        if payload.get("binding_sha256") != identity.get("binding_sha256"):
+            raise WorkflowFailure(
+                "checkpoint binding differs from fit receipt",
+                reason_codes=["provenance-checkpoint-metadata-mismatch"],
+            )
+
+
 def run_event(
     event: str,
     stage: str,
@@ -1321,6 +1342,9 @@ def run_event(
                     reason_codes=["provenance-stage-hash-mismatch"],
                     diagnostics={"product": model_path.name},
                 )
+            _validate_checkpoint_metadata(
+                run_directory / "checkpoints", fit_identity
+            )
             result = _load_fit(fit_path, model_path, event_data)
         else:
             checkpoint_directory = run_directory / "checkpoints"
@@ -1341,6 +1365,7 @@ def run_event(
                     checkpoint_identity=hashlib.sha256(
                         _canonical_json(checkpoint_context)
                     ).hexdigest(),
+                    checkpoint_context=checkpoint_context,
                 )
             )
             _save_fit(fit_path, result)
@@ -1370,6 +1395,18 @@ def run_event(
                     "checkpoint_sha256": {
                         path.name: _sha256(path)
                         for path in sorted(checkpoint_directory.glob("*.pkl"))
+                    },
+                    "checkpoint_metadata_sha256": {
+                        path.name: _sha256(path)
+                        for path in sorted(checkpoint_directory.glob("*.json"))
+                    },
+                    "checkpoint_metadata": {
+                        path.name: {
+                            "path": path.name,
+                            "sha256": _sha256(path),
+                            "binding_sha256": json.loads(path.read_text())["binding_sha256"],
+                        }
+                        for path in sorted(checkpoint_directory.glob("*.json"))
                     },
                 },
             )
