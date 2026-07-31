@@ -12,6 +12,7 @@ from pathlib import Path
 import jsonschema
 import numpy as np
 import pytest
+from pypdf import PdfReader
 
 import workflows.dualband_burst_model as workflow
 from workflows.dualband_burst_model import promote_result, run_event
@@ -98,6 +99,17 @@ def test_shared_dm_axis_labels_do_not_overlap() -> None:
         )
     finally:
         workflow.plt.close(figure)
+
+
+def test_review_packet_uses_summary_table_not_evidence_bars(
+    published_result: tuple[Path, Path],
+) -> None:
+    _, result_dir = published_result
+    page_text = PdfReader(result_dir / "review-packet.pdf").pages[1].extract_text()
+    assert "Quantity" in page_text
+    assert "Morphology: emg" in page_text
+    assert "Association: one-to-one" in page_text
+    assert "Evidence weight" not in page_text
 
 
 def test_resume_reuses_identical_products_and_owner_promotion_changes_status_only(

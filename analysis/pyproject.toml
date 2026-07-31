@@ -61,7 +61,7 @@ dev = [
 package = true
 
 [tool.setuptools.packages.find]
-include = ["faber2026*", "studies*", "workflows*"]
+include = ["faber2026*", "plotting*", "studies*", "workflows*"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

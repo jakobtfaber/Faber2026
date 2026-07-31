@@ -33,6 +33,7 @@ from faber2026.burst_models import (
 from faber2026.burst_models.kernels import (
     dispersion_delay_s,
 )
+from plotting import use_manuscript_style
 from studies.dualband_synthetic import SyntheticEvent, build_synthetic_event
 
 _STAGES = ("observations", "fit", "verify", "review")
@@ -900,6 +901,18 @@ def _render_review_packet(
     checks: dict[str, Any],
     request_hash: str,
 ) -> None:
+    with plt.rc_context():
+        use_manuscript_style()
+        _render_review_packet_styled(path, event, result, checks, request_hash)
+
+
+def _render_review_packet_styled(
+    path: Path,
+    event: SyntheticEvent,
+    result: JointFitResult,
+    checks: dict[str, Any],
+    request_hash: str,
+) -> None:
     with PdfPages(
         path,
         metadata={"CreationDate": None, "ModDate": None},
@@ -909,6 +922,9 @@ def _render_review_packet(
         )
         for column, observation in enumerate(event.request.observations):
             instrument = observation.instrument
+            display_name = {"chimefrb": "CHIME/FRB", "dsa110": "DSA-110"}[
+                instrument
+            ]
             extent = [
                 observation.times_s[0] * 1000,
                 observation.times_s[-1] * 1000,
@@ -932,30 +948,32 @@ def _render_review_packet(
                 axes[row, column].text(
                     0.02,
                     0.95,
-                    f"{instrument} — {label}",
+                    f"{display_name} — {label}",
                     transform=axes[row, column].transAxes,
                     va="top",
                 )
         pdf.savefig(figure)
         plt.close(figure)
 
-        figure, axes = plt.subplots(
-            2, 2, figsize=(9, 8), constrained_layout=True
-        )
+        figure = plt.figure(figsize=(9, 8), constrained_layout=True)
+        grid = figure.add_gridspec(2, 2, height_ratios=(1.0, 0.85))
+        dm_axis = figure.add_subplot(grid[0, 0])
+        geometry_axis = figure.add_subplot(grid[0, 1])
+        summary_axis = figure.add_subplot(grid[1, :])
         dm_samples = result.samples[:, 0]
-        axes[0, 0].hist(
+        dm_axis.hist(
             dm_samples,
             bins=40,
             weights=result.weights,
             histtype="step",
             color="black",
         )
-        axes[0, 0].axvline(
+        dm_axis.axvline(
             event.truth["absolute_dm"], color="tab:red", linestyle="--"
         )
-        _configure_shared_dm_axis(axes[0, 0], dm_samples)
-        axes[0, 0].set_xlabel(r"Shared DM (pc cm$^{-3}$)")
-        axes[0, 0].set_ylabel("Posterior density")
+        _configure_shared_dm_axis(dm_axis, dm_samples)
+        dm_axis.set_xlabel(r"Shared DM (pc cm$^{-3}$)")
+        dm_axis.set_ylabel("Posterior density")
 
         delays_ms = np.asarray(
             [
@@ -965,13 +983,13 @@ def _render_review_packet(
         ) * 1000
         geocentric_ms = result.component_toas[0].median * 1000
         topocentric_ms = geocentric_ms + delays_ms
-        axes[0, 1].plot(
+        geometry_axis.plot(
             delays_ms,
             geocentric_ms + delays_ms,
             color="0.5",
             linestyle="--",
         )
-        axes[0, 1].scatter(
+        geometry_axis.scatter(
             delays_ms, topocentric_ms, color=("tab:orange", "tab:blue")
         )
         for name, x, y in zip(
@@ -980,44 +998,63 @@ def _render_review_packet(
             topocentric_ms,
             strict=True,
         ):
-            axes[0, 1].annotate(name, (x, y), xytext=(4, 4), textcoords="offset points")
-        axes[0, 1].set_xlabel("Station delay from geocenter (ms)")
-        axes[0, 1].set_ylabel("Topocentric 400 MHz arrival time (ms)")
+            geometry_axis.annotate(
+                name, (x, y), xytext=(4, 4), textcoords="offset points"
+            )
+        geometry_axis.set_xlabel("Station delay from geocenter (ms)")
+        geometry_axis.set_ylabel("Topocentric 400 MHz arrival time (ms)")
 
-        labels = [
-            *(f"morphology: {name}" for name in result.morphology_weights),
-            *(f"association: {name}" for name in result.association_weights),
+        passed_checks = sum(check["passed"] for check in checks.values())
+        rows = [
+            (
+                "Status",
+                result.status.replace("-", " "),
+                f"{passed_checks}/{len(checks)} checks pass",
+            ),
+            (
+                "Shared DM",
+                f"{result.shared_dm.median:.6f} pc cm$^{{-3}}$",
+                "posterior median",
+            ),
+            (
+                "400 MHz ToA",
+                f"{result.component_toas[0].median:.9f} s",
+                "geocentric, unscattered",
+            ),
+            (
+                "ln Z",
+                f"{result.log_evidence:.2f} ± {result.log_evidence_uncertainty:.2f}",
+                "evidence-weighted",
+            ),
         ]
-        values = [
-            *result.morphology_weights.values(),
-            *result.association_weights.values(),
-        ]
-        positions = np.arange(len(labels))
-        axes[1, 0].barh(positions, values, color="0.5")
-        axes[1, 0].set_xlim(0, 1.05)
-        axes[1, 0].set_yticks(positions, labels, fontsize=8)
-        axes[1, 0].set_xlabel("Evidence weight")
-
-        axes[1, 1].axis("off")
-        lines = [
-            f"Status: {result.status}",
-            f"Request: {request_hash[:16]}…",
-            f"DM: {result.shared_dm.median:.6f}",
-            f"400 MHz ToA: {result.component_toas[0].median:.9f} s",
-            f"ln Z: {result.log_evidence:.2f} ± {result.log_evidence_uncertainty:.2f}",
-        ]
-        lines.extend(
-            f"{name}: {result.morphology_statuses[name]}, "
-            f"ln Z={result.morphology_log_evidences[name]:.1f}"
-            for name in result.morphology_weights
+        rows.extend(
+            (
+                f"Morphology: {name}",
+                f"weight {weight:.3f}",
+                result.morphology_statuses[name].replace("-", " "),
+            )
+            for name, weight in result.morphology_weights.items()
         )
-        lines.extend(
-            f"{name}: {'PASS' if check['passed'] else 'FAIL'}"
-            for name, check in checks.items()
+        rows.extend(
+            (f"Association: {name}", f"weight {weight:.3f}", "")
+            for name, weight in result.association_weights.items()
         )
-        axes[1, 1].text(
-            0.0, 1.0, "\n".join(lines), va="top", family="monospace", fontsize=8
+        rows.append(("Request", request_hash[:16] + "…", "hash-bound"))
+        summary_axis.axis("off")
+        table = summary_axis.table(
+            cellText=rows,
+            colLabels=("Quantity", "Value", "Status"),
+            colWidths=(0.30, 0.35, 0.35),
+            cellLoc="left",
+            loc="center",
         )
+        table.auto_set_font_size(False)
+        table.set_fontsize(8)
+        table.scale(1.0, 1.18)
+        for (row, _column), cell in table.get_celld().items():
+            cell.set_edgecolor("0.6")
+            if row == 0:
+                cell.set_text_props(weight="bold")
         pdf.savefig(figure)
         plt.close(figure)
 
