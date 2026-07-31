@@ -7,6 +7,7 @@ from .joint import (
     JointFitRequest,
     JointFitResult,
     PosteriorSummary,
+    combine_joint_fit_results,
     evaluate_log_likelihood,
     fit_joint_event,
 )
@@ -18,6 +19,7 @@ __all__ = [
     "JointFitRequest",
     "JointFitResult",
     "PosteriorSummary",
+    "combine_joint_fit_results",
     "evaluate_log_likelihood",
     "fit_joint_event",
 ]

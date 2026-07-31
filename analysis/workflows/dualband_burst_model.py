@@ -9,6 +9,7 @@ import json
 import math
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -28,6 +29,7 @@ from scipy.special import ndtr
 from faber2026.burst_models import (
     JointFitResult,
     PosteriorSummary,
+    combine_joint_fit_results,
     fit_joint_event,
 )
 from faber2026.burst_models.kernels import (
@@ -44,6 +46,7 @@ _CANONICAL_PRODUCTS = (
     "provenance.json",
     "review-packet.pdf",
 )
+_CELL_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 
 def _power_law_tail_mass(
@@ -157,6 +160,428 @@ def _write_json(path: Path, value: Any) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_bytes(_json_document_bytes(value))
     os.replace(temporary, path)
+
+
+def _cell_files(directory: Path) -> dict[str, dict[str, int | str]]:
+    entries = list(directory.rglob("*"))
+    if any(path.is_symlink() for path in entries):
+        raise WorkflowFailure(
+            "cell contains a symbolic link",
+            reason_codes=["provenance-cell-path-invalid"],
+        )
+    files = sorted(
+        path for path in entries if path.is_file() and path.name != "cell-receipt.json"
+    )
+    return {
+        path.relative_to(directory).as_posix(): {
+            "sha256": _sha256(path),
+            "size": path.stat().st_size,
+        }
+        for path in files
+    }
+
+
+def run_fit_cell(
+    event: str,
+    association_id: str,
+    morphology: str,
+    repository_root: Path,
+    cells_root: Path,
+) -> Path:
+    """Run one configured association and morphology through the serial fitter."""
+
+    if (
+        not _CELL_ID.fullmatch(event)
+        or not _CELL_ID.fullmatch(association_id)
+        or not _CELL_ID.fullmatch(morphology)
+    ):
+        raise ValueError("cell identifiers must be safe path components")
+    repository_root = repository_root.resolve()
+    cells_root = cells_root.resolve()
+    configuration = _load_configuration(event, repository_root)
+    request_hash = _request_hash(configuration, repository_root)
+    environment = _environment_preflight(repository_root)
+    event_data = build_synthetic_event(configuration)
+    association = next(
+        (
+            item
+            for item in event_data.request.associations
+            if item.association_id == association_id
+        ),
+        None,
+    )
+    if association is None:
+        raise ValueError(f"association is not configured: {association_id}")
+    morphologies = (
+        (event_data.request.morphology,)
+        if isinstance(event_data.request.morphology, str)
+        else event_data.request.morphology
+    )
+    if morphology not in morphologies:
+        raise ValueError(f"morphology is not configured: {morphology}")
+    directory = cells_root / event / request_hash / association_id / morphology
+    directory.mkdir(parents=True, exist_ok=True)
+    receipt_path = directory / "cell-receipt.json"
+    if receipt_path.exists():
+        _validate_fit_cell(
+            directory,
+            association_id=association_id,
+            morphology=morphology,
+            request_hash=request_hash,
+            environment=environment,
+            request=event_data.request,
+            configuration=configuration,
+            repository_root=repository_root,
+        )
+        return directory
+    if (directory / "posterior.npz").exists() or (directory / "model-products.npz").exists():
+        raise WorkflowFailure(
+            "partial cell products cannot be resumed",
+            reason_codes=["provenance-partial-cell"],
+        )
+    checkpoint_context = {
+        "request_sha256": request_hash,
+        "environment_sha256": environment["manifest_sha256"],
+        "schema_version": configuration["schema_version"],
+        "model_version": "joint-burst-v1",
+        "input_hashes": {
+            observation.instrument: dict(observation.input_hashes)
+            for observation in event_data.request.observations
+        },
+    }
+    started_unix_ns = time.time_ns()
+    started = time.perf_counter()
+    result = fit_joint_event(
+        replace(
+            event_data.request,
+            associations=(association,),
+            morphology=morphology,
+            checkpoint_directory=str(directory / "checkpoints"),
+            checkpoint_identity=hashlib.sha256(
+                _canonical_json(checkpoint_context)
+            ).hexdigest(),
+            checkpoint_context=checkpoint_context,
+        )
+    )
+    _save_fit(directory / "posterior.npz", result)
+    _save_model_products(directory / "model-products.npz", event_data, result)
+    finished_unix_ns = time.time_ns()
+    receipt = {
+        "schema_version": "1.0.0",
+        "request_sha256": request_hash,
+        "environment_sha256": environment["manifest_sha256"],
+        "source": _git_identity(repository_root),
+        "cell": {
+            "association_id": association_id,
+            "morphology": morphology,
+        },
+        "binding": {
+            "configuration_schema_version": configuration["schema_version"],
+            "model_version": "joint-burst-v1",
+            "input_hashes": checkpoint_context["input_hashes"],
+        },
+        "sampler": {
+            "seed": event_data.request.seed,
+            "nlive": event_data.request.nlive,
+            "dlogz": event_data.request.dlogz,
+        },
+        "timing": {
+            "started_unix_ns": started_unix_ns,
+            "finished_unix_ns": finished_unix_ns,
+            "elapsed_seconds": time.perf_counter() - started,
+        },
+        "files": _cell_files(directory),
+    }
+    schema = json.loads(
+        (
+            repository_root
+            / "analysis-configs"
+            / "dualband-burst-models"
+            / "cell-receipt.schema.json"
+        ).read_text()
+    )
+    try:
+        jsonschema.validate(receipt, schema)
+    except jsonschema.ValidationError as error:
+        raise WorkflowFailure(
+            "cell receipt violates its closed schema",
+            reason_codes=["provenance-cell-receipt-schema"],
+        ) from error
+    _write_json(receipt_path, receipt)
+    return directory
+
+
+def _validate_fit_cell(
+    directory: Path,
+    *,
+    association_id: str,
+    morphology: str,
+    request_hash: str,
+    environment: dict[str, Any],
+    request: Any,
+    configuration: dict[str, Any],
+    repository_root: Path,
+) -> dict[str, Any]:
+    if not directory.is_dir() or directory.is_symlink():
+        raise WorkflowFailure(
+            f"missing matrix cell: {association_id}/{morphology}",
+            reason_codes=["provenance-cell-missing"],
+        )
+    receipt_path = directory / "cell-receipt.json"
+    if not receipt_path.is_file() or receipt_path.is_symlink():
+        raise WorkflowFailure(
+            f"missing matrix cell receipt: {association_id}/{morphology}",
+            reason_codes=["provenance-cell-receipt-missing"],
+        )
+    receipt = json.loads(receipt_path.read_text())
+    schema = json.loads(
+        (
+            repository_root
+            / "analysis-configs"
+            / "dualband-burst-models"
+            / "cell-receipt.schema.json"
+        ).read_text()
+    )
+    try:
+        jsonschema.validate(receipt, schema)
+    except jsonschema.ValidationError as error:
+        raise WorkflowFailure(
+            "cell receipt violates its closed schema",
+            reason_codes=["provenance-cell-receipt-schema"],
+        ) from error
+    expected_files = {
+        "posterior.npz",
+        "model-products.npz",
+        f"checkpoints/{association_id}-{morphology}.json",
+        f"checkpoints/{association_id}-{morphology}.pkl",
+    }
+    if set(receipt["files"]) != expected_files or receipt["files"] != _cell_files(directory):
+        raise WorkflowFailure(
+            "cell file manifest differs from fixed contract",
+            reason_codes=["provenance-cell-hash-mismatch"],
+        )
+    checkpoint_path = (
+        directory / "checkpoints" / f"{association_id}-{morphology}.json"
+    )
+    checkpoint = json.loads(checkpoint_path.read_text())
+    binding = checkpoint.get("binding")
+    if (
+        not isinstance(binding, dict)
+        or checkpoint.get("binding_sha256")
+        != hashlib.sha256(_canonical_json(binding)).hexdigest()
+    ):
+        raise WorkflowFailure(
+            "checkpoint binding hash is invalid",
+            reason_codes=["provenance-cell-checkpoint-binding"],
+        )
+    expected_sampler = {
+        "seed": request.seed,
+        "nlive": request.nlive,
+        "dlogz": request.dlogz,
+    }
+    expected_binding = {
+        "configuration_schema_version": configuration["schema_version"],
+        "model_version": "joint-burst-v1",
+        "input_hashes": {
+            observation.instrument: dict(observation.input_hashes)
+            for observation in request.observations
+        },
+    }
+    expected_run_context = {
+        "request_sha256": request_hash,
+        "environment_sha256": environment["manifest_sha256"],
+        "schema_version": configuration["schema_version"],
+        "model_version": "joint-burst-v1",
+        "input_hashes": expected_binding["input_hashes"],
+    }
+    expected_run_identity = hashlib.sha256(
+        _canonical_json(expected_run_context)
+    ).hexdigest()
+    if (
+        receipt["request_sha256"] != request_hash
+        or receipt["environment_sha256"] != environment["manifest_sha256"]
+        or receipt["source"] != environment["code"]
+        or receipt["cell"]
+        != {"association_id": association_id, "morphology": morphology}
+        or receipt["binding"] != expected_binding
+        or receipt["sampler"] != expected_sampler
+        or binding.get("run_context") != expected_run_context
+        or binding.get("run_identity") != expected_run_identity
+        or binding.get("model_version") != "joint-burst-v1"
+        or binding.get("association") != association_id
+        or binding.get("morphology") != morphology
+        or binding.get("nlive") != request.nlive
+        or binding.get("dlogz") != request.dlogz
+    ):
+        raise WorkflowFailure(
+            "cell identity differs from aggregate request",
+            reason_codes=["provenance-cell-identity-mismatch"],
+        )
+    return receipt
+
+
+def aggregate_fit_cells(
+    event: str,
+    repository_root: Path,
+    cells_root: Path,
+    output_root: Path,
+) -> Path:
+    """Validate four serial fit cells and publish their deterministic mixture."""
+
+    repository_root = repository_root.resolve()
+    cells_root = cells_root.resolve()
+    output_root = output_root.resolve()
+    configuration = _load_configuration(event, repository_root)
+    request_hash = _request_hash(configuration, repository_root)
+    environment = _environment_preflight(repository_root)
+    event_data = build_synthetic_event(configuration)
+    morphologies = (
+        (event_data.request.morphology,)
+        if isinstance(event_data.request.morphology, str)
+        else event_data.request.morphology
+    )
+    cells = tuple(
+        (association.association_id, morphology)
+        for association in event_data.request.associations
+        for morphology in morphologies
+    )
+    if len(cells) != 4:
+        raise WorkflowFailure(
+            "matrix contract requires exactly four configured cells",
+            reason_codes=["configuration-cell-count"],
+        )
+    matrix_root = cells_root / event / request_hash
+    fits: list[JointFitResult] = []
+    cell_directories: list[Path] = []
+    for association_id, morphology in cells:
+        directory = matrix_root / association_id / morphology
+        _validate_fit_cell(
+            directory,
+            association_id=association_id,
+            morphology=morphology,
+            request_hash=request_hash,
+            environment=environment,
+            request=event_data.request,
+            configuration=configuration,
+            repository_root=repository_root,
+        )
+        fit = _load_fit(
+            directory / "posterior.npz",
+            directory / "model-products.npz",
+            event_data,
+        )
+        checkpoint = json.loads(
+            (
+                directory
+                / "checkpoints"
+                / f"{association_id}-{morphology}.json"
+            ).read_text()
+        )
+        if (
+            set(np.unique(fit.sample_associations)) != {association_id}
+            or set(np.unique(fit.sample_morphologies)) != {morphology}
+            or tuple(checkpoint["binding"]["parameters"]) != fit.parameter_names
+        ):
+            raise WorkflowFailure(
+                "loaded posterior semantics differ from declared cell",
+                reason_codes=["provenance-cell-semantic-mismatch"],
+            )
+        fits.append(fit)
+        cell_directories.append(directory)
+    expected_paths: set[str] = set()
+    for association_id, morphology in cells:
+        prefix = f"{association_id}/{morphology}"
+        expected_paths.update(
+            {
+                association_id,
+                prefix,
+                f"{prefix}/cell-receipt.json",
+                f"{prefix}/posterior.npz",
+                f"{prefix}/model-products.npz",
+                f"{prefix}/checkpoints",
+                f"{prefix}/checkpoints/{association_id}-{morphology}.json",
+                f"{prefix}/checkpoints/{association_id}-{morphology}.pkl",
+            }
+        )
+    observed_entries = list(matrix_root.rglob("*"))
+    if any(path.is_symlink() for path in observed_entries) or {
+        path.relative_to(matrix_root).as_posix() for path in observed_entries
+    } != expected_paths:
+        raise WorkflowFailure(
+            "matrix contains missing or unexpected artifact paths",
+            reason_codes=["provenance-cell-set-mismatch"],
+        )
+    result = combine_joint_fit_results(event_data.request, fits)
+    canonical = output_root / "dualband-burst-models" / event
+    if canonical.exists():
+        raise WorkflowFailure(
+            "aggregate refuses an existing canonical result",
+            reason_codes=["provenance-aggregate-state-conflict"],
+        )
+    run_directory = output_root / ".runs" / event / request_hash
+    run_directory.mkdir(parents=True, exist_ok=True)
+    observations_path = run_directory / "observations.npz"
+    observations_receipt = run_directory / "observations-receipt.json"
+    _validate_stage_product(
+        observations_path,
+        observations_receipt,
+        request_hash,
+        "output_sha256",
+        environment["manifest_sha256"],
+    )
+    if not observations_path.exists():
+        _save_observations(observations_path, event_data)
+        _write_json(
+            observations_receipt,
+            {
+                "request_sha256": request_hash,
+                "environment_sha256": environment["manifest_sha256"],
+                "output_sha256": _sha256(observations_path),
+            },
+        )
+    checkpoint_directory = run_directory / "checkpoints"
+    checkpoint_directory.mkdir(exist_ok=True)
+    for directory in cell_directories:
+        for source in sorted((directory / "checkpoints").iterdir()):
+            target = checkpoint_directory / source.name
+            if target.exists():
+                raise WorkflowFailure(
+                    "aggregate checkpoint destination is not empty",
+                    reason_codes=["provenance-aggregate-state-conflict"],
+                )
+            shutil.copy2(source, target)
+    fit_path = run_directory / "posterior.npz"
+    model_path = run_directory / "model-products.npz"
+    if fit_path.exists() or model_path.exists() or (run_directory / "fit-receipt.json").exists():
+        raise WorkflowFailure(
+            "aggregate fit destination is not empty",
+            reason_codes=["provenance-aggregate-state-conflict"],
+        )
+    _save_fit(fit_path, result)
+    _save_model_products(model_path, event_data, result)
+    fit_receipt = _fit_receipt(
+        result,
+        fit_path,
+        model_path,
+        checkpoint_directory,
+        request_hash,
+        environment,
+    )
+    fit_receipt["matrix_cells"] = {
+        f"{association_id}/{morphology}": {
+            "receipt_sha256": _sha256(directory / "cell-receipt.json"),
+            "files": json.loads((directory / "cell-receipt.json").read_text())["files"],
+        }
+        for (association_id, morphology), directory in zip(
+            cells, cell_directories, strict=True
+        )
+    }
+    fit_receipt["matrix_order"] = [
+        f"{association_id}/{morphology}"
+        for association_id, morphology in cells
+    ]
+    _write_json(run_directory / "fit-receipt.json", fit_receipt)
+    return run_event(event, "review", repository_root, output_root)
 
 
 def _load_configuration(event: str, repository_root: Path) -> dict[str, Any]:
@@ -305,6 +730,10 @@ def _request_hash(configuration: dict[str, Any], repository_root: Path) -> str:
             / "analysis-configs"
             / "dualband-burst-models"
             / "params.schema.json",
+            repository_root
+            / "analysis-configs"
+            / "dualband-burst-models"
+            / "cell-receipt.schema.json",
             repository_root / "pyproject.toml",
             repository_root / "uv.lock",
             repository_root / ".python-version",
@@ -338,6 +767,16 @@ def _save_observations(path: Path, event: SyntheticEvent) -> None:
 def _save_fit(path: Path, result: JointFitResult) -> None:
     np.savez_compressed(
         path,
+        status=result.status,
+        shared_dm_summary=np.asarray(
+            [result.shared_dm.median, result.shared_dm.lower, result.shared_dm.upper]
+        ),
+        component_toa_summaries=np.asarray(
+            [
+                [summary.median, summary.lower, summary.upper]
+                for summary in result.component_toas
+            ]
+        ),
         samples=result.samples,
         weights=result.weights,
         parameter_names=np.asarray(result.parameter_names),
@@ -353,6 +792,7 @@ def _save_fit(path: Path, result: JointFitResult) -> None:
         morphology_weights_json=json.dumps(
             dict(result.morphology_weights), sort_keys=True
         ),
+        morphology_order=np.asarray(tuple(result.morphology_weights)),
         morphology_statuses_json=json.dumps(
             dict(result.morphology_statuses), sort_keys=True
         ),
@@ -368,6 +808,7 @@ def _save_fit(path: Path, result: JointFitResult) -> None:
         association_weights_json=json.dumps(
             dict(result.association_weights), sort_keys=True
         ),
+        association_order=np.asarray(tuple(result.association_weights)),
     )
 
 
@@ -505,6 +946,61 @@ def _utc_string(epoch_unix_ns: int, offset_s: float) -> str:
     return str(time.isot)
 
 
+def _published_summary_fields(
+    event: SyntheticEvent,
+    result: JointFitResult,
+    uncertainty_budget: dict[str, Any],
+) -> dict[str, Any]:
+    components = []
+    for component, summary in zip(
+        event.request.component_ids,
+        result.component_toas,
+        strict=True,
+    ):
+        instrument_summaries = {}
+        instrument_utc = {}
+        for instrument in ("chimefrb", "dsa110"):
+            values = (
+                result.samples[
+                    :, result.parameter_names.index(f"toa_400_s:{component}")
+                ]
+                + result.samples[
+                    :, result.parameter_names.index(f"timing_error_s:{instrument}")
+                ]
+                + event.request.geometry.station_delays_s[instrument]
+            )
+            instrument_summary = _weighted_summary(values, result.weights)
+            instrument_summaries[f"{instrument}_toa_400_s"] = asdict(
+                instrument_summary
+            )
+            instrument_utc[f"{instrument}_toa_400_utc"] = {
+                key: _utc_string(event.request.geometry.epoch_unix_ns, value)
+                for key, value in asdict(instrument_summary).items()
+            }
+        components.append(
+            {
+                "id": component,
+                "geocentric_toa_400_s": asdict(summary),
+                "geocentric_toa_400_utc": {
+                    key: _utc_string(event.request.geometry.epoch_unix_ns, value)
+                    for key, value in asdict(summary).items()
+                },
+                **instrument_summaries,
+                **instrument_utc,
+            }
+        )
+    return {
+        "shared_absolute_dm": {
+            **asdict(result.shared_dm),
+            "uncertainty_classes": _dm_uncertainty_classes(
+                result,
+                uncertainty_budget,
+            ),
+        },
+        "components": components,
+    }
+
+
 def _load_fit(
     posterior_path: Path,
     model_path: Path,
@@ -517,32 +1013,54 @@ def _load_fit(
         parameter_units = tuple(str(item) for item in posterior["parameter_units"])
         sample_morphologies = posterior["sample_morphologies"]
         sample_associations = posterior["sample_associations"]
-        summaries = tuple(
-            _weighted_summary(samples[:, index], weights)
-            for index in range(samples.shape[1])
+        status = str(posterior["status"])
+        shared_dm = PosteriorSummary(
+            *(float(value) for value in posterior["shared_dm_summary"])
+        )
+        component_toas = tuple(
+            PosteriorSummary(*(float(value) for value in row))
+            for row in posterior["component_toa_summaries"]
         )
         log_evidence = float(posterior["log_evidence"])
         log_evidence_uncertainty = float(posterior["log_evidence_uncertainty"])
         maximum_not_on_boundary = bool(posterior["maximum_not_on_boundary"])
         prior_edge_mass = json.loads(str(posterior["prior_edge_mass_json"]))
-        morphology_weights = json.loads(
-            str(posterior["morphology_weights_json"])
-        )
-        morphology_statuses = json.loads(
-            str(posterior["morphology_statuses_json"])
-        )
-        morphology_log_evidences = json.loads(
+        morphology_order = tuple(str(value) for value in posterior["morphology_order"])
+        association_order = tuple(str(value) for value in posterior["association_order"])
+        morphology_weights_data = json.loads(str(posterior["morphology_weights_json"]))
+        morphology_statuses_data = json.loads(str(posterior["morphology_statuses_json"]))
+        morphology_log_evidences_data = json.loads(
             str(posterior["morphology_log_evidences_json"])
         )
-        morphology_log_evidence_uncertainties = json.loads(
+        morphology_log_evidence_uncertainties_data = json.loads(
             str(posterior["morphology_log_evidence_uncertainties_json"])
         )
-        morphology_maximum_prior_edge_mass = json.loads(
+        morphology_maximum_prior_edge_mass_data = json.loads(
             str(posterior["morphology_maximum_prior_edge_mass_json"])
         )
-        association_weights = json.loads(
+        association_weights_data = json.loads(
             str(posterior["association_weights_json"])
         )
+        morphology_weights = {
+            name: morphology_weights_data[name] for name in morphology_order
+        }
+        morphology_statuses = {
+            name: morphology_statuses_data[name] for name in morphology_order
+        }
+        morphology_log_evidences = {
+            name: morphology_log_evidences_data[name] for name in morphology_order
+        }
+        morphology_log_evidence_uncertainties = {
+            name: morphology_log_evidence_uncertainties_data[name]
+            for name in morphology_order
+        }
+        morphology_maximum_prior_edge_mass = {
+            name: morphology_maximum_prior_edge_mass_data[name]
+            for name in morphology_order
+        }
+        association_weights = {
+            name: association_weights_data[name] for name in association_order
+        }
     models: dict[str, np.ndarray] = {}
     residuals: dict[str, np.ndarray] = {}
     with np.load(model_path, allow_pickle=False) as products:
@@ -553,15 +1071,10 @@ def _load_fit(
             residuals[observation.instrument] = products[
                 f"{observation.instrument}_residual"
             ]
-    component_count = len(event.request.component_ids)
     return JointFitResult(
-        status=(
-            "provisional-owner-review"
-            if maximum_not_on_boundary
-            else "failed-inference"
-        ),
-        shared_dm=summaries[0],
-        component_toas=summaries[1 : 1 + component_count],
+        status=status,
+        shared_dm=shared_dm,
+        component_toas=component_toas,
         parameter_names=parameter_names,
         parameter_units=parameter_units,
         samples=samples,
@@ -1262,6 +1775,49 @@ def _validate_checkpoint_metadata(directory: Path, receipt: dict[str, Any]) -> N
             )
 
 
+def _fit_receipt(
+    result: JointFitResult,
+    fit_path: Path,
+    model_path: Path,
+    checkpoint_directory: Path,
+    request_hash: str,
+    environment: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "request_sha256": request_hash,
+        "environment_sha256": environment["manifest_sha256"],
+        "posterior_sha256": _sha256(fit_path),
+        "model_products_sha256": _sha256(model_path),
+        "status": result.status,
+        "morphology_weights": dict(result.morphology_weights),
+        "morphology_statuses": dict(result.morphology_statuses),
+        "morphology_log_evidences": dict(result.morphology_log_evidences),
+        "morphology_log_evidence_uncertainties": dict(
+            result.morphology_log_evidence_uncertainties
+        ),
+        "morphology_maximum_prior_edge_mass": dict(
+            result.morphology_maximum_prior_edge_mass
+        ),
+        "prior_edge_mass_by_parameter": dict(result.prior_edge_mass_by_parameter),
+        "checkpoint_sha256": {
+            path.name: _sha256(path)
+            for path in sorted(checkpoint_directory.glob("*.pkl"))
+        },
+        "checkpoint_metadata_sha256": {
+            path.name: _sha256(path)
+            for path in sorted(checkpoint_directory.glob("*.json"))
+        },
+        "checkpoint_metadata": {
+            path.name: {
+                "path": path.name,
+                "sha256": _sha256(path),
+                "binding_sha256": json.loads(path.read_text())["binding_sha256"],
+            }
+            for path in sorted(checkpoint_directory.glob("*.json"))
+        },
+    }
+
+
 def run_event(
     event: str,
     stage: str,
@@ -1387,43 +1943,14 @@ def run_event(
             _save_model_products(model_path, event_data, result)
             _write_json(
                 fit_receipt,
-                {
-                    "request_sha256": request_hash,
-                    "environment_sha256": environment["manifest_sha256"],
-                    "posterior_sha256": _sha256(fit_path),
-                    "model_products_sha256": _sha256(model_path),
-                    "status": result.status,
-                    "morphology_weights": dict(result.morphology_weights),
-                    "morphology_statuses": dict(result.morphology_statuses),
-                    "morphology_log_evidences": dict(
-                        result.morphology_log_evidences
-                    ),
-                    "morphology_log_evidence_uncertainties": dict(
-                        result.morphology_log_evidence_uncertainties
-                    ),
-                    "morphology_maximum_prior_edge_mass": dict(
-                        result.morphology_maximum_prior_edge_mass
-                    ),
-                    "prior_edge_mass_by_parameter": dict(
-                        result.prior_edge_mass_by_parameter
-                    ),
-                    "checkpoint_sha256": {
-                        path.name: _sha256(path)
-                        for path in sorted(checkpoint_directory.glob("*.pkl"))
-                    },
-                    "checkpoint_metadata_sha256": {
-                        path.name: _sha256(path)
-                        for path in sorted(checkpoint_directory.glob("*.json"))
-                    },
-                    "checkpoint_metadata": {
-                        path.name: {
-                            "path": path.name,
-                            "sha256": _sha256(path),
-                            "binding_sha256": json.loads(path.read_text())["binding_sha256"],
-                        }
-                        for path in sorted(checkpoint_directory.glob("*.json"))
-                    },
-                },
+                _fit_receipt(
+                    result,
+                    fit_path,
+                    model_path,
+                    checkpoint_directory,
+                    request_hash,
+                    environment,
+                ),
             )
         if result.status != "provisional-owner-review":
             raise WorkflowFailure(
@@ -1495,6 +2022,13 @@ def run_event(
                 )
             },
         }
+        fit_identity = json.loads(fit_receipt.read_text())
+        if "matrix_cells" in fit_identity:
+            provenance["aggregation"] = {
+                "method": "configured-serial-cell-evidence-mixture",
+                "ordered_cells": fit_identity["matrix_order"],
+                "cells": fit_identity["matrix_cells"],
+            }
         products: dict[str, dict[str, str]] = {}
         params = {
             "schema_version": "1.0.0",
@@ -1505,111 +2039,11 @@ def run_event(
                 "reference_frequency_mhz": 400.0,
                 "coordinate": "geocentric unscattered arrival time",
             },
-            "shared_absolute_dm": {
-                **asdict(result.shared_dm),
-                "uncertainty_classes": _dm_uncertainty_classes(
-                    result,
-                    configuration["uncertainty_budget"],
-                ),
-            },
-            "components": [
-                {
-                    "id": component,
-                    "geocentric_toa_400_s": asdict(summary),
-                    "geocentric_toa_400_utc": {
-                        key: _utc_string(
-                            event_data.request.geometry.epoch_unix_ns,
-                            value,
-                        )
-                        for key, value in asdict(summary).items()
-                    },
-                    "chimefrb_toa_400_s": asdict(
-                        _weighted_summary(
-                            result.samples[:, result.parameter_names.index(
-                                f"toa_400_s:{component}"
-                            )]
-                            + result.samples[:, result.parameter_names.index(
-                                "timing_error_s:chimefrb"
-                            )]
-                            + event_data.request.geometry.station_delays_s[
-                                "chimefrb"
-                            ],
-                            result.weights,
-                        )
-                    ),
-                    "chimefrb_toa_400_utc": {
-                        key: _utc_string(
-                            event_data.request.geometry.epoch_unix_ns,
-                            value,
-                        )
-                        for key, value in asdict(
-                            _weighted_summary(
-                                result.samples[
-                                    :,
-                                    result.parameter_names.index(
-                                        f"toa_400_s:{component}"
-                                    ),
-                                ]
-                                + result.samples[
-                                    :,
-                                    result.parameter_names.index(
-                                        "timing_error_s:chimefrb"
-                                    ),
-                                ]
-                                + event_data.request.geometry.station_delays_s[
-                                    "chimefrb"
-                                ],
-                                result.weights,
-                            )
-                        ).items()
-                    },
-                    "dsa110_toa_400_s": asdict(
-                        _weighted_summary(
-                            result.samples[:, result.parameter_names.index(
-                                f"toa_400_s:{component}"
-                            )]
-                            + result.samples[:, result.parameter_names.index(
-                                "timing_error_s:dsa110"
-                            )]
-                            + event_data.request.geometry.station_delays_s[
-                                "dsa110"
-                            ],
-                            result.weights,
-                        )
-                    ),
-                    "dsa110_toa_400_utc": {
-                        key: _utc_string(
-                            event_data.request.geometry.epoch_unix_ns,
-                            value,
-                        )
-                        for key, value in asdict(
-                            _weighted_summary(
-                                result.samples[
-                                    :,
-                                    result.parameter_names.index(
-                                        f"toa_400_s:{component}"
-                                    ),
-                                ]
-                                + result.samples[
-                                    :,
-                                    result.parameter_names.index(
-                                        "timing_error_s:dsa110"
-                                    ),
-                                ]
-                                + event_data.request.geometry.station_delays_s[
-                                    "dsa110"
-                                ],
-                                result.weights,
-                            )
-                        ).items()
-                    },
-                }
-                for component, summary in zip(
-                    event_data.request.component_ids,
-                    result.component_toas,
-                    strict=True,
-                )
-            ],
+            **_published_summary_fields(
+                event_data,
+                result,
+                configuration["uncertainty_budget"],
+            ),
             "model_parameters": {
                 name: asdict(
                     _weighted_summary(

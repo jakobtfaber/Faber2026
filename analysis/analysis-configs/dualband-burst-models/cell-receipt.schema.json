@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_sha256",
+    "environment_sha256",
+    "source",
+    "cell",
+    "binding",
+    "sampler",
+    "timing",
+    "files"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "environment_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "dirty", "dirty_paths"],
+      "properties": {
+        "commit": {"type": "string", "minLength": 1},
+        "dirty": {"type": "boolean"},
+        "dirty_paths": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["association_id", "morphology"],
+      "properties": {
+        "association_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+        "morphology": {"enum": ["gaussian", "emg", "powerlaw"]}
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["configuration_schema_version", "model_version", "input_hashes"],
+      "properties": {
+        "configuration_schema_version": {"type": "string", "minLength": 1},
+        "model_version": {"const": "joint-burst-v1"},
+        "input_hashes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chimefrb", "dsa110"],
+          "properties": {
+            "chimefrb": {"$ref": "#/$defs/hashMap"},
+            "dsa110": {"$ref": "#/$defs/hashMap"}
+          }
+        }
+      }
+    },
+    "sampler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seed", "nlive", "dlogz"],
+      "properties": {
+        "seed": {"type": "integer"},
+        "nlive": {"type": "integer", "minimum": 20},
+        "dlogz": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started_unix_ns", "finished_unix_ns", "elapsed_seconds"],
+      "properties": {
+        "started_unix_ns": {"type": "integer", "minimum": 1},
+        "finished_unix_ns": {"type": "integer", "minimum": 1},
+        "elapsed_seconds": {"type": "number", "minimum": 0}
+      }
+    },
+    "files": {
+      "type": "object",
+      "minProperties": 4,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sha256", "size"],
+        "properties": {
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "size": {"type": "integer", "minimum": 1}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hashMap": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+    }
+  }
+}

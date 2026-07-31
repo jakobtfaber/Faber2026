@@ -29,7 +29,146 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
-      - run: make test
+      - run: |
+          PYTHONPATH="$PWD:$PWD/scripts" \
+            uv run --group test --frozen python -m pytest -q \
+            --standalone-analysis \
+            -m "not slow and not network and not external_data and not historical_replay and not integration" \
+            --ignore=tests/test_permanent_dualband_workflow.py \
+            --ignore=tests/test_checkout_inventory.py
+          bash tests/test_journal_append.sh
+
+  dualband-workflow-tests:
+    name: dualband-workflow-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: |
+          PYTHONPATH="$PWD:$PWD/scripts" \
+            uv run --group test --frozen python -m pytest -q \
+            --standalone-analysis \
+            -m "not slow and not network and not external_data and not historical_replay and not integration" \
+            tests/test_permanent_dualband_workflow.py
+
+  checkout-inventory-tests:
+    name: checkout-inventory-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: |
+          PYTHONPATH="$PWD:$PWD/scripts" \
+            uv run --group test --frozen python -m pytest -q \
+            --standalone-analysis \
+            -m "not slow and not network and not external_data and not historical_replay and not integration" \
+            tests/test_checkout_inventory.py
+
+  dualband-fit-cell:
+    name: dualband-${{ matrix.association }}-${{ matrix.morphology }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - association: one-to-one
+            morphology: gaussian
+          - association: one-to-one
+            morphology: emg
+          - association: wrong-chime-component
+            morphology: gaussian
+          - association: wrong-chime-component
+            morphology: emg
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12.13"
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - name: Run one serial fit cell
+        env:
+          CELL_ASSOCIATION: ${{ matrix.association }}
+          CELL_MORPHOLOGY: ${{ matrix.morphology }}
+        run: |
+          UV_PROJECT_ENVIRONMENT="$RUNNER_TEMP/dualband-env" \
+            uv run --frozen --group dualband \
+            python scripts/run_dualband_burst_model.py \
+            --event synthetic --stage fit-cell \
+            --association "$CELL_ASSOCIATION" \
+            --morphology "$CELL_MORPHOLOGY" \
+            --cells-root "$RUNNER_TEMP/dualband-cells"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dualband-cell-${{ matrix.association }}-${{ matrix.morphology }}-${{ github.sha }}
+          path: ${{ runner.temp }}/dualband-cells
+          if-no-files-found: error
+          include-hidden-files: false
+          retention-days: 3
+
+  dualband-aggregate:
+    name: dualband-aggregate
+    needs: dualband-fit-cell
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12.13"
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          pattern: dualband-cell-*-${{ github.sha }}
+          path: ${{ runner.temp }}/dualband-cells
+          merge-multiple: true
+      - name: Validate and aggregate cells
+        run: |
+          UV_PROJECT_ENVIRONMENT="$RUNNER_TEMP/dualband-env" \
+            uv run --frozen --group dualband \
+            python scripts/run_dualband_burst_model.py \
+            --event synthetic --stage aggregate \
+            --cells-root "$RUNNER_TEMP/dualband-cells" \
+            --output-root "$RUNNER_TEMP/dualband-results"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: dualband-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/dualband-results/dualband-burst-models/synthetic
+          if-no-files-found: error
+          include-hidden-files: false
+          retention-days: 3
 
   analysis-quality:
     name: analysis-quality

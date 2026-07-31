@@ -879,10 +879,12 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
     )
 
 
-def _mixture_result(
+def combine_joint_fit_results(
     request: JointFitRequest,
     fits: list[JointFitResult],
 ) -> JointFitResult:
+    """Combine independently completed fit cells in configured order."""
+
     log_evidences = np.asarray([fit.log_evidence for fit in fits])
     log_weights = log_evidences - logsumexp(log_evidences)
     model_weights = np.exp(log_weights)
@@ -1041,6 +1043,9 @@ def _mixture_result(
     )
 
 
+_mixture_result = combine_joint_fit_results
+
+
 def fit_joint_event(request: JointFitRequest) -> JointFitResult:
     """Fit every association-morphology combination and mix by evidence."""
 
@@ -1059,4 +1064,4 @@ def fit_joint_event(request: JointFitRequest) -> JointFitResult:
         for association in request.associations
         for morphology in morphologies
     ]
-    return _mixture_result(request, fits)
+    return combine_joint_fit_results(request, fits)
