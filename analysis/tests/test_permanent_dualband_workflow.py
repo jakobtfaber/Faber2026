@@ -127,6 +127,11 @@ def test_permanent_slice_has_no_flits_or_legacy_pipeline_imports() -> None:
     assert "radio_pipeline" not in source
 
 
+def test_verification_uses_declared_component_identifiers() -> None:
+    source = (Path(__file__).parents[1] / "workflows" / "dualband_burst_model.py").read_text()
+    assert '"width_400_s:component-1"' not in source
+
+
 def test_preflight_failure_writes_a_unique_failure_receipt(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,

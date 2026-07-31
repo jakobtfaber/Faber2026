@@ -619,7 +619,9 @@ def _verification(
             "limit": thresholds["toa_error_s_max"],
         },
         "width-recovery": {
-            "measured": parameter_medians["width_400_s:component-1"],
+            "measured": parameter_medians[
+                f"width_400_s:{event.request.component_ids[0]}"
+            ],
             "truth": truth["width_400_s"],
             "limit": thresholds["width_error_s_max"],
         },
