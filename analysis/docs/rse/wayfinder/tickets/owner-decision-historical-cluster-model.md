@@ -1,7 +1,7 @@
 # Choose the historical FRB 20230307A cluster model
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: resolved — owner deferred 2026-07-31
 - Assignee: manuscript owner + cluster-model source expert
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -115,3 +115,10 @@ git show c8ec78ceeeb37505b5343aeb0ad0a51671658640:scripts/dm_budget_uncertainty.
 These commands establish only the committed lineage. No producer rerun is
 prescribed because the exact historical runtime environment and invocation
 receipt are absent.
+
+## Resolution
+
+Owner decision, 2026-07-31: **defer**. Quote no historical cluster-budget
+result pending source-expert review and complete producer, input, environment,
+artifact, reproduction, and scientific-acceptance receipts. This resolution
+does not admit `203/255/322`, `202/260/329`, or `217/281/354 pc cm^-3`.

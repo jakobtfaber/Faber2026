@@ -1,8 +1,8 @@
 # Adjudicate WHL J115048.0+714428
 
-- Type: `wayfinder:grilling` (HITL)
-- Status: open
-- Assignee: manuscript owner or foreground-source expert
+- Type: `wayfinder:research`
+- Status: resolved — source recovery adjudicated catalog fragment 2026-07-31
+- Assignee: Researcher 3
 - Blocked by: —
 - Map: [ApJ submission](../map-apj-submission.md)
 
@@ -64,7 +64,12 @@ The frozen identity and catalog payload exist. The required source-bound
 `M500`, model-compatible `R500`, and two-object crossmatch adjudication do not.
 Therefore no budget rerun command is prescribed.
 
-## Owner decision card
+## Superseded owner-decision framing
+
+Owner direction, 2026-07-31: this is not an owner decision. Researcher 3 must
+recover and adjudicate the primary catalog, crossmatch, mass, and radius
+evidence. The former choices below remain only as investigation outcomes and
+must not appear in the owner queue.
 
 ```json
 {
@@ -120,3 +125,24 @@ Therefore no budget rerun command is prescribed.
   "priority": 20
 }
 ```
+
+## Resolution
+
+Research adjudication, 2026-07-31: treat `WHL J115048.0+714428` as an
+older, poorer catalog fragment or alternate center of the system represented
+by `J115120.4+714435`, not as a second additive halo.
+
+Primary-source recovery is recorded in
+`docs/rse/specs/research-whl-j115048-source-recovery-2026-07-31.md`, SHA-256
+`d524ecde6dc0fe81f189e01401b89193727792de61c6d0a81797c22831448b2a`.
+The centers are separated by `2.538489 arcmin`, or `0.6725` of the modern
+`r500`; the older object is the unique compatible WHL entry inside the
+published `1.5 r500` cleaning radius, is poorer, and disappears from the 2024
+catalog while the surviving row is flagged `Cat=WHL`.
+
+Budget consequence: retain one modeled cluster using the Wen & Han (2024)
+`M500=1.48e14 Msun` and `r500=0.729 Mpc`; do not add the older WH15 proxy as a
+second contribution. This identity adjudication does not validate the gas
+profile, dispersion calculation, or manuscript admission. Reopen if an
+immutable producer cross-ID/member artifact or spectroscopy establishes two
+distinct halos.

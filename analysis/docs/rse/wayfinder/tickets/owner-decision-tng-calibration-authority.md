@@ -1,7 +1,7 @@
 # Decide TNG calibration authority
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: resolved — owner accepted fixed binary narrowly 2026-07-31
 - Assignee: manuscript owner
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -95,3 +95,16 @@ arrays, and tolerance are identified in the cited note. No fit-reproduction
 command is prescribed: its original inputs and producer are absent. No host
 rerun is prescribed until the owner selects an authority standard and the
 remaining admission prerequisites exist.
+
+## Resolution
+
+Owner decision, 2026-07-31: **accept the published binary narrowly as a fixed
+calibration input**. Authority is Connor repository revision
+`c8ca7cccc22828270291b039963a316b5e35d04f`, artifact
+`src/tng_params_new.npy`, SHA-256
+`e4e1aa68ae4367bb698df5ca1cc93d9eaaeba23f73bef2435f4aee0ef5674625`.
+
+This permits a reviewed receipt binding that fixed grid and diagnostic reruns.
+It does not establish reproduction of the original fit, its producing
+environment, physical validation, or admission of any host-dispersion result.
+All independent downstream receipt and owner-review gates remain closed.

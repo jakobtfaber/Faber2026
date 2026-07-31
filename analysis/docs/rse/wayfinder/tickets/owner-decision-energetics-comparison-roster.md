@@ -1,7 +1,7 @@
 # Choose the energetics comparison and roster
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: resolved — owner selected methods-only 2026-07-31
 - Assignee: manuscript owner
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -108,3 +108,11 @@ PY
 Expected current inventory: 24 rows, seven non-passing windows, and only pending
 calibration, noise, and review states. This inventories blockers; it authorizes
 no energy calculation.
+
+## Resolution
+
+Owner decision, 2026-07-31: **methods-only for now**. Run no population
+comparison. Record roster `none`, minimum event count `0`, and exclusions `not
+applicable`. Retain only the measurement method until a later owner decision.
+This resolution admits no fluence, energy, calibration, event roster, or
+population claim.
