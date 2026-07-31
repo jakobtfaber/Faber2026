@@ -30,7 +30,6 @@ from faber2026.burst_models import (
     fit_joint_event,
 )
 from faber2026.burst_models.kernels import (
-    convolved_tail_upper_bound,
     dispersion_delay_s,
 )
 from studies.dualband_synthetic import SyntheticEvent, build_synthetic_event
@@ -43,6 +42,56 @@ _CANONICAL_PRODUCTS = (
     "provenance.json",
     "review-packet.pdf",
 )
+
+
+def _power_law_tail_mass(
+    cutoff_s: np.ndarray,
+    tau_s: np.ndarray,
+    beta: np.ndarray,
+) -> np.ndarray:
+    cutoff, tau, beta_values = np.broadcast_arrays(cutoff_s, tau_s, beta)
+    result = np.ones_like(cutoff, dtype=float)
+    valid = cutoff >= 0
+    scaled = np.divide(cutoff, tau, out=np.zeros_like(cutoff), where=valid)
+    exponential = np.isclose(beta_values, 4.0)
+    result[valid & exponential] = np.exp(-scaled[valid & exponential])
+    power_law = valid & ~exponential
+    if np.any(power_law):
+        selected_beta = beta_values[power_law]
+        crossover = 2.0 * np.log(2.0 / (4.0 - selected_beta))
+        tail_total = np.exp(-crossover) * crossover / (selected_beta / 2.0 - 1.0)
+        normalization = 1.0 - np.exp(-crossover) + tail_total
+        selected_scaled = scaled[power_law]
+        remaining = np.empty_like(selected_scaled)
+        core = selected_scaled <= crossover
+        remaining[core] = (
+            np.exp(-selected_scaled[core]) - np.exp(-crossover[core]) + tail_total[core]
+        )
+        remaining[~core] = tail_total[~core] * (
+            selected_scaled[~core] / crossover[~core]
+        ) ** (1.0 - selected_beta[~core] / 2.0)
+        result[power_law] = remaining / normalization
+    return result
+
+
+def _convolved_tail_bound(
+    cutoff_s: np.ndarray,
+    sigma_s: np.ndarray,
+    tau_s: np.ndarray,
+    beta: np.ndarray,
+) -> np.ndarray:
+    cutoff, sigma, tau, beta_values = np.broadcast_arrays(
+        cutoff_s, sigma_s, tau_s, beta
+    )
+    lower = -8.0 * sigma
+    fractions = np.linspace(0.0, 1.0, 129)
+    splits = lower[..., None] + (cutoff - lower)[..., None] * fractions
+    bounds = ndtr(-splits / sigma[..., None]) + _power_law_tail_mass(
+        cutoff[..., None] - splits,
+        tau[..., None],
+        beta_values[..., None],
+    )
+    return np.minimum(1.0, np.min(bounds, axis=-1))
 
 
 class WorkflowFailure(RuntimeError):
@@ -64,20 +113,33 @@ def _canonical_json(value: Any) -> bytes:
     return json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
 
 
-def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _write_json(path: Path, value: Any) -> None:
+def _json_document_bytes(value: Any) -> bytes:
     def convert(item: Any) -> Any:
         if isinstance(item, np.generic):
             return item.item()
         raise TypeError(f"cannot serialize {type(item).__name__}")
 
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
+    return (
         json.dumps(value, indent=2, sort_keys=True, default=convert) + "\n"
-    )
+    ).encode()
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _immutable_params_sha256(params: dict[str, Any]) -> str:
+    payload = {
+        key: value
+        for key, value in params.items()
+        if key not in {"status", "owner_acceptance", "products"}
+    }
+    return hashlib.sha256(_canonical_json(payload)).hexdigest()
+
+
+def _write_json(path: Path, value: Any) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_bytes(_json_document_bytes(value))
     os.replace(temporary, path)
 
 
@@ -150,6 +212,20 @@ def _environment_preflight(repository_root: Path) -> dict[str, Any]:
             reason_codes=["input-sampler-version"],
             diagnostics={"measured": dynesty_version, "required": "3.1.0"},
         )
+    import dynesty
+
+    dynesty_origin = Path(inspect.getfile(dynesty)).resolve()
+    dynesty_distribution = importlib.metadata.distribution("dynesty")
+    dynesty_root = Path(dynesty_distribution.locate_file("dynesty")).resolve()
+    if dynesty_root not in dynesty_origin.parents:
+        raise WorkflowFailure(
+            "Dynesty import does not originate in the active environment",
+            reason_codes=["input-sampler-import-origin"],
+            diagnostics={
+                "origin": str(dynesty_origin),
+                "distribution_root": str(dynesty_root),
+            },
+        )
     required_python = (3, 12, 13)
     if sys.version_info[:3] != required_python:
         raise WorkflowFailure(
@@ -171,6 +247,7 @@ def _environment_preflight(repository_root: Path) -> dict[str, Any]:
         "python": sys.version,
         "platform": platform.platform(),
         "dynesty": dynesty_version,
+        "dynesty_origin": str(dynesty_origin),
         "faber2026_origin": str(origin),
         "flits_runtime": False,
         "code": code,
@@ -506,11 +583,16 @@ def _verification(
         "width_index",
         "tau_1ghz_s",
     }
-    parameter_medians = {
-        name: _weighted_summary(result.samples[:, index], result.weights).median
-        for index, name in enumerate(result.parameter_names)
-        if name in required_parameters
-    }
+    parameter_medians = {}
+    for index, name in enumerate(result.parameter_names):
+        if name not in required_parameters:
+            continue
+        valid = np.isfinite(result.samples[:, index]) & (result.weights > 0)
+        if np.any(valid):
+            parameter_medians[name] = _weighted_summary(
+                result.samples[valid, index],
+                result.weights[valid],
+            ).median
     omitted_tail_mass = 0.0
     reduced_residual_powers = []
     lag_one_correlations = []
@@ -545,8 +627,18 @@ def _verification(
             axis=1,
         )
         frequencies = np.asarray(observation.frequencies_mhz)
+        frequency_edges = np.stack(
+            (
+                frequencies - 0.5 * np.asarray(observation.channel_widths_mhz),
+                frequencies + 0.5 * np.asarray(observation.channel_widths_mhz),
+            ),
+            axis=-1,
+        )
         start = observation.times_s[0] - 0.5 * observation.sample_interval_s
         end = observation.times_s[-1] + 0.5 * observation.sample_interval_s
+        tail_mass = np.zeros(
+            (posterior_samples.shape[0], frequencies.size), dtype=float
+        )
         for component in event.request.component_ids:
             toa_values = posterior_samples[:, names.index(f"toa_400_s:{component}")]
             width_values = posterior_samples[:, names.index(f"width_400_s:{component}")]
@@ -556,9 +648,9 @@ def _verification(
                 :, names.index(f"timing_error_s:{observation.instrument}")
             ]
             centers = (
-                toa_values[:, None]
+                toa_values[:, None, None]
                 + event.request.geometry.station_delays_s[observation.instrument]
-                + timing_values[:, None]
+                + timing_values[:, None, None]
                 - (
                     observation.time_origin_unix_ns
                     - event.request.geometry.epoch_unix_ns
@@ -566,41 +658,66 @@ def _verification(
                 * 1e-9
                 - observation.dispersion.time_origin_correction_s
                 + dispersion_delay_s(
-                    dm_values[:, None] - observation.dispersion.product_dm,
-                    frequencies[None, :],
+                    dm_values[:, None, None]
+                    - observation.dispersion.product_dm,
+                    frequency_edges[None, :, :],
                 )
             )
-            widths = width_values[:, None] * (
-                frequencies[None, :] / 400.0
-            ) ** index_values[:, None]
-            early = ndtr((start - centers) / widths)
-            finite_tau = (
-                posterior_samples[:, names.index("tau_1ghz_s")]
-                if "tau_1ghz_s" in names
-                else np.array([])
+            widths = width_values[:, None, None] * (
+                frequency_edges[None, :, :] / 400.0
+            ) ** index_values[:, None, None]
+            center_min = np.min(centers, axis=-1)
+            center_max = np.max(centers, axis=-1)
+            width_max = np.max(widths, axis=-1)
+            early = np.where(
+                start < center_min,
+                ndtr((start - center_min) / width_max),
+                1.0,
             )
-            if finite_tau.size == 0:
-                late = ndtr(-(end - centers) / widths)
-            else:
-                tau_1ghz = float(np.nanmax(finite_tau))
-                beta = (
-                    float(np.nanmin(posterior_samples[:, names.index("beta")]))
-                    if "beta" in names
-                    else 4.0
-                )
-                alpha = 2.0 * beta / (beta - 2.0)
-                tau = tau_1ghz * (frequencies / 1000.0) ** -alpha
-                late = np.asarray(
-                    [
-                        convolved_tail_upper_bound(
-                            end - float(np.max(centers[:, index])),
-                            float(np.max(widths[:, index])),
-                            channel_tau,
-                            beta,
-                        )
-                        for index, channel_tau in enumerate(tau)
+            sample_morphologies = result.sample_morphologies[sample_indices]
+            late = np.ones_like(center_max)
+            gaussian = sample_morphologies[:, None] == "gaussian"
+            gaussian_inside = gaussian & (end > center_max)
+            late[gaussian_inside] = ndtr(
+                -(end - center_max[gaussian_inside])
+                / width_max[gaussian_inside]
+            )
+            if "tau_1ghz_s" in names:
+                tau_values = posterior_samples[:, names.index("tau_1ghz_s")]
+                beta_values = np.full(posterior_samples.shape[0], 4.0)
+                power_law = sample_morphologies == "powerlaw"
+                if "beta" in names:
+                    beta_values[power_law] = posterior_samples[
+                        power_law,
+                        names.index("beta"),
                     ]
+                scattered = ~gaussian[:, 0]
+                valid_scattering = (
+                    scattered
+                    & np.isfinite(tau_values)
+                    & np.isfinite(beta_values)
+                    & (tau_values > 0)
+                    & (beta_values > 2.0)
+                    & (beta_values <= 4.0)
                 )
+                if np.any(valid_scattering):
+                    alpha_values = 2.0 * beta_values / (beta_values - 2.0)
+                    tau_edges = tau_values[:, None, None] * (
+                        frequency_edges[None, :, :] / 1000.0
+                    ) ** -alpha_values[:, None, None]
+                    tau_max = np.max(tau_edges, axis=-1)
+                    cutoffs = end - center_max
+                    scattering_inside = valid_scattering[:, None] & (cutoffs > 0)
+                    beta_by_channel = np.broadcast_to(
+                        beta_values[:, None],
+                        cutoffs.shape,
+                    )
+                    late[scattering_inside] = _convolved_tail_bound(
+                        cutoffs[scattering_inside],
+                        width_max[scattering_inside],
+                        tau_max[scattering_inside],
+                        beta_by_channel[scattering_inside],
+                    )
             association_amplitudes = np.asarray(
                 [
                     posterior_samples[
@@ -614,11 +731,7 @@ def _verification(
                 ]
             )
             fractional_tail = association_amplitudes / total_amplitude
-            omitted_tail_mass = max(
-                omitted_tail_mass,
-                float(np.max(fractional_tail[:, None] * early)),
-                float(np.max(fractional_tail[:, None] * late)),
-            )
+            tail_mass += fractional_tail[:, None] * (early + late)
         # Band-local nuisance components are Gaussian.  They do not constrain
         # the geometry, but their fitted support must still be contained by
         # the reviewed crop.  NaNs are expected for samples from associations
@@ -638,17 +751,12 @@ def _verification(
                 names.index(f"amplitude:{observation.instrument}:{component}"),
             ]
             fractional_tail = amplitudes / total_amplitude[finite]
-            omitted_tail_mass = max(
-                omitted_tail_mass,
-                float(np.max(
-                    fractional_tail
-                    * ndtr((start - local_toas[finite]) / local_widths[finite])
-                )),
-                float(np.max(
-                    fractional_tail
-                    * ndtr(-(end - local_toas[finite]) / local_widths[finite])
-                )),
+            local_tail = fractional_tail * (
+                ndtr((start - local_toas[finite]) / local_widths[finite])
+                + ndtr(-(end - local_toas[finite]) / local_widths[finite])
             )
+            tail_mass[finite, :] += local_tail[:, None]
+        omitted_tail_mass = max(omitted_tail_mass, float(np.max(tail_mass)))
         valid = np.asarray(observation.valid_pixels)
         standardized = (
             result.residual_by_instrument[observation.instrument]
@@ -718,7 +826,7 @@ def _verification(
             "limit": thresholds["maximum_reduced_residual_power"] - 1.0,
         },
         "structured-residual-correlation": {
-            "measured": max(lag_one_correlations),
+            "measured": max(lag_one_correlations, default=0.0),
             "truth": 0.0,
             "limit": thresholds["maximum_structured_residual_correlation"],
         },
@@ -964,6 +1072,11 @@ def _validate_canonical(
                 "canonical result commit differs from current checkout",
                 reason_codes=["provenance-commit-mismatch"],
             )
+    if provenance.get("immutable_params_sha256") != _immutable_params_sha256(params):
+        raise WorkflowFailure(
+            "canonical parameters differ from their provenance binding",
+            reason_codes=["provenance-params-payload-mismatch"],
+        )
     for name, identity in params["products"].items():
         if _sha256(canonical / name) != identity["sha256"]:
             raise WorkflowFailure(
@@ -990,11 +1103,39 @@ def _validate_canonical(
                 diagnostics={"product": name},
             )
     acceptance = params.get("owner_acceptance")
+    if params["status"] == "accepted" and acceptance is None:
+        raise WorkflowFailure(
+            "accepted result has no owner acceptance receipt",
+            reason_codes=["provenance-owner-acceptance-missing"],
+        )
     if acceptance is not None:
         receipt = canonical.parent.parent / acceptance["receipt_path"]
-        if not receipt.exists() or _sha256(receipt) != acceptance["receipt_sha256"]:
+        acceptance_root = (canonical.parent.parent / ".acceptance").resolve()
+        if (
+            acceptance_root not in receipt.resolve().parents
+            or not receipt.exists()
+            or _sha256(receipt) != acceptance["receipt_sha256"]
+        ):
             raise WorkflowFailure(
                 "owner acceptance receipt is missing or changed",
+                reason_codes=["provenance-owner-acceptance-mismatch"],
+            )
+        accepted = json.loads(receipt.read_text())
+        pre_promotion = dict(params)
+        pre_promotion["status"] = "provisional-owner-review"
+        pre_promotion.pop("owner_acceptance", None)
+        if (
+            accepted.get("request_sha256") != params["request_sha256"]
+            or accepted.get("immutable_params_sha256")
+            != provenance["immutable_params_sha256"]
+            or accepted.get("scientific_product_sha256")
+            != acceptance["scientific_product_sha256"]
+            or accepted.get("owner") != acceptance["owner"]
+            or accepted.get("pre_promotion_params_sha256")
+            != hashlib.sha256(_json_document_bytes(pre_promotion)).hexdigest()
+        ):
+            raise WorkflowFailure(
+                "owner acceptance receipt does not bind canonical results",
                 reason_codes=["provenance-owner-acceptance-mismatch"],
             )
 
@@ -1137,6 +1278,9 @@ def run_event(
                 replace(
                     event_data.request,
                     checkpoint_directory=str(checkpoint_directory),
+                    checkpoint_identity=hashlib.sha256(
+                        f"{request_hash}:{environment['manifest_sha256']}".encode()
+                    ).hexdigest(),
                 )
             )
             _save_fit(fit_path, result)
@@ -1239,15 +1383,7 @@ def run_event(
                 )
             },
         }
-        _write_json(run_directory / "provenance.json", provenance)
-        products = {}
-        for name in (
-            "posterior.npz",
-            "model-products.npz",
-            "provenance.json",
-            "review-packet.pdf",
-        ):
-            products[name] = {"path": name, "sha256": _sha256(run_directory / name)}
+        products: dict[str, dict[str, str]] = {}
         params = {
             "schema_version": "1.0.0",
             "event": configuration["event"],
@@ -1390,6 +1526,18 @@ def run_event(
             "verification": checks,
             "products": products,
         }
+        provenance["immutable_params_sha256"] = _immutable_params_sha256(params)
+        _write_json(run_directory / "provenance.json", provenance)
+        for name in (
+            "posterior.npz",
+            "model-products.npz",
+            "provenance.json",
+            "review-packet.pdf",
+        ):
+            products[name] = {
+                "path": name,
+                "sha256": _sha256(run_directory / name),
+            }
         _write_json(run_directory / "params.json", params)
         params_schema = json.loads(
             (
@@ -1403,7 +1551,10 @@ def run_event(
         publication = canonical.with_name(canonical.name + ".publishing")
         publication.parent.mkdir(parents=True, exist_ok=True)
         if publication.exists():
-            shutil.rmtree(publication)
+            raise WorkflowFailure(
+                "stale atomic-publication directory requires investigation",
+                reason_codes=["provenance-stale-publication"],
+            )
         publication.mkdir()
         for name in _CANONICAL_PRODUCTS:
             shutil.copy2(run_directory / name, publication / name)
@@ -1455,26 +1606,39 @@ def promote_result(result_directory: Path, owner: str) -> None:
         "owner": owner,
         "scientific_product_sha256": scientific_hashes,
         "pre_promotion_params_sha256": _sha256(params_path),
+        "immutable_params_sha256": provenance["immutable_params_sha256"],
     }
     promotion["promotion_sha256"] = hashlib.sha256(
         _canonical_json(promotion)
     ).hexdigest()
-    receipt_directory = (
+    receipt_path = (
         result_directory.parent.parent
         / ".acceptance"
         / result_directory.name
-        / promotion["promotion_sha256"]
+        / f"{promotion['promotion_sha256']}.json"
     )
-    receipt_directory.mkdir(parents=True, exist_ok=False)
-    _write_json(receipt_directory / "owner-acceptance.json", promotion)
+    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    if receipt_path.exists():
+        existing = json.loads(receipt_path.read_text())
+        if existing != promotion:
+            raise WorkflowFailure(
+                "owner acceptance receipt conflicts with this promotion",
+                reason_codes=["provenance-owner-acceptance-conflict"],
+            )
+    else:
+        _write_json(receipt_path, promotion)
     params["status"] = "accepted"
     params["owner_acceptance"] = {
         "owner": owner,
         "scientific_product_sha256": scientific_hashes,
         "receipt_path": str(
-            receipt_directory.relative_to(result_directory.parent.parent)
-            / "owner-acceptance.json"
+            receipt_path.relative_to(result_directory.parent.parent)
         ),
-        "receipt_sha256": _sha256(receipt_directory / "owner-acceptance.json"),
+        "receipt_sha256": _sha256(receipt_path),
     }
     _write_json(params_path, params)
+    _validate_canonical(
+        result_directory,
+        params["request_sha256"],
+        repository_root,
+    )

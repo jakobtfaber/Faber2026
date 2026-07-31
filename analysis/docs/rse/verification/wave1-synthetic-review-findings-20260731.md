@@ -73,3 +73,35 @@ sampling; zero-mean gain integral and gain-adjusted residual; explicit
 time-origin correction and UTC consistency. Timing-origin sign still lacks
 nonzero injected recovery; current test only perturbs metadata on zero-shift
 data.
+
+## Later candidate review retained for repair provenance
+
+**FAIL / not eligible.** `84155c34` was invalidated by later uncommitted
+edits. Supplied output binds `0370eb0`, not the candidate.
+
+### Issues
+
+- **[BLOCKING] Mutable science summary.** `params.json` is not content-bound;
+  changing DM, ToAs, status, or owner can remain schema-valid and pass
+  canonical validation.
+- **[BLOCKING] Checkpoint reuse lacks provenance binding.** Existing Dynesty
+  checkpoint path is restored without validating request hash or environment.
+- **[BLOCKING] Promotion is not crash-safe.** Permanent receipt directory is
+  created before its receipt; interruption leaves an unrecoverable path.
+- **[BLOCKING] Crop-tail certificate is not mathematically sufficient.** It
+  evaluates channel centers despite channel-width integration in the likelihood,
+  and takes a maximum of individual component tails rather than their summed
+  omitted flux. Independent edge evaluation found `1.73720087109e-05`, versus
+  reported `8.04068053893e-06`.
+- **[BLOCKING] Dynesty provenance checks version, not imported module origin.**
+
+### Strengths
+
+- No active FLITS imports.
+- Native grids, 400 MHz timing convention, exactly-once dispersion state, and
+  association/nuisance modeling are substantively present.
+- Old synthetic output recovered the injected DM/ToA and geometric offset, but
+  is stale evidence only.
+
+These findings are retained as repair provenance for the replacement freeze and
+full gate rerun.

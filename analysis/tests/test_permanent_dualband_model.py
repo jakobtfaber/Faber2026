@@ -11,7 +11,7 @@ import pytest
 from astropy import units as u
 from astropy.constants import c, e, eps0, m_e
 from scipy.integrate import quad, trapezoid
-from scipy.special import logsumexp
+from scipy.special import logsumexp, ndtr
 from scipy.stats import exponnorm
 
 from faber2026.burst_models import (
@@ -268,6 +268,52 @@ def test_convolved_tail_bound_contains_independent_emg_tail() -> None:
         )
         assert exact <= bound
         assert bound <= 1.0
+
+
+def test_vectorized_crop_tail_bound_contains_exact_emg_tail() -> None:
+    from workflows.dualband_burst_model import _convolved_tail_bound
+
+    cutoff_s = np.array([0.004, 0.018, 0.07])
+    sigma_s = np.array([0.001, 0.002, 0.004])
+    tau_s = np.array([0.002, 0.008, 0.015])
+    exact = exponnorm.sf(cutoff_s, tau_s / sigma_s, loc=0.0, scale=sigma_s)
+    bound = _convolved_tail_bound(cutoff_s, sigma_s, tau_s, np.full(3, 4.0))
+    assert np.all(exact <= bound + 1e-15)
+    assert np.all(bound <= 1.0)
+
+
+def test_vectorized_crop_tail_bound_contains_power_law_tail() -> None:
+    from workflows.dualband_burst_model import _convolved_tail_bound
+
+    cutoff_s = 0.05
+    sigma_s = 0.002
+    tau_s = 0.008
+    beta = 11.0 / 3.0
+    crossover_s = 2.0 * tau_s * np.log(2.0 / (4.0 - beta))
+    upper_s = 0.2
+    exact = sum(
+        quad(
+            lambda lag: power_law_pbf(lag, tau_s, beta)
+            * ndtr(-(cutoff_s - lag) / sigma_s),
+            lower,
+            upper,
+            epsabs=1e-12,
+            limit=300,
+        )[0]
+        for lower, upper in (
+            (0.0, crossover_s),
+            (crossover_s, upper_s),
+            (upper_s, np.inf),
+        )
+    )
+    bound = _convolved_tail_bound(
+        np.array([cutoff_s]),
+        np.array([sigma_s]),
+        np.array([tau_s]),
+        np.array([beta]),
+    )[0]
+    assert exact <= bound + 1e-12
+    assert bound <= 1.0
 
 
 def test_power_law_convolution_reaches_exact_emg_endpoint() -> None:
@@ -724,6 +770,7 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
         nlive=20,
         dlogz=0.5,
         checkpoint_directory=str(tmp_path / "checkpoints"),
+        checkpoint_identity="test-checkpoint-identity",
     )
     checkpoint = tmp_path / "checkpoints" / "one-to-one-gaussian.pkl"
     checkpoint.parent.mkdir()
@@ -741,8 +788,13 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
         if interrupted.ncall >= 100:
             break
     interrupted.save(str(checkpoint))
+    checkpoint.with_suffix(".json").write_text(
+        '{"checkpoint_identity":"test-checkpoint-identity"}\n'
+    )
     resumed = fit_joint_event(request)
     uninterrupted = fit_joint_event(replace(request, checkpoint_directory=None))
     np.testing.assert_array_equal(resumed.samples, uninterrupted.samples)
     np.testing.assert_array_equal(resumed.weights, uninterrupted.weights)
     assert resumed.log_evidence == uninterrupted.log_evidence
+    with pytest.raises(RuntimeError, match="checkpoint identity differs"):
+        fit_joint_event(replace(request, checkpoint_identity="different-request"))

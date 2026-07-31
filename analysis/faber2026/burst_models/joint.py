@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 from collections.abc import Mapping
 from dataclasses import dataclass, field, replace
@@ -99,6 +100,7 @@ class JointFitRequest:
     maximum_failed_morphology_weight: float = 1e-6
     component_amplitude_bounds: tuple[float, float] = (1e-3, 1e3)
     checkpoint_directory: str | None = None
+    checkpoint_identity: str | None = None
     band_component_toa_bounds_s: Mapping[
         str, Mapping[str, tuple[float, float]]
     ] = field(default_factory=dict)
@@ -153,6 +155,23 @@ class JointFitRequest:
                     raise ValueError("association names an unknown band component") from error
                 if indices != sorted(indices) or len(indices) != len(set(indices)):
                     raise ValueError("association must be one-to-one and order-preserving")
+        association_windows_required = len(self.associations) > 1 or any(
+            set(self.band_component_ids[instrument])
+            != {
+                match.chimefrb_component_id
+                if instrument == "chimefrb"
+                else match.dsa110_component_id
+                for match in association.matches
+            }
+            for association in self.associations
+            for instrument in ("chimefrb", "dsa110")
+        )
+        if association_windows_required:
+            for instrument in ("chimefrb", "dsa110"):
+                if instrument not in self.band_component_toa_bounds_s:
+                    raise ValueError(
+                        "association fitting requires native component time windows"
+                    )
         morphologies = (
             (self.morphology,)
             if isinstance(self.morphology, str)
@@ -181,6 +200,8 @@ class JointFitRequest:
             raise ValueError("invalid nested-sampling controls")
         if not 0 <= self.maximum_failed_morphology_weight < 1:
             raise ValueError("invalid failed-morphology weight limit")
+        if self.checkpoint_directory is not None and not self.checkpoint_identity:
+            raise ValueError("checkpoint identity is required for resumable inference")
 
 
 @dataclass(frozen=True, slots=True)
@@ -643,9 +664,27 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
         checkpoint_file = directory / (
             f"{request.associations[0].association_id}-{request.morphology}.pkl"
         )
+    checkpoint_metadata = (
+        checkpoint_file.with_suffix(".json") if checkpoint_file is not None else None
+    )
     if checkpoint_file and checkpoint_file.exists():
+        if checkpoint_metadata is None or not checkpoint_metadata.exists():
+            raise RuntimeError("checkpoint identity receipt is missing")
+        identity = json.loads(checkpoint_metadata.read_text())
+        if identity.get("checkpoint_identity") != request.checkpoint_identity:
+            raise RuntimeError("checkpoint identity differs from this request")
         sampler = dynesty.utils.restore_sampler(str(checkpoint_file))
     else:
+        if checkpoint_metadata and checkpoint_metadata.exists():
+            raise RuntimeError("checkpoint identity receipt has no sampler")
+        if checkpoint_metadata:
+            checkpoint_metadata.write_text(
+                json.dumps(
+                    {"checkpoint_identity": request.checkpoint_identity},
+                    sort_keys=True,
+                )
+                + "\n"
+            )
         sampler = dynesty.NestedSampler(
             partial(_likelihood_for_request, request=request),
             partial(_prior_transform_for_specs, specs=specs),
