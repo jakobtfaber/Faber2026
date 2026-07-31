@@ -1324,12 +1324,22 @@ def run_event(
             result = _load_fit(fit_path, model_path, event_data)
         else:
             checkpoint_directory = run_directory / "checkpoints"
+            checkpoint_context = {
+                "request_sha256": request_hash,
+                "environment_sha256": environment["manifest_sha256"],
+                "schema_version": configuration["schema_version"],
+                "model_version": "joint-burst-v1",
+                "input_hashes": {
+                    observation.instrument: dict(observation.input_hashes)
+                    for observation in event_data.request.observations
+                },
+            }
             result = fit_joint_event(
                 replace(
                     event_data.request,
                     checkpoint_directory=str(checkpoint_directory),
                     checkpoint_identity=hashlib.sha256(
-                        f"{request_hash}:{environment['manifest_sha256']}".encode()
+                        _canonical_json(checkpoint_context)
                     ).hexdigest(),
                 )
             )

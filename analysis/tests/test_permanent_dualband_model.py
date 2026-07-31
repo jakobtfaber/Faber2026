@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import multiprocessing
 from dataclasses import replace
 from functools import partial
@@ -776,6 +777,7 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
     import dynesty
 
     from faber2026.burst_models.joint import (
+        _checkpoint_identity,
         _likelihood_for_request,
         _prior_specs,
         _prior_transform_for_specs,
@@ -805,7 +807,8 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
             break
     interrupted.save(str(checkpoint))
     checkpoint.with_suffix(".json").write_text(
-        '{"checkpoint_identity":"test-checkpoint-identity"}\n'
+        json.dumps({"checkpoint_identity": _checkpoint_identity(request, specs)})
+        + "\n"
     )
     resumed = fit_joint_event(request)
     uninterrupted = fit_joint_event(replace(request, checkpoint_directory=None))
@@ -814,3 +817,52 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
     assert resumed.log_evidence == uninterrupted.log_evidence
     with pytest.raises(RuntimeError, match="checkpoint identity differs"):
         fit_joint_event(replace(request, checkpoint_identity="different-request"))
+
+
+def test_checkpoint_refuses_another_association_subproblem(tmp_path) -> None:
+    from faber2026.burst_models.joint import _checkpoint_identity, _prior_specs
+
+    request = replace(
+        _request(),
+        checkpoint_directory=str(tmp_path / "checkpoints"),
+        checkpoint_identity="run-identity",
+    )
+    alternate = replace(
+        request,
+        associations=(
+            replace(request.associations[0], association_id="different-map"),
+        ),
+    )
+    checkpoint = tmp_path / "checkpoints" / "different-map-gaussian.pkl"
+    checkpoint.parent.mkdir()
+    checkpoint.write_bytes(b"not a sampler")
+    checkpoint.with_suffix(".json").write_text(
+        json.dumps(
+            {"checkpoint_identity": _checkpoint_identity(request, _prior_specs(request))}
+        )
+        + "\n"
+    )
+    with pytest.raises(RuntimeError, match="checkpoint identity differs"):
+        fit_joint_event(alternate)
+
+
+def test_checkpoint_refuses_another_morphology_subproblem(tmp_path) -> None:
+    from faber2026.burst_models.joint import _checkpoint_identity, _prior_specs
+
+    request = replace(
+        _request(),
+        checkpoint_directory=str(tmp_path / "checkpoints"),
+        checkpoint_identity="run-identity",
+    )
+    alternate = replace(request, morphology="emg")
+    checkpoint = tmp_path / "checkpoints" / "one-to-one-emg.pkl"
+    checkpoint.parent.mkdir()
+    checkpoint.write_bytes(b"not a sampler")
+    checkpoint.with_suffix(".json").write_text(
+        json.dumps(
+            {"checkpoint_identity": _checkpoint_identity(request, _prior_specs(request))}
+        )
+        + "\n"
+    )
+    with pytest.raises(RuntimeError, match="checkpoint identity differs"):
+        fit_joint_event(alternate)

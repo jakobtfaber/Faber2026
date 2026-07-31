@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from collections.abc import Mapping
@@ -25,6 +26,7 @@ from .kernels import (
 )
 
 _MORPHOLOGIES = {"gaussian", "emg", "powerlaw"}
+_CHECKPOINT_MODEL_VERSION = "joint-burst-v1"
 
 
 @dataclass(frozen=True, slots=True)
@@ -635,6 +637,26 @@ def _prior_transform_for_specs(
     return np.asarray(transformed)
 
 
+def _checkpoint_identity(
+    request: JointFitRequest, specs: tuple[tuple[str, float, float], ...]
+) -> str:
+    """Bind a resumable sampler to its exact inference subproblem."""
+
+    payload = {
+        "run_identity": request.checkpoint_identity,
+        "model_version": _CHECKPOINT_MODEL_VERSION,
+        "association": request.associations[0].association_id,
+        "morphology": request.morphology,
+        "parameters": _parameter_names(request),
+        "prior_specs": specs,
+        "nlive": request.nlive,
+        "dlogz": request.dlogz,
+    }
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+
+
 def _weighted_summary(values: NDArray[np.floating], weights: NDArray[np.floating]) -> PosteriorSummary:
     order = np.argsort(values)
     sorted_values = values[order]
@@ -656,6 +678,7 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
         raise RuntimeError("dynesty 3.1.0 is required for joint fitting") from error
 
     specs = _prior_specs(request)
+    checkpoint_identity = _checkpoint_identity(request, specs)
 
     checkpoint_file = None
     if request.checkpoint_directory is not None:
@@ -671,7 +694,7 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
         if checkpoint_metadata is None or not checkpoint_metadata.exists():
             raise RuntimeError("checkpoint identity receipt is missing")
         identity = json.loads(checkpoint_metadata.read_text())
-        if identity.get("checkpoint_identity") != request.checkpoint_identity:
+        if identity.get("checkpoint_identity") != checkpoint_identity:
             raise RuntimeError("checkpoint identity differs from this request")
         sampler = dynesty.utils.restore_sampler(str(checkpoint_file))
     else:
@@ -680,7 +703,7 @@ def _fit_one_morphology(request: JointFitRequest) -> JointFitResult:
         if checkpoint_metadata:
             checkpoint_metadata.write_text(
                 json.dumps(
-                    {"checkpoint_identity": request.checkpoint_identity},
+                    {"checkpoint_identity": checkpoint_identity},
                     sort_keys=True,
                 )
                 + "\n"
