@@ -948,7 +948,7 @@ def _render_review_packet_styled(
                 axes[row, column].text(
                     0.02,
                     0.95,
-                    f"{display_name} — {label}",
+                    f"{display_name} - {label}",
                     transform=axes[row, column].transAxes,
                     va="top",
                 )
@@ -1023,7 +1023,7 @@ def _render_review_packet_styled(
             ),
             (
                 "ln Z",
-                f"{result.log_evidence:.2f} ± {result.log_evidence_uncertainty:.2f}",
+                f"{result.log_evidence:.2f} $\\pm$ {result.log_evidence_uncertainty:.2f}",
                 "evidence-weighted",
             ),
         ]
@@ -1039,7 +1039,7 @@ def _render_review_packet_styled(
             (f"Association: {name}", f"weight {weight:.3f}", "")
             for name, weight in result.association_weights.items()
         )
-        rows.append(("Request", request_hash[:16] + "…", "hash-bound"))
+        rows.append(("Request", request_hash[:16] + "...", "hash-bound"))
         summary_axis.axis("off")
         table = summary_axis.table(
             cellText=rows,
