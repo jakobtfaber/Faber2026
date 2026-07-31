@@ -196,6 +196,16 @@ def test_permanent_slice_has_no_flits_or_legacy_pipeline_imports() -> None:
     assert "radio_pipeline" not in source
 
 
+def test_public_make_runner_uses_the_installed_project_without_pythonpath() -> None:
+    makefile = (Path(__file__).parents[1] / "Makefile").read_text()
+    runner = next(
+        line for line in makefile.splitlines() if line.startswith("DUALBAND_RUN =")
+    )
+    assert "PYTHONPATH" not in runner
+    assert "--group dualband" in runner
+    assert "--only-group dualband" not in runner
+
+
 def test_verification_uses_declared_component_identifiers() -> None:
     source = (Path(__file__).parents[1] / "workflows" / "dualband_burst_model.py").read_text()
     assert '"width_400_s:component-1"' not in source

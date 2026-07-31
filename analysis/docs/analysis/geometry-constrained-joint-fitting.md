@@ -94,7 +94,7 @@ The public execution surface is:
 
 ```bash
 UV_PROJECT_ENVIRONMENT=.venv-dualband uv sync --locked \
-  --only-group dualband
+  --group dualband
 make review EVENT=synthetic
 ```
 

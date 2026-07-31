@@ -8,7 +8,7 @@ DUALBAND_ENV ?= $(CURDIR)/.venv-dualband
 
 EVENT ?=
 DUALBAND_OUTPUT_ROOT ?= $(CURDIR)
-DUALBAND_RUN = UV_PROJECT_ENVIRONMENT="$(DUALBAND_ENV)" $(UV) run --locked --no-sync --only-group dualband python scripts/run_dualband_burst_model.py
+DUALBAND_RUN = UV_PROJECT_ENVIRONMENT="$(DUALBAND_ENV)" $(UV) run --locked --no-sync --group dualband python scripts/run_dualband_burst_model.py
 
 observations:
 	@test -n "$(EVENT)" || (echo "Usage: make observations EVENT=<event>" >&2; exit 1)
