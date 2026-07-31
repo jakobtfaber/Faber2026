@@ -53,7 +53,7 @@ def _power_law_tail_mass(
     result = np.ones_like(cutoff, dtype=float)
     valid = cutoff >= 0
     scaled = np.divide(cutoff, tau, out=np.zeros_like(cutoff), where=valid)
-    exponential = np.isclose(beta_values, 4.0)
+    exponential = beta_values == 4.0
     result[valid & exponential] = np.exp(-scaled[valid & exponential])
     power_law = valid & ~exponential
     if np.any(power_law):

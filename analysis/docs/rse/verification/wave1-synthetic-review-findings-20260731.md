@@ -105,3 +105,26 @@ edits. Supplied output binds `0370eb0`, not the candidate.
 
 These findings are retained as repair provenance for the replacement freeze and
 full gate rerun.
+
+## 336553b independent scientific review
+
+**FAIL**
+
+**[BLOCKING]** Power-law crop support is not rigorous near the allowed
+\(\beta=4\) endpoint.
+
+`workflows/dualband_burst_model.py:_power_law_tail_mass` uses
+`np.isclose(beta, 4.0)` to substitute the exponential tail. The physical
+power-law kernel uses the exponential only at exactly `beta == 4.0`.
+
+Independent oracle: for allowed `beta=3.999999` and `cutoff/tau=100`:
+
+- true declared power-law tail: `2.105013849018507e-12`
+- code's exponential substitute: `3.720075976020836e-44`
+- underbound: factor `5.66e31`
+
+That invalidates the claimed rigorous crop-tail bound for supported power-law
+fits (`workflows/dualband_burst_model.py:715`).
+
+The fresh EMG synthetic output itself is otherwise correctly bound and
+provenance-clean; this blocker is generic power-law support.

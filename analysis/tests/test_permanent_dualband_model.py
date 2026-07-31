@@ -316,6 +316,22 @@ def test_vectorized_crop_tail_bound_contains_power_law_tail() -> None:
     assert bound <= 1.0
 
 
+def test_vectorized_power_law_tail_does_not_snap_near_emg_endpoint() -> None:
+    from workflows.dualband_burst_model import _power_law_tail_mass
+
+    cutoff_s = 0.1
+    tau_s = 0.001
+    beta = 3.999999
+    expected = power_law_pbf_tail_mass_after(cutoff_s, tau_s, beta)
+    actual = _power_law_tail_mass(
+        np.array([cutoff_s]),
+        np.array([tau_s]),
+        np.array([beta]),
+    )[0]
+    assert expected > 1e20 * np.exp(-cutoff_s / tau_s)
+    assert actual == pytest.approx(expected, rel=1e-12)
+
+
 def test_power_law_convolution_reaches_exact_emg_endpoint() -> None:
     time_s = np.linspace(-0.01, 0.06, 101)
     expected = exponentially_modified_gaussian(
