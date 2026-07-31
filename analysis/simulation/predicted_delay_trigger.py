@@ -230,3 +230,189 @@ def trigger_pvalue(tw: TruthWaterfall, fit: FittedModel, tau_pred_ms,
         if stat(replicate) >= observed:
             exceed += 1
     return exceed / n_replicates
+
+
+# --------------------------------------------------------------------------
+# Phase 4: campaign cells, grids, and the rate table
+# (plan-predicted-delay-trigger-calibration.md; grids declared there).
+# Null ratios contain every power-arm ratio because the physically motivated
+# real-use regime is tau_pred < tau_1 (a resolved scintillation bandwidth
+# implies a nearer, smaller-tau screen).
+
+SNRS = (8.0, 15.0, 30.0)
+NULL_RATIOS = (0.1, 0.3, 1.0, 3.0, 6.0)
+POWER_RS = (0.1, 0.3, 1.0, 3.0)
+N_INJECTIONS = 200
+SEED0 = 20260731
+RATES = (0.005, 0.01, 0.05)
+WINDOW_FRAC = 0.5
+
+
+def run_injection(kind, snr, value, seed):
+    """One truth-known injection through the full inject->fit->statistic
+    path.  kind='null': one-screen truth, statistic evaluated at
+    tau_pred = value * fitted tau1(band).  kind='power': two-screen truth
+    with r=value, tau_pred = value * fitted tau1(band) (truth-informed
+    prediction).  Returns a JSON-safe record; failures record NaN."""
+    r_truth = 0.0 if kind == "null" else float(value)
+    tw = make_truth_waterfall(seed=seed, r=r_truth, snr=snr)
+    try:
+        fit = fit_one_screen(tw)
+        tau_pred = float(value) * fit.tau1_band_ms
+        t_peak = _model_peak_time_ms(fit, tw.time_ms)
+        resid = (tw.data - fit.model) / tw.noise_std[:, None]
+        stat = predicted_delay_statistic(
+            resid, tw.valid, tw.time_ms, t_peak, tau_pred, WINDOW_FRAC)
+        return {
+            "statistic": float(stat.matched_snr),
+            "best_width": int(stat.best_width),
+            "tau_pred_ms": tau_pred,
+            "fit_tau1_ms": fit.tau1_ms,
+            "fit_converged": bool(fit.converged),
+            "seed": int(seed),
+        }
+    except Exception as exc:  # recorded, never silently dropped
+        return {"statistic": float("nan"), "error": repr(exc),
+                "seed": int(seed)}
+
+
+def run_cell(kind, snr, value, n, cell_index, seed0=SEED0):
+    """n injections; seeds seed0 + cell_index*1000 + injection (plan)."""
+    return [run_injection(kind, snr, value,
+                          seed0 + cell_index * 1000 + injection)
+            for injection in range(n)]
+
+
+def declared_cells(snrs=SNRS, null_ratios=NULL_RATIOS, power_rs=POWER_RS):
+    """The frozen schedule: (kind, key, snr, value, cell_index)."""
+    cells, idx = [], 0
+    for snr in snrs:
+        for ratio in null_ratios:
+            cells.append(("null", f"null:snr-{snr:g}:taupred-{ratio:g}",
+                          snr, ratio, idx))
+            idx += 1
+    for snr in snrs:
+        for r in power_rs:
+            cells.append(("power", f"power:snr-{snr:g}:r-{r:g}",
+                          snr, r, idx))
+            idx += 1
+    return cells
+
+
+def rate_table(null_samples_by_cell, power_samples_by_cell, rates=RATES):
+    """Conservative envelope over null cells (threshold_table pattern,
+    trigger_calibration.py:229, including the >=50%-finite guard) and the
+    detection fraction of every power cell at each envelope."""
+    thresholds = {}
+    per_cell_quantiles = {}
+    for rate in rates:
+        per_cell = {}
+        for cell, sample in null_samples_by_cell.items():
+            arr = np.asarray(sample, dtype=float)
+            finite = arr[np.isfinite(arr)]
+            if finite.size < 0.5 * arr.size or finite.size == 0:
+                raise ValueError(
+                    f"cell {cell}: {arr.size - finite.size}/{arr.size} "
+                    "failed injections; cannot set a threshold")
+            per_cell[cell] = float(np.quantile(finite, 1.0 - rate))
+        thresholds[rate] = max(per_cell.values())
+        per_cell_quantiles[rate] = per_cell
+    detection = {}
+    for rate, envelope in thresholds.items():
+        detection[rate] = {}
+        for cell, sample in power_samples_by_cell.items():
+            arr = np.asarray(sample, dtype=float)
+            finite = arr[np.isfinite(arr)]
+            if finite.size == 0:
+                detection[rate][cell] = float("nan")
+            else:
+                detection[rate][cell] = float(np.mean(finite >= envelope))
+    return {"thresholds": thresholds, "detection": detection,
+            "per_cell_null_quantiles": per_cell_quantiles}
+
+
+# --------------------------------------------------------------------------
+# Phase 5: nested-sampling anchor (surrogate-fidelity check, not a
+# replicate-arm correction -- the null quantiles are rate-calibrated by
+# construction; see the plan's Implementation Approach).
+
+def nested_fit_one_screen(tw: TruthWaterfall, nlive=500, seed=0):
+    """dynesty posterior over the same (t0, log sigma, log tau1) likelihood
+    the ML fit uses; returns a FittedModel built from posterior medians."""
+    import dynesty
+
+    profile = tw.data.sum(axis=0)
+    t0_init = float(tw.time_ms[int(np.argmax(profile))])
+    t0_lo, t0_hi = t0_init - 1.0, t0_init + 1.0
+    log_sig_lo, log_sig_hi = np.log(1e-3), np.log(1.0)
+    log_tau_lo, log_tau_hi = np.log(1e-3), np.log(1.0)
+
+    def prior_transform(u):
+        return np.array([
+            t0_lo + u[0] * (t0_hi - t0_lo),
+            log_sig_lo + u[1] * (log_sig_hi - log_sig_lo),
+            log_tau_lo + u[2] * (log_tau_hi - log_tau_lo),
+        ])
+
+    def loglike(theta):
+        t0, log_sig, log_tau = theta
+        kernel = _band_kernels(tw.time_ms, tw.freq_ghz, float(t0),
+                               float(np.exp(log_sig)),
+                               float(np.exp(log_tau)), 0.0)
+        gains = _ols_gains(tw.data, kernel, tw.valid)
+        model = gains[:, None] * kernel
+        resid = (tw.data - model) / tw.noise_std[:, None]
+        return -0.5 * float((resid[tw.valid] ** 2).sum())
+
+    rng = np.random.default_rng(seed)
+    sampler = dynesty.NestedSampler(loglike, prior_transform, ndim=3,
+                                    nlive=nlive, rstate=rng)
+    sampler.run_nested(dlogz=0.5, print_progress=False)
+    res = sampler.results
+    weights = np.exp(res.logwt - res.logz[-1])
+    weights /= weights.sum()
+    median = np.array([
+        _weighted_quantile(res.samples[:, i], weights, 0.5)
+        for i in range(3)
+    ])
+    t0, sig, tau = float(median[0]), float(np.exp(median[1])), float(np.exp(median[2]))
+    kernel = _band_kernels(tw.time_ms, tw.freq_ghz, t0, sig, tau, 0.0)
+    gains = _ols_gains(tw.data, kernel, tw.valid)
+    band_center = 0.5 * (BAND_LO_GHZ + BAND_HI_GHZ)
+    return FittedModel(t0_ms=t0, sigma_ms=sig, tau1_ms=tau,
+                       tau1_band_ms=tau * band_center ** (-TRUTH_ALPHA),
+                       model=gains[:, None] * kernel, converged=True)
+
+
+def _weighted_quantile(values, weights, q):
+    order = np.argsort(values)
+    cdf = np.cumsum(weights[order])
+    return float(np.interp(q, cdf, values[order]))
+
+
+ANCHOR_CELLS = (
+    ("null", 15.0, 0.3),
+    ("null", 15.0, 3.0),
+    ("power", 15.0, 0.3),
+)
+ANCHOR_INJECTIONS = 10
+
+
+def anchor_pair(kind, snr, value, seed, nlive=500, n_replicates=200):
+    """Paired (ML, nested) statistic and p-value for one injection."""
+    r_truth = 0.0 if kind == "null" else float(value)
+    tw = make_truth_waterfall(seed=seed, r=r_truth, snr=snr)
+    out = {"seed": int(seed), "kind": kind, "snr": snr, "value": value}
+    for label, fitter in (("ml", fit_one_screen),
+                          ("nested", lambda w: nested_fit_one_screen(
+                              w, nlive=nlive, seed=seed))):
+        fit = fitter(tw)
+        tau_pred = float(value) * fit.tau1_band_ms
+        t_peak = _model_peak_time_ms(fit, tw.time_ms)
+        resid = (tw.data - fit.model) / tw.noise_std[:, None]
+        stat = predicted_delay_statistic(
+            resid, tw.valid, tw.time_ms, t_peak, tau_pred, WINDOW_FRAC)
+        out[f"{label}_statistic"] = float(stat.matched_snr)
+        out[f"{label}_pvalue"] = trigger_pvalue(
+            tw, fit, tau_pred, WINDOW_FRAC, n_replicates, seed + 7)
+    return out

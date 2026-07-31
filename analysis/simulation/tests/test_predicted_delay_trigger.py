@@ -87,3 +87,74 @@ def test_null_pvalues_are_uniformish():
     p = trigger_pvalue(tw, fit, tau_pred_ms=3 * fit.tau1_band_ms,
                        window_frac=0.5, n_replicates=200, seed=99)
     assert 0.0 <= p <= 1.0
+
+
+# ---------------------------------------------------------------------------
+# Phase 4-5 tests
+
+import pytest  # noqa: E402
+
+from simulation.predicted_delay_trigger import (  # noqa: E402
+    anchor_pair,
+    declared_cells,
+    rate_table,
+    run_cell,
+)
+
+
+def test_declared_schedule_is_27_cells_with_aligned_ratios():
+    cells = declared_cells()
+    nulls = [c for c in cells if c[0] == "null"]
+    powers = [c for c in cells if c[0] == "power"]
+    assert len(nulls) == 15 and len(powers) == 12
+    null_ratios = {c[3] for c in nulls}
+    power_rs = {c[3] for c in powers}
+    assert power_rs <= null_ratios
+    assert len({c[4] for c in cells}) == 27
+
+
+def test_rate_table_envelope_and_detection_on_constructed_samples():
+    rng = np.random.default_rng(0)
+    nulls = {"null:a": rng.normal(0, 1, 400).tolist(),
+             "null:b": (rng.normal(0, 1, 400) + 1.0).tolist()}
+    powers = {"power:hi": np.full(100, 50.0).tolist(),
+              "power:lo": np.full(100, -50.0).tolist()}
+    table = rate_table(nulls, powers, rates=(0.01,))
+    envelope = table["thresholds"][0.01]
+    assert envelope == max(table["per_cell_null_quantiles"][0.01].values())
+    assert envelope == pytest.approx(
+        np.quantile(np.asarray(nulls["null:b"]), 0.99), abs=1e-12)
+    assert table["detection"][0.01]["power:hi"] == 1.0
+    assert table["detection"][0.01]["power:lo"] == 0.0
+
+
+def test_rate_table_fails_closed_on_majority_nan_cell():
+    nulls = {"null:bad": [float("nan")] * 6 + [0.0] * 4}
+    with pytest.raises(ValueError, match="cannot set a threshold"):
+        rate_table(nulls, {}, rates=(0.01,))
+
+
+def test_run_injection_failure_records_nan_not_raise(monkeypatch):
+    import simulation.predicted_delay_trigger as pdt
+    monkeypatch.setattr(pdt, "fit_one_screen",
+                        lambda tw: (_ for _ in ()).throw(RuntimeError("x")))
+    rec = pdt.run_injection("null", 15.0, 3.0, seed=1)
+    assert np.isnan(rec["statistic"]) and "error" in rec
+
+
+@pytest.mark.slow
+def test_smoke_cell_produces_finite_statistics():
+    records = run_cell("null", 30.0, 3.0, n=2, cell_index=0)
+    stats = [r["statistic"] for r in records]
+    assert len(stats) == 2 and all(np.isfinite(s) for s in stats)
+    power = run_cell("power", 30.0, 3.0, n=1, cell_index=1)
+    assert np.isfinite(power[0]["statistic"])
+
+
+@pytest.mark.slow
+def test_anchor_pair_smoke_nested_agrees_with_ml():
+    pair = anchor_pair("null", 30.0, 3.0, seed=5, nlive=60,
+                       n_replicates=50)
+    assert np.isfinite(pair["ml_statistic"])
+    assert np.isfinite(pair["nested_statistic"])
+    assert abs(pair["ml_statistic"] - pair["nested_statistic"]) < 2.0
