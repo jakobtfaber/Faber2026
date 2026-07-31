@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0",
+  "event": {
+    "nickname": "synthetic",
+    "tns_name": "SYNTHETIC",
+    "instrument_burst_ids": {
+      "chimefrb": "synthetic-chimefrb",
+      "dsa110": "synthetic-dsa110"
+    }
+  },
+  "source": {"kind": "synthetic"},
+  "geometry": {
+    "reference_frequency_mhz": 400.0,
+    "epoch_unix_ns": 1767225600000000000,
+    "station_delays_s": {"chimefrb": 0.0, "dsa110": 0.002},
+    "station_delay_uncertainties_s": {"chimefrb": 0.0000001, "dsa110": 0.0000001},
+    "clock_uncertainties_s": {"chimefrb": 0.0000001, "dsa110": 0.0000001},
+    "independent_projection_difference_s": 0.000000002,
+    "maximum_projection_difference_s": 0.00000001
+  },
+  "fit": {
+    "component_ids": ["matched-component"],
+    "band_component_ids": {
+      "chimefrb": ["chime-component-1", "chime-component-2"],
+      "dsa110": ["dsa-component-1"]
+    },
+    "associations": [
+      {
+        "association_id": "one-to-one",
+        "matches": [
+          {
+            "latent_id": "matched-component",
+            "chimefrb_component_id": "chime-component-1",
+            "dsa110_component_id": "dsa-component-1"
+          }
+        ]
+      },
+      {
+        "association_id": "wrong-chime-component",
+        "matches": [
+          {
+            "latent_id": "matched-component",
+            "chimefrb_component_id": "chime-component-2",
+            "dsa110_component_id": "dsa-component-1"
+          }
+        ]
+      }
+    ],
+    "morphologies": ["gaussian", "emg"],
+    "dm_bounds": [491.1, 491.4],
+    "toa_bounds_s": [[0.072, 0.088]],
+    "width_bounds_s": [[0.0005, 0.02]],
+    "width_index_bounds": [-6.0, 1.0],
+    "scattering_tau_1ghz_bounds_s": [0.00005, 0.001],
+    "beta_bounds": [3.0, 4.0],
+    "seed": 20260730,
+    "nlive": 60,
+    "dlogz": 0.3,
+    "maximum_failed_morphology_weight": 0.000001,
+    "component_amplitude_bounds": [0.01, 10.0]
+  },
+  "synthetic": {
+    "injected_morphology": "emg",
+    "truth_association_id": "one-to-one",
+    "noise_seed": 731,
+    "truth": {
+      "absolute_dm": 491.25,
+      "geocentric_toa_s": 0.08,
+      "width_400_s": 0.002,
+      "width_index": 0.0,
+      "tau_1ghz_s": 0.0003,
+      "beta": 3.6666666666666665,
+      "matched_amplitudes": {"chimefrb": 1.0, "dsa110": 1.0},
+      "local_components": {
+        "chimefrb": [
+          {
+            "id": "chime-component-2",
+            "toa_s": 0.125,
+            "width_s": 0.002,
+            "amplitude": 0.6
+          }
+        ],
+        "dsa110": []
+      }
+    },
+    "grids": {
+      "chimefrb": {
+        "frequency_low_mhz": 430.0,
+        "frequency_high_mhz": 790.0,
+        "frequency_channels": 10,
+        "time_samples": 401,
+        "sample_interval_s": 0.0005,
+        "product_dm": 491.18,
+        "noise_std": 1.0,
+        "gain_prior_std": 2.0
+        ,"time_origin_offset_s": 0.0
+        ,"time_origin_utc": "2026-01-01T00:00:00.000000000"
+      },
+      "dsa110": {
+        "frequency_low_mhz": 1310.0,
+        "frequency_high_mhz": 1490.0,
+        "frequency_channels": 8,
+        "time_samples": 301,
+        "sample_interval_s": 0.0007,
+        "product_dm": 491.31,
+        "noise_std": 1.0,
+        "gain_prior_std": 2.0
+        ,"time_origin_offset_s": 0.05
+        ,"time_origin_utc": "2026-01-01T00:00:00.050000000"
+      }
+    }
+  },
+  "verification": {
+    "absolute_dm_error_max": 0.01,
+    "toa_error_s_max": 0.001,
+    "width_error_s_max": 0.001,
+    "width_index_error_max": 0.5,
+    "scattering_tau_error_s_max": 0.0002,
+    "maximum_incorrect_association_weight": 0.01,
+    "maximum_omitted_tail_mass": 0.0001,
+    "maximum_log_evidence_uncertainty": 1.2,
+    "maximum_reduced_residual_power": 1.2,
+    "maximum_structured_residual_correlation": 0.2,
+    "minimum_valid_sample_fraction": 0.99,
+    "maximum_prior_edge_mass": 0.05
+  },
+  "uncertainty_budget": {
+    "calibration_resolution_dm": 0.0,
+    "intrinsic_lag_dm": 0.0,
+    "basis": "exact synthetic construction; no calibration, resolution, or intrinsic-lag perturbation is present"
+  }
+}

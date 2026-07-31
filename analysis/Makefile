@@ -2,8 +2,26 @@
 MANUSCRIPT_ROOT ?= ..
 MANUSCRIPT_ROOT_ABS := $(abspath $(MANUSCRIPT_ROOT))
 UV ?= uv
+DUALBAND_ENV ?= $(CURDIR)/.venv-dualband
 
-.PHONY: check-mount check-state test test-manuscript test-slow test-replay test-external lint ci figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
+.PHONY: check-mount check-state test test-manuscript test-slow test-replay test-external lint ci figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch observations fit verify review
+
+EVENT ?=
+DUALBAND_OUTPUT_ROOT ?= $(CURDIR)
+DUALBAND_RUN = UV_PROJECT_ENVIRONMENT="$(DUALBAND_ENV)" $(UV) run --locked --no-sync --only-group dualband python scripts/run_dualband_burst_model.py
+
+observations:
+	@test -n "$(EVENT)" || (echo "Usage: make observations EVENT=<event>" >&2; exit 1)
+	$(DUALBAND_RUN) --event "$(EVENT)" --stage observations --output-root "$(DUALBAND_OUTPUT_ROOT)"
+
+fit: observations
+	$(DUALBAND_RUN) --event "$(EVENT)" --stage fit --output-root "$(DUALBAND_OUTPUT_ROOT)"
+
+verify: fit
+	$(DUALBAND_RUN) --event "$(EVENT)" --stage verify --output-root "$(DUALBAND_OUTPUT_ROOT)"
+
+review: verify
+	$(DUALBAND_RUN) --event "$(EVENT)" --stage review --output-root "$(DUALBAND_OUTPUT_ROOT)"
 
 check-mount:
 	@test -f "$(MANUSCRIPT_ROOT_ABS)/main.tex" || \

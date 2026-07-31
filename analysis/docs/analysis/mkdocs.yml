@@ -35,6 +35,7 @@ extra_javascript:
 
 nav:
   - Overview: index.md
+  - Geometry-constrained joint fitting: geometry-constrained-joint-fitting.md
   - DM:
       - Window sweep (manual envelopes): dm/window-sweep.md
   - Scattering:
