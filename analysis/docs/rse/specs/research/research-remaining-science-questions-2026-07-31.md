@@ -7,9 +7,11 @@ appendix, receipt state, or parent pin.
 **Probe environment:** the original read-only probe ran in a clean analysis
 worktree based on historical commit
 `711c47c1f89c0ebc5cdcae98cb403708a312ae3c`. Before publication, the cited
-ticket, census, producer, input, and output surfaces were rechecked at analysis
-`origin/main` commit `7a4b6a00ff7e6efdbddcac980816099f9b84b01b`; Git reports no byte changes for
-those paths between the two commits. Required knowledge-base searches ran first
+ticket, census, producer, input, and output surfaces were rechecked at the
+initial publication base `7a4b6a00ff7e6efdbddcac980816099f9b84b01b` and again
+after merging current analysis `origin/main` commit
+`c75a68d6541628bfe36cfd3e4cec7c01a92b1bc0`; Git reports no byte changes for
+those paths across the three commits. Required knowledge-base searches ran first
 with `FABER2026_ROOT` set to the canonical parent checkout and returned no
 results; exhaustive source and Git history reads followed.
 
@@ -51,9 +53,9 @@ results; exhaustive source and Git history reads followed.
   `3362019a776cf799bcb53f6b7bfda2363217f130323a57351fd9ff9f029c6951`;
   and input `scripts/phineas_halo_crossing_inputs.csv` SHA-256
   `2657115881a91261b547c1c1233508e8c03b2758d2aa365b30f89f944b507891`.
-- In the historical probe environment, and unchanged on publication base
-  `7a4b6a0`, the retained historical CSV bytes are unchanged, but the current
-  producer is a different surface: SHA-256 `43823c73...`, output
+- In the historical probe environment, and unchanged through current-main
+  publication base `c75a68d`, the retained historical CSV bytes are unchanged,
+  but the current producer is a different surface: SHA-256 `43823c73...`, output
   `foregrounds/results/propagation/host_dm_diagnostic.csv`, no profile
   averaging, and current intervening input SHA-256 `0dd74d3c...` with cluster
   point `216.915467424`. It does not produce or validate the historical
