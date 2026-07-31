@@ -5,7 +5,6 @@
 - Assignee: manuscript owner
 - Blocked by: none
 - Map: [ApJ submission](../map-apj-submission.md)
-- Triage: `ready-for-human`
 
 ## Owner decision card
 

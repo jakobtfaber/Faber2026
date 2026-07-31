@@ -12,10 +12,12 @@ The frozen WHL12 payload identifies `WHL J115048.0+714428` at
 RA `177.69998 deg`, Dec `71.74124 deg`, photometric redshift `0.1893`,
 `N200=12`, and catalog `r200=0.92 Mpc`. The census places the sightline
 `614.3 kpc` from that center and marks the object confirmed but
-budget-ineligible. The budgeted Wen--Han system `J115120.4+714435, 1254337`
-is a separate registry row at RA `177.83488 deg`, Dec `71.74319 deg`,
+budget-ineligible. The frozen registry records the budgeted Wen--Han system
+`J115120.4+714435, 1254337` at RA `177.83488 deg`, Dec `71.74319 deg`, and
 spectroscopic redshift `0.2000`, with adopted `M500=1.48e14 Msun` and
-`R500=0.729 Mpc`.
+`R500=0.729 Mpc`. Primary-source recovery instead identifies the governing
+Wen & Han (2024) row at photometric redshift `0.1938`; this ticket changes no
+registry value.
 
 Exact evidence:
 
@@ -97,7 +99,7 @@ must not appear in the owner queue.
   ],
   "context": [
     "WHL12 identifies the entry at photometric redshift 0.1893 with N200=12 and catalog r200=0.92 Mpc; the sightline impact is 614.3 kpc.",
-    "The budgeted Wen--Han entry is at spectroscopic redshift 0.2000 with adopted M500=1.48e14 Msun and R500=0.729 Mpc.",
+    "The frozen registry records the budgeted Wen--Han entry at spectroscopic redshift 0.2000 with adopted M500=1.48e14 Msun and R500=0.729 Mpc; primary-source recovery identifies the governing Wen & Han (2024) row at photometric redshift 0.1938, without changing the registry.",
     "No primary-source evidence in the current packet establishes distinctness or duplication, and no model-compatible M500 and R500 are adopted for WHL J115048.0+714428."
   ],
   "evidence": [
