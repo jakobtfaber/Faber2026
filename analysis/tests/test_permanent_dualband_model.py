@@ -827,6 +827,9 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
         )
         + "\n"
     )
+    persisted = json.loads(checkpoint.with_suffix(".json").read_text())
+    assert persisted["binding"]["run_identity"] == request.checkpoint_identity
+    assert persisted["binding"]["run_context"] == request.checkpoint_context
     resumed = fit_joint_event(request)
     uninterrupted = fit_joint_event(replace(request, checkpoint_directory=None))
     np.testing.assert_array_equal(resumed.samples, uninterrupted.samples)

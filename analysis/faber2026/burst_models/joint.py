@@ -39,10 +39,11 @@ _CHECKPOINT_RECEIPT_SCHEMA = {
             "type": "object",
             "additionalProperties": False,
             "required": [
-                "run_context", "model_version", "association", "morphology",
+                "run_identity", "run_context", "model_version", "association", "morphology",
                 "parameters", "prior_specs", "nlive", "dlogz"
             ],
             "properties": {
+                "run_identity": {"type": "string", "minLength": 1},
                 "run_context": {
                     "type": "object", "additionalProperties": False,
                     "required": ["request_sha256", "environment_sha256", "schema_version", "model_version", "input_hashes"],
@@ -696,6 +697,7 @@ def _checkpoint_binding(
     """Bind a resumable sampler to its exact inference subproblem."""
 
     return {
+        "run_identity": request.checkpoint_identity,
         "run_context": dict(request.checkpoint_context),
         "model_version": _CHECKPOINT_MODEL_VERSION,
         "association": request.associations[0].association_id,
