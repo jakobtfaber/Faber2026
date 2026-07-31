@@ -1,0 +1,302 @@
+[
+  {
+    "seed": 21160731,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 3.193619785634026,
+    "ml_pvalue": 0.02,
+    "nested_statistic": 3.1963425149039817,
+    "nested_pvalue": 0.02
+  },
+  {
+    "seed": 21160732,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 2.2304353947736155,
+    "ml_pvalue": 0.275,
+    "nested_statistic": 2.233488849408853,
+    "nested_pvalue": 0.27
+  },
+  {
+    "seed": 21160733,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.8668343949414727,
+    "ml_pvalue": 0.505,
+    "nested_statistic": 1.8694573414487043,
+    "nested_pvalue": 0.505
+  },
+  {
+    "seed": 21160734,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.9665713363286206,
+    "ml_pvalue": 0.5,
+    "nested_statistic": 1.968651320465107,
+    "nested_pvalue": 0.5
+  },
+  {
+    "seed": 21160735,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.6730133928482616,
+    "ml_pvalue": 0.67,
+    "nested_statistic": 1.6748397549988099,
+    "nested_pvalue": 0.665
+  },
+  {
+    "seed": 21160736,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.5059048514275903,
+    "ml_pvalue": 0.76,
+    "nested_statistic": 1.506533291972513,
+    "nested_pvalue": 0.76
+  },
+  {
+    "seed": 21160737,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 2.06842183310814,
+    "ml_pvalue": 0.505,
+    "nested_statistic": 2.070730392926024,
+    "nested_pvalue": 0.505
+  },
+  {
+    "seed": 21160738,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.6375702049908867,
+    "ml_pvalue": 0.735,
+    "nested_statistic": 1.6388978648772865,
+    "nested_pvalue": 0.735
+  },
+  {
+    "seed": 21160739,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.4127392321462022,
+    "ml_pvalue": 0.84,
+    "nested_statistic": 1.416290491641846,
+    "nested_pvalue": 0.84
+  },
+  {
+    "seed": 21160740,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.7825588636516705,
+    "ml_pvalue": 0.62,
+    "nested_statistic": 1.780913687967824,
+    "nested_pvalue": 0.62
+  },
+  {
+    "seed": 21160731,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 3.2144061613183217,
+    "ml_pvalue": 0.27,
+    "nested_statistic": 3.2139558485090216,
+    "nested_pvalue": 0.27
+  },
+  {
+    "seed": 21160732,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 2.8258368290625087,
+    "ml_pvalue": 0.585,
+    "nested_statistic": 2.8254761433572613,
+    "nested_pvalue": 0.585
+  },
+  {
+    "seed": 21160733,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 2.7805012464344774,
+    "ml_pvalue": 0.625,
+    "nested_statistic": 2.780808142616652,
+    "nested_pvalue": 0.625
+  },
+  {
+    "seed": 21160734,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 3.1674582392943873,
+    "ml_pvalue": 0.27,
+    "nested_statistic": 3.1683631870690214,
+    "nested_pvalue": 0.27
+  },
+  {
+    "seed": 21160735,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 2.077134566495498,
+    "ml_pvalue": 1.0,
+    "nested_statistic": 2.078581728045056,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160736,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 2.7852822876927004,
+    "ml_pvalue": 0.64,
+    "nested_statistic": 2.788024884476642,
+    "nested_pvalue": 0.64
+  },
+  {
+    "seed": 21160737,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 2.7860878710294465,
+    "ml_pvalue": 0.56,
+    "nested_statistic": 2.786235512125142,
+    "nested_pvalue": 0.56
+  },
+  {
+    "seed": 21160738,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 3.101981941538033,
+    "ml_pvalue": 0.355,
+    "nested_statistic": 3.1011124165743666,
+    "nested_pvalue": 0.355
+  },
+  {
+    "seed": 21160739,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 2.883922673952175,
+    "ml_pvalue": 0.545,
+    "nested_statistic": 2.8826175295282415,
+    "nested_pvalue": 0.545
+  },
+  {
+    "seed": 21160740,
+    "kind": "null",
+    "snr": 15.0,
+    "value": 3.0,
+    "ml_statistic": 2.6045895977233227,
+    "ml_pvalue": 0.81,
+    "nested_statistic": 2.6074886088603257,
+    "nested_pvalue": 0.81
+  },
+  {
+    "seed": 21160731,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -1.2239545507485337,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -1.2268436738747974,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160732,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -1.0076199980422371,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -1.0084536001293962,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160733,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -0.4542335339066989,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -0.45063332963453656,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160734,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -0.6554218600782448,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -0.6536260786464018,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160735,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -1.8833822081095426,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -1.8845551904659061,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160736,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -0.3200250653087874,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -0.31726437329029583,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160737,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -0.012205647536196702,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -0.009148275997550654,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160738,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -1.9308897667492484,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -1.9306570519677726,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160739,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": -1.7675015420374363,
+    "ml_pvalue": 1.0,
+    "nested_statistic": -1.767642364697145,
+    "nested_pvalue": 1.0
+  },
+  {
+    "seed": 21160740,
+    "kind": "power",
+    "snr": 15.0,
+    "value": 0.3,
+    "ml_statistic": 1.0463942794732406,
+    "ml_pvalue": 0.98,
+    "nested_statistic": 1.0538952196090745,
+    "nested_pvalue": 0.98
+  }
+]
