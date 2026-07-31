@@ -92,10 +92,14 @@ shows the census correctly; it cannot judge whether the figure reads well, or
 whether nine drawn panels — three sightlines are omitted for having no
 established host redshift — is the right presentation for the paper.
 
-**Blocked, needs an owner call before a review batch can exist:**
-`scripts/figure_review.py new-batch` still requires `--pipeline-revision`,
-naming the retired repository. Until that argument is made optional, a batch
-for this candidate cannot be created without supplying a dead revision.
+**Unblocked (2026-07-31):** `scripts/figure_review.py new-batch` no longer
+requires `--pipeline-revision`. When omitted, the manifest records the
+resolved `--source-revision` — the exact `Faber2026-analysis` producer
+commit — consistent with the dsa110-FLITS retirement (owner decision,
+2026-07-28). The stale `--pipeline-revision $(git -C pipeline rev-parse
+HEAD)` approval hint in `scripts/figure_flow.py` was removed in the same
+change. A review batch for the installed Figure 3 bytes can now be created
+without naming a dead revision.
 
 ## Superseded record (2026-07-26)
 

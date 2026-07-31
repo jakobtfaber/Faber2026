@@ -221,8 +221,7 @@ def approval_hint(fig: dict[str, Any]) -> str | None:
         f"    $(date +%Y-%m-%d)-{fig['id']} \\\n"
         f'    --title "{fig.get("tex") or fig["id"]}" \\\n'
         f"    --candidate {slot} \\\n"
-        f"    --candidate-root {candidate_root} \\\n"
-        f"    --pipeline-revision $(git -C pipeline rev-parse HEAD)"
+        f"    --candidate-root {candidate_root}"
     )
 
 
