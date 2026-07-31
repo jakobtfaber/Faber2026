@@ -15,7 +15,12 @@ import pytest
 from pypdf import PdfReader
 
 import workflows.dualband_burst_model as workflow
-from workflows.dualband_burst_model import promote_result, run_event
+from workflows.dualband_burst_model import (
+    WorkflowFailure,
+    _validate_checkpoint_metadata,
+    promote_result,
+    run_event,
+)
 
 
 def _sha256(path: Path) -> str:
@@ -228,6 +233,32 @@ def test_permanent_slice_has_no_flits_or_legacy_pipeline_imports() -> None:
     assert "import flits" not in source.lower()
     assert "from flits" not in source.lower()
     assert "radio_pipeline" not in source
+
+
+def test_checkpoint_receipt_rejects_binary_path_and_set_tampering(tmp_path: Path) -> None:
+    checkpoint = tmp_path / "one-to-one-gaussian.pkl"
+    metadata = tmp_path / "one-to-one-gaussian.json"
+    checkpoint.write_bytes(b"sampler")
+    metadata.write_text('{"binding_sha256":"' + "0" * 64 + '"}\n')
+    receipt = {
+        "checkpoint_sha256": {checkpoint.name: _sha256(checkpoint)},
+        "checkpoint_metadata_sha256": {metadata.name: _sha256(metadata)},
+        "checkpoint_metadata": {
+            metadata.name: {
+                "path": metadata.name,
+                "sha256": _sha256(metadata),
+                "binding_sha256": "0" * 64,
+            }
+        },
+    }
+    _validate_checkpoint_metadata(tmp_path, receipt)
+    checkpoint.write_bytes(b"changed")
+    with pytest.raises(WorkflowFailure, match="checkpoint sampler changed"):
+        _validate_checkpoint_metadata(tmp_path, receipt)
+    checkpoint.write_bytes(b"sampler")
+    (tmp_path / "unrecorded.pkl").write_bytes(b"other")
+    with pytest.raises(WorkflowFailure, match="checkpoint set differs"):
+        _validate_checkpoint_metadata(tmp_path, receipt)
 
 
 def test_public_make_runner_uses_the_installed_project_without_pythonpath() -> None:

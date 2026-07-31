@@ -43,7 +43,29 @@ _CHECKPOINT_RECEIPT_SCHEMA = {
                 "parameters", "prior_specs", "nlive", "dlogz"
             ],
             "properties": {
-                "run_context": {"type": "object", "minProperties": 1},
+                "run_context": {
+                    "type": "object", "additionalProperties": False,
+                    "required": ["request_sha256", "environment_sha256", "schema_version", "model_version", "input_hashes"],
+                    "properties": {
+                        "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                        "environment_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                        "schema_version": {"const": "1.0.0"},
+                        "model_version": {"const": _CHECKPOINT_MODEL_VERSION},
+                        "input_hashes": {
+                            "type": "object", "additionalProperties": False,
+                            "required": ["chimefrb", "dsa110"],
+                            "properties": {
+                                instrument: {
+                                    "type": "object", "minProperties": 1,
+                                    "additionalProperties": {
+                                        "type": "string", "pattern": "^sha256:[0-9a-f]{64}$"
+                                    },
+                                }
+                                for instrument in ("chimefrb", "dsa110")
+                            },
+                        },
+                    },
+                },
                 "model_version": {"const": _CHECKPOINT_MODEL_VERSION},
                 "association": {"type": "string", "minLength": 1},
                 "morphology": {"enum": sorted(_MORPHOLOGIES)},

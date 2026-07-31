@@ -791,11 +791,14 @@ def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
         checkpoint_directory=str(tmp_path / "checkpoints"),
         checkpoint_identity="test-checkpoint-identity",
         checkpoint_context={
-            "request_sha256": "request",
-            "environment_sha256": "environment",
+            "request_sha256": "0" * 64,
+            "environment_sha256": "1" * 64,
             "schema_version": "1.0.0",
             "model_version": "joint-burst-v1",
-            "input_hashes": {"synthetic": "input"},
+            "input_hashes": {
+                "chimefrb": {"synthetic": "sha256:" + "2" * 64},
+                "dsa110": {"synthetic": "sha256:" + "3" * 64},
+            },
         },
     )
     checkpoint = tmp_path / "checkpoints" / "one-to-one-gaussian.pkl"
@@ -844,7 +847,7 @@ def test_checkpoint_refuses_another_association_subproblem(tmp_path) -> None:
         _request(),
         checkpoint_directory=str(tmp_path / "checkpoints"),
         checkpoint_identity="run-identity",
-        checkpoint_context={"request_sha256": "request"},
+        checkpoint_context={"request_sha256": "0" * 64, "environment_sha256": "1" * 64, "schema_version": "1.0.0", "model_version": "joint-burst-v1", "input_hashes": {"chimefrb": {"synthetic": "sha256:" + "2" * 64}, "dsa110": {"synthetic": "sha256:" + "3" * 64}}},
     )
     alternate = replace(
         request,
@@ -880,7 +883,7 @@ def test_checkpoint_refuses_another_morphology_subproblem(tmp_path) -> None:
         _request(),
         checkpoint_directory=str(tmp_path / "checkpoints"),
         checkpoint_identity="run-identity",
-        checkpoint_context={"request_sha256": "request"},
+        checkpoint_context={"request_sha256": "0" * 64, "environment_sha256": "1" * 64, "schema_version": "1.0.0", "model_version": "joint-burst-v1", "input_hashes": {"chimefrb": {"synthetic": "sha256:" + "2" * 64}, "dsa110": {"synthetic": "sha256:" + "3" * 64}}},
     )
     alternate = replace(request, morphology="emg")
     checkpoint = tmp_path / "checkpoints" / "one-to-one-emg.pkl"

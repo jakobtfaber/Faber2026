@@ -1227,6 +1227,21 @@ def _validate_stage_product(
 
 
 def _validate_checkpoint_metadata(directory: Path, receipt: dict[str, Any]) -> None:
+    required = {"checkpoint_sha256", "checkpoint_metadata_sha256", "checkpoint_metadata"}
+    if not required <= receipt.keys():
+        raise WorkflowFailure("fit receipt lacks checkpoint identities", reason_codes=["provenance-checkpoint-metadata-mismatch"])
+    expected_samplers = set(receipt["checkpoint_sha256"])
+    expected_metadata = set(receipt["checkpoint_metadata_sha256"])
+    if expected_samplers != {path.name for path in directory.glob("*.pkl")} or expected_metadata != {path.name for path in directory.glob("*.json")} or expected_metadata != set(receipt["checkpoint_metadata"]):
+        raise WorkflowFailure("checkpoint set differs from fit receipt", reason_codes=["provenance-checkpoint-metadata-mismatch"])
+    for name, expected in receipt.get("checkpoint_sha256", {}).items():
+        path = directory / name
+        if not path.exists() or _sha256(path) != expected:
+            raise WorkflowFailure("checkpoint sampler changed after fit receipt", reason_codes=["provenance-checkpoint-metadata-mismatch"])
+    for name, expected in receipt.get("checkpoint_metadata_sha256", {}).items():
+        path = directory / name
+        if not path.exists() or _sha256(path) != expected:
+            raise WorkflowFailure("checkpoint metadata changed after fit receipt", reason_codes=["provenance-checkpoint-metadata-mismatch"])
     for name, identity in receipt.get("checkpoint_metadata", {}).items():
         if identity.get("path") != name:
             raise WorkflowFailure(
