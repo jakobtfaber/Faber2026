@@ -863,13 +863,19 @@ def _render_review_packet(
         axes[0, 1].set_xlabel("Station delay from geocenter (ms)")
         axes[0, 1].set_ylabel("Topocentric 400 MHz arrival time (ms)")
 
-        labels = list(result.morphology_weights) + list(result.association_weights)
-        values = list(result.morphology_weights.values()) + list(
-            result.association_weights.values()
-        )
-        axes[1, 0].bar(labels, values, color="0.5")
-        axes[1, 0].set_ylim(0, 1.05)
-        axes[1, 0].set_ylabel("Evidence weight")
+        labels = [
+            *(f"morphology: {name}" for name in result.morphology_weights),
+            *(f"association: {name}" for name in result.association_weights),
+        ]
+        values = [
+            *result.morphology_weights.values(),
+            *result.association_weights.values(),
+        ]
+        positions = np.arange(len(labels))
+        axes[1, 0].barh(positions, values, color="0.5")
+        axes[1, 0].set_xlim(0, 1.05)
+        axes[1, 0].set_yticks(positions, labels, fontsize=8)
+        axes[1, 0].set_xlabel("Evidence weight")
 
         axes[1, 1].axis("off")
         lines = [
