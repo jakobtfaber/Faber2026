@@ -499,29 +499,58 @@ def _verification(
 ) -> dict[str, Any]:
     thresholds = configuration["verification"]
     truth = event.truth
+    required_parameters = {
+        f"width_400_s:{event.request.component_ids[0]}",
+        "width_index",
+        "tau_1ghz_s",
+    }
     parameter_medians = {
         name: _weighted_summary(result.samples[:, index], result.weights).median
         for index, name in enumerate(result.parameter_names)
+        if name in required_parameters
     }
     omitted_tail_mass = 0.0
     reduced_residual_powers = []
     lag_one_correlations = []
     valid_fractions = []
-    # Every stored posterior sample participates. The bound intentionally uses
+    # Every positive-posterior-mass sample participates. The bound intentionally uses
     # a conservative envelope across their coordinates, so covariance cannot
     # hide a crop-touching draw.
-    sample_indices = np.arange(result.samples.shape[0])
+    sample_indices = np.flatnonzero(result.weights > 0)
+    posterior_samples = result.samples[sample_indices]
+    posterior_associations = result.sample_associations[sample_indices]
+    association_components = {
+        association.association_id: {
+            "chimefrb": {
+                match.latent_id: match.chimefrb_component_id
+                for match in association.matches
+            },
+            "dsa110": {
+                match.latent_id: match.dsa110_component_id
+                for match in association.matches
+            },
+        }
+        for association in event.request.associations
+    }
     for observation in event.request.observations:
+        names = list(result.parameter_names)
+        amplitude_names = [
+            f"amplitude:{observation.instrument}:{component}"
+            for component in event.request.band_component_ids[observation.instrument]
+        ]
+        total_amplitude = np.sum(
+            posterior_samples[:, [names.index(name) for name in amplitude_names]],
+            axis=1,
+        )
         frequencies = np.asarray(observation.frequencies_mhz)
         start = observation.times_s[0] - 0.5 * observation.sample_interval_s
         end = observation.times_s[-1] + 0.5 * observation.sample_interval_s
         for component in event.request.component_ids:
-            names = list(result.parameter_names)
-            toa_values = result.samples[:, names.index(f"toa_400_s:{component}")]
-            width_values = result.samples[:, names.index(f"width_400_s:{component}")]
-            dm_values = result.samples[:, names.index("absolute_dm")]
-            index_values = result.samples[:, names.index("width_index")]
-            timing_values = result.samples[
+            toa_values = posterior_samples[:, names.index(f"toa_400_s:{component}")]
+            width_values = posterior_samples[:, names.index(f"width_400_s:{component}")]
+            dm_values = posterior_samples[:, names.index("absolute_dm")]
+            index_values = posterior_samples[:, names.index("width_index")]
+            timing_values = posterior_samples[
                 :, names.index(f"timing_error_s:{observation.instrument}")
             ]
             centers = (
@@ -544,16 +573,16 @@ def _verification(
             ) ** index_values[:, None]
             early = ndtr((start - centers) / widths)
             finite_tau = (
-                result.samples[:, names.index("tau_1ghz_s")]
+                posterior_samples[:, names.index("tau_1ghz_s")]
                 if "tau_1ghz_s" in names
                 else np.array([])
             )
             if finite_tau.size == 0:
                 late = ndtr(-(end - centers) / widths)
             else:
-                tau_1ghz = float(np.nanmax(finite_tau[sample_indices]))
+                tau_1ghz = float(np.nanmax(finite_tau))
                 beta = (
-                    float(np.nanmin(result.samples[sample_indices, names.index("beta")]))
+                    float(np.nanmin(posterior_samples[:, names.index("beta")]))
                     if "beta" in names
                     else 4.0
                 )
@@ -570,10 +599,23 @@ def _verification(
                         for index, channel_tau in enumerate(tau)
                     ]
                 )
+            association_amplitudes = np.asarray(
+                [
+                    posterior_samples[
+                        index,
+                        names.index(
+                            f"amplitude:{observation.instrument}:"
+                            f"{association_components[posterior_associations[index]][observation.instrument][component]}"
+                        ),
+                    ]
+                    for index in range(posterior_samples.shape[0])
+                ]
+            )
+            fractional_tail = association_amplitudes / total_amplitude
             omitted_tail_mass = max(
                 omitted_tail_mass,
-                float(np.max(early)),
-                float(np.max(late)),
+                float(np.max(fractional_tail[:, None] * early)),
+                float(np.max(fractional_tail[:, None] * late)),
             )
         # Band-local nuisance components are Gaussian.  They do not constrain
         # the geometry, but their fitted support must still be contained by
@@ -584,15 +626,26 @@ def _verification(
             width_name = f"local_width_s:{observation.instrument}:{component}"
             if toa_name not in names:
                 continue
-            local_toas = result.samples[:, names.index(toa_name)]
-            local_widths = result.samples[:, names.index(width_name)]
+            local_toas = posterior_samples[:, names.index(toa_name)]
+            local_widths = posterior_samples[:, names.index(width_name)]
             finite = np.isfinite(local_toas) & np.isfinite(local_widths)
             if not np.any(finite):
                 continue
+            amplitudes = posterior_samples[
+                finite,
+                names.index(f"amplitude:{observation.instrument}:{component}"),
+            ]
+            fractional_tail = amplitudes / total_amplitude[finite]
             omitted_tail_mass = max(
                 omitted_tail_mass,
-                float(np.max(ndtr((start - local_toas[finite]) / local_widths[finite]))),
-                float(np.max(ndtr(-(end - local_toas[finite]) / local_widths[finite]))),
+                float(np.max(
+                    fractional_tail
+                    * ndtr((start - local_toas[finite]) / local_widths[finite])
+                )),
+                float(np.max(
+                    fractional_tail
+                    * ndtr(-(end - local_toas[finite]) / local_widths[finite])
+                )),
             )
         valid = np.asarray(observation.valid_pixels)
         standardized = (
@@ -1311,6 +1364,11 @@ def run_event(
                 for index, name in enumerate(result.parameter_names)
                 if name != "absolute_dm"
                 and not name.startswith("toa_400_s:")
+                and np.any(
+                    np.isfinite(result.samples[:, index])
+                    & np.isfinite(result.weights)
+                    & (result.weights > 0)
+                )
             },
             "morphology_weights": dict(result.morphology_weights),
             "morphology_statuses": dict(result.morphology_statuses),

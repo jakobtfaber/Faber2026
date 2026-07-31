@@ -484,6 +484,10 @@ def test_association_and_unmatched_nuisance_components_change_likelihood() -> No
             "chimefrb": ("chime-component-1",),
             "dsa110": ("dsa-component-1",),
         },
+        band_component_toa_bounds_s={
+            "chimefrb": {"chime-component-1": (0.07, 0.09)},
+            "dsa110": {"dsa-component-1": (0.02, 0.045)},
+        },
     )
     assert evaluate_log_likelihood(correct, _synthetic_parameter_vector(correct)) > (
         evaluate_log_likelihood(no_nuisance, _synthetic_parameter_vector(no_nuisance))

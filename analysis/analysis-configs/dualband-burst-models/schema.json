@@ -58,6 +58,7 @@
       "required": [
         "component_ids",
         "band_component_ids",
+        "band_component_toa_bounds_s",
         "associations",
         "morphologies",
         "dm_bounds",
@@ -86,6 +87,15 @@
           "properties": {
             "chimefrb": {"$ref": "#/$defs/stringList"},
             "dsa110": {"$ref": "#/$defs/stringList"}
+          }
+        },
+        "band_component_toa_bounds_s": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chimefrb", "dsa110"],
+          "properties": {
+            "chimefrb": {"$ref": "#/$defs/componentTimeWindows"},
+            "dsa110": {"$ref": "#/$defs/componentTimeWindows"}
           }
         },
         "associations": {
@@ -215,6 +225,10 @@
     }
   },
   "$defs": {
+    "componentTimeWindows": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/numberPair"}
+    },
     "stringList": {
       "type": "array",
       "minItems": 1,

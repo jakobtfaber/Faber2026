@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import math
-from pathlib import Path
-from functools import partial
 from collections.abc import Mapping
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
+from functools import partial
+from pathlib import Path
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -99,6 +99,9 @@ class JointFitRequest:
     maximum_failed_morphology_weight: float = 1e-6
     component_amplitude_bounds: tuple[float, float] = (1e-3, 1e3)
     checkpoint_directory: str | None = None
+    band_component_toa_bounds_s: Mapping[
+        str, Mapping[str, tuple[float, float]]
+    ] = field(default_factory=dict)
 
     def validate(self) -> None:
         if len(self.observations) != 2:
@@ -119,6 +122,16 @@ class JointFitRequest:
             identifiers = self.band_component_ids.get(instrument, ())
             if not identifiers or len(set(identifiers)) != len(identifiers):
                 raise ValueError("unique band component identifiers are required")
+            windows = self.band_component_toa_bounds_s.get(instrument)
+            if windows is None:
+                continue
+            if set(windows) != set(identifiers):
+                raise ValueError("one native time window is required per band component")
+            if any(
+                len(bounds) != 2 or bounds[0] >= bounds[1]
+                for bounds in windows.values()
+            ):
+                raise ValueError("band component time windows must increase")
         for association in self.associations:
             if not association.association_id or not association.matches:
                 raise ValueError("association identity is required")
@@ -281,14 +294,18 @@ def _prior_specs(
         for component in request.band_component_ids[instrument]:
             specs.append(("log_uniform", *request.component_amplitude_bounds))
             if component not in matched[instrument]:
+                windows = request.band_component_toa_bounds_s.get(instrument, {})
                 half_bin = 0.5 * observation.sample_interval_s
+                local_bounds = windows.get(
+                    component,
+                    (
+                        float(observation.times_s[0] - half_bin),
+                        float(observation.times_s[-1] + half_bin),
+                    ),
+                )
                 specs.extend(
                     (
-                        (
-                            "uniform",
-                            float(observation.times_s[0] - half_bin),
-                            float(observation.times_s[-1] + half_bin),
-                        ),
+                        ("uniform", *local_bounds),
                         ("log_uniform", *request.width_bounds_s[0]),
                     )
                 )
@@ -455,6 +472,41 @@ def _component_profile(
     return total
 
 
+def _matched_component_windows_allow(
+    request: JointFitRequest,
+    parameters: ArrayLike,
+) -> bool:
+    """Require each declared match to occupy its reviewed native window."""
+
+    _, toas, _, _, timing_errors, _, _ = _unpack(request, parameters)
+    matched = request.associations[0].matches
+    observations = {item.instrument: item for item in request.observations}
+    for latent_index, match in enumerate(matched):
+        for instrument, component_id in (
+            ("chimefrb", match.chimefrb_component_id),
+            ("dsa110", match.dsa110_component_id),
+        ):
+            observation = observations[instrument]
+            center = (
+                toas[latent_index]
+                + request.geometry.station_delays_s[instrument]
+                + timing_errors[instrument]
+                - (
+                    observation.time_origin_unix_ns
+                    - request.geometry.epoch_unix_ns
+                )
+                * 1e-9
+                - observation.dispersion.time_origin_correction_s
+            )
+            windows = request.band_component_toa_bounds_s.get(instrument)
+            if windows is None:
+                continue
+            lower, upper = windows[component_id]
+            if center < lower or center > upper:
+                return False
+    return True
+
+
 def _gain_marginal_log_likelihood(
     data: NDArray[np.floating],
     model: NDArray[np.floating],
@@ -510,6 +562,8 @@ def evaluate_log_likelihood(request: JointFitRequest, parameters: ArrayLike) -> 
     request.validate()
     if not isinstance(request.morphology, str):
         raise ValueError("likelihood evaluation requires one morphology")
+    if not _matched_component_windows_allow(request, parameters):
+        return -np.inf
     values = np.asarray(parameters, dtype=float)
     specs = _prior_specs(request)
     if values.shape != (len(specs),):

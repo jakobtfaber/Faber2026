@@ -60,6 +60,12 @@ arrays are forbidden.
 The model integrates over each actual channel width and time-bin exposure.
 It never stitches bands or forces a common resolution.
 
+Each reviewed association also names a native time window for every band
+component. A matched latent center must lie in both of its declared windows;
+an unmatched component is constrained to its own band window. This prevents a
+component association from becoming a label-only permutation of the same
+mixture.
+
 ## Pulse-broadening models
 
 The production ladder is physically constrained:

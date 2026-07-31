@@ -190,6 +190,13 @@ def build_synthetic_event(configuration: dict[str, Any]) -> SyntheticEvent:
             instrument: tuple(identifiers)
             for instrument, identifiers in fit["band_component_ids"].items()
         },
+        band_component_toa_bounds_s={
+            instrument: {
+                component: tuple(bounds)
+                for component, bounds in windows.items()
+            }
+            for instrument, windows in fit["band_component_toa_bounds_s"].items()
+        },
         associations=tuple(
             AssociationHypothesis(
                 association_id=association["association_id"],

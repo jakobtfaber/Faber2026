@@ -24,6 +24,15 @@
       "chimefrb": ["chime-component-1", "chime-component-2"],
       "dsa110": ["dsa-component-1"]
     },
+    "band_component_toa_bounds_s": {
+      "chimefrb": {
+        "chime-component-1": [0.070, 0.090],
+        "chime-component-2": [0.075, 0.135]
+      },
+      "dsa110": {
+        "dsa-component-1": [0.020, 0.045]
+      }
+    },
     "associations": [
       {
         "association_id": "one-to-one",
@@ -49,7 +58,7 @@
     "morphologies": ["gaussian", "emg"],
     "dm_bounds": [491.1, 491.4],
     "toa_bounds_s": [[0.072, 0.088]],
-    "width_bounds_s": [[0.0005, 0.02]],
+    "width_bounds_s": [[0.0005, 0.005]],
     "width_index_bounds": [-6.0, 1.0],
     "scattering_tau_1ghz_bounds_s": [0.00005, 0.001],
     "beta_bounds": [3.0, 4.0],
