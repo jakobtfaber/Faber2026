@@ -433,7 +433,7 @@ def command_new_batch(args: argparse.Namespace) -> None:
         "title": args.title,
         "created_at": utc_now(),
         "source_revision": source_revision,
-        "pipeline_revision": args.pipeline_revision,
+        "pipeline_revision": args.pipeline_revision or source_revision,
         "dm_catalog": {
             "path": str(dm_catalog.relative_to(ROOT)),
             "sha256": sha256(dm_catalog),
@@ -928,7 +928,14 @@ def parser() -> argparse.ArgumentParser:
         action="store_true",
         help="stage target bytes from --source-revision instead of the worktree",
     )
-    new.add_argument("--pipeline-revision", required=True)
+    new.add_argument(
+        "--pipeline-revision",
+        help=(
+            "producer repository commit; defaults to the resolved"
+            " --source-revision because analysis/ is the sole producer"
+            " since the dsa110-FLITS retirement (owner, 2026-07-28)"
+        ),
+    )
     new.add_argument(
         "--candidate",
         "--only",

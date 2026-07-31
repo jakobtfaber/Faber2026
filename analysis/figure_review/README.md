@@ -115,7 +115,8 @@ than assuming a single repository:
 
 `figure_review.py new-batch` retains the historical field name
 `--pipeline-revision` because it is part of every existing hash-pinned receipt.
-For new batches, its value is the exact `Faber2026-analysis` producer commit.
+The flag is now optional: when omitted, the manifest records the resolved
+`--source-revision`, which is the exact `Faber2026-analysis` producer commit.
 The field name does not imply a runtime dependency.
 
 ## Canonical paths
