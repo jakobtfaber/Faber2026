@@ -1,0 +1,167 @@
+{
+  "batch_id": "2026-07-31-fig3-installed-approval",
+  "candidates": [
+    {
+      "artifact": "candidates/fig3-halo-grid.pdf",
+      "artifact_sha256": "281e4bf4c9d910c070cb822195a743920a7ecf14e249c924521e359a9d788a75",
+      "claim": null,
+      "decision": {
+        "notes": null,
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "evidence_ids": [
+        "expanded-catalog-build",
+        "figure3-input",
+        "verdi-host-redshifts",
+        "law-host-redshifts",
+        "candidate-redshift-ledger",
+        "candidate-redshift-replay",
+        "candidate-redshift-payloads"
+      ],
+      "family": "foreground-halo-grid",
+      "generator": "cd analysis && uv run --frozen python -m foregrounds.visualization.sightline_halo_grid --halo-csv foregrounds/census/data/sightline_halo_grid.csv --out-dir figure_review/artifacts/staging/fig3_halo_grid/figures --review-candidate",
+      "id": "fig3-halo-grid",
+      "manuscript_section": "Foreground census (Figure 3)",
+      "owner_decision_card": {
+        "choices": [
+          {
+            "id": "approve",
+            "label": "Approve the installed bytes and record the exact-hash decision."
+          },
+          {
+            "id": "needs-revision",
+            "label": "Return needs_revision, naming the presentation changes required."
+          }
+        ],
+        "context": [
+          "Nine of twelve sightlines are drawn; three are omitted because no established host redshift exists, and each omission is checked against the data rather than trusted.",
+          "The candidate is byte-identical to the installed figures/sightline_halo_grid.pdf and to the owner-review.json review binding (SHA-256 281e4bf4\u2026).",
+          "Correctness is established by six recomputing checks with mutation tests; this call judges only whether the figure reads well for the paper."
+        ],
+        "decision": "Approve the installed Figure 3 bytes (figures/sightline_halo_grid.pdf), or return needs_revision with the presentation changes required?",
+        "effect": "Closes the last owner call on the Figure 3 independent-validation-gate ticket and unblocks exact-byte promotion of the installed figure.",
+        "evidence": [
+          {
+            "label": "Candidate bytes (installed Figure 3)",
+            "path": "figure_review/artifacts/batches/2026-07-31-fig3-installed-approval/candidates/fig3-halo-grid.pdf",
+            "sha256": "281e4bf4c9d910c070cb822195a743920a7ecf14e249c924521e359a9d788a75"
+          },
+          {
+            "label": "Analysis-only validation receipt",
+            "path": "docs/rse/specs/receipt-foreground-census-analysis-only-2026-07-29.md",
+            "sha256": "c13404f855275f53240a5c6255d5964cb6b48d1b74696facddf3e1eb20840ae0"
+          },
+          {
+            "label": "Owner-review byte binding",
+            "path": "docs/rse/specs/evidence/foreground-census-analysis-only-2026-07-29/owner-review.json",
+            "sha256": "32887fda4256dd8d2beb9974d0dd10f1685d79140ee3246580413cce6a30a967"
+          }
+        ],
+        "id": "fig3-installed-approval",
+        "kind": "visual",
+        "priority": 20,
+        "recommended": {
+          "choice": "approve",
+          "reason": "The analysis-only validation recomputes every census input behind the figure and passes with mutation coverage; the remaining judgment is presentation only, and the nine-panel layout follows the fail-closed rule for the three sightlines without an established host redshift."
+        },
+        "recorder": {
+          "action": "python3 scripts/figure_review.py decide 2026-07-31-fig3-installed-approval fig3-halo-grid approved|needs_revision --reviewer <owner> --note <note>",
+          "path": "figure_review/artifacts/batches/2026-07-31-fig3-installed-approval/manifest.json"
+        },
+        "title": "Figure 3 installed-bytes approval"
+      },
+      "preview": "previews/fig3-halo-grid.png",
+      "priority": 100,
+      "protect_in_manuscript": false,
+      "required_provenance": [
+        "expanded-catalog build manifest and SHA-256",
+        "twelve-sightline Figure 3 input and reproduction receipt SHA-256",
+        "established host-redshift source extracts and SHA-256",
+        "diagnostic dispersion-measure redshift posterior, interval, basis, and SHA-256",
+        "hostless candidate states and foreground probabilities",
+        "coverage and exact-query limitations for every hostless sightline",
+        "review-candidate output hashes and blocked-promotion state",
+        "manuscript-owner visual approval"
+      ],
+      "review_question": "Approve the installed Figure 3 bytes (figures/sightline_halo_grid.pdf) or return needs_revision. The analysis-only validation passed; this call judges presentation: nine drawn panels, with three sightlines omitted for having no established host redshift.",
+      "target": "figures/sightline_halo_grid.pdf",
+      "title": "Figure 3: foreground halo sightlines"
+    }
+  ],
+  "created_at": "2026-07-31T18:08:48+00:00",
+  "dm_catalog": {
+    "path": "dispersion/results/joint-phase/manuscript_dm_catalog.csv",
+    "sha256": "3730d486a6857d6a5e7fe8a9d445e5c989b36e57dc71b9fb2e6421079e8b6b4a"
+  },
+  "evidence": [
+    {
+      "id": "expanded-catalog-build",
+      "repository": "analysis",
+      "sha256": "b4d782ae52a5467d8ed2b79fcffdbb12cd5bbb1b855bc6578c85f11186038ffc",
+      "source_path": "foregrounds/census/data/expanded_catalog_build.json",
+      "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+      "stored_path": "provenance/expanded-catalog-build.json"
+    },
+    {
+      "id": "figure3-input",
+      "repository": "analysis",
+      "sha256": "ca115a3dd2df7f77c13b8ae9beb339644f6826a24cfa4127f71d96f896762a71",
+      "source_path": "foregrounds/census/data/sightline_halo_grid.csv",
+      "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+      "stored_path": "provenance/figure3-input.csv"
+    },
+    {
+      "id": "verdi-host-redshifts",
+      "repository": "analysis",
+      "sha256": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa",
+      "source_path": "foregrounds/census/data/frozen_census/verdi2025_host_redshift_extract.csv",
+      "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+      "stored_path": "provenance/verdi-host-redshifts.csv"
+    },
+    {
+      "id": "law-host-redshifts",
+      "repository": "analysis",
+      "sha256": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
+      "source_path": "foregrounds/census/data/frozen_census/law2024_host_redshift_extract.csv",
+      "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+      "stored_path": "provenance/law-host-redshifts.csv"
+    },
+    {
+      "id": "candidate-redshift-ledger",
+      "repository": "analysis",
+      "sha256": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
+      "source_path": "foregrounds/census/data/candidate_redshift_provenance.csv",
+      "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+      "stored_path": "provenance/candidate-redshift-ledger.csv"
+    },
+    {
+      "id": "candidate-redshift-replay",
+      "repository": "analysis",
+      "sha256": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
+      "source_path": "foregrounds/census/data/candidate_redshift_replay_2026-07-22.json",
+      "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+      "stored_path": "provenance/candidate-redshift-replay.json"
+    },
+    {
+      "id": "candidate-redshift-payloads",
+      "repository": "analysis",
+      "sha256": "814845249e0acae8091f7177a56a08015ace03bfdf5786c75198f3e34f4b6cee",
+      "source_path": "foregrounds/census/data/candidate_redshift_source_payloads_2026-07-22.json",
+      "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+      "stored_path": "provenance/candidate-redshift-payloads.json"
+    }
+  ],
+  "pipeline_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+  "policy": {
+    "agent_visual_review_is_not_author_approval": true,
+    "approval_is_per_candidate": true,
+    "owner_preview_requires_verified_reproduction": true,
+    "promotion_requires_exact_hash_match": true
+  },
+  "schema_version": 1,
+  "source_revision": "2d061fe98a1149ad51f6462133682d37c11642dd",
+  "title": "Figure 3: installed sightline halo grid \u2014 owner approval"
+}
