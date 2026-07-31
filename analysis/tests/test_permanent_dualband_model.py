@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import multiprocessing
-from functools import partial
 from dataclasses import replace
+from functools import partial
 
 import numpy as np
 import pytest
@@ -493,6 +493,7 @@ def test_association_and_unmatched_nuisance_components_change_likelihood() -> No
 def test_powerlaw_injection_uses_and_constrains_truth_beta() -> None:
     import json
     from pathlib import Path
+
     from faber2026.burst_models.joint import _parameter_names
 
     configuration = json.loads(
@@ -546,6 +547,15 @@ def test_shared_dm_likelihood_recovers_injected_truth_on_unlike_grids() -> None:
     high[0] += 0.025
     assert evaluate_log_likelihood(request, truth) > evaluate_log_likelihood(request, low)
     assert evaluate_log_likelihood(request, truth) > evaluate_log_likelihood(request, high)
+
+
+def test_dispersion_delay_broadcasts_posterior_dm_samples() -> None:
+    delays = dispersion_delay_s(
+        np.array([[491.2], [491.3]]),
+        np.array([[430.0, 790.0]]),
+    )
+    assert delays.shape == (2, 2)
+    assert delays[0, 0] != delays[1, 0]
 
 
 def test_wrong_geometric_sign_is_rejected_by_dual_band_likelihood() -> None:
@@ -698,6 +708,7 @@ def test_nested_fit_recovers_shared_dm_and_geocentric_toa() -> None:
 @pytest.mark.slow
 def test_checkpoint_resume_preserves_completed_inference(tmp_path) -> None:
     import dynesty
+
     from faber2026.burst_models.joint import (
         _likelihood_for_request,
         _prior_specs,

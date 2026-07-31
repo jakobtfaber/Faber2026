@@ -17,7 +17,7 @@ K_DM_S_MHZ2 = 4148.808
 
 
 def dispersion_delay_s(
-    delta_dm: float,
+    delta_dm: ArrayLike,
     frequencies_mhz: ArrayLike,
 ) -> NDArray[np.floating]:
     """Cold-plasma delay relative to the fixed 400 megahertz coordinate."""
@@ -25,7 +25,7 @@ def dispersion_delay_s(
     frequencies = np.asarray(frequencies_mhz, dtype=float)
     if np.any(frequencies <= 0):
         raise ValueError("frequencies must be positive")
-    return K_DM_S_MHZ2 * float(delta_dm) * (
+    return K_DM_S_MHZ2 * np.asarray(delta_dm, dtype=float) * (
         frequencies**-2 - REFERENCE_FREQUENCY_MHZ**-2
     )
 
