@@ -320,6 +320,8 @@ def _weighted_summary(
     values: np.ndarray, weights: np.ndarray
 ) -> PosteriorSummary:
     finite = np.isfinite(values) & np.isfinite(weights) & (weights > 0)
+    if not np.any(finite):
+        return PosteriorSummary(math.nan, math.nan, math.nan)
     values = values[finite]
     weights = weights[finite]
     weights = weights / weights.sum()

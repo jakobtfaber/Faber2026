@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import shutil
 from collections.abc import Iterator
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 import workflows.dualband_burst_model as workflow
@@ -130,6 +132,13 @@ def test_permanent_slice_has_no_flits_or_legacy_pipeline_imports() -> None:
 def test_verification_uses_declared_component_identifiers() -> None:
     source = (Path(__file__).parents[1] / "workflows" / "dualband_burst_model.py").read_text()
     assert '"width_400_s:component-1"' not in source
+
+
+def test_unsupported_union_parameter_has_no_posterior_summary() -> None:
+    summary = workflow._weighted_summary(
+        np.array([float("nan"), 1.0]), np.array([0.0, 0.0])
+    )
+    assert math.isnan(summary.median)
 
 
 def test_preflight_failure_writes_a_unique_failure_receipt(
