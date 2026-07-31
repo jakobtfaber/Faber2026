@@ -78,6 +78,28 @@ def test_synthetic_workflow_publishes_five_hash_bound_products(
         assert params["products"][name]["sha256"] == _sha256(result_dir / name)
 
 
+def test_shared_dm_axis_labels_do_not_overlap() -> None:
+    figure, axis = workflow.plt.subplots(figsize=(3.75, 2.5))
+    try:
+        workflow._configure_shared_dm_axis(
+            axis,
+            np.linspace(491.15, 491.35, 101),
+        )
+        figure.canvas.draw()
+        renderer = figure.canvas.get_renderer()
+        labels = [
+            label.get_window_extent(renderer)
+            for label in axis.get_xticklabels()
+            if label.get_visible()
+        ]
+        assert all(
+            left.x1 <= right.x0
+            for left, right in zip(labels[:-1], labels[1:], strict=True)
+        )
+    finally:
+        workflow.plt.close(figure)
+
+
 def test_resume_reuses_identical_products_and_owner_promotion_changes_status_only(
     published_result: tuple[Path, Path],
     tmp_path: Path,

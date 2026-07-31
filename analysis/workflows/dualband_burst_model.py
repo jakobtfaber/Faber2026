@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from astropy.time import Time, TimeDelta
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.ticker import FixedLocator, FuncFormatter
 from scipy.special import ndtr
 
 from faber2026.burst_models import (
@@ -92,6 +93,20 @@ def _convolved_tail_bound(
         beta_values[..., None],
     )
     return np.minimum(1.0, np.min(bounds, axis=-1))
+
+
+def _configure_shared_dm_axis(axis: Any, samples: np.ndarray) -> None:
+    lower = float(np.min(samples))
+    upper = float(np.max(samples))
+    if not upper > lower:
+        raise ValueError("shared-DM posterior must span a nonzero range")
+    span = upper - lower
+    precision = max(0, int(math.ceil(-math.log10(span / 2.0))) + 1)
+    axis.set_xlim(lower, upper)
+    axis.xaxis.set_major_locator(FixedLocator(np.linspace(lower, upper, 3)))
+    axis.xaxis.set_major_formatter(
+        FuncFormatter(lambda value, _position: f"{value:.{precision}f}")
+    )
 
 
 class WorkflowFailure(RuntimeError):
@@ -938,9 +953,7 @@ def _render_review_packet(
         axes[0, 0].axvline(
             event.truth["absolute_dm"], color="tab:red", linestyle="--"
         )
-        axes[0, 0].set_xlim(
-            float(np.min(dm_samples)), float(np.max(dm_samples))
-        )
+        _configure_shared_dm_axis(axes[0, 0], dm_samples)
         axes[0, 0].set_xlabel(r"Shared DM (pc cm$^{-3}$)")
         axes[0, 0].set_ylabel("Posterior density")
 

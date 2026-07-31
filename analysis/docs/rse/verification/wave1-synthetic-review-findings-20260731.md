@@ -128,3 +128,22 @@ fits (`workflows/dualband_burst_model.py:715`).
 
 The fresh EMG synthetic output itself is otherwise correctly bound and
 provenance-clean; this blocker is generic power-law support.
+
+## 69b8e93 independent scientific review
+
+**FAIL**
+
+**[BLOCKING] PDF readability.** Page 2's Shared DM axis tick labels overlap
+(`491.15491.20491.25…`), so the posterior scale is not legible in
+`review-packet.pdf`.
+
+All scientific-contract checks pass:
+
+- Output and receipts bind cleanly to `69b8e938623a8de8fa488423c7fa162a9c80f9e8`.
+- `beta=3.999999` tail equals the independent power-law reference exactly:
+  `2.1050138490185069e-12`; exact `beta=4` gives
+  `3.7200759760208361e-44`.
+- Exact EMG channel-edge tail: `1.7372008711e-05`; recorded conservative bound:
+  `3.9009799926e-05 < 1e-4`.
+- Exactly-once DM identities, native grids, shared-DM/ToA recovery, geometric
+  400 MHz sign, and provisional synthetic status all pass.
