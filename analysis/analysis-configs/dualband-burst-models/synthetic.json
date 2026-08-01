@@ -63,7 +63,7 @@
     "scattering_tau_1ghz_bounds_s": [0.00005, 0.001],
     "beta_bounds": [3.0, 4.0],
     "seed": 20260730,
-    "nlive": 60,
+    "nlive": 80,
     "dlogz": 0.3,
     "maximum_failed_morphology_weight": 0.000001,
     "component_amplitude_bounds": [0.01, 10.0]
