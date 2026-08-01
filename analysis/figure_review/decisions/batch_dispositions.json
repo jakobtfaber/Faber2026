@@ -43,6 +43,11 @@
             "owner_queue": false,
             "status": "superseded",
             "reason": "The batch is bound to retired external-source paths and bytes that are no longer installed. The analysis-only Figure 3 approval ticket binds the current exact manuscript bytes."
+        },
+        "2026-07-31-fig3-installed-approval": {
+            "owner_queue": false,
+            "status": "needs_revision",
+            "reason": "Owner walkthrough 2026-07-31: the owner upheld the needs_revision already recorded against these exact bytes (SHA-256 281e4bf4...) in docs/rse/wayfinder/tickets/figure3-installed-owner-approval.md and docs/rse/specs/evidence/foreground-census-analysis-only-2026-07-29/owner-review.json — infer dispersion-measure-based redshift distributions for the three sightlines without an established host redshift, extend the foreground search to those redshifts, and return a new exact-byte candidate. The batch was created in error: it re-queued an already-decided candidate as pending. Its reproduction gate is also uncertifiable at the pinned revision 2d061fe: the installed bytes (matplotlib 3.10.9, 52576 bytes) do not regenerate under the frozen analysis environment (matplotlib 3.10.6) nor under a matplotlib 3.10.9 overlay, and the staging render committed at that revision carries a third distinct hash (8c7d2e92...)."
         }
     }
 }
