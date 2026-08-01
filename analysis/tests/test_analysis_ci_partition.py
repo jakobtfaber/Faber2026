@@ -66,7 +66,10 @@ def test_analysis_ci_partitions_the_original_suite_exactly_once() -> None:
     assert f"--ignore={DUALBAND_MODULE}" in general_command
     assert f"--ignore={INVENTORY_MODULE}" in general_command
     assert dualband["needs"] == "dualband-aggregate"
-    assert dualband["env"]["FABER2026_DUALBAND_PUBLISHED_FIXTURE"] == (
+    test_step = next(
+        step for step in dualband["steps"] if DUALBAND_MODULE in step.get("run", "")
+    )
+    assert test_step["env"]["FABER2026_DUALBAND_PUBLISHED_FIXTURE"] == (
         "${{ runner.temp }}/dualband-published"
     )
     downloads = [

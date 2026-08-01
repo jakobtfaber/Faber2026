@@ -43,8 +43,6 @@ jobs:
     needs: dualband-aggregate
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      FABER2026_DUALBAND_PUBLISHED_FIXTURE: ${{ runner.temp }}/dualband-published
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -66,6 +64,8 @@ jobs:
             --standalone-analysis \
             -m "not slow and not network and not external_data and not historical_replay and not integration" \
             tests/test_permanent_dualband_workflow.py
+        env:
+          FABER2026_DUALBAND_PUBLISHED_FIXTURE: ${{ runner.temp }}/dualband-published
 
   checkout-inventory-tests:
     name: checkout-inventory-tests
