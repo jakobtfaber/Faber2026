@@ -1,6 +1,6 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:task`
+- Type: `wayfinder:task` (HITL)
 - Status: open
 - Assignee: Orchestrator
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
@@ -31,6 +31,69 @@
 - Effect: all 27 controlled fits use the same accepted 65.536-microsecond
   sampling. Their model evidence and residuals—not the profile peak finder—must
   adjudicate the component count.
+
+## Current state (2026-07-31)
+
+The 27-rung campaign launched on h17 (`~/zach_count_20260731/`, clone at
+`894a1d2`, uv-frozen environment, inputs hash-verified) and was stopped by
+the owner ~4.5 h in for wall-clock: the 9-launcher × 3-serial-seed schedule
+implies ~12 h. Five rungs completed with `outputs_complete: true` receipts
+(C2D3 at s2 = 1/10/100 and C2D4 at s2 = 1/10, all seed-20220207); four
+first-seed fits were killed mid-sampling; later seeds had barely started.
+All artifacts preserved; processes verified dead. Details:
+`docs/rse/specs/handoff-2026-07-31-20-23-zach-campaign-replan.md`.
+
+## Owner decision card
+
+```json
+{
+  "id": "zach-campaign-restart-schedule",
+  "kind": "scientific",
+  "title": "Zach campaign restart schedule",
+  "decision": "Restart the stopped 27-rung component-count campaign under which schedule?",
+  "recommended": {
+    "choice": "finish-seed1-grid",
+    "reason": "Relaunching only the four unfinished seed-20220207 fits, concurrently and contract-unchanged, yields a full nine-cell single-seed grid in roughly four hours, keeps the five completed receipts valid, and defers the eighteen stability-seed fits until after a provisional adjudication shows where they matter."
+  },
+  "choices": [
+    {
+      "id": "finish-seed1-grid",
+      "label": "Relaunch the four unfinished first-seed fits concurrently; adjudicate provisionally on the nine-cell grid; run remaining seeds afterward."
+    },
+    {
+      "id": "amend-contract-cheaper-sampler",
+      "label": "Halve nlive under an amended hash-bound contract and restart all 27 rungs; invalidates the five completed receipts."
+    },
+    {
+      "id": "resume-original-schedule",
+      "label": "Relaunch the original nine-launcher, three-serial-seed schedule unchanged (about twelve hours)."
+    }
+  ],
+  "context": [
+    "Five of 27 rungs are receipt-complete (C2D3 s2 1/10/100, C2D4 s2 1/10, seed-20220207); the owner stopped the campaign for wall-clock, processes were killed cleanly, and all artifacts are preserved on h17.",
+    "The bottleneck is the serial seed dimension: three ~4-hour waves; full nine-cell single-seed coverage needs only four more fits run concurrently.",
+    "A contract-identical reordering preserves completed receipts; any sampler amendment restarts all 27 rungs because the contract requires uniform environment and settings."
+  ],
+  "evidence": [
+    {
+      "label": "Stop-state handoff (exact rung inventory and environment identity)",
+      "path": "docs/rse/specs/handoff-2026-07-31-20-23-zach-campaign-replan.md",
+      "sha256": "e0a7fa33991a32800df27043e8fe173932a46d8dad44e9911ba72f425f37bc0c"
+    },
+    {
+      "label": "Frozen campaign contract and acceptance rules",
+      "path": "scattering/studies/joint-refits/zach_count_20260729/MANIFEST.md",
+      "sha256": "765ecbb152c1aa7af448c51aafbff50ae410bb5dc2f1335b2b6993249e03d677"
+    }
+  ],
+  "effect": "Sets the relaunch schedule for the component-count campaign; adjudication (this ticket's core work) begins only after the chosen schedule delivers its rungs.",
+  "recorder": {
+    "path": "docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+    "action": "Record the chosen restart schedule in this ticket's Current state section, then relaunch on h17 accordingly."
+  },
+  "priority": 25
+}
+```
 
 ## What to build
 
