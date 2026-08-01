@@ -466,8 +466,11 @@ def test_four_cell_aggregate_matches_full_serial_workflow(
     for key in (
         "shared_absolute_dm",
         "components",
-        "morphology",
-        "association",
+        "morphology_weights",
+        "morphology_statuses",
+        "morphology_log_evidences",
+        "morphology_log_evidence_uncertainties",
+        "association_weights",
         "verification",
     ):
         assert aggregate_params[key] == serial_params[key]
