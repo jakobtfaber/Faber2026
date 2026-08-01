@@ -21,6 +21,9 @@
 
 # Python bytecode caches from running scripts/ and tests/.
 __pycache__/
+*.egg-info/
+.venv/
+.venv-dualband/
 
 # Local layout prototypes (regenerate from analysis producers; promote winners to figures/).
 figures/prototypes/
@@ -59,6 +62,10 @@ graphify-out/
 
 # Knowledge-base SQLite index (rebuild with: make kb-index)
 /.kb/
+
+# Resumable dual-band workflow state and immutable local failures.
+/.runs/
+/.failed/
 
 # Running Notes: raw inbox + live status (dispositions may be committed)
 /docs/rse/ops/running-notes/inbox/

@@ -32,16 +32,36 @@ dependencies = [
   "tqdm>=4.62",
 ]
 
+[build-system]
+requires = ["setuptools>=70,<81"]
+build-backend = "setuptools.build_meta"
+
 [dependency-groups]
+dualband = [
+  "astropy>=5.0",
+  "dynesty==3.1.0",
+  "jsonschema>=4.0",
+  "matplotlib>=3.4,<3.11",
+  "numpy>=1.20",
+  "pypdf>=5.0",
+  "scipy>=1.7",
+]
 test = [
   "pytest>=7.0",
   "pytest-cov>=4.0",
   "ruff>=0.15.18",
   "zizmor==1.28.0",
 ]
+dev = [
+  {include-group = "dualband"},
+  {include-group = "test"},
+]
 
 [tool.uv]
-package = false
+package = true
+
+[tool.setuptools.packages.find]
+include = ["faber2026*", "plotting*", "studies*", "workflows*"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

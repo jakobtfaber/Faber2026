@@ -1,150 +1,137 @@
 # Geometry-constrained joint burst fitting
 
-Status: validated on injected data only. Real-event results remain provisional
-until reviewed timing, crop, component, and clock inputs are complete and the
-owner approves the review packet.
+Status: permanent interfaces validated on synthetic data only. No real-event or
+manuscript authority changes in migration Wave 1.
 
 ## Physical coordinate
 
-The fit has one absolute dispersion measure. Each matched physical component
-has one latent, unscattered arrival time at the terrestrial geocenter,
-referenced to 400 MHz. For instrument \(i\) and channel frequency \(\nu\),
+The fit has one absolute dispersion measure and one unscattered geocentric
+arrival time per matched component, all referred to 400 MHz. For instrument
+\(i\) and frequency \(\nu\),
 
 \[
-t_i(\nu)=t_{\mathrm{geo},400}
- + d_i + c_i
- + K_{\mathrm{DM}}(\mathrm{DM}-\mathrm{DM}_{\mathrm{product},i})
-   (\nu^{-2}-400^{-2}).
+t_i(\nu)=t_{\mathrm{geo},400}+d_i+
+K_{\mathrm{DM}}\left(\mathrm{DM}_{\mathrm{absolute}}
+-\mathrm{DM}_{\mathrm{product},i}\right)
+\left(\nu^{-2}-400^{-2}\right).
 \]
 
-\(d_i=-\boldsymbol r_i\cdot\hat{\boldsymbol n}/c\) is the station delay.
-Topocentric arrival time therefore equals geocentric arrival time plus station
-delay. \(c_i\) is a zero-mean clock-error nuisance term. Seconds and megahertz
-are used internally. The reported arrival time is the modeled unscattered
-component center, not the scattering-shifted peak.
+In implementation, the final two factors are multiplied:
+\(K_{\mathrm{DM}}=4148.808\ {\rm s\,MHz^2\,(pc\,cm^{-3})^{-1}}\).
+Positive station delay \(d_i\) means the station records the wavefront after
+the geocenter. The reported arrival time is the modeled unscattered component
+center, not the observed peak of a broadened pulse.
 
-The GCRS and ITRS calculations independently check the observable
-CHIME/FRB–DSA-110 baseline delay. Geometry and clock uncertainties must both be
-present. Agreement with geometry never certifies the input voltage state.
+Each station must supply geometric and clock uncertainties. Independent
+geocentric and terrestrial coordinate calculations must agree within the
+reviewed limit. Agreement with geometry never establishes the physical
+dispersion state of voltage data.
 
-For Casey, the provisional owner-adopted Gaussian clock prior has a 1 ms
-standard deviation on the inter-site difference. The model uses independent
-station nuisance terms, so each receives \(1/\sqrt{2}\) ms; their quadrature
-difference remains exactly 1 ms. Each station-delay term receives an
-owner-adopted Gaussian standard deviation of 0.5 us. This is separate from the
-independent-projection agreement check. These priors permit inference but are
-not measurements of either station's absolute UTC accuracy.
+The latent arrival time is stored as seconds from one integer-nanosecond UTC
+epoch. Each band carries its own integer-nanosecond UTC origin; the likelihood
+subtracts that origin before evaluating the band grid. Output summaries include
+both epoch-relative seconds and nine-decimal UTC strings.
+Each dispersion state also records the signed correction between the stored
+product origin and this 400 MHz coordinate. The likelihood applies that
+correction once.
 
-## Data contract
+## Observation and dispersion contract
 
-Each band remains on its reviewed native frequency and time grid. Products
-record:
+CHIME/FRB and DSA-110 remain on separate native grids. Every observation
+provides valid pixels, authoritative channel centers and widths, sample
+exposures, a precise time origin, frequency frame, per-channel noise, gain
+prior, and input hashes.
 
-- explicit valid pixels and accepted channel support;
-- authoritative channel centers and widths;
-- exact nanosecond crop origin, shape, sample interval, and noise-estimation
-  pixel mask;
-- per-row off-pulse noise;
-- input, coherent-correction, residual-correction, and product dispersion
-  measures;
-- raw and accepted-support input hashes.
-
-The dispersion identity is exact:
+Dispersion is represented exactly once:
 
 \[
-\mathrm{DM}_{\mathrm{input}}+
-\mathrm{DM}_{\mathrm{coherent}}+
-\mathrm{DM}_{\mathrm{residual}}=
+\mathrm{DM}_{\mathrm{voltage}}+
+\Delta\mathrm{DM}_{\mathrm{coherent}}+
+\Delta\mathrm{DM}_{\mathrm{residual}}=
 \mathrm{DM}_{\mathrm{product}}.
 \]
 
-The model evaluates only
+The likelihood applies only
 \(\mathrm{DM}_{\mathrm{absolute}}-\mathrm{DM}_{\mathrm{product},i}\).
-Builders use fractional, non-wrapping shifts. They never incoherently
-dedisperse archival CHIME/FRB arrays.
+The coherent anchor is a computational coordinate, not a measurement.
+Circular placement and incoherent correction of archival CHIME/FRB NumPy
+arrays are forbidden.
 
-## Model
+The model integrates over each actual channel width and time-bin exposure.
+It never stitches bands or forces a common resolution.
 
-Matched components share the latent arrival time and a continuous
-frequency-dependent width law. They retain band-specific amplitudes, spectral
-envelopes, masks, noise, and response. Unmatched components are local nuisance
-components and do not constrain geometry. Event configuration lists only
-plausible one-to-one, time-order-preserving associations.
+Each reviewed association also names a native time window for every band
+component. A matched latent center must lie in both of its declared windows;
+an unmatched component is constrained to its own band window. This prevents a
+component association from becoming a label-only permutation of the same
+mixture.
 
-Two baseline families are compared: Gaussian components and the same
-components convolved with a shared scattering law. Per-channel gains are
-integrated out with a proper Gaussian prior. Nested sampling fits every
-morphology–association combination. Evidence weights form the reported
-dispersion-measure and arrival-time posterior mixture, including association
-uncertainty.
+## Pulse-broadening models
 
-No common-grid stitching, circular rolling, independent band centroid shift,
-or free residual drift is allowed.
+The production ladder is physically constrained:
 
-## Reviewed execution
+1. unscattered Gaussian components;
+2. an exponentially modified Gaussian at the square-law endpoint
+   \(\beta=4\), where the pulse-broadening function is exponential and
+   \(\tau\propto\nu^{-4}\);
+3. a thin-screen power-law pulse-broadening function for \(2<\beta<4\), with
+   both its tail and frequency scaling fixed by the same parameter,
+   \(\alpha=2\beta/(\beta-2)\).
 
-The single public command is:
+A freely varying frequency exponent inside an exponential kernel is diagnostic
+only: its pulse shape assumes \(\beta=4\), so interpreting another exponent as
+turbulence would be inconsistent.
+
+The power-law kernel is causal and normalized. Its omitted probability beyond
+finite support is analytic. Gaussian-convolution support uses a rigorous union
+bound, so crop admission is based on a number rather than visual judgment.
+Per-channel amplitudes are integrated out under a zero-mean normal prior.
+Intrinsic widths and scattering times use log-uniform priors.
+
+## Public workflow
+
+The public execution surface is:
 
 ```bash
-python scripts/run_one_event_absolute_dm_workflow.py \
-  --config analysis-configs/absolute-dm/casey.json
+UV_PROJECT_ENVIRONMENT=.venv-dualband uv sync --locked \
+  --group dualband
+make review EVENT=synthetic
 ```
 
-Formal execution requires locked band-specific crop bounds, off-pulse padding,
-time and frequency bin factors, frequency-grid and valid-mask hashes,
-crop-origin and off-pulse-mask hashes,
-component windows, association hypotheses, clock
-uncertainties, and acceptance thresholds. Any drift fails before sampling.
-The locked environment supplies `dynesty` 3.1 and rejects imports from a
-retired editable FLITS checkout.
+Execution uses that dedicated environment with `--no-sync`; a run never
+changes its own environment. Python 3.12.13 and Dynesty 3.1.0 are required.
 
-Input preparation fails before data processing when reviewed clock or
-station-delay uncertainties are absent. It performs one CHIME/FRB coherent
-anchor evaluation. Fully coherent bracketing evaluations remain a post-fit
-acceptance step.
+The dependency chain is:
 
-Review uses three immutable configuration states:
+```text
+review -> verify -> fit -> observations
+```
 
-1. Blocked: only high-resolution preparation and proposals are allowed.
-2. Reviewed: fit grids, component windows, associations, priors, and array
-   hashes are locked; execution remains disabled.
-3. Authorized: an explicit note creates a new binding and enables execution.
+Each stage resumes only when request and product hashes agree. Changed or
+partial products fail with an immutable receipt. Publication is atomic.
+Accepted output names are:
 
-Transitions always write a new configuration. Authorization changes the event
-binding, so preflight, DSA-110 audit, both high-resolution product builders,
-fit-grid materialization, and geometry are rebuilt before fitting.
+```text
+dualband-burst-models/<event>/
+├── params.json
+├── posterior.npz
+├── model-products.npz
+├── provenance.json
+└── review-packet.pdf
+```
 
-Preparation is two-pass. A high-resolution diagnostic establishes the
-component widths needed to review frequency averaging. Reviewed factors then
-materialize separate fit-grid observations; only those observations define the
-final component sample coordinates. Formal time averaging is forbidden because
-the likelihood evaluates bin centers and does not integrate over averaged-bin
-duration. Frequency averaging requires complete rectangular support and
-analytic residual intra-bin smearing below 0.10 fit sample and 0.05 of the
-narrowest reviewed component width.
+The synthetic result may reach `provisional-owner-review`. Only an owner
+decision can change an unchanged result to `accepted`; promotion does not
+rerun inference.
 
-Canonical outputs are `fit-result.json`, `posterior.npz`,
-`model-products.npz`, `geometry-constraint.json`, `run-provenance.json`, and
-`review-packet.pdf`. `oracle-verification.json` is the compact fail-closed
-receipt for the posterior lower bound, median, and upper bound. Posterior
-samples never enter JSON. Results remain provisional until owner visual
-approval.
+## Admission boundary
 
-## Acceptance
+Synthetic truth is fixed before sampling. Required checks include shared
+dispersion measure and 400 MHz arrival-time recovery, geometry sign, complete
+dispersion accounting, posterior bracketing, prior-edge mass, finite crop-tail
+support, evidence uncertainty, valid-sample coverage, residual power,
+structured residual correlation, immutable resume, and forbidden FLITS
+runtime detection.
 
-Execution fails on a dispersion-measure posterior at a prior boundary,
-inadequate residuals, missing timing uncertainty, changed frequency or support
-identity, incomplete crops, or exactly-once dispersion failure. Final review
-also compares the posterior median and bracketing dispersion measures against
-fully coherent CHIME/FRB evaluations and exactly-once DSA-110 corrections.
-The packet shows the posterior-median spectra separately from the fit-coordinate
-data, model, and residual so unlike time coordinates are never overplotted.
-
-Post-fit resolution convergence is mandatory. The proposed frequency factor is
-compared with half that factor. Both fits must pass; dispersion-measure medians
-must differ by at most 0.5 combined posterior standard deviations and
-0.005 pc cm^-3; arrival times by at most 0.5 combined posterior standard
-deviations; 68% interval-width ratio must lie in 0.8–1.25; morphology and
-association weights may differ by at most 0.10 in summed absolute weight.
-Material movement becomes a systematic uncertainty; it is never silently
-accepted.
+Wave 1 does not read real raw data, run Casey, change manuscript consumers, or
+retire legacy code. Those actions require later migration waves.
