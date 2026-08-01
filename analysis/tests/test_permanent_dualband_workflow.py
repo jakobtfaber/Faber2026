@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import math
+import os
 import shutil
 from collections.abc import Iterator
 from pathlib import Path
@@ -27,14 +29,43 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _external_published_fixture() -> Path | None:
+    configured = os.environ.get("FABER2026_DUALBAND_PUBLISHED_FIXTURE")
+    if configured is None:
+        return None
+    fixture = Path(configured).resolve()
+    runner_temp = Path(os.environ["RUNNER_TEMP"]).resolve()
+    if not fixture.is_relative_to(runner_temp):
+        raise RuntimeError("published fixture is outside the fixed runner root")
+    entries = list(fixture.iterdir())
+    expected = {
+        "params.json",
+        "posterior.npz",
+        "model-products.npz",
+        "provenance.json",
+        "review-packet.pdf",
+    }
+    if (
+        any(path.is_symlink() or not path.is_file() for path in entries)
+        or {path.name for path in entries} != expected
+    ):
+        raise RuntimeError("published fixture does not contain exactly five regular products")
+    return fixture
+
+
 @pytest.fixture(scope="module", autouse=True)
 def _clean_test_checkout() -> Iterator[None]:
     patch = pytest.MonkeyPatch()
-    patch.setattr(
-        workflow,
-        "_git_identity",
-        lambda _root: {"commit": "test", "dirty": False, "dirty_paths": []},
-    )
+    fixture = _external_published_fixture()
+    if fixture is None:
+        patch.setattr(
+            workflow,
+            "_git_identity",
+            lambda _root: {"commit": "test", "dirty": False, "dirty_paths": []},
+        )
+    else:
+        environment = json.loads((fixture / "provenance.json").read_text())["environment"]
+        patch.setattr(workflow, "_environment_preflight", lambda _root: environment)
     yield
     patch.undo()
 
@@ -42,6 +73,11 @@ def _clean_test_checkout() -> Iterator[None]:
 @pytest.fixture(scope="module")
 def published_result(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, Path]:
     output_root = tmp_path_factory.mktemp("published")
+    fixture = _external_published_fixture()
+    if fixture is not None:
+        destination = output_root / "dualband-burst-models" / "synthetic"
+        destination.parent.mkdir(parents=True)
+        shutil.copytree(fixture, destination)
     result_dir = run_event(
         event="synthetic",
         stage="review",
@@ -71,7 +107,16 @@ def test_synthetic_workflow_publishes_five_hash_bound_products(
     assert provenance["immutable_params_sha256"] == workflow._immutable_params_sha256(
         params
     )
-    assert Path(provenance["environment"]["dynesty_origin"]).is_file()
+    recorded_dynesty = Path(provenance["environment"]["dynesty_origin"])
+    if _external_published_fixture() is None:
+        assert recorded_dynesty.is_file()
+    else:
+        installed_dynesty = importlib.util.find_spec("dynesty")
+        assert recorded_dynesty.is_absolute()
+        assert installed_dynesty is not None
+        assert installed_dynesty.origin is not None
+        assert Path(installed_dynesty.origin).is_file()
+        assert provenance["environment"]["distributions"]["dynesty"] == "3.1.0"
     assert params["event"] == {
         "nickname": "synthetic",
         "tns_name": "SYNTHETIC",
@@ -104,6 +149,26 @@ def test_shared_dm_axis_labels_do_not_overlap() -> None:
         )
     finally:
         workflow.plt.close(figure)
+
+
+def test_external_published_fixture_is_fixed_root_and_exact(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    runner_temp = tmp_path / "runner"
+    runner_temp.mkdir()
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    monkeypatch.setenv("RUNNER_TEMP", str(runner_temp))
+    monkeypatch.setenv("FABER2026_DUALBAND_PUBLISHED_FIXTURE", str(outside))
+    with pytest.raises(RuntimeError, match="outside the fixed runner root"):
+        _external_published_fixture()
+    incomplete = runner_temp / "published"
+    incomplete.mkdir()
+    (incomplete / "params.json").write_text("{}")
+    monkeypatch.setenv("FABER2026_DUALBAND_PUBLISHED_FIXTURE", str(incomplete))
+    with pytest.raises(RuntimeError, match="exactly five regular products"):
+        _external_published_fixture()
 
 
 def test_review_packet_uses_summary_table_not_evidence_bars(

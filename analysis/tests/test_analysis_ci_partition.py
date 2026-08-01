@@ -65,6 +65,20 @@ def test_analysis_ci_partitions_the_original_suite_exactly_once() -> None:
     general_command = "\n".join(_run_commands(general))
     assert f"--ignore={DUALBAND_MODULE}" in general_command
     assert f"--ignore={INVENTORY_MODULE}" in general_command
+    assert dualband["needs"] == "dualband-aggregate"
+    assert dualband["env"]["FABER2026_DUALBAND_PUBLISHED_FIXTURE"] == (
+        "${{ runner.temp }}/dualband-published"
+    )
+    downloads = [
+        step
+        for step in dualband["steps"]
+        if step.get("uses", "").startswith("actions/download-artifact@")
+    ]
+    assert len(downloads) == 1
+    assert downloads[0]["with"] == {
+        "name": "dualband-aggregate-${{ github.sha }}",
+        "path": "${{ runner.temp }}/dualband-published",
+    }
 
 
 def test_analysis_ci_pytest_partitions_are_complete_and_disjoint() -> None:

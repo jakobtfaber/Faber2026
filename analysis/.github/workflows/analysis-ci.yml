@@ -40,8 +40,11 @@ jobs:
 
   dualband-workflow-tests:
     name: dualband-workflow-tests
+    needs: dualband-aggregate
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      FABER2026_DUALBAND_PUBLISHED_FIXTURE: ${{ runner.temp }}/dualband-published
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -53,6 +56,10 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: dualband-aggregate-${{ github.sha }}
+          path: ${{ runner.temp }}/dualband-published
       - run: |
           PYTHONPATH="$PWD:$PWD/scripts" \
             uv run --group test --frozen python -m pytest -q \
