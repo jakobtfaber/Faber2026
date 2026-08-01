@@ -1,7 +1,7 @@
 # Close the scintillation-to-scattering coupling design
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: resolved — owner selected `accept-restricted`, 2026-07-31
 - Assignee: —
 - Blocked by: [trigger](04a-close-residual-trigger.md)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -93,3 +93,32 @@ has now run (plan `plan-predicted-delay-trigger-calibration.md`; 27 cells,
   "priority": 30
 }
 ```
+
+## Resolution
+
+Owner decision, 2026-07-31: **accept-restricted**.
+
+The 1 per cent false-escalation envelope (windowed residual statistic
+threshold 4.65) is adopted as the second-screen escalation operating point,
+valid only for second screens with `r = tau2/tau1 >= 1` on matching
+CHIME-like geometry (0.4-0.8 GHz, 2.56 microsecond sampling,
+single-component morphology, exponential pulse-broadening family).
+
+Binding restrictions that travel with any use of the trigger:
+
+- The calibration proves **zero** detection power for `r <= 0.3` at every
+  tested S/N. A non-escalation therefore carries no evidence against a
+  weaker near screen — the regime a resolved scintillation bandwidth
+  implies cannot be adjudicated by this trigger, and no manuscript claim
+  may read a quiet trigger as an absence of sub-`tau1` scattering.
+- Different geometry, multi-component morphology, or a different
+  pulse-broadening family requires recalibration before use
+  (`recalibrate` path of this card).
+- The evidence is fixed to the hashed artifacts above (calibration report
+  `a3fc6eb4...`, rate table `440ffb1b...`, nested-sampling anchor
+  `f18438bc...`, source revision `7a4b6a0`).
+
+With this, the reopened escalation-trigger element of the 2026-07-10 D4
+design lock is closed; the frozen posterior/limit products, quality flags,
+and prior-odds-only role for scintillation geometry remain in force
+unchanged.
