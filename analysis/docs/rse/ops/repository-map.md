@@ -36,13 +36,10 @@ that every result is currently science-ready. For current trust, consult
 flowchart LR
     parentRepo["Faber2026<br/>manuscript authority"]
     analysisRepo["Faber2026-analysis<br/>analysis and research control"]
-    flits["dsa110-FLITS<br/>exact package dependency"]
     overleaf["Overleaf<br/>manuscript working copy"]
 
     parentRepo -->|"gitlink pins exact commit"| analysisRepo
-    analysisRepo -->|"lockfile pins exact commit"| flits
     parentRepo -->|"root TeX and approved assets sync"| overleaf
-    flits -->|"shared fitting modules"| analysisRepo
     analysisRepo -->|"reviewed tables, figures, claims"| parentRepo
 ```
 
@@ -84,18 +81,13 @@ repository owns:
 This layer decides what is understood, reviewed, and eligible for manuscript
 use. Final TeX and embedded figure bytes remain in the parent.
 
-### Shared fitting dependency: FLITS
+### Maintained analysis and fitting code
 
-The
-[`dsa110-FLITS`](https://github.com/jakobtfaber/dsa110-FLITS)
-repository supplies shared fitting and science modules. It is not mounted as a
-second submodule. The exact accepted commit is declared and locked by this
-analysis repository. Project-specific methods, configurations, studies, and
-results live under the matching scientific subject here.
-
-FLITS means *Fitting Likelihoods In Time-Frequency Spectra*. Development
-authority is the fork's accepted history; manuscript provenance uses the exact
-analysis lockfile pin, which may deliberately lag the fork's current `main`.
+All active scientific code, fitting implementations, workflows, configuration,
+and tests live in this repository. The former `dsa110-FLITS` repository is
+retired provenance only and must not be imported at runtime. Reusable model code
+lives under `faber2026/`; workflow orchestration lives under `workflows/` and
+`scripts/`. `pyproject.toml` and `uv.lock` define the complete runtime.
 
 ## Scientific data and claim flow
 
@@ -138,10 +130,10 @@ they are not values frozen into the raw voltage archive.
 
 ### Measurements, fits, and analyses
 
-FLITS code and subject-local configuration produce fit artifacts. Focused or
-dated runs belong in the relevant subject's `studies/` directory. Current
-canonical inputs, methods, results, figures, and tests use the matching
-subject-level directory.
+Repository-owned model code and subject-local configuration produce fit
+artifacts. Focused or dated runs belong in the relevant subject's `studies/`
+directory. Current canonical inputs, methods, results, figures, and tests use
+the matching subject-level directory.
 
 Bulk campaign bytes do not belong in Git. The local navigable view is
 `~/Data/Faber2026/results-library/`, built from
@@ -179,7 +171,7 @@ fail-closed:
 |---|---|---|
 | Manuscript text, generated tables, approved figures | Faber2026 GitHub `main` | Overleaf and local clones are working copies |
 | Analysis and research-control history | Pinned `Faber2026-analysis` commit | Parent gitlink selects the manuscript pair |
-| Fitting code history | Exact `dsa110-FLITS` commit in `pyproject.toml` and `uv.lock` | The analysis lock selects the code paired with the manuscript |
+| Fitting code history | `faber2026/`, `workflows/`, `scripts/`, `pyproject.toml`, and `uv.lock` in the pinned analysis commit | Retired FLITS history is provenance only, never runtime authority |
 | Raw data | h17: 12 `.h5` + 12 `.fil` | Derived arrays are not raw |
 | Fit-input cubes (24) | h17 intensity cubes | jakob-mbp copies are replicas; not CANFAR |
 | Accepted bulk result bytes | Tracked h17 or local results-library objects | Byte custody does not imply scientific trust |
@@ -240,13 +232,13 @@ flowchart RL
 3. Find its results-registry row and repro-manifest row.
 4. Run the named renderer and cross-repository parity check. A generator checked
    only against its own output cannot detect stale upstream inputs.
-5. Record the parent, analysis, and FLITS commits used by the check.
+5. Record the parent and analysis commits and locked environment used by the check.
 
 ### Fit or campaign product
 
 1. Identify the campaign artifact and its configuration.
 2. Resolve burst identity through `config/bursts.yaml`.
-3. Record the locked FLITS commit, not merely the dependency branch tip.
+3. Record the analysis commit and locked environment identity.
 4. Resolve input hashes through the data manifests and certificates.
 5. Apply the mandatory model/fit and diagnostic review gates.
 6. Promote the result to manuscript use only through the results registry.
@@ -258,8 +250,8 @@ flowchart RL
 | Understand the paper | [`main.tex`](../../../../main.tex), then [`sections/`](../../../../sections/) |
 | Know what is currently citable | [`analysis/CONTEXT.md`](../../../CONTEXT.md), then [`results-registry.toml`](../control/results-registry.toml) |
 | Find current work or open decisions | [Wayfinder map](../wayfinder/map-apj-submission.md), then [`BOARD.md`](../control/BOARD.md) |
-| Understand fitting assumptions | [`CONTEXT.md`](../../../CONTEXT.md), then the relevant subject README and locked FLITS source |
-| Change model physics | The locked `dsa110-FLITS` source, with a reviewed dependency update |
+| Understand fitting assumptions | [`CONTEXT.md`](../../../CONTEXT.md), then the relevant subject README and `faber2026/` implementation |
+| Change model physics | The maintained `faber2026/` implementation, with focused tests and review |
 | Regenerate a manuscript figure | [`figures/catalog.yaml`](../../../../figures/catalog.yaml), then [`figure_flow.py`](../../../scripts/figure_flow.py) |
 | Trace a table or figure | [`repro_manifest.csv`](../../../repro_manifest.csv) and [`REPRODUCE.md`](../../../REPRODUCE.md) |
 | Locate data | [`data/catalog/`](../../../data/catalog/) and the results-library catalog |
@@ -277,7 +269,7 @@ make figures                 # clone-safe manuscript figure set
 make kb-index                # refresh project knowledge base
 ```
 
-Analysis and FLITS producers use this repository's lock:
+Analysis producers use this repository's lock:
 
 ```sh
 cd analysis
@@ -289,7 +281,7 @@ Analysis producers that require the broader scientific stack use the Conda
 environment documented by the producer:
 
 ```sh
-conda run -n flits python analysis/scripts/<producer.py>
+conda run -n <documented-environment> python analysis/scripts/<producer.py>
 ```
 
 Use the exact command recorded in the figure catalog or repro manifest when one
@@ -303,14 +295,14 @@ blocks and command/output-path hazards.
 - **DSA-110**: Deep Synoptic Array, 110-antenna instrument.
 - **CANFAR**: Canadian Advanced Network for Astronomical Research.
 - **HDF5**: Hierarchical Data Format version 5.
-- **FLITS**: Fitting Likelihoods In Time-Frequency Spectra.
+- **FLITS**: retired Fitting Likelihoods In Time-Frequency Spectra repository;
+  provenance only, never an active import.
 
 ## Common wrong turns
 
 - Changes inside the analysis submodule require a commit there and a deliberate
   parent gitlink update.
-- Do not change the locked FLITS commit as a side effect of manuscript or
-  analysis work.
+- Do not restore a runtime dependency on the retired FLITS repository.
 - Do not cite a result because its file exists. Check registry trust and
   clearing evidence.
 - Do not equate a verified byte copy with scientific approval.
@@ -318,8 +310,8 @@ blocks and command/output-path hazards.
 - Do not hand-edit generated state views, generated tables, or promoted figures.
 - Do not assume a successful command wrote the declared output; verify the
   output path and receipt.
-- Do not assume the current FLITS branch is the manuscript dependency. Read the
-  analysis lock.
+- Do not use retired FLITS code or infrastructure as a current scientific
+  authority. Read the maintained implementation and analysis lock.
 - Do not mix CHIME/FRB products into the DSA-110 local data tree.
 
 ## Keeping this map current
