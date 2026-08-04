@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "event": "casey",
+  "decision_status": "owner_approved_empirical_trigger_peak_anchor_only",
+  "proposal": {
+    "source_thread_id": "019fb228-b55c-7b63-81c8-bccf963fe419",
+    "source_turn_id": "019fbc9e-690d-7830-8e2c-591121c61c5f",
+    "source_message_id": "msg_0bb62d3dcc0ca429016a6dbe4e13e48194a7f6934af80fcc1b",
+    "text_sha256": "762547210d15159c469ca55d4262bd222663b76bba881aeac7ae54fc81ae618e",
+    "text": "Yes—your interpretation is supported.\n\nWhat I found:\n\n- Casey’s DSA-110 filterbank is already dedispersed at the accepted product dispersion measure, 491.211 pc cm⁻³.\n- Its burst peak is sample 15,259:\n  - sample interval: 32.768 microseconds\n  - offset: 0.500006912 seconds\n- The historical timing notebook explicitly paired that measured peak phase with the T2 trigger epoch.\n- The corrected trigger epoch is MJD 60369.37095221912. Therefore the implied filterbank sample-zero coordinate is:\n\n  `MJD 60369.370946432003`\n\n- The rounded filterbank `tstart` remains unusable and should be ignored.\n\nThe search-trigger dispersion measure, 491.554 pc cm⁻³, is a different quantity. Applying the difference between 491.211 and 491.554 to the filterbank introduces visible frequency-dependent over-dedispersion. That confirms we should anchor the trigger epoch to the peak in the filterbank’s existing 491.211-dedispersed state, as you suggested.\n\nOne residual issue remains: the producer source predicts a nominal anchor three filterbank samples earlier, at sample 15,256. The historical notebook and actual data both select 15,259. That 98.304-microsecond discrepancy must be retained as a mapping systematic unless we identify the exact channelization or filtering delay.\n\nWhat we should do next:\n\n- Anchor DSA-110 sample 15,259 to the corrected trigger MJD.\n- Carry the unresolved 98.304-microsecond mapping difference as a timing systematic.\n- Keep the expected geometric CHIME/FRB–DSA-110 offset inside the joint likelihood.\n- Fit the shared absolute dispersion measure and unscattered 400 MHz arrival time; do not select the dispersion measure from peak alignment alone.\n\nSo: the geometric dispersion-measure constraint stays. This discovery gives us a defensible route to reinstate the DSA absolute time axis, with an explicit uncertainty rather than an unjustified exact mapping."
+  },
+  "owner_response": {
+    "source_thread_id": "019fb228-b55c-7b63-81c8-bccf963fe419",
+    "source_turn_id": "019fbe63-7f30-75c3-a733-b310ebe936dd",
+    "source_message_id": "msg_019fbe63-8edf-7e92-8dd4-fae0fbe70f68",
+    "text_sha256": "7483e3703643b662a7d08af4ac5c0cb8d9920fecd17d275212177868c870eb42",
+    "text_includes_trailing_newline": true,
+    "text": "Excellent, please proceed\n"
+  },
+  "approved_scope": {
+    "trigger_mjd_utc": "60369.37095221912",
+    "filterbank_peak_sample_index": 15259,
+    "filterbank_product_dm_pc_cm3": 491.211,
+    "rounded_filterbank_tstart_forbidden": true,
+    "geometry_constraint_retained": true
+  },
+  "subsequent_review_corrections": {
+    "sample_15256_status": "unverified_alternative_pretrigger_convention",
+    "mapping_ambiguity_s": 0.000098304,
+    "mapping_ambiguity_is_separate_from_clock_prior": true,
+    "mapping_uncertainty_treatment": "pending_owner_decision_discrete_two_anchor_sensitivity",
+    "trigger_reference_frequency_mhz": 1530.0,
+    "trigger_reference_frequency_status": "proposed_modeling_convention_pending_owner_decision",
+    "trigger_reference_frequency_sensitivity_required": true
+  },
+  "not_approved": [
+    "component association",
+    "crop or off-pulse windows",
+    "fit resolution",
+    "mapping uncertainty treatment",
+    "1530 MHz reference-frequency convention",
+    "execution authorization",
+    "sampling",
+    "fit result",
+    "science claim"
+  ]
+}

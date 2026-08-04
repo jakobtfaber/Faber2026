@@ -1185,6 +1185,15 @@ def test_preparation_mode_only_relaxes_product_builder_authorization(
     )
     for stage in ("dsa_audit", "chime_products", "dsa_products"):
         assert "--preparation-only" in commands[stage]
+    dsa_audit_controls = workflow_runner._control_files("dsa_audit", ROOT, CONFIG)
+    assert ROOT / "scripts/replay_one_event_timing_authorities.py" in dsa_audit_controls
+    dsa_audit_inputs = workflow_runner._stage_input_files(
+        "dsa_audit",
+        config,
+        ROOT,
+        workflow_runner._output_paths(config),
+    )
+    assert Path(config["paths"]["trigger_recovery"]) in dsa_audit_inputs
     assert "PYTHONPATH=/workflow" in commands["chime_products"]
     for stage in (
         "geometry_constraint",
@@ -1199,8 +1208,76 @@ def test_preparation_mode_only_relaxes_product_builder_authorization(
             assert "--preparation-only" not in command
 
 
-def test_casey_preparation_geometry_is_reviewed() -> None:
-    workflow_runner._require_preparation_geometry(_config())
+def test_casey_preparation_remains_blocked_pending_mapping_decision() -> None:
+    with pytest.raises(ValueError, match="mapping sensitivity is pending owner decision"):
+        workflow_runner._require_preparation_geometry(_config())
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("status", "pending", "owner-approved"),
+        ("rounded_tstart_allowed", True, "rounded DSA tstart"),
+        ("filterbank_peak_offset_s", 0.0, "peak offset contradicts"),
+        ("mapping_ambiguity_s", 0.0, "mapping ambiguity contradicts"),
+        (
+            "trigger_reference_frequency_status",
+            "recovered_producer_fact",
+            "reference-frequency status is invalid",
+        ),
+        (
+            "trigger_reference_frequency_sensitivity_required",
+            False,
+            "sensitivity must remain required",
+        ),
+        ("filterbank_product_dm_pc_cm3", 491.0, "product DM differs"),
+        ("trigger_reference_frequency_mhz", 1400.0, "geometry timing reference"),
+    ],
+)
+def test_casey_time_origin_mutations_fail_closed(
+    field: str, value: object, message: str
+) -> None:
+    config = _config()
+    config["dsa"]["time_origin"][field] = value
+    config["event_binding_sha256"] = event_binding_sha256(config)
+    with pytest.raises(ValueError, match=message):
+        validate_config(config)
+
+
+def test_preparation_rejects_missing_dsa_time_origin() -> None:
+    config = _config()
+    del config["dsa"]["time_origin"]
+    with pytest.raises(ValueError, match="owner-approved trigger peak anchor"):
+        workflow_runner._require_preparation_geometry(config)
+
+
+def test_preparation_rejects_trigger_reference_drift() -> None:
+    config = _config()
+    config["dsa"]["time_origin"]["trigger_reference_frequency_mhz"] = 1400.0
+    with pytest.raises(ValueError, match="reference frequencies differ"):
+        workflow_runner._require_preparation_geometry(config)
+
+
+def _shrink_timing_prior(geometry: dict) -> None:
+    geometry["clock_sigma_s"] = {
+        "chime": 35.35533905932738e-6,
+        "dsa": 35.35533905932738e-6,
+    }
+    geometry["timing_uncertainty_provenance"]["inter_site_clock_sigma_s"] = 50e-6
+
+
+def test_clock_prior_remains_separate_from_mapping_ambiguity() -> None:
+    config = _config()
+    clock_basis = config["joint_fit"]["geometry"]["timing_uncertainty_provenance"][
+        "clock_basis"
+    ]
+    assert "separate from the unresolved 15256/15259 mapping ambiguity" in clock_basis
+    assert "covers" not in clock_basis
+    _shrink_timing_prior(config["joint_fit"]["geometry"])
+    config["event_binding_sha256"] = event_binding_sha256(config)
+    validate_config(config)
+    with pytest.raises(ValueError, match="mapping sensitivity is pending owner decision"):
+        workflow_runner._require_preparation_geometry(config)
 
 
 @pytest.mark.parametrize(
@@ -1222,6 +1299,7 @@ def test_casey_preparation_geometry_is_reviewed() -> None:
         lambda geometry: geometry.update(
             clock_sigma_s={"chime": 0.6e-3, "dsa": 0.8e-3}
         ),
+        _shrink_timing_prior,
     ],
 )
 def test_preparation_geometry_rejects_malformed_timing_budget(mutate) -> None:

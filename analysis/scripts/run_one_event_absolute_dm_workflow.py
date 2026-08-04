@@ -60,6 +60,29 @@ def _require_preparation_geometry(config: dict[str, Any]) -> None:
             f"input preparation preflight rejected timing inputs: {exc}; "
             "no data processing started"
         ) from exc
+    time_origin = config["dsa"].get("time_origin")
+    if not isinstance(time_origin, dict) or time_origin.get("status") != (
+        "owner_approved_trigger_peak_anchor"
+    ):
+        raise ValueError(
+            "input preparation preflight rejected DSA timing: an owner-approved "
+            "trigger peak anchor is required; no data processing started"
+        )
+    if float(time_origin["trigger_reference_frequency_mhz"]) != float(
+        config["geometry"]["dsa_native_frequency_mhz"]
+    ):
+        raise ValueError(
+            "input preparation preflight rejected DSA timing: trigger and geometry "
+            "reference frequencies differ; no data processing started"
+        )
+    if time_origin["mapping_uncertainty_treatment"] == (
+        "pending_owner_decision_discrete_two_anchor_sensitivity"
+    ):
+        raise ValueError(
+            "input preparation preflight rejected DSA timing: the discrete 15256/15259 "
+            "mapping sensitivity is pending owner decision and remains separate from "
+            "the clock prior; no data processing started"
+        )
 
 
 def _resolve(path: str, repo_root: Path) -> Path:
@@ -809,6 +832,7 @@ def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]
         "dsa_audit": [
             repo_root / "scripts/audit_one_event_dsa_state_h17.py",
             repo_root / "scripts/absolute_dm_voltage.py",
+            repo_root / "scripts/replay_one_event_timing_authorities.py",
         ],
         "chime_products": [
             repo_root / "scripts/run_one_event_hybrid_absolute_dm_h17.py",
@@ -888,6 +912,7 @@ def _stage_input_files(
         inputs = [
             _resolve(source["raw_dsa_filterbank"], repo_root),
             _resolve(source["accepted_dsa_reference"], repo_root),
+            _resolve(source["trigger_recovery"], repo_root),
         ]
         for key in ("dsa_state_reconstruction", "dsa_state_calibration"):
             if key in source:
@@ -1646,10 +1671,18 @@ def main() -> None:
     if args.print_binding:
         print(event_binding_sha256(json.loads(config_path.read_text())))
         return
-    config = load_config(
-        config_path,
-        require_execution_authorized=args.execute,
-    )
+    try:
+        config = load_config(
+            config_path,
+            require_execution_authorized=args.execute,
+        )
+    except ValueError as exc:
+        if args.prepare_reviewed_inputs:
+            raise ValueError(
+                f"input preparation preflight rejected configuration: {exc}; "
+                "no data processing started"
+            ) from exc
+        raise
     if "joint_fit" not in config:
         raise RuntimeError(
             "historical anchored-hybrid configuration is compatibility-only; "

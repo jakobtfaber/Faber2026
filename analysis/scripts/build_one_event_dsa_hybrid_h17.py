@@ -15,7 +15,7 @@ from one_event_workflow import legacy_stage_config, load_config
 
 from radio_pipeline.fitting import DispersionState
 from radio_pipeline.fitting.products import (
-    mjd_crop_time0_unix_ns,
+    trigger_anchor_crop_time0_unix_ns,
     write_band_observation_product,
 )
 
@@ -100,6 +100,52 @@ def _accepted_support(reference: np.ndarray, expected: dict) -> np.ndarray:
     ):
         raise RuntimeError("accepted DSA support changed")
     return live
+
+
+def _validated_time_origin(dsa_audit: dict, expected: dict) -> dict:
+    if expected.get("mapping_uncertainty_treatment") != "owner_approved_fit_treatment":
+        raise RuntimeError("DSA mapping uncertainty treatment is not owner approved")
+    if expected.get("trigger_reference_frequency_status") != (
+        "owner_approved_modeling_convention"
+    ):
+        raise RuntimeError("DSA trigger reference frequency is not owner approved")
+    if expected.get("trigger_reference_frequency_sensitivity_required") is not False:
+        raise RuntimeError("DSA trigger reference-frequency sensitivity is incomplete")
+    timing = dsa_audit.get("timing", {})
+    if timing.get("fit_observation_time_origin_eligible") is not True:
+        raise RuntimeError("DSA audit lacks an eligible trigger-to-peak time origin")
+    if timing.get("joint_fit_timing_uncertainty_eligible") is not True:
+        raise RuntimeError("DSA mapping uncertainty decision is not fit eligible")
+    if timing.get("filterbank_sample_zero_status") != (
+        "derived_from_owner_approved_trigger_peak_anchor"
+    ):
+        raise RuntimeError("DSA audit lacks the approved trigger-to-peak anchor")
+    if float(timing.get("product_reference_frequency_mhz", float("nan"))) != (
+        REFERENCE_FREQUENCY_MHZ
+    ):
+        raise RuntimeError("DSA audit time origin is not referred to 400 MHz")
+    for field in (
+        "mapping_uncertainty_treatment",
+        "trigger_reference_frequency_status",
+        "trigger_reference_frequency_sensitivity_required",
+    ):
+        if timing.get(field) != expected[field]:
+            raise RuntimeError(f"DSA audit time-origin {field} differs from configuration")
+    comparisons = {
+        "trigger_mjd_utc": float(expected["trigger_mjd_utc"]),
+        "trigger_reference_frequency_mhz": float(
+            expected["trigger_reference_frequency_mhz"]
+        ),
+        "filterbank_product_dm_pc_cm3": float(
+            expected["filterbank_product_dm_pc_cm3"]
+        ),
+        "filterbank_peak_sample_index": int(expected["filterbank_peak_sample_index"]),
+        "mapping_ambiguity_s": float(expected["mapping_ambiguity_s"]),
+    }
+    for field, value in comparisons.items():
+        if not np.isclose(float(timing.get(field, float("nan"))), value, rtol=0.0, atol=1e-15):
+            raise RuntimeError(f"DSA audit time-origin {field} differs from configuration")
+    return timing
 
 
 def _profile(waterfall: np.ndarray, live: np.ndarray) -> np.ndarray:
@@ -341,6 +387,9 @@ def run(
         raise RuntimeError("DSA audit refers to another raw filterbank")
     if dsa_audit["accepted_reference"]["sha256"] != expected_reference_sha256:
         raise RuntimeError("DSA audit refers to another accepted reference")
+    expected_time_origin = config.get("dsa_time_origin")
+    if expected_time_origin is not None:
+        _validated_time_origin(dsa_audit, expected_time_origin)
     frequency_order = dsa_audit["frequency_order"]
     direct_correlation = float(frequency_order["direct_median_correlation"])
     reversed_correlation = float(frequency_order["reversed_median_correlation"])
@@ -413,12 +462,26 @@ def run(
     frequency_mhz = float(reader.header["fch1"]) + float(reader.header["foff"]) * np.arange(
         int(reader.header["nchans"])
     )
-    if "tstart" not in reader.header:
-        raise RuntimeError("DSA filterbank lacks an authoritative MJD time origin")
-    product_time0_unix_ns = mjd_crop_time0_unix_ns(
-        reader.header["tstart"],
+    time_origin = config.get("dsa_time_origin")
+    if not isinstance(time_origin, dict):
+        raise RuntimeError("DSA filterbank lacks a reviewed trigger-to-sample time origin")
+    if time_origin.get("status") != "owner_approved_trigger_peak_anchor":
+        raise RuntimeError("DSA trigger-to-sample time origin is not approved")
+    product_time0_unix_ns = trigger_anchor_crop_time0_unix_ns(
+        time_origin["trigger_mjd_utc"],
+        int(time_origin["filterbank_peak_sample_index"]),
         crop_start,
         sample_time_s,
+        float(time_origin["filterbank_product_dm_pc_cm3"]),
+        float(time_origin["trigger_reference_frequency_mhz"]),
+    )
+    trigger_to_reference_s = (
+        K_DM_S_MHZ2
+        * float(time_origin["filterbank_product_dm_pc_cm3"])
+        * (
+            REFERENCE_FREQUENCY_MHZ**-2
+            - float(time_origin["trigger_reference_frequency_mhz"]) ** -2
+        )
     )
     channel_width_mhz = abs(float(reader.header["foff"]))
     input_hashes = {
@@ -721,6 +784,25 @@ def run(
             "nonwrapping_fractional_sample_interpolation": True,
             "fixed_absolute_crop": True,
             "sign_oracle": _sign_oracle(sample_time_s),
+        },
+        "time_origin": {
+            "status": time_origin["status"],
+            "trigger_mjd_utc": time_origin["trigger_mjd_utc"],
+            "trigger_reference_frequency_mhz": float(
+                time_origin["trigger_reference_frequency_mhz"]
+            ),
+            "product_dm_pc_cm3": float(time_origin["filterbank_product_dm_pc_cm3"]),
+            "product_reference_frequency_mhz": REFERENCE_FREQUENCY_MHZ,
+            "trigger_to_product_reference_s": trigger_to_reference_s,
+            "filterbank_peak_sample_index": int(
+                time_origin["filterbank_peak_sample_index"]
+            ),
+            "mapping_ambiguity_s": float(time_origin["mapping_ambiguity_s"]),
+            "mapping_uncertainty_treatment": time_origin[
+                "mapping_uncertainty_treatment"
+            ],
+            "rounded_tstart_used": False,
+            "crop_time0_unix_ns": product_time0_unix_ns,
         },
         "support": {
             "accepted_live_count": int(accepted_live.sum()),

@@ -859,6 +859,87 @@ def validate_config(
         raise ValueError("dsa.raw_crop_start_sample must be non-negative")
     if int(dsa["crop_samples"]) <= 0 or int(dsa["padding_samples"]) <= 0:
         raise ValueError("DSA crop and padding samples must be positive")
+    if config.get("joint_fit") is not None and "time_origin" in dsa:
+        time_origin = dsa["time_origin"]
+        _require_keys(
+            time_origin,
+            (
+                "status",
+                "trigger_mjd_utc",
+                "trigger_reference_frequency_mhz",
+                "trigger_reference_frequency_status",
+                "trigger_reference_frequency_sensitivity_required",
+                "filterbank_product_dm_pc_cm3",
+                "filterbank_peak_sample_index",
+                "filterbank_peak_offset_s",
+                "alternative_pretrigger_convention",
+                "mapping_ambiguity_s",
+                "mapping_uncertainty_treatment",
+                "rounded_tstart_allowed",
+                "owner_approval_date",
+                "owner_decision_receipt",
+                "owner_decision_receipt_sha256",
+            ),
+            "dsa.time_origin",
+        )
+        if time_origin["status"] != "owner_approved_trigger_peak_anchor":
+            raise ValueError("DSA time origin needs an owner-approved trigger peak anchor")
+        if time_origin["rounded_tstart_allowed"] is not False:
+            raise ValueError("rounded DSA tstart must remain forbidden")
+        if int(time_origin["filterbank_peak_sample_index"]) < 0:
+            raise ValueError("DSA trigger peak sample must be non-negative")
+        expected_peak_offset_s = int(time_origin["filterbank_peak_sample_index"]) * float(
+            dsa.get("native_sample_time_s", 32.768e-6)
+        )
+        if not math.isclose(
+            float(time_origin["filterbank_peak_offset_s"]),
+            expected_peak_offset_s,
+            rel_tol=0.0,
+            abs_tol=1.0e-15,
+        ):
+            raise ValueError("DSA peak offset contradicts its sample index")
+        alternative = time_origin["alternative_pretrigger_convention"]
+        if alternative.get("status") != "unverified_alternative_for_sensitivity_only":
+            raise ValueError("DSA alternative pretrigger convention status is invalid")
+        expected_mapping_ambiguity_s = abs(
+            int(time_origin["filterbank_peak_sample_index"])
+            - int(alternative["sample_index"])
+        ) * float(dsa.get("native_sample_time_s", 32.768e-6))
+        if not math.isclose(
+            float(time_origin["mapping_ambiguity_s"]),
+            expected_mapping_ambiguity_s,
+            rel_tol=0.0,
+            abs_tol=1.0e-15,
+        ):
+            raise ValueError("DSA mapping ambiguity contradicts the alternative convention")
+        if time_origin["mapping_uncertainty_treatment"] != (
+            "pending_owner_decision_discrete_two_anchor_sensitivity"
+        ):
+            raise ValueError("DSA mapping uncertainty treatment is unsupported")
+        if time_origin["trigger_reference_frequency_status"] != (
+            "proposed_modeling_convention_pending_owner_decision"
+        ):
+            raise ValueError("DSA trigger reference-frequency status is invalid")
+        if time_origin["trigger_reference_frequency_sensitivity_required"] is not True:
+            raise ValueError("DSA trigger reference-frequency sensitivity must remain required")
+        if not re.fullmatch(
+            r"[0-9a-f]{64}", str(time_origin["owner_decision_receipt_sha256"])
+        ):
+            raise ValueError("DSA owner decision receipt hash is invalid")
+        if not math.isclose(
+            float(time_origin["trigger_reference_frequency_mhz"]),
+            float(config["geometry"]["dsa_native_frequency_mhz"]),
+            rel_tol=0.0,
+            abs_tol=0.0,
+        ):
+            raise ValueError("DSA trigger reference differs from the geometry timing reference")
+        if not math.isclose(
+            float(time_origin["filterbank_product_dm_pc_cm3"]),
+            float(dsa["accepted_reference_dm_pc_cm3"]),
+            rel_tol=0.0,
+            abs_tol=1.0e-12,
+        ):
+            raise ValueError("DSA time-origin product DM differs from the input state")
     if not is_regression_fixture:
         _require_keys(
             dsa,
@@ -1013,6 +1094,7 @@ def validate_config(
         )
         if float(joint_fit["reference_frequency_mhz"]) != REFERENCE_FREQUENCY_MHZ:
             raise ValueError("joint_fit reference frequency must remain 400 MHz")
+        validate_timing_uncertainties(joint_fit["geometry"])
         validate_review_plan(joint_fit["review_plan"])
         blockers = joint_fit["blockers"]
         if (
@@ -1074,7 +1156,6 @@ def validate_config(
                 ),
                 "joint_fit.geometry",
             )
-            validate_timing_uncertainties(joint_fit["geometry"])
             validate_resolution_lock(joint_fit["resolution"])
             review_decision = joint_fit["review_decision"]
             _require_keys(
@@ -1386,8 +1467,10 @@ def legacy_stage_config(config: dict[str, Any]) -> dict[str, Any]:
         "expected_chime_support": chime["accepted_support"],
         "geometry_dm_pc_cm3": config["geometry"]["geometry_dm_pc_cm3"],
         "raw_dsa_filterbank": paths["raw_dsa_filterbank"],
+        "trigger_recovery": paths["trigger_recovery"],
         "accepted_dsa_reference": paths["accepted_dsa_reference"],
         "expected_dsa_raw_sha256": hashes["raw_dsa_filterbank"],
+        "expected_trigger_recovery_sha256": hashes["trigger_recovery"],
         "expected_dsa_reference_sha256": hashes["accepted_dsa_reference"],
         "accepted_dsa_reference_dm_pc_cm3": dsa["accepted_reference_dm_pc_cm3"],
         "raw_dsa_crop_start_sample": dsa["raw_crop_start_sample"],
@@ -1398,6 +1481,7 @@ def legacy_stage_config(config: dict[str, Any]) -> dict[str, Any]:
         "dsa_gates": dsa["gates"],
         "reference_frequency_mhz": config["geometry"]["reference_frequency_mhz"],
         "dsa_native_frequency_mhz": config["geometry"]["dsa_native_frequency_mhz"],
+        "dsa_time_origin": dsa.get("time_origin"),
         **(
             {
                 "dsa_state_reconstruction": paths["dsa_state_reconstruction"],

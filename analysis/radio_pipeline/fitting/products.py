@@ -41,6 +41,32 @@ def mjd_crop_time0_unix_ns(
     return int((seconds * Decimal("1000000000")).to_integral_value(rounding=ROUND_HALF_EVEN))
 
 
+def trigger_anchor_crop_time0_unix_ns(
+    trigger_mjd: object,
+    trigger_sample_index: int,
+    crop_start_sample: float,
+    sample_time_s: float,
+    product_dm_pc_cm3: float,
+    trigger_reference_frequency_mhz: float,
+) -> int:
+    """Refer a filterbank crop to 400 MHz from a trigger-bound raw sample."""
+
+    from .joint_burst import K_DM_S_MHZ2
+
+    seconds = (
+        (Decimal(str(trigger_mjd)) - MJD_UNIX_EPOCH) * SECONDS_PER_DAY
+        + (Decimal(str(crop_start_sample)) - Decimal(trigger_sample_index))
+        * Decimal(str(sample_time_s))
+        + Decimal(str(K_DM_S_MHZ2))
+        * Decimal(str(product_dm_pc_cm3))
+        * (
+            Decimal(str(REFERENCE_FREQUENCY_MHZ)) ** -2
+            - Decimal(str(trigger_reference_frequency_mhz)) ** -2
+        )
+    )
+    return int((seconds * Decimal("1000000000")).to_integral_value(rounding=ROUND_HALF_EVEN))
+
+
 def unix_seconds_parts_to_ns(
     whole_seconds: np.ndarray,
     fractional_seconds: np.ndarray,

@@ -10,6 +10,7 @@ from radio_pipeline.fitting import (
 )
 from radio_pipeline.fitting.products import (
     mjd_crop_time0_unix_ns,
+    trigger_anchor_crop_time0_unix_ns,
     unix_seconds_parts_to_ns,
 )
 
@@ -62,6 +63,29 @@ def test_observation_product_rejects_hash_drift(tmp_path) -> None:
 def test_filterbank_crop_time_origin_avoids_epoch_float_loss() -> None:
     assert mjd_crop_time0_unix_ns("40587", 0.0, 0.001) == 0
     assert mjd_crop_time0_unix_ns("40587.000000001", 2.0, 0.001) == 2_086_400
+
+
+def test_trigger_peak_anchor_defines_crop_origin_without_rounded_tstart() -> None:
+    trigger_mjd = "60369.37095221912"
+    sample_interval_s = 32.768e-6
+    sample_zero = trigger_anchor_crop_time0_unix_ns(
+        trigger_mjd,
+        15259,
+        0,
+        sample_interval_s,
+        491.211,
+        1530.0,
+    )
+    crop = trigger_anchor_crop_time0_unix_ns(
+        trigger_mjd,
+        15259,
+        13998,
+        sample_interval_s,
+        491.211,
+        1530.0,
+    )
+    assert sample_zero == 1709196861638271101
+    assert crop - sample_zero == 458686464
 
 
 def test_h5_split_epoch_preserves_nanoseconds() -> None:

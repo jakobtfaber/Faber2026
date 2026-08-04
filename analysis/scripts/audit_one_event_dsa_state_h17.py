@@ -5,12 +5,17 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import tempfile
+import warnings
+from decimal import Decimal
 from pathlib import Path
 
 import numpy as np
 from absolute_dm_voltage import K_DM_S_MHZ2, sha256
 from blimpy import Waterfall
 from one_event_workflow import legacy_stage_config, load_config
+from replay_one_event_timing_authorities import audit_dsa
 from scipy.signal import correlate
 
 BOUND_ONLY_EXCLUDED_CHECKS = {
@@ -19,6 +24,34 @@ BOUND_ONLY_EXCLUDED_CHECKS = {
     "held_out_correction",
     "material_nonzero_residual",
 }
+
+
+def _validate_time_origin_owner_decision(config: dict) -> None:
+    time_origin = config.get("dsa_time_origin")
+    if time_origin is None:
+        return
+    repo_root = Path(__file__).resolve().parents[1]
+    decision_root = (repo_root / "analysis-configs/absolute-dm/decisions").resolve()
+    decision_path = (repo_root / time_origin["owner_decision_receipt"]).resolve()
+    if decision_path.parent != decision_root:
+        raise RuntimeError("owner decision receipt path leaves the decision directory")
+    if sha256(decision_path) != time_origin["owner_decision_receipt_sha256"]:
+        raise RuntimeError("owner decision receipt SHA-256 mismatch")
+    decision = json.loads(decision_path.read_text())
+    approved = decision.get("approved_scope", {})
+    if (
+        decision.get("event") != config["event"]
+        or decision.get("decision_status")
+        != "owner_approved_empirical_trigger_peak_anchor_only"
+        or Decimal(str(approved.get("trigger_mjd_utc")))
+        != Decimal(str(time_origin["trigger_mjd_utc"]))
+        or int(approved.get("filterbank_peak_sample_index", -1))
+        != int(time_origin["filterbank_peak_sample_index"])
+        or Decimal(str(approved.get("filterbank_product_dm_pc_cm3")))
+        != Decimal(str(time_origin["filterbank_product_dm_pc_cm3"]))
+        or approved.get("rounded_filterbank_tstart_forbidden") is not True
+    ):
+        raise RuntimeError("owner decision receipt scope differs from configuration")
 
 
 def _normalised_correlation(reference: np.ndarray, candidate: np.ndarray) -> float:
@@ -178,7 +211,9 @@ def audit(config: dict) -> dict:
     reference = np.load(reference_path)
     if raw.shape[0] != reference.shape[0]:
         raise ValueError("raw and reference frequency dimensions differ")
-    standard_deviation = np.nanstd(reference, axis=1)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        standard_deviation = np.nanstd(reference, axis=1)
     valid = np.isfinite(standard_deviation) & (standard_deviation > 0)
     valid_rows = np.flatnonzero(valid)
     selected_count = int(config["dsa_audit_sample_rows"])
@@ -328,6 +363,44 @@ def audit(config: dict) -> dict:
                 else {}
             ),
         }
+    trigger_path = Path(config["trigger_recovery"])
+    if sha256(trigger_path) != config["expected_trigger_recovery_sha256"]:
+        raise RuntimeError("trigger recovery SHA-256 mismatch")
+    trigger_rows = json.loads(trigger_path.read_text())
+    event = config["event"]
+    if event not in trigger_rows:
+        raise RuntimeError(f"trigger recovery lacks event {event}")
+    result["timing"] = audit_dsa(
+        raw_path,
+        trigger_rows[event],
+        config.get("dsa_time_origin"),
+        reference_path,
+    )
+    return result
+
+
+def publish_audit(config: dict, output: Path) -> dict:
+    _validate_time_origin_owner_decision(config)
+    result = audit(config)
+    payload = json.dumps(result, indent=2, allow_nan=False) + "\n"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path: Path | None = None
+    try:
+        descriptor, temporary_name = tempfile.mkstemp(
+            dir=output.parent,
+            prefix=f".{output.name}.",
+            suffix=".tmp",
+        )
+        temporary_path = Path(temporary_name)
+        with os.fdopen(descriptor, "w") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_path, output)
+        temporary_path = None
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
     return result
 
 
@@ -337,16 +410,15 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--preparation-only", action="store_true")
     args = parser.parse_args()
-    result = audit(
+    result = publish_audit(
         legacy_stage_config(
             load_config(
                 args.config,
                 require_execution_authorized=not args.preparation_only,
             )
-        )
+        ),
+        args.output,
     )
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result["dedispersion_state_fit"], indent=2))
 
 

@@ -103,6 +103,29 @@ on top of it, the uncertainty of fitting a model to the burst profile
 fitting uncertainties are typically far larger than the microsecond trigger
 floor and are quantified per analysis, not here.
 
+The recovered trigger MJD is not, by itself, the time of sample zero in a
+derived SIGPROC filterbank. A fit-ready filterbank observation must additionally
+bind the trigger to an exact sample index through a producer receipt or an
+independently verified integer-sample construction. The rounded `tstart` header
+must not be substituted for that mapping.
+
+For Casey, the owner approved the second route on 2026-08-01. In the raw
+filterbank already dedispersed to 491.211 pc cm⁻³, the replayed band-integrated
+peak is sample 15259, or 0.500006912 s from sample zero. An unverified
+alternative pretrigger convention places an anchor at sample 15256. No
+immutable producer artifact validates that convention. Their three-sample
+difference is a 98.304 µs mapping ambiguity. It remains separate from the
+unchanged clock prior. The required discrete two-anchor sensitivity decision is
+pending; joint fitting remains blocked. This is an empirical trigger-to-peak
+binding, not recovery of the missing producer receipt.
+
+The proposed trigger epoch referral from 1530 MHz to the shared 400 MHz
+coordinate is an owner modeling convention, not a recovered producer fact. It
+requires explicit approval and a retained reference-frequency sensitivity. At
+491.211 pc cm⁻³ the proposed cold-plasma referral is +11.866546044944464 s.
+The geometry constraint remains part of the joint fit; it is not used to choose
+the anchor.
+
 ## Current caveats
 
 - isha (221113aaao): no records from its own acquisition run survive on any
@@ -114,23 +137,42 @@ floor and are quantified per analysis, not here.
   independent end-to-end check of the whole chain; it is not used as an anchor
   for any value in this note.
 
+## Casey downstream claim boundary
+
+The value 491.27737153955155 pc cm⁻³ is a coherent-power and
+relative-dispersion diagnostic. It does not depend on the absolute
+CHIME/FRB–DSA-110 time origins and remains pending independent and owner review.
+The value 491.27924166266934 pc cm⁻³ is only a conditional geometry-alignment
+sensitivity under the assumption that the recovered trigger epoch is the
+DSA-110 burst arrival time; it has no formal uncertainty and is not a formal
+dispersion-measure result.
+
+The sole executed Casey joint absolute-timing fit used the rounded filterbank
+`tstart` plus crop as its DSA-110 origin, producing an approximately 11.5583 s
+origin displacement; the fit diagnostic records a nominal window gap of
+11.55608945970681 s. Its `fit-result.json` has SHA-256
+`7e88c030152b5b967c28be4d0fc9a3a219b199fcf6438f3272e916c2716846a8`, status
+`failed_prior_rail`, and model and timing failures. The associated resolution
+packet inherits that origin and contains no fit. Raw-only and exact-time
+diagnostic packets avoid the numeric displacement through analysis-derived
+trigger-to-peak assignments, but lack the producer mapping and contain no
+traceable fit result. The owner-approved Casey trigger-to-peak binding above
+permits a new, separately hash-bound preparation run; it does not validate
+those historical packets. The legacy fixed-DM crossmatch is unverified.
+
+No existing Casey product supplies a formally quotable geometry-matching DM or
+geocentric 400 MHz TOA. These failures do not invalidate the relative or
+coherent-power diagnostic above.
+
 ## Source evidence and durable artifacts
 
-All under `~/Data/Faber2026/review/dsa-origin-metadata-20260727/` unless noted:
+The current trigger-time authority is
+`~/Data/Faber2026/dsa110/trigger_mjd_microsecond_recovery.json`, SHA-256
+`87852969eb41c2abfa4c6534557ad03ed4f3e16e64cf1b28bd9da35f4ff89a0e`.
+The configured h17 shared-input copy has the same hash. This JSON supplies the
+trigger MJD only; it does not supply the filterbank sample-zero mapping.
 
-- `trigger_mjd_microsecond_recovery_v3_FINAL.json` — the authoritative
-  per-burst values reproduced in the table above.
-- `SUMMARY.md` — capture provenance for the archived trigger records
-  (dsa-storage `/mnt/data/dsa110/candidates/candidates/<event>/`, h17 header
-  re-reads, h23 recovery of casey's trigger record).
-- `token-ambiguity-inrun-resolution-20260727.md` — the in-run confirmations
-  for zach (`/mnt/data/bckuph23data/dsa110/T3/2022_2_6_19_34_4/` on
-  dsa-storage) and whitney
-  (`/mnt/data/dsa110/T2/2022_3_10_1_19_25/cluster_output1646891314.cand`),
-  with the sibling rows and anchor arithmetic quoted verbatim, and the
-  exhaustive negative search for isha-era records.
-- `adversarial-review-usec-recovery.log` — independent adversarial review of
-  the reconstruction.
-- `dsastorage_capture.json`, `dsastorage_capture_raw.json`, per-burst
-  `<burst>.json` — verbatim archived trigger records and filterbank headers
-  with checksums.
+The current supporting captures are described by
+`~/Data/Faber2026/dsa110/origin-metadata/README.md`. Its `bursts/`,
+`dsastorage/`, and `h17/` subdirectories contain the retained per-burst trigger
+records and filterbank-header captures.

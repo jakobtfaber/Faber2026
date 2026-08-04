@@ -37,7 +37,7 @@
     "timing_results": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/toa_crossmatch_results.json",
     "trigger_recovery": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/trigger_mjd_microsecond_recovery.json",
     "reproduction_fixture": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/shared-inputs/notebook_reproduction_fixture.json",
-    "output_root": "/data/Faber2026/evidence/dm-toa-geometry-20260728/casey-one-event-workflow"
+    "output_root": "/data/Faber2026/evidence/dm-toa-geometry-20260801/casey-one-event-workflow"
   },
   "input_sha256": {
     "raw_chime_h5": "ea15c60b2bc770b30ab24d2d21e8e3fac8f5f3fe02238019ef258679770ebc0c",
@@ -139,6 +139,27 @@
     "crop_samples": 2500,
     "padding_samples": 64,
     "audit_sample_rows": 96,
+    "native_sample_time_s": 0.000032768,
+    "time_origin": {
+      "status": "owner_approved_trigger_peak_anchor",
+      "trigger_mjd_utc": "60369.37095221912",
+      "trigger_reference_frequency_mhz": 1530.0,
+      "trigger_reference_frequency_status": "proposed_modeling_convention_pending_owner_decision",
+      "trigger_reference_frequency_sensitivity_required": true,
+      "filterbank_product_dm_pc_cm3": 491.211,
+      "filterbank_peak_sample_index": 15259,
+      "filterbank_peak_offset_s": 0.500006912,
+      "alternative_pretrigger_convention": {
+        "sample_index": 15256,
+        "status": "unverified_alternative_for_sensitivity_only"
+      },
+      "mapping_ambiguity_s": 0.000098304,
+      "mapping_uncertainty_treatment": "pending_owner_decision_discrete_two_anchor_sensitivity",
+      "rounded_tstart_allowed": false,
+      "owner_approval_date": "2026-08-01",
+      "owner_decision_receipt": "analysis-configs/absolute-dm/decisions/casey-trigger-peak.json",
+      "owner_decision_receipt_sha256": "eff1e306ffe75ed5efe9e93137e6faecec1d077b2ca5a35853aec883087becb0"
+    },
     "accepted_support": {
       "full_grid_rows": 6144,
       "live_count": 6104,
@@ -182,7 +203,7 @@
         "status": "owner_adopted_provisional_bounds",
         "inter_site_clock_sigma_s": 0.001,
         "clock_allocation": "equal_independent_station_terms",
-        "clock_basis": "owner-adopted provisional 1 ms Gaussian standard deviation on the inter-site difference for this fit",
+        "clock_basis": "owner-adopted provisional 1 ms Gaussian standard deviation on the inter-site difference; unchanged and separate from the unresolved 15256/15259 mapping ambiguity",
         "site_delay_basis": "owner-adopted provisional 0.5 us Gaussian standard deviation per station; not inferred from projection agreement",
         "absolute_utc_calibration_status": "not_independently_measured",
         "owner_adoption_date": "2026-07-29"
@@ -296,5 +317,5 @@
       "manifests"
     ]
   },
-  "event_binding_sha256": "18572c3f5d0be37c639824014dfa1ef3718205c11c73ccca0347d339c1e4ef5f"
+  "event_binding_sha256": "a7e50d63fc08feb9adad82e028bc585e0dc4510e607f2546b07c6dd25f533be5"
 }
