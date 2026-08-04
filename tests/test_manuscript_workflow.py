@@ -2,6 +2,7 @@ from pathlib import Path
 from unittest import TestCase, main
 
 WORKFLOW = Path(__file__).parents[1] / ".github/workflows/manuscript-provenance.yml"
+MAKEFILE = Path(__file__).parents[1] / "Makefile"
 
 
 class ManuscriptWorkflow(TestCase):
@@ -20,6 +21,13 @@ class ManuscriptWorkflow(TestCase):
         self.assertIn("make check-manuscript", manuscript)
         self.assertIn("python3 -m unittest discover", manuscript)
         self.assertIn("xu-cheng/latex-action@", manuscript)
+
+    def test_focused_claim_check_does_not_run_full_registry_validation(self) -> None:
+        target = MAKEFILE.read_text().split("check-manuscript:", 1)[1].split(
+            "check-provenance:", 1
+        )[0]
+        self.assertIn("check_claim_anchors.py", target)
+        self.assertNotIn("--validate", target)
 
     def test_parent_watches_one_stable_analysis_verdict(self) -> None:
         pinned = self.text.split("  pinned-analysis-tests:", 1)[1].split(

@@ -22,9 +22,7 @@ check-state:
 		python3 analysis/scripts/sync_state.py --check --offline
 
 check-manuscript:
-	FABER2026_ROOT="$(FABER2026_ROOT)" \
-		python3 analysis/scripts/render_results_registry.py --validate \
-		--manuscript-root "$(FABER2026_ROOT)"
+	python3 scripts/check_claim_anchors.py "$(FABER2026_ROOT)"
 	FABER2026_ROOT="$(FABER2026_ROOT)" \
 		python3 analysis/scripts/render_results_registry.py --check
 	python3 scripts/check_manuscript_paths.py "$(FABER2026_ROOT)"
