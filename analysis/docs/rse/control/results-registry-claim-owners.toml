@@ -35,7 +35,7 @@ claims = [
   { fingerprint = "2b1ce110ab69081a", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
   { fingerprint = "2e4e073b3688582e", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
   { fingerprint = "744dcfffab10066c", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
-  { fingerprint = "00e0946017b1a82d", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
+  { fingerprint = "68b908240497dc08", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
   { fingerprint = "13ef7d3b3462d91d", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
   { fingerprint = "436ea786eac4a796", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
   { fingerprint = "70bec1b84a25429e", occurrence = 1, exclusion_reason = "Taxonomy, software, facility, or repository identifier; no project measurement." },
