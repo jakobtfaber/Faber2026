@@ -10,9 +10,14 @@ class ManuscriptWorkflow(TestCase):
     def setUpClass(cls) -> None:
         cls.text = WORKFLOW.read_text()
 
-    def test_prose_only_route_skips_full_provenance(self) -> None:
-        self.assertIn("prose-only=$prose_only", self.text)
-        self.assertIn("if: needs.changes.outputs.prose-only != 'true'", self.text)
+    def test_prose_or_analysis_pin_route_skips_full_provenance(self) -> None:
+        self.assertIn("analysis|*.tex|bib/*.bib", self.text)
+        self.assertIn("focused-only=$focused_only", self.text)
+        self.assertIn("if: needs.changes.outputs.focused-only != 'true'", self.text)
+
+    def test_draft_pull_requests_defer_ci_until_ready(self) -> None:
+        self.assertIn("ready_for_review", self.text)
+        self.assertGreaterEqual(self.text.count("draft == false"), 3)
 
     def test_focused_lane_checks_claims_paths_and_compiles(self) -> None:
         manuscript = self.text.split("  manuscript:", 1)[1].split(

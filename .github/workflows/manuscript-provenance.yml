@@ -2,6 +2,7 @@ name: Manuscript provenance
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch:
@@ -16,11 +17,12 @@ permissions:
 jobs:
   changes:
     name: route-manuscript-suite
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
       analysis-pin: ${{ steps.diff.outputs.analysis-pin }}
-      prose-only: ${{ steps.diff.outputs.prose-only }}
+      focused-only: ${{ steps.diff.outputs.focused-only }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -34,7 +36,7 @@ jobs:
           set -euo pipefail
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             echo "analysis-pin=true" >> "$GITHUB_OUTPUT"
-            echo "prose-only=false" >> "$GITHUB_OUTPUT"
+            echo "focused-only=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
@@ -48,20 +50,21 @@ jobs:
             echo "analysis-pin=true" >> "$GITHUB_OUTPUT"
           fi
           mapfile -t changed < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
-          prose_only=true
+          focused_only=true
           if [ "${#changed[@]}" -eq 0 ]; then
-            prose_only=false
+            focused_only=false
           fi
           for path in "${changed[@]}"; do
             case "$path" in
-              *.tex|bib/*.bib) ;;
-              *) prose_only=false ;;
+              analysis|*.tex|bib/*.bib) ;;
+              *) focused_only=false ;;
             esac
           done
-          echo "prose-only=$prose_only" >> "$GITHUB_OUTPUT"
+          echo "focused-only=$focused_only" >> "$GITHUB_OUTPUT"
 
   manuscript:
     name: manuscript-focused
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -85,7 +88,7 @@ jobs:
   provenance:
     name: provenance-details
     needs: changes
-    if: needs.changes.outputs.prose-only != 'true'
+    if: needs.changes.outputs.focused-only != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -150,7 +153,7 @@ jobs:
 
   required:
     name: manuscript-provenance
-    if: always()
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs: [changes, manuscript, provenance, pinned-analysis-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 5
