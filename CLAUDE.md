@@ -8,7 +8,8 @@ Agent brief for the **Faber2026** manuscript repository and its associated
 Apply in order:
 
 1. The owner's latest explicit instruction this session.
-2. The current task's declared objective, phase, and scope.
+2. The current task's declared objective, scientific phase, operational phase,
+   and scope.
 3. Standing repository authorizations in this file.
 4. General autonomy defaults here.
 
@@ -23,10 +24,44 @@ Apply in order:
 For multi-step or high-risk work, establish the boundary before acting:
 
 - **Objective:** the result being pursued.
-- **Phase:** discovery, capture, verification, repair, reconciliation,
-  landing, or retirement — one active phase at a time.
+- **Operational phase:** discovery, capture, verification, repair,
+  reconciliation, landing, or retirement — one active operational phase at a
+  time.
 - **May change** / **Must not change:** exact paths, branches, artifacts.
-- **Done when:** the condition that ends the phase.
+- **Done when:** the condition that ends the operational phase.
+
+## Scientific work phases
+
+Every numerical or scientific task operates in one declared scientific phase:
+
+- **Exploration** — obtain and inspect the scientific result.
+- **Scientific validation** — test assumptions, sensitivity, convergence, and
+  model adequacy.
+- **Publication** — produce immutable provenance, independent reruns, final
+  receipts, and repository integration.
+
+Default to exploration unless the owner explicitly requests another phase.
+
+During exploration:
+
+- Perform only checks needed to interpret the result and distinguish it from an
+  execution artifact.
+- Put scientific outputs, plots, residuals, and parameter estimates first.
+- Record publication-only gaps once; do not stop to close them.
+- Do not build exhaustive receipts, manifests, publication workflows, or
+  repeated independent reviews.
+- Stop only when a problem prevents scientific interpretation or safe
+  execution.
+
+Do not change scientific phases implicitly. Promotion to publication requires
+an explicit owner decision. Validation-first means validation proportional to
+the current scientific phase, not publication-grade closure for every
+intermediate result.
+
+For exploratory fits, report scientific results and diagnostic figures before
+provenance packaging. Keep audit evidence available but out of the foreground.
+A publication-only provenance gap does not block an exploratory fit unless it
+could change the scientific interpretation.
 
 ## Response style
 
@@ -85,7 +120,7 @@ report the answer:
 
 Proceed without asking on a reversible change only when all hold:
 
-- inside the current objective and active phase;
+- inside the current objective and active operational phase;
 - no scientific judgment required;
 - does not mutate an input under capture or verification;
 - does not silently invalidate a safety verdict;
@@ -107,14 +142,14 @@ Reserve questions for:
 For reversible naming or organizational choices: pick a sensible default,
 record it, proceed.
 
-## Phases, checkpoints, and frozen inputs
+## Operational phases, checkpoints, and frozen inputs
 
-- Do not mix phases.
-- Reach a verified checkpoint before the next phase, stating: what was
+- Do not mix operational phases.
+- Reach a verified checkpoint before the next operational phase, stating: what was
   examined, changed, unchanged, verified, still preliminary/blocked/stale,
   and exactly which inputs and outputs it covers.
-- A phase is not complete because an agent or script reports success; verify
-  the state.
+- An operational phase is not complete because an agent or script reports
+  success; verify the state.
 - Do not modify a source folder while it is being captured or verified.
 - Every capture, safety, or retirement verdict must identify the exact source
   snapshot: path, repository, branch or detached state, commit, staged and
@@ -178,7 +213,7 @@ Correct an error in three statements:
 - When a new fact invalidates a conclusion, mark it **STALE** immediately; do
   not keep using it while arranging a fix.
 - When the owner corrects agent behavior, record the correction as a durable
-  rule before the next phase boundary — or note it in the checkpoint receipt
+  rule before the next operational phase boundary — or note it in the checkpoint receipt
   if stopped. Operational rules go in this file (mirror them to `AGENTS.md`);
   scientific or trust-state facts go in the relevant `CONTEXT.md`, and a
   `CONTEXT.md` write inside `analysis/` or `pipeline/` is a separately
@@ -383,7 +418,7 @@ For any preservation, rescue, reconciliation, retirement, or
 multi-repository operation, write a receipt at the established project
 receipt location containing:
 
-- objective and phase;
+- objective, scientific phase, and operational phase;
 - source paths and snapshot identifiers;
 - commands used; outputs and checksums;
 - verification method and evidence;

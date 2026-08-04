@@ -11,6 +11,13 @@ Agent brief for the **Faber2026** manuscript repo.
   Explain domain statistics (e.g. confidence bounds, order statistics) in
   plain English when they appear.
 
+## Exploratory fits
+
+Report scientific results and diagnostic figures before provenance packaging.
+Keep audit evidence available but out of the foreground. A publication-only
+provenance gap does not block an exploratory fit unless it could change the
+scientific interpretation.
+
 ## Orient with the knowledge base before grepping
 
 Before exploratory `grep`/`glob`/file-reading to reconstruct context, run
