@@ -24,7 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          fetch-depth: 0
           persist-credentials: false
       - id: diff
         env:
@@ -40,6 +39,8 @@ jobs:
           fi
           if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
             BASE_SHA="$HEAD_SHA^"
+          elif ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
           fi
           if git diff --quiet "$BASE_SHA" "$HEAD_SHA" -- analysis; then
             echo "analysis-pin=false" >> "$GITHUB_OUTPUT"
