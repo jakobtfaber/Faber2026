@@ -22,8 +22,8 @@ scientific interpretation.
 
 Before exploratory `grep`/`glob`/file-reading to reconstruct context, run
 `python3 analysis/scripts/kb search "<topic>"` — hybrid keyword+semantic search over
-manuscript docs, wayfinder tickets, git history, analysis code, locked FLITS
-package provenance, configs, and cited references, with ranked
+manuscript docs, wayfinder tickets, git history, analysis code, retired FLITS
+provenance, configs, and cited references, with ranked
 cross-source results. Filter with `--source tickets|docs|git|code|config|refs`.
 Refresh after changes with `make kb-index` (incremental, seconds when
 embeddings are current). See [`analysis/docs/rse/ops/knowledge-base.md`](analysis/docs/rse/ops/knowledge-base.md).
@@ -107,4 +107,4 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - Local burst products live under `~/Data/Faber2026/dsa110/` (DSA-110; Stokes-I cubes in `DSA_bursts/`) and `~/Data/Faber2026/chimefrb/` (CHIME/FRB; Stokes-I cubes in `CHIME_bursts/`); do not mix instruments across those trees or paper over layout drift with compatibility symlinks — fix referencing paths universally instead.
 - Product dispersion measures in `_cntr_bpc.npy` filenames are per-band archival referral values and can differ between CHIME and DSA for the same event.
 - Retained Mac worktrees and orphan clones need an explicit content disposition — land/integrate, superseded/obsolete, or preserve — with a receipt before retirement; subject-on-main alone does not prove superseded when unique patches remain.
-- The parent manuscript pins one submodule: `analysis/` is the research-control repository and its lockfile pins the reusable FLITS fitting library.
+- The parent manuscript pins one submodule: `analysis/` is the research-control repository, and it also houses all fitting code. Its lockfile no longer references FLITS; `dsa110-FLITS` is retired provenance and must not be imported at runtime.

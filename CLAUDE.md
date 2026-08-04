@@ -1,7 +1,9 @@
 # CLAUDE.md
 
-Agent brief for the **Faber2026** manuscript repository and its associated
-**Faber2026-analysis** and **dsa110-FLITS** repositories.
+Agent brief for the **Faber2026** manuscript repository and its single
+associated **Faber2026-analysis** repository. The former `dsa110-FLITS`
+dependency and the former `pipeline/` submodule are both retired; they are
+provenance only and never runtime or review authorities.
 
 ## Instruction priority and task scope
 
@@ -216,8 +218,8 @@ Correct an error in three statements:
   rule before the next operational phase boundary — or note it in the checkpoint receipt
   if stopped. Operational rules go in this file (mirror them to `AGENTS.md`);
   scientific or trust-state facts go in the relevant `CONTEXT.md`, and a
-  `CONTEXT.md` write inside `analysis/` or `pipeline/` is a separately
-  scoped submodule step, never a side effect. A chat correction helps once;
+  `CONTEXT.md` write inside `analysis/` is a separately scoped submodule
+  step, never a side effect. A chat correction helps once;
   a written rule helps every later session.
 
 ## Verification
@@ -291,8 +293,8 @@ python3 analysis/scripts/kb search "<topic>"   # filter: --source tickets|docs|g
 ```
 
 - Searches manuscript documents, wayfinder tickets, Git history (parent
-  repository and `pipeline/` submodule), pipeline code, configurations, and
-  cited references.
+  repository and the `analysis/` submodule), analysis code, configurations,
+  and cited references.
 - Refresh with `make kb-index` only after the underlying changes are
   verified.
 - See
@@ -310,9 +312,8 @@ python3 analysis/scripts/kb search "<topic>"   # filter: --source tickets|docs|g
   [`analysis/docs/agents/issue-tracker.md`](analysis/docs/agents/issue-tracker.md).
 - Triage labels: default Matt Pocock skill labels; see
   [`analysis/docs/agents/triage-labels.md`](analysis/docs/agents/triage-labels.md).
-- Domain documents: manuscript context in
-  [`analysis/CONTEXT.md`](analysis/CONTEXT.md), fitting context in
-  [`pipeline/CONTEXT.md`](pipeline/CONTEXT.md); see
+- Domain documents: manuscript and fitting context both in
+  [`analysis/CONTEXT.md`](analysis/CONTEXT.md); see
   [`analysis/docs/agents/domain.md`](analysis/docs/agents/domain.md).
 - Context files carry scientific and trust-state information; this file
   carries standing operational instructions.
@@ -367,7 +368,7 @@ silence resolves the item instead of leaving it open indefinitely.
 ## Standing authorization: branches and pull requests
 
 Granted 2026-07-08, cross-session, for focused Git branch and pull-request
-work in `Faber2026`, `Faber2026-analysis`, and `dsa110-FLITS`:
+work in `Faber2026` and `Faber2026-analysis`:
 
 - Agents may push focused branches and open or update pull requests without
   per-action approval when required by the current objective.
@@ -406,7 +407,7 @@ Guardrails:
 - Do not merge a divergent branch to avoid resolving its scope.
 - Changes spanning repositories require a separate verified checkpoint in
   each.
-- The `pipeline/` submodule pin is deliberate: never change it as a side
+- The `analysis/` submodule pin is deliberate: never change it as a side
   effect of a manuscript update — a pin change is a separately scoped,
   verified step.
 - Permission prompts are controlled outside the repository; do not modify
@@ -460,4 +461,4 @@ The chat summary points to the receipt rather than reproducing it.
 - Local burst products live under `~/Data/Faber2026/dsa110/` (DSA-110; Stokes-I cubes in `DSA_bursts/`) and `~/Data/Faber2026/chimefrb/` (CHIME/FRB; Stokes-I cubes in `CHIME_bursts/`); do not mix instruments across those trees or paper over layout drift with compatibility symlinks — fix referencing paths universally instead.
 - Product dispersion measures in `_cntr_bpc.npy` filenames are per-band archival referral values and can differ between CHIME and DSA for the same event.
 - Retained Mac worktrees and orphan clones need an explicit content disposition — land/integrate, superseded/obsolete, or preserve — with a receipt before retirement; subject-on-main alone does not prove superseded when unique patches remain.
-- The parent manuscript pins one submodule: `analysis/` is the research-control repository and its lockfile pins the reusable FLITS fitting library.
+- The parent manuscript pins one submodule: `analysis/` is the research-control repository, and it also houses all fitting code. Its lockfile no longer references FLITS; `dsa110-FLITS` is retired provenance and must not be imported at runtime.
