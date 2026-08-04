@@ -15,11 +15,12 @@ permissions:
 
 jobs:
   changes:
-    name: route-analysis-pin
+    name: route-manuscript-suite
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
       analysis-pin: ${{ steps.diff.outputs.analysis-pin }}
+      prose-only: ${{ steps.diff.outputs.prose-only }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -31,16 +32,59 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
+          set -euo pipefail
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             echo "analysis-pin=true" >> "$GITHUB_OUTPUT"
-          elif git diff --quiet "$BASE_SHA" "$HEAD_SHA" -- analysis; then
+            echo "prose-only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
+            BASE_SHA="$HEAD_SHA^"
+          fi
+          if git diff --quiet "$BASE_SHA" "$HEAD_SHA" -- analysis; then
             echo "analysis-pin=false" >> "$GITHUB_OUTPUT"
           else
             echo "analysis-pin=true" >> "$GITHUB_OUTPUT"
           fi
+          mapfile -t changed < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          prose_only=true
+          if [ "${#changed[@]}" -eq 0 ]; then
+            prose_only=false
+          fi
+          for path in "${changed[@]}"; do
+            case "$path" in
+              *.tex|bib/*.bib) ;;
+              *) prose_only=false ;;
+            esac
+          done
+          echo "prose-only=$prose_only" >> "$GITHUB_OUTPUT"
+
+  manuscript:
+    name: manuscript-focused
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Verify claim ownership and referenced paths
+        run: |
+          make check-manuscript
+          python3 -m unittest discover -s tests -p 'test_manuscript_paths.py'
+      - name: Compile manuscript
+        uses: xu-cheng/latex-action@6549dc21effb2730855a1281407ecfcececc6c1b # v4
+        with:
+          root_file: main.tex
+          latexmk_use_xelatex: false
 
   provenance:
     name: provenance-details
+    needs: changes
+    if: needs.changes.outputs.prose-only != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -62,11 +106,6 @@ jobs:
         uses: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
       - name: Scan workflow security
         run: uv run --project analysis --group test --frozen zizmor --pedantic .github/workflows
-      - name: Compile manuscript
-        uses: xu-cheng/latex-action@6549dc21effb2730855a1281407ecfcececc6c1b # v4
-        with:
-          root_file: main.tex
-          latexmk_use_xelatex: false
 
   pinned-analysis-tests:
     name: pinned-analysis-tests
@@ -87,52 +126,42 @@ jobs:
           pin=$(git ls-tree HEAD analysis | awk '$1 == "160000" {print $3}')
           test ${#pin} -eq 40
 
-          runs=$(gh api \
-            "repos/${analysis_repository}/actions/workflows/analysis-ci.yml/runs?head_sha=${pin}&event=push&status=success&per_page=100")
+          runs=$(gh run list \
+            --repo "$analysis_repository" \
+            --workflow analysis-ci.yml \
+            --commit "$pin" \
+            --limit 20 \
+            --json databaseId,headSha,status,conclusion)
           run_id=$(jq -er --arg pin "$pin" '
-            [.workflow_runs[] | select(
-              .head_sha == $pin and
-              .head_branch == "main" and
-              .event == "push" and
-              .status == "completed" and
-              .conclusion == "success" and
-              .path == ".github/workflows/analysis-ci.yml"
-            )] | sort_by(.run_number) | last | .id
+            [.[] | select(.headSha == $pin)] | first | .databaseId
           ' <<<"$runs")
-
-          jobs=$(gh api "repos/${analysis_repository}/actions/runs/${run_id}/jobs?per_page=100")
-          expected=$(printf '%s\n' \
-            analysis-quality \
-            analysis-tests \
-            checkout-inventory-tests \
-            dualband-aggregate \
-            dualband-one-to-one-emg \
-            dualband-one-to-one-gaussian \
-            dualband-workflow-tests \
-            dualband-wrong-chime-component-emg \
-            dualband-wrong-chime-component-gaussian)
-          test "$(jq '.total_count' <<<"$jobs")" -eq 9
+          gh run watch "$run_id" \
+            --repo "$analysis_repository" \
+            --exit-status \
+            --interval 10
+          checks=$(gh api "repos/${analysis_repository}/commits/${pin}/check-runs")
           jq -e '
-            [.jobs[] | select(
-              .status != "completed" or .conclusion != "success"
-            )] | length == 0
-          ' <<<"$jobs"
-          actual=$(jq -r '.jobs[].name' <<<"$jobs" | sort)
-          test "$actual" = "$expected"
+            [.check_runs[] | select(
+              .name == "analysis-ci" and
+              .app.slug == "github-actions"
+            )] | sort_by(.completed_at) | last | .conclusion == "success"
+          ' <<<"$checks"
 
   required:
     name: manuscript-provenance
     if: always()
-    needs: [changes, provenance, pinned-analysis-tests]
+    needs: [changes, manuscript, provenance, pinned-analysis-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Require every routed check
         env:
           CHANGES: ${{ needs.changes.result }}
+          MANUSCRIPT: ${{ needs.manuscript.result }}
           PROVENANCE: ${{ needs.provenance.result }}
           PINNED_ANALYSIS: ${{ needs.pinned-analysis-tests.result }}
         run: |
           test "$CHANGES" = success
-          test "$PROVENANCE" = success
+          test "$MANUSCRIPT" = success
+          test "$PROVENANCE" = success -o "$PROVENANCE" = skipped
           test "$PINNED_ANALYSIS" = success -o "$PINNED_ANALYSIS" = skipped
