@@ -50,7 +50,7 @@ def test_analysis_ci_partitions_the_original_suite_exactly_once() -> None:
     workflow = yaml.safe_load(WORKFLOW.read_text())
     jobs = workflow["jobs"]
     general = jobs["analysis-tests"]
-    dualband = jobs["dualband-workflow-tests"]
+    dualband = jobs["dualband-aggregate"]
     inventory = jobs["checkout-inventory-tests"]
     all_commands = "\n".join(
         command for job in jobs.values() for command in _run_commands(job)
@@ -65,23 +65,13 @@ def test_analysis_ci_partitions_the_original_suite_exactly_once() -> None:
     general_command = "\n".join(_run_commands(general))
     assert f"--ignore={DUALBAND_MODULE}" in general_command
     assert f"--ignore={INVENTORY_MODULE}" in general_command
-    assert dualband["needs"] == ["changes", "dualband-aggregate"]
+    assert dualband["needs"] == ["changes", "dualband-fit-cell"]
     test_step = next(
         step for step in dualband["steps"] if DUALBAND_MODULE in step.get("run", "")
     )
     assert test_step["env"]["FABER2026_DUALBAND_PUBLISHED_FIXTURE"] == (
-        "${{ runner.temp }}/dualband-published"
+        "${{ runner.temp }}/dualband-results/dualband-burst-models/synthetic"
     )
-    downloads = [
-        step
-        for step in dualband["steps"]
-        if step.get("uses", "").startswith("actions/download-artifact@")
-    ]
-    assert len(downloads) == 1
-    assert downloads[0]["with"] == {
-        "name": "dualband-aggregate-${{ github.sha }}",
-        "path": "${{ runner.temp }}/dualband-published",
-    }
 
 
 def test_analysis_ci_pytest_partitions_are_complete_and_disjoint() -> None:
@@ -124,33 +114,41 @@ def test_analysis_ci_declares_fixed_four_cell_serial_matrix() -> None:
                 assert len(step["uses"].rsplit("@", 1)[1].split()[0]) == 40
 
 
-def test_registry_only_changes_use_the_fast_lane() -> None:
+def test_analysis_changes_use_three_routed_lanes() -> None:
     workflow = yaml.safe_load(WORKFLOW.read_text())
     jobs = workflow["jobs"]
     route = "\n".join(_run_commands(jobs["changes"]))
-    assert "results-registry.toml" in route
-    assert "results-registry-claim-owners.toml" in route
-    assert "registry-only=$registry_only" in route
+    assert "classify_ci_changes.py" in route
+    assert "lane=$lane" in route
     assert jobs["registry-validation"]["if"] == (
-        "needs.changes.outputs.registry-only == 'true'"
+        "needs.changes.outputs.lane == 'registry'"
     )
     for name in (
         "analysis-tests",
-        "dualband-workflow-tests",
         "checkout-inventory-tests",
         "dualband-fit-cell",
         "dualband-aggregate",
-        "analysis-quality",
     ):
-        assert jobs[name]["if"] == "needs.changes.outputs.full-suite == 'true'"
+        assert jobs[name]["if"] == "needs.changes.outputs.lane == 'full'"
+    assert jobs["analysis-quality"]["if"] == (
+        "needs.changes.outputs.lane != 'registry'"
+    )
+
+
+def test_draft_pull_requests_defer_ci_until_ready() -> None:
+    workflow = yaml.safe_load(WORKFLOW.read_text())
+    jobs = workflow["jobs"]
+    assert "draft == false" in jobs["changes"]["if"]
+    assert "draft == false" in jobs["required"]["if"]
 
 
 def test_analysis_ci_exposes_one_stable_required_check() -> None:
     workflow = yaml.safe_load(WORKFLOW.read_text())
     required = workflow["jobs"]["required"]
     assert required["name"] == "analysis-ci"
-    assert required["if"] == "always()"
+    assert required["if"].startswith("always()")
     command = "\n".join(_run_commands(required))
-    assert 'if [ "$FULL_SUITE" = true ]' in command
+    assert 'if [ "$LANE" = full ]' in command
+    assert 'elif [ "$LANE" = quality ]' in command
     assert 'test "$REGISTRY_VALIDATION" = success' in command
     assert 'test "$DUALBAND_FIT" = success' in command

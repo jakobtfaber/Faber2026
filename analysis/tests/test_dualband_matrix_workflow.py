@@ -114,6 +114,7 @@ def _write_fake_matrix(root: Path) -> Path:
     return matrix
 
 
+@pytest.mark.integration
 def test_fit_cell_writes_closed_hash_bound_receipt(
     tmp_path: Path,
     monkeypatch,

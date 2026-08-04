@@ -2,6 +2,7 @@ name: Analysis continuous integration
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
     branches: [main]
   workflow_dispatch:
@@ -16,15 +17,14 @@ permissions:
 jobs:
   changes:
     name: route-analysis-suite
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
-      full-suite: ${{ steps.route.outputs.full-suite }}
-      registry-only: ${{ steps.route.outputs.registry-only }}
+      lane: ${{ steps.route.outputs.lane }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          fetch-depth: 0
           persist-credentials: false
       - id: route
         env:
@@ -34,35 +34,22 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$EVENT_NAME" = workflow_dispatch ]; then
-            echo "full-suite=true" >> "$GITHUB_OUTPUT"
-            echo "registry-only=false" >> "$GITHUB_OUTPUT"
+            echo "lane=full" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
             BASE_SHA="$HEAD_SHA^"
+          elif ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
           fi
           mapfile -t changed < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
-          registry_only=true
-          if [ "${#changed[@]}" -eq 0 ]; then
-            registry_only=false
-          fi
-          for path in "${changed[@]}"; do
-            case "$path" in
-              RESULTS.md|docs/rse/control/results-registry.toml|docs/rse/control/results-registry-claim-owners.toml) ;;
-              *) registry_only=false ;;
-            esac
-          done
-          echo "registry-only=$registry_only" >> "$GITHUB_OUTPUT"
-          if [ "$registry_only" = true ]; then
-            echo "full-suite=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "full-suite=true" >> "$GITHUB_OUTPUT"
-          fi
+          lane=$(python3 scripts/classify_ci_changes.py "${changed[@]}")
+          echo "lane=$lane" >> "$GITHUB_OUTPUT"
 
   registry-validation:
     name: registry-validation
     needs: changes
-    if: needs.changes.outputs.registry-only == 'true'
+    if: needs.changes.outputs.lane == 'registry'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -84,7 +71,7 @@ jobs:
   analysis-tests:
     name: analysis-tests
     needs: changes
-    if: needs.changes.outputs.full-suite == 'true'
+    if: needs.changes.outputs.lane == 'full'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -107,40 +94,10 @@ jobs:
             --ignore=tests/test_checkout_inventory.py
           bash tests/test_journal_append.sh
 
-  dualband-workflow-tests:
-    name: dualband-workflow-tests
-    needs: [changes, dualband-aggregate]
-    if: needs.changes.outputs.full-suite == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
-        with:
-          python-version: "3.12"
-      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
-        with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: dualband-aggregate-${{ github.sha }}
-          path: ${{ runner.temp }}/dualband-published
-      - run: |
-          PYTHONPATH="$PWD:$PWD/scripts" \
-            uv run --group test --frozen python -m pytest -q \
-            --standalone-analysis \
-            -m "not slow and not network and not external_data and not historical_replay and not integration" \
-            tests/test_permanent_dualband_workflow.py
-        env:
-          FABER2026_DUALBAND_PUBLISHED_FIXTURE: ${{ runner.temp }}/dualband-published
-
   checkout-inventory-tests:
     name: checkout-inventory-tests
     needs: changes
-    if: needs.changes.outputs.full-suite == 'true'
+    if: needs.changes.outputs.lane == 'full'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -164,7 +121,7 @@ jobs:
   dualband-fit-cell:
     name: dualband-${{ matrix.association }}-${{ matrix.morphology }}
     needs: changes
-    if: needs.changes.outputs.full-suite == 'true'
+    if: needs.changes.outputs.lane == 'full'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -215,7 +172,7 @@ jobs:
   dualband-aggregate:
     name: dualband-aggregate
     needs: [changes, dualband-fit-cell]
-    if: needs.changes.outputs.full-suite == 'true'
+    if: needs.changes.outputs.lane == 'full'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -244,6 +201,15 @@ jobs:
             --event synthetic --stage aggregate \
             --cells-root "$RUNNER_TEMP/dualband-cells" \
             --output-root "$RUNNER_TEMP/dualband-results"
+      - name: Validate the published workflow fixture
+        env:
+          FABER2026_DUALBAND_PUBLISHED_FIXTURE: ${{ runner.temp }}/dualband-results/dualband-burst-models/synthetic
+        run: |
+          PYTHONPATH="$PWD:$PWD/scripts" \
+            uv run --group test --frozen python -m pytest -q \
+            --standalone-analysis \
+            -m "not slow and not network and not external_data and not historical_replay and not integration" \
+            tests/test_permanent_dualband_workflow.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: dualband-aggregate-${{ github.sha }}
@@ -255,13 +221,12 @@ jobs:
   analysis-quality:
     name: analysis-quality
     needs: changes
-    if: needs.changes.outputs.full-suite == 'true'
+    if: needs.changes.outputs.lane != 'registry'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -270,7 +235,11 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
-      - run: make lint
+      - run: |
+          if [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          fi
+          make lint
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
       - run: uv run --group test --frozen zizmor --pedantic .github/workflows
@@ -278,12 +247,11 @@ jobs:
 
   required:
     name: analysis-ci
-    if: always()
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs:
       - changes
       - registry-validation
       - analysis-tests
-      - dualband-workflow-tests
       - checkout-inventory-tests
       - dualband-fit-cell
       - dualband-aggregate
@@ -294,10 +262,9 @@ jobs:
       - name: Require the routed validation lane
         env:
           CHANGES: ${{ needs.changes.result }}
-          FULL_SUITE: ${{ needs.changes.outputs.full-suite }}
+          LANE: ${{ needs.changes.outputs.lane }}
           REGISTRY_VALIDATION: ${{ needs.registry-validation.result }}
           ANALYSIS_TESTS: ${{ needs.analysis-tests.result }}
-          DUALBAND_WORKFLOW: ${{ needs.dualband-workflow-tests.result }}
           CHECKOUT_INVENTORY: ${{ needs.checkout-inventory-tests.result }}
           DUALBAND_FIT: ${{ needs.dualband-fit-cell.result }}
           DUALBAND_AGGREGATE: ${{ needs.dualband-aggregate.result }}
@@ -305,13 +272,19 @@ jobs:
         run: |
           set -euo pipefail
           test "$CHANGES" = success
-          if [ "$FULL_SUITE" = true ]; then
+          if [ "$LANE" = full ]; then
             test "$REGISTRY_VALIDATION" = skipped
             test "$ANALYSIS_TESTS" = success
-            test "$DUALBAND_WORKFLOW" = success
             test "$CHECKOUT_INVENTORY" = success
             test "$DUALBAND_FIT" = success
             test "$DUALBAND_AGGREGATE" = success
+            test "$ANALYSIS_QUALITY" = success
+          elif [ "$LANE" = quality ]; then
+            test "$REGISTRY_VALIDATION" = skipped
+            test "$ANALYSIS_TESTS" = skipped
+            test "$CHECKOUT_INVENTORY" = skipped
+            test "$DUALBAND_FIT" = skipped
+            test "$DUALBAND_AGGREGATE" = skipped
             test "$ANALYSIS_QUALITY" = success
           else
             test "$REGISTRY_VALIDATION" = success
