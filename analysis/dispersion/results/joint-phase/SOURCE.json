@@ -2,7 +2,7 @@
   "source_repository": "https://github.com/jakobtfaber/dsa110-FLITS",
   "source_branch": "agent/dm-phase-v2",
   "source_commit": "c07f1f1660ee0736459eead04ebf69eaa82aebc4",
-  "copied_into": "Faber2026/analysis/dm-joint-phase-v2",
+  "copied_into": "Faber2026/analysis/dispersion/results/joint-phase",
   "contents": [
     "custom phase-coherence estimator",
     "end-to-end CHIME and DSA campaign runner",
@@ -10,7 +10,6 @@
     "held-out injection validator",
     "raw-product provenance writer",
     "reference-parity and recovery tests",
-    "complete numerical fits",
-    "all-event and per-event diagnostics"
+    "complete numerical fits"
   ]
 }
