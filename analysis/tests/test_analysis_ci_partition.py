@@ -65,7 +65,7 @@ def test_analysis_ci_partitions_the_original_suite_exactly_once() -> None:
     general_command = "\n".join(_run_commands(general))
     assert f"--ignore={DUALBAND_MODULE}" in general_command
     assert f"--ignore={INVENTORY_MODULE}" in general_command
-    assert dualband["needs"] == "dualband-aggregate"
+    assert dualband["needs"] == ["changes", "dualband-aggregate"]
     test_step = next(
         step for step in dualband["steps"] if DUALBAND_MODULE in step.get("run", "")
     )
@@ -114,7 +114,7 @@ def test_analysis_ci_declares_fixed_four_cell_serial_matrix() -> None:
     assert "--stage fit-cell" in matrix_commands
     assert "worker_processes" not in matrix_commands
     aggregate = jobs["dualband-aggregate"]
-    assert aggregate["needs"] == "dualband-fit-cell"
+    assert aggregate["needs"] == ["changes", "dualband-fit-cell"]
     assert "--stage aggregate" in "\n".join(_run_commands(aggregate))
     for job in (matrix, aggregate):
         assert job["permissions"] == {"contents": "read"}
@@ -122,3 +122,35 @@ def test_analysis_ci_declares_fixed_four_cell_serial_matrix() -> None:
             if isinstance(step, dict) and "uses" in step:
                 assert "@" in step["uses"]
                 assert len(step["uses"].rsplit("@", 1)[1].split()[0]) == 40
+
+
+def test_registry_only_changes_use_the_fast_lane() -> None:
+    workflow = yaml.safe_load(WORKFLOW.read_text())
+    jobs = workflow["jobs"]
+    route = "\n".join(_run_commands(jobs["changes"]))
+    assert "results-registry.toml" in route
+    assert "results-registry-claim-owners.toml" in route
+    assert "registry-only=$registry_only" in route
+    assert jobs["registry-validation"]["if"] == (
+        "needs.changes.outputs.registry-only == 'true'"
+    )
+    for name in (
+        "analysis-tests",
+        "dualband-workflow-tests",
+        "checkout-inventory-tests",
+        "dualband-fit-cell",
+        "dualband-aggregate",
+        "analysis-quality",
+    ):
+        assert jobs[name]["if"] == "needs.changes.outputs.full-suite == 'true'"
+
+
+def test_analysis_ci_exposes_one_stable_required_check() -> None:
+    workflow = yaml.safe_load(WORKFLOW.read_text())
+    required = workflow["jobs"]["required"]
+    assert required["name"] == "analysis-ci"
+    assert required["if"] == "always()"
+    command = "\n".join(_run_commands(required))
+    assert 'if [ "$FULL_SUITE" = true ]' in command
+    assert 'test "$REGISTRY_VALIDATION" = success' in command
+    assert 'test "$DUALBAND_FIT" = success' in command

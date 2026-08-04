@@ -88,11 +88,11 @@ def test_toa_claims_have_semantic_owners() -> None:
         for item in _registry()["prose_source"]
         if item["source"] == "sections/toa.tex"
     )
-    owners = {claim["line"]: claim["owner_result_id"] for claim in source["claims"]}
-    assert owners[22] == "association.sample_table"  # dispersion constant
-    assert owners[173] == "association.pcc_sum"  # P_cc equation
-    assert owners[274] == "association.toa_offset_figure"  # residual diagnostic
-    assert owners[343] == "association.pcc_sum"  # post-figure P_cc claim
+    owners = {claim["fingerprint"]: claim["owner_result_id"] for claim in source["claims"]}
+    assert owners["181de351d2b7b8cf"] == "association.sample_table"
+    assert owners["f4dc628b950eb1fe"] == "association.pcc_sum"
+    assert owners["6493454ed49a1e8b"] == "association.toa_offset_figure"
+    assert owners["2347277ed1ec0470"] == "association.pcc_sum"
 
 
 def test_association_cards_and_pending_toa_have_disjoint_scope() -> None:
@@ -139,7 +139,10 @@ def test_unrelated_known_claim_owner_fails_semantic_review() -> None:
         for item in registry["prose_source"]
         if item["source"] == "sections/toa.tex"
     )
-    claim = next(item for item in source["claims"] if item["line"] == 173)
+    claim = next(
+        item for item in source["claims"]
+        if item["fingerprint"] == "f4dc628b950eb1fe"
+    )
     claim["owner_result_id"] = "energies.burst_energies_table"
     errors = validate_registry(registry, _manuscript_root())
     assert "claim ownership differs from independent semantic review" in errors
@@ -414,12 +417,8 @@ def test_prose_claim_nested_schema_and_types_are_exact() -> None:
     registry = deepcopy(_registry())
     claim = registry["prose_source"][0]["claims"][0]
     claim["unexpected"] = "value"
-    claim["line"] = True
     errors = validate_registry(registry, _manuscript_root())
     assert any("prose claim has incorrect fields" in error for error in errors)
-    assert any(
-        "prose claim line must be a positive integer" in error for error in errors
-    )
 
 
 def test_artifact_coverage_nested_schema_and_types_are_exact() -> None:

@@ -59,7 +59,6 @@ def generate(root: Path, registry: dict) -> str:
             fields = [
                 f'fingerprint = {quoted(str(discovered["fingerprint"]))}',
                 f'occurrence = {discovered["occurrence"]}',
-                f'line = {discovered["line"]}',
                 f'text = {quoted(str(discovered["text"]))}',
             ]
             if previous.get("exclusion_reason"):

@@ -14,8 +14,77 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    name: route-analysis-suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      full-suite: ${{ steps.route.outputs.full-suite }}
+      registry-only: ${{ steps.route.outputs.registry-only }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: route
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = workflow_dispatch ]; then
+            echo "full-suite=true" >> "$GITHUB_OUTPUT"
+            echo "registry-only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
+            BASE_SHA="$HEAD_SHA^"
+          fi
+          mapfile -t changed < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          registry_only=true
+          if [ "${#changed[@]}" -eq 0 ]; then
+            registry_only=false
+          fi
+          for path in "${changed[@]}"; do
+            case "$path" in
+              RESULTS.md|docs/rse/control/results-registry.toml|docs/rse/control/results-registry-claim-owners.toml) ;;
+              *) registry_only=false ;;
+            esac
+          done
+          echo "registry-only=$registry_only" >> "$GITHUB_OUTPUT"
+          if [ "$registry_only" = true ]; then
+            echo "full-suite=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "full-suite=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  registry-validation:
+    name: registry-validation
+    needs: changes
+    if: needs.changes.outputs.registry-only == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: |
+          uv run --group test --frozen python -m pytest -q \
+            --standalone-analysis tests/test_results_registry.py
+          python scripts/render_results_registry.py --check
+
   analysis-tests:
     name: analysis-tests
+    needs: changes
+    if: needs.changes.outputs.full-suite == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -40,7 +109,8 @@ jobs:
 
   dualband-workflow-tests:
     name: dualband-workflow-tests
-    needs: dualband-aggregate
+    needs: [changes, dualband-aggregate]
+    if: needs.changes.outputs.full-suite == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -69,6 +139,8 @@ jobs:
 
   checkout-inventory-tests:
     name: checkout-inventory-tests
+    needs: changes
+    if: needs.changes.outputs.full-suite == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -91,6 +163,8 @@ jobs:
 
   dualband-fit-cell:
     name: dualband-${{ matrix.association }}-${{ matrix.morphology }}
+    needs: changes
+    if: needs.changes.outputs.full-suite == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -140,7 +214,8 @@ jobs:
 
   dualband-aggregate:
     name: dualband-aggregate
-    needs: dualband-fit-cell
+    needs: [changes, dualband-fit-cell]
+    if: needs.changes.outputs.full-suite == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -179,6 +254,8 @@ jobs:
 
   analysis-quality:
     name: analysis-quality
+    needs: changes
+    if: needs.changes.outputs.full-suite == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -198,3 +275,50 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
       - run: uv run --group test --frozen zizmor --pedantic .github/workflows
       - uses: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
+
+  required:
+    name: analysis-ci
+    if: always()
+    needs:
+      - changes
+      - registry-validation
+      - analysis-tests
+      - dualband-workflow-tests
+      - checkout-inventory-tests
+      - dualband-fit-cell
+      - dualband-aggregate
+      - analysis-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require the routed validation lane
+        env:
+          CHANGES: ${{ needs.changes.result }}
+          FULL_SUITE: ${{ needs.changes.outputs.full-suite }}
+          REGISTRY_VALIDATION: ${{ needs.registry-validation.result }}
+          ANALYSIS_TESTS: ${{ needs.analysis-tests.result }}
+          DUALBAND_WORKFLOW: ${{ needs.dualband-workflow-tests.result }}
+          CHECKOUT_INVENTORY: ${{ needs.checkout-inventory-tests.result }}
+          DUALBAND_FIT: ${{ needs.dualband-fit-cell.result }}
+          DUALBAND_AGGREGATE: ${{ needs.dualband-aggregate.result }}
+          ANALYSIS_QUALITY: ${{ needs.analysis-quality.result }}
+        run: |
+          set -euo pipefail
+          test "$CHANGES" = success
+          if [ "$FULL_SUITE" = true ]; then
+            test "$REGISTRY_VALIDATION" = skipped
+            test "$ANALYSIS_TESTS" = success
+            test "$DUALBAND_WORKFLOW" = success
+            test "$CHECKOUT_INVENTORY" = success
+            test "$DUALBAND_FIT" = success
+            test "$DUALBAND_AGGREGATE" = success
+            test "$ANALYSIS_QUALITY" = success
+          else
+            test "$REGISTRY_VALIDATION" = success
+            test "$ANALYSIS_TESTS" = skipped
+            test "$DUALBAND_WORKFLOW" = skipped
+            test "$CHECKOUT_INVENTORY" = skipped
+            test "$DUALBAND_FIT" = skipped
+            test "$DUALBAND_AGGREGATE" = skipped
+            test "$ANALYSIS_QUALITY" = skipped
+          fi

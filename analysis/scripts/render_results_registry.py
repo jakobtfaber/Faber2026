@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "docs/rse/control/results-registry.toml"
 CLAIM_OWNERS = ROOT / "docs/rse/control/results-registry-claim-owners.toml"
 OUTPUT = ROOT / "RESULTS.md"
-EXPECTED_SCHEMA_VERSION = 6
+EXPECTED_SCHEMA_VERSION = 7
 EXPECTED_REGISTRY_FIELDS: dict[str, type] = {
     "schema_version": int,
     "updated": str,
@@ -31,7 +31,7 @@ EXPECTED_CLAIM_OWNER_FIELDS = {"schema_version", "source"}
 EXPECTED_CLAIM_OWNER_SOURCE_FIELDS = {"path", "claims"}
 CLAIM_OWNER_BASE_FIELDS = {"fingerprint", "occurrence"}
 EXPECTED_PROSE_SOURCE_FIELDS = {"source", "claims"}
-PROSE_CLAIM_BASE_FIELDS = {"fingerprint", "occurrence", "line", "text"}
+PROSE_CLAIM_BASE_FIELDS = {"fingerprint", "occurrence", "text"}
 EXPECTED_ARTIFACT_COVERAGE_FIELDS = {"result_id", "paths"}
 EXPECTED_INPUT_EXCEPTION_FIELDS = {"name", "class", "path", "status", "reason"}
 CANONICAL_INPUT_EXCEPTION_NAMES = (
@@ -797,10 +797,6 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
             (claim["fingerprint"], claim["occurrence"]): claim["text"]
             for claim in numeric_claims(root / relative)
         }
-        actual_lines = {
-            (claim["fingerprint"], claim["occurrence"]): claim["line"]
-            for claim in numeric_claims(root / relative)
-        }
         declared_claims = record.get("claims", [])
         if not isinstance(declared_claims, list) or not all(
             isinstance(claim, dict) for claim in declared_claims
@@ -840,10 +836,6 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
                 errors.append(
                     f"{relative}: prose claim occurrence must be a positive integer"
                 )
-            if type(claim.get("line")) is not int or claim.get("line", 0) < 1:
-                errors.append(
-                    f"{relative}: prose claim line must be a positive integer"
-                )
             if (
                 not isinstance(claim.get("text"), str)
                 or not claim.get("text", "").strip()
@@ -855,12 +847,6 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
                 errors.append(
                     f"{relative}:{claim.get('fingerprint')}:{claim.get('occurrence')}: "
                     "claim text is stale"
-                )
-            expected_line = actual_lines.get(claim_key)
-            if claim.get("line") != expected_line:
-                errors.append(
-                    f"{relative}:{claim.get('fingerprint')}:{claim.get('occurrence')}: "
-                    "claim line is stale"
                 )
             owner = claim.get("owner_result_id")
             exclusion = claim.get("exclusion_reason")
