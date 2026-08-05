@@ -35,7 +35,13 @@ graphify-out/
 # Local agent/runtime state. Keep these on this machine, but do not publish them
 # to GitHub or mirror them into Overleaf.
 /.agents/
-/.claude/
+# Local Claude state stays out of the repo, but the tend bot's project skill
+# must be tracked so its workflow runs load it. Same technique as /.github/
+# below: exclude the contents, then re-include the one tracked subtree.
+/.claude/*
+!/.claude/skills/
+/.claude/skills/*
+!/.claude/skills/running-tend/
 /.claude-science/
 /.codex/
 /.cursor/

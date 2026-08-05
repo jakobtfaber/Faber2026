@@ -1,0 +1,19 @@
+bot_name: tend-jakobtfaber
+
+# Actions are pinned to commit hashes to match the repository's existing
+# policy, which the provenance job enforces with `zizmor --pedantic`. These
+# two hashes are the same ones manuscript-provenance.yml already uses.
+setup:
+  - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+    name: Set up Python
+    with:
+      python-version: "3.12"
+  - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+    name: Set up uv
+    with:
+      enable-cache: true
+      cache-dependency-glob: analysis/uv.lock
+
+workflows:
+  ci-fix:
+    watched_workflows: ["Manuscript provenance"]
