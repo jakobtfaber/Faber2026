@@ -26,6 +26,16 @@ def test_scientific_products_fail_closed_to_full_lane() -> None:
     assert classify(["figures/catalog.yaml"]) == "full"
 
 
+def test_gitignore_changes_use_full_lane_so_the_notebook_policy_is_tested() -> None:
+    # `.gitignore` carries the notebook policy that `tests/test_notebook_policy.py`
+    # enforces, and that test only runs in the `full` lane. Routing a
+    # `.gitignore`-only change to `quality` would give it no test coverage at
+    # all -- `scripts/lint_changed.py` diffs only `*.py` -- so reverting the
+    # notebook ignore rules could land unchecked.
+    assert classify([".gitignore"]) == "full"
+    assert classify([".gitignore", "README.md"]) == "full"
+
+
 def test_code_dependencies_workflows_and_mixed_changes_use_full_lane() -> None:
     assert classify(["faber2026/burst_models/fit.py"]) == "full"
     assert classify(["pyproject.toml", "uv.lock"]) == "full"

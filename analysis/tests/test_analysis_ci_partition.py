@@ -1,3 +1,4 @@
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -140,6 +141,22 @@ def test_draft_pull_requests_defer_ci_until_ready() -> None:
     jobs = workflow["jobs"]
     assert "draft == false" in jobs["changes"]["if"]
     assert "draft == false" in jobs["required"]["if"]
+
+
+def test_required_gate_references_only_declared_environment_variables() -> None:
+    # The gate script runs under `set -euo pipefail`, so `-u` aborts the step on
+    # the first undeclared variable. A job removed from `needs:` must also have
+    # its assertions removed: #246 dropped `dualband-workflow-tests` and its
+    # `DUALBAND_WORKFLOW` declaration but left the assertion in the registry
+    # lane, which failed that lane closed until it was removed.
+    workflow = yaml.safe_load(WORKFLOW.read_text())
+    required = workflow["jobs"]["required"]
+    for step in required["steps"]:
+        declared = set(step.get("env", {}))
+        referenced = set(re.findall(r'"\$([A-Z_][A-Z0-9_]*)"', step.get("run", "")))
+        assert referenced <= declared, (
+            f"gate references undeclared variables: {sorted(referenced - declared)}"
+        )
 
 
 def test_analysis_ci_exposes_one_stable_required_check() -> None:

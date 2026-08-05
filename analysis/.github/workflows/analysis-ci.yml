@@ -289,7 +289,6 @@ jobs:
           else
             test "$REGISTRY_VALIDATION" = success
             test "$ANALYSIS_TESTS" = skipped
-            test "$DUALBAND_WORKFLOW" = skipped
             test "$CHECKOUT_INVENTORY" = skipped
             test "$DUALBAND_FIT" = skipped
             test "$DUALBAND_AGGREGATE" = skipped

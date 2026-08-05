@@ -29,7 +29,6 @@ def is_quality_only(path: str) -> bool:
     if is_scientific_product(path):
         return False
     return path.endswith(".md") or path.startswith("docs/") or path in {
-        ".gitignore",
         ".gitattributes",
         "LICENSE",
     }
