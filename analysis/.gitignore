@@ -76,3 +76,8 @@ graphify-out/
 /figure_review/artifacts/staging/*
 !/figure_review/artifacts/staging/fig3_halo_grid/
 !/figure_review/artifacts/staging/fig3_halo_grid/**
+
+# New exploratory notebooks live under ~/Data/Faber2026/workbench/.
+# Tracked notebooks are grandfathered via config/grandfathered-notebooks.txt.
+.ipynb_checkpoints/
+*.ipynb

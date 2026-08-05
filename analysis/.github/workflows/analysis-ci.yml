@@ -89,7 +89,7 @@ jobs:
           PYTHONPATH="$PWD:$PWD/scripts" \
             uv run --group test --frozen python -m pytest -q \
             --standalone-analysis \
-            -m "not slow and not network and not external_data and not historical_replay and not integration" \
+            -m "not slow and not network and not external_data and not historical_replay and not integration and not notebook_surface" \
             --ignore=tests/test_permanent_dualband_workflow.py \
             --ignore=tests/test_checkout_inventory.py
           bash tests/test_journal_append.sh
@@ -115,7 +115,7 @@ jobs:
           PYTHONPATH="$PWD:$PWD/scripts" \
             uv run --group test --frozen python -m pytest -q \
             --standalone-analysis \
-            -m "not slow and not network and not external_data and not historical_replay and not integration" \
+            -m "not slow and not network and not external_data and not historical_replay and not integration and not notebook_surface" \
             tests/test_checkout_inventory.py
 
   dualband-fit-cell:
@@ -208,7 +208,7 @@ jobs:
           PYTHONPATH="$PWD:$PWD/scripts" \
             uv run --group test --frozen python -m pytest -q \
             --standalone-analysis \
-            -m "not slow and not network and not external_data and not historical_replay and not integration" \
+            -m "not slow and not network and not external_data and not historical_replay and not integration and not notebook_surface" \
             tests/test_permanent_dualband_workflow.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

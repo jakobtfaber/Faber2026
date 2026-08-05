@@ -28,6 +28,9 @@ def is_scientific_product(path: str) -> bool:
 def is_quality_only(path: str) -> bool:
     if is_scientific_product(path):
         return False
+    # .gitignore is deliberately not quality-only: it is the enforcement point
+    # for the notebook policy (tests/test_notebook_policy.py), which only the
+    # full lane runs.
     return path.endswith(".md") or path.startswith("docs/") or path in {
         ".gitattributes",
         "LICENSE",

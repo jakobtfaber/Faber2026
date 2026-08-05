@@ -10,7 +10,7 @@ DUALBAND_MODULE = "tests/test_permanent_dualband_workflow.py"
 INVENTORY_MODULE = "tests/test_checkout_inventory.py"
 MARKERS = (
     "not slow and not network and not external_data and "
-    "not historical_replay and not integration"
+    "not historical_replay and not integration and not notebook_surface"
 )
 
 

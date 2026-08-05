@@ -4,7 +4,12 @@ MANUSCRIPT_ROOT_ABS := $(abspath $(MANUSCRIPT_ROOT))
 UV ?= uv
 DUALBAND_ENV ?= $(CURDIR)/.venv-dualband
 
-.PHONY: check-mount check-state test test-manuscript test-slow test-replay test-external lint ci figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch observations fit verify review
+.PHONY: check-mount check-state test test-manuscript test-slow test-replay test-external test-notebook lint ci figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch observations fit verify review
+
+test-notebook:
+	$(UV) lock --check
+	$(UV) run --group test --group notebook --locked \
+		python -m pytest tests/test_jupyter_surface.py -q
 
 EVENT ?=
 DUALBAND_OUTPUT_ROOT ?= $(CURDIR)
@@ -36,7 +41,7 @@ test:
 	PYTHONPATH="$(CURDIR):$(CURDIR)/scripts" \
 		$(UV) run --group test --frozen python -m pytest -q \
 		--standalone-analysis \
-		-m "not slow and not network and not external_data and not historical_replay and not integration"
+		-m "not slow and not network and not external_data and not historical_replay and not integration and not notebook_surface"
 	bash tests/test_journal_append.sh
 
 test-manuscript: check-mount

@@ -46,6 +46,11 @@ dualband = [
   "pypdf>=5.0",
   "scipy>=1.7",
 ]
+notebook = [
+  "ipykernel>=6.29",
+  "jupyter-client>=8.6",
+  "jupytext>=1.16",
+]
 test = [
   "pytest>=7.0",
   "pytest-cov>=4.0",
@@ -85,6 +90,7 @@ markers = [
   "historical_replay: replays frozen evidence or repository history",
   "integration: marks tests spanning multiple components",
   "network: marks tests requiring live network services",
+  "notebook_surface: requires the notebook dependency group; run via make test-notebook",
   "slow: marks tests as slow",
   "unit: marks isolated unit tests",
 ]

@@ -30,8 +30,26 @@ manuscript docs, wayfinder tickets, parent and analysis git history, analysis
 code, configs, and cited references, with ranked
 cross-source results. Filter with `--source tickets|docs|git|code|config|refs`.
 Refresh after changes with `make kb-index` (incremental, seconds when
-embeddings are current). See [`docs/rse/knowledge-base.md`](docs/rse/knowledge-base.md).
+embeddings are current). See
+[`docs/rse/ops/knowledge-base.md`](docs/rse/ops/knowledge-base.md).
 Fall back to grep for exhaustive sweeps (every call site, every match).
+
+## Live analysis and the Jupyter surface
+
+Interactive analysis follows
+[`docs/rse/ops/live-analysis.md`](docs/rse/ops/live-analysis.md): which
+workspace to open, which repository may be written, the five-line task header,
+where exploratory notebooks live, and how an accepted result reaches the
+manuscript.
+
+The repository-owned Jupyter surface — environment and lock, kernel
+specification, notebooks, data mounts, generated-output policy, bind address
+and port, start/stop commands, owner, recovery procedure, and admission smoke
+test — is defined in
+[`docs/rse/ops/jupyter-surface.md`](docs/rse/ops/jupyter-surface.md), written
+to the admission bar set by
+[`authority-10-choose-operational-ownership.md`](docs/rse/wayfinder/tickets/authority-10-choose-operational-ownership.md).
+Defined but not yet owner-ratified.
 
 ## Owner queue walkthrough
 
