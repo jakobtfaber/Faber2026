@@ -4,8 +4,8 @@ Manuscript: **Scattering, Scintillation, and Energetics of Fast Radio Bursts
 Codetected by CHIME/FRB and DSA-110**
 
 This repository is the compact manuscript authority synchronized with Overleaf.
-Research-control material lives in one pinned submodule. Its lockfile pins the
-reusable FLITS fitting package.
+Research-control material and the fitting code live in one pinned submodule,
+`analysis`.
 
 ## Layout
 
@@ -15,11 +15,11 @@ auth.tex          author and affiliation block
 sections/         manuscript sections and parked section drafts
 figures/          final embedded assets and figure catalog
 bib/refs.bib      bibliography
-analysis/         Faber2026-analysis submodule and locked FLITS environment
+analysis/         Faber2026-analysis submodule: research control and fitting code
 ```
 
 Overleaf compiles only the root TeX, bibliography, generated tables, and final
-figure assets. It does not need either submodule.
+figure assets. It does not need the submodule.
 
 ## Start here
 
