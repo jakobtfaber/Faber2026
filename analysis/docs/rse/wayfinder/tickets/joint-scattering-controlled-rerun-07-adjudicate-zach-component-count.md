@@ -77,6 +77,36 @@ artifacts for hash-bound review.
 
 Stop-state history: `docs/rse/specs/handoff-2026-07-31-20-23-zach-campaign-replan.md`.
 
+## Queued next steps (agent work, no owner decision pending)
+
+1. **Build the adjudicator.** No code yet applies the six MANIFEST acceptance
+   rules to the rung receipts; the campaign directory holds only the contract,
+   the schedule and the driver. Write it under
+   `scattering/studies/joint-refits/zach_count_20260729/`, developed against
+   the five completed seed-20220207 receipts so it is ready when wave 1 lands.
+   It must read receipts and joint products only, and report per rule: output
+   completeness and stopping threshold; log-evidence step against the
+   threshold of 5 after subtracting twice the combined numerical uncertainty,
+   evaluated at every fixed gain-prior variance; every component posterior
+   arrival time inside its own band's fitted window; overlapping
+   pulse-broadening exponent posteriors between neighbouring counts with none
+   at a prior edge; bounded non-null amplitude for the added component. It
+   decides nothing on its own — the per-band visual residual review and the
+   owner's morphology review stay separate, and no value is promoted.
+2. **Verify wave 1.** When the nine relaunched rungs finish, confirm 14 of 27
+   receipts read `outputs_complete: true` with the complete five-artifact
+   output set, using the re-runnable check in
+   `docs/rse/verify/zach-count-relaunch-20260804/README.md`.
+3. **Waves 2 and 3.** Launch the remaining thirteen rungs (`C2D4:s2-100` and
+   the three `C2D5` rungs at seed-20220208, then all nine seed-20220209 rungs)
+   under the same unchanged contract.
+
+Also corrected 2026-08-04: issue #205's body still specified native
+32.768-microsecond DSA-110 sampling, which the owner's 2026-07-30 decision
+superseded. The issue body now states 65.536 microseconds and cites this ticket
+and the frozen contract. The contract and the running campaign were already
+correct; only the issue text was stale.
+
 ## Owner decision card — resolved 2026-08-04
 
 Retained for provenance. The owner answered this card on 2026-08-04 with a
