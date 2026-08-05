@@ -46,7 +46,7 @@ jobs:
           github_token: ${{ secrets.TEND_BOT_TOKEN }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          bot_name: tend-faber2026
+          bot_name: tend-jakobtfaber
           model: opus
           prompt: |
             /tend-ci-runner:nightly

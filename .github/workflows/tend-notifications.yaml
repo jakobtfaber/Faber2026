@@ -94,7 +94,7 @@ jobs:
             PR_INFO=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUM" --jq '"\(.user.login) \(.state)"' 2>/dev/null) || continue
             PR_AUTHOR=${PR_INFO%% *}
             PR_STATE=${PR_INFO##* }
-            if [ "$PR_AUTHOR" = "tend-faber2026" ] && [ "$PR_STATE" = "closed" ]; then
+            if [ "$PR_AUTHOR" = "tend-jakobtfaber" ] && [ "$PR_STATE" = "closed" ]; then
               gh api "notifications/threads/$tid" -X PATCH || true
             fi
           done
@@ -152,7 +152,7 @@ jobs:
           github_token: ${{ secrets.TEND_BOT_TOKEN }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          bot_name: tend-faber2026
+          bot_name: tend-jakobtfaber
           model: opus
           prompt: |
             /tend-ci-runner:notifications

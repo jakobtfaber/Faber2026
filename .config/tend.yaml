@@ -1,4 +1,4 @@
-bot_name: tend-faber2026
+bot_name: tend-jakobtfaber
 
 setup:
   - uses: actions/setup-python@v6
