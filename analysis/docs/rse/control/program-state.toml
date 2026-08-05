@@ -78,14 +78,14 @@ needs_owner = true
 id = "zach-component-count-adjudication"
 title = "Zach bounded-window C2D3/C2D4/C2D5 adjudication"
 strand = "scattering"
-status = "proposed"
+status = "in_progress"
 owner = "jakobtfaber"
 issue = 205                       # GitHub issue (0 = not yet filed)
 branch = ""
 worktree = ""
 pr = 0
 gates = ["controlled C2D3/C2D4/C2D5 contract", "fixed s2 = 1, 10, 100", "same-mode and in-window components", "hash-bound owner review before promotion"]
-next_action = "complete the clean Zach C2D4 rerun, then execute controlled-rerun ticket 07"
+next_action = "wave 1 of the owner-chosen restart is running on h17 (9 rungs); verify 14 of 27 receipts, then provisionally adjudicate the nine-cell seed-20220207 grid"
 needs_owner = false
 
 [[lane]]

@@ -1,6 +1,6 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:task` (HITL)
+- Type: `wayfinder:task` (AFK)
 - Status: open
 - Assignee: Orchestrator
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
@@ -32,18 +32,55 @@
   sampling. Their model evidence and residuals—not the profile peak finder—must
   adjudicate the component count.
 
-## Current state (2026-07-31)
+## Owner decision — restart schedule
 
-The 27-rung campaign launched on h17 (`~/zach_count_20260731/`, clone at
-`894a1d2`, uv-frozen environment, inputs hash-verified) and was stopped by
-the owner ~4.5 h in for wall-clock: the 9-launcher × 3-serial-seed schedule
-implies ~12 h. Five rungs completed with `outputs_complete: true` receipts
-(C2D3 at s2 = 1/10/100 and C2D4 at s2 = 1/10, all seed-20220207); four
-first-seed fits were killed mid-sampling; later seeds had barely started.
-All artifacts preserved; processes verified dead. Details:
-`docs/rse/specs/handoff-2026-07-31-20-23-zach-campaign-replan.md`.
+- Decision: restart the stopped campaign as **seed-1 grid plus seed-2
+  backfill** — relaunch the four unfinished seed-20220207 rungs together with
+  five seed-20220208 rungs, concurrently, with the contract unchanged.
+- Recorded: manuscript owner, 2026-08-04, choosing against the three cards
+  offered on 2026-07-31 (`finish-seed1-grid`, `resume-original-schedule`,
+  `amend-contract-cheaper-sampler`).
+- Why this rather than the recommended `finish-seed1-grid`: that option would
+  have left 24 of h17's 40 cores idle. Nine concurrent fits at four processes
+  each occupy 36 cores — the same occupancy the original schedule already
+  assumed — so the full nine-cell seed-20220207 grid still arrives in one
+  wave, and a third of the stability seeds arrives with it.
+- Contract status: unchanged. No sampler, prior, window, mask, resolution or
+  environment amendment. Only launch order differs, which the contract does
+  not fix, so the five completed receipts stay valid.
+- Effect: 14 of 27 rungs complete after wave 1; provisional adjudication may
+  begin on the nine-cell single-seed grid; the remaining thirteen rungs run in
+  waves 2 and 3.
 
-## Owner decision card
+## Current state (2026-08-04)
+
+Wave 1 of the owner-chosen restart is running on h17 in the preserved campaign
+tree `~/zach_count_20260731/` (clone at `894a1d2`, clean; CPython 3.13.12 with
+dynesty 3.1.0; both input hashes re-verified as `be917e94…` and `bf317648…`).
+Nine rungs launched 2026-08-04 22:55 PDT:
+
+- seed-20220207 completion: `C2D4:s2-100`, `C2D5:s2-1`, `C2D5:s2-10`,
+  `C2D5:s2-100`;
+- seed-20220208 backfill: `C2D3:s2-1`, `C2D3:s2-10`, `C2D3:s2-100`,
+  `C2D4:s2-1`, `C2D4:s2-10`.
+
+The five completed seed-20220207 receipts (C2D3 at s2 = 1/10/100, C2D4 at
+s2 = 1/10) were left untouched. Each relaunched rung's killed partial run
+directory was moved, not deleted, to `runs/rungs-superseded-20260804/`, because
+the driver refuses a non-empty rung namespace. Launch record and verification
+commands: `docs/rse/verify/zach-count-relaunch-20260804/README.md`.
+
+This ticket is `(AFK)` while the campaign executes: the restart decision is
+recorded and no owner decision is pending. It returns to `(HITL)` with an
+evidence-bound decision card when adjudication produces exact candidate
+artifacts for hash-bound review.
+
+Stop-state history: `docs/rse/specs/handoff-2026-07-31-20-23-zach-campaign-replan.md`.
+
+## Owner decision card — resolved 2026-08-04
+
+Retained for provenance. The owner answered this card on 2026-08-04 with a
+fourth option, recorded above; it is no longer a queue item.
 
 ```json
 {
