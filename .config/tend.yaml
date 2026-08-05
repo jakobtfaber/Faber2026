@@ -1,0 +1,16 @@
+bot_name: tend-faber2026
+
+setup:
+  - uses: actions/setup-python@v6
+    name: Set up Python
+    with:
+      python-version: "3.12"
+  - uses: astral-sh/setup-uv@v9
+    name: Set up uv
+    with:
+      enable-cache: true
+      cache-dependency-glob: analysis/uv.lock
+
+workflows:
+  ci-fix:
+    watched_workflows: ["Manuscript provenance"]
