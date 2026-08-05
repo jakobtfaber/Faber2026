@@ -1,6 +1,6 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:task` (HITL)
+- Type: `wayfinder:task` (AFK)
 - Status: open
 - Assignee: Orchestrator
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
@@ -66,19 +66,79 @@ C2D3 at s2 = 1/10/100 and C2D4 at s2 = 1/10, all seed-20220207, receipts still
 `outputs_complete: true`. Stop record, kill sequence and re-runnable state
 check: `docs/rse/verify/zach-count-relaunch-20260804/README.md`.
 
-Nothing further runs until the card below is answered. The per-fit cost is the
-frozen contract's own cost, not a scheduling defect: at 1000 live points a rung
-is of order 100,000 iterations, which the MANIFEST already measured as 1.5 to 3
-hours. Reordering launches — what the earlier restart decision did — cannot
-change it, because the wall clock per fit is set by the sampler settings the
-contract fixes. Making it materially faster means amending the contract, which
-is a scientific decision, not a scheduling one.
+The per-fit cost is the frozen contract's own cost, not a scheduling defect: at
+1000 live points a rung is of order 100,000 iterations, which the MANIFEST
+already measured as 1.5 to 3 hours. Reordering launches — what the earlier
+restart decision did — cannot change it, because the wall clock per fit is set
+by the sampler settings the contract fixes.
 
 Stop-state history: `docs/rse/specs/handoff-2026-07-31-20-23-zach-campaign-replan.md`.
 
+## Owner decision — retire the campaign plan, pivot to fast fitting (2026-08-05)
+
+- Decision: stop the long-running component-count campaign and instead fit the
+  dynamic spectrum at the highest resolution that completes in under five
+  minutes end to end.
+- Recorded: manuscript owner, 2026-08-05. This supersedes the queued
+  `zach-campaign-sampler-cost` card, which asked how to make the campaign
+  cheaper; the owner's answer was to stop running it.
+- Campaign disposition: **parked, not deleted.** The five completed
+  seed-20220207 receipts, the nine killed partial directories, the superseded
+  directories, the frozen contract and the campaign clone all remain exactly as
+  the stop record leaves them. Reviving the campaign needs no recovery work,
+  only a decision.
+- What is retired is the *plan* to run 27 contract rungs on the current
+  schedule. The contract itself stays valid and untouched, so nothing about the
+  five completed receipts is invalidated.
+
+### What the pivot measured
+
+Result: **263.9 seconds end to end, exit code 0, at the finest resolution on
+the ladder** — DSA-110 at native 32.768-microsecond sampling with 32 channels,
+CHIME/FRB at 128 channels, 421,248 fitted points, four times the campaign
+contract's data volume. Recipe, harness and full timing table:
+`scattering/studies/joint-refits/fast_fit_20260805/` and
+`docs/rse/verify/zach-fast-fit-cost-ladder-20260805/`.
+
+The premise of the instruction did not survive measurement, in a useful
+direction. **Downsampling buys no time at all.** Three ladder rows spanning an
+eightfold range in fitted data volume, at identical sampler settings, finished
+within one second of each other (332.3 / 332.4 / 331.7 s). At four processes a
+260-fold data reduction moved the sampler rate by five per cent. Preparation is
+about 141 seconds of fixed overhead regardless of resolution, and sampling cost
+is set by the number of likelihood calls — 36 per accepted sample at about 2.9
+per cent efficiency — not by the size of each call.
+
+So the answer to "the highest resolution that runs in under five minutes" is
+*the highest resolution available*. The five minutes came from processes
+(4 → 5.62, 8 → 10.9, 32 → 35.7 iterations per second, nearly linear and
+scientifically free; the contract used four on a forty-core host), live points,
+a looser stopping threshold, and switching off the model scan.
+
+### What this does not deliver
+
+The fast configuration reports a log-evidence uncertainty of ±2.63. The
+acceptance rule needs a step above 5 after subtracting *twice* the combined
+numerical uncertainty, so one such fit spends the whole budget on its own
+noise. This is a fast route to morphology, residuals and parameter
+plausibility — not a cheap route to the component-count answer, and its outputs
+must never be mixed into that comparison. The component-count question remains
+open and unanswered.
+
 ## Queued next steps (agent work, no owner decision pending)
 
-These are independent of the sampler-cost decision and cost no compute.
+Item 2 below is **done** — that is the pivot's cost ladder, recorded above.
+Item 1 stays queued and still costs no compute. Item 3 is new.
+
+3. **Expose the random-walk step count.** It is the largest untouched lever and
+   currently unreachable: `nc` is dynesty's `rwalk` default of 25, and neither
+   `nlive_walks` in the band run-config (read only by the single-band pipeline)
+   nor `walks` under `dynesty:` in the sampler resource is consumed by the
+   joint fit. `run_joint_fit.py` never passes it, though `fit_joint_scattering`
+   already forwards `**dynesty_kwargs` to `NestedSampler`. A one-line optional
+   flag with an unchanged default would let a future fit cut likelihood calls
+   per sample by roughly threefold. It touches a shared entry point, so it
+   belongs in its own reviewed change, not in a timing study.
 
 1. **Build the adjudicator.** No code yet applies the six MANIFEST acceptance
    rules to the rung receipts; the campaign directory holds only the contract,
@@ -110,7 +170,12 @@ superseded. The issue body now states 65.536 microseconds and cites this ticket
 and the frozen contract. The contract and the running campaign were already
 correct; only the issue text was stale.
 
-## Owner decision card
+## Owner decision card — sampler cost, resolved 2026-08-05
+
+Retained for provenance. The owner answered it by retiring the campaign plan
+rather than choosing among its three options; see the pivot decision above. It
+is no longer a queue item, and the ticket is `(AFK)` because no owner decision
+is pending.
 
 ```json
 {
