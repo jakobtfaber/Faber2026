@@ -1,6 +1,6 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:task` (AFK)
+- Type: `wayfinder:task` (HITL)
 - Status: open
 - Assignee: Orchestrator
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
@@ -52,54 +52,57 @@
   begin on the nine-cell single-seed grid; the remaining thirteen rungs run in
   waves 2 and 3.
 
-## Current state (2026-08-04)
+## Current state (2026-08-04, after the owner stop)
 
-Wave 1 of the owner-chosen restart is running on h17 in the preserved campaign
-tree `~/zach_count_20260731/` (clone at `894a1d2`, clean; CPython 3.13.12 with
-dynesty 3.1.0; both input hashes re-verified as `be917e94…` and `bf317648…`).
-Nine rungs launched 2026-08-04 22:55 PDT:
+Wave 1 of the restart launched at 22:55 PDT and the owner stopped it at 23:47,
+about 52 minutes in: the per-fit cost was too long. Nine rungs were killed
+(`C2D4:s2-100` and the three `C2D5` rungs at seed-20220207; `C2D3:s2-1/10/100`
+and `C2D4:s2-1/10` at seed-20220208). All processes are verified dead and every
+artifact is preserved; nothing was deleted. No rung of this wave reached its
+stopping threshold, so this wave produced no usable evidence.
 
-- seed-20220207 completion: `C2D4:s2-100`, `C2D5:s2-1`, `C2D5:s2-10`,
-  `C2D5:s2-100`;
-- seed-20220208 backfill: `C2D3:s2-1`, `C2D3:s2-10`, `C2D3:s2-100`,
-  `C2D4:s2-1`, `C2D4:s2-10`.
+**The campaign stands where it stood before wave 1: 5 of 27 rungs complete** —
+C2D3 at s2 = 1/10/100 and C2D4 at s2 = 1/10, all seed-20220207, receipts still
+`outputs_complete: true`. Stop record, kill sequence and re-runnable state
+check: `docs/rse/verify/zach-count-relaunch-20260804/README.md`.
 
-The five completed seed-20220207 receipts (C2D3 at s2 = 1/10/100, C2D4 at
-s2 = 1/10) were left untouched. Each relaunched rung's killed partial run
-directory was moved, not deleted, to `runs/rungs-superseded-20260804/`, because
-the driver refuses a non-empty rung namespace. Launch record and verification
-commands: `docs/rse/verify/zach-count-relaunch-20260804/README.md`.
-
-This ticket is `(AFK)` while the campaign executes: the restart decision is
-recorded and no owner decision is pending. It returns to `(HITL)` with an
-evidence-bound decision card when adjudication produces exact candidate
-artifacts for hash-bound review.
+Nothing further runs until the card below is answered. The per-fit cost is the
+frozen contract's own cost, not a scheduling defect: at 1000 live points a rung
+is of order 100,000 iterations, which the MANIFEST already measured as 1.5 to 3
+hours. Reordering launches — what the earlier restart decision did — cannot
+change it, because the wall clock per fit is set by the sampler settings the
+contract fixes. Making it materially faster means amending the contract, which
+is a scientific decision, not a scheduling one.
 
 Stop-state history: `docs/rse/specs/handoff-2026-07-31-20-23-zach-campaign-replan.md`.
 
 ## Queued next steps (agent work, no owner decision pending)
 
+These are independent of the sampler-cost decision and cost no compute.
+
 1. **Build the adjudicator.** No code yet applies the six MANIFEST acceptance
    rules to the rung receipts; the campaign directory holds only the contract,
    the schedule and the driver. Write it under
    `scattering/studies/joint-refits/zach_count_20260729/`, developed against
-   the five completed seed-20220207 receipts so it is ready when wave 1 lands.
-   It must read receipts and joint products only, and report per rule: output
-   completeness and stopping threshold; log-evidence step against the
-   threshold of 5 after subtracting twice the combined numerical uncertainty,
-   evaluated at every fixed gain-prior variance; every component posterior
-   arrival time inside its own band's fitted window; overlapping
-   pulse-broadening exponent posteriors between neighbouring counts with none
-   at a prior edge; bounded non-null amplitude for the added component. It
-   decides nothing on its own — the per-band visual residual review and the
-   owner's morphology review stay separate, and no value is promoted.
-2. **Verify wave 1.** When the nine relaunched rungs finish, confirm 14 of 27
-   receipts read `outputs_complete: true` with the complete five-artifact
-   output set, using the re-runnable check in
-   `docs/rse/verify/zach-count-relaunch-20260804/README.md`.
-3. **Waves 2 and 3.** Launch the remaining thirteen rungs (`C2D4:s2-100` and
-   the three `C2D5` rungs at seed-20220208, then all nine seed-20220209 rungs)
-   under the same unchanged contract.
+   the five completed seed-20220207 receipts. It must read receipts and joint
+   products only, and report per rule: output completeness and stopping
+   threshold; log-evidence step against the threshold of 5 after subtracting
+   twice the combined numerical uncertainty, evaluated at every fixed
+   gain-prior variance; every component posterior arrival time inside its own
+   band's fitted window; overlapping pulse-broadening exponent posteriors
+   between neighbouring counts with none at a prior edge; bounded non-null
+   amplitude for the added component. It decides nothing on its own — the
+   per-band visual residual review and the owner's morphology review stay
+   separate, and no value is promoted.
+2. **Measure the cost-versus-precision trade directly.** The decision below
+   currently rests on the MANIFEST's 50-live-point feasibility timing and the
+   general expectation that log-evidence precision degrades as live points
+   fall. A short, explicitly non-contract scan at reduced live points on the
+   already-complete C2D3 s2 = 1 rung would replace that expectation with a
+   measured curve of wall clock and reported log-evidence error, which is what
+   the owner needs to judge whether a cheaper sampler can still clear a
+   threshold of 5. Its outputs are diagnostic only and must never enter
+   adjudication.
 
 Also corrected 2026-08-04: issue #205's body still specified native
 32.768-microsecond DSA-110 sampling, which the owner's 2026-07-30 decision
@@ -107,10 +110,63 @@ superseded. The issue body now states 65.536 microseconds and cites this ticket
 and the frozen contract. The contract and the running campaign were already
 correct; only the issue text was stale.
 
-## Owner decision card — resolved 2026-08-04
+## Owner decision card
+
+```json
+{
+  "id": "zach-campaign-sampler-cost",
+  "kind": "scientific",
+  "title": "Zach campaign per-fit sampler cost",
+  "decision": "The frozen contract costs 1.5 to 3 hours per fit and the owner has judged that too long. How should the campaign proceed?",
+  "recommended": {
+    "choice": "measure-then-decide",
+    "reason": "Every cheaper option trades log-evidence precision for wall clock, and the acceptance rule compares a step against a threshold of 5 after subtracting twice the combined numerical uncertainty — so a sampler that halves the cost but widens that uncertainty can make the comparison unresolvable rather than faster. The trade is currently an expectation, not a measurement: the only timing in hand is a 50-live-point feasibility fit. A short diagnostic scan at reduced live points on the already-complete C2D3 s2 = 1 rung costs minutes, not hours, and returns a measured curve of wall clock against reported log-evidence error, which turns this decision into a numerical one. It commits to nothing and touches no contract."
+  },
+  "choices": [
+    {
+      "id": "measure-then-decide",
+      "label": "Keep the contract frozen and run a short diagnostic live-point scan first; decide the sampler question against measured cost and precision."
+    },
+    {
+      "id": "amend-halve-nlive",
+      "label": "Halve the live points now under an amended contract; roughly twice as fast per fit, but all 27 rungs restart and the five completed receipts are invalidated."
+    },
+    {
+      "id": "drop-stability-seeds",
+      "label": "Keep the sampler unchanged and cut the schedule to the nine-cell single-seed grid; four fits remain, but the seed spread that feeds the acceptance test's numerical uncertainty is lost."
+    }
+  ],
+  "context": [
+    "Wave 1 was stopped by the owner 52 minutes in on 2026-08-04; all processes are dead, all artifacts preserved, and the campaign stands at 5 of 27 rungs — exactly where it stood before the wave. Stopping outright here also remains available and needs no card.",
+    "The per-fit cost is the contract's own cost, not a scheduling defect: at 1000 live points a rung is of order 100,000 iterations, so reordering launches cannot change it. Any sampler amendment breaks the uniformity the contract requires, restarting all 27 rungs and invalidating the five completed receipts.",
+    "Live points set the log-evidence precision the acceptance rule spends: the rule requires a step above 5 with the same sign at every fixed gain-prior variance, after subtracting twice the sampler error added in quadrature with the seed spread — so dropping the stability seeds also weakens the test, leaving only the sampler's own reported error to bound it."
+  ],
+  "evidence": [
+    {
+      "label": "Wave-1 launch, owner stop, verified-dead processes and preserved artifacts",
+      "path": "docs/rse/verify/zach-count-relaunch-20260804/README.md",
+      "sha256": "fde405a6dd8e682992a290f52266e575079a90c0cf7277b15b144f6f20f55ccb"
+    },
+    {
+      "label": "Frozen contract, acceptance rules and the measured cost basis",
+      "path": "scattering/studies/joint-refits/zach_count_20260729/MANIFEST.md",
+      "sha256": "765ecbb152c1aa7af448c51aafbff50ae410bb5dc2f1335b2b6993249e03d677"
+    }
+  ],
+  "effect": "Determines whether the component-count experiment continues under the frozen contract, continues under an amended one, continues with a weaker acceptance test, or stops. Nothing runs on h17 until this is answered.",
+  "recorder": {
+    "path": "docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+    "action": "Record the chosen option in this ticket's Current state section, then act on it; do not relaunch any rung before it is recorded."
+  },
+  "priority": 30
+}
+```
+
+## Owner decision card — restart schedule, resolved 2026-08-04
 
 Retained for provenance. The owner answered this card on 2026-08-04 with a
-fourth option, recorded above; it is no longer a queue item.
+fourth option, recorded above. The wave it authorised was then stopped for
+per-fit cost, which the card above now addresses.
 
 ```json
 {

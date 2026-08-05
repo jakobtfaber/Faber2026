@@ -153,16 +153,62 @@ output set. Only then may the provisional adjudication phase begin, against the
 acceptance rules in
 [`scattering/studies/joint-refits/zach_count_20260729/MANIFEST.md`](../../../../scattering/studies/joint-refits/zach_count_20260729/MANIFEST.md).
 
+## Owner stop, 2026-08-04 23:47 PDT
+
+The owner stopped wave 1 about 52 minutes in: "1-3 hours per fit is too long,
+if fits are running now, kill them." No further wave was started.
+
+- Kill sequence: the launcher, then the nine `stage_zach_count.py` drivers,
+  then the `run_controlled_joint_fit.py` children, with a final signal 9 sweep.
+  It ran from a script file on the host rather than an inline command, because
+  an inline `pkill -f stage_zach_count` matches the killing command's own
+  command line and terminates the invoking shell before the later kills run —
+  the first attempt failed exactly that way and left all nine rungs alive.
+- Verified dead: `pgrep -fc '[s]tage_zach_count'`,
+  `pgrep -fc '[r]un_controlled_joint_fit'` and `pgrep -fc '[r]elaunch-20260804'`
+  all return zero; no campaign Python process survives (`pgrep -af python`
+  shows only unrelated system services). Load average drains from 30.
+- **Nothing was deleted.** All nine partial run directories, their contracts,
+  their incomplete receipts and every per-rung log remain in place, as do the
+  nine directories under `runs/rungs-superseded-20260804/` (580 KiB).
+- Rung state after the stop, re-read from the receipts: unchanged at 5 of 27
+  complete. The five seed-20220207 receipts (C2D3 at s2 = 1/10/100, C2D4 at
+  s2 = 1/10) still read `outputs_complete: true`; all nine killed rungs read
+  `false`. No rung of this wave reached its stopping threshold, so no rung of
+  this wave produced usable evidence.
+
+## What the stop implies
+
+The per-fit cost is the frozen contract's own cost, not a scheduling defect.
+At 1000 live points a rung is of order 100,000 iterations, which the MANIFEST
+already measured as 1.5 to 3 hours. Reordering launches, which is what the
+2026-08-04 restart decision did, cannot reduce it: the wall clock per fit is
+set by the sampler settings the contract fixes.
+
+Reducing it therefore requires amending the contract — the
+`amend-contract-cheaper-sampler` option from the 2026-07-31 card. That is not a
+mechanical change. Live points set the evidence precision, and the acceptance
+rule compares log-evidence steps against a threshold of 5 after subtracting
+twice the combined numerical uncertainty, so a cheaper sampler widens exactly
+the uncertainty the comparison must overcome. It also breaks the uniformity the
+contract requires, invalidating the five completed receipts and restarting all
+27 rungs. This is a scientific decision for the manuscript owner and is queued
+as a decision card in
+[ticket 07](../../wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md).
+
 ## Still prohibited
 
 - Promoting any fit value, table, figure or results-library pointer.
 - Mixing the superseded Mac tree `~/Data/Faber2026/zach_count_20260731/` or the
   quarantined `zach-count-20260730-r3` receipts into adjudication.
-- Amending the contract, including a sampler change, to make the remaining
-  waves cheaper.
-- Deleting anything under `runs/rungs-superseded-20260804/`.
+- Amending the contract, including a sampler change, without the owner's
+  recorded decision on the queued card.
+- Relaunching any rung before that decision is recorded.
+- Deleting anything under `runs/rungs-superseded-20260804/` or under the nine
+  killed rung directories.
 
 ## Status
 
-STATUS: PRELIMINARY — wave 1 launched and verified live; no rung of this wave
-has completed, and no scientific claim follows from this record.
+STATUS: VERIFIED — wave 1 launched, ran about 52 minutes, and was stopped by
+the owner; all processes verified dead and all artifacts preserved. The campaign
+stands at 5 of 27 complete rungs. No scientific claim follows from this record.

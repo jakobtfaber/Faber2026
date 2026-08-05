@@ -85,8 +85,8 @@ branch = ""
 worktree = ""
 pr = 0
 gates = ["controlled C2D3/C2D4/C2D5 contract", "fixed s2 = 1, 10, 100", "same-mode and in-window components", "hash-bound owner review before promotion"]
-next_action = "wave 1 of the owner-chosen restart is running on h17 (9 rungs); verify 14 of 27 receipts, then provisionally adjudicate the nine-cell seed-20220207 grid"
-needs_owner = false
+next_action = "owner stopped wave 1 for per-fit cost; campaign holds at 5 of 27 rungs and nothing runs until the queued sampler-cost decision is recorded"
+needs_owner = true
 
 [[lane]]
 id = "f3-consistency-audit"
