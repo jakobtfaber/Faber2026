@@ -107,6 +107,17 @@ jobs:
           cache-dependency-glob: analysis/uv.lock
       - name: Verify manuscript, registry, figures, and tables
         run: make check-provenance
+      - name: Run the manuscript test suite
+        # The deselected four assert quarantine paths that #249 removed from
+        # this repository, so they fail outright; whether to delete or repoint
+        # them is the open decision in #331. The module's fifth test still
+        # guards the manuscript root and stays in the run.
+        run: >-
+          uv run --project analysis --group test --frozen pytest tests
+          --deselect=tests/test_outdated_science_quarantine.py::test_obsolete_tables_and_full_ledger_are_quarantined
+          --deselect=tests/test_outdated_science_quarantine.py::test_active_propagation_ledger_is_fail_closed_only
+          --deselect=tests/test_outdated_science_quarantine.py::test_generator_cannot_recreate_live_obsolete_tables
+          --deselect=tests/test_outdated_science_quarantine.py::test_quarantine_has_review_index
       - name: Validate workflow files
         uses: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
       - name: Scan workflow security
