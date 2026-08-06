@@ -16,8 +16,8 @@ def create_notebook():
     # --- Cell 1: Setup & Imports ---
     c1_md = (
         "# Stage 1: Setup & Environment Configuration\n"
-        "Loads required packages, adds `pipeline` to `sys.path`, and imports canonical "
-        "scintillation analysis functions from `pipeline.scintillation.scint_analysis`."
+        "Loads required packages, adds the repository root to `sys.path`, and imports canonical "
+        "scintillation analysis functions from `scintillation.scint_analysis`."
     )
     c1_code = (
         "import os\n"
