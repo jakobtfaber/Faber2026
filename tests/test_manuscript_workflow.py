@@ -1,4 +1,5 @@
 from pathlib import Path
+from re import findall
 from unittest import TestCase, main
 
 WORKFLOW = Path(__file__).parents[1] / ".github/workflows/manuscript-provenance.yml"
@@ -33,6 +34,34 @@ class ManuscriptWorkflow(TestCase):
         )[0]
         self.assertIn("check_claim_anchors.py", target)
         self.assertNotIn("--validate", target)
+
+    def test_provenance_lane_runs_the_whole_manuscript_test_suite(self) -> None:
+        provenance = self.text.split("  provenance:", 1)[1].split(
+            "  pinned-analysis-tests:", 1
+        )[0]
+        self.assertIn(
+            "uv run --project analysis --group test --frozen pytest tests",
+            provenance,
+        )
+
+    def test_every_excluded_test_still_exists(self) -> None:
+        root = Path(__file__).parents[1]
+        excluded = findall(
+            r"--(?:ignore|deselect)=(tests/\S+?\.py)(?:::(\S+))?\s", self.text
+        )
+        self.assertTrue(excluded, "expected the suite step to name its exclusions")
+        for module, test in excluded:
+            path = root / module
+            self.assertTrue(
+                path.is_file(),
+                f"{module} is excluded from the suite but no longer exists",
+            )
+            if test:
+                self.assertIn(
+                    f"def {test}(",
+                    path.read_text(),
+                    f"{module}::{test} is excluded but no longer exists",
+                )
 
     def test_parent_watches_one_stable_analysis_verdict(self) -> None:
         pinned = self.text.split("  pinned-analysis-tests:", 1)[1].split(
