@@ -46,6 +46,39 @@ report it in a pull-request comment or an issue with the evidence. Do not
 Mechanical work on prose, build tooling, workflows, tests, and
 documentation is in scope, subject to the rest of this file.
 
+## What the runner's checkout contains
+
+Every tend workflow checks out the parent repository without submodules,
+so `analysis/` is an empty directory when a session starts. That is not a
+reason to leave a submodule-dependent question **UNKNOWN**. Populating the
+submodule read-only is one command, it lands on the pinned commit, and it
+does not touch the gitlink:
+
+```bash
+git submodule update --init --depth 1 analysis
+git -C analysis rev-parse HEAD   # equals the pin in `git ls-tree HEAD analysis`
+git status --porcelain           # still clean — the pointer has not moved
+```
+
+Verified 2026-08-06 against pin `d76fd2c`: the checkout landed exactly on
+the pinned commit and left the working tree clean. Populating the
+submodule does not move the pin; only staging `analysis` does, and the
+pointer check under Hard prohibitions still runs before every commit.
+
+Do this whenever a finding turns on what is inside the submodule — whether
+a package is importable, whether a superseding record exists, what a
+pinned script actually does. Writing **UNKNOWN** because "the runner does
+not check it out" asserts something false about the runner, and publishes
+a finding weaker than the evidence available.
+
+The knowledge base is the one thing populating the submodule does not
+recover. `CLAUDE.md` asks agents to run
+`python3 analysis/scripts/kb search "<topic>"` before exploratory
+grepping, but its index lives at `analysis/.kb/`, which is gitignored and
+therefore never present in CI. The command exits 0 and prints `no results`
+for every query. Read that as "no index", never as "no such thing exists",
+and grep instead.
+
 ## Scope discipline
 
 Commit with explicit pathspecs, never `git add -A` or `git add .`. This
