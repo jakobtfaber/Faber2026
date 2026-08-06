@@ -1,0 +1,7 @@
+{
+  "latest_apply_run": "20260806T111528220125Z-apply",
+  "latest_benchmark_run": "20260806T111433049718Z-benchmark",
+  "latest_optimize_agents_run": "20260806T111439212377Z-optimize-agents",
+  "latest_optimize_skills_run": "20260806T111509438839Z-optimize-skills",
+  "latest_scan_run": "20260806T111433049718Z-benchmark"
+}

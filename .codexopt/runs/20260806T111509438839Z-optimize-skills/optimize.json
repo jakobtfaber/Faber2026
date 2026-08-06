@@ -1,0 +1,10 @@
+{
+  "average_delta": 0.0,
+  "engine": "heuristic",
+  "fallback_count": 0,
+  "files_improved": 0,
+  "files_total": 0,
+  "kind": "skill",
+  "requested_engine": "heuristic",
+  "results": []
+}
