@@ -1,0 +1,22 @@
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 3b68e60a..1e283c40 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -315,6 +315,17 @@ python3 analysis/scripts/kb search "<topic>"   # filter: --source tickets|docs|g
+ - Domain documents: manuscript and fitting context both in
+   [`analysis/CONTEXT.md`](analysis/CONTEXT.md); see
+   [`analysis/docs/agents/domain.md`](analysis/docs/agents/domain.md).
++- Live analysis: which of the two workspaces to open, which repository may be
++  written, the five-line header every task carries, where exploratory
++  notebooks live (`~/Data/Faber2026/workbench/`), and how an accepted result
++  reaches the manuscript — an analysis pull request, then a separate pull
++  request advancing the `analysis` pin; see
++  [`analysis/docs/rse/ops/live-analysis.md`](analysis/docs/rse/ops/live-analysis.md).
++- Jupyter surface: the repository-owned environment and lock, kernel
++  specification, notebooks, data mounts, generated-output policy, bind address
++  and port, start and stop commands, owner, recovery procedure, and admission
++  smoke test — defined, but not yet owner-ratified; see
++  [`analysis/docs/rse/ops/jupyter-surface.md`](analysis/docs/rse/ops/jupyter-surface.md).
+ - Context files carry scientific and trust-state information; this file
+   carries standing operational instructions.
+ - Implementation flow, using the skills installed in this environment:
