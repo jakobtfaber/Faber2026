@@ -10,6 +10,11 @@ the cell source is itself Python. ``'Frequency $\\nu$ (MHz)'`` in a cell is a
 non-raw literal, so at notebook run time it becomes ``Frequency $`` + newline +
 ``u$ (MHz)``; the sibling ``ax_fit`` labels avoid this with an ``r`` prefix.
 
+A third class leaves no trace in the output at all: an *unrecognized* escape such
+as ``\\D`` keeps its backslash and only raises ``SyntaxWarning: invalid escape
+sequence``. Compiling the generator with that warning promoted to an error is the
+guard for it.
+
 Both the generator's fresh output and the committed notebook are checked. The
 committed file is the *executed* artifact -- it carries cell outputs and a
 kernelspec the generator does not emit -- so it is not byte-comparable to a fresh
@@ -20,6 +25,7 @@ import ast
 import json
 import os
 import sys
+import warnings
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase, main
@@ -93,6 +99,15 @@ class ScintillationNotebookEscapes(TestCase):
 
     def test_committed_labels_survive_a_second_expansion(self) -> None:
         self.assert_labels_survive_a_second_expansion(self.committed(), "committed")
+
+    def test_generator_source_has_no_invalid_escape_sequences(self) -> None:
+        """An unrecognized escape survives as a literal backslash, not a control
+        character, so the checks above miss it -- but Python still warns.
+        """
+        source = ROOT / "scripts" / "create_scintillation_notebook.py"
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", SyntaxWarning)
+            compile(source.read_text(), str(source), "exec")
 
 
 if __name__ == "__main__":
