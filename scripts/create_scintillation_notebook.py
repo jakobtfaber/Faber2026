@@ -234,8 +234,8 @@ def create_notebook():
 
     # --- Cell 6: Multi-Band Power-Law Fit & Final Publication Plot ---
     c6_md = (
-        "# Stage 6: Multi-Band Power-Law Scaling Fit ($\alpha$) & Final Figure\n"
-        "Combines CHIME (400–800 MHz) and DSA-110 (1280–1530 MHz) sub-band scintillation bandwidths $\Delta\\nu_d(\\nu)$, "
+        "# Stage 6: Multi-Band Power-Law Scaling Fit ($\\alpha$) & Final Figure\n"
+        "Combines CHIME (400–800 MHz) and DSA-110 (1280–1530 MHz) sub-band scintillation bandwidths $\\Delta\\nu_d(\\nu)$, "
         "fits power-law scaling $\\Delta\\nu_d(\\nu) = \\Delta\\nu_{600} (\\nu / 600)^\\alpha$ via ODR, "
         "and displays the 3-panel publication summary plot."
     )
@@ -280,8 +280,8 @@ def create_notebook():
         "\n"
         "# Plot Modulation Index Spectrum\n"
         "ax_mod.axhline(1.0, color='gray', linestyle='--', label='Strong Diffractive Threshold ($m=1$)')\n"
-        "ax_mod.set_xlabel('Frequency $\\nu$ (MHz)')\n"
-        "ax_mod.set_ylabel('Modulation Index $m(\\nu)$')\n"
+        "ax_mod.set_xlabel(r'Frequency $\\nu$ (MHz)')\n"
+        "ax_mod.set_ylabel(r'Modulation Index $m(\\nu)$')\n"
         "ax_mod.set_ylim(0, 1.5)\n"
         "ax_mod.legend()\n"
         "ax_mod.grid(True, ls=':', alpha=0.5)\n"
