@@ -1,0 +1,36 @@
+{
+  "counts": {
+    "agents": 1,
+    "issues": 0,
+    "skills": 0
+  },
+  "cwd": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
+  "entries": [
+    {
+      "bytes": 9638,
+      "issues": [],
+      "kind": "agents",
+      "lines": 110,
+      "metadata": {
+        "bullet_count": 32,
+        "contradictions": [],
+        "duplicate_nonempty_line_count": 0,
+        "duplicate_nonempty_lines": [],
+        "heading_count": 8,
+        "instruction_flags": {
+          "has_constraints": true,
+          "has_examples": false,
+          "has_output_contract": true,
+          "has_repo_context": true,
+          "has_role": true,
+          "has_trigger_phrase": true,
+          "has_verification": true,
+          "has_workflow": true
+        }
+      },
+      "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/AGENTS.md",
+      "token_estimate": 1743,
+      "words": 1311
+    }
+  ]
+}

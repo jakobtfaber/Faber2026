@@ -1,0 +1,41 @@
+version: 1
+targets:
+  agents_files:
+  - AGENTS.md
+  - '**/AGENTS.md'
+  - '**/AGENTS.override.md'
+  skills_globs:
+  - .codex/skills/**/SKILL.md
+  - '**/.codex/skills/**/SKILL.md'
+  - .agents/skills/**/SKILL.md
+  - '**/.agents/skills/**/SKILL.md'
+  exclude_globs:
+  - .git/**
+  - .codexopt/**
+  - .venv/**
+  - node_modules/**
+  - reference/**
+output:
+  root_dir: .codexopt
+evidence:
+  task_files: []
+  issue_files: []
+optimization:
+  engine: heuristic
+  min_apply_delta: 0.01
+  max_metric_calls: 60
+  reflection_model: null
+  skillopt_train_ratio: 0.67
+  skillopt_edit_budget: 24
+  skillopt_validation_delta: 0.01
+reflective:
+  optimizer_model: null
+  judge_model: null
+  reward_mode: tiered
+  minibatch_size: 3
+  max_iterations: 6
+  edit_budget: 12
+  valset_ratio: 0.34
+  max_rollouts: 60
+  seed: 0
+  codex_binary: codex

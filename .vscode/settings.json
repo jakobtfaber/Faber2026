@@ -1,0 +1,6 @@
+{
+    "editor.accessibilitySupport": "off",
+    "editor.screenReaderAnnounceInlineSuggestion": false,
+    "window.zoomPerWindow": false,
+    "accessibility.hideAccessibleView": true
+}
