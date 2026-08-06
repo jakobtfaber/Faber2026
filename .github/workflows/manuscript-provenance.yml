@@ -79,6 +79,7 @@ jobs:
         run: |
           make check-manuscript
           python3 -m unittest discover -s tests -p 'test_manuscript_paths.py'
+          python3 -m unittest discover -s tests -p 'test_scintillation_notebook.py'
       - name: Compile manuscript
         uses: xu-cheng/latex-action@6549dc21effb2730855a1281407ecfcececc6c1b # v4
         with:
