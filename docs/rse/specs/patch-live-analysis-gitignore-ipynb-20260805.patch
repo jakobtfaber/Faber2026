@@ -1,0 +1,14 @@
+diff --git a/.gitignore b/.gitignore
+index a8cdc75f..7bb3d9e5 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -78,3 +78,9 @@ graphify-out/
+ #Ignore vscode AI rules
+ .github/instructions/codacy.instructions.md
+ teaching/
++
++# Exploratory notebooks are never tracked. They live under
++# ~/Data/Faber2026/workbench/ (see analysis/docs/rse/ops/live-analysis.md).
++# The exception below is grandfathered and closed to new entries.
++*.ipynb
++!/notebooks/scintillation_interactive_walkthrough.ipynb
