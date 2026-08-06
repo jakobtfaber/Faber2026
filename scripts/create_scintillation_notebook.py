@@ -32,7 +32,7 @@ def create_notebook():
         "    widgets = None\n"
         "    display = print\n"
         "\n"
-        "# Add the manuscript repository root; FLITS is installed from the analysis lock.\n"
+        "# Add the manuscript repository root to sys.path.\n"
         "repo_root = Path.cwd().resolve()\n"
         "if str(repo_root) not in sys.path:\n"
         "    sys.path.insert(0, str(repo_root))\n"
