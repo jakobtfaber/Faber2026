@@ -70,14 +70,21 @@ Before `gh issue create` or `gh pr create`, check what is left:
 ```bash
 BOT=tend-jakobtfaber
 TODAY=$(date -u +%Y-%m-%d)
-gh api "search/issues?q=author:${BOT}+repo:${GITHUB_REPOSITORY}+created:${TODAY}" \
-  --jq '.total_count'
+YESTERDAY=$(date -u -d yesterday +%Y-%m-%d)
+SIX_DAYS_AGO=$(date -u -d '6 days ago' +%Y-%m-%d)
+count() { gh api "search/issues?q=author:${BOT}+repo:${GITHUB_REPOSITORY}+created:$1" --jq '.total_count'; }
+TODAY_POSTS=$(count "$TODAY")
+PAST_POSTS=$(count "${SIX_DAYS_AGO}..${YESTERDAY}")
+echo "today=${TODAY_POSTS} limit=$((10 + PAST_POSTS / 3))"
 ```
 
-Against the usual allowance of ten: from seven onward, file only what
-carries an owner decision or a correctness finding, and put everything else
-in an existing open issue, in the pull-request body, or in a comment. At the
-allowance, file nothing, and say in a comment what would have been filed and
+Those are the two queries the preflight itself runs, so the printed limit
+is the one it will apply — it is ten only while the six-day baseline is
+zero, and it was fourteen on 2026-08-07. Key the decision off that number,
+not off ten: from three below the limit onward, file only what carries an
+owner decision or a correctness finding, and put everything else in an
+existing open issue, in the pull-request body, or in a comment. At the
+limit, file nothing, and say in a comment what would have been filed and
 why it was held.
 
 Group findings by theme rather than by instance. One issue that names a
@@ -89,9 +96,10 @@ This is not a tidiness preference. On 2026-08-06 the bot created twelve
 items against an allowance of ten, and twelve later runs — nine
 `tend-notifications` and three `tend-review` — then failed at the preflight
 over the following fifteen hours, until the count reset at midnight UTC.
-`tend-review` fires only on pull-request events and never retries, so
-[#339](https://github.com/jakobtfaber/Faber2026/pull/339) has gone
-unreviewed ever since. Two of the twelve items were the `review-runs`
+`tend-review` fires only on pull-request events and never retries, so the
+review [#339](https://github.com/jakobtfaber/Faber2026/pull/339) was owed
+when it opened that morning was simply lost, and it was still missing a day
+later. Two of the twelve items were the `review-runs`
 workflow's own tracking issue and pull request, so a housekeeping run can
 spend the budget that a review of real work then cannot get.
 
