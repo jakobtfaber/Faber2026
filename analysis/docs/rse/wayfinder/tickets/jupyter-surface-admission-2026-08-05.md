@@ -1,11 +1,15 @@
 # Ratify the Jupyter surface against the authority-10 admission bar
 
 - Type: `wayfinder:grilling` (HITL)
-- Status: open
+- Status: resolved — ratified 2026-08-07 by the owner (jakobtfaber):
+  choice `ratify` on the decision card. The kernel-only Jupyter surface is
+  ADMITTED as a repository-owned operational surface under its own start,
+  stop, and recovery instructions. Receipts:
+  [admission receipts](jupyter-surface-admission-receipts-20260806.md).
 - Assignee: —
 - Blocked by: —
 - Map: [Project authority and custody](../map-project-authority-and-custody.md)
-- Triage: `ready-for-human`
+- Triage: `done`
 
 ## Owner decision card
 
@@ -183,11 +187,12 @@ recorded per the card's recorder instructions.
   pointer. A pin change is a separately scoped, verified step and never a side
   effect of admitting an operational surface.
 
-## Until this is resolved
+## Resolution state
 
-Authority-10's finding still governs. The repository owns no admitted Jupyter
-surface, and the former ad hoc runtime remains unclassified rather than
-retired. Agents must not treat the proposed definition, dependency group, or
-smoke test as an admitted surface, must not cite them as authority for starting
-a kernel, and must not reconstruct a runtime from shell history. Writing and
-reviewing the proposed material is permitted; relying on it is not.
+Ratified 2026-08-07. Authority-10's admission bar is satisfied and the
+kernel-only surface is admitted: agents may start and stop a kernel for
+bounded local work under `docs/rse/ops/jupyter-surface.md`'s own start, stop,
+and recovery instructions. The standing admission state in `AGENTS.md`,
+`CLAUDE.md`, and the surface definition's Status section was updated in the
+same change, per the card's recorder instructions. A JupyterLab or notebook
+server remains a separate, later admission.

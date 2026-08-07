@@ -49,7 +49,10 @@ test — is defined in
 [`docs/rse/ops/jupyter-surface.md`](docs/rse/ops/jupyter-surface.md), written
 to the admission bar set by
 [`authority-10-choose-operational-ownership.md`](docs/rse/wayfinder/tickets/authority-10-choose-operational-ownership.md).
-Defined but not yet owner-ratified.
+Owner-ratified 2026-08-07 (admission ticket
+`docs/rse/wayfinder/tickets/jupyter-surface-admission-2026-08-05.md`):
+agents may start and stop a kernel for bounded local work under the
+definition's own start, stop, and recovery instructions.
 
 ## Owner queue walkthrough
 

@@ -321,11 +321,12 @@ in the admission receipt that authority-10 requires.
 
 ## Status
 
-**Defined, not yet ratified.** This document defines the surface; it does not by
-itself admit it. Its parts — the `notebook` dependency group,
-`tests/test_jupyter_surface.py`, and [`live-analysis.md`](live-analysis.md) —
-are admissible only once all are present on `main` and the smoke test has been
-run there. Ratification is an explicit owner decision, recorded in a wayfinder
-ticket created once the smoke-test evidence exists. Until the owner ratifies it,
-authority-10's finding stands: the repository owns no Jupyter surface, and no
-agent may treat this document as permission to run one for unbounded work.
+**Ratified 2026-08-07** (owner decision recorded in
+[the admission ticket](../wayfinder/tickets/jupyter-surface-admission-2026-08-05.md),
+receipts in
+[the admission receipts](../wayfinder/tickets/jupyter-surface-admission-receipts-20260806.md)).
+The kernel-only surface is admitted: agents may start and stop a kernel for
+bounded local work under this document's own start, stop, and recovery
+instructions. Admission covers exactly this definition — a JupyterLab or
+notebook server, or any outward exposure, remains a separate and later
+admission per authority-10's outward-authorization requirement.
