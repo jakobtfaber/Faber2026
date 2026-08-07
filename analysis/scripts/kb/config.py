@@ -73,10 +73,18 @@ CONFIG_GLOBS = [
 # git: commit history (analysis + parent). FLITS is pinned by uv.lock.
 # ---------------------------------------------------------------------------
 GIT_MAX_COMMITS = 2000
-GIT_REPOS = [
-    (ANALYSIS_ROOT, "analysis@"),
-    (MANUSCRIPT_ROOT, ""),
-]
+# In the monorepo layout analysis/ has no .git of its own: both roots are the
+# same repository, so index its history once. The two-entry form remains for
+# a standalone analysis checkout mounted into a manuscript tree.
+if (ANALYSIS_ROOT / ".git").exists():
+    GIT_REPOS = [
+        (ANALYSIS_ROOT, "analysis@"),
+        (MANUSCRIPT_ROOT, ""),
+    ]
+else:
+    GIT_REPOS = [
+        (MANUSCRIPT_ROOT, ""),
+    ]
 
 # ---------------------------------------------------------------------------
 # refs: cited-references library
