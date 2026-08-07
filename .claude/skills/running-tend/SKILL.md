@@ -56,6 +56,45 @@ One pull request does one thing. Do not bundle an adjacent cleanup,
 a lint fix in an untouched file, or a documentation edit into a change
 that is about something else.
 
+## The daily item budget
+
+Opening an issue or a pull request spends a shared, repository-wide daily
+allowance. Every tend workflow starts with a preflight that counts the
+issues and pull requests this bot has created so far today in UTC, and
+aborts the job when that count exceeds `10 + (items over the previous six
+days) / 3`. The abort happens before the model starts and applies to every
+workflow, including the ones that create nothing.
+
+Before `gh issue create` or `gh pr create`, check what is left:
+
+```bash
+BOT=tend-jakobtfaber
+TODAY=$(date -u +%Y-%m-%d)
+gh api "search/issues?q=author:${BOT}+repo:${GITHUB_REPOSITORY}+created:${TODAY}" \
+  --jq '.total_count'
+```
+
+Against the usual allowance of ten: from seven onward, file only what
+carries an owner decision or a correctness finding, and put everything else
+in an existing open issue, in the pull-request body, or in a comment. At the
+allowance, file nothing, and say in a comment what would have been filed and
+why it was held.
+
+Group findings by theme rather than by instance. One issue that names a
+class of defect and enumerates its instances costs one item and reads
+better than five issues; splitting a single finding into a parent issue and
+a follow-up task issue spends two items on one owner decision.
+
+This is not a tidiness preference. On 2026-08-06 the bot created twelve
+items against an allowance of ten, and twelve later runs — nine
+`tend-notifications` and three `tend-review` — then failed at the preflight
+over the following fifteen hours, until the count reset at midnight UTC.
+`tend-review` fires only on pull-request events and never retries, so
+[#339](https://github.com/jakobtfaber/Faber2026/pull/339) has gone
+unreviewed ever since. Two of the twelve items were the `review-runs`
+workflow's own tracking issue and pull request, so a housekeeping run can
+spend the budget that a review of real work then cannot get.
+
 ## Pull request conventions
 
 Title with the lowercase prefix that matches recent history —
