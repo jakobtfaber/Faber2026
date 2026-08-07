@@ -1,0 +1,8 @@
+{
+  "source": "Connor et al. (2025), A gas-rich cosmic web revealed by the partitioning of the missing baryons",
+  "source_table_url": "https://raw.githubusercontent.com/liamconnor/frb_baryon_connor2024/main/data/frbsample_connor0924.csv",
+  "source_table_sha256": "d3458b33864623ec148d08944bea631f440dce8c0bdaf24de2c3fb9c20f93148",
+  "frozen_row": "whitney,FRB 20220310F,59648.24172,68.4,462.7,462.15,415.9,4,0.479,spec,134.7205,73.4908,yes,DSA-110,46.3,1500,True",
+  "retrieved_utc": "2026-07-22",
+  "owner_decision": "Retain the production Whitney redshift 0.479; adopt the Verdi source-event identifiers for Freya, Hamilton, and Chromatica."
+}

@@ -1,0 +1,101 @@
+{
+  "arms": {
+    "adjacent_pair": {
+      "dt_us": 65.536,
+      "offpulse_sigma": 0.26836501826713666,
+      "peak_snr": 66.03236519985657,
+      "profile_peaks_above_5sigma": 4,
+      "samples": 1250,
+      "t_factor": 2
+    },
+    "native": {
+      "dt_us": 32.768,
+      "offpulse_sigma": 0.3097242793038806,
+      "peak_snr": 58.78297260416505,
+      "profile_peaks_above_5sigma": 6,
+      "samples": 2500,
+      "t_factor": 1
+    }
+  },
+  "averaging_identity_max_abs_difference": 0.09967517852783203,
+  "averaging_identity_note": "NOT round-off. The coarse arm differs from a literal adjacent-pair mean of the native arm by a near-constant 0.0997, about 0.37 off-pulse sigma, so load_band's t_factor path is not a bare pairwise average. A previously claimed 2.22e-15 identity is not reproducible through this production loader; it presumably came from an independent averaging step rather than from the path the fits actually use.",
+  "held_identical": {
+    "f_factor": 12,
+    "loader": "plot_codetection_gallery.load_band",
+    "residual_dm": 0.0,
+    "telescope": "dsa"
+  },
+  "input": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
+  "input_sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01",
+  "outputs": {
+    "zach_dsa_resolution_comparison.pdf": "7de2574997f2ceaa8c1f8e3d6fa37839fd19f3cdbf3b514d9a77601c85f559c4",
+    "zach_dsa_resolution_comparison.png": "a4ef354b2d86bbbfd569ca7ae07a24817d481ebb34d0f951d61f595991ebf0a5"
+  },
+  "peak_snr_ratio_coarse_over_native": 1.1233247022825428,
+  "producer": {
+    "argv": [
+      "docs/rse/verify/zach-dsa-resolution-comparison-20260730/compare_resolution.py",
+      "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis",
+      "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/docs/rse/verify/zach-dsa-resolution-comparison-20260730",
+      "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy"
+    ],
+    "matplotlib": "3.10.6",
+    "numpy": "2.5.1",
+    "producer_revision": "77231aedb34f61056d174c4fbfbff0ad01948465",
+    "python": "3.12.13",
+    "script_sha256": "0824eaf8b4072e4f04e7074922219b1e92eb9d9fd59b675fcb9004f90615984e",
+    "working_directory": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis"
+  },
+  "profile_peaks": {
+    "adjacent_pair_ms_from_peak_and_snr": [
+      [
+        0.0,
+        66.0
+      ],
+      [
+        2.032,
+        13.7
+      ],
+      [
+        2.49,
+        18.0
+      ],
+      [
+        3.015,
+        9.8
+      ]
+    ],
+    "native_ms_from_peak_and_snr": [
+      [
+        0.0,
+        58.8
+      ],
+      [
+        2.064,
+        12.5
+      ],
+      [
+        2.195,
+        5.8
+      ],
+      [
+        2.523,
+        16.5
+      ],
+      [
+        2.785,
+        8.1
+      ],
+      [
+        3.015,
+        9.0
+      ]
+    ]
+  },
+  "raw_peak_amplitude": {
+    "adjacent_pair": 17.980180740356445,
+    "native": 18.565961837768555,
+    "ratio_coarse_over_native": 0.9684486533727297
+  },
+  "threshold_peak_count_differs": true
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "decision_date": "2026-07-23",
+  "reviewer": "Jakob T. Faber",
+  "reviewer_role": "manuscript_owner",
+  "scope": "Current local Overleaf working copy",
+  "decision": "none_approved_for_final_draft",
+  "active_pdf_count": 27,
+  "svg_counterpart_count": 13,
+  "note": "No current Overleaf figure is approved for the final draft. This does not convert the separate Figure 3 source-replay candidate into an approval or a scientific rejection."
+}

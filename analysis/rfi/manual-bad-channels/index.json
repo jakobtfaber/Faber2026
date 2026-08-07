@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "policy": "owner-reviewed event-specific maps are the only bad-channel authority",
+  "maps": [
+    {"event": "zach", "instrument": "chime-frb", "status": "owner_approved_materialized", "path": "chime-frb/zach.json"},
+    {"event": "whitney", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "oran", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "isha", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "wilhelm", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "phineas", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "freya", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "johndoeii", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "hamilton", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "mahi", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "chromatica", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "casey", "instrument": "chime-frb", "status": "pending_manual_review", "path": null},
+    {"event": "zach", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "whitney", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "oran", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "isha", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "wilhelm", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "phineas", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "freya", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "johndoeii", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "hamilton", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "mahi", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "chromatica", "instrument": "dsa-110", "status": "pending_manual_review", "path": null},
+    {"event": "casey", "instrument": "dsa-110", "status": "pending_manual_review", "path": null}
+  ]
+}

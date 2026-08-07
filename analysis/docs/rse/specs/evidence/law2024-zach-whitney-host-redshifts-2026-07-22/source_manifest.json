@@ -1,0 +1,118 @@
+{
+  "schema": "faber2026-law2024-host-redshift-evidence/v1",
+  "status": "verified_authoritative_publication",
+  "scope": {
+    "ticket": "expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts",
+    "events": [
+      "FRB 20220207C",
+      "FRB 20220310F"
+    ],
+    "changes_census": false,
+    "changes_verdicts_or_budgets": false
+  },
+  "publication": {
+    "authors": "Casey J. Law et al.",
+    "title": "Deep Synoptic Array Science: First FRB and Host Galaxy Catalog",
+    "journal": "The Astrophysical Journal",
+    "volume": "967",
+    "issue": "1",
+    "article": "29",
+    "version_of_record_date": "2024-05-20",
+    "doi": "10.3847/1538-4357/ad3736",
+    "arxiv": "2307.03344v2",
+    "license": "CC BY 4.0"
+  },
+  "retrieval": {
+    "date": "2026-07-22",
+    "publisher_pdf": {
+      "url": "https://iopscience.iop.org/article/10.3847/1538-4357/ad3736/pdf",
+      "role": "version of record; independently checked against Tables 2 and 3 and the spectroscopy method",
+      "sha256": "f484b7dd23acd2f36cb3de65865d2d4f01c1d29e11978dcdaf3467f928d01478",
+      "size_bytes": 3022602
+    },
+    "arxiv_source": {
+      "url": "https://export.arxiv.org/e-print/2307.03344v2",
+      "version_date": "2024-01-24",
+      "role": "official author source for exact byte extracts",
+      "sha256": "03d941deaa0bc98326a4c3c11466d18efb5a648d9c04acad2ed81743e5b3ee99",
+      "size_bytes": 20045211,
+      "main_tex_sha256": "bd7d9ffdd3080a7a925c24546ab49fa9199e34fcd7babb4816260f47afa60011",
+      "main_tex_size_bytes": 88489
+    },
+    "arxiv_pdf": {
+      "url": "https://arxiv.org/pdf/2307.03344v2",
+      "sha256": "1964e3a5d7aa6a2d2990bfa467e2dd379aa1e64462dc51e38f7d22047f768dc2",
+      "size_bytes": 11186965
+    },
+    "crossref_metadata": {
+      "url": "https://api.crossref.org/works/10.3847/1538-4357/ad3736",
+      "sha256": "e75125127608345733f7d6966b84fe40b568f7fdcd20721128fb6b66bb1cfbba",
+      "size_bytes": 29806
+    }
+  },
+  "frozen_source_bytes": [
+    {
+      "path": "identifier_macros.tex",
+      "source_range": "arXiv 2307.03344v2 main.tex lines 39-41",
+      "sha256": "c4803543915ad7388360fc2a98aef90bbb35b2e83294f1e8e726c124ec887e8c",
+      "size_bytes": 156
+    },
+    {
+      "path": "table2_host_identity.tex",
+      "source_range": "arXiv 2307.03344v2 main.tex lines 243-261; complete Table 2 source environment",
+      "sha256": "ff6784b92831f4cdbb44e26d9a66eefaa30e3744d6a17e9ce5201267ad786134",
+      "size_bytes": 2125
+    },
+    {
+      "path": "spectroscopy_method.tex",
+      "source_range": "arXiv 2307.03344v2 main.tex lines 297-306",
+      "sha256": "70870a572a7f273f50d66b01ea1ccb869ab4ad7a297261715643966157af8abe",
+      "size_bytes": 2328
+    },
+    {
+      "path": "table3_host_redshift.tex",
+      "source_range": "arXiv 2307.03344v2 main.tex lines 347-379; complete Table 3 source environment",
+      "sha256": "6a89e0f7809a68daa53425b8d981ae9cc77d9bee403ef6e69cd54c0eae8af652",
+      "size_bytes": 3356
+    }
+  ],
+  "normalized_output": {
+    "path": "host_redshift_rows.csv",
+    "sha256": "4b21e87b31dbd5aec7b709d757e829bca9b346d2ae7c8502d04a61b63b9d1bbb",
+    "size_bytes": 1000,
+    "row_count": 2
+  },
+  "row_linkage": [
+    {
+      "nickname": "zach",
+      "frb_identifier": "FRB 20220207C",
+      "host_identifier": "PSO J310.1977+72.8826",
+      "published_redshift": "0.043040",
+      "host_identity_row": "10.3847/1538-4357/ad3736|Table 2|FRB 20220207C",
+      "redshift_row": "10.3847/1538-4357/ad3736|Table 3|FRB 20220207C",
+      "measurement_kind": "spectroscopic",
+      "measurement_basis": "pPXF joint stellar-continuum and nebular-emission fit; at least three emission lines",
+      "redshift_uncertainty_available": false,
+      "redshift_uncertainty": null
+    },
+    {
+      "nickname": "whitney",
+      "frb_identifier": "FRB 20220310F",
+      "host_identifier": "PSO J134.7211+73.4910",
+      "published_redshift": "0.477958",
+      "host_identity_row": "10.3847/1538-4357/ad3736|Table 2|FRB 20220310F",
+      "redshift_row": "10.3847/1538-4357/ad3736|Table 3|FRB 20220310F",
+      "measurement_kind": "spectroscopic",
+      "measurement_basis": "pPXF joint stellar-continuum and nebular-emission fit; at least three emission lines",
+      "redshift_uncertainty_available": false,
+      "redshift_uncertainty": null
+    }
+  ],
+  "verification": {
+    "publisher_pdf_matches_author_source_rows": true,
+    "table2_table3_join_key": "FRB identifier",
+    "row_level_redshift_uncertainty_reported": false,
+    "uncertainty_note": "Table 3 and the spectroscopy method report no row-level redshift uncertainty for either event.",
+    "disposition": "The publication supports freezing Zach at 0.043040 and Whitney at 0.477958 as spectroscopic host redshifts. Census adoption and redshift adjudication remain out of scope."
+  }
+}

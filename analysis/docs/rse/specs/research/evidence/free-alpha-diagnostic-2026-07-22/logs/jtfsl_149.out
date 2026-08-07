@@ -1,0 +1,6 @@
+HOST=lxd110h17 JOB=149 START=2026-07-18T15:14:41-07:00 SCINTLEAK burst=wilhelm band=C nchan=8 gamma=0.130 m=1.0 tau=0.25 decorr=1 seed=0
+INJECT-SCINT-LEAK burst=wilhelm band=C nchan=8 (50.0 MHz/ch) gamma=0.13MHz m=1.0 -> m_eff=0.0477 (Dnu_d/ch_bw suppression) tau=0.25 alpha_true=4.0 [DECORR]
+  JOINT free-alpha: alpha_apparent=4.000[3.989,4.012]  bias=-0.000  tau=0.2495  lnZ=-29068.4
+  VERDICT: no leakage (alpha recovers ~4)
+  wrote /home/ubuntu/flits-runs/data/scintleak/scintleak_wilhelm_C8_g0.13_m1.0_dec_s0.json
+DONE SCINTLEAK burst=wilhelm gamma=0.130 decorr=1 RC=0 WALL_SEC=1277 END=2026-07-18T15:35:58-07:00

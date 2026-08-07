@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "event": "replace-me",
+  "instrument": "chime-frb-or-dsa-110",
+  "source_product": {
+    "path": "replace-me",
+    "sha256": "replace-me"
+  },
+  "frequency_axis": {
+    "path": "replace-me",
+    "sha256": "replace-me",
+    "row_count": 0
+  },
+  "bad_row_ranges": [],
+  "review": {
+    "reviewer": null,
+    "reviewed_at": null,
+    "evidence": null,
+    "notes": ""
+  }
+}

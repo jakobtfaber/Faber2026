@@ -1,0 +1,36 @@
+{
+  "dirtyState": [
+    {
+      "repo": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-h17-source-data-layout/pipeline",
+      "taskScoped": [
+        "scripts/h17_codetections/diag/_timeit.py",
+        "scripts/h17_codetections/diag/diag_dedisp.py",
+        "scripts/h17_codetections/diag/diag_residual_batch.py",
+        "scripts/h17_codetections/diag/diag_zach_dmphase_docker.py",
+        "scripts/h17_codetections/diag/diag_zach_docker.py",
+        "scripts/h17_codetections/diag/diag_zach_residual_docker.py",
+        "scripts/h17_codetections/diag/proto_extract_zach.py",
+        "scripts/h17_codetections/diag/proto_sweep.py",
+        "scripts/h17_codetections/dump_dmphase.py",
+        "scripts/h17_codetections/dump_grid_data.py",
+        "scripts/h17_codetections/extract_chime_dm_v2.py",
+        "scripts/h17_codetections/extract_chime_dm_v3_finetune.py",
+        "scripts/h17_codetections/extract_chime_dm_v4_envelope.py",
+        "scripts/h17_codetections/extract_chime_dm_v4b_regression.py",
+        "scripts/h17_codetections/extract_chime_side_inputs.py",
+        "scripts/h17_codetections/extract_chime_singlebeam_toas.py",
+        "scripts/h17_codetections/extract_final_parallel.py",
+        "scripts/h17_codetections/sweep_downsample.py",
+        "scripts/h17_codetections/validate_fix.py",
+        "tests/test_h17_source_data_layout.py"
+      ],
+      "preExistingUnrelated": [],
+      "adjacentFollowup": [],
+      "generatedOrCache": [],
+      "sensitiveOrConfig": [],
+      "unknown": [],
+      "blocksCommit": false,
+      "nextQuestion": null
+    }
+  ]
+}

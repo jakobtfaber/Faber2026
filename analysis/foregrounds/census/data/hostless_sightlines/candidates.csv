@@ -1,0 +1,4 @@
+nickname,type,object_id,classification,impact_kpc,adopted_z,adopted_z_err,source_family,source_disposition,source_row_sha256,m200c_msun,r200c_kpc,model_fields_complete,science_admitted
+freya,halo,197030881733398302,GALAXY,60.1,0.3047,0.068,PS1-STRM,frozen_not_admitted,87dcccc8370c027ae81b6171f77ea9df53094032e04545fd73be7833e2ed11f9,13018977990494.793,445.8656126627757,True,False
+freya,halo,197040882212782495,GALAXY,233.9,0.6175,0.1255,PS1-STRM,frozen_not_admitted,6208dfe94a02806d8108ad7714e38af7b08f14352f2e55865f52b29a7285408a,2492956128051.4624,226.86812138090824,True,False
+wilhelm,halo,194453151328186646,UNSURE,232.0,,,PS1-STRM,identity_verified_no_catalog_redshift,e9d3baa96b4f12651c6f14c586db4ada331ac66763519ae113b24f2c014fba1b,,,False,False

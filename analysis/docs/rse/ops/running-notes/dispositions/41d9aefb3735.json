@@ -1,0 +1,11 @@
+{
+  "id": "41d9aefb3735",
+  "note_id": "41d9aefb3735",
+  "sorted_at": "2026-07-20T08:32:00Z",
+  "plain_english": "Reminder only: the casey DM strip pick is still the current NOW item under ticket 18 (redo DM analysis on certified bytes). Owner still needs to pick casey's DM from the corrected-sign decision strip (casey_dm_strip_CORRECTED.png) before the metric can be codified and run on all 12 bursts. This is a smoke-test note carrying no new science; it just re-anchors attention to the pending casey calibration decision.",
+  "data_chain": "Measurements and Fits",
+  "wayfinder_tickets": ["18"],
+  "board_sections": ["Cross-cutting campaigns", "Both-band scintillation campaign"],
+  "suggested_next": "Show docs/rse/decks/dm/casey-dm-calibration-2026-07-19/casey_dm_strip_CORRECTED.png full-size and get the owner's casey DM pick.",
+  "invented_claims": false
+}

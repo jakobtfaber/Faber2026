@@ -1,0 +1,17 @@
+{
+  "input": {
+    "path": "foregrounds/census/data/sightline_halo_grid.csv",
+    "receipt": "foregrounds/census/data/sightline_halo_grid.receipt.json",
+    "receipt_sha256": "0176e916c16cc11cec76dfc88b2bedc431cf497ee44cc144cb88772b08c727d5",
+    "sha256": "ca115a3dd2df7f77c13b8ae9beb339644f6826a24cfa4127f71d96f896762a71"
+  },
+  "manuscript_promotion": "blocked_pending_owner_visual_approval",
+  "manuscript_target": "figures/sightline_halo_grid.pdf",
+  "outputs": {
+    "sightline_halo_grid.pdf": "8c7d2e9289ae08f82a1fc6fd8dea9e2ee659e60f9becef437d6a0cf0f6b611a6",
+    "sightline_halo_grid.png": "a7e2da3d9196e36da3fcc176658d05c9d5db89fe2e2d97cf42c463fa20e69118",
+    "sightline_halo_grid.svg": "dcb794f8ff36336fd5d2e94104820af182ec783108816c8ac1af2ec97bd1d3c3"
+  },
+  "schema_version": 1,
+  "status": "review_candidate_generated"
+}
