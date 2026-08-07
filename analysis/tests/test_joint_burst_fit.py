@@ -22,6 +22,7 @@ from radio_pipeline.fitting.joint_burst import (
     HypothesisFit,
     JointFitRequest,
     _checkpoint_identity,
+    _gain_marginal_band,
     _layout,
     _log_likelihood,
     _mixture_edge_mass,
@@ -175,6 +176,44 @@ def test_different_native_grids_share_one_absolute_dm_maximum() -> None:
     truth_score = _log_likelihood(truth, request, layout, "gaussian")
     assert truth_score > _log_likelihood(low, request, layout, "gaussian")
     assert truth_score > _log_likelihood(high, request, layout, "gaussian")
+
+
+def test_one_component_gain_marginal_matches_scalar_reference() -> None:
+    observation = _request().observations[0]
+    rng = np.random.default_rng(991)
+    kernels = rng.normal(size=(1, *observation.waterfall.shape))
+    gain_variance = 3.7
+    actual, actual_model = _gain_marginal_band(
+        observation, kernels, gain_variance, return_model=True
+    )
+
+    expected = 0.0
+    expected_model = np.full(observation.waterfall.shape, np.nan)
+    for row in range(observation.waterfall.shape[0]):
+        use = observation.valid[row]
+        if not np.any(use):
+            continue
+        data = observation.waterfall[row, use]
+        noise = observation.noise_std[row, use]
+        design = kernels[:, row, use].T
+        whitened_data = data / noise
+        whitened_design = design / noise[:, None]
+        gram = whitened_design.T @ whitened_design
+        projection = whitened_design.T @ whitened_data
+        precision = gram + np.eye(1) / gain_variance
+        gains = np.linalg.solve(precision, projection)
+        _, logdet = np.linalg.slogdet(np.eye(1) + gain_variance * gram)
+        quadratic = float(whitened_data @ whitened_data - projection @ gains)
+        expected += (
+            -0.5 * quadratic
+            - 0.5 * float(logdet)
+            - 0.5 * use.sum() * np.log(2.0 * np.pi)
+            - float(np.log(noise).sum())
+        )
+        expected_model[row, use] = design @ gains
+
+    assert actual == pytest.approx(expected, rel=5.0e-13, abs=5.0e-10)
+    np.testing.assert_allclose(actual_model, expected_model, rtol=5.0e-13)
 
 
 @pytest.mark.parametrize(
@@ -367,6 +406,26 @@ def test_crop_origin_and_off_pulse_support_fail_on_drift() -> None:
     shifted["time0_unix_ns"] = np.asarray(resolution["chime_time0_unix_ns"] + 1)
     with pytest.raises(ValueError, match="crop origin"):
         _require_locked_product_metadata(shifted, "chime", resolution)
+    shifted_time_axis = sample_time_axis_ns(
+        time0_unix_ns=int(shifted["time0_unix_ns"]),
+        sample_interval_s=sample_interval_s,
+        sample_count=waterfall.shape[1],
+    )
+    _require_locked_product_metadata(
+        shifted,
+        "chime",
+        resolution,
+        expected_time0_unix_ns=int(shifted["time0_unix_ns"]),
+        expected_time_axis_sha256=_arrays_sha256(shifted_time_axis),
+    )
+    with pytest.raises(ValueError, match="time axis"):
+        _require_locked_product_metadata(
+            shifted,
+            "chime",
+            resolution,
+            expected_time0_unix_ns=int(shifted["time0_unix_ns"]),
+            expected_time_axis_sha256="0" * 64,
+        )
     changed_mask = dict(product)
     changed_mask["noise_estimation_mask"] = np.roll(mask, 1, axis=1)
     with pytest.raises(ValueError, match="off-pulse"):

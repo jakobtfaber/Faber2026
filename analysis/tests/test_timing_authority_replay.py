@@ -24,7 +24,7 @@ CASEY_TIME_ORIGIN = {
     "trigger_mjd_utc": "60369.37095221912",
     "trigger_reference_frequency_mhz": 1530.0,
     "trigger_reference_frequency_status": (
-        "proposed_modeling_convention_pending_owner_decision"
+        "owner_approved_provisional_modeling_convention"
     ),
     "trigger_reference_frequency_sensitivity_required": True,
     "filterbank_product_dm_pc_cm3": 491.211,
@@ -36,7 +36,7 @@ CASEY_TIME_ORIGIN = {
     },
     "mapping_ambiguity_s": 0.000098304,
     "mapping_uncertainty_treatment": (
-        "pending_owner_decision_discrete_two_anchor_sensitivity"
+        "owner_approved_discrete_two_anchor_sensitivity"
     ),
     "rounded_tstart_allowed": False,
     "owner_approval_date": "2026-08-01",
@@ -44,11 +44,11 @@ CASEY_TIME_ORIGIN = {
         "analysis-configs/absolute-dm/decisions/casey-trigger-peak.json"
     ),
     "owner_decision_receipt_sha256": (
-        "eff1e306ffe75ed5efe9e93137e6faecec1d077b2ca5a35853aec883087becb0"
+        "8556058d12d062b62b9053707af83fa32d42481addb99b0c7993dc1777b16071"
     ),
 }
 TRIGGER_AUTHORITY_SHA256 = "87852969eb41c2abfa4c6534557ad03ed4f3e16e64cf1b28bd9da35f4ff89a0e"
-OWNER_DECISION_SHA256 = "eff1e306ffe75ed5efe9e93137e6faecec1d077b2ca5a35853aec883087becb0"
+OWNER_DECISION_SHA256 = "8556058d12d062b62b9053707af83fa32d42481addb99b0c7993dc1777b16071"
 ORIGINAL_AUDIT_CHIME = timing.audit_chime
 ORIGINAL_AUDIT_DSA = timing.audit_dsa
 
@@ -383,7 +383,7 @@ def test_receipt_records_peak_anchor_but_blocks_pending_mapping_decision(
         tmp_path / "environment-receipt.json",
     )
     assert receipt["status"] == (
-        "timing_replayed_fit_input_blocked_pending_mapping_decision"
+        "timing_replayed_fit_input_blocked_pending_sensitivity_products"
     )
     assert receipt["reference_frequency_mhz"] == 400.0
 
@@ -633,6 +633,20 @@ def test_owner_decision_receipt_binds_exact_context_and_narrow_scope() -> None:
     assert timing.hashlib.sha256(
         receipt["owner_response"]["text"].encode()
     ).hexdigest() == receipt["owner_response"]["text_sha256"]
+    followup = receipt["followup_owner_decision"]
+    assert followup["proposal"]["source_message_id"] == (
+        "msg_01dcbd6a96f1be7d016a6e3fe43ba0819ba2ce4359855a0569"
+    )
+    assert timing.hashlib.sha256(
+        followup["proposal"]["text"].encode()
+    ).hexdigest() == followup["proposal"]["text_sha256"]
+    assert followup["owner_response"]["source_message_id"] == (
+        "msg_019fc4c3-5cc2-73c0-bf27-5c4fd8d1ea77"
+    )
+    assert followup["owner_response"]["text"].endswith("\n")
+    assert timing.hashlib.sha256(
+        followup["owner_response"]["text"].encode()
+    ).hexdigest() == followup["owner_response"]["text_sha256"]
     assert receipt["approved_scope"]["filterbank_peak_sample_index"] == 15259
     assert receipt["approved_scope"]["geometry_constraint_retained"] is True
     assert "sampling" in receipt["not_approved"]

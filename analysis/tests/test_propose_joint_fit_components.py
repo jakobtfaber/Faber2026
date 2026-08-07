@@ -178,6 +178,41 @@ def test_injected_c1d1_proposal_preserves_native_grids_and_emits_pdf(tmp_path) -
         assert component["padding_samples"] >= 4
         assert component["width_bounds_s"][0] < component["width_bounds_s"][1]
         assert min(component["off_pulse_samples"].values()) >= 8
+        intervals = component["off_pulse_intervals_samples"]
+        assert intervals[0][0] == 0
+        assert intervals[-1][1] in (256, 320)
+
+
+def test_post_peak_tail_extends_envelope_through_background_guard(tmp_path) -> None:
+    _, config_path, chime, dsa = _inputs(tmp_path)
+    with np.load(chime, allow_pickle=False) as archive:
+        payload = {name: np.array(archive[name], copy=True) for name in archive.files}
+    sample = np.arange(payload["waterfall"].shape[1])
+    narrow_peak = 30.0 * np.exp(-0.5 * np.square((sample - 128) / 2.0))
+    tail = np.where(sample >= 128, 4.0 * np.exp(-(sample - 128) / 24.0), 0.0)
+    payload["waterfall"] += (narrow_peak + tail)[None, :]
+    np.savez_compressed(chime, **payload)
+
+    result = run(
+        config_path=config_path,
+        event="injected",
+        chime_path=chime,
+        dsa_path=dsa,
+        output_json=tmp_path / "proposal.json",
+        output_pdf=tmp_path / "proposal.pdf",
+    )
+
+    component = next(
+        row for row in result["components"] if row["instrument"] == "chime"
+    )
+    tail_check = component["tail_background_check"]
+    assert tail_check["envelope_extended"] is True
+    assert component["on_pulse_envelope_samples"][1] == (
+        tail_check["background_consistent_samples"][1]
+    )
+    assert tail_check["consecutive_samples"] == (
+        2 * component["matched_filter_width_samples"]
+    )
 
 
 def test_proposal_fails_on_low_signal(tmp_path) -> None:

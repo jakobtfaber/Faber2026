@@ -34,11 +34,16 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.special import ndtri
 
-from ._pulse_kernels import gaussian_density, gaussian_exponential_density
+from ._pulse_kernels import (
+    gaussian_density,
+    gaussian_exponential_density,
+)
 
 REFERENCE_FREQUENCY_MHZ = 400.0
 K_DM_S_MHZ2 = 4148.808
 _DM_IDENTITY_ATOL = 1.0e-9
+_RESPONSE_NODE = np.array([-math.sqrt(3.0 / 5.0), 0.0, math.sqrt(3.0 / 5.0)])
+_RESPONSE_WEIGHT = np.array([5.0, 8.0, 5.0]) / 18.0
 
 Instrument = Literal["chime", "dsa"]
 Morphology = Literal["gaussian", "scattering"]
@@ -88,6 +93,13 @@ class BandObservation:
     reference_frequency_mhz: float
     dispersion: DispersionState
     input_sha256: dict[str, str] = field(default_factory=dict)
+    _gain_whitened_data: NDArray[np.floating] = field(init=False, repr=False)
+    _gain_inverse_noise: NDArray[np.floating] = field(init=False, repr=False)
+    _gain_data_quadratic: NDArray[np.floating] = field(init=False, repr=False)
+    _gain_log_constant: NDArray[np.floating] = field(init=False, repr=False)
+    _kernel_time_s: NDArray[np.floating] = field(init=False, repr=False)
+    _kernel_frequency_mhz: NDArray[np.floating] = field(init=False, repr=False)
+    _kernel_dispersion_basis_s: NDArray[np.floating] = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
         self.waterfall = np.asarray(self.waterfall, dtype=float)
@@ -133,10 +145,42 @@ class BandObservation:
             raise ValueError("valid pixels require finite positive noise")
         self.channel_width_mhz = widths
         self.noise_std = noise
+        safe_noise = np.where(self.valid, noise, 1.0)
+        self._gain_whitened_data = np.where(
+            self.valid, self.waterfall / safe_noise, 0.0
+        )
+        self._gain_inverse_noise = np.where(self.valid, 1.0 / safe_noise, 0.0)
+        self._gain_data_quadratic = np.einsum(
+            "ft,ft->f", self._gain_whitened_data, self._gain_whitened_data
+        )
+        self._gain_log_constant = (
+            -0.5 * self.valid.sum(axis=1) * math.log(2.0 * math.pi)
+            - np.where(self.valid, np.log(safe_noise), 0.0).sum(axis=1)
+        )
+        self._kernel_time_s = np.arange(self.waterfall.shape[1], dtype=float) * float(
+            self.sample_interval_s
+        )
+        self._kernel_frequency_mhz = (
+            self.frequency_mhz[:, None]
+            + 0.5 * self.channel_width_mhz[:, None] * _RESPONSE_NODE
+        )
+        self._kernel_dispersion_basis_s = K_DM_S_MHZ2 * (
+            self._kernel_frequency_mhz**-2 - REFERENCE_FREQUENCY_MHZ**-2
+        )
+        # The gain and kernel terms above are precomputed from these arrays;
+        # freeze them so later mutation cannot desynchronize the cached terms.
+        for array in (
+            self.waterfall,
+            self.valid,
+            self.frequency_mhz,
+            self.channel_width_mhz,
+            self.noise_std,
+        ):
+            array.setflags(write=False)
 
     @property
     def time_s(self) -> NDArray[np.floating]:
-        return np.arange(self.waterfall.shape[1], dtype=float) * float(self.sample_interval_s)
+        return self._kernel_time_s
 
 
 @dataclass(frozen=True, slots=True)
@@ -604,19 +648,10 @@ def _component_kernels(
 ) -> NDArray[np.floating]:
     relative_time = (
         observation.time0_unix_ns - request.geometry.epoch_unix_ns
-    ) * 1.0e-9 + observation.time_s
-    frequency = observation.frequency_mhz
-    # Three-point Gauss-Legendre integration represents each recorded
-    # rectangular channel response without resampling either native grid.
-    response_node = np.array([-math.sqrt(3.0 / 5.0), 0.0, math.sqrt(3.0 / 5.0)])
-    response_weight = np.array([5.0, 8.0, 5.0]) / 18.0
-    evaluation_frequency = (
-        frequency[:, None] + 0.5 * observation.channel_width_mhz[:, None] * response_node
-    )
+    ) * 1.0e-9 + observation._kernel_time_s
+    evaluation_frequency = observation._kernel_frequency_mhz
     residual_dm = values["absolute_dm_pc_cm3"] - observation.dispersion.product_dm_pc_cm3
-    dispersion_delay = (
-        K_DM_S_MHZ2 * residual_dm * (evaluation_frequency**-2 - REFERENCE_FREQUENCY_MHZ**-2)
-    )
+    dispersion_delay = residual_dm * observation._kernel_dispersion_basis_s
     timing_error = values[layout.timing_error_names[observation.instrument]]
     kernels = []
     ordered = sorted(
@@ -647,28 +682,36 @@ def _component_kernels(
             values[width_name]
             * (evaluation_frequency / REFERENCE_FREQUENCY_MHZ) ** values[index_name]
         )
-        kernel = np.zeros(
-            (observation.waterfall.shape[0], relative_time.size),
-            dtype=float,
-        )
-        for node_index, weight in enumerate(response_weight):
-            if morphology == "scattering":
-                tau = values["tau_1ghz_s"] * (evaluation_frequency[:, node_index] / 1000.0) ** (
-                    -values["scattering_alpha"]
-                )
-                evaluated = gaussian_exponential_density(
+        if morphology == "scattering":
+            tau = values["tau_1ghz_s"] * (evaluation_frequency / 1000.0) ** (
+                -values["scattering_alpha"]
+            )
+            evaluated = gaussian_exponential_density(
+                relative_time,
+                center.reshape(-1),
+                width.reshape(-1),
+                tau.reshape(-1),
+            )
+            evaluated = evaluated.reshape(
+                observation.waterfall.shape[0],
+                _RESPONSE_WEIGHT.size,
+                relative_time.size,
+            )
+            kernel = (
+                _RESPONSE_WEIGHT[0] * evaluated[:, 0]
+                + _RESPONSE_WEIGHT[1] * evaluated[:, 1]
+                + _RESPONSE_WEIGHT[2] * evaluated[:, 2]
+            )
+        else:
+            kernel = np.zeros(
+                (observation.waterfall.shape[0], relative_time.size), dtype=float
+            )
+            for node_index, weight in enumerate(_RESPONSE_WEIGHT):
+                kernel += weight * gaussian_density(
                     relative_time,
                     center[:, node_index],
                     width[:, node_index],
-                    tau,
                 )
-            else:
-                evaluated = gaussian_density(
-                    relative_time,
-                    center[:, node_index],
-                    width[:, node_index],
-                )
-            kernel += weight * evaluated
         kernels.append(kernel)
     return np.asarray(kernels, dtype=float)
 
@@ -683,6 +726,30 @@ def _gain_marginal_band(
     """Integrate channel/component gains under a fixed proper Gaussian prior."""
 
     ncomponent, nfrequency, _ = kernels.shape
+    if ncomponent == 1:
+        whitened_design = kernels[0] * observation._gain_inverse_noise
+        gram = np.einsum("ft,ft->f", whitened_design, whitened_design)
+        projection = np.einsum(
+            "ft,ft->f", whitened_design, observation._gain_whitened_data
+        )
+        precision = gram + 1.0 / gain_variance
+        if np.any(~np.isfinite(precision)) or np.any(precision <= 0):
+            return -np.inf, None
+        gains = projection / precision
+        logdet = np.log1p(gain_variance * gram)
+        if np.any(~np.isfinite(logdet)):
+            return -np.inf, None
+        quadratic = observation._gain_data_quadratic - projection * gains
+        log_evidence = np.sum(
+            -0.5 * quadratic - 0.5 * logdet + observation._gain_log_constant
+        )
+        if not return_model:
+            return float(log_evidence), None
+        model = np.full(observation.waterfall.shape, np.nan, dtype=float)
+        evaluated = kernels[0] * gains[:, None]
+        model[observation.valid] = evaluated[observation.valid]
+        return float(log_evidence), model
+
     log_evidence = 0.0
     model = np.full(observation.waterfall.shape, np.nan, dtype=float)
     identity = np.eye(ncomponent)

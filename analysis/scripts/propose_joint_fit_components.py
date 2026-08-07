@@ -32,6 +32,8 @@ from radio_pipeline.fitting.products import sha256_file  # noqa: E402
 
 MINIMUM_PEAK_SIGNAL_TO_NOISE = 6.0
 MINIMUM_OFF_PULSE_SAMPLES_PER_SIDE = 8
+TAIL_BACKGROUND_THRESHOLD_SIGMA = 2.5
+TAIL_BACKGROUND_FILTER_WIDTHS = 2
 
 
 @dataclass(frozen=True, slots=True)
@@ -50,6 +52,10 @@ class BandProposal:
     width_bounds_s: tuple[float, float]
     off_pulse_samples_left: int
     off_pulse_samples_right: int
+    off_pulse_intervals_samples: tuple[tuple[int, int], ...]
+    tail_background_start_sample: int
+    tail_background_stop_sample: int
+    tail_extension_applied: bool
 
     def compact(self, component_index: int) -> dict[str, object]:
         return {
@@ -70,7 +76,31 @@ class BandProposal:
                 "left": self.off_pulse_samples_left,
                 "right": self.off_pulse_samples_right,
             },
+            "off_pulse_intervals_samples": [
+                list(interval) for interval in self.off_pulse_intervals_samples
+            ],
+            "tail_background_check": {
+                "threshold_sigma": TAIL_BACKGROUND_THRESHOLD_SIGMA,
+                "consecutive_samples": (
+                    self.tail_background_stop_sample
+                    - self.tail_background_start_sample
+                ),
+                "background_consistent_samples": [
+                    self.tail_background_start_sample,
+                    self.tail_background_stop_sample,
+                ],
+                "envelope_extended": self.tail_extension_applied,
+            },
         }
+
+
+def _true_intervals(mask: np.ndarray) -> tuple[tuple[int, int], ...]:
+    edges = np.diff(np.pad(np.asarray(mask, dtype=np.int8), (1, 1)))
+    starts = np.flatnonzero(edges == 1)
+    stops = np.flatnonzero(edges == -1)
+    return tuple(
+        (int(start), int(stop)) for start, stop in zip(starts, stops, strict=True)
+    )
 
 
 def _profile_and_off_pulse(product_path: Path) -> tuple[object, np.ndarray, np.ndarray]:
@@ -140,6 +170,25 @@ def _proposal_for_peak(
     padding = max(4, 2 * width)
     envelope_start = core_start - padding
     envelope_stop = core_stop + padding
+
+    tail_profile = filtered / np.sqrt(width)
+    tail_run_samples = TAIL_BACKGROUND_FILTER_WIDTHS * width
+    tail_background_start = None
+    for start in range(core_stop, profile.size - tail_run_samples + 1):
+        if np.all(
+            np.abs(tail_profile[start : start + tail_run_samples])
+            <= TAIL_BACKGROUND_THRESHOLD_SIGMA
+        ):
+            tail_background_start = start
+            break
+    if tail_background_start is None:
+        raise ValueError(
+            f"{observation.instrument} post-peak tail never reaches background"
+        )
+    tail_background_stop = tail_background_start + tail_run_samples
+    tail_extension_applied = envelope_stop < tail_background_start
+    if tail_extension_applied:
+        envelope_stop = tail_background_stop
     if envelope_start <= 0 or envelope_stop >= profile.size:
         raise ValueError(f"{observation.instrument} proposed envelope contacts crop edge")
 
@@ -174,6 +223,10 @@ def _proposal_for_peak(
         width_bounds_s=(width_low, width_high),
         off_pulse_samples_left=left_off_pulse,
         off_pulse_samples_right=right_off_pulse,
+        off_pulse_intervals_samples=_true_intervals(off_pulse_columns),
+        tail_background_start_sample=tail_background_start,
+        tail_background_stop_sample=tail_background_stop,
+        tail_extension_applied=tail_extension_applied,
     )
 
 
@@ -361,6 +414,22 @@ def _render(
             color="black",
             linewidth=0.8,
         )
+        background_intervals = proposals[instrument][0].off_pulse_intervals_samples
+        for interval_index, (start, stop) in enumerate(background_intervals):
+            if interval_index == 0:
+                label = "pre-burst background"
+            elif interval_index == len(background_intervals) - 1:
+                label = "post-burst background"
+            else:
+                label = "background"
+            for axis, alpha in ((axes[0, column], 0.08), (axes[1, column], 0.12)):
+                axis.axvspan(
+                    (start - 0.5) * time_step_ms,
+                    (stop - 0.5) * time_step_ms,
+                    color="tab:green",
+                    alpha=alpha,
+                    label=label if axis is axes[1, column] else None,
+                )
         for component_index, proposal in enumerate(proposals[instrument], start=1):
             label_suffix = f" {component_index}" if len(proposals[instrument]) > 1 else ""
             for axis, envelope_alpha, core_alpha in (
