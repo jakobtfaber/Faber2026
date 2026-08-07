@@ -5,7 +5,14 @@ from pathlib import Path
 
 import yaml
 
-WORKFLOW = Path(__file__).parents[1] / ".github" / "workflows" / "analysis-ci.yml"
+# The workflow lives at the repository root; in the monorepo layout that is
+# one level above the analysis directory, in a standalone analysis checkout
+# it is the analysis directory itself.
+_CANDIDATES = [
+    Path(__file__).parents[1] / ".github" / "workflows" / "analysis-ci.yml",
+    Path(__file__).parents[2] / ".github" / "workflows" / "analysis-ci.yml",
+]
+WORKFLOW = next((p for p in _CANDIDATES if p.is_file()), _CANDIDATES[0])
 DUALBAND_MODULE = "tests/test_permanent_dualband_workflow.py"
 INVENTORY_MODULE = "tests/test_checkout_inventory.py"
 MARKERS = (
@@ -35,7 +42,10 @@ def _collect(*extra: str) -> set[str]:
             MARKERS,
             *extra,
         ],
-        cwd=WORKFLOW.parents[2],
+        # Collection always runs from the analysis root (the directory the
+        # workflow sets as working-directory), not from wherever the workflow
+        # file itself lives.
+        cwd=Path(__file__).parents[1],
         check=True,
         capture_output=True,
         text=True,
@@ -132,7 +142,8 @@ def test_analysis_changes_use_three_routed_lanes() -> None:
     ):
         assert jobs[name]["if"] == "needs.changes.outputs.lane == 'full'"
     assert jobs["analysis-quality"]["if"] == (
-        "needs.changes.outputs.lane != 'registry'"
+        "needs.changes.outputs.lane == 'full' || "
+        "needs.changes.outputs.lane == 'quality'"
     )
 
 
