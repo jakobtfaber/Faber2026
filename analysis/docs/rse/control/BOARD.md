@@ -1,0 +1,334 @@
+# Manuscript board — CHIME/FRB–DSA-110 co-detections (canonical task list)
+
+**Canonical as of 2026-07-18** (owner decision). Supersedes
+`specs/plan-circulation-readiness.md` and the `program-state.toml` lane views,
+which are frozen as history (banners in place; the CI `check-state` gate still
+reads the frozen toml — retiring that machinery is a separate mechanical
+change). Decisions are made on the wayfinder map
+([`wayfinder/map-apj-submission.md`](wayfinder/map-apj-submission.md)) — this
+board carries execution, organized by manuscript structure. Wayfinder ticket
+references appear as `[wf-NN]`.
+
+**Naming:** descriptive-first; legacy letter+number codes appear once in
+parentheses for traceability into the frozen docs.
+
+**Trust:** the row-level registry and its independent claim-owner ledger govern
+what is citable ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)).
+Only rows marked trusted may be quoted, within their named scope. Pending and
+revoked rows remain fail-closed. Tasks marked **⛔ trust** consume those products
+and remain sequenced behind their named re-validation gates.
+
+**Legend:** `[ ]` open · `[x]` done · `⛔ trust` gated on trust
+overhaul/re-validation · `⏳ campaign` gated on a cross-cutting campaign ·
+Owner decisions live in linked Wayfinder tickets or figure-review manifests;
+the board is not an independent queue source.
+
+---
+
+## Cross-cutting campaigns
+
+Feed multiple sections; section tasks reference them, never duplicate them.
+
+### Trust & contracts
+- [x] Trust-ledger overhaul — lane-by-lane re-audit of the revocation
+  waves; sets the citability bar everywhere
+  ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md))
+- [x] Fit re-validation contract ratification (legacy V1) — bar for any
+  re-fit to be citable ([wf-03](wayfinder/tickets/03-ratify-fit-retrust-contract.md))
+- [ ] CHIME scattering-input lineage check (legacy V2) — do the dynamic
+  spectra feeding the scattering fits share the gen-1 de-chirp defect?
+
+### Both-band scintillation campaign
+
+**SUPERSEDED AS A LANE (owner charter 2026-07-26):** the first-pass campaign
+(window tuning, two-component ACF runs, `window_campaign_2L` table) is not
+final; manuscript numbers come from the interactive from-raw re-do,
+[scint-redo-01](wayfinder/tickets/scint-redo-01-interactive-recampaign-from-raw-data.md).
+The items below stand as checklist inputs to the re-do, not as an
+independent execution path.
+
+**⛔ INPUT REMEDIATION FIRST (owner adjudication 2026-07-18,
+[findings](specs/owner-data-review-findings-2026-07-18.md)):**
+
+- [ ] RFI excision pass: all CHIME upchannelized products + DSA
+  central-channel RFI; per-burst masks documented
+- [ ] One authoritative DM per burst across all products (reconcile upchan
+  TARGETS vs full-res vs adopted catalog; marker-dependence rule governs);
+  rebuild aligned upchan npz set at adopted DMs, fresh checksums/provenance
+- [ ] Re-run the windowed-refit campaign on remediated inputs (same
+  predeclared gates); rerun closure/finalization + validation.json + figures
+- [ ] Fresh 36-panel input review + both-band ACF review for owner
+
+- [ ] Ratify the qualifying CHIME-band method — **blocked on remediation**
+  ([wf-02](wayfinder/tickets/02-ratify-chime-scintillation-method.md))
+- [ ] Burst configs for the four unconfigured sightlines
+  (whitney/phineas/mahi/isha) (legacy B1)
+- [ ] CHIME regeneration for the six never-generated co-detections
+  (zach, oran, wilhelm, johndoeii, hamilton, chromatica) (legacy B2)
+- [ ] mahi 700–725 MHz RFI inspection before that sub-band is used (legacy B3*)
+- [ ] ACF / decorrelation-bandwidth measurements across the sample, both
+  bands, under the ratified contract (incl. re-running the revoked DSA-band
+  fits) (legacy B4)
+- [ ] Two-screen analysis rebuilt on joint CHIME+DSA products (legacy B5)
+- [ ] Provenance housekeeping: scint data-provenance refresh, commit the
+  h17-side tooling (legacy B6)
+
+### Scattering re-fit campaign
+- [ ] Scintillation-to-scattering coupling design closure (legacy A1):
+  [residual trigger](wayfinder/tickets/04a-close-residual-trigger.md)
+- [x] Profile-component-count statistic deferred; not a submission blocker (legacy A5)
+  ([wf-05](wayfinder/tickets/05-profile-component-statistic-blocker-decision.md))
+- [ ] Extended-medium (uniform-LOS) PBF kernel, β-coupled, per band (legacy A2)
+- [ ] Per-sightline geometry model selection, thin vs extended,
+  scint-informed (legacy A3)
+- [ ] From-scratch re-fit of all twelve co-detections under the ratified
+  contract with geometry adjudication (legacy C1) — **12/12 production
+  mass-refit landscape landed 2026-07-18** (jointtf lane, h17): 4 interior /
+  3 ceiling-adjacent / 3 ceiling-rail / new floor-rail class
+  (hamilton, whitney); PL-PBF collapsed to production EMG. The free-α win is a
+  diagnostic mismatch signature only; mechanism injections are closed and its
+  reporting is confined to Methods or an appendix
+  ([wf-14](../wayfinder/tickets/14-free-alpha-diagnostic-reporting.md)). Remaining:
+  count adoption
+  ([wf-15](wayfinder/tickets/15-count-audit-remediation-standing-method.md)),
+  validation + ratification before manuscript use
+- [ ] Per-band systematics pass on flagged sightlines (legacy C2)
+- [ ] Pipeline pin bump + table/figure regeneration from the campaign (legacy C3)
+
+### Energies re-validation
+- [ ] Energies pipeline under the ratified contract; resolve the spectral-index
+  pile-up at ≈−5 and the table selection-rule contradiction; fold in the
+  energy-definitions/calibration checklist (units, unmasked-bandwidth
+  integration, SEFD/beam prior budget) (legacy V3 + review S20)
+
+### Figures
+- [ ] Figure 1 twelve-burst gallery — **at owner-decide gate** (2026-07-18):
+  observed-peak candidate merged + promotable
+  (`2026-07-17-fig1-observed-peak-audit`); dmcorr variant refuted
+  (marker-dependence); owner runs the two `figure_review.py decide` commands
+  (handoff-2026-07-18-14-44), then any session runs the promotion PR
+- [ ] Wishlist figures: (re)insert per `specs/figure-wishlist.md` as their
+  gates clear; strip draft `\fbox` placeholders before circulation
+
+### Verification & rigor
+
+Protocol: [`verification-protocol.md`](verification-protocol.md) (adopted
+2026-07-18). Five tiers by claim class; a section task is not done until its
+inherited tiers are green. Approved tooling: WolframScript + MATLAB (hpcc),
+SymPy, astropy.units, Undermind, Perplexity, ADS, Retraction Watch/Crossref,
+Semantic Scholar, hypothesis, SBC. (Excluded by owner: scite.ai, Elicit,
+Consensus.)
+
+- [ ] Prose-number parity gate — extend table-parity CI to all numeric
+  claims in prose; **blocking**; `\draftnum{}` escape hatch, zero-tolerance
+  at circulation freeze (tier 2)
+- [ ] Dual-CAS derivation checks (WolframScript + SymPy; MATLAB tiebreak)
+  for all displayed equations; `astropy.units` dimensional audit of budget
+  and delay arithmetic (tier 1)
+- [ ] Simulation-based-calibration harness for the dynesty fit pipelines;
+  runs at each campaign closeout (tier 3; rides the re-fit campaign)
+- [ ] Reference sweep script: ADS metadata + Retraction Watch via Crossref +
+  Semantic Scholar version check for every `refs.bib` entry (tier 4)
+- [ ] Prior-work coverage search per headline results claim (Undermind;
+  Perplexity for point facts), findings into the evidence ledger (tier 4)
+- [ ] Multi-model adversarial referee protocol: ≥2 independent cold reads
+  per round, dispositions doc per round, convergence = no new valid P0/P1
+  (tier 5; pre-circulation + pre-submission)
+
+### Board hygiene
+- [x] Descriptive-names glossary for the frozen letter+number docs
+  ([glossary](../specs/legacy-code-glossary.md);
+  [wf-12](../wayfinder/tickets/12-retire-letter-number-stage-names.md), scope
+  reduced: this board already reads descriptively)
+
+---
+
+## §0 — Results provenance & organization (pre-manuscript)
+
+**CURRENT CHIME INPUT ROUTE (owner, 2026-07-26):** additional RFI cleaning is
+not necessary for the sample; the owner-reviewed **manual bad-channel maps**
+are the bad-channel authority
+([rfi-validation-01](../wayfinder/tickets/rfi-validation-01-define-acceptance-contract.md)
+disposition; Zach CHIME amendment merged as analysis PR #116). The
+automated-cleaner ladder (stable bandpass → frozen benchmark → cleaner
+comparison → blind validation → cleaning-boundary ratification) is **not
+pursued**; its tickets were removed 2026-07-26 (Git history preserves them).
+Manuscript scintillation numbers come from the interactive re-do
+([scint-redo-01](../wayfinder/tickets/scint-redo-01-interactive-recampaign-from-raw-data.md)),
+which supersedes the remediate-and-rerun path
+([wf-17](../wayfinder/tickets/17-remediate-scintillation-inputs-and-rerun.md), resolved-superseded).
+No science fit or claim is admitted before the re-do's owner checkpoints pass.
+
+Owner directive 2026-07-18: before section work, establish one reliable view
+of what results exist, where they originated (scripts, pipeline pin, external
+survey/catalog queries), and what is trusted — the repo + auxiliary worktrees
+are currently too dispersed to know what is current. Canonical artifact:
+[`results-registry.toml`](results-registry.toml), with the generated
+`RESULTS.md` view and independent
+[`results-registry-claim-owners.toml`](results-registry-claim-owners.toml).
+The exact inventory and row-level adjudication are complete; pending and
+revoked rows retain their explicit gates ([wf-13](wayfinder/tickets/13-overhaul-trust-assessment.md)).
+
+- [x] Registry generator: `results-registry.toml` → `RESULTS.md`; validation
+  and byte-drift checks are wired into `check-state`
+- [ ] Dispersion sweep: inventory artifacts across the repo, pipeline
+  submodule, worktrees, `~/Data`, and h17; mark current vs superseded;
+  quarantine stale products (PR #131 precedent)
+- [x] Populate the registry: every manuscript-facing number/table/figure/
+  verdict, with producing script, pipeline pin, external-source provenance
+  (survey/DR/DOI/query date), and trust seeded from the `CONTEXT.md` ledger
+- [x] Re-point the tier-2 prose-number parity gate at the registry (single
+  source of truth for the CI check)
+
+## Abstract
+
+- [ ] ⏳ Fill the cluster-column slot with the intracluster-DM uncertainty
+  once frozen (referee M16; submission-time)
+- [ ] ⛔ Rewrite the closing multiplicity-bias claim — rides on revoked fits;
+  post re-fit campaign / trust overhaul
+- [ ] Final headline pass (association + budget sentences are on re-verified
+  numbers; re-verify after §4 refills)
+
+## §1 Introduction
+
+- [ ] Opening-prose consistency guard: keep claims aligned with what the
+  filled scattering/scint/energy slots actually state (carry-forward)
+- [ ] Structural referee-mode pass (can run now)
+
+## §2 Observations and Sample
+
+- 2.1 Dynamic spectra & reduction
+  - [ ] Jackknife/masking specification: block width, contiguity, ordering
+    vs masking, mask-threshold stability (review S7 — 3–4 sentences)
+- 2.2 Dispersion-measure measurements *(provenance re-validated 2026-07-07,
+  shared DSA-DM convention)*
+  - [x] Coverage-calibrated DM uncertainties deferred with a stated caveat:
+    end-to-end injections into real off-pulse waterfalls + coverage fraction
+    (review S8; disposition via [wf-10](wayfinder/tickets/10-disposition-technical-review-robustness-items.md))
+- 2.3 Scattering fits
+  - [ ] ⏳ Rewrite on the re-fit campaign's verified inputs/methods
+- 2.4 Milky Way foreground
+  - [ ] NE2025 publication-status check at submission (referee MW4)
+  - [ ] Per-sightline disk-model comparison table (NE2025 vs
+    NE2001/YMW16) — justifies the 30% disk prior (review S15b; via wf-10)
+- 2.5 Foreground-galaxy search *(census re-validated + remediated 2026-07-15)*
+  - [x] Census-aperture wording: frozen census as-built
+    description ([wf-08](wayfinder/tickets/08-correct-census-aperture-description.md))
+  - [ ] Completeness / missing-halo systematic: limiting magnitude →
+    P(missed group-scale halo) per corridor (review S11; via wf-10)
+
+## §3 Methods
+
+- 3.1 TOA crossmatching *(association arithmetic re-validated 2026-07-07)*
+  - [ ] TOA estimator + time-standards paragraph (peak vs matched-filter vs
+    model t₀; UTC/TDB; barycentring; reproduce the geometric-delay range)
+    (review S3)
+  - [ ] Deterministic trial-set rule + operational association windows as
+    supplementary material (review S1)
+  - [x] Exact DSA-110 FRB detection denominator — 64 detections selected by
+    finite MJD in `59611 <= MJD < 60370`
+    ([wf-09](wayfinder/tickets/09-obtain-dsa-trigger-denominator.md))
+  - [ ] Restore the TOA prose from “triggers” to “FRB detections”; preserve the
+    deterministic MJD rule and trial-set receipt
+- 3.2 Dispersion-measure decomposition
+  - [x] Fiducial priors and host-DM headline accepted (2026-07-22)
+    ([wf-07](wayfinder/tickets/07-sign-off-budget-priors-and-host-dm-headline.md))
+- 3.2b Intervening foreground galaxies & clusters
+  - [x] Phineas halo-mass prescription conflict resolved (census flags vs budget
+    chain; DM_int 241 vs ≈218)
+    ([wf-06](wayfinder/tickets/06-adjudicate-phineas-halo-mass-prescriptions.md))
+  - [x] Probabilistic b/R_vir mixture for borderline halos (review S12;
+    the machinery half of the phineas adjudication)
+- 3.3 Scattering attribution (joint two-band fit; sub-band cross-check;
+  gain-marginalized likelihood; multiple temporal components)
+  - [ ] ⛔ Purge rail-class vocabulary and α=4-limit quoting; restructure
+    around geometry selection (post re-fit campaign)
+  - [x] Presentation contracts locked 2026-07-10: closure-regime column,
+    sub-band-diagnostic-only, separate ACF path + gain prior, band-restricted
+    energies disclaimer (legacy D2–D5)
+- 3.4 Band-restricted burst energies
+  - [ ] ⏳ Refill from the energies re-validation campaign
+
+## §4 Results
+
+- 4.1 Association of the co-detections *(re-validated 2026-07-07)*
+  - [ ] Robustness paragraph: positive-residual mean (+2.4 ms, ≈2.4σ) with
+    verdict-stability statement; declination-conditioned rate sensitivity
+    sentence; repeater/clustering statement (review S4/S5/S6)
+- 4.2 Per-sightline DM budget *(base lane re-validated 2026-07-07;
+  phantom-DM_int bug fixed 2026-07-15, FLITS #183; the probabilistic Phineas
+  update remains pending integrated producer/input/artifact receipts)*
+  - [ ] Cluster-aperture sensitivity: recompute at 1.5·R_500 / R_200 with
+    envelope (review S13; via wf-10)
+  - [x] Intervening-scattering column dropped until the scattering framework
+    lands (review S14)
+- 4.3 Scintillation & screen attribution
+  - [ ] ⏳ Rebuild on the both-band campaign + two-screen rebuild
+  - [x] Modulation-index gate (m ≤ 1.5) vs two-screen √3 bound deferred into
+    the input-remediation and CHIME-method tickets (review S16; via wf-10)
+  - [x] Pulsar positive control through the CHIME upchannelization chain
+    deferred (review S17; via wf-10)
+- 4.4 Turbulence spectrum & burst multiplicity
+  - [ ] ⛔⏳ Refill from the re-fit campaign under geometry adjudication;
+    β-table rework (geometry-adjudicated quoting; descriptive
+    exponential-consistency statements where no index is quotable)
+- 4.5 Band-restricted burst energies
+  - [ ] ⛔⏳ Refill from the energies re-validation (roster + disclaimers per
+    the locked presentation contract)
+
+## §5 Discussion
+
+- [ ] ⛔⏳ Screen-attribution subsection on the re-derived
+  measured-vs-predicted overlay (both sides currently revoked)
+- [ ] ⛔⏳ Event-by-event interpretation ledger refresh post campaigns
+  (incl. the FRB 20230913A intervening attribution, currently revoked)
+- [ ] Fixed-α vs β-posterior choice in screen attribution (referee D1 full
+  resolution; TODO in tex)
+- [ ] Population limits / next-pass subsections: consistency with what
+  actually ships
+
+## §6 Conclusions
+
+- [ ] ⛔⏳ Rewrite items tied to revoked claims (census/budget items,
+  scattering items, the multiplicity item) after campaigns + trust overhaul
+
+## Appendices
+
+- A. Association cards — [ ] verify against the re-validated association
+  artifacts
+- B. Intracluster DMs — [x] cluster geometry offset carried as documented
+  ±3% systematic (2026-07-15) · [ ] inherits the cluster-aperture
+  sensitivity outcome (S13)
+- C. Host-DM forward model — [ ] regenerate iff priors move
+  ([wf-07](wayfinder/tickets/07-sign-off-budget-priors-and-host-dm-headline.md))
+- D. Scintillation ACF diagnostics + two-screen formalism — [ ] ⏳ refresh
+  from the ratified method; keep consistent with the modulation-gate
+  resolution (S16)
+- E. Joint-model morphology audits — [ ] ⛔⏳ refill from the re-fit
+  campaign; sightline-halo-grid caption states panel count/omissions
+  (referee M15)
+- Parked EMG appendix — [x] effective-index sensitivity variant remains parked
+  (review S19; via wf-10)
+
+## Front & back matter
+
+- [x] Co-author list fixed to Jakob plus the CHIME/FRB and DSA-110
+  collaborations; `auth.tex` typeset
+  ([wf-11](wayfinder/tickets/11-prune-coauthor-list.md))
+- [ ] Zenodo archival release + DOI mint; point `\software{}` pipeline entry
+  at it (referee B5/M11; submission-time)
+- [ ] Data-availability section final check
+- [x] Keywords include Radio bursts (1339) (referee M12)
+
+---
+
+## Done ledger (major, pre-board)
+
+Association + DM provenance re-validated (2026-07-07) · census re-validated
+(2026-07-07) + remediated to 28 physical systems with adjudicated masses
+(2026-07-15) · DM-budget re-validated (2026-07-07); phantom-DM_int fallback
+bug fixed, six sightlines corrected (FLITS #183) · chance-coincidence units
+and cross-ref fixes landed · referee blocking items B1–B4 resolved; design
+locks accepted (2026-07-10) · Figure 1 contract locked (2026-07-14) ·
+CHIME-band qualification history: three routes documented-fail, successor
+method in hand pending ratification ([wf-02](wayfinder/tickets/02-ratify-chime-scintillation-method.md)).

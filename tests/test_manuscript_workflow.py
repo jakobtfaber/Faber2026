@@ -12,7 +12,7 @@ class ManuscriptWorkflow(TestCase):
         cls.text = WORKFLOW.read_text()
 
     def test_prose_or_analysis_pin_route_skips_full_provenance(self) -> None:
-        self.assertIn("analysis|*.tex|bib/*.bib", self.text)
+        self.assertIn("analysis/*|*.tex|bib/*.bib", self.text)
         self.assertIn("focused-only=$focused_only", self.text)
         self.assertIn("if: needs.changes.outputs.focused-only != 'true'", self.text)
 
@@ -37,7 +37,7 @@ class ManuscriptWorkflow(TestCase):
 
     def test_provenance_lane_runs_the_whole_manuscript_test_suite(self) -> None:
         provenance = self.text.split("  provenance:", 1)[1].split(
-            "  pinned-analysis-tests:", 1
+            "  required:", 1
         )[0]
         self.assertIn(
             "uv run --project analysis --group test --frozen pytest tests",
@@ -63,14 +63,18 @@ class ManuscriptWorkflow(TestCase):
                     f"{module}::{test} is excluded but no longer exists",
                 )
 
-    def test_parent_watches_one_stable_analysis_verdict(self) -> None:
-        pinned = self.text.split("  pinned-analysis-tests:", 1)[1].split(
-            "  required:", 1
-        )[0]
-        self.assertIn("gh run watch", pinned)
-        self.assertIn('.name == "analysis-ci"', pinned)
-        self.assertNotIn("head_branch", pinned)
-        self.assertNotIn("dualband-one-to-one", pinned)
+    def test_analysis_suite_runs_in_repo_not_via_pin_watch(self) -> None:
+        # The former pinned-analysis-tests job watched the standalone
+        # repository's verdict for the submodule pointer. Since the monorepo
+        # consolidation the analysis suite runs in this repository on the
+        # same commit, so the watcher must stay retired and the in-repo
+        # workflow must expose the stable required check name.
+        self.assertNotIn("pinned-analysis-tests", self.text)
+        self.assertNotIn("gh run watch", self.text)
+        analysis_ci = (
+            Path(__file__).parents[1] / ".github/workflows/analysis-ci.yml"
+        ).read_text()
+        self.assertIn("name: analysis-ci", analysis_ci)
 
 
 if __name__ == "__main__":

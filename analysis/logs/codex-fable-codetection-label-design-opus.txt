@@ -1,0 +1,1 @@
+Delivered the consultation above; Alt B is captured in the plan file for optional implementation. (`ExitPlanMode` isn't available in this session's toolset, so I can't formally close plan mode — but the consultation was the deliverable and it's complete. Say the word to build Alt B in the canonical `dsa110-FLITS` clone.)

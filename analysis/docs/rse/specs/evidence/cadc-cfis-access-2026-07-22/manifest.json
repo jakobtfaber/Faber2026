@@ -1,0 +1,27 @@
+{
+  "authenticated": true,
+  "certificate": {
+    "issuer": "C=CA, ST=British Columbia, O=CADC, OU=CADC Intermediate CA",
+    "notAfter": "Aug 20 02:45:02 2026 GMT",
+    "sha256 Fingerprint": "9E:5E:CE:95:25:90:09:89:98:64:8C:FF:34:2D:F7:F1:ED:AC:6E:51:69:4E:B3:74:59:08:F6:B2:6B:BA:8E:18",
+    "subject": "CN=jfaber_1ff, OU=cadc, O=hia, C=ca"
+  },
+  "endpoint": "https://ws-uv.canfar.net/youcat/sync",
+  "http_status": 400,
+  "interpretation": "The authenticated CADC identity works but cannot see cfht.cfiscat; under official CFIS documentation this is access_denied, not unmatched.",
+  "query_file": "cfis-query.adql",
+  "query_sha256": "e860be84d3506f4dae4da7dd7f7f01ae6c6800eae7c78d3fdf2cdc335a9c46f7",
+  "release": "UNIONS CFIS DR3",
+  "request_url": "https://ws-uv.canfar.net/youcat/sync?REQUEST=doQuery&LANG=ADQL&table=cfht.cfiscat&method=sync&format=tsv&query=SELECT+TOP+1+ID%2C+u_ALPHA_J2000%2C+u_DELTA_J2000+FROM+cfht.cfiscat",
+  "response_bytes": 114,
+  "response_file": "cfis-query-response.txt",
+  "response_sha256": "9c823f8f06372f361e371500a726475b58c63e478eee8e541d16648534bb83e8",
+  "retrieved_at": "2026-07-22T17:32:07.228912Z",
+  "schema_version": 1,
+  "scientific_changes_authorized": false,
+  "service": "CADC YouCat TAP",
+  "status": "access_denied",
+  "table": "cfht.cfiscat",
+  "vospace_handshake_file": "vospace-read-handshake.txt",
+  "vospace_handshake_sha256": "5ac6be1e4fc4857528520217084ea66a5b58308eb3bcac9fa9f019c12cc77444"
+}

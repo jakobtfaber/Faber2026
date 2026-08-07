@@ -1,0 +1,81 @@
+{
+  "as_of": "2026-07-20",
+  "source": "kept docs + tex snapshot — author-facing; not campaign scorekeeping",
+  "now": {
+    "title": "Pick casey DM",
+    "where": "Input Data Products → Measurements and Fits",
+    "how": "Open casey_dm_strip_CORRECTED.png full-size. Choose 491.148 / 491.178 / finer. Ticket 18."
+  },
+  "chain": [
+    { "name": "Raw Data", "state": "done" },
+    { "name": "Input Data Products", "state": "here" },
+    { "name": "Measurements and Fits", "state": "later" },
+    { "name": "Analyses and Interpretations", "state": "later" },
+    { "name": "In-Manuscript Claims", "state": "later" }
+  ],
+  "sections": [
+    {
+      "name": "Association / TOA",
+      "ready": "yes",
+      "draft": "yes",
+      "line": "Strongest trusted block in the paper; polish only."
+    },
+    {
+      "name": "Census / DM budget",
+      "ready": "mixed",
+      "draft": "yes",
+      "line": "In draft; owner calls still open (phineas, aperture)."
+    },
+    {
+      "name": "DM measurements",
+      "ready": "no",
+      "draft": "yes",
+      "line": "Tables exist but not final after owner data-review."
+    },
+    {
+      "name": "Scattering / β",
+      "ready": "no",
+      "draft": "partial",
+      "line": "Locks accepted; numbers not citable until re-anchor."
+    },
+    {
+      "name": "Scintillation",
+      "ready": "no",
+      "draft": "slot",
+      "line": "Bad inputs; casey-first; abstract slot empty."
+    },
+    {
+      "name": "Energies",
+      "ready": "no",
+      "draft": "slot",
+      "line": "Contract locked; table refill blocked."
+    },
+    {
+      "name": "Discussion / Conclusions",
+      "ready": "no",
+      "draft": "partial",
+      "line": "Waiting on restored results."
+    },
+    {
+      "name": "Figure 1",
+      "ready": "no",
+      "draft": "partial",
+      "line": "Product locked; bytes not owner-approved."
+    },
+    {
+      "name": "Abstract science slots",
+      "ready": "no",
+      "draft": "slot",
+      "line": "Scatter / scint / energy / physics line empty."
+    }
+  ],
+  "ignore": "Campaign boards, letter codes, stub plans, and check chore lists. They do not answer ready / in-draft.",
+  "cheat_sheet": [
+    { "term": "Raw Data", "def": "12 CHIME voltage files on h17 only." },
+    { "term": "Input Data Products", "def": "upchan / masks / applied DM (casey lives here)." },
+    { "term": "Measurements and Fits", "def": "DM, TOA, τ, ACF…" },
+    { "term": "Analyses and Interpretations", "def": "budgets, attributions." },
+    { "term": "In-Manuscript Claims", "def": "what the paper asserts." }
+  ],
+  "checks_later": "Equation · Calculation · Model/Fit · Reference · No-Context Review."
+}

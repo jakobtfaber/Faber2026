@@ -26,6 +26,15 @@ def main() -> int:
         "analysis": ROOT / "analysis",
         "manuscript": ROOT,
     }
+    # Registry provenance refs for "analysis" name commits of the retired
+    # standalone Faber2026-analysis repository. Since the monorepo
+    # consolidation, analysis/ has no repository of its own, so those exact
+    # objects are fetched from the archived original into this repository's
+    # object store instead of from origin.
+    remotes = {
+        "analysis": "https://github.com/jakobtfaber/Faber2026-analysis.git",
+        "manuscript": "origin",
+    }
     registry = tomllib.loads(REGISTRY.read_text())
     for repository, commits in required_commits(registry).items():
         missing = [
@@ -46,7 +55,7 @@ def main() -> int:
                     "fetch",
                     "--no-tags",
                     "--depth=1",
-                    "origin",
+                    remotes[repository],
                     *missing,
                 ],
                 check=True,

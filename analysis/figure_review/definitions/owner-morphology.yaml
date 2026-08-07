@@ -1,0 +1,87 @@
+schema: faber2026-owner-morphology/v1
+reviewer: Jakob Faber
+reviewed_at: "2026-07-22"
+scope: visual component-count constraints for controlled joint-scattering reruns
+trust_boundary: >-
+  Owner morphology assignments constrain candidate models. They do not approve
+  fitted values, residual adequacy, evidence comparisons, or manuscript promotion.
+notation:
+  C: number of visually assigned CHIME/FRB sub-pulses
+  D: number of visually assigned DSA-110 sub-pulses
+review_figure:
+  kind: data-only dynamic spectra and band-summed time profiles
+  output_sha256: 2697f714a93467d8cbd35a5a9e05b313b12745e1c98d0a68a2f3908cbf8dac58
+  manuscript_revision: 228f93dbe8c1e81845c3ca03eb0ebabdb3a114af
+  analysis_revision: 87a2d7d9ecb60e765c5bb788bdd1463ecd042cb9
+  pipeline_revision: b69dea16636fc9944c0083040c09b5a57d66db34
+  environment_sha256: d2fe00a94447c47f67288aac8d71268209072c2f247118407b48593577d34569
+  shared_time_support: true
+  note: >-
+    Both instruments contain data across the complete displayed time interval.
+    Hatching marks only the unobserved frequency gap.
+bursts:
+  - nick: zach
+    tns: FRB 20220207C
+    C: 2
+    D: 4
+    confidence: confirmed
+    note: one isolated leading DSA pulse plus a lower-S/N trailing cluster of three; the cluster broadens into one apparent CHIME feature
+  - nick: whitney
+    tns: FRB 20220310F
+    C: 2
+    D: 2
+    confidence: confirmed
+  - nick: oran
+    tns: FRB 20220506D
+    C: 1
+    D: 1
+    confidence: confirmed
+    note: morphology accepted; residual adequacy must be checked in the controlled rerun
+  - nick: isha
+    tns: FRB 20221113A
+    C: 1
+    D: 1
+    confidence: confirmed
+  - nick: wilhelm
+    tns: FRB 20221203A
+    C: 1
+    D: 1
+    confidence: confirmed
+  - nick: phineas
+    tns: FRB 20230307A
+    C: 3
+    D: 4
+    confidence: uncertain
+    note: complex morphology is difficult to count at the review figure's coarse time resolution
+  - nick: freya
+    tns: FRB 20230325A
+    C: 1
+    D: 1
+    confidence: confirmed
+  - nick: johndoeii
+    tns: FRB 20230814B
+    C: 2
+    D: 2
+    confidence: confirmed
+    note: owner assignment differs from the current certified C1D2 candidate artifact; reconcile before rerunning
+  - nick: hamilton
+    tns: FRB 20230913A
+    C: 5
+    D: 1
+    confidence: uncertain
+    note: complex morphology is difficult to count at the review figure's coarse time resolution
+  - nick: mahi
+    tns: FRB 20240122A
+    C: 1
+    D: 1
+    confidence: confirmed
+  - nick: chromatica
+    tns: FRB 20240203A
+    C: 1
+    D: 1
+    confidence: confirmed
+  - nick: casey
+    tns: FRB 20240229A
+    C: 1
+    D: 1
+    confidence: confirmed

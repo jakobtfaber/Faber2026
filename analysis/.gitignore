@@ -1,0 +1,83 @@
+# LaTeX build artifacts (Overleaf regenerates these).
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+
+# Built PDF of any local manuscript/prototype.
+/main.pdf
+
+# Research data lives in ~/Data/Faber2026/; data/ holds machine-local absolute
+# symlinks into it, which would not resolve on another machine or in CI.
+/data/
+
+# Python bytecode caches from running scripts/ and tests/.
+__pycache__/
+*.egg-info/
+.venv/
+.venv-dualband/
+
+# Local layout prototypes (regenerate from analysis producers; promote winners to figures/).
+figures/prototypes/
+# Local grit coordination state (locks/worktrees for concurrent agents).
+.grit/
+
+# Graphify knowledge-graph outputs (regenerable via /graphify; large + ephemeral
+# scratch/cache). A prior run accidentally committed the scratch dotfiles and the
+# AST cache; keep the whole dir out of git.
+graphify-out/
+
+# Local agent/runtime state. Keep these on this machine, but do not publish them
+# to GitHub or mirror them into Overleaf.
+/.agents/
+/.claude/
+/.claude-science/
+/.codex/
+/.cursor/
+/.entire/
+# Agent tooling under .github/ stays out of the repo, but CI workflows must be
+# tracked. Git cannot re-include a path whose parent dir is excluded, so exclude
+# the contents (/.github/*) rather than the directory itself.
+/.github/*
+!/.github/workflows/
+/.remember/
+/.superpowers/
+
+# agent scratch worktrees (never commit)
+/.worktrees/
+
+# Results-library Phase B: bytes live under ~/Data/Faber2026/results-library/
+# (see scripts/results_library_catalog.yaml). Recreate local symlinks with:
+#   python3 scripts/materialize_results_library.py
+# CI/manuscript-coupled curated files stay tracked; bulk diagnostics do not.
+/dispersion/results/joint-phase/results/diagnostics
+
+# Knowledge-base SQLite index (rebuild with: make kb-index)
+/.kb/
+
+# Resumable dual-band workflow state and immutable local failures.
+/.runs/
+/.failed/
+
+# Running Notes: raw inbox + live status (dispositions may be committed)
+/docs/rse/ops/running-notes/inbox/
+/docs/rse/ops/running-notes/status.json
+
+# Figure-flow regen receipts (scripts/figure_flow.py)
+/figures/.receipts/
+/figure_review/artifacts/staging/*
+!/figure_review/artifacts/staging/fig3_halo_grid/
+!/figure_review/artifacts/staging/fig3_halo_grid/**
+
+# New exploratory notebooks live under ~/Data/Faber2026/workbench/.
+# Tracked notebooks are grandfathered via config/grandfathered-notebooks.txt.
+.ipynb_checkpoints/
+*.ipynb

@@ -1,0 +1,78 @@
+{
+  "authority_contract": {
+    "blocking_findings": [
+      "No row-level host-galaxy identifiers are present.",
+      "No row-level redshift uncertainties are present.",
+      "Four local and source FRB identifiers have different suffixes.",
+      "The current and older drafts disagree for at least one sightline.",
+      "At least one local host redshift is absent from the current draft.",
+      "The archive has no release or version identifier."
+    ],
+    "required": [
+      "FRB identifier",
+      "host identifier",
+      "redshift and uncertainty",
+      "measurement kind",
+      "bibliographic source",
+      "upstream row identifier",
+      "release or retrieval date",
+      "content hash"
+    ],
+    "satisfied": false
+  },
+  "disposition": "Minimal comparison frozen; archive is insufficient for authoritative row-complete host-redshift provenance.",
+  "generator": {
+    "path": "scripts/freeze_verdi_host_redshifts.py",
+    "sha256": "8881fcbc9a916c92b192d83b320e2fcefc6ccb94ab83541682fb11857619bf83"
+  },
+  "input": {
+    "bursts_filename": "bursts.csv",
+    "bursts_sha256": "204fb79727ff71f15269f3d5564215e34d8f027aedbd82719dfda162bdcfb644",
+    "row_count": 12
+  },
+  "output": {
+    "comparison_csv": "verdi_host_redshift_comparison.csv",
+    "comparison_csv_sha256": "c4cb63e385837d547f03d6c398c3bb7b371e91f5673e5754af09bc10cf6161f7"
+  },
+  "schema": "faber2026-verdi-host-redshift-evidence/v1",
+  "source": {
+    "archive_filename": "Verdi-Probing_Host_Galaxy_Environments_with_a_New_Sample_of_Localized_FRBs_Detected_with_the_DSA_110 -2026.zip",
+    "archive_sha256": "c1e14983531711aa47f214f0c010cdba550f4bf26b1ac132da96280d748a7346",
+    "archive_size_bytes": 20412942,
+    "members": {
+      "test.tex": {
+        "role": "older_internal_draft",
+        "sha256": "dde8d78ce5dd67a34f769b72a6aa37c047db8df26d6ed3a2abd64b07f25dcf52",
+        "size_bytes": 45053
+      },
+      "verdi2025.tex": {
+        "role": "current_named_draft",
+        "sha256": "ea094a20d5cac53d79fde24e696c5c4aca967d82067e3dc7f23c8a6cdb640e90",
+        "size_bytes": 76762
+      }
+    },
+    "release": "unpublished draft; no version identifier",
+    "source_received_date": "2026-07-22",
+    "title": "Probing Host Galaxy Environments with a New Sample of Localized FRBs Detected with the DSA-110"
+  },
+  "status": "fail_closed",
+  "summary": {
+    "comparison_status_counts": {
+      "absent_from_archive": 2,
+      "current_draft_missing_prior_draft_matches": 1,
+      "local_missing_current_draft_has_value": 1,
+      "matches_current_draft": 6,
+      "no_redshift_in_local_or_drafts": 2
+    },
+    "rows": 12,
+    "rows_with_current_draft_source": 10,
+    "rows_with_explicit_row_level_measurement_kind": 2,
+    "rows_with_row_level_host_identifier": 0,
+    "rows_with_row_level_redshift_uncertainty": 0,
+    "source_conflict_nicknames": [
+      "hamilton",
+      "wilhelm"
+    ],
+    "source_conflict_rows": 2
+  }
+}

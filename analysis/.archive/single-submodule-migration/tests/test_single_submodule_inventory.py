@@ -1,0 +1,161 @@
+from __future__ import annotations
+
+import csv
+import hashlib
+import importlib.util
+from copy import deepcopy
+import subprocess
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location(
+    "single_submodule_inventory", ROOT / "scripts/single_submodule_inventory.py"
+)
+assert SPEC and SPEC.loader
+MODULE = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = MODULE
+SPEC.loader.exec_module(MODULE)
+
+
+def run(repo: Path, *args: str) -> None:
+    subprocess.run(["git", "-C", str(repo), *args], check=True, capture_output=True)
+
+
+def fixture_repo(tmp_path: Path) -> Path:
+    repo = tmp_path / "flits"
+    repo.mkdir()
+    run(repo, "init")
+    run(repo, "config", "user.name", "Test")
+    run(repo, "config", "user.email", "test@example.invalid")
+    paths = {
+        "analysis/demo/result.json": "{}\n",
+        "configs/bursts.yaml": "bursts: {}\n",
+        "crossmatching/association.py": "def associate(): ...\n",
+        "crossmatching/association_report.json": "{}\n",
+        "data-manifest.csv": "path,sha256\n",
+        "flits/core.py": "VALUE = 1\n",
+        "scattering/configs/bursts/chime/casey.yaml": "burst: casey\n",
+    }
+    for relative, content in paths.items():
+        target = repo / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content)
+    run(repo, "add", ".")
+    run(repo, "commit", "-m", "fixture")
+    return repo
+
+
+def test_inventory_is_complete_and_routes_project_paths(tmp_path: Path) -> None:
+    repo = fixture_repo(tmp_path)
+    analysis = tmp_path / "analysis"
+    analysis.mkdir()
+    run(analysis, "init")
+    commit, rows = MODULE.build_rows(repo, analysis, "HEAD")
+    MODULE.verify_rows(repo, commit, rows)
+
+    by_path = {row["old_path"]: row for row in rows}
+    assert set(by_path) == {
+        "analysis/demo/result.json",
+        "configs/bursts.yaml",
+        "crossmatching/association.py",
+        "crossmatching/association_report.json",
+        "data-manifest.csv",
+        "flits/core.py",
+        "scattering/configs/bursts/chime/casey.yaml",
+    }
+    assert by_path["analysis/demo/result.json"]["new_path"] == "campaigns/demo/result.json"
+    assert by_path["configs/bursts.yaml"]["new_path"] == "config/bursts.yaml"
+    assert by_path["data-manifest.csv"]["new_path"] == "data/catalog/data-manifest.csv"
+    assert by_path["flits/core.py"]["disposition"] == "keep-reusable"
+    assert by_path["crossmatching/association.py"]["disposition"] == "keep-reusable"
+    assert (
+        by_path["crossmatching/association_report.json"]["new_path"]
+        == "associations/studies/crossmatching/association_report.json"
+    )
+    assert (
+        by_path["scattering/configs/bursts/chime/casey.yaml"]["new_path"]
+        == "config/fits/scattering/bursts/chime/casey.yaml"
+    )
+    assert all(row["source_commit"] == commit for row in rows)
+    assert all(len(row["sha256"]) == 64 for row in rows)
+
+
+def test_destination_collision_is_recorded(tmp_path: Path) -> None:
+    repo = fixture_repo(tmp_path)
+    analysis = tmp_path / "analysis"
+    analysis.mkdir()
+    run(analysis, "init")
+    run(analysis, "config", "user.name", "Test")
+    run(analysis, "config", "user.email", "test@example.invalid")
+    collision = analysis / "campaigns/demo/result.json"
+    collision.parent.mkdir(parents=True)
+    collision.write_text("existing\n")
+    run(analysis, "add", ".")
+    run(analysis, "commit", "-m", "baseline")
+
+    _commit, rows = MODULE.build_rows(repo, analysis, "HEAD")
+    by_path = {row["old_path"]: row for row in rows}
+    assert by_path["analysis/demo/result.json"]["destination_collision"] == "yes"
+
+
+def test_verifier_rejects_duplicate_rows_and_forged_hashes(tmp_path: Path) -> None:
+    repo = fixture_repo(tmp_path)
+    analysis = tmp_path / "analysis"
+    analysis.mkdir()
+    run(analysis, "init")
+    commit, rows = MODULE.build_rows(repo, analysis, "HEAD")
+
+    duplicated = rows + [deepcopy(rows[0])]
+    try:
+        MODULE.verify_rows(repo, commit, duplicated)
+    except ValueError as exc:
+        assert "complement mismatch" in str(exc)
+    else:
+        raise AssertionError("duplicate path-map row was accepted")
+
+    forged = deepcopy(rows)
+    forged[0]["sha256"] = "0" * 64
+    try:
+        MODULE.verify_rows(repo, commit, forged)
+    except ValueError as exc:
+        assert "SHA-256 mismatch" in str(exc)
+    else:
+        raise AssertionError("forged SHA-256 was accepted")
+
+
+def test_consumer_graph_records_literal_pipeline_reference(tmp_path: Path) -> None:
+    repo = fixture_repo(tmp_path)
+    analysis = tmp_path / "analysis"
+    analysis.mkdir()
+    run(analysis, "init")
+    consumer = analysis / "consumer.py"
+    consumer.write_text(
+        'SOURCE = "associations/studies/crossmatching/association_report.json"\n'
+    )
+    rows = MODULE.build_rows(
+        repo, analysis, "HEAD", consumer_roots=[analysis]
+    )[1]
+    by_path = {row["old_path"]: row for row in rows}
+    assert (
+        by_path["crossmatching/association_report.json"]["consumers"]
+        == "analysis:consumer.py"
+    )
+
+
+def test_declared_migration_adjustments_match_destination_bytes() -> None:
+    receipt = (
+        ROOT
+        / "docs/rse/specs/evidence/single-submodule-migration"
+        / "migration-adjustments.csv"
+    )
+    rows = list(csv.DictReader(receipt.open(encoding="utf-8")))
+    assert rows
+    for row in rows:
+        destination = ROOT / row["new_path"]
+        assert destination.is_file()
+        assert (
+            hashlib.sha256(destination.read_bytes()).hexdigest()
+            == row["destination_sha256"]
+        )

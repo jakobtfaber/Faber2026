@@ -1,0 +1,206 @@
+{
+  "schema": "faber2026-analysis-zach-component-count-readiness/v1",
+  "audit_date": "2026-07-29",
+  "issue": "https://github.com/jakobtfaber/Faber2026/issues/205",
+  "ticket": "analysis/docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+  "objective": "audit readiness of the frozen C2D4 baseline; execute or stage the strict C2D3/C2D4/C2D5 by s2={1,10,100} contract",
+  "phase": "discovery_and_staging",
+  "status": "BLOCKED",
+  "adjudication_verdict": "none_available",
+  "adjudication_verdict_reason": "no rung executed; the only existing artifacts are the barred job-180 numbers and the deleted 2026-07-23 v4 bundle",
+  "snapshot": {
+    "parent_repository_revision": "d4eebe4f",
+    "parent_branch": "main",
+    "analysis_submodule_revision": "a762ece30da414e1dacf72c730bcc2cc5a08c5c5",
+    "analysis_worktree_clean": false,
+    "analysis_worktree_note": "shared checkout; foreground, figure-review and wayfinder-tooling lanes held by other workers; nothing under analysis/scattering is modified"
+  },
+  "frozen_c2d4_baseline": {
+    "verdict": "unavailable_stale",
+    "prior_receipt": "analysis/docs/rse/verify/joint-scattering-controlled-rerun-05-zach-c2d4-20260723/verification-receipt.json",
+    "declared_run_root": "/home/ubuntu/flits-controlled/joint-scattering-2026-07-23-v4/zach",
+    "declared_run_root_exists": false,
+    "declared_parent_exists": false,
+    "h17_filesystem_search": {
+      "command": "find / -xdev \\( -name '*flits-controlled*' -o -name '*joint-scattering-2026-07-23*' \\)",
+      "matches": 0,
+      "note": "h17 has a single root device; the search covered it"
+    },
+    "local_copy_present": false,
+    "surviving_evidence": [
+      "analysis/docs/rse/verify/joint-scattering-controlled-rerun-05-zach-c2d4-20260723/verification-receipt.json",
+      "analysis/docs/rse/verify/joint-scattering-controlled-rerun-06-owner-review-20260723/panels/zach-c2d4.svg",
+      "/home/ubuntu/Developer/worktrees/dsa110-FLITS-controlled-zach-20260723-v4 (h17, source only)"
+    ],
+    "declared_source_revision": "fba755ad7edbd69dece059c8c5f0868da41e3f2b",
+    "declared_source_repository": "dsa110-FLITS (retired 2026-07-28)",
+    "consequence": "C2D4 must be re-run as one of the three rungs; it cannot serve as a frozen comparator, and parity with the old baseline cannot be asserted because the analysis-housed code is a migration and is not hash-identical"
+  },
+  "blockers": [
+    {
+      "id": "resolution-unreachable",
+      "severity": "owner_decision",
+      "verified_by": "execution",
+      "summary": "issue #205 requires native 32.768 microsecond DSA-110 resolution; the preparation code delivers 65.5 microseconds and offers no knob",
+      "evidence": "[zach] AUTO-TF DSA  : 24 ch x 7.8 MHz, dt=65.5 us (f256/t2); window 23.8 ms; peak S/N 38/px",
+      "mechanism": "band reconciliation, not the per-band resolution choice. choose_resolution returns t_factor 1 (native 32.768 us) for DSA-110 from its own 41-sample on-pulse window. _common_peak_relative_window then unions the two bands' windows in peak-relative time; CHIME/FRB's own window is 9280 native CHIME samples, so the union spans 23.8 ms = 726 native DSA-110 samples. _build_model (joint_tf_prep.py:439-442) re-applies the MAX_TIME_BINS cap to that reconciled window: 726 // 1 > 512, so the decimation doubles to 2 and DSA-110 lands at 65.5 us.",
+      "mechanism_verified_by": "oracle re-derivation on the real Zach probes: cap 512 -> t_factor 2 (65.5 us); cap 1024 -> t_factor 1 (32.8 us)",
+      "mechanism_correction": "an earlier draft of this receipt attributed the decimation to a floor inside choose_resolution. That was wrong: choose_resolution's floor for this band is 1. The cap that fires is the one in _build_model, acting on the reconciled common window. The practical difference matters: the DSA-110 band is coarsened because CHIME/FRB's window is long, not because DSA-110 needs it.",
+      "config_override_effective": false,
+      "config_override_note": "t_factor: 1 in the band configuration cannot help, because the cap runs after the per-band resolution choice",
+      "resolution_options": [
+        "raise MAX_TIME_BINS to at least 1024 for this experiment (roughly doubles the DSA-110 sample count in the joint likelihood, and the sampler cost with it)",
+        "amend issue #205 to accept 65.5 microseconds"
+      ],
+      "owner_relevance": "this is the resolution family that produced the earlier collapsed C2D4 result at coarse binning"
+    },
+    {
+      "id": "sampler-not-declared",
+      "severity": "blocking",
+      "verified_by": "execution",
+      "summary": "dynesty is required by the fit path and by the environment-identity gate but is absent from analysis/pyproject.toml and analysis/uv.lock",
+      "evidence": "ControlledRunError: required runtime distribution is missing: dynesty",
+      "uv_lock_dynesty_occurrences": 0,
+      "import_site": "analysis/scattering/scat_analysis/burstfit_joint.py:1046 (from dynesty import NestedSampler, inside fit_joint_scattering)",
+      "gate_site": "analysis/scattering/scat_analysis/controlled_run.py:610",
+      "consequence": "no controlled joint fit can run analysis-only on any machine until dynesty is declared and locked",
+      "not_fixed_here_because": "analysis/pyproject.toml is modified by another worker in this shared checkout"
+    },
+    {
+      "id": "retired-pipeline-shadow",
+      "severity": "blocking",
+      "verified_by": "execution",
+      "summary": "the default workstation interpreter resolves scattering.scat_analysis to the retired dsa110-FLITS clone",
+      "evidence": "File \"/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scattering/scat_analysis/controlled_run.py\", line 715",
+      "cause": "__editable__.flits-0.1.0.pth in the base interpreter's site-packages maps the top-level scattering package to the retired repository",
+      "workaround_verified": "PYTHONPATH=<analysis> resolves the import inside the analysis submodule; applied to every command in the staged manifest",
+      "durable_fix_options": [
+        "uninstall the editable flits distribution",
+        "have run_joint_fit.py place the repository root on sys.path (it currently inserts only <repo>/scattering, so the package name resolves only by accident)"
+      ]
+    },
+    {
+      "id": "dirty-source-tree",
+      "severity": "owner_decision",
+      "verified_by": "execution",
+      "summary": "the controlled entrypoint fails closed on a dirty source tree, including untracked files",
+      "evidence": "ControlledRunError: source worktree is dirty: M LOCAL_CODE_PROVENANCE.md",
+      "gate_site": "analysis/scattering/scat_analysis/controlled_run.py:717-719",
+      "consequence": "a clean source snapshot at a fixed revision is required; this lane was told not to create a worktree, so the mechanism is an owner or orchestrator decision"
+    },
+    {
+      "id": "no-prepared-compute-host",
+      "severity": "blocking",
+      "verified_by": "remote_inspection",
+      "summary": "h17 is reachable and holds the inputs but cannot run the analysis-only contract",
+      "h17_reachable": true,
+      "h17_hostname": "lxd110h17",
+      "h17_gpus": "2 x NVIDIA GeForce RTX 2080 Ti",
+      "h17_free_space": "131G of 916G",
+      "h17_inputs_staged": "/home/ubuntu/flits-runs/data",
+      "h17_faber2026_clone_revision": "7478397",
+      "h17_analysis_submodule_checked_out": false
+    }
+  ],
+  "ready": {
+    "inputs_present_locally": true,
+    "code_migrated_to_analysis": true,
+    "code_imports_retired_pipeline": false,
+    "configs_migrated": true,
+    "contract_gates_fail_closed_in_order": true,
+    "end_to_end_feasibility_run_succeeded": true
+  },
+  "input_hashes_sha256": {
+    "dsa_input": {
+      "path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
+      "sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01"
+    },
+    "chime_input": {
+      "path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
+      "sha256": "bf317648879936ce4d019f116c17e0c33a22042610e37bddceef0ba48fe40deb"
+    },
+    "dsa_telescope_config": {
+      "path": "analysis/radio_pipeline/resources/scattering_telescopes.yaml",
+      "sha256": "ca497ab9f273b69ad462daea140bec77fa8f2f806281ca218dccdbcdc5d65938"
+    },
+    "chime_telescope_config": {
+      "path": "analysis/radio_pipeline/resources/scattering_telescopes.yaml",
+      "sha256": "ca497ab9f273b69ad462daea140bec77fa8f2f806281ca218dccdbcdc5d65938"
+    },
+    "sampler_config": {
+      "path": "analysis/radio_pipeline/resources/scattering_sampler.yaml",
+      "sha256": "693f8953170137e349f761f5fa166a6aa342da99e403d10ab33b5bdc2ca62f75"
+    },
+    "environment_lock": {
+      "path": "analysis/uv.lock",
+      "sha256": "5def9d0ed88d86a5924def11b40ad9bafd791da1b1c1555d777536f47cf4431b"
+    }
+  },
+  "executed_source_hashes_sha256": {
+    "controlled_entrypoint": "680d4ef962d617030b9f7d8d5b2acf5045a242836be6b25c034ffe2f8fa38bef",
+    "fit_driver": "7436cac821b1832280de2c7c0c45ded74bea7e9050b2139a7588ebddd7238a6d",
+    "joint_tf_prep_source": "85c849097ebe302b0e990f4ec96043e7e74c54a65bff0ae522df495e9f9842e8",
+    "burstfit_joint_source": "0a2bf717aa2c93ee0e7e0e380e10e330088de074f52adee11622d64e67e5755a",
+    "controlled_run_source": "d8186f65d3f0f070c9bb9f2a5d6f5c22560d156a2aeeef33b2054f525a1d8ffe",
+    "model_grid_source": "2bacf94dd61280715328f0a233c3668ec2d738ad4258ab5b77d727b989d59679",
+    "diagnostic_source": "a7dc11b1f49c14c5db3dbbd8e30f3d5d72ada3719cda232b68a5015232e16b9a"
+  },
+  "hash_caveat": "these source hashes describe the dirty shared checkout at audit time; the contract must be re-frozen against a clean revision before any run",
+  "feasibility_run": {
+    "purpose": "prove the analysis-only code path runs end to end on the real Zach data and anchor cost",
+    "entrypoint": "run_joint_fit.py (uncontrolled; the controlled entrypoint cannot run from a dirty tree)",
+    "settings": "50 live points, 4 workers, C2D4, fixed gain-prior variance 100, seed 20220207",
+    "outputs_written_to": "session scratchpad only",
+    "chime_preparation": "64 channels x 6.2 MHz, dt 81.9 us (f16/t32), window 23.8 ms, peak signal-to-noise 74 per pixel, qualified",
+    "dsa_preparation": "24 channels x 7.8 MHz, dt 65.5 us (f256/t2), window 23.8 ms, peak signal-to-noise 38 per pixel, qualified",
+    "converged": true,
+    "iterations": 5658,
+    "elapsed": "4m34s",
+    "outputs_written": ["fit summary", "weighted samples"],
+    "outputs_not_written": ["model grid", "residual diagnostics", "panel"],
+    "outputs_note": "the uncontrolled entrypoint does not produce the complete five-artifact set; those come from the controlled finalization path, so the controlled entrypoint is mandatory for issue #205",
+    "science_status": "NOT EVIDENCE. 50 live points, uncontrolled entrypoint, no contract. Its fitted values must never be cited or promoted."
+  },
+  "cost_estimate": {
+    "rungs": 27,
+    "composition": "3 component counts x 3 fixed gain-prior variances x 3 seeds",
+    "basis": "5658 iterations in 4m34s at 50 live points on 4 workstation cores; iteration count scales roughly linearly with live points",
+    "per_fit_hours": "1.5 to 3 at 1000 live points on 4 cores",
+    "serial_total_hours": "40 to 80",
+    "recommendation": "run in parallel on a compute host",
+    "note": "raising MAX_TIME_BINS to reach native resolution roughly doubles the DSA-110 sample count and will increase this"
+  },
+  "documentation_drift_found": [
+    {
+      "file": "analysis/scattering/studies/joint-refits/CONTROLLED_RUN.md",
+      "issue": "the documented contract environment variables are FLITS_REPO and FLITS_RUNS; the migrated code reads FABER2026_ANALYSIS and FABER2026_RUNS (FLITS_JOINT_AUTO_TF, FLITS_SNR_TARGET and FLITS_MAX_CHANNELS did keep their old names)"
+    },
+    {
+      "file": "analysis/scattering/studies/joint-refits/CONTROLLED_RUN.md",
+      "issue": "the example contract shows shared_zeta true for a C2D4 fit; the runner forces the effective value to false for any multi-component fit, so a contract copied from the example would fail preflight"
+    }
+  ],
+  "deliverables": [
+    "analysis/docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/README.md",
+    "analysis/docs/rse/verify/joint-scattering-controlled-rerun-07-zach-count-readiness-20260729/readiness-audit.json",
+    "analysis/scattering/studies/joint-refits/zach_count_20260729/MANIFEST.md",
+    "analysis/scattering/studies/joint-refits/zach_count_20260729/rungs.json",
+    "analysis/scattering/studies/joint-refits/zach_count_20260729/stage_zach_count.py",
+    "analysis/tests/test_zach_count_schedule.py"
+  ],
+  "verification": {
+    "command": "cd analysis && python -m pytest tests/test_zach_count_schedule.py -q",
+    "result": "8 passed",
+    "lint": "ruff check passed on both new Python files",
+    "plan_check": "stage_zach_count.py --plan-only emits exactly 27 unique rung labels",
+    "fail_closed_check": "stage_zach_count.py refuses to execute against this dirty checkout and names the offending path"
+  },
+  "actions_not_taken": [
+    "no commit",
+    "no push",
+    "no issue closure",
+    "no change to any shared control registry",
+    "no edit to any path held by another worker",
+    "no promotion of any fitted value, table, figure, or results-library pointer"
+  ]
+}

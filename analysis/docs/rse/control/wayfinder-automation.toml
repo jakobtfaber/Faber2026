@@ -1,0 +1,154 @@
+[controller]
+repo = "jakobtfaber/Faber2026-analysis"
+base_branch = "main"
+ticket_glob = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-*.md"
+state_dir = "~/.local/state/Faber2026-analysis/wayfinder-controller"
+worktree_root = "~/Developer/scratch/worktrees/Faber2026-analysis-wayfinder-auto"
+model = "gpt-5.6-sol"
+reasoning_effort = "medium"
+max_parallel = 4
+timeout_seconds = 14400
+
+[[task]]
+id = "set-expanded-independent-validation"
+wave = "first"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-05-set-independent-validation-gate.md"
+branch = "codex/auto-set-expanded-independent-validation"
+mode = "resolve"
+execution = "afk"
+repo = "jakobtfaber/Faber2026-analysis"
+depends_on = ["set-expanded-figure3-gate"]
+instructions = "Implement the independent-validation gate after the Figure 3 gate resolves. Do not self-certify or promote scientific trust."
+
+[[history]]
+id = "set-expanded-figure3-gate"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-04-set-figure-3-gate.md"
+execution = "afk"
+depends_on = ["set-expanded-physics-authority", "repeat-expanded-redshift-verification"]
+status = "resolved"
+
+[[history]]
+id = "freeze-six-redshiftless-identities"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-20-freeze-six-redshiftless-identities.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "repeat-expanded-redshift-verification"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-09-repeat-redshift-source-verification.md"
+execution = "afk"
+depends_on = ["source-zach-whitney-host-redshifts", "replay-nine-sightline-query-corpus"]
+status = "resolved"
+
+[[history]]
+id = "adjudicate-host-redshift-differences"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-19-adjudicate-host-redshift-differences.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "fail-close-expanded-catalog"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-01-fail-close-validation.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-anonymous-query-corpus"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-14-freeze-anonymous-nine-sightline-query-corpus.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "replay-nine-sightline-query-corpus"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-16-independently-replay-nine-sightline-query-corpus.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "set-expanded-crossmatch-contract"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-02-set-crossmatch-contract.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "set-expanded-physics-authority"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-03-set-physics-authority.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "verify-expanded-redshift-verdicts"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-06-verify-redshift-verdicts.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-host-redshift-provenance"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-07-freeze-host-redshift-provenance.md"
+execution = "hitl"
+depends_on = ["verify-expanded-redshift-verdicts"]
+status = "resolved"
+
+[[history]]
+id = "freeze-candidate-redshift-provenance"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-08-freeze-candidate-redshift-provenance.md"
+execution = "afk"
+depends_on = ["verify-expanded-redshift-verdicts"]
+status = "resolved"
+
+[[history]]
+id = "restore-knowledge-base-launcher"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-10-restore-knowledge-base-launcher.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "resolve-zach-redshift-discrepancy"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-11-resolve-zach-intercatalog-redshift.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "expand-nine-sightline-catalogs"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-12-expand-nine-sightline-catalogs.md"
+execution = "afk"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "set-nine-sightline-search-contract"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-13-set-nine-sightline-search-contract.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "freeze-protected-query-evidence"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-15-freeze-protected-nine-sightline-query-evidence.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "obtain-authoritative-host-redshift-ledger"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-17-obtain-authoritative-host-redshift-ledger.md"
+execution = "hitl"
+depends_on = []
+status = "resolved"
+
+[[history]]
+id = "source-zach-whitney-host-redshifts"
+ticket = "docs/rse/wayfinder/tickets/expanded-foreground-catalog-repair-18-source-zach-whitney-host-redshifts.md"
+execution = "afk"
+depends_on = []
+status = "resolved"

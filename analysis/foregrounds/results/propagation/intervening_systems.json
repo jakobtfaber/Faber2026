@@ -1,0 +1,171 @@
+{
+  "dispositions": [
+    {
+      "canonical_object": "194021777634832653",
+      "nickname": "phineas",
+      "object": "832",
+      "status": "deduplicated"
+    },
+    {
+      "nickname": "phineas",
+      "object": "953",
+      "status": "omitted_no_central_mnfw_crossing"
+    },
+    {
+      "canonical_object": "194041777780157594",
+      "nickname": "phineas",
+      "object": "1153",
+      "status": "deduplicated"
+    },
+    {
+      "canonical_object": "194051777813062524",
+      "nickname": "phineas",
+      "object": "1190",
+      "status": "deduplicated"
+    },
+    {
+      "canonical_object": "192831699797402822",
+      "nickname": "casey",
+      "object": "827",
+      "status": "deduplicated"
+    },
+    {
+      "canonical_object": "192821700026167542",
+      "nickname": "casey",
+      "object": "824",
+      "status": "deduplicated"
+    }
+  ],
+  "schema_version": 1,
+  "status": "diagnostic_not_science_admitted",
+  "systems": [
+    {
+      "dm_point": 8.723579653,
+      "impact_kpc": 100.727191297,
+      "kind": "galaxy",
+      "mass_msun": 276142436070.9615,
+      "mass_sigma_dex": null,
+      "mass_source": "measured",
+      "model": "redshift_marginalized_lognormal",
+      "nickname": "whitney",
+      "object": "1473",
+      "theta_arcsec": 19.461992559,
+      "tns": "FRB 20220310F",
+      "uncertainty_flags": "photo-z modeled; mass uncertainty unavailable; profile width assumed",
+      "z": 0.3585,
+      "z_sigma": 0.1132
+    },
+    {
+      "dm_point": 216.915467424,
+      "impact_kpc": 618.746522604,
+      "kind": "cluster",
+      "mass_msun": 148000000000000.0,
+      "mass_sigma_dex": 0.2,
+      "mass_source": "cluster_catalog",
+      "model": "cluster_conditional",
+      "nickname": "phineas",
+      "object": "J115120.4+714435, 1254337",
+      "theta_arcsec": 181.549040136,
+      "tns": "FRB 20230307A",
+      "uncertainty_flags": "mass scatter modeled; profile choice conditional",
+      "z": 0.2,
+      "z_sigma": 0.0001
+    },
+    {
+      "dm_point": 7.977731142,
+      "impact_kpc": 144.436588227,
+      "kind": "galaxy",
+      "mass_msun": 542273443718.04755,
+      "mass_sigma_dex": null,
+      "mass_source": "measured",
+      "model": "probabilistic_crossing",
+      "nickname": "phineas",
+      "object": "194021777634832653",
+      "theta_arcsec": 43.671459837,
+      "tns": "FRB 20230307A",
+      "uncertainty_flags": "photo-z and photometry propagated by crossing producer",
+      "z": 0.1925,
+      "z_sigma": 0.0284
+    },
+    {
+      "dm_point": 40.032382981,
+      "impact_kpc": 129.622532745,
+      "kind": "galaxy",
+      "mass_msun": 1707590432605.2102,
+      "mass_sigma_dex": null,
+      "mass_source": "measured",
+      "model": "redshift_marginalized_lognormal",
+      "nickname": "phineas",
+      "object": "194041777780157594",
+      "theta_arcsec": 36.012224554,
+      "tns": "FRB 20230307A",
+      "uncertainty_flags": "photo-z modeled; mass uncertainty unavailable; profile width assumed",
+      "z": 0.2146,
+      "z_sigma": 0.0
+    },
+    {
+      "dm_point": 14.273031213,
+      "impact_kpc": 105.160203002,
+      "kind": "galaxy",
+      "mass_msun": 356081744303.46747,
+      "mass_sigma_dex": null,
+      "mass_source": "measured",
+      "model": "redshift_marginalized_lognormal",
+      "nickname": "phineas",
+      "object": "194051777813062524",
+      "theta_arcsec": 50.887555708,
+      "tns": "FRB 20230307A",
+      "uncertainty_flags": "photo-z modeled; mass uncertainty unavailable; profile width assumed",
+      "z": 0.1096,
+      "z_sigma": 0.0
+    },
+    {
+      "dm_point": 0.0,
+      "impact_kpc": 115.730554569,
+      "kind": "galaxy",
+      "mass_msun": 112787184570.15146,
+      "mass_sigma_dex": null,
+      "mass_source": "measured",
+      "model": "probabilistic_crossing",
+      "nickname": "phineas",
+      "object": "983",
+      "theta_arcsec": 39.623102575,
+      "tns": "FRB 20230307A",
+      "uncertainty_flags": "photo-z and photometry propagated by crossing producer",
+      "z": 0.1649,
+      "z_sigma": 0.0585
+    },
+    {
+      "dm_point": 81.690650841,
+      "impact_kpc": 176.321821262,
+      "kind": "galaxy",
+      "mass_msun": 7077422410797.027,
+      "mass_sigma_dex": null,
+      "mass_source": "measured",
+      "model": "redshift_marginalized_lognormal",
+      "nickname": "casey",
+      "object": "192821700026167542",
+      "theta_arcsec": 51.176969304,
+      "tns": "FRB 20240229A",
+      "uncertainty_flags": "photo-z modeled; mass uncertainty unavailable; profile width assumed",
+      "z": 0.2028,
+      "z_sigma": 0.0001
+    },
+    {
+      "dm_point": 37.75635897,
+      "impact_kpc": 242.6246802,
+      "kind": "galaxy",
+      "mass_msun": 5544095092280.866,
+      "mass_sigma_dex": null,
+      "mass_source": "measured",
+      "model": "redshift_marginalized_lognormal",
+      "nickname": "casey",
+      "object": "192831699797402822",
+      "theta_arcsec": 61.979200062,
+      "tns": "FRB 20240229A",
+      "uncertainty_flags": "photo-z modeled; mass uncertainty unavailable; profile width assumed",
+      "z": 0.2398,
+      "z_sigma": 0.012
+    }
+  ]
+}

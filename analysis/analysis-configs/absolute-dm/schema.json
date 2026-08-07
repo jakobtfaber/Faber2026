@@ -1,0 +1,1827 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://faber2026.jakobfaber.com/schemas/one-event-absolute-dm-v1.json",
+  "title": "Faber2026 geometry-constrained one-event joint fitting workflow",
+  "description": "Formal joint-fit configuration plus historical compatibility fields. Schema validity does not establish science authority or manuscript admissibility.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event",
+    "result_status",
+    "identity",
+    "paths",
+    "input_sha256",
+    "chime",
+    "dsa",
+    "geometry",
+    "workflow",
+    "event_binding_sha256"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "event": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$"
+    },
+    "result_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewed_event",
+        "input_basenames",
+        "output_root_basename",
+        "disallowed_event_tokens"
+      ],
+      "properties": {
+        "reviewed_event": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "input_basenames": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "raw_chime_h5",
+            "accepted_chime_reference",
+            "raw_dsa_filterbank",
+            "accepted_dsa_reference",
+            "timing_results",
+            "trigger_recovery",
+            "reproduction_fixture"
+          ],
+          "properties": {
+            "raw_chime_h5": {
+              "$ref": "#/$defs/basename"
+            },
+            "accepted_chime_reference": {
+              "$ref": "#/$defs/basename"
+            },
+            "raw_dsa_filterbank": {
+              "$ref": "#/$defs/basename"
+            },
+            "accepted_dsa_reference": {
+              "$ref": "#/$defs/basename"
+            },
+            "timing_results": {
+              "$ref": "#/$defs/basename"
+            },
+            "trigger_recovery": {
+              "$ref": "#/$defs/basename"
+            },
+            "reproduction_fixture": {
+              "$ref": "#/$defs/basename"
+            },
+            "dsa_state_reconstruction": {
+              "$ref": "#/$defs/basename"
+            },
+            "dsa_state_calibration": {
+              "$ref": "#/$defs/basename"
+            }
+          }
+        },
+        "output_root_basename": {
+          "$ref": "#/$defs/basename"
+        },
+        "disallowed_event_tokens": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          }
+        }
+      }
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_chime_h5",
+        "accepted_chime_reference",
+        "raw_dsa_filterbank",
+        "accepted_dsa_reference",
+        "timing_results",
+        "trigger_recovery",
+        "reproduction_fixture",
+        "output_root"
+      ],
+      "properties": {
+        "raw_chime_h5": {
+          "$ref": "#/$defs/path"
+        },
+        "accepted_chime_reference": {
+          "$ref": "#/$defs/path"
+        },
+        "raw_dsa_filterbank": {
+          "$ref": "#/$defs/path"
+        },
+        "accepted_dsa_reference": {
+          "$ref": "#/$defs/path"
+        },
+        "timing_results": {
+          "$ref": "#/$defs/path"
+        },
+        "trigger_recovery": {
+          "$ref": "#/$defs/path"
+        },
+        "reproduction_fixture": {
+          "$ref": "#/$defs/path"
+        },
+        "dsa_state_reconstruction": {
+          "$ref": "#/$defs/path"
+        },
+        "dsa_state_calibration": {
+          "$ref": "#/$defs/path"
+        },
+        "output_root": {
+          "$ref": "#/$defs/path"
+        }
+      }
+    },
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_chime_h5",
+        "accepted_chime_reference",
+        "raw_dsa_filterbank",
+        "accepted_dsa_reference",
+        "timing_results",
+        "trigger_recovery",
+        "reproduction_fixture"
+      ],
+      "properties": {
+        "raw_chime_h5": {
+          "$ref": "#/$defs/sha256"
+        },
+        "accepted_chime_reference": {
+          "$ref": "#/$defs/sha256"
+        },
+        "raw_dsa_filterbank": {
+          "$ref": "#/$defs/sha256"
+        },
+        "accepted_dsa_reference": {
+          "$ref": "#/$defs/sha256"
+        },
+        "timing_results": {
+          "$ref": "#/$defs/sha256"
+        },
+        "trigger_recovery": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reproduction_fixture": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dsa_state_reconstruction": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dsa_state_calibration": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "chime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_reference_dm_pc_cm3",
+        "anchor_dm_pc_cm3",
+        "reference_pulse_fwhm_s",
+        "upchannel_factor",
+        "window_s",
+        "grid",
+        "gates",
+        "accepted_support"
+      ],
+      "properties": {
+        "accepted_reference_dm_pc_cm3": {
+          "type": "number"
+        },
+        "anchor_dm_pc_cm3": {
+          "type": "number"
+        },
+        "reference_pulse_fwhm_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "upchannel_factor": {
+          "const": 16
+        },
+        "window_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "grid": {
+          "$ref": "#/$defs/chime_grid"
+        },
+        "gates": {
+          "$ref": "#/$defs/chime_gates"
+        },
+        "accepted_support": {
+          "$ref": "#/$defs/chime_support"
+        }
+      }
+    },
+    "dsa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_reference_dm_pc_cm3",
+        "raw_crop_start_sample",
+        "crop_samples",
+        "padding_samples",
+        "audit_sample_rows",
+        "accepted_support",
+        "gates"
+      ],
+      "properties": {
+        "accepted_reference_dm_pc_cm3": {
+          "type": "number"
+        },
+        "input_dm_pc_cm3": {
+          "type": "number"
+        },
+        "input_dm_method": {
+          "enum": [
+            "inferred_raw_reference_row_timing",
+            "accepted_product_dm_nominal_with_residual_bound"
+          ]
+        },
+        "input_dm_half_width_pc_cm3": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "reference_minus_raw_dm_pc_cm3": {
+          "type": "number"
+        },
+        "input_dm_reconstruction_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_dm_calibration_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "input_dm_bound_source": {
+          "enum": [
+            "v3_inferred_value",
+            "v3_conservative_residual_bound",
+            "calibrated_v3_integer_interval_intersection"
+          ]
+        },
+        "reference_minus_raw_dm_interval_pc_cm3": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "raw_reference_frequency_crop_start_sample": {
+          "type": "number",
+          "minimum": 0
+        },
+        "native_sample_time_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "raw_crop_start_sample": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "crop_samples": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "padding_samples": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "audit_sample_rows": {
+          "type": "integer",
+          "minimum": 8
+        },
+        "accepted_support": {
+          "$ref": "#/$defs/dsa_support"
+        },
+        "gates": {
+          "$ref": "#/$defs/dsa_gates"
+        },
+        "time_origin": {
+          "$ref": "#/$defs/dsa_time_origin"
+        }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "geometry_dm_pc_cm3",
+        "reference_frequency_mhz",
+        "dsa_native_frequency_mhz"
+      ],
+      "properties": {
+        "geometry_dm_pc_cm3": {
+          "type": "number"
+        },
+        "reference_frequency_mhz": {
+          "const": 400.0
+        },
+        "dsa_native_frequency_mhz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "joint_fit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "execution_authorized",
+        "reference_frequency_mhz",
+        "blockers",
+        "geometry",
+        "resolution",
+        "review_plan",
+        "dm_bounds_pc_cm3",
+        "morphologies",
+        "scattering_tau_1ghz_bounds_s",
+        "scattering_alpha_bounds",
+        "gain_variance",
+        "sampler",
+        "acceptance"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "blocked_pending_reviewed_inputs",
+            "reviewed_execution_disabled",
+            "ready"
+          ]
+        },
+        "execution_authorized": {
+          "type": "boolean"
+        },
+        "reference_frequency_mhz": {
+          "const": 400.0
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "geometry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_icrs",
+            "epoch_mjd_utc",
+            "maximum_projection_disagreement_s"
+          ],
+          "properties": {
+            "source_icrs": {
+              "type": "string",
+              "minLength": 1
+            },
+            "epoch_mjd_utc": {
+              "type": [
+                "string",
+                "number"
+              ]
+            },
+            "maximum_projection_disagreement_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "site_delay_sigma_s": {
+              "$ref": "#/$defs/instrumentPositiveValues"
+            },
+            "clock_sigma_s": {
+              "$ref": "#/$defs/instrumentPositiveValues"
+            },
+            "timing_uncertainty_provenance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "inter_site_clock_sigma_s",
+                "clock_allocation",
+                "clock_basis",
+                "site_delay_basis",
+                "absolute_utc_calibration_status",
+                "owner_adoption_date"
+              ],
+              "properties": {
+                "status": {
+                  "const": "owner_adopted_provisional_bounds"
+                },
+                "inter_site_clock_sigma_s": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "clock_allocation": {
+                  "const": "equal_independent_station_terms"
+                },
+                "clock_basis": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "site_delay_basis": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "absolute_utc_calibration_status": {
+                  "const": "not_independently_measured"
+                },
+                "owner_adoption_date": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "crop_and_off_pulse_padding_locked"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "minLength": 1
+            },
+            "crop_and_off_pulse_padding_locked": {
+              "type": "boolean"
+            },
+            "chime_shape": {
+              "$ref": "#/$defs/arrayShape"
+            },
+            "dsa_shape": {
+              "$ref": "#/$defs/arrayShape"
+            },
+            "chime_sample_interval_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "dsa_sample_interval_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "chime_frequency_bin_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "chime_time_bin_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "dsa_frequency_bin_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "dsa_time_bin_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "chime_frequency_grid_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "dsa_frequency_grid_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "chime_valid_mask_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "dsa_valid_mask_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "chime_off_pulse_mask_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "dsa_off_pulse_mask_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "chime_waterfall_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "dsa_waterfall_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "chime_noise_std_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "dsa_noise_std_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "chime_time_axis_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "dsa_time_axis_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "chime_fit_frequency_average_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "chime_fit_time_average_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "dsa_fit_frequency_average_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "dsa_fit_time_average_factor": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "chime_fit_observation_sha256": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dsa_fit_observation_sha256": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "chime_max_residual_intra_bin_smearing_s": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "dsa_max_residual_intra_bin_smearing_s": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "chime_smearing_calculation_sha256": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dsa_smearing_calculation_sha256": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/sha256"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "chime_time0_unix_ns": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "dsa_time0_unix_ns": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          }
+        },
+        "review_plan": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "component_count",
+            "association_hypotheses",
+            "fit_resolution"
+          ],
+          "properties": {
+            "component_count": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "chime",
+                "dsa"
+              ],
+              "properties": {
+                "chime": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "dsa": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "association_hypotheses": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/associationHypothesis"
+              }
+            },
+            "fit_resolution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "minimum_valid_fraction",
+                "minimum_samples_per_component",
+                "time_average_factor",
+                "maximum_residual_smearing_fraction_of_fit_sample",
+                "maximum_residual_smearing_fraction_of_component_width",
+                "exact_divisor_required"
+              ],
+              "properties": {
+                "status": {
+                  "const": "pending_data_driven_proposal"
+                },
+                "minimum_valid_fraction": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                },
+                "minimum_samples_per_component": {
+                  "type": "integer",
+                  "minimum": 2
+                },
+                "time_average_factor": {
+                  "const": 1
+                },
+                "maximum_residual_smearing_fraction_of_fit_sample": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                },
+                "maximum_residual_smearing_fraction_of_component_width": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                },
+                "exact_divisor_required": {
+                  "const": true
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/componentWindow"
+          }
+        },
+        "associations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/associationHypothesis"
+          }
+        },
+        "dm_bounds_pc_cm3": {
+          "$ref": "#/$defs/numberPair"
+        },
+        "morphologies": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "gaussian",
+              "scattering"
+            ]
+          }
+        },
+        "scattering_tau_1ghz_bounds_s": {
+          "$ref": "#/$defs/numberPair"
+        },
+        "scattering_alpha_bounds": {
+          "$ref": "#/$defs/numberPair"
+        },
+        "gain_variance": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "sampler": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "seed",
+            "nlive",
+            "dlogz"
+          ],
+          "properties": {
+            "seed": {
+              "type": "integer"
+            },
+            "nlive": {
+              "type": "integer",
+              "minimum": 20
+            },
+            "dlogz": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "sample": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pool_size": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "resume": {
+              "type": "boolean"
+            }
+          }
+        },
+        "acceptance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maximum_reduced_residual_power",
+            "maximum_structured_residual_correlation",
+            "posterior_edge_fraction",
+            "maximum_prior_edge_mass",
+            "resolution_convergence_required",
+            "maximum_resolution_dm_shift_combined_sigma",
+            "maximum_resolution_dm_shift_pc_cm3",
+            "maximum_resolution_toa_shift_combined_sigma",
+            "resolution_interval_width_ratio",
+            "maximum_resolution_model_weight_l1_difference"
+          ],
+          "properties": {
+            "maximum_reduced_residual_power": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maximum_structured_residual_correlation": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "posterior_edge_fraction": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 0.5
+            },
+            "maximum_prior_edge_mass": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 0.5
+            },
+            "resolution_convergence_required": {
+              "const": true
+            },
+            "maximum_resolution_dm_shift_combined_sigma": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maximum_resolution_dm_shift_pc_cm3": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "maximum_resolution_toa_shift_combined_sigma": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "resolution_interval_width_ratio": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "number",
+                  "minimum": 1
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "maximum_resolution_model_weight_l1_difference": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 2
+            }
+          }
+        },
+        "review_decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "event",
+            "source_event_binding_sha256",
+            "component_proposal_sha256",
+            "resolution_proposal_sha256",
+            "timing_sensitivity_roster_sha256",
+            "fit_settings_sha256",
+            "components_sha256",
+            "associations_sha256",
+            "approved_resolution_sha256",
+            "timing_sensitivity_review_status",
+            "reviewer",
+            "review_date",
+            "note"
+          ],
+          "properties": {
+            "status": {
+              "const": "approved"
+            },
+            "event": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source_event_binding_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "component_proposal_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "resolution_proposal_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "timing_sensitivity_roster_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "fit_settings_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "components_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "associations_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "approved_resolution_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "timing_sensitivity_review_status": {
+              "const": "approved"
+            },
+            "reviewer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "review_date": {
+              "type": "string",
+              "format": "date"
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1
+            },
+            "window_amendment": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "path",
+                "sha256",
+                "chime_window_samples",
+                "dsa_window_samples",
+                "base_component_proposal_sha256",
+                "base_resolution_proposal_sha256"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "chime_window_samples": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "dsa_window_samples": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "base_component_proposal_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "base_resolution_proposal_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            }
+          }
+        },
+        "authorization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "source_reviewed_event_binding_sha256",
+            "date",
+            "note",
+            "requires_receipt_rebuild"
+          ],
+          "properties": {
+            "status": {
+              "const": "explicitly_authorized"
+            },
+            "source_reviewed_event_binding_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "date": {
+              "type": "string",
+              "format": "date"
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1
+            },
+            "requires_receipt_rebuild": {
+              "const": [
+                "preflight",
+                "dsa_audit",
+                "chime_products",
+                "dsa_products",
+                "geometry_constraint"
+              ]
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "reviewed_execution_disabled",
+                  "ready"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "components",
+              "associations",
+              "review_decision"
+            ],
+            "properties": {
+              "blockers": {
+                "maxItems": 0
+              },
+              "geometry": {
+                "required": [
+                  "site_delay_sigma_s",
+                  "clock_sigma_s",
+                  "timing_uncertainty_provenance"
+                ]
+              },
+              "resolution": {
+                "required": [
+                  "chime_shape",
+                  "dsa_shape",
+                  "chime_sample_interval_s",
+                  "dsa_sample_interval_s",
+                  "chime_frequency_bin_factor",
+                  "chime_time_bin_factor",
+                  "dsa_frequency_bin_factor",
+                  "dsa_time_bin_factor",
+                  "chime_frequency_grid_sha256",
+                  "dsa_frequency_grid_sha256",
+                  "chime_valid_mask_sha256",
+                  "dsa_valid_mask_sha256",
+                  "chime_off_pulse_mask_sha256",
+                  "dsa_off_pulse_mask_sha256",
+                  "chime_waterfall_sha256",
+                  "dsa_waterfall_sha256",
+                  "chime_noise_std_sha256",
+                  "dsa_noise_std_sha256",
+                  "chime_time_axis_sha256",
+                  "dsa_time_axis_sha256",
+                  "chime_fit_frequency_average_factor",
+                  "chime_fit_time_average_factor",
+                  "dsa_fit_frequency_average_factor",
+                  "dsa_fit_time_average_factor",
+                  "chime_fit_observation_sha256",
+                  "dsa_fit_observation_sha256",
+                  "chime_max_residual_intra_bin_smearing_s",
+                  "dsa_max_residual_intra_bin_smearing_s",
+                  "chime_smearing_calculation_sha256",
+                  "dsa_smearing_calculation_sha256",
+                  "chime_time0_unix_ns",
+                  "dsa_time0_unix_ns"
+                ],
+                "properties": {
+                  "crop_and_off_pulse_padding_locked": {
+                    "const": true
+                  },
+                  "chime_frequency_bin_factor": {
+                    "type": "integer"
+                  },
+                  "chime_time_bin_factor": {
+                    "type": "integer"
+                  },
+                  "dsa_frequency_bin_factor": {
+                    "type": "integer"
+                  },
+                  "dsa_time_bin_factor": {
+                    "type": "integer"
+                  },
+                  "chime_fit_time_average_factor": {
+                    "const": 1
+                  },
+                  "dsa_fit_time_average_factor": {
+                    "const": 1
+                  },
+                  "chime_fit_observation_sha256": {
+                    "$ref": "#/$defs/sha256"
+                  },
+                  "dsa_fit_observation_sha256": {
+                    "$ref": "#/$defs/sha256"
+                  },
+                  "chime_max_residual_intra_bin_smearing_s": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "dsa_max_residual_intra_bin_smearing_s": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "chime_smearing_calculation_sha256": {
+                    "$ref": "#/$defs/sha256"
+                  },
+                  "dsa_smearing_calculation_sha256": {
+                    "$ref": "#/$defs/sha256"
+                  },
+                  "chime_time0_unix_ns": {
+                    "type": "integer"
+                  },
+                  "dsa_time0_unix_ns": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "reviewed_execution_disabled"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "execution_authorized": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "ready"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "authorization"
+            ],
+            "properties": {
+              "execution_authorized": {
+                "const": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_authorized",
+        "regression_fixture",
+        "chime_container_image",
+        "container_data_mount",
+        "stages"
+      ],
+      "properties": {
+        "execution_authorized": {
+          "type": "boolean"
+        },
+        "regression_fixture": {
+          "type": "boolean"
+        },
+        "chime_container_image": {
+          "type": "string",
+          "pattern": "@sha256:[0-9a-f]{64}$"
+        },
+        "container_data_mount": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "stages": {
+          "oneOf": [
+            {
+              "const": [
+                "preflight",
+                "dsa_audit",
+                "chime_products",
+                "dsa_products",
+                "geometry_constraint",
+                "joint_fit",
+                "alternative_anchor_fit",
+                "resolution_fit",
+                "resolution_check",
+                "chime_oracle",
+                "dsa_oracle",
+                "oracle_check",
+                "packet",
+                "manifests"
+              ]
+            },
+            {
+              "const": [
+                "preflight",
+                "dsa_audit",
+                "chime_hybrid",
+                "dsa_products",
+                "geometry",
+                "packet",
+                "manifests"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configuration_status",
+        "blockers",
+        "dsa_input_state"
+      ],
+      "properties": {
+        "configuration_status": {
+          "enum": [
+            "blocked",
+            "reviewed"
+          ]
+        },
+        "blockers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dsa_input_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "authority",
+            "reconstruction_sha256",
+            "independent_uncertainty_review_status",
+            "accepted_for_config_review",
+            "conservative_bound_accepted_for_config_review",
+            "material_nonzero_residual_proven",
+            "inferred_raw_input_dm_pc_cm3",
+            "conservative_uncertainty_pc_cm3"
+          ],
+          "properties": {
+            "authority": {
+              "const": "raw_reference_row_timing_v3_value_or_bound"
+            },
+            "reconstruction_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "independent_uncertainty_review_status": {
+              "enum": [
+                "pending",
+                "passed"
+              ]
+            },
+            "accepted_for_config_review": {
+              "type": "boolean"
+            },
+            "conservative_bound_accepted_for_config_review": {
+              "type": "boolean"
+            },
+            "material_nonzero_residual_proven": {
+              "type": "boolean"
+            },
+            "inferred_raw_input_dm_pc_cm3": {
+              "type": "number"
+            },
+            "conservative_uncertainty_pc_cm3": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      }
+    },
+    "event_binding_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "windowed_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_config_sha256",
+        "source_output_root",
+        "chime_window_samples",
+        "dsa_window_samples",
+        "prematerialized"
+      ],
+      "properties": {
+        "source_config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_output_root": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "chime_window_samples": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "dsa_window_samples": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "prematerialized": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "workflow": {
+            "properties": {
+              "regression_fixture": {
+                "const": false
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "review"
+        ],
+        "properties": {
+          "identity": {
+            "properties": {
+              "input_basenames": {
+                "required": [
+                  "dsa_state_reconstruction"
+                ]
+              }
+            }
+          },
+          "paths": {
+            "required": [
+              "dsa_state_reconstruction"
+            ]
+          },
+          "input_sha256": {
+            "required": [
+              "dsa_state_reconstruction"
+            ]
+          },
+          "dsa": {
+            "required": [
+              "input_dm_pc_cm3",
+              "input_dm_method",
+              "input_dm_bound_source",
+              "input_dm_half_width_pc_cm3",
+              "reference_minus_raw_dm_pc_cm3",
+              "reference_minus_raw_dm_interval_pc_cm3",
+              "input_dm_reconstruction_sha256",
+              "raw_reference_frequency_crop_start_sample",
+              "native_sample_time_s"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "basename": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^/]+$"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "positive_number": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "numberPair": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "associationHypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "matches"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "matches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "latent_id",
+              "chime_component_id",
+              "dsa_component_id"
+            ],
+            "properties": {
+              "latent_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "chime_component_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dsa_component_id": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "componentWindow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instrument",
+        "component_id",
+        "center_sample",
+        "half_width_samples",
+        "width_bounds_s",
+        "width_index_bounds"
+      ],
+      "properties": {
+        "instrument": {
+          "enum": [
+            "chime",
+            "dsa"
+          ]
+        },
+        "component_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "center_sample": {
+          "type": "number",
+          "minimum": 0
+        },
+        "half_width_samples": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "width_bounds_s": {
+          "$ref": "#/$defs/numberPair"
+        },
+        "width_index_bounds": {
+          "$ref": "#/$defs/numberPair"
+        }
+      }
+    },
+    "arrayShape": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "instrumentPositiveValues": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chime",
+        "dsa"
+      ],
+      "properties": {
+        "chime": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "dsa": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "chime_grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coarse_half_width_pc_cm3",
+        "coarse_step_pc_cm3",
+        "fine_half_width_pc_cm3",
+        "fine_step_pc_cm3"
+      ],
+      "properties": {
+        "coarse_half_width_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "coarse_step_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "fine_half_width_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "fine_step_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        }
+      }
+    },
+    "chime_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "oracle_half_width_pc_cm3",
+        "oracle_material_threshold_pc_cm3",
+        "oracle_normalised_curve_max_abs_difference",
+        "oracle_center_score_ratio_tolerance",
+        "smearing_max_fraction_of_upchannel_sample",
+        "smearing_max_fraction_of_reference_pulse_fwhm",
+        "injection_max_error_pc_cm3"
+      ],
+      "properties": {
+        "oracle_half_width_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "oracle_material_threshold_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "oracle_normalised_curve_max_abs_difference": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "oracle_center_score_ratio_tolerance": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "smearing_max_fraction_of_upchannel_sample": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "smearing_max_fraction_of_reference_pulse_fwhm": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "injection_max_error_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        }
+      }
+    },
+    "chime_support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "full_grid_rows",
+        "all_nan_count",
+        "finite_flat_count",
+        "live_count",
+        "h5_present_count",
+        "h5_missing_count",
+        "h5_present_accepted_dead_ids",
+        "manual_bad_channel_ids",
+        "historical_row_sum_replay"
+      ],
+      "properties": {
+        "full_grid_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "all_nan_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "finite_flat_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "live_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "h5_present_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "h5_missing_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "h5_present_accepted_dead_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "manual_bad_channel_ids": {
+          "const": []
+        },
+        "historical_row_sum_replay": {
+          "const": false
+        }
+      }
+    },
+    "dsa_support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "full_grid_rows",
+        "live_count",
+        "dead_count",
+        "manual_bad_channel_ids"
+      ],
+      "properties": {
+        "full_grid_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "live_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dead_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "manual_bad_channel_ids": {
+          "const": []
+        }
+      }
+    },
+    "dsa_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "direct_correlation_min",
+        "reversed_correlation_max",
+        "edge_fail_closed"
+      ],
+      "properties": {
+        "direct_correlation_min": {
+          "type": "number"
+        },
+        "reversed_correlation_max": {
+          "type": "number"
+        },
+        "reference_minus_raw_dm_abs_max_pc_cm3": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "input_dm_reference_timing_half_width_max_native_samples": {
+          "$ref": "#/$defs/positive_number"
+        },
+        "input_dm_aligned_profile_correlation_min": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "gallery_alignment_must_be_robust": {
+          "const": true
+        },
+        "edge_fail_closed": {
+          "const": true
+        }
+      }
+    },
+    "dsa_time_origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "trigger_mjd_utc",
+        "trigger_reference_frequency_mhz",
+        "trigger_reference_frequency_status",
+        "trigger_reference_frequency_sensitivity_required",
+        "filterbank_product_dm_pc_cm3",
+        "filterbank_peak_sample_index",
+        "filterbank_peak_offset_s",
+        "alternative_pretrigger_convention",
+        "mapping_ambiguity_s",
+        "mapping_uncertainty_treatment",
+        "rounded_tstart_allowed",
+        "owner_approval_date",
+        "owner_decision_receipt",
+        "owner_decision_receipt_sha256"
+      ],
+      "properties": {
+        "status": {
+          "const": "owner_approved_trigger_peak_anchor"
+        },
+        "trigger_mjd_utc": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "trigger_reference_frequency_mhz": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "trigger_reference_frequency_status": {
+          "const": "owner_approved_provisional_modeling_convention"
+        },
+        "trigger_reference_frequency_sensitivity_required": {
+          "const": true
+        },
+        "filterbank_product_dm_pc_cm3": {
+          "type": "number"
+        },
+        "filterbank_peak_sample_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "filterbank_peak_offset_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "alternative_pretrigger_convention": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sample_index",
+            "status"
+          ],
+          "properties": {
+            "sample_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "status": {
+              "const": "unverified_alternative_for_sensitivity_only"
+            }
+          }
+        },
+        "mapping_ambiguity_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "mapping_uncertainty_treatment": {
+          "const": "owner_approved_discrete_two_anchor_sensitivity"
+        },
+        "rounded_tstart_allowed": {
+          "const": false
+        },
+        "owner_approval_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "owner_decision_receipt": {
+          "type": "string",
+          "pattern": "^analysis-configs/absolute-dm/decisions/.+\\.json$"
+        },
+        "owner_decision_receipt_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "event": "casey",
+  "record_type": "owner_decision",
+  "recorded_date_utc": "2026-08-03",
+  "pr": {
+    "repo": "jakobtfaber/Faber2026-analysis",
+    "number": 234,
+    "head_oid": "47db30323a97c0a8213e1565cb7fd1562f9edd9d",
+    "base_ref": "main"
+  },
+  "supersedes_pending_status_in": "analysis-configs/absolute-dm/decisions/casey-trigger-peak.json",
+  "decision_text_sha256": "46f18465de8a80002f5c355174dfd24e18fe84b006c2c632fcaaca07beedbc4e",
+  "decision_text": "### Owner decision: Casey sample-15256 timing sensitivity\n\n**Decision status:** Approved as a required discrete sensitivity test; not approved as an alternative primary timing authority.\n\n**Available evidence**\n\n- The corrected DSA-110 trigger epoch is MJD `60369.37095221912`.\n- The raw Casey filterbank is already dedispersed at `491.211 pc cm^-3`.\n- Replaying the hash-bound raw filterbank (`8eb60706543875363f20f21ab1473d439f356120b8f8852cedaa9e567b938bd1`) recovers the band-integrated burst peak at sample `15259`.\n- Sample `15259` is `0.500006912 s` from sample zero at the native `32.768 us` cadence and is consistent with the historical notebook’s empirical trigger-to-peak pairing.\n- A producer-source reconstruction predicts sample `15256`, three samples or `98.304 us` earlier.\n- No retained immutable producer artifact establishes the exact channelization/filtering delay or validates sample `15256`.\n- The existing owner receipt approved sample `15259` as the empirical peak anchor, but explicitly did not approve the treatment of the `15256/15259` ambiguity.\n\n**Alternatives considered**\n\n1. Use sample `15259` only and ignore `15256`.\n2. Replace the adopted anchor with sample `15256`.\n3. Fold `98.304 us` into the existing Gaussian clock prior.\n4. Use sample `15259` for the primary analysis and rerun the complete fit with sample `15256` as a discrete sensitivity branch.\n\n**Scientific consequences**\n\n- The two anchors differ by an exact deterministic `98.304 us`; this is a mapping ambiguity, not evidence for additional random clock noise.\n- If the full displacement were absorbed as a 400–1530 MHz dispersive delay, it would correspond to approximately `0.0040693 pc cm^-3`.\n- This is close to the configured maximum absolute resolution-sensitivity DM shift of `0.005 pc cm^-3`; it therefore cannot be dismissed without a fit-level comparison.\n- Treating the ambiguity as Gaussian clock noise would erase its discrete provenance and could incorrectly broaden or recenter the DM and TOA posterior.\n- Selecting `15256` from geometric peak agreement would circularly use the science result to choose the timing authority.\n\n**Decision**\n\nAdopt sample `15259` as the primary empirical trigger-peak anchor. Require a separately identified sample-`15256` branch using otherwise identical inputs, likelihood, priors, resolution, component association, sampler settings, and reference-frequency convention. Do not combine the branches into the clock prior and do not promote sample `15256` to a producer fact.\n\nThe primary scientific result may be promoted only after the branch comparison is reviewed. Both branch results must be reported when the change is material; no threshold outcome may be inferred in advance.\n\n**Required tests**\n\n- Assert that changing `15259 -> 15256` changes every derived DSA crop epoch by exactly `98,304 ns` and changes no waterfall pixels, masks, frequencies, dispersion state, or non-timing configuration.\n- Run the same hash-bound preparation and joint-fit workflow for both anchors.\n- Compare posterior DM, geocentric 400 MHz TOA, credible-interval widths, prior-edge mass, model weights, residual diagnostics, and acceptance-gate outcomes.\n- Report both the absolute DM shift and the shift in combined posterior sigma.\n- Require investigation before promotion if the branch changes an acceptance outcome, changes the preferred morphology/association, exceeds `0.005 pc cm^-3`, or exceeds `0.5` combined sigma in DM or TOA.\n- Preserve the existing geometry term in both likelihoods; it must not select the anchor.\n\n**Required provenance**\n\nEach branch receipt must bind the PR head/base commits, raw-input SHA-256 values, owner-decision receipt, exact sample index, native sample interval, derived `time0_unix_ns`, 1530 MHz convention decision, complete configuration, environment/lock hashes, random seed, observation-product hashes, fit-result hashes, and comparison-report hash. The comparison must identify sample `15256` as an unverified producer-derived sensitivity convention.\n\n**Owner approval text**\n\nI approve sample 15259 as the primary empirical trigger-peak anchor and approve sample 15256 only as a required discrete sensitivity branch. The 98.304 us difference must remain separate from the Gaussian clock prior. Run both branches with all other analysis choices held fixed, retain complete hash-bound provenance, and return the fit-level DM, TOA, model-weight, residual, and acceptance-gate comparison for review before promoting a result or science claim. This decision does not authenticate sample 15256 as a producer fact and does not authorize fitting until the other recorded input decisions are complete.\n",
+  "decision_status": "owner_approved_discrete_sensitivity_branch_only",
+  "approved_scope": {
+    "primary_anchor_sample_index": 15259,
+    "sensitivity_branch_sample_index": 15256,
+    "sample_15256_promoted_to_producer_fact": false,
+    "mapping_ambiguity_s": 9.8304e-05,
+    "mapping_ambiguity_excluded_from_clock_prior": true,
+    "equivalent_dm_shift_pc_cm3_if_fully_dispersive_400_1530_mhz": 0.0040693,
+    "material_change_thresholds": {
+      "abs_dm_shift_pc_cm3": 0.005,
+      "combined_posterior_sigma": 0.5
+    },
+    "fitting_authorized_by_this_decision_alone": false
+  },
+  "resolves": "mapping_uncertainty_treatment"
+}

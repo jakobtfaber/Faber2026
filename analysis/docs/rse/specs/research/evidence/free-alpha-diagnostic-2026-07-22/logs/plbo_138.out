@@ -1,0 +1,5 @@
+HOST=lxd110h17 JOB=138 BETA=3.5 TAU=0.019 SI=3 W=0.3 AMP=0.2 DT=0.1 NLIVE=300
+INJECT-BOTH tau=0.019 beta_prim=3.5 s_i=3.0 alpha_true=4.667 W/tau=0.3 amp=0.2 dt=0.1ms
+  1-COMP EMG fit alpha_apparent=4.257[4.218,4.309]  (alpha_true=4.667)  bias=-0.410  lnZ=-27670.6
+  BOTH-BIAS -0.410  (heavy-tail-alone max -0.21; close-leakage-alone max -0.43; need ~-1.6)
+DONE BOTH si=3 amp=0.2 dt=0.1 RC=0 WALL=1239

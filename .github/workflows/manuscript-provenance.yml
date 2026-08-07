@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     outputs:
-      analysis-pin: ${{ steps.diff.outputs.analysis-pin }}
       focused-only: ${{ steps.diff.outputs.focused-only }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -35,7 +34,6 @@ jobs:
         run: |
           set -euo pipefail
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            echo "analysis-pin=true" >> "$GITHUB_OUTPUT"
             echo "focused-only=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -44,19 +42,18 @@ jobs:
           elif ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA"
           fi
-          if git diff --quiet "$BASE_SHA" "$HEAD_SHA" -- analysis; then
-            echo "analysis-pin=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "analysis-pin=true" >> "$GITHUB_OUTPUT"
+          if ! git cat-file -e "$HEAD_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$HEAD_SHA"
           fi
-          mapfile -t changed < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          changed_output=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          mapfile -t changed <<<"$changed_output"
           focused_only=true
           if [ "${#changed[@]}" -eq 0 ]; then
             focused_only=false
           fi
           for path in "${changed[@]}"; do
             case "$path" in
-              analysis|*.tex|bib/*.bib) ;;
+              analysis/*|*.tex|bib/*.bib) ;;
               *) focused_only=false ;;
             esac
           done
@@ -70,7 +67,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          submodules: recursive
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -95,7 +91,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          submodules: recursive
           persist-credentials: false
       - name: Fetch exact historical provenance objects
         run: python3 scripts/fetch_provenance_commits.py
@@ -124,50 +119,10 @@ jobs:
       - name: Scan workflow security
         run: uv run --project analysis --group test --frozen zizmor --pedantic .github/workflows
 
-  pinned-analysis-tests:
-    name: pinned-analysis-tests
-    needs: changes
-    if: needs.changes.outputs.analysis-pin == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - name: Require successful continuous integration for the pinned analysis commit
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          analysis_repository="jakobtfaber/Faber2026-analysis"
-          pin=$(git ls-tree HEAD analysis | awk '$1 == "160000" {print $3}')
-          test ${#pin} -eq 40
-
-          runs=$(gh run list \
-            --repo "$analysis_repository" \
-            --workflow analysis-ci.yml \
-            --commit "$pin" \
-            --limit 20 \
-            --json databaseId,headSha,status,conclusion)
-          run_id=$(jq -er --arg pin "$pin" '
-            [.[] | select(.headSha == $pin)] | first | .databaseId
-          ' <<<"$runs")
-          gh run watch "$run_id" \
-            --repo "$analysis_repository" \
-            --exit-status \
-            --interval 10
-          checks=$(gh api "repos/${analysis_repository}/commits/${pin}/check-runs")
-          jq -e '
-            [.check_runs[] | select(
-              .name == "analysis-ci" and
-              .app.slug == "github-actions"
-            )] | sort_by(.completed_at) | last | .conclusion == "success"
-          ' <<<"$checks"
-
   required:
     name: manuscript-provenance
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    needs: [changes, manuscript, provenance, pinned-analysis-tests]
+    needs: [changes, manuscript, provenance]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -176,9 +131,7 @@ jobs:
           CHANGES: ${{ needs.changes.result }}
           MANUSCRIPT: ${{ needs.manuscript.result }}
           PROVENANCE: ${{ needs.provenance.result }}
-          PINNED_ANALYSIS: ${{ needs.pinned-analysis-tests.result }}
         run: |
           test "$CHANGES" = success
           test "$MANUSCRIPT" = success
           test "$PROVENANCE" = success -o "$PROVENANCE" = skipped
-          test "$PINNED_ANALYSIS" = success -o "$PINNED_ANALYSIS" = skipped
