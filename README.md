@@ -28,13 +28,6 @@ After initializing the analysis submodule, read the
 It explains the three repositories, scientific data chain, authority roles,
 and how to trace a manuscript claim, figure, table, or fit to its sources.
 
-## Start here
-
-After initializing the analysis submodule, read the
-[repository and provenance map](analysis/docs/rse/ops/repository-map.md).
-It explains the three repositories, scientific data chain, authority roles,
-and how to trace a manuscript claim, figure, table, or fit to its sources.
-
 ## Build
 
 ```sh
