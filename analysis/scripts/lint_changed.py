@@ -69,6 +69,10 @@ def main() -> int:
             "git",
             "diff",
             "--name-only",
+            # --relative keeps paths ROOT-relative and scoped to ROOT when
+            # this repository lives as a subdirectory of the manuscript
+            # monorepo; it is a no-op when ROOT is the repository root.
+            "--relative",
             "--diff-filter=ACMR",
             base,
             "HEAD",
