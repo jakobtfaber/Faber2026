@@ -15,8 +15,11 @@ A pending figure receipt counts only when its candidate hash matches exactly.
 
 Every card must contain one decision, two or three choices, one recommendation,
 at most three context facts, one to three evidence links, the effect, and the
-recording destination. Scientific and visual choices never auto-resolve.
-Silence leaves promotion and claims blocked.
+recording destination. Cards carry one of three kinds: `scientific`, `visual`,
+or `operational` (an authority or admission decision over an operational
+surface, such as ratifying the Jupyter surface — owner-only, but not a
+manuscript judgment). No kind auto-resolves. Silence leaves promotion and
+claims blocked.
 
 Outside a requested walkthrough, report only: **"N decisions queued."**
 Do not repeat decision requests in chat.

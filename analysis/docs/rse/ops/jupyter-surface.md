@@ -271,11 +271,14 @@ cause.
 environment is out of date). Rebuild the environment from the lock:
 
 ```bash
-env -u VIRTUAL_ENV uv sync --frozen --group notebook
+env -u VIRTUAL_ENV -u UV_PROJECT_ENVIRONMENT uv sync --frozen --group notebook
 ```
 
 Clearing an inherited `VIRTUAL_ENV` matters: `uv` will otherwise select the
-wrong interpreter. Never repair a failure with `uv add` or `uv lock` inside a
+wrong interpreter. `UV_PROJECT_ENVIRONMENT` must be cleared for the same
+reason — when exported (the dualband make targets export it, for example) it
+redirects the sync to an alternate environment while the editor keeps using
+the checkout `.venv`. Never repair a failure with `uv add` or `uv lock` inside a
 session — that edits the lock as a side effect. If the surface genuinely needs a
 new dependency, change `pyproject.toml` and `uv.lock` in their own reviewed
 pull request.

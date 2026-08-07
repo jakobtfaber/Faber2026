@@ -397,25 +397,46 @@ def _validate_fit_cell(
     expected_run_identity = hashlib.sha256(
         _canonical_json(expected_run_context)
     ).hexdigest()
-    if (
-        receipt["request_sha256"] != request_hash
-        or receipt["environment_sha256"] != environment["manifest_sha256"]
-        or receipt["source"] != environment["code"]
-        or receipt["cell"]
-        != {"association_id": association_id, "morphology": morphology}
-        or receipt["binding"] != expected_binding
-        or receipt["sampler"] != expected_sampler
-        or binding.get("run_context") != expected_run_context
-        or binding.get("run_identity") != expected_run_identity
-        or binding.get("model_version") != "joint-burst-v1"
-        or binding.get("association") != association_id
-        or binding.get("morphology") != morphology
-        or binding.get("nlive") != request.nlive
-        or binding.get("dlogz") != request.dlogz
-    ):
+    clauses = {
+        "request_sha256": (receipt["request_sha256"], request_hash),
+        "environment_sha256": (
+            receipt["environment_sha256"],
+            environment["manifest_sha256"],
+        ),
+        "source": (receipt["source"], environment["code"]),
+        "cell": (
+            receipt["cell"],
+            {"association_id": association_id, "morphology": morphology},
+        ),
+        "binding": (receipt["binding"], expected_binding),
+        "sampler": (receipt["sampler"], expected_sampler),
+        "checkpoint_run_context": (binding.get("run_context"), expected_run_context),
+        "checkpoint_run_identity": (
+            binding.get("run_identity"),
+            expected_run_identity,
+        ),
+        "checkpoint_model_version": (binding.get("model_version"), "joint-burst-v1"),
+        "checkpoint_association": (binding.get("association"), association_id),
+        "checkpoint_morphology": (binding.get("morphology"), morphology),
+        "checkpoint_nlive": (binding.get("nlive"), request.nlive),
+        "checkpoint_dlogz": (binding.get("dlogz"), request.dlogz),
+    }
+    mismatched = {
+        name: {"cell": actual, "aggregate": expected}
+        for name, (actual, expected) in clauses.items()
+        if actual != expected
+    }
+    if mismatched:
+        print(
+            "cell identity mismatch diagnostics: "
+            + json.dumps(mismatched, sort_keys=True, default=str),
+            file=sys.stderr,
+        )
         raise WorkflowFailure(
-            "cell identity differs from aggregate request",
+            "cell identity differs from aggregate request: "
+            + ", ".join(sorted(mismatched)),
             reason_codes=["provenance-cell-identity-mismatch"],
+            diagnostics={"mismatched_clauses": mismatched},
         )
     return receipt
 
@@ -684,9 +705,37 @@ def _environment_preflight(repository_root: Path) -> dict[str, Any]:
             reason_codes=["input-dirty-checkout"],
             diagnostics={"dirty_paths": code["dirty_paths"]},
         )
+    # The hashed platform is what can change a numerical result: OS family,
+    # CPU architecture, libc, and the OS product/distribution release. The
+    # kernel BUILD (e.g. 6.17.0-1021 vs -1020 on mixed CI runner pools) cannot,
+    # and hashing it made the cross-job identity check fail on infrastructure
+    # noise; it stays in the manifest as unhashed detail.
+    if platform.system() == "Darwin":
+        os_release = platform.mac_ver()[0]
+    elif platform.system() == "Linux":
+        try:
+            release_info = platform.freedesktop_os_release()
+            os_release = "-".join(
+                part
+                for part in (
+                    release_info.get("ID", ""),
+                    release_info.get("VERSION_ID", ""),
+                )
+                if part
+            )
+        except OSError:
+            os_release = ""
+    else:
+        os_release = platform.release()
+    platform_parts = [
+        platform.system(),
+        os_release,
+        platform.machine(),
+        *platform.libc_ver(),
+    ]
     environment_manifest = {
         "python": sys.version,
-        "platform": platform.platform(),
+        "platform": "-".join(part for part in platform_parts if part),
         "dynesty": dynesty_version,
         "dynesty_origin": str(dynesty_origin),
         "faber2026_origin": str(origin),
@@ -697,6 +746,13 @@ def _environment_preflight(repository_root: Path) -> dict[str, Any]:
     environment_manifest["manifest_sha256"] = hashlib.sha256(
         _canonical_json(environment_manifest)
     ).hexdigest()
+    environment_manifest["platform_detail"] = platform.platform()
+    # Logged so a cross-job manifest divergence (the sha alone names no
+    # ingredient) can be diagnosed by diffing the two job logs.
+    print(
+        "environment manifest: " + json.dumps(environment_manifest, sort_keys=True),
+        file=sys.stderr,
+    )
     return environment_manifest
 
 

@@ -4,7 +4,7 @@ MANUSCRIPT_ROOT_ABS := $(abspath $(MANUSCRIPT_ROOT))
 UV ?= uv
 DUALBAND_ENV ?= $(CURDIR)/.venv-dualband
 
-.PHONY: check-mount check-state test test-manuscript test-slow test-replay test-external test-notebook lint ci figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch observations fit verify review
+.PHONY: check-mount check-state test test-manuscript test-slow test-replay test-external test-notebook lint ci figures kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch observations fit verify review session
 
 test-notebook:
 	$(UV) lock --check
@@ -102,3 +102,8 @@ wayfinder-status:
 wayfinder-launch:
 	@test -n "$(WAVE)" || (echo 'Usage: make wayfinder-launch WAVE=first' >&2; exit 1)
 	python3 scripts/wayfinder_controller.py launch --wave "$(WAVE)"
+
+session:
+	@test -n "$(ISSUE)" || (echo "Usage: make session ISSUE=<n> PHASE=<phase> [EVENT=<event>] [RESUME=1] [WORKTREE=1] [FETCH=1]" >&2; exit 1)
+	@test -n "$(PHASE)" || (echo "Usage: make session ISSUE=<n> PHASE=<phase> [EVENT=<event>] [RESUME=1] [WORKTREE=1] [FETCH=1]" >&2; exit 1)
+	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/research_session.py start --issue "$(ISSUE)" --phase "$(PHASE)" $(if $(EVENT),--event "$(EVENT)",) $(if $(RESUME),--resume,) $(if $(WORKTREE),--worktree,) $(if $(FETCH),--fetch,)

@@ -304,7 +304,7 @@ def test_cards_are_ordered_and_deduplicated(tmp_path):
     [
         (
             lambda card: card.update(kind="technical"),
-            "kind must be scientific or visual",
+            "kind must be scientific, visual, or operational",
         ),
         (lambda card: card.update(choices=card["choices"][:1]), "2-3 choices"),
         (
@@ -537,3 +537,39 @@ def test_check_mode_rejects_stale_generated_queue(tmp_path):
     )
     assert result.returncode == 1
     assert "generated queue is stale" in result.stdout
+
+
+def test_figure_cards_reject_the_operational_kind(tmp_path, monkeypatch):
+    import owner_queue
+
+    batch = tmp_path / "figure_review/batches/2026-01-01-test"
+    batch.mkdir(parents=True)
+    card = {
+        "id": "op-figure",
+        "kind": "operational",
+        "title": "Operational figure decision",
+        "decision": "Should this figure use an operational card?",
+        "recommended": {"choice": "no", "reason": "Figure cards are scientific or visual."},
+        "choices": [{"id": "no", "label": "No."}, {"id": "yes", "label": "Yes."}],
+        "context": ["Test."],
+        "evidence": [{"label": "Manifest", "path": "figure_review/batches/2026-01-01-test/manifest.json"}],
+        "effect": "None.",
+        "recorder": {"path": "x.md", "action": "Record."},
+        "priority": 10,
+    }
+    manifest = {
+        "batch_id": "2026-01-01-test",
+        "candidates": [
+            {
+                "id": "cand-1",
+                "decision": {"status": "pending"},
+                "owner_decision_card": card,
+            }
+        ],
+    }
+    (batch / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    monkeypatch.setattr(
+        owner_queue, "collect_undecided_figure_batches", lambda root: [batch]
+    )
+    with pytest.raises(owner_queue.QueueValidationError, match="operational"):
+        owner_queue.collect_figure_cards(tmp_path)

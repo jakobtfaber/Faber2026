@@ -27,7 +27,7 @@ CARD_RE = re.compile(
     r"(?P<payload>.*?)\n```",
     re.MULTILINE | re.DOTALL,
 )
-ALLOWED_KINDS = {"scientific", "visual"}
+ALLOWED_KINDS = {"scientific", "visual", "operational"}
 ALLOWED_FIGURE_STATUSES = {"pending", "approved", "needs_revision"}
 
 
@@ -304,7 +304,7 @@ def _validate_card(card: DecisionCard, *, root: Path) -> None:
         raise QueueValidationError(f"{prefix}: invalid stable id")
     if card.kind not in ALLOWED_KINDS:
         raise QueueValidationError(
-            f"{prefix}: kind must be scientific or visual, not {card.kind!r}"
+            f"{prefix}: kind must be scientific, visual, or operational, not {card.kind!r}"
         )
     if not 1 <= len(card.title.split()) <= 8:
         raise QueueValidationError(f"{prefix}: title must contain 1-8 words")
@@ -421,6 +421,14 @@ def collect_figure_cards(root: Path = ROOT) -> list[DecisionCard]:
                     f"{manifest_path.relative_to(root)}: pending candidate "
                     f"{candidate['id']!r} lacks owner_decision_card"
                 )
+            if isinstance(payload, dict) and payload.get("kind") == "operational":
+                # figure_review/README.md restricts figure decisions to
+                # scientific or visual; operational is a ticket-only kind.
+                raise QueueValidationError(
+                    f"{manifest_path.relative_to(root)}: candidate "
+                    f"{candidate['id']!r}: figure cards must be scientific or "
+                    "visual, not operational"
+                )
             cards.append(_load_card(payload, source=manifest_path, root=root))
     return cards
 
@@ -446,7 +454,7 @@ def render_owner_queue(root: Path = ROOT) -> str:
     lines = [
         "# OWNER QUEUE — regenerate with `python3 scripts/owner_queue.py`",
         "",
-        "_Only scientific and visual decisions. Silence leaves every item blocked._",
+        "_Only scientific, visual, and operational-authority decisions. Silence leaves every item blocked._",
         "",
     ]
     if not cards:
