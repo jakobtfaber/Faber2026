@@ -46,14 +46,22 @@ jobs:
           elif ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA"
           fi
+          # The shallow checkout holds only the merge commit; fetch the head
+          # commit too, or the diff below fails on a missing object.
+          if ! git cat-file -e "$HEAD_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$HEAD_SHA"
+          fi
           # --relative scopes and rewrites the diff to this directory, so the
           # classifier sees the same analysis-relative paths it saw when this
-          # repository stood alone.
-          mapfile -t changed < <(git diff --name-only --relative "$BASE_SHA" "$HEAD_SHA")
-          if [ "${#changed[@]}" -eq 0 ]; then
+          # repository stood alone. The command substitution runs under
+          # set -e: a diff failure aborts this job (fail closed) instead of
+          # reading as an empty change set (lane=none would skip the suite).
+          changed_output=$(git diff --name-only --relative "$BASE_SHA" "$HEAD_SHA")
+          if [ -z "$changed_output" ]; then
             echo "lane=none" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          mapfile -t changed <<<"$changed_output"
           lane=$(python3 scripts/classify_ci_changes.py "${changed[@]}")
           echo "lane=$lane" >> "$GITHUB_OUTPUT"
 
