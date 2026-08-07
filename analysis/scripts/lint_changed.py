@@ -43,6 +43,29 @@ def _resolve_base() -> str | None:
     return None
 
 
+def _changed_python_files(base: str) -> list[str]:
+    return subprocess.run(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            # --relative keeps paths ROOT-relative and scoped to ROOT when
+            # this repository lives as a subdirectory of the manuscript
+            # monorepo; it is a no-op when ROOT is the repository root.
+            "--relative",
+            "--diff-filter=ACMR",
+            base,
+            "HEAD",
+            "--",
+            "*.py",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+
+
 def main() -> int:
     base = _resolve_base()
     if base is None:
@@ -64,26 +87,17 @@ def main() -> int:
         else:
             print("No diff base resolvable and no parent commit; failing.")
             return 1
-    changed = subprocess.run(
-        [
-            "git",
-            "diff",
-            "--name-only",
-            # --relative keeps paths ROOT-relative and scoped to ROOT when
-            # this repository lives as a subdirectory of the manuscript
-            # monorepo; it is a no-op when ROOT is the repository root.
-            "--relative",
-            "--diff-filter=ACMR",
-            base,
-            "HEAD",
-            "--",
-            "*.py",
-        ],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.splitlines()
+    changed = _changed_python_files(base)
+    # The monorepo import made every analysis file "changed" relative to the
+    # manuscript history, which would point the changed-files lint ratchet at
+    # thousands of imported-but-untouched legacy files. When the workflow
+    # provides a second base inside the imported lineage, lint only files
+    # changed relative to BOTH bases: imported-unchanged files drop out while
+    # anything authored on top of the import is still linted. Unset, this is
+    # a no-op.
+    intersect_base = os.environ.get("LINT_BASE_INTERSECT")
+    if intersect_base:
+        changed = sorted(set(changed) & set(_changed_python_files(intersect_base)))
     paths = [path for path in changed if (ROOT / path).is_file()]
     if not paths:
         print("No changed Python files.")

@@ -258,9 +258,17 @@ jobs:
           if [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA"
           fi
+          if ! git cat-file -e "$LINT_BASE_INTERSECT^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$LINT_BASE_INTERSECT"
+          fi
           make lint
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          # The pure filtered tip of the 2026-08 analysis import: diffing
+          # against the manuscript history alone would mark every imported
+          # legacy file as changed and turn the changed-files lint into a
+          # whole-tree lint. Files must differ from BOTH bases to be linted.
+          LINT_BASE_INTERSECT: 06c51f4430434fb41b7de82737430113e91067e2
       - run: uv run --group test --frozen zizmor --pedantic ../.github/workflows
       - uses: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
 
