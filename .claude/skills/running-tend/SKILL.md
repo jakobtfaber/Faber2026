@@ -80,12 +80,12 @@ echo "today=${TODAY_POSTS} limit=$((10 + PAST_POSTS / 3))"
 
 Those are the two queries the preflight itself runs, so the printed limit
 is the one it will apply — it is ten only while the six-day baseline is
-zero, and it was fourteen on 2026-08-07. Key the decision off that number,
-not off ten: from three below the limit onward, file only what carries an
-owner decision or a correctness finding, and put everything else in an
-existing open issue, in the pull-request body, or in a comment. At the
-limit, file nothing, and say in a comment what would have been filed and
-why it was held.
+under three, and it was fourteen on 2026-08-07. Key the decision off that
+number, not off ten: from three below the limit onward, file only what
+carries an owner decision or a correctness finding, and put everything
+else in an existing open issue, in the pull-request body, or in a comment.
+At the limit, file nothing, and say in a comment what would have been
+filed and why it was held.
 
 Group findings by theme rather than by instance. One issue that names a
 class of defect and enumerates its instances costs one item and reads
@@ -97,11 +97,11 @@ items against an allowance of ten, and twelve later runs — nine
 `tend-notifications` and three `tend-review` — then failed at the preflight
 over the following fifteen hours, until the count reset at midnight UTC.
 `tend-review` fires only on pull-request events and never retries, so the
-review [#339](https://github.com/jakobtfaber/Faber2026/pull/339) was owed
-when it opened that morning was simply lost, and it was still missing a day
-later. Two of the twelve items were the `review-runs`
-workflow's own tracking issue and pull request, so a housekeeping run can
-spend the budget that a review of real work then cannot get.
+review owed to [#339](https://github.com/jakobtfaber/Faber2026/pull/339)
+when it opened that morning was never delivered, and it was still missing
+a day later. Two of the twelve items were the `review-runs` workflow's own
+tracking issue and pull request, so a housekeeping run can spend the
+budget that a review of real work then cannot get.
 
 ## Pull request conventions
 
