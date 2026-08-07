@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -27,10 +28,12 @@ from one_event_workflow import (
     load_config,
     sample_time_axis_ns,
     sha256_file,
+    validate_timing_sensitivity_roster,
     validate_timing_uncertainties,
 )
 
 CONTAINER_REPO = Path("/workflow")
+DSA_REFERENCE_INVARIANCE_MHZ = 1498.75
 
 
 def _require_supported_python() -> None:
@@ -75,13 +78,19 @@ def _require_preparation_geometry(config: dict[str, Any]) -> None:
             "input preparation preflight rejected DSA timing: trigger and geometry "
             "reference frequencies differ; no data processing started"
         )
-    if time_origin["mapping_uncertainty_treatment"] == (
-        "pending_owner_decision_discrete_two_anchor_sensitivity"
+    if time_origin["mapping_uncertainty_treatment"] != (
+        "owner_approved_discrete_two_anchor_sensitivity"
     ):
         raise ValueError(
             "input preparation preflight rejected DSA timing: the discrete 15256/15259 "
-            "mapping sensitivity is pending owner decision and remains separate from "
-            "the clock prior; no data processing started"
+            "mapping sensitivity is not owner approved; no data processing started"
+        )
+    if time_origin["trigger_reference_frequency_status"] != (
+        "owner_approved_provisional_modeling_convention"
+    ):
+        raise ValueError(
+            "input preparation preflight rejected DSA timing: the 1530 MHz modeling "
+            "convention is not owner approved; no data processing started"
         )
 
 
@@ -107,6 +116,28 @@ def _output_paths(config: dict[str, Any]) -> dict[str, Path]:
         "dsa_fit_observation": root / "products" / "fit" / "dsa-fit-observation.npz",
         "chime_fit_resolution": root / "products" / "fit" / "chime-fit-resolution.json",
         "dsa_fit_resolution": root / "products" / "fit" / "dsa-fit-resolution.json",
+        "timing_sensitivity_dir": root / "products" / "timing-sensitivity",
+        "dsa_alternative_anchor_observation": (
+            root / "products" / "timing-sensitivity" / "dsa-anchor-sensitivity.npz"
+        ),
+        "dsa_reference_invariance_observation": (
+            root / "products" / "timing-sensitivity" / "dsa-reference-invariance.npz"
+        ),
+        "timing_sensitivity_roster": root / "timing-sensitivity-roster.json",
+        "timing_sensitivity_pdf": root / "timing-sensitivity-proposal.pdf",
+        "alternative_fit_dir": root.parent / f"{root.name}-anchor-15256-sensitivity",
+        "alternative_fit_result": (
+            root.parent / f"{root.name}-anchor-15256-sensitivity" / "fit-result.json"
+        ),
+        "alternative_posterior": (
+            root.parent / f"{root.name}-anchor-15256-sensitivity" / "posterior.npz"
+        ),
+        "alternative_model_products": (
+            root.parent / f"{root.name}-anchor-15256-sensitivity" / "model-products.npz"
+        ),
+        "alternative_provenance": (
+            root.parent / f"{root.name}-anchor-15256-sensitivity" / "run-provenance.json"
+        ),
         "geometry_constraint": root / "geometry-constraint.json",
         "fit_result": root / "fit-result.json",
         "posterior": root / "posterior.npz",
@@ -166,6 +197,20 @@ def _container_config(
     except ValueError:
         mount = Path("/workflow-config")
         return mount / path.name, ["-v", f"{path.parent}:{mount}:ro"]
+
+
+def alternative_anchor_fit_applicable(config: dict[str, Any]) -> bool:
+    """The sample-15256 sensitivity fit runs only for configurations that
+    declare the alternative pre-trigger convention and carry a reviewed
+    timing-sensitivity roster hash; regression fixtures and legacy configs
+    record the stage as not applicable instead of silently omitting it."""
+
+    time_origin = (config.get("dsa") or {}).get("time_origin") or {}
+    review = (config.get("joint_fit") or {}).get("review_decision") or {}
+    return (
+        "alternative_pretrigger_convention" in time_origin
+        and bool(review.get("timing_sensitivity_roster_sha256"))
+    )
 
 
 def build_stage_commands(
@@ -252,6 +297,28 @@ def build_stage_commands(
             "--output-dir",
             str(paths["root"]),
         ],
+        "alternative_anchor_fit": (
+            [
+                python,
+                str(repo_root / "scripts/fit_one_event_joint_burst.py"),
+                "--config",
+                str(config_path),
+                "--chime-observation",
+                str(paths["chime_fit_observation"]),
+                "--dsa-observation",
+                str(paths["dsa_alternative_anchor_observation"]),
+                "--geometry-constraint",
+                str(paths["geometry_constraint"]),
+                "--output-dir",
+                str(paths["alternative_fit_dir"]),
+                "--timing-variant",
+                "alternative_anchor",
+                "--timing-sensitivity-roster",
+                str(paths["timing_sensitivity_roster"]),
+            ]
+            if alternative_anchor_fit_applicable(config)
+            else None
+        ),
         "resolution_fit": [
             python,
             str(repo_root / "scripts/fit_resolution_variant.py"),
@@ -419,6 +486,15 @@ def expected_stage_outputs(
             paths["posterior"],
             paths["model_products"],
             paths["provenance"],
+        ]
+    if stage == "alternative_anchor_fit":
+        if config is not None and not alternative_anchor_fit_applicable(config):
+            return []
+        return [
+            paths["alternative_fit_result"],
+            paths["alternative_posterior"],
+            paths["alternative_model_products"],
+            paths["alternative_provenance"],
         ]
     if stage == "resolution_fit":
         return [
@@ -619,6 +695,239 @@ def materialize_reviewed_fit_observations(
     return fit_observations, fit_receipts
 
 
+def _atomic_write_npz(path: Path, arrays: dict[str, Any]) -> None:
+    import numpy as np
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    temporary_path = Path(temporary)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            np.savez_compressed(handle, **arrays)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_path, path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def materialize_dsa_timing_sensitivities(
+    config: dict[str, Any],
+    *,
+    paths: dict[str, Path],
+) -> dict[str, Any]:
+    """Prepare the approved DSA timing alternatives without starting a fit."""
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    from radio_pipeline.fitting.products import trigger_anchor_crop_time0_unix_ns
+
+    source = paths["dsa_fit_observation"]
+    high_resolution_source = paths["dsa_dir"] / "dsa_anchor_dm.npz"
+    alternative_staged = paths["dsa_alternative_anchor_observation"].with_name(
+        f".{paths['dsa_alternative_anchor_observation'].name}.preparing"
+    )
+    invariant_staged = paths["dsa_reference_invariance_observation"].with_name(
+        f".{paths['dsa_reference_invariance_observation'].name}.preparing"
+    )
+    pdf_staged = paths["timing_sensitivity_pdf"].with_name(
+        f".{paths['timing_sensitivity_pdf'].name}.preparing.pdf"
+    )
+    time_origin = config["dsa"]["time_origin"]
+    sample_interval_s = float(config["dsa"]["native_sample_time_s"])
+    crop_start = int(config["dsa"]["raw_crop_start_sample"])
+    product_dm = float(time_origin["filterbank_product_dm_pc_cm3"])
+    primary_sample = int(time_origin["filterbank_peak_sample_index"])
+    alternative_sample = int(
+        time_origin["alternative_pretrigger_convention"]["sample_index"]
+    )
+    primary_reference_mhz = float(time_origin["trigger_reference_frequency_mhz"])
+    with np.load(source, allow_pickle=False) as archive:
+        primary = {key: np.array(archive[key], copy=True) for key in archive.files}
+    with np.load(high_resolution_source, allow_pickle=False) as archive:
+        invariant_reference_mhz = float(np.max(archive["frequency_mhz"]))
+        high_resolution_frequency_grid_sha256 = _array_sha256(
+            archive["frequency_mhz"], archive["channel_width_mhz"]
+        )
+    if abs(invariant_reference_mhz - DSA_REFERENCE_INVARIANCE_MHZ) > 1.0e-12:
+        raise ValueError("authoritative DSA reference-invariance frequency changed")
+
+    primary_time0_ns = trigger_anchor_crop_time0_unix_ns(
+        time_origin["trigger_mjd_utc"],
+        primary_sample,
+        crop_start,
+        sample_interval_s,
+        product_dm,
+        primary_reference_mhz,
+    )
+    if int(primary["time0_unix_ns"]) != primary_time0_ns:
+        raise ValueError("DSA fit observation time origin differs from the approved anchor")
+
+    alternative_time0_ns = trigger_anchor_crop_time0_unix_ns(
+        time_origin["trigger_mjd_utc"],
+        alternative_sample,
+        crop_start,
+        sample_interval_s,
+        product_dm,
+        primary_reference_mhz,
+    )
+    expected_mapping_ns = int(
+        round(float(time_origin["mapping_ambiguity_s"]) * 1_000_000_000)
+    )
+    if alternative_time0_ns - primary_time0_ns != expected_mapping_ns:
+        raise ValueError("DSA anchor sensitivity does not equal the approved mapping ambiguity")
+
+    alternative = dict(primary)
+    alternative["time0_unix_ns"] = np.asarray(alternative_time0_ns, dtype=np.int64)
+    alternative["timing_variant"] = np.asarray("alternative_anchor_sensitivity")
+    alternative["trigger_anchor_sample_index"] = np.asarray(
+        alternative_sample, dtype=np.int64
+    )
+    _atomic_write_npz(alternative_staged, alternative)
+
+    dispersion_constant = Decimal("4148.808")
+    reference_shift_s = dispersion_constant * Decimal(str(product_dm)) * (
+        Decimal(str(invariant_reference_mhz)) ** -2
+        - Decimal(str(primary_reference_mhz)) ** -2
+    )
+    invariant_trigger_mjd = Decimal(str(time_origin["trigger_mjd_utc"])) + (
+        reference_shift_s / Decimal("86400")
+    )
+    invariant_time0_ns = trigger_anchor_crop_time0_unix_ns(
+        invariant_trigger_mjd,
+        primary_sample,
+        crop_start,
+        sample_interval_s,
+        product_dm,
+        invariant_reference_mhz,
+    )
+    if abs(invariant_time0_ns - primary_time0_ns) > 1:
+        raise ValueError("DSA trigger reference-frequency reparameterization changed 400 MHz time")
+
+    invariant = dict(primary)
+    invariant["time0_unix_ns"] = np.asarray(invariant_time0_ns, dtype=np.int64)
+    invariant["timing_variant"] = np.asarray("reference_frequency_invariance")
+    invariant["trigger_reference_frequency_mhz"] = np.asarray(
+        invariant_reference_mhz, dtype=np.float64
+    )
+    invariant["reparameterized_trigger_mjd_utc"] = np.asarray(str(invariant_trigger_mjd))
+    _atomic_write_npz(invariant_staged, invariant)
+
+    fixed_epoch_time0_ns = trigger_anchor_crop_time0_unix_ns(
+        time_origin["trigger_mjd_utc"],
+        primary_sample,
+        crop_start,
+        sample_interval_s,
+        product_dm,
+        invariant_reference_mhz,
+    )
+    roster = {
+        "schema_version": 1,
+        "status": "prepared_pending_independent_review",
+        "event": config["event"],
+        "event_binding_sha256": config["event_binding_sha256"],
+        "materializer_sha256": sha256_file(Path(__file__)),
+        "joint_fit_timing_eligible": False,
+        "authoritative_frequency_source": {
+            "path": str(high_resolution_source),
+            "sha256": sha256_file(high_resolution_source),
+            "frequency_grid_sha256": high_resolution_frequency_grid_sha256,
+        },
+        "source_observation": {
+            "path": str(source),
+            "sha256": sha256_file(source),
+        },
+        "primary_anchor": {
+            "sample_index": primary_sample,
+            "time0_unix_ns": primary_time0_ns,
+            "trigger_reference_frequency_mhz": primary_reference_mhz,
+        },
+        "alternative_anchor": {
+            "sample_index": alternative_sample,
+            "time0_unix_ns": alternative_time0_ns,
+            "offset_from_primary_ns": alternative_time0_ns - primary_time0_ns,
+            "product": str(paths["dsa_alternative_anchor_observation"]),
+            "sha256": sha256_file(alternative_staged),
+        },
+        "reference_frequency_invariance": {
+            "alternative_reference_frequency_mhz": invariant_reference_mhz,
+            "reparameterized_trigger_mjd_utc": str(invariant_trigger_mjd),
+            "time0_unix_ns": invariant_time0_ns,
+            "difference_from_primary_ns": invariant_time0_ns - primary_time0_ns,
+            "fixed_trigger_epoch_difference_from_primary_ns": (
+                fixed_epoch_time0_ns - primary_time0_ns
+            ),
+            "fixed_trigger_epoch_is_diagnostic_only": True,
+            "product": str(paths["dsa_reference_invariance_observation"]),
+            "sha256": sha256_file(invariant_staged),
+        },
+    }
+
+    waterfall = np.asarray(primary["waterfall"], dtype=float)
+    valid = np.asarray(primary["pixel_valid"], dtype=bool)
+    frequencies = np.asarray(primary["frequency_mhz"], dtype=float)
+    display = np.where(valid, waterfall, np.nan)
+    finite = display[np.isfinite(display)]
+    lower, upper = np.nanpercentile(finite, [2, 99.5])
+    duration_ms = waterfall.shape[1] * sample_interval_s * 1000.0
+    peak_ms = int(np.nanargmax(np.nansum(display, axis=0))) * sample_interval_s * 1000.0
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.5), constrained_layout=True)
+    for axis, label, offset_ns in (
+        (axes[0], f"Primary anchor: sample {primary_sample}", 0),
+        (
+            axes[1],
+            f"Sensitivity anchor: sample {alternative_sample}",
+            alternative_time0_ns - primary_time0_ns,
+        ),
+    ):
+        offset_ms = offset_ns / 1_000_000.0
+        axis.imshow(
+            display,
+            aspect="auto",
+            origin="lower",
+            interpolation="nearest",
+            extent=[offset_ms, offset_ms + duration_ms, frequencies[0], frequencies[-1]],
+            vmin=lower,
+            vmax=upper,
+            cmap="viridis",
+        )
+        axis.set_xlabel("Time from primary crop origin (ms)")
+        axis.set_ylabel("Frequency (MHz)")
+        axis.set_xlim(peak_ms - 1.5, peak_ms + 1.5)
+        axis.text(
+            0.02,
+            0.97,
+            label,
+            transform=axis.transAxes,
+            va="top",
+            color="white",
+            bbox={"facecolor": "black", "alpha": 0.55, "edgecolor": "none"},
+        )
+    fig.suptitle(
+        "DSA-110 timing sensitivity: identical burst data, 98.304 microsecond coordinate shift\n"
+        f"Algebraic coordinate-invariance check: {primary_reference_mhz:g} to "
+        f"{invariant_reference_mhz:g} MHz changes the 400 MHz origin by "
+        f"{invariant_time0_ns - primary_time0_ns} ns"
+    )
+    pdf_staged.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(pdf_staged, format="pdf", bbox_inches="tight")
+    plt.close(fig)
+    roster["review_pdf"] = {
+        "path": str(paths["timing_sensitivity_pdf"]),
+        "sha256": sha256_file(pdf_staged),
+    }
+    os.replace(alternative_staged, paths["dsa_alternative_anchor_observation"])
+    os.replace(invariant_staged, paths["dsa_reference_invariance_observation"])
+    os.replace(pdf_staged, paths["timing_sensitivity_pdf"])
+    _write_json(paths["timing_sensitivity_roster"], roster)
+    return roster
+
+
 def materialize_resolution_variant(
     config: dict[str, Any],
     *,
@@ -776,6 +1085,7 @@ def prepare_review_artifacts(
         repo_root=repo_root,
         paths=paths,
     )
+    timing_sensitivity = materialize_dsa_timing_sensitivities(config, paths=paths)
 
     resolution = resolution_lock_proposal(
         paths,
@@ -801,6 +1111,10 @@ def prepare_review_artifacts(
         component_proposal_sha256=sha256_file(paths["component_proposal"]),
         resolution_proposal=resolution,
         resolution_proposal_sha256=sha256_file(paths["resolution_proposal"]),
+        timing_sensitivity_roster=timing_sensitivity,
+        timing_sensitivity_roster_sha256=sha256_file(
+            paths["timing_sensitivity_roster"]
+        ),
     )
     _write_json(paths["review_decision_template"], decision)
     return {
@@ -817,6 +1131,11 @@ def prepare_review_artifacts(
         "review_decision_template": {
             "path": str(paths["review_decision_template"]),
             "sha256": sha256_file(paths["review_decision_template"]),
+        },
+        "timing_sensitivity": timing_sensitivity,
+        "timing_sensitivity_pdf": {
+            "path": str(paths["timing_sensitivity_pdf"]),
+            "sha256": sha256_file(paths["timing_sensitivity_pdf"]),
         },
     }
 
@@ -846,6 +1165,13 @@ def _control_files(stage: str, repo_root: Path, config_path: Path) -> list[Path]
         "geometry_constraint": [repo_root / "scripts/build_geometry_constraint.py"],
         "joint_fit": [
             repo_root / "scripts/materialize_joint_fit_observations.py",
+            repo_root / "scripts/fit_one_event_joint_burst.py",
+            repo_root / "radio_pipeline/fitting/joint_burst.py",
+            repo_root / "radio_pipeline/fitting/products.py",
+            repo_root / "radio_pipeline/fitting/_pulse_kernels.py",
+            repo_root / "radio_pipeline/fitting/resolution.py",
+        ],
+        "alternative_anchor_fit": [
             repo_root / "scripts/fit_one_event_joint_burst.py",
             repo_root / "radio_pipeline/fitting/joint_burst.py",
             repo_root / "radio_pipeline/fitting/products.py",
@@ -940,6 +1266,15 @@ def _stage_input_files(
             paths["dsa_fit_observation"],
             paths["chime_fit_resolution"],
             paths["dsa_fit_resolution"],
+            paths["geometry_constraint"],
+        ]
+    if stage == "alternative_anchor_fit":
+        if not alternative_anchor_fit_applicable(config):
+            return []
+        return [
+            paths["chime_fit_observation"],
+            paths["dsa_alternative_anchor_observation"],
+            paths["timing_sensitivity_roster"],
             paths["geometry_constraint"],
         ]
     if stage == "resolution_fit":
@@ -1056,6 +1391,10 @@ def _output_schema_matches(
         json_path = paths["geometry_constraint"]
     elif stage == "joint_fit":
         json_path = paths["fit_result"]
+    elif stage == "alternative_anchor_fit":
+        if not alternative_anchor_fit_applicable(config):
+            return True
+        json_path = paths["alternative_fit_result"]
     elif stage == "resolution_fit":
         json_path = paths["fine_fit_result"]
     elif stage == "resolution_check":
@@ -1126,11 +1465,21 @@ def _all_workflow_files(
         "dsa_fit_observation",
         "chime_fit_resolution",
         "dsa_fit_resolution",
+        "dsa_alternative_anchor_observation",
+        "dsa_reference_invariance_observation",
+        "timing_sensitivity_roster",
+        "timing_sensitivity_pdf",
     ):
         if paths[key].is_file():
             expected.add(paths[key])
     for stage in STAGES:
         expected.update(expected_stage_outputs(stage, paths, config))
+    windowed = config.get("windowed_inputs")
+    if windowed is not None:
+        for relative in windowed["prematerialized"]:
+            expected.add(paths["root"] / relative)
+        amendment = config["joint_fit"]["review_decision"]["window_amendment"]
+        expected.add(Path(amendment["path"]))
     return expected
 
 
@@ -1143,6 +1492,114 @@ def _workflow_output_set_valid(
     root = paths["root"]
     actual = {path for path in root.rglob("*") if path.is_file()} if root.is_dir() else set()
     expected = _all_workflow_files(paths, config)
+    sensitivity_paths = {
+        paths["dsa_alternative_anchor_observation"],
+        paths["dsa_reference_invariance_observation"],
+        paths["timing_sensitivity_roster"],
+        paths["timing_sensitivity_pdf"],
+    }
+    present_sensitivity = sensitivity_paths & actual
+    if present_sensitivity:
+        if present_sensitivity != sensitivity_paths:
+            return False
+        try:
+            roster = json.loads(paths["timing_sensitivity_roster"].read_text())
+            validate_timing_sensitivity_roster(config, roster)
+            review_decision = config["joint_fit"].get("review_decision", {})
+            expected_source_binding = review_decision.get(
+                "source_event_binding_sha256", config["event_binding_sha256"]
+            )
+            time_origin = config["dsa"]["time_origin"]
+            if (
+                roster.get("event") != config["event"]
+                or roster.get("event_binding_sha256") != expected_source_binding
+                or roster.get("joint_fit_timing_eligible") is not False
+                or roster.get("materializer_sha256") != sha256_file(Path(__file__))
+            ):
+                return False
+            if review_decision and review_decision.get(
+                "timing_sensitivity_roster_sha256"
+            ) != sha256_file(paths["timing_sensitivity_roster"]):
+                return False
+            source_observation = paths["dsa_fit_observation"]
+            authoritative_source = paths["dsa_dir"] / "dsa_anchor_dm.npz"
+            if (
+                roster["source_observation"]
+                != {"path": str(source_observation), "sha256": sha256_file(source_observation)}
+                or roster["authoritative_frequency_source"]["path"]
+                != str(authoritative_source)
+                or roster["authoritative_frequency_source"]["sha256"]
+                != sha256_file(authoritative_source)
+                or roster["review_pdf"]
+                != {
+                    "path": str(paths["timing_sensitivity_pdf"]),
+                    "sha256": sha256_file(paths["timing_sensitivity_pdf"]),
+                }
+            ):
+                return False
+            import numpy as np
+
+            with np.load(source_observation, allow_pickle=False) as source_archive:
+                source_time0_ns = int(source_archive["time0_unix_ns"])
+            with np.load(authoritative_source, allow_pickle=False) as authority_archive:
+                authority_grid_sha256 = _array_sha256(
+                    authority_archive["frequency_mhz"],
+                    authority_archive["channel_width_mhz"],
+                )
+                authority_max_mhz = float(np.max(authority_archive["frequency_mhz"]))
+            expected_mapping_ns = int(
+                round(float(time_origin["mapping_ambiguity_s"]) * 1_000_000_000)
+            )
+            if (
+                roster["authoritative_frequency_source"]["frequency_grid_sha256"]
+                != authority_grid_sha256
+                or abs(authority_max_mhz - DSA_REFERENCE_INVARIANCE_MHZ) > 1.0e-12
+                or roster["primary_anchor"]
+                != {
+                    "sample_index": int(time_origin["filterbank_peak_sample_index"]),
+                    "time0_unix_ns": source_time0_ns,
+                    "trigger_reference_frequency_mhz": float(
+                        time_origin["trigger_reference_frequency_mhz"]
+                    ),
+                }
+                or roster["alternative_anchor"]["sample_index"]
+                != int(time_origin["alternative_pretrigger_convention"]["sample_index"])
+                or roster["alternative_anchor"]["offset_from_primary_ns"]
+                != expected_mapping_ns
+                or roster["alternative_anchor"]["time0_unix_ns"]
+                != source_time0_ns + expected_mapping_ns
+                or roster["reference_frequency_invariance"][
+                    "alternative_reference_frequency_mhz"
+                ]
+                != DSA_REFERENCE_INVARIANCE_MHZ
+                or abs(
+                    int(
+                        roster["reference_frequency_invariance"][
+                            "difference_from_primary_ns"
+                        ]
+                    )
+                )
+                > 1
+                or roster["reference_frequency_invariance"][
+                    "fixed_trigger_epoch_is_diagnostic_only"
+                ]
+                is not True
+            ):
+                return False
+            for section, product in (
+                ("alternative_anchor", paths["dsa_alternative_anchor_observation"]),
+                (
+                    "reference_frequency_invariance",
+                    paths["dsa_reference_invariance_observation"],
+                ),
+            ):
+                if (
+                    roster[section]["product"] != str(product)
+                    or roster[section]["sha256"] != sha256_file(product)
+                ):
+                    return False
+        except (OSError, KeyError, TypeError, ValueError):
+            return False
     return actual == expected if require_complete else actual.issubset(expected)
 
 
@@ -1367,6 +1824,67 @@ def _write_manifest(
     )
 
 
+WINDOWED_RUNNABLE_STAGES = frozenset(
+    {"preflight", "geometry_constraint", "joint_fit", "alternative_anchor_fit"}
+)
+
+
+def require_windowed_stage_window(
+    config: dict[str, Any],
+    selected: list[str],
+) -> None:
+    """A windowed-inputs configuration authorizes a refit on prematerialized
+    sliced products; the product-building stages cannot be rerun from it and
+    must be requested against the source configuration instead."""
+
+    windowed = config.get("windowed_inputs")
+    if windowed is None:
+        return
+    blocked = [stage for stage in selected if stage not in WINDOWED_RUNNABLE_STAGES]
+    if blocked:
+        raise RuntimeError(
+            "windowed-inputs configuration cannot run stage(s) "
+            + ", ".join(blocked)
+            + ": its products are prematerialized slices of "
+            + str(windowed["source_output_root"])
+            + "; rerun product stages from the source configuration, or select "
+            + "stages within "
+            + ", ".join(sorted(WINDOWED_RUNNABLE_STAGES, key=STAGES.index))
+        )
+
+
+def verify_prematerialized_windowed_inputs(
+    config: dict[str, Any],
+    paths: dict[str, Path],
+) -> None:
+    """Verify every declared prematerialized product byte-for-byte before a
+    windowed refit; this replaces the product-building stages' materialization."""
+
+    windowed = config["windowed_inputs"]
+    root = paths["root"]
+    for relative, digest in windowed["prematerialized"].items():
+        product = root / relative
+        if not product.is_file():
+            raise RuntimeError(
+                f"windowed input missing: {product} (declared in windowed_inputs)"
+            )
+        actual = sha256_file(product)
+        if actual != digest:
+            raise RuntimeError(
+                f"windowed input differs from its declaration: {product} "
+                f"has SHA-256 {actual}, declared {digest}"
+            )
+    resolution = config["joint_fit"]["resolution"]
+    for instrument in ("chime", "dsa"):
+        expected = resolution[f"{instrument}_fit_observation_sha256"]
+        observation = paths[f"{instrument}_fit_observation"]
+        if sha256_file(observation) != expected:
+            raise RuntimeError(
+                f"{instrument} windowed fit observation does not match the "
+                "reviewed resolution binding"
+            )
+
+
 def execute(
     config: dict[str, Any],
     *,
@@ -1404,6 +1922,7 @@ def execute(
         }
 
     selected_stages = _stage_window(from_stage, through_stage)
+    require_windowed_stage_window(config, list(selected_stages))
     interrupted_stages = [
         stage for stage, record in state["stages"].items() if record.get("status") == "running"
     ]
@@ -1515,11 +2034,14 @@ def execute(
         _write_json(paths["state"], state)
         try:
             if stage == "joint_fit":
-                materialize_reviewed_fit_observations(
-                    config["joint_fit"]["resolution"],
-                    repo_root=repo_root,
-                    paths=paths,
-                )
+                if config.get("windowed_inputs") is not None:
+                    verify_prematerialized_windowed_inputs(config, paths)
+                else:
+                    materialize_reviewed_fit_observations(
+                        config["joint_fit"]["resolution"],
+                        repo_root=repo_root,
+                        paths=paths,
+                    )
             elif stage == "resolution_fit":
                 materialize_resolution_variant(
                     config,
@@ -1544,6 +2066,11 @@ def execute(
             _write_json(paths["state"], state)
             if stage == "preflight":
                 record["verified_inputs"] = verified_inputs
+            elif stage == "alternative_anchor_fit" and commands[stage] is None:
+                record["not_applicable_reason"] = (
+                    "configuration declares no alternative pre-trigger convention "
+                    "or no reviewed timing-sensitivity roster"
+                )
             elif stage == "packet":
                 subprocess.run(commands[stage], check=True, env=stage_environment)
             elif stage == "manifests":
@@ -1646,6 +2173,7 @@ def main() -> None:
     )
     parser.add_argument("--component-proposal", type=Path)
     parser.add_argument("--resolution-proposal", type=Path)
+    parser.add_argument("--timing-sensitivity-roster", type=Path)
     parser.add_argument("--output-config", type=Path)
     parser.add_argument("--authorization-note")
     parser.add_argument("--authorization-date")
@@ -1692,6 +2220,7 @@ def main() -> None:
         required_paths = {
             "--component-proposal": args.component_proposal,
             "--resolution-proposal": args.resolution_proposal,
+            "--timing-sensitivity-roster": args.timing_sensitivity_roster,
             "--output-config": args.output_config,
         }
         missing = [name for name, value in required_paths.items() if value is None]
@@ -1701,6 +2230,7 @@ def main() -> None:
             )
         assert args.component_proposal is not None
         assert args.resolution_proposal is not None
+        assert args.timing_sensitivity_roster is not None
         assert args.output_config is not None
         if args.output_config.resolve() == config_path:
             raise ValueError("review transition must not overwrite its source config")
@@ -1713,6 +2243,12 @@ def main() -> None:
             component_proposal_sha256=sha256_file(args.component_proposal),
             resolution_proposal=resolution_proposal,
             resolution_proposal_sha256=sha256_file(args.resolution_proposal),
+            timing_sensitivity_roster=json.loads(
+                args.timing_sensitivity_roster.read_text()
+            ),
+            timing_sensitivity_roster_sha256=sha256_file(
+                args.timing_sensitivity_roster
+            ),
         )
         _write_json(args.output_config, reviewed)
         print(

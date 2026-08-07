@@ -365,7 +365,7 @@ def build_receipt(
             raise RuntimeError("approved DSA trigger peak anchor is absent")
         if dsa.get("joint_fit_timing_uncertainty_eligible") is not False:
             raise RuntimeError("pending DSA mapping treatment must block joint fitting")
-        receipt_status = "timing_replayed_fit_input_blocked_pending_mapping_decision"
+        receipt_status = "timing_replayed_fit_input_blocked_pending_sensitivity_products"
     repo_root = Path(__file__).resolve().parents[1]
     return {
         "schema_version": 1,

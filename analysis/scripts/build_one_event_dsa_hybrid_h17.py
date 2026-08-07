@@ -102,19 +102,26 @@ def _accepted_support(reference: np.ndarray, expected: dict) -> np.ndarray:
     return live
 
 
-def _validated_time_origin(dsa_audit: dict, expected: dict) -> dict:
-    if expected.get("mapping_uncertainty_treatment") != "owner_approved_fit_treatment":
+def _validated_time_origin(
+    dsa_audit: dict,
+    expected: dict,
+    *,
+    require_fit_eligible: bool = True,
+) -> dict:
+    if expected.get("mapping_uncertainty_treatment") != (
+        "owner_approved_discrete_two_anchor_sensitivity"
+    ):
         raise RuntimeError("DSA mapping uncertainty treatment is not owner approved")
     if expected.get("trigger_reference_frequency_status") != (
-        "owner_approved_modeling_convention"
+        "owner_approved_provisional_modeling_convention"
     ):
         raise RuntimeError("DSA trigger reference frequency is not owner approved")
-    if expected.get("trigger_reference_frequency_sensitivity_required") is not False:
-        raise RuntimeError("DSA trigger reference-frequency sensitivity is incomplete")
+    if expected.get("trigger_reference_frequency_sensitivity_required") is not True:
+        raise RuntimeError("DSA trigger reference-frequency sensitivity requirement is missing")
     timing = dsa_audit.get("timing", {})
     if timing.get("fit_observation_time_origin_eligible") is not True:
         raise RuntimeError("DSA audit lacks an eligible trigger-to-peak time origin")
-    if timing.get("joint_fit_timing_uncertainty_eligible") is not True:
+    if require_fit_eligible and timing.get("joint_fit_timing_uncertainty_eligible") is not True:
         raise RuntimeError("DSA mapping uncertainty decision is not fit eligible")
     if timing.get("filterbank_sample_zero_status") != (
         "derived_from_owner_approved_trigger_peak_anchor"
@@ -362,6 +369,7 @@ def run(
     output_dir: Path,
     *,
     verification_dms_pc_cm3: np.ndarray | None = None,
+    preparation_only: bool = False,
 ) -> dict:
     event = config["event"]
     expected_status = config["result_status"]
@@ -389,7 +397,11 @@ def run(
         raise RuntimeError("DSA audit refers to another accepted reference")
     expected_time_origin = config.get("dsa_time_origin")
     if expected_time_origin is not None:
-        _validated_time_origin(dsa_audit, expected_time_origin)
+        _validated_time_origin(
+            dsa_audit,
+            expected_time_origin,
+            require_fit_eligible=not preparation_only,
+        )
     frequency_order = dsa_audit["frequency_order"]
     direct_correlation = float(frequency_order["direct_median_correlation"])
     reversed_correlation = float(frequency_order["reversed_median_correlation"])
@@ -857,6 +869,7 @@ def main() -> None:
         json.loads(args.dsa_audit.read_text()),
         args.output_dir,
         verification_dms_pc_cm3=verification_dms,
+        preparation_only=args.preparation_only,
     )
     print(
         f"{result['burst']} DSA: "

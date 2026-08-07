@@ -14,7 +14,11 @@ from pathlib import Path
 import numpy as np
 from absolute_dm_voltage import K_DM_S_MHZ2, sha256
 from blimpy import Waterfall
-from one_event_workflow import legacy_stage_config, load_config
+from one_event_workflow import (
+    legacy_stage_config,
+    load_config,
+    validate_timing_sensitivity_roster,
+)
 from replay_one_event_timing_authorities import audit_dsa
 from scipy.signal import correlate
 
@@ -42,7 +46,7 @@ def _validate_time_origin_owner_decision(config: dict) -> None:
     if (
         decision.get("event") != config["event"]
         or decision.get("decision_status")
-        != "owner_approved_empirical_trigger_peak_anchor_only"
+        != "owner_approved_trigger_peak_and_sensitivity_protocol"
         or Decimal(str(approved.get("trigger_mjd_utc")))
         != Decimal(str(time_origin["trigger_mjd_utc"]))
         or int(approved.get("filterbank_peak_sample_index", -1))
@@ -50,6 +54,14 @@ def _validate_time_origin_owner_decision(config: dict) -> None:
         or Decimal(str(approved.get("filterbank_product_dm_pc_cm3")))
         != Decimal(str(time_origin["filterbank_product_dm_pc_cm3"]))
         or approved.get("rounded_filterbank_tstart_forbidden") is not True
+        or approved.get("mapping_uncertainty_treatment")
+        != time_origin["mapping_uncertainty_treatment"]
+        or Decimal(str(approved.get("trigger_reference_frequency_mhz")))
+        != Decimal(str(time_origin["trigger_reference_frequency_mhz"]))
+        or approved.get("trigger_reference_frequency_status")
+        != time_origin["trigger_reference_frequency_status"]
+        or approved.get("trigger_reference_frequency_sensitivity_required")
+        is not time_origin["trigger_reference_frequency_sensitivity_required"]
     ):
         raise RuntimeError("owner decision receipt scope differs from configuration")
 
@@ -379,9 +391,48 @@ def audit(config: dict) -> dict:
     return result
 
 
-def publish_audit(config: dict, output: Path) -> dict:
+def _admit_reviewed_timing_sensitivity(
+    config: dict,
+    result: dict,
+) -> None:
+    review = config.get("joint_fit", {}).get("review_decision", {})
+    if not review:
+        return
+    if (
+        review.get("status") != "approved"
+        or review.get("timing_sensitivity_review_status") != "approved"
+    ):
+        raise RuntimeError("DSA timing sensitivity is not approved")
+    roster_path = Path(config["paths"]["output_root"]) / "timing-sensitivity-roster.json"
+    roster_sha256 = sha256(roster_path)
+    if roster_sha256 != review.get("timing_sensitivity_roster_sha256"):
+        raise RuntimeError("DSA timing-sensitivity roster differs from reviewed input")
+    roster = json.loads(roster_path.read_text())
+    validate_timing_sensitivity_roster(config, roster)
+    if result["timing"].get("joint_fit_timing_uncertainty_eligible") is not False:
+        raise RuntimeError("DSA intrinsic timing audit changed before sensitivity admission")
+    result["timing"].update(
+        {
+            "joint_fit_timing_uncertainty_eligible": True,
+            "timing_sensitivity_review_status": "approved",
+            "timing_sensitivity_roster": {
+                "path": str(roster_path),
+                "sha256": roster_sha256,
+            },
+        }
+    )
+
+
+def publish_audit(
+    config: dict,
+    output: Path,
+    *,
+    reviewed_config: dict | None = None,
+) -> dict:
     _validate_time_origin_owner_decision(config)
     result = audit(config)
+    if reviewed_config is not None:
+        _admit_reviewed_timing_sensitivity(reviewed_config, result)
     payload = json.dumps(result, indent=2, allow_nan=False) + "\n"
     output.parent.mkdir(parents=True, exist_ok=True)
     temporary_path: Path | None = None
@@ -410,14 +461,14 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--preparation-only", action="store_true")
     args = parser.parse_args()
+    config = load_config(
+        args.config,
+        require_execution_authorized=not args.preparation_only,
+    )
     result = publish_audit(
-        legacy_stage_config(
-            load_config(
-                args.config,
-                require_execution_authorized=not args.preparation_only,
-            )
-        ),
+        legacy_stage_config(config),
         args.output,
+        reviewed_config=None if args.preparation_only else config,
     )
     print(json.dumps(result["dedispersion_state_fit"], indent=2))
 

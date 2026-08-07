@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "event": "casey",
-  "decision_status": "owner_approved_empirical_trigger_peak_anchor_only",
+  "decision_status": "owner_approved_trigger_peak_and_sensitivity_protocol",
   "proposal": {
     "source_thread_id": "019fb228-b55c-7b63-81c8-bccf963fe419",
     "source_turn_id": "019fbc9e-690d-7830-8e2c-591121c61c5f",
@@ -17,28 +17,54 @@
     "text_includes_trailing_newline": true,
     "text": "Excellent, please proceed\n"
   },
+  "followup_owner_decision": {
+    "source_task_id": "019fbc4d-fb9e-7601-8dd8-90fe66a52941",
+    "date": "2026-08-02",
+    "proposal": {
+      "source_turn_id": "019fbea7-1c02-7dd1-9459-7ca332a82bda",
+      "source_message_id": "msg_01dcbd6a96f1be7d016a6e3fe43ba0819ba2ce4359855a0569",
+      "text_sha256": "a60e9703a527e2ed9d835c3520a668b433ea30023847b945368753e07249885e",
+      "text_includes_trailing_newline": false,
+      "text": "What I did\n\nResearcher 1’s exact candidate passed both independent reviews:\n\n- Frozen candidate: `643334fd4dab5a15c74c570814539d69ee083eac773501e80d0c8a12cca4955e`\n- Manifest: `093badfdddd5d78e25f1406e232f2486c4ca3df90bf2695e6287d8bb06bbfc34`\n- Real-data oracle confirms DSA-110 peak sample `15259`\n- Sample `15256` retained as an unverified alternative\n- The `98.304 μs` mapping ambiguity remains separate from the clock uncertainty\n- `1530 MHz` remains a proposed reference-frequency convention\n- 116 focused tests passed; both independent reviews passed\n- No preparation, products, sampling, or fitting occurred\n\nI instructed Researcher 1 to create a focused commit, regenerate commit-bound receipts, obtain fresh post-commit reviews from Researchers 2 and 3, then open a draft pull request. No merge or scientific execution.\n\nWhat we should do next\n\nTwo owner decisions still gate input finalization:\n\n1. Approve sample `15259` as the primary anchor and require a separate `15256` sensitivity run. Do not absorb the ambiguity into the clock uncertainty.\n2. Approve `1530 MHz` as the provisional DSA-110 reference-frequency convention, with a reference-frequency invariance check.\n\nMy scientific recommendation is to approve both exactly as stated. Component windows, crop, off-pulse intervals, and resolution must then be locked before the notebook fit can run.\n\n<oai-mem-citation>\n<citation_entries>\nMEMORY.md:579-588|note=[used Casey timing authority boundaries and historical claim status]\nMEMORY.md:594-594|note=[used fail-closed execution requirements]\n</citation_entries>\n<rollout_ids>\n019fbc4d-fb9e-7601-8dd8-90fe66a52941\n019fb775-376e-7100-990c-0616eba11818\n019fb6b0-3177-71b1-8daa-8b48ef2b50f2\n</rollout_ids>\n</oai-mem-citation>"
+    },
+    "owner_response": {
+      "source_turn_id": "019fc4c3-53d2-7fd1-89bd-2e8be0a306b5",
+      "source_message_id": "msg_019fc4c3-5cc2-73c0-bf27-5c4fd8d1ea77",
+      "text_sha256": "e9b3ba495636a30d6c9877b5067f3837ebed6750b5addf80a9ea01ae980daafe",
+      "text_includes_trailing_newline": true,
+      "text": "Approved for both --- what is researcher 1 doing?\n"
+    },
+    "approved_decisions": [
+      "sample 15259 is primary and sample 15256 is a separate sensitivity arm",
+      "the 98.304 microsecond mapping ambiguity remains separate from clock uncertainty",
+      "1530 MHz is the provisional DSA-110 modeling convention",
+      "reference-frequency invariance sensitivity is required"
+    ]
+  },
   "approved_scope": {
     "trigger_mjd_utc": "60369.37095221912",
     "filterbank_peak_sample_index": 15259,
     "filterbank_product_dm_pc_cm3": 491.211,
     "rounded_filterbank_tstart_forbidden": true,
-    "geometry_constraint_retained": true
+    "geometry_constraint_retained": true,
+    "mapping_uncertainty_treatment": "owner_approved_discrete_two_anchor_sensitivity",
+    "trigger_reference_frequency_mhz": 1530.0,
+    "trigger_reference_frequency_status": "owner_approved_provisional_modeling_convention",
+    "trigger_reference_frequency_sensitivity_required": true
   },
   "subsequent_review_corrections": {
     "sample_15256_status": "unverified_alternative_pretrigger_convention",
     "mapping_ambiguity_s": 0.000098304,
     "mapping_ambiguity_is_separate_from_clock_prior": true,
-    "mapping_uncertainty_treatment": "pending_owner_decision_discrete_two_anchor_sensitivity",
+    "mapping_uncertainty_treatment": "owner_approved_discrete_two_anchor_sensitivity",
     "trigger_reference_frequency_mhz": 1530.0,
-    "trigger_reference_frequency_status": "proposed_modeling_convention_pending_owner_decision",
+    "trigger_reference_frequency_status": "owner_approved_provisional_modeling_convention",
     "trigger_reference_frequency_sensitivity_required": true
   },
   "not_approved": [
     "component association",
     "crop or off-pulse windows",
     "fit resolution",
-    "mapping uncertainty treatment",
-    "1530 MHz reference-frequency convention",
     "execution authorization",
     "sampling",
     "fit result",

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 import types
 from pathlib import Path
@@ -22,10 +23,16 @@ from build_one_event_dsa_hybrid_h17 import (  # noqa: E402
     endpoint_gate_summary,
     reference_400_timing_half_width,
 )
+from one_event_workflow import legacy_stage_config, load_config  # noqa: E402
 from run_one_event_absolute_dm_workflow import (  # noqa: E402
     _output_paths,
     expected_stage_outputs,
 )
+
+
+def test_casey_owner_decision_receipt_matches_runtime_configuration() -> None:
+    config = load_config(ROOT / "analysis-configs/absolute-dm/casey.json")
+    dsa_audit._validate_time_origin_owner_decision(legacy_stage_config(config))
 
 
 def test_dsa_builder_requires_eligible_400_mhz_time_origin() -> None:
@@ -35,9 +42,9 @@ def test_dsa_builder_requires_eligible_400_mhz_time_origin() -> None:
         "filterbank_product_dm_pc_cm3": 491.211,
         "filterbank_peak_sample_index": 15259,
         "mapping_ambiguity_s": 0.000098304,
-        "mapping_uncertainty_treatment": "owner_approved_fit_treatment",
-        "trigger_reference_frequency_status": "owner_approved_modeling_convention",
-        "trigger_reference_frequency_sensitivity_required": False,
+        "mapping_uncertainty_treatment": "owner_approved_discrete_two_anchor_sensitivity",
+        "trigger_reference_frequency_status": "owner_approved_provisional_modeling_convention",
+        "trigger_reference_frequency_sensitivity_required": True,
     }
     valid = {
         "timing": {
@@ -51,6 +58,15 @@ def test_dsa_builder_requires_eligible_400_mhz_time_origin() -> None:
         }
     }
     assert _validated_time_origin(valid, expected) is valid["timing"]
+    pending = {
+        "timing": valid["timing"] | {"joint_fit_timing_uncertainty_eligible": False}
+    }
+    assert (
+        _validated_time_origin(pending, expected, require_fit_eligible=False)
+        is pending["timing"]
+    )
+    with pytest.raises(RuntimeError, match="not fit eligible"):
+        _validated_time_origin(pending, expected)
     for mutation in (
         {"fit_observation_time_origin_eligible": False},
         {"filterbank_sample_zero_status": "blocked"},
@@ -74,9 +90,9 @@ def test_dsa_builder_requires_eligible_400_mhz_time_origin() -> None:
                 "proposed_modeling_convention_pending_owner_decision"
             )
         },
-        {"trigger_reference_frequency_sensitivity_required": True},
+        {"trigger_reference_frequency_sensitivity_required": False},
     ):
-        with pytest.raises(RuntimeError, match="not owner approved|incomplete"):
+        with pytest.raises(RuntimeError, match="not owner approved|requirement is missing"):
             _validated_time_origin(valid, expected | mutation)
 
     for mutation in (
@@ -90,11 +106,50 @@ def test_dsa_builder_requires_eligible_400_mhz_time_origin() -> None:
                 "proposed_modeling_convention_pending_owner_decision"
             )
         },
-        {"trigger_reference_frequency_sensitivity_required": True},
+        {"trigger_reference_frequency_sensitivity_required": False},
     ):
         changed = {"timing": valid["timing"] | mutation}
         with pytest.raises(RuntimeError, match="differs from configuration"):
             _validated_time_origin(changed, expected)
+
+
+def test_dsa_timing_becomes_fit_eligible_only_from_exact_reviewed_roster(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    roster_path = tmp_path / "timing-sensitivity-roster.json"
+    roster = {"status": "prepared_pending_independent_review"}
+    roster_path.write_text(json.dumps(roster))
+    config = {
+        "paths": {"output_root": str(tmp_path)},
+        "joint_fit": {
+            "review_decision": {
+                "status": "approved",
+                "timing_sensitivity_review_status": "approved",
+                "timing_sensitivity_roster_sha256": dsa_audit.sha256(roster_path),
+            }
+        },
+    }
+    result = {"timing": {"joint_fit_timing_uncertainty_eligible": False}}
+    checked: list[dict] = []
+    monkeypatch.setattr(
+        dsa_audit,
+        "validate_timing_sensitivity_roster",
+        lambda supplied_config, supplied_roster: checked.append(supplied_roster),
+    )
+
+    dsa_audit._admit_reviewed_timing_sensitivity(config, result)
+
+    assert checked == [roster]
+    assert result["timing"]["joint_fit_timing_uncertainty_eligible"] is True
+    assert result["timing"]["timing_sensitivity_roster"]["sha256"] == (
+        config["joint_fit"]["review_decision"]["timing_sensitivity_roster_sha256"]
+    )
+
+    roster_path.write_text(json.dumps({"status": "tampered"}))
+    result = {"timing": {"joint_fit_timing_uncertainty_eligible": False}}
+    with pytest.raises(RuntimeError, match="differs from reviewed input"):
+        dsa_audit._admit_reviewed_timing_sensitivity(config, result)
 
 
 def test_dsa_audit_rejects_unbound_owner_decision_before_publication(

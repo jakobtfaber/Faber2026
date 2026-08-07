@@ -5,13 +5,20 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 import dynesty
 import numpy as np
-from one_event_workflow import arrays_sha256, load_config, sample_time_axis_ns
+from one_event_workflow import (
+    arrays_sha256,
+    load_config,
+    sample_time_axis_ns,
+    validate_timing_sensitivity_roster,
+)
 
 import radio_pipeline
 from radio_pipeline.fitting import (
@@ -54,8 +61,15 @@ def _require_locked_product_metadata(
     product,
     instrument: str,
     resolution: dict,
+    *,
+    expected_time0_unix_ns: int | None = None,
+    expected_time_axis_sha256: str | None = None,
 ) -> None:
-    expected_time0 = int(resolution[f"{instrument}_time0_unix_ns"])
+    expected_time0 = int(
+        resolution[f"{instrument}_time0_unix_ns"]
+        if expected_time0_unix_ns is None
+        else expected_time0_unix_ns
+    )
     if int(product["time0_unix_ns"]) != expected_time0:
         raise ValueError(f"{instrument} locked crop origin changed")
     if "noise_estimation_mask" not in product:
@@ -80,10 +94,12 @@ def _require_locked_product_metadata(
         sample_interval_s=float(product["sample_interval_s"]),
         sample_count=int(product["waterfall"].shape[1]),
     )
-    if (
-        _arrays_sha256(time_axis_ns)
-        != resolution[f"{instrument}_time_axis_sha256"]
-    ):
+    expected_axis = (
+        resolution[f"{instrument}_time_axis_sha256"]
+        if expected_time_axis_sha256 is None
+        else expected_time_axis_sha256
+    )
+    if _arrays_sha256(time_axis_ns) != expected_axis:
         raise ValueError(f"{instrument} locked time axis changed")
 
 
@@ -108,6 +124,8 @@ def _load_locked_fit_observations(
     settings: dict,
     chime_path: Path,
     dsa_path: Path,
+    *,
+    dsa_expected_sha256: str | None = None,
 ):
     resolution = settings["resolution"]
     return (
@@ -117,9 +135,115 @@ def _load_locked_fit_observations(
         ),
         load_band_observation_product(
             dsa_path,
-            expected_sha256=resolution["dsa_fit_observation_sha256"],
+            expected_sha256=(
+                resolution["dsa_fit_observation_sha256"]
+                if dsa_expected_sha256 is None
+                else dsa_expected_sha256
+            ),
         ),
     )
+
+
+def _timing_variant_contract(
+    config: dict,
+    dsa_path: Path,
+    timing_variant: str,
+    timing_sensitivity_roster: dict | None,
+    timing_sensitivity_roster_path: Path | None = None,
+    timing_sensitivity_roster_sha256: str | None = None,
+) -> dict[str, object]:
+    resolution = config["joint_fit"]["resolution"]
+    if timing_variant == "primary":
+        if any(
+            value is not None
+            for value in (
+                timing_sensitivity_roster,
+                timing_sensitivity_roster_path,
+                timing_sensitivity_roster_sha256,
+            )
+        ):
+            raise ValueError("primary fit does not accept a timing-sensitivity roster")
+        return {
+            "product_sha256": resolution["dsa_fit_observation_sha256"],
+            "time0_unix_ns": int(resolution["dsa_time0_unix_ns"]),
+            "time_axis_sha256": resolution["dsa_time_axis_sha256"],
+        }
+    if (
+        timing_variant != "alternative_anchor"
+        or timing_sensitivity_roster is None
+        or timing_sensitivity_roster_path is None
+        or timing_sensitivity_roster_sha256 is None
+    ):
+        raise ValueError("alternative-anchor fit requires its reviewed timing roster")
+    reviewed_roster_sha256 = config["joint_fit"]["review_decision"][
+        "timing_sensitivity_roster_sha256"
+    ]
+    if (
+        sha256_file(timing_sensitivity_roster_path)
+        != timing_sensitivity_roster_sha256
+        or timing_sensitivity_roster_sha256 != reviewed_roster_sha256
+    ):
+        raise ValueError("timing-sensitivity roster differs from the reviewed input")
+    validate_timing_sensitivity_roster(config, timing_sensitivity_roster)
+    alternative = timing_sensitivity_roster["alternative_anchor"]
+    if dsa_path.resolve() != Path(alternative["product"]).resolve():
+        raise ValueError("alternative-anchor fit received the wrong DSA observation")
+    time0_unix_ns = int(alternative["time0_unix_ns"])
+    time_axis_sha256 = _arrays_sha256(
+        sample_time_axis_ns(
+            time0_unix_ns=time0_unix_ns,
+            sample_interval_s=float(resolution["dsa_sample_interval_s"]),
+            sample_count=int(resolution["dsa_shape"][1]),
+        )
+    )
+    return {
+        "product_sha256": alternative["sha256"],
+        "time0_unix_ns": time0_unix_ns,
+        "time_axis_sha256": time_axis_sha256,
+        "roster_path": str(timing_sensitivity_roster_path.resolve()),
+        "roster_sha256": timing_sensitivity_roster_sha256,
+    }
+
+
+def _variant_output_dir(config: dict, timing_variant: str) -> Path:
+    primary = Path(config["paths"]["output_root"]).resolve()
+    if timing_variant == "primary":
+        return primary
+    if timing_variant == "alternative_anchor":
+        return primary.parent / f"{primary.name}-anchor-15256-sensitivity"
+    raise ValueError("unknown timing variant")
+
+
+def _atomic_write_json(path: Path, payload: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
+    temporary_path = Path(temporary)
+    try:
+        with os.fdopen(descriptor, "w") as handle:
+            json.dump(payload, handle, sort_keys=True, separators=(",", ":"))
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary_path, path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def _prepare_output_binding(output_dir: Path, binding: dict[str, object]) -> None:
+    checkpoint_dir = output_dir / ".checkpoints"
+    binding_path = checkpoint_dir / "timing-variant.json"
+    for product_name in ("fit-result.json", "run-provenance.json"):
+        product_path = output_dir / product_name
+        if product_path.is_file():
+            existing = json.loads(product_path.read_text())
+            if existing.get("timing_binding") != binding:
+                raise ValueError("fit output directory belongs to another timing variant")
+    if binding_path.is_file():
+        if json.loads(binding_path.read_text()) != binding:
+            raise ValueError("checkpoint directory belongs to another timing variant")
+    elif checkpoint_dir.is_dir() and any(checkpoint_dir.iterdir()):
+        raise ValueError("checkpoint directory lacks a trusted timing-variant binding")
+    _atomic_write_json(binding_path, binding)
 
 
 def _request(
@@ -127,9 +251,28 @@ def _request(
     chime_path: Path,
     dsa_path: Path,
     geometry_path: Path,
+    *,
+    checkpoint_dir: Path,
+    timing_variant: str,
+    timing_sensitivity_roster: dict | None,
+    timing_sensitivity_roster_path: Path | None,
+    timing_sensitivity_roster_sha256: str | None,
 ) -> JointFitRequest:
     settings = config["joint_fit"]
-    observations = _load_locked_fit_observations(settings, chime_path, dsa_path)
+    timing_contract = _timing_variant_contract(
+        config,
+        dsa_path,
+        timing_variant,
+        timing_sensitivity_roster,
+        timing_sensitivity_roster_path,
+        timing_sensitivity_roster_sha256,
+    )
+    observations = _load_locked_fit_observations(
+        settings,
+        chime_path,
+        dsa_path,
+        dsa_expected_sha256=str(timing_contract["product_sha256"]),
+    )
     expected_inputs = config["input_sha256"]
     if observations[0].input_sha256 != {
         "raw_chime_h5": expected_inputs["raw_chime_h5"],
@@ -159,6 +302,18 @@ def _request(
                 product,
                 observation.instrument,
                 resolution,
+                **(
+                    {
+                        "expected_time0_unix_ns": int(
+                            timing_contract["time0_unix_ns"]
+                        ),
+                        "expected_time_axis_sha256": str(
+                            timing_contract["time_axis_sha256"]
+                        ),
+                    }
+                    if observation.instrument == "dsa"
+                    else {}
+                ),
             )
             for axis in ("frequency", "time"):
                 key = f"{axis}_bin_factor"
@@ -217,7 +372,7 @@ def _request(
         dlogz=float(sampler["dlogz"]),
         sample=sampler.get("sample", "rwalk"),
         pool_size=int(sampler.get("pool_size", 1)),
-        checkpoint_dir=str(Path(config["paths"]["output_root"]) / ".checkpoints"),
+        checkpoint_dir=str(checkpoint_dir),
         resume=bool(sampler.get("resume", True)),
         maximum_projection_disagreement_s=float(
             settings.get("maximum_projection_disagreement_s", 5.0e-7)
@@ -248,9 +403,43 @@ def run(
     geometry_path: Path,
     output_dir: Path,
     repo_root: Path,
+    timing_variant: str = "primary",
+    timing_sensitivity_roster: dict | None = None,
+    timing_sensitivity_roster_path: Path | None = None,
+    timing_sensitivity_roster_sha256: str | None = None,
 ) -> dict:
+    required_output_dir = _variant_output_dir(config, timing_variant)
+    if output_dir.resolve() != required_output_dir:
+        raise ValueError(
+            f"{timing_variant} fit output must be {required_output_dir}"
+        )
     runtime = _runtime_preflight(repo_root)
-    request = _request(config, chime_path, dsa_path, geometry_path)
+    request = _request(
+        config,
+        chime_path,
+        dsa_path,
+        geometry_path,
+        checkpoint_dir=output_dir / ".checkpoints",
+        timing_variant=timing_variant,
+        timing_sensitivity_roster=timing_sensitivity_roster,
+        timing_sensitivity_roster_path=timing_sensitivity_roster_path,
+        timing_sensitivity_roster_sha256=timing_sensitivity_roster_sha256,
+    )
+    timing_contract = _timing_variant_contract(
+        config,
+        dsa_path,
+        timing_variant,
+        timing_sensitivity_roster,
+        timing_sensitivity_roster_path,
+        timing_sensitivity_roster_sha256,
+    )
+    binding = {
+        "event_binding_sha256": config["event_binding_sha256"],
+        "timing_variant": timing_variant,
+        "dsa_observation_sha256": str(timing_contract["product_sha256"]),
+        "timing_sensitivity_roster_sha256": timing_contract.get("roster_sha256"),
+    }
+    _prepare_output_binding(output_dir, binding)
     result = fit_joint_event(request)
     shutil.rmtree(output_dir / ".checkpoints", ignore_errors=True)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -288,6 +477,8 @@ def run(
         "status": result.status,
         "event": config["event"],
         "event_binding_sha256": config["event_binding_sha256"],
+        "timing_variant": timing_variant,
+        "timing_binding": binding,
         "reference_frequency_mhz": 400.0,
         "shared_absolute_dm_pc_cm3": result.dm_pc_cm3,
         "geocentric_unscattered_toa_unix_ns": (result.geocentric_toa_unix_ns),
@@ -311,6 +502,14 @@ def run(
             "geometry_constraint": sha256_file(geometry_path),
             "chime_observation": sha256_file(chime_path),
             "dsa_observation": sha256_file(dsa_path),
+            "timing_sensitivity_roster": (
+                {
+                    "path": str(timing_sensitivity_roster_path.resolve()),
+                    "sha256": timing_sensitivity_roster_sha256,
+                }
+                if timing_sensitivity_roster_path is not None
+                else None
+            ),
         },
         "provenance_code_sha256": code_hashes,
     }
@@ -320,11 +519,21 @@ def run(
         "status": result.status,
         "event": config["event"],
         "event_binding_sha256": config["event_binding_sha256"],
+        "timing_variant": timing_variant,
+        "timing_binding": binding,
         "inputs": {
             "config": sha256_file(config["_config_path"]),
             "chime_observation": sha256_file(chime_path),
             "dsa_observation": sha256_file(dsa_path),
             "geometry_constraint": sha256_file(geometry_path),
+            "timing_sensitivity_roster": (
+                {
+                    "path": str(timing_sensitivity_roster_path.resolve()),
+                    "sha256": timing_sensitivity_roster_sha256,
+                }
+                if timing_sensitivity_roster_path is not None
+                else None
+            ),
         },
         "code": code_hashes,
         "runtime": runtime,
@@ -347,9 +556,25 @@ def main() -> None:
     parser.add_argument("--dsa-observation", type=Path, required=True)
     parser.add_argument("--geometry-constraint", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--timing-variant",
+        choices=("primary", "alternative_anchor"),
+        default="primary",
+    )
+    parser.add_argument("--timing-sensitivity-roster", type=Path)
     args = parser.parse_args()
     config = load_config(args.config)
     config["_config_path"] = str(args.config.resolve())
+    timing_roster = (
+        json.loads(args.timing_sensitivity_roster.read_text())
+        if args.timing_sensitivity_roster is not None
+        else None
+    )
+    timing_roster_sha256 = (
+        sha256_file(args.timing_sensitivity_roster)
+        if args.timing_sensitivity_roster is not None
+        else None
+    )
     result = run(
         config,
         chime_path=args.chime_observation,
@@ -357,6 +582,10 @@ def main() -> None:
         geometry_path=args.geometry_constraint,
         output_dir=args.output_dir,
         repo_root=Path(__file__).resolve().parents[1],
+        timing_variant=args.timing_variant,
+        timing_sensitivity_roster=timing_roster,
+        timing_sensitivity_roster_path=args.timing_sensitivity_roster,
+        timing_sensitivity_roster_sha256=timing_roster_sha256,
     )
     print(json.dumps({"status": result["status"], "event": result["event"]}))
 
