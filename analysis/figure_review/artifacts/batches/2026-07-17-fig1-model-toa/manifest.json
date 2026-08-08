@@ -1,0 +1,2238 @@
+{
+  "batch_id": "2026-07-17-fig1-model-toa",
+  "candidates": [
+    {
+      "artifact": "candidates/fig1-gallery.pdf",
+      "artifact_sha256": "dda668128aa6e4f942f07a3feffc447526d21ff56ef7bbfcacd3f87ff7892e76",
+      "decision": {
+        "notes": "Owner decision 2026-07-17 (recorded via agent session): re-render with observed-peak markers only. Model-corrected intrinsic-arrival markers (observed peak minus published Delta_scat) violate the 2026-07-14 data-only lock and consume wave-1 V1-revoked joint-fit kernels that the joint-tf lane has since diagnosed as RFI-contaminated (mask-unaware downsample; refits pending). A model-anchored variant may resubmit as a new batch only after V1 clearance + RFI-fixed refits + an explicit lock amendment; manifest pipeline_revision 4e951c8a must also match the submodule pin. ADDENDUM 2026-07-17T22:11:01+00:00 (owner): two further defects to clear before resubmission. (1) DM rendering still looks off in the gallery: the producer re-dedisperses each waterfall from its filename-stem DM to the adopted CHIME phase-coherence DM, so any product whose stem misstates the actually-applied DM (chromatica DSA 272.368-vs-272.664 precedent) leaves residual sweep. Resubmission must include a per-panel DM-provenance audit: measure the residual drift slope per panel and prove it consistent with zero at the adopted DM. (2) Frequency-index/orientation assignment is not trusted for all bursts (casey rendered upside-down until recently). Resubmission must validate each panel's frequency axis against the raw product headers (band edges + channel ordering) for both instruments, not assume a fixed ordering.",
+        "reviewed_at": "2026-07-17T19:06:24+00:00",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "status": "needs_revision"
+      },
+      "dm_measurements": [
+        {
+          "adopted_dm": "262.361665",
+          "adopted_sigma": "0.010372",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.023274",
+          "chime_dm": "262.361665",
+          "chime_minus_dsa": "0.045268",
+          "chime_sigma": "0.010372",
+          "dsa_dm": "262.316397",
+          "dsa_sigma": "0.029297",
+          "gaussian_joint_dm": "262.347322",
+          "gaussian_joint_sigma": "0.021060",
+          "nick": "zach",
+          "tns": "FRB 20220207C"
+        },
+        {
+          "adopted_dm": "462.188773",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "462.188773",
+          "chime_minus_dsa": "-0.004032",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "462.192806",
+          "dsa_sigma": "0.029313",
+          "gaussian_joint_dm": "462.188887",
+          "gaussian_joint_sigma": "0.004929",
+          "nick": "whitney",
+          "tns": "FRB 20220310F"
+        },
+        {
+          "adopted_dm": "397.015535",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "397.015535",
+          "chime_minus_dsa": "0.074489",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "396.941046",
+          "dsa_sigma": "0.082506",
+          "gaussian_joint_dm": "397.015263",
+          "gaussian_joint_sigma": "0.004991",
+          "nick": "oran",
+          "tns": "FRB 20220506D"
+        },
+        {
+          "adopted_dm": "411.435717",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.064884",
+          "chime_dm": "411.435717",
+          "chime_minus_dsa": "-0.116990",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "411.552707",
+          "dsa_sigma": "0.072400",
+          "gaussian_joint_dm": "411.471916",
+          "gaussian_joint_sigma": "0.054079",
+          "nick": "isha",
+          "tns": "FRB 20221113A"
+        },
+        {
+          "adopted_dm": "602.377821",
+          "adopted_sigma": "0.006047",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "602.377821",
+          "chime_minus_dsa": "-0.001370",
+          "chime_sigma": "0.006047",
+          "dsa_dm": "602.379192",
+          "dsa_sigma": "0.012800",
+          "gaussian_joint_dm": "602.378071",
+          "gaussian_joint_sigma": "0.005467",
+          "nick": "wilhelm",
+          "tns": "FRB 20221203A"
+        },
+        {
+          "adopted_dm": "610.289070",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.039496",
+          "chime_dm": "610.289070",
+          "chime_minus_dsa": "0.056527",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "610.232543",
+          "dsa_sigma": "0.007096",
+          "gaussian_joint_dm": "610.261030",
+          "gaussian_joint_sigma": "0.028262",
+          "nick": "phineas",
+          "tns": "FRB 20230307A"
+        },
+        {
+          "adopted_dm": "912.407552",
+          "adopted_sigma": "0.015668",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.055841",
+          "chime_dm": "912.407552",
+          "chime_minus_dsa": "-0.083539",
+          "chime_sigma": "0.015668",
+          "dsa_dm": "912.491091",
+          "dsa_sigma": "0.022292",
+          "gaussian_joint_dm": "912.447817",
+          "gaussian_joint_sigma": "0.041742",
+          "nick": "freya",
+          "tns": "FRB 20230325A"
+        },
+        {
+          "adopted_dm": "696.518001",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "696.518001",
+          "chime_minus_dsa": "0.052497",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "696.465504",
+          "dsa_sigma": "0.068454",
+          "gaussian_joint_dm": "696.517722",
+          "gaussian_joint_sigma": "0.004987",
+          "nick": "johndoeII",
+          "tns": "FRB 20230814B"
+        },
+        {
+          "adopted_dm": "518.796993",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "518.796993",
+          "chime_minus_dsa": "-0.000663",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "518.797655",
+          "dsa_sigma": "0.063024",
+          "gaussian_joint_dm": "518.796997",
+          "gaussian_joint_sigma": "0.004984",
+          "nick": "hamilton",
+          "tns": "FRB 20230913A"
+        },
+        {
+          "adopted_dm": "960.131611",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "960.131611",
+          "chime_minus_dsa": "0.045776",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "960.085835",
+          "dsa_sigma": "0.069745",
+          "gaussian_joint_dm": "960.131377",
+          "gaussian_joint_sigma": "0.004987",
+          "nick": "mahi",
+          "tns": "FRB 20240122A"
+        },
+        {
+          "adopted_dm": "272.638699",
+          "adopted_sigma": "0.011918",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "272.638699",
+          "chime_minus_dsa": "0.077283",
+          "chime_sigma": "0.011918",
+          "dsa_dm": "272.561416",
+          "dsa_sigma": "0.086174",
+          "gaussian_joint_dm": "272.637248",
+          "gaussian_joint_sigma": "0.011806",
+          "nick": "chromatica",
+          "tns": "FRB 20240203A"
+        },
+        {
+          "adopted_dm": "491.207826",
+          "adopted_sigma": "0.005165",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "491.207826",
+          "chime_minus_dsa": "0.010334",
+          "chime_sigma": "0.005165",
+          "dsa_dm": "491.197492",
+          "dsa_sigma": "0.039550",
+          "gaussian_joint_dm": "491.207653",
+          "gaussian_joint_sigma": "0.005122",
+          "nick": "casey",
+          "tns": "FRB 20240229A"
+        }
+      ],
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest"
+      ],
+      "family": "gallery",
+      "generator": "scripts/plot_codetection_data_grid.py",
+      "id": "fig1-gallery",
+      "preview": "previews/fig1-gallery.png",
+      "required_provenance": [
+        "adopted DM and uncertainty for every burst",
+        "input waterfall path and SHA-256 for both telescopes",
+        "input-product DM and applied re-dedispersion offset",
+        "time/frequency resolution and mask summary"
+      ],
+      "target": "figures/codetection_data_grid.pdf",
+      "title": "Figure 1: twelve-burst CHIME/FRB and DSA-110 gallery"
+    },
+    {
+      "artifact": "candidates/fig5-association.pdf",
+      "artifact_sha256": "f76864431c788f8e21b3336d7d2ce95ff6032a2953afb6d35b1f5d2af13880f7",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurements": [
+        {
+          "adopted_dm": "262.361665",
+          "adopted_sigma": "0.010372",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.023274",
+          "chime_dm": "262.361665",
+          "chime_minus_dsa": "0.045268",
+          "chime_sigma": "0.010372",
+          "dsa_dm": "262.316397",
+          "dsa_sigma": "0.029297",
+          "gaussian_joint_dm": "262.347322",
+          "gaussian_joint_sigma": "0.021060",
+          "nick": "zach",
+          "tns": "FRB 20220207C"
+        },
+        {
+          "adopted_dm": "462.188773",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "462.188773",
+          "chime_minus_dsa": "-0.004032",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "462.192806",
+          "dsa_sigma": "0.029313",
+          "gaussian_joint_dm": "462.188887",
+          "gaussian_joint_sigma": "0.004929",
+          "nick": "whitney",
+          "tns": "FRB 20220310F"
+        },
+        {
+          "adopted_dm": "397.015535",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "397.015535",
+          "chime_minus_dsa": "0.074489",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "396.941046",
+          "dsa_sigma": "0.082506",
+          "gaussian_joint_dm": "397.015263",
+          "gaussian_joint_sigma": "0.004991",
+          "nick": "oran",
+          "tns": "FRB 20220506D"
+        },
+        {
+          "adopted_dm": "411.435717",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.064884",
+          "chime_dm": "411.435717",
+          "chime_minus_dsa": "-0.116990",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "411.552707",
+          "dsa_sigma": "0.072400",
+          "gaussian_joint_dm": "411.471916",
+          "gaussian_joint_sigma": "0.054079",
+          "nick": "isha",
+          "tns": "FRB 20221113A"
+        },
+        {
+          "adopted_dm": "602.377821",
+          "adopted_sigma": "0.006047",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "602.377821",
+          "chime_minus_dsa": "-0.001370",
+          "chime_sigma": "0.006047",
+          "dsa_dm": "602.379192",
+          "dsa_sigma": "0.012800",
+          "gaussian_joint_dm": "602.378071",
+          "gaussian_joint_sigma": "0.005467",
+          "nick": "wilhelm",
+          "tns": "FRB 20221203A"
+        },
+        {
+          "adopted_dm": "610.289070",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.039496",
+          "chime_dm": "610.289070",
+          "chime_minus_dsa": "0.056527",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "610.232543",
+          "dsa_sigma": "0.007096",
+          "gaussian_joint_dm": "610.261030",
+          "gaussian_joint_sigma": "0.028262",
+          "nick": "phineas",
+          "tns": "FRB 20230307A"
+        },
+        {
+          "adopted_dm": "912.407552",
+          "adopted_sigma": "0.015668",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.055841",
+          "chime_dm": "912.407552",
+          "chime_minus_dsa": "-0.083539",
+          "chime_sigma": "0.015668",
+          "dsa_dm": "912.491091",
+          "dsa_sigma": "0.022292",
+          "gaussian_joint_dm": "912.447817",
+          "gaussian_joint_sigma": "0.041742",
+          "nick": "freya",
+          "tns": "FRB 20230325A"
+        },
+        {
+          "adopted_dm": "696.518001",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "696.518001",
+          "chime_minus_dsa": "0.052497",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "696.465504",
+          "dsa_sigma": "0.068454",
+          "gaussian_joint_dm": "696.517722",
+          "gaussian_joint_sigma": "0.004987",
+          "nick": "johndoeII",
+          "tns": "FRB 20230814B"
+        },
+        {
+          "adopted_dm": "518.796993",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "518.796993",
+          "chime_minus_dsa": "-0.000663",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "518.797655",
+          "dsa_sigma": "0.063024",
+          "gaussian_joint_dm": "518.796997",
+          "gaussian_joint_sigma": "0.004984",
+          "nick": "hamilton",
+          "tns": "FRB 20230913A"
+        },
+        {
+          "adopted_dm": "960.131611",
+          "adopted_sigma": "0.005000",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "960.131611",
+          "chime_minus_dsa": "0.045776",
+          "chime_sigma": "0.005000",
+          "dsa_dm": "960.085835",
+          "dsa_sigma": "0.069745",
+          "gaussian_joint_dm": "960.131377",
+          "gaussian_joint_sigma": "0.004987",
+          "nick": "mahi",
+          "tns": "FRB 20240122A"
+        },
+        {
+          "adopted_dm": "272.638699",
+          "adopted_sigma": "0.011918",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "272.638699",
+          "chime_minus_dsa": "0.077283",
+          "chime_sigma": "0.011918",
+          "dsa_dm": "272.561416",
+          "dsa_sigma": "0.086174",
+          "gaussian_joint_dm": "272.637248",
+          "gaussian_joint_sigma": "0.011806",
+          "nick": "chromatica",
+          "tns": "FRB 20240203A"
+        },
+        {
+          "adopted_dm": "491.207826",
+          "adopted_sigma": "0.005165",
+          "adoption": "chime_primary",
+          "between_band_sigma": "0.000000",
+          "chime_dm": "491.207826",
+          "chime_minus_dsa": "0.010334",
+          "chime_sigma": "0.005165",
+          "dsa_dm": "491.197492",
+          "dsa_sigma": "0.039550",
+          "gaussian_joint_dm": "491.207653",
+          "gaussian_joint_sigma": "0.005122",
+          "nick": "casey",
+          "tns": "FRB 20240229A"
+        }
+      ],
+      "evidence_ids": [
+        "dm-catalog"
+      ],
+      "family": "association",
+      "generator": "scripts/plot_association_summary.py",
+      "id": "fig5-association",
+      "preview": "previews/fig5-association.png",
+      "required_provenance": [
+        "adopted DM catalog SHA-256",
+        "timing-table source and convention",
+        "association class and probability inputs",
+        "CHIME-minus-DSA DM values and uncertainties"
+      ],
+      "target": "figures/association_summary.pdf",
+      "title": "Figure 5: association diagnostics"
+    },
+    {
+      "artifact": "candidates/fig6-scint-summary.pdf",
+      "artifact_sha256": "e7f5f902d53720f7c0beea7be3f6c3b2ab6ff5ca5abaa762cb953b89a2574dd9",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products. ADDITIONALLY, concept rejected for the paper: the scintillation summary must show measurements across DSA AND CHIME together (CHIME per-subband measurements now exist from the 2L campaign), not DSA alone. Replace with a joint DSA+CHIME figure."
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-summary",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "fig6-scint-summary",
+      "preview": "previews/fig6-scint-summary.png",
+      "required_provenance": [
+        "component catalog SHA-256",
+        "quality flags and exclusion reasons",
+        "fit convention and lag mask",
+        "qualification status distinct from diagnostic status"
+      ],
+      "target": "figures/dsa_lorentzian_summary.pdf",
+      "title": "Figure 6: DSA-110 scintillation summary"
+    },
+    {
+      "artifact": "candidates/dsa-acf-zach.pdf",
+      "artifact_sha256": "820b4b2a8bac2c78414773abeb8dca6eceee13ce55036e8207d27742b3a20647",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "262.361665",
+        "adopted_sigma": "0.010372",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.023274",
+        "chime_dm": "262.361665",
+        "chime_minus_dsa": "0.045268",
+        "chime_sigma": "0.010372",
+        "dsa_dm": "262.316397",
+        "dsa_sigma": "0.029297",
+        "gaussian_joint_dm": "262.347322",
+        "gaussian_joint_sigma": "0.021060",
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-zach",
+      "preview": "previews/dsa-acf-zach.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "target": "figures/dsa_scint_acf/zach_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20220207C"
+    },
+    {
+      "artifact": "candidates/dsa-acf-whitney.pdf",
+      "artifact_sha256": "7e34ed0e4d0e1a2a68122ac662bc8955852c76b8218c3ce6d9401ad1dd22f176",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "462.188773",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "462.188773",
+        "chime_minus_dsa": "-0.004032",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "462.192806",
+        "dsa_sigma": "0.029313",
+        "gaussian_joint_dm": "462.188887",
+        "gaussian_joint_sigma": "0.004929",
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-whitney",
+      "preview": "previews/dsa-acf-whitney.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "target": "figures/dsa_scint_acf/whitney_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20220310F"
+    },
+    {
+      "artifact": "candidates/dsa-acf-oran.pdf",
+      "artifact_sha256": "1c232f01e433b4354df17fdbc365fd06ef03c843a49dd5de2768f8197e584871",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "397.015535",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "397.015535",
+        "chime_minus_dsa": "0.074489",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "396.941046",
+        "dsa_sigma": "0.082506",
+        "gaussian_joint_dm": "397.015263",
+        "gaussian_joint_sigma": "0.004991",
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-oran",
+      "preview": "previews/dsa-acf-oran.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "target": "figures/dsa_scint_acf/oran_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20220506D"
+    },
+    {
+      "artifact": "candidates/dsa-acf-isha.pdf",
+      "artifact_sha256": "d0671e6a7dd5e6e56c78969d0101e9bb4e11e4799b98a32d0b2461287d0aa7cf",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "411.435717",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.064884",
+        "chime_dm": "411.435717",
+        "chime_minus_dsa": "-0.116990",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "411.552707",
+        "dsa_sigma": "0.072400",
+        "gaussian_joint_dm": "411.471916",
+        "gaussian_joint_sigma": "0.054079",
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-isha",
+      "preview": "previews/dsa-acf-isha.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "target": "figures/dsa_scint_acf/isha_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20221113A"
+    },
+    {
+      "artifact": "candidates/dsa-acf-wilhelm.pdf",
+      "artifact_sha256": "4337a0a33ff571fa45b0bf3e4732cbcb595fff6bf50d06d53238916b8f63939a",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "602.377821",
+        "adopted_sigma": "0.006047",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "602.377821",
+        "chime_minus_dsa": "-0.001370",
+        "chime_sigma": "0.006047",
+        "dsa_dm": "602.379192",
+        "dsa_sigma": "0.012800",
+        "gaussian_joint_dm": "602.378071",
+        "gaussian_joint_sigma": "0.005467",
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-wilhelm",
+      "preview": "previews/dsa-acf-wilhelm.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "target": "figures/dsa_scint_acf/wilhelm_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20221203A"
+    },
+    {
+      "artifact": "candidates/dsa-acf-phineas.pdf",
+      "artifact_sha256": "0d85d3c2ea0d56be28832a118284528eea98876114325930bbb29ed2981c7b19",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "610.289070",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.039496",
+        "chime_dm": "610.289070",
+        "chime_minus_dsa": "0.056527",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "610.232543",
+        "dsa_sigma": "0.007096",
+        "gaussian_joint_dm": "610.261030",
+        "gaussian_joint_sigma": "0.028262",
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-phineas",
+      "preview": "previews/dsa-acf-phineas.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "target": "figures/dsa_scint_acf/phineas_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20230307A"
+    },
+    {
+      "artifact": "candidates/dsa-acf-freya.pdf",
+      "artifact_sha256": "a22e49d1be54e5f4f93f8b7e8735f1f87f0ae33485f204d4d3c3b19382a1e287",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "912.407552",
+        "adopted_sigma": "0.015668",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.055841",
+        "chime_dm": "912.407552",
+        "chime_minus_dsa": "-0.083539",
+        "chime_sigma": "0.015668",
+        "dsa_dm": "912.491091",
+        "dsa_sigma": "0.022292",
+        "gaussian_joint_dm": "912.447817",
+        "gaussian_joint_sigma": "0.041742",
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-freya",
+      "preview": "previews/dsa-acf-freya.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "target": "figures/dsa_scint_acf/freya_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20230325A"
+    },
+    {
+      "artifact": "candidates/dsa-acf-johndoeII.pdf",
+      "artifact_sha256": "57ffe1a6b84cfd7b56b5a25b48f2666b93465b92087088312895124e828ed787",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "696.518001",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "696.518001",
+        "chime_minus_dsa": "0.052497",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "696.465504",
+        "dsa_sigma": "0.068454",
+        "gaussian_joint_dm": "696.517722",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-johndoeII",
+      "preview": "previews/dsa-acf-johndoeII.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "target": "figures/dsa_scint_acf/johndoeII_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20230814B"
+    },
+    {
+      "artifact": "candidates/dsa-acf-hamilton.pdf",
+      "artifact_sha256": "563dfd09c18cdeca4f4c8d35ed4a1dbff71c6ef59459b4ffeffe52b91e4e0261",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "518.796993",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "518.796993",
+        "chime_minus_dsa": "-0.000663",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "518.797655",
+        "dsa_sigma": "0.063024",
+        "gaussian_joint_dm": "518.796997",
+        "gaussian_joint_sigma": "0.004984",
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-hamilton",
+      "preview": "previews/dsa-acf-hamilton.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "target": "figures/dsa_scint_acf/hamilton_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20230913A"
+    },
+    {
+      "artifact": "candidates/dsa-acf-mahi.pdf",
+      "artifact_sha256": "6b97d4342dc1e147d8596d66a4767968bdc869d1ded83b52bf55f34917541339",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "960.131611",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "960.131611",
+        "chime_minus_dsa": "0.045776",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "960.085835",
+        "dsa_sigma": "0.069745",
+        "gaussian_joint_dm": "960.131377",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-mahi",
+      "preview": "previews/dsa-acf-mahi.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "target": "figures/dsa_scint_acf/mahi_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20240122A"
+    },
+    {
+      "artifact": "candidates/dsa-acf-chromatica.pdf",
+      "artifact_sha256": "fe9996be40a278c301d8f859e81931c8a14b623c252ca9c2a671c571f0171c88",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "272.638699",
+        "adopted_sigma": "0.011918",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "272.638699",
+        "chime_minus_dsa": "0.077283",
+        "chime_sigma": "0.011918",
+        "dsa_dm": "272.561416",
+        "dsa_sigma": "0.086174",
+        "gaussian_joint_dm": "272.637248",
+        "gaussian_joint_sigma": "0.011806",
+        "nick": "chromatica",
+        "tns": "FRB 20240203A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-chromatica",
+      "preview": "previews/dsa-acf-chromatica.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "chromatica",
+        "tns": "FRB 20240203A"
+      },
+      "target": "figures/dsa_scint_acf/chromatica_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20240203A"
+    },
+    {
+      "artifact": "candidates/dsa-acf-casey.pdf",
+      "artifact_sha256": "48289ef565f5f8baeeb67bc3a3d1f7ad4f8e04db78658cd03e190e4ed673860d",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "491.207826",
+        "adopted_sigma": "0.005165",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "491.207826",
+        "chime_minus_dsa": "0.010334",
+        "chime_sigma": "0.005165",
+        "dsa_dm": "491.197492",
+        "dsa_sigma": "0.039550",
+        "gaussian_joint_dm": "491.207653",
+        "gaussian_joint_sigma": "0.005122",
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "evidence_ids": [
+        "scint-component-catalog",
+        "scint-fit-catalog"
+      ],
+      "family": "scintillation-acf",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07",
+      "id": "dsa-acf-casey",
+      "preview": "previews/dsa-acf-casey.png",
+      "required_provenance": [
+        "sub-band edges and center frequencies",
+        "symmetric-lag ACF samples, errors, and lag exclusions",
+        "all fitted components with flags",
+        "narrow-track membership and fit diagnostics",
+        "PBF overlay source or explicit absence"
+      ],
+      "subject": {
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "target": "figures/dsa_scint_acf/casey_dsa_acf_lorentzian_fits.pdf",
+      "title": "DSA-110 scintillation ACF: FRB 20240229A"
+    },
+    {
+      "artifact": "candidates/joint-zach.pdf",
+      "artifact_sha256": "d98782ceb51d20a8384293296efc9c6f951a647b883d1eb5eaf10337f9176c9d",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "262.361665",
+        "adopted_sigma": "0.010372",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.023274",
+        "chime_dm": "262.361665",
+        "chime_minus_dsa": "0.045268",
+        "chime_sigma": "0.010372",
+        "dsa_dm": "262.316397",
+        "dsa_sigma": "0.029297",
+        "gaussian_joint_dm": "262.347322",
+        "gaussian_joint_sigma": "0.021060",
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-zach",
+      "preview": "previews/joint-zach.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "target": "figures/jointmodel_pair/zach_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20220207C"
+    },
+    {
+      "artifact": "candidates/joint-whitney.pdf",
+      "artifact_sha256": "36468228a351b66bb9acfd7532266601ad278a6011d0fe9646e85d529d227f40",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "462.188773",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "462.188773",
+        "chime_minus_dsa": "-0.004032",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "462.192806",
+        "dsa_sigma": "0.029313",
+        "gaussian_joint_dm": "462.188887",
+        "gaussian_joint_sigma": "0.004929",
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-whitney",
+      "preview": "previews/joint-whitney.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "target": "figures/jointmodel_pair/whitney_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20220310F"
+    },
+    {
+      "artifact": "candidates/joint-oran.pdf",
+      "artifact_sha256": "3b85d0cdca1f453f1422305cb8c0538ca2842a48a6b20a10d336642429307faa",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "397.015535",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "397.015535",
+        "chime_minus_dsa": "0.074489",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "396.941046",
+        "dsa_sigma": "0.082506",
+        "gaussian_joint_dm": "397.015263",
+        "gaussian_joint_sigma": "0.004991",
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-oran",
+      "preview": "previews/joint-oran.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "target": "figures/jointmodel_pair/oran_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20220506D"
+    },
+    {
+      "artifact": "candidates/joint-isha.pdf",
+      "artifact_sha256": "9a19244d1afd7dc8529cb25c1ba57da903c62b5ff2462d7c7d658209c73be66c",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "411.435717",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.064884",
+        "chime_dm": "411.435717",
+        "chime_minus_dsa": "-0.116990",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "411.552707",
+        "dsa_sigma": "0.072400",
+        "gaussian_joint_dm": "411.471916",
+        "gaussian_joint_sigma": "0.054079",
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-isha",
+      "preview": "previews/joint-isha.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "target": "figures/jointmodel_pair/isha_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20221113A"
+    },
+    {
+      "artifact": "candidates/joint-wilhelm.pdf",
+      "artifact_sha256": "b06742a6b76248b19a24d3d0c99450825407792ced0e94246c07138e955b998f",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "602.377821",
+        "adopted_sigma": "0.006047",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "602.377821",
+        "chime_minus_dsa": "-0.001370",
+        "chime_sigma": "0.006047",
+        "dsa_dm": "602.379192",
+        "dsa_sigma": "0.012800",
+        "gaussian_joint_dm": "602.378071",
+        "gaussian_joint_sigma": "0.005467",
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-wilhelm",
+      "preview": "previews/joint-wilhelm.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "target": "figures/jointmodel_pair/wilhelm_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20221203A"
+    },
+    {
+      "artifact": "candidates/joint-phineas.pdf",
+      "artifact_sha256": "112824efb8a133238ee965d586d6549c2b2b85bb55591453a584a44bbf0b7d46",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "610.289070",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.039496",
+        "chime_dm": "610.289070",
+        "chime_minus_dsa": "0.056527",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "610.232543",
+        "dsa_sigma": "0.007096",
+        "gaussian_joint_dm": "610.261030",
+        "gaussian_joint_sigma": "0.028262",
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-phineas",
+      "preview": "previews/joint-phineas.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "target": "figures/jointmodel_pair/phineas_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20230307A"
+    },
+    {
+      "artifact": "candidates/joint-freya.pdf",
+      "artifact_sha256": "c3a9eb1560169ebdeb62f25bfc34449d4e9bae009ff262928605f5edda1cb986",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "912.407552",
+        "adopted_sigma": "0.015668",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.055841",
+        "chime_dm": "912.407552",
+        "chime_minus_dsa": "-0.083539",
+        "chime_sigma": "0.015668",
+        "dsa_dm": "912.491091",
+        "dsa_sigma": "0.022292",
+        "gaussian_joint_dm": "912.447817",
+        "gaussian_joint_sigma": "0.041742",
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-freya",
+      "preview": "previews/joint-freya.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "target": "figures/jointmodel_pair/freya_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20230325A"
+    },
+    {
+      "artifact": "candidates/joint-johndoeII.pdf",
+      "artifact_sha256": "14377d25fb301b7daf18d3a800c349c060193d813194fa953293f96704cd2b7e",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "696.518001",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "696.518001",
+        "chime_minus_dsa": "0.052497",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "696.465504",
+        "dsa_sigma": "0.068454",
+        "gaussian_joint_dm": "696.517722",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-johndoeII",
+      "preview": "previews/joint-johndoeII.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "target": "figures/jointmodel_pair/johndoeII_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20230814B"
+    },
+    {
+      "artifact": "candidates/joint-hamilton.pdf",
+      "artifact_sha256": "5db2abbb1b3d4624130149c6bef1eee13806720b790db3d314d2fdcf8ccb7221",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "518.796993",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "518.796993",
+        "chime_minus_dsa": "-0.000663",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "518.797655",
+        "dsa_sigma": "0.063024",
+        "gaussian_joint_dm": "518.796997",
+        "gaussian_joint_sigma": "0.004984",
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-hamilton",
+      "preview": "previews/joint-hamilton.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "target": "figures/jointmodel_pair/hamilton_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20230913A"
+    },
+    {
+      "artifact": "candidates/joint-mahi.pdf",
+      "artifact_sha256": "29ee428fa85b91b28be7c6f4fbbbb3ab6c5dfedb40319bbb4705b76d4ddb9272",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "960.131611",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "960.131611",
+        "chime_minus_dsa": "0.045776",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "960.085835",
+        "dsa_sigma": "0.069745",
+        "gaussian_joint_dm": "960.131377",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-mahi",
+      "preview": "previews/joint-mahi.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "target": "figures/jointmodel_pair/mahi_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20240122A"
+    },
+    {
+      "artifact": "candidates/joint-casey.pdf",
+      "artifact_sha256": "82e004a3fe9e974da4ce477b1b307da4bca1f74b3643d8d3c5cc11c96b3ece83",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "491.207826",
+        "adopted_sigma": "0.005165",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "491.207826",
+        "chime_minus_dsa": "0.010334",
+        "chime_sigma": "0.005165",
+        "dsa_dm": "491.197492",
+        "dsa_sigma": "0.039550",
+        "gaussian_joint_dm": "491.207653",
+        "gaussian_joint_sigma": "0.005122",
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "joint-model",
+      "generator": "pipeline/analysis/scattering-dm-locked-2026-07-14",
+      "id": "joint-casey",
+      "preview": "previews/joint-casey.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact fit artifact and configuration SHA-256",
+        "component counts and priors",
+        "per-band residual diagnostics",
+        "physical, morphology-only, or rejected adjudication with notes"
+      ],
+      "subject": {
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "target": "figures/jointmodel_pair/casey_jointmodel_pair.pdf",
+      "title": "DM-locked joint-model audit: FRB 20240229A"
+    },
+    {
+      "artifact": "candidates/triptych-zach.pdf",
+      "artifact_sha256": "25e3169c6840b91f5ddf94f6d21dfaace5fefd177983e0da9a4435f098c61abe",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "262.361665",
+        "adopted_sigma": "0.010372",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.023274",
+        "chime_dm": "262.361665",
+        "chime_minus_dsa": "0.045268",
+        "chime_sigma": "0.010372",
+        "dsa_dm": "262.316397",
+        "dsa_sigma": "0.029297",
+        "gaussian_joint_dm": "262.347322",
+        "gaussian_joint_sigma": "0.021060",
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-zach",
+      "preview": "previews/triptych-zach.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "zach",
+        "tns": "FRB 20220207C"
+      },
+      "target": "figures/codetection_triptych/zach_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20220207C"
+    },
+    {
+      "artifact": "candidates/triptych-whitney.pdf",
+      "artifact_sha256": "d6e51e80682efc7d86c364d85af2f74c24d0970b9c3c6bc594b5678696453c95",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "462.188773",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "462.188773",
+        "chime_minus_dsa": "-0.004032",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "462.192806",
+        "dsa_sigma": "0.029313",
+        "gaussian_joint_dm": "462.188887",
+        "gaussian_joint_sigma": "0.004929",
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-whitney",
+      "preview": "previews/triptych-whitney.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "whitney",
+        "tns": "FRB 20220310F"
+      },
+      "target": "figures/codetection_triptych/whitney_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20220310F"
+    },
+    {
+      "artifact": "candidates/triptych-oran.pdf",
+      "artifact_sha256": "654cec3d03a05b5f4e53932962e7b39ceee49fdee539dfc604416f8451a7ff9c",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "397.015535",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "397.015535",
+        "chime_minus_dsa": "0.074489",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "396.941046",
+        "dsa_sigma": "0.082506",
+        "gaussian_joint_dm": "397.015263",
+        "gaussian_joint_sigma": "0.004991",
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-oran",
+      "preview": "previews/triptych-oran.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "oran",
+        "tns": "FRB 20220506D"
+      },
+      "target": "figures/codetection_triptych/oran_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20220506D"
+    },
+    {
+      "artifact": "candidates/triptych-isha.pdf",
+      "artifact_sha256": "c54d0d0ceb03959f9be9f70ff9b13f21d3e3c6e439a676c12a631f7cfef7d1fc",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "411.435717",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.064884",
+        "chime_dm": "411.435717",
+        "chime_minus_dsa": "-0.116990",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "411.552707",
+        "dsa_sigma": "0.072400",
+        "gaussian_joint_dm": "411.471916",
+        "gaussian_joint_sigma": "0.054079",
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-isha",
+      "preview": "previews/triptych-isha.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "isha",
+        "tns": "FRB 20221113A"
+      },
+      "target": "figures/codetection_triptych/isha_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20221113A"
+    },
+    {
+      "artifact": "candidates/triptych-wilhelm.pdf",
+      "artifact_sha256": "702c266d7225da99832ed5a2bfa02b7b8514b6eb4eca31f509e8a2f7cd3770b1",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "602.377821",
+        "adopted_sigma": "0.006047",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "602.377821",
+        "chime_minus_dsa": "-0.001370",
+        "chime_sigma": "0.006047",
+        "dsa_dm": "602.379192",
+        "dsa_sigma": "0.012800",
+        "gaussian_joint_dm": "602.378071",
+        "gaussian_joint_sigma": "0.005467",
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-wilhelm",
+      "preview": "previews/triptych-wilhelm.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "wilhelm",
+        "tns": "FRB 20221203A"
+      },
+      "target": "figures/codetection_triptych/wilhelm_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20221203A"
+    },
+    {
+      "artifact": "candidates/triptych-phineas.pdf",
+      "artifact_sha256": "9ab8121c8f6cfa0df9d382ef6df1ccb2009ab5cf60ab8af2af62e1c4466a8c76",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "610.289070",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.039496",
+        "chime_dm": "610.289070",
+        "chime_minus_dsa": "0.056527",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "610.232543",
+        "dsa_sigma": "0.007096",
+        "gaussian_joint_dm": "610.261030",
+        "gaussian_joint_sigma": "0.028262",
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-phineas",
+      "preview": "previews/triptych-phineas.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "phineas",
+        "tns": "FRB 20230307A"
+      },
+      "target": "figures/codetection_triptych/phineas_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20230307A"
+    },
+    {
+      "artifact": "candidates/triptych-freya.pdf",
+      "artifact_sha256": "3d987fd24e25c6de3d2a59d385b9d57720d5763284491d8331472bb52ab2dd5b",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "912.407552",
+        "adopted_sigma": "0.015668",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.055841",
+        "chime_dm": "912.407552",
+        "chime_minus_dsa": "-0.083539",
+        "chime_sigma": "0.015668",
+        "dsa_dm": "912.491091",
+        "dsa_sigma": "0.022292",
+        "gaussian_joint_dm": "912.447817",
+        "gaussian_joint_sigma": "0.041742",
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-freya",
+      "preview": "previews/triptych-freya.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "freya",
+        "tns": "FRB 20230325A"
+      },
+      "target": "figures/codetection_triptych/freya_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20230325A"
+    },
+    {
+      "artifact": "candidates/triptych-johndoeii.pdf",
+      "artifact_sha256": "a0645afedb183b835b38b629d6aab36c4e3b9df56fa97f47d212339ec4f7f3ad",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "696.518001",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "696.518001",
+        "chime_minus_dsa": "0.052497",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "696.465504",
+        "dsa_sigma": "0.068454",
+        "gaussian_joint_dm": "696.517722",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "johndoeII",
+        "tns": "FRB 20230814B"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-johndoeii",
+      "preview": "previews/triptych-johndoeii.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "johndoeii",
+        "tns": "FRB 20230814B"
+      },
+      "target": "figures/codetection_triptych/johndoeii_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20230814B"
+    },
+    {
+      "artifact": "candidates/triptych-hamilton.pdf",
+      "artifact_sha256": "c9423b20186fb8e7cf4ad008e981fee38e4ceee3d8b09d74164ca27c9637290b",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "518.796993",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "518.796993",
+        "chime_minus_dsa": "-0.000663",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "518.797655",
+        "dsa_sigma": "0.063024",
+        "gaussian_joint_dm": "518.796997",
+        "gaussian_joint_sigma": "0.004984",
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-hamilton",
+      "preview": "previews/triptych-hamilton.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "hamilton",
+        "tns": "FRB 20230913A"
+      },
+      "target": "figures/codetection_triptych/hamilton_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20230913A"
+    },
+    {
+      "artifact": "candidates/triptych-mahi.pdf",
+      "artifact_sha256": "fbc20e0c7132a968f7b85433eaad9864cd9436a784e797df4f0a6a61634f76e3",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "960.131611",
+        "adopted_sigma": "0.005000",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "960.131611",
+        "chime_minus_dsa": "0.045776",
+        "chime_sigma": "0.005000",
+        "dsa_dm": "960.085835",
+        "dsa_sigma": "0.069745",
+        "gaussian_joint_dm": "960.131377",
+        "gaussian_joint_sigma": "0.004987",
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-mahi",
+      "preview": "previews/triptych-mahi.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "mahi",
+        "tns": "FRB 20240122A"
+      },
+      "target": "figures/codetection_triptych/mahi_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20240122A"
+    },
+    {
+      "artifact": "candidates/triptych-chromatica.pdf",
+      "artifact_sha256": "f82fc3b2db2a24f8107e0d307ad0b8f0879d39195135a52f8e998c741d68aa75",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "272.638699",
+        "adopted_sigma": "0.011918",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "272.638699",
+        "chime_minus_dsa": "0.077283",
+        "chime_sigma": "0.011918",
+        "dsa_dm": "272.561416",
+        "dsa_sigma": "0.086174",
+        "gaussian_joint_dm": "272.637248",
+        "gaussian_joint_sigma": "0.011806",
+        "nick": "chromatica",
+        "tns": "FRB 20240203A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-chromatica",
+      "preview": "previews/triptych-chromatica.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "chromatica",
+        "tns": "FRB 20240203A"
+      },
+      "target": "figures/codetection_triptych/chromatica_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20240203A"
+    },
+    {
+      "artifact": "candidates/triptych-casey.pdf",
+      "artifact_sha256": "3848dba211f84294f3442a453cadf8ed440cdbe746ce1dbe56d2a9b1c08cd7b8",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products."
+      },
+      "dm_measurement": {
+        "adopted_dm": "491.207826",
+        "adopted_sigma": "0.005165",
+        "adoption": "chime_primary",
+        "between_band_sigma": "0.000000",
+        "chime_dm": "491.207826",
+        "chime_minus_dsa": "0.010334",
+        "chime_sigma": "0.005165",
+        "dsa_dm": "491.197492",
+        "dsa_sigma": "0.039550",
+        "gaussian_joint_dm": "491.207653",
+        "gaussian_joint_sigma": "0.005122",
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "evidence_ids": [
+        "dm-catalog",
+        "joint-render-manifest",
+        "joint-fit-roster",
+        "joint-fit-adjudication"
+      ],
+      "family": "codetection-triptych",
+      "generator": "scripts/plot_codetection_triptych.py",
+      "id": "triptych-casey",
+      "preview": "previews/triptych-casey.png",
+      "required_provenance": [
+        "adopted DM and input-product DM for both telescopes",
+        "exact joint-model artifact SHA-256 or explicit data-only status",
+        "display window, resolution, and masks",
+        "residual normalization and color scale",
+        "relationship to the approved Figure 1 layout"
+      ],
+      "subject": {
+        "nick": "casey",
+        "tns": "FRB 20240229A"
+      },
+      "target": "figures/codetection_triptych/casey_triptych.pdf",
+      "title": "Data/model/residual triptych: FRB 20240229A"
+    },
+    {
+      "artifact": "candidates/oran-qualified-scintillation.png",
+      "artifact_sha256": "efaae17332939497198b83b07674aaa766d0619d2936c4436a42c693fd83fdd6",
+      "decision": {
+        "status": "rejected",
+        "reviewer": "Jakob Faber",
+        "reviewer_role": "manuscript_owner",
+        "reviewed_at": "2026-07-17T22:09:42+00:00",
+        "notes": "Owner decision 2026-07-17 (recorded via coordination agent session): batch REJECTED wholesale as stale. Diagnostics are 2026-07-14 renders from the DM-locked adjudication whose wave-1 kernels were since diagnosed RFI-contaminated; superseded by the merged 2L window campaign (dsa110-FLITS #192) and the owner-approved power-law-PBF model change (spec locked 2026-07-17) with pooled production refits pending. Resubmission bar: regenerate at submodule-pin parity (5fb387e or later) from the post-refit products. ADDITIONALLY, dropped from the paper: not sufficiently informative, and Oran is no longer the sole CHIME-data scintillation example after the 2L campaign re-analysis (zach and chromatica 4/4, freya resurrected, whitney two-scale candidate). Do not resubmit as a manuscript figure."
+      },
+      "evidence_ids": [
+        "oran-qualification"
+      ],
+      "family": "scintillation-qualification",
+      "generator": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/run_oran_dsa_measurement.py",
+      "id": "oran-qualified-scintillation",
+      "preview": "previews/oran-qualified-scintillation.png",
+      "required_provenance": [
+        "frozen real-background injection configuration",
+        "injection recovery and off-pulse null results",
+        "fit-window and low-lag stability",
+        "reported interval convention and center frequency"
+      ],
+      "target": "pipeline/analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/figures/oran_dsa_calibrated_measurement.png",
+      "title": "Qualified Oran DSA-110 scintillation calibration"
+    }
+  ],
+  "created_at": "2026-07-17T10:27:07+00:00",
+  "dm_catalog": {
+    "path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8"
+  },
+  "evidence": [
+    {
+      "id": "dm-catalog",
+      "repository": "parent",
+      "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8",
+      "source_path": "analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv",
+      "source_revision": "c8e5639bbafa04588d3230ddf244b4368d9365c8",
+      "stored_path": "provenance/dm-catalog.csv"
+    },
+    {
+      "id": "joint-render-manifest",
+      "repository": "parent",
+      "sha256": "0ab236d30ec0c3db450516a86f2147aaa803c49d844e00da9041e6ea5b7e7d19",
+      "source_path": "scripts/jointmodel_triptych_manifest.yaml",
+      "source_revision": "c8e5639bbafa04588d3230ddf244b4368d9365c8",
+      "stored_path": "provenance/joint-render-manifest.yaml"
+    },
+    {
+      "id": "joint-fit-roster",
+      "repository": "pipeline",
+      "sha256": "101fa5389692beadd9cf5ce06f0593dea0c43889a0ae0784eadbd7008ad20e40",
+      "source_path": "analysis/scattering-dm-locked-2026-07-14/fit_roster.csv",
+      "source_revision": "4e951c8acd6f0e221058d86ed97bb52b9d8c8597",
+      "stored_path": "provenance/joint-fit-roster.csv"
+    },
+    {
+      "id": "joint-fit-adjudication",
+      "repository": "pipeline",
+      "sha256": "7ed91f3eab8f09f9f414254b138ae2baceecb7d92c0f89437760a366eb97877d",
+      "source_path": "analysis/scattering-dm-locked-2026-07-14/results/fit_adjudication.csv",
+      "source_revision": "4e951c8acd6f0e221058d86ed97bb52b9d8c8597",
+      "stored_path": "provenance/joint-fit-adjudication.csv"
+    },
+    {
+      "id": "scint-component-catalog",
+      "repository": "pipeline",
+      "sha256": "cb1686c76250e97d881fa4b9dcad8ace012004e5abdbc31abd444697ea74c16f",
+      "source_path": "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_components.csv",
+      "source_revision": "4e951c8acd6f0e221058d86ed97bb52b9d8c8597",
+      "stored_path": "provenance/scint-component-catalog.csv"
+    },
+    {
+      "id": "scint-fit-catalog",
+      "repository": "pipeline",
+      "sha256": "15ac6736485b5baaa787c605a62bc2372fabf450caf0b8f3d9ef4febdf915346",
+      "source_path": "analysis/scintillation-dsa-lorentzian-2026-07-07/results/dsa_lorentzian_fits.json",
+      "source_revision": "4e951c8acd6f0e221058d86ed97bb52b9d8c8597",
+      "stored_path": "provenance/scint-fit-catalog.json"
+    },
+    {
+      "id": "oran-qualification",
+      "repository": "pipeline",
+      "sha256": "e0c455e1c73e1a9bd24bbc833029cd5506d1d710fe18585251094b48d11e89f9",
+      "source_path": "analysis/scintillation-dsa-lorentzian-2026-07-07/results/oran_qualified/validation.json",
+      "source_revision": "4e951c8acd6f0e221058d86ed97bb52b9d8c8597",
+      "stored_path": "provenance/oran-qualification.json"
+    }
+  ],
+  "pipeline_revision": "4e951c8acd6f0e221058d86ed97bb52b9d8c8597",
+  "policy": {
+    "agent_visual_review_is_not_author_approval": true,
+    "approval_is_per_candidate": true,
+    "promotion_requires_exact_hash_match": true
+  },
+  "schema_version": 1,
+  "source_revision": "c8e5639bbafa04588d3230ddf244b4368d9365c8",
+  "title": "Figure 1: gallery re-anchored on adopted model-t0 arrival (scatter-corrected)"
+}

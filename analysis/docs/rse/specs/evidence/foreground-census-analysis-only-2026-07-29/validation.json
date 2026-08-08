@@ -1,0 +1,152 @@
+{
+  "artifact": "foreground_census_analysis_only_validation",
+  "checks": [
+    {
+      "facts": {
+        "candidate_rows_with_adopted_redshift": 46,
+        "host_rows": 12,
+        "hosts_with_established_redshift": 9,
+        "law_extract_rows": 3,
+        "provenance_rows": 52,
+        "verdi_extract_rows": 9
+      },
+      "failures": [],
+      "id": "sourced_redshifts",
+      "status": "passed",
+      "title": "Every adopted redshift carries a source-bearing record"
+    },
+    {
+      "facts": {
+        "diagnostic_only_sightlines": [
+          "freya",
+          "mahi",
+          "wilhelm"
+        ],
+        "geometry_flagged_systems": [
+          {
+            "nickname": "phineas",
+            "object_id": "J114928.5+712526, 1253366",
+            "reason": "invalid_foreground_redshift"
+          },
+          {
+            "nickname": "phineas",
+            "object_id": "WHL J115048.0+714428",
+            "reason": "missing_sourced_geometry"
+          }
+        ],
+        "redshiftless_candidate_rows": 6
+      },
+      "failures": [],
+      "id": "hostless_fail_closed",
+      "status": "passed",
+      "title": "Systems and sightlines without a trustworthy redshift fail closed"
+    },
+    {
+      "facts": {
+        "confirmed_registry_rows": 29,
+        "cross_match_rows_audited": 192,
+        "duplicate_pairs_reproduced": 7,
+        "figure3_input_rebuild_is_byte_identical": true,
+        "grid_system_rows": 24
+      },
+      "failures": [],
+      "id": "deterministic_matching",
+      "status": "passed",
+      "title": "Matching and deduplication are deterministic and auditable"
+    },
+    {
+      "facts": {
+        "coverage_rows": 60,
+        "footprint_files_verified": [
+          "data/survey_footprints/desi_dr8_north.moc.fits",
+          "data/survey_footprints/sdss_dr12.moc.fits"
+        ],
+        "sightlines": 12,
+        "sightlines_without_candidates": [
+          "johndoeii",
+          "mahi"
+        ],
+        "surveys": [
+          "CLUSTERS",
+          "DESI_DR8_NORTH",
+          "GLADE+",
+          "NED",
+          "SDSS_DR12"
+        ]
+      },
+      "failures": [],
+      "id": "survey_coverage",
+      "status": "passed",
+      "title": "Survey coverage is stated for every sightline and backed by a footprint"
+    },
+    {
+      "facts": {
+        "cluster_rows_checked": 16,
+        "cosmology": "Planck18",
+        "figure3_cluster_rows": 14,
+        "figure3_halo_rows": 8,
+        "halo_overdensity": 200.0,
+        "halo_radii_reproduced_from_mass": 25,
+        "radius_definitions_used": [
+          "R200c",
+          "R500c_catalog"
+        ]
+      },
+      "failures": [],
+      "id": "mass_radius_conventions",
+      "status": "passed",
+      "title": "Halo and cluster mass and radius definitions are explicit and never mixed"
+    },
+    {
+      "facts": {
+        "byte_note": "installed bytes differ from the local render; the extracted content is identical, so the difference is renderer version, not science",
+        "confirmed_census_systems_after_deduplication": 24,
+        "figure3_host_rows": 12,
+        "figure3_panels_drawn": [
+          "casey",
+          "chromatica",
+          "hamilton",
+          "isha",
+          "johndoeii",
+          "oran",
+          "phineas",
+          "whitney",
+          "zach"
+        ],
+        "figure3_system_rows": 24,
+        "figure3_systems_drawn": 22,
+        "installed_content_matches_fresh_render": true,
+        "installed_figure3": "figures/sightline_halo_grid.pdf",
+        "installed_figure3_sha256": "281e4bf4c9d910c070cb822195a743920a7ecf14e249c924521e359a9d788a75",
+        "installed_matches_staged_render_byte_for_byte": true,
+        "local_render_sha256": "b1cea6186680a6d11e53a1f264b809158ede0eaf2374fcb3bf216f0ca6f4146a",
+        "local_renderer": "matplotlib 3.10.6",
+        "panels_omitted_for_lack_of_a_host_redshift": [
+          "freya",
+          "mahi",
+          "wilhelm"
+        ],
+        "staged_render": "figure_review/artifacts/staging/fig3_halo_grid/figures/sightline_halo_grid.pdf"
+      },
+      "failures": [],
+      "id": "census_matches_figure3",
+      "status": "passed",
+      "title": "The twelve-sightline census and the installed Figure 3 describe the same systems"
+    }
+  ],
+  "input_sha256": {
+    "foregrounds/census/data/candidate_redshift_provenance.csv": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
+    "foregrounds/census/data/census_masses/census_duplicates.csv": "336e4023dbf046762477c724e57365c29a3ecabb982f6978e635fb0d05d47e45",
+    "foregrounds/census/data/expanded_catalog_cross_references.csv": "017a03147b058a500427b54b4b89c374379242091a45171fca68732c599061aa",
+    "foregrounds/census/data/frozen_census/bursts.csv": "6610aabb1527137c647149b86f6f65a3a1c4782680d618dd5c5f712b9f3c4536",
+    "foregrounds/census/data/frozen_census/law2024_host_redshift_extract.csv": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
+    "foregrounds/census/data/frozen_census/ps1_strm_resolution.csv": "18947acafc02b9781c4ac9612b9570d02eedd46c0115c9f73b5f3d79ec2c354e",
+    "foregrounds/census/data/frozen_census/verdi2025_host_redshift_extract.csv": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa",
+    "foregrounds/census/data/intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+    "foregrounds/census/data/sightline_halo_grid.csv": "2a59fb28bfe196fde63f2335548030ff911dfbeda9e07e133823ca511fdf79e9",
+    "foregrounds/census/data/survey_coverage/all_12_sightlines.csv": "4a95273417cdf24bcf61d6c8b704109e481d7e11f53f8465ebdef84dd0e5b3e7"
+  },
+  "schema_version": 1,
+  "scope": "analysis/ only; no pipeline repository or external submodule is read",
+  "status": "passed"
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "faber2026-controlled-joint-scattering-owner-review/v1",
+  "status": "owner_scientific_visual_decision_pending",
+  "scientific_trust": "pending",
+  "manuscript_promotion_enabled": false,
+  "panels": [
+    {
+      "burst": "oran",
+      "morphology": "C1D1",
+      "panel_path": "panels/oran-c1d1.svg",
+      "panel_sha256": "01bbe8cdcd15cd47c1d02b5901f43bb7e451f728e5f37e04c5a61b7828a0f5ce",
+      "h17_source_path": "/home/ubuntu/flits-controlled/joint-scattering-2026-07-23-v4/oran/data/joint/oran_joint_panel_C1D1_s2-100.svg",
+      "verification_receipt_path": "../joint-scattering-controlled-rerun-03-oran-c1d1-20260723/verification-receipt.json",
+      "verification_receipt_sha256": "8369131511e8c14f71642c791e602453d8f9e5a62d82670658be2ffee11ce247",
+      "reproduction_receipt_sha256": "2ed0932c686c27a36da454ecf6aced970ef5f136dac98ef58be813b64eea077f",
+      "recommendation": "revise",
+      "owner_decision": null,
+      "panel_review_eligible": false,
+      "panel_approved": false,
+      "readiness_flags": [
+        "prior_edge_model_family_rejection",
+        "coarse_chime_time_support",
+        "component_width_exceeds_window_guard",
+        "structured_residual"
+      ]
+    },
+    {
+      "burst": "johndoeII",
+      "morphology": "C2D2",
+      "panel_path": "panels/johndoeii-c2d2.svg",
+      "panel_sha256": "d4e0f432486f3de8fae21d1494478f16b6e15fd54ae13744630ab729e046f7a9",
+      "h17_source_path": "/home/ubuntu/flits-controlled/joint-scattering-2026-07-23-v4/johndoeII/data/joint/johndoeII_joint_panel_C2D2_s2-100.svg",
+      "verification_receipt_path": "../joint-scattering-controlled-rerun-04-johndoeii-c2d2-20260723/verification-receipt.json",
+      "verification_receipt_sha256": "1858c6e4e5b58a81ef59e1d9ce8162fb1434795bea0c5944a08ac5f0470ef559",
+      "reproduction_receipt_sha256": "f2b1fec84bb92cc69d9a4ef218f5fc05d7e8512fba059e04dfb540afc3e42326",
+      "recommendation": "revise",
+      "owner_decision": null,
+      "panel_review_eligible": false,
+      "panel_approved": false,
+      "readiness_flags": [
+        "prior_edge_model_family_rejection",
+        "low_fluence_chime_component",
+        "dsa_component_width_exceeds_window_guard",
+        "structured_dsa_residual_profile"
+      ]
+    },
+    {
+      "burst": "zach",
+      "morphology": "C2D4",
+      "panel_path": "panels/zach-c2d4.svg",
+      "panel_sha256": "345fe7d01fd3b5bd350180d1cc3c0bcc3a85ee1d57550b674c2787604c21261f",
+      "h17_source_path": "/home/ubuntu/flits-controlled/joint-scattering-2026-07-23-v4/zach/data/joint/zach_joint_panel_C2D4_s2-100.svg",
+      "verification_receipt_path": "../joint-scattering-controlled-rerun-05-zach-c2d4-20260723/verification-receipt.json",
+      "verification_receipt_sha256": "76f2540e709953d32ec586b12457f3613b50e7eed30f64c2878499bced7af9dd",
+      "reproduction_receipt_sha256": "d8a24df4a12798db29f25e4ce873590ce7a8d95447359a6a4dcea32a78bb46da",
+      "recommendation": "revise",
+      "owner_decision": null,
+      "panel_review_eligible": false,
+      "panel_approved": false,
+      "readiness_flags": [
+        "prior_edge_model_family_rejection",
+        "component_width_exceeds_window_guard",
+        "low_fluence_component",
+        "strong_structured_residuals_both_bands"
+      ]
+    }
+  ]
+}

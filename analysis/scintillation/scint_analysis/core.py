@@ -1,0 +1,501 @@
+# ==============================================================================
+# File: scint_analysis/scint_analysis/core.py
+# ==============================================================================
+import logging
+
+import numpy as np
+
+# Removed astropy.stats import to avoid bottleneck dependency (NumPy 2.x incompatibility)
+# Using NumPy-native sigma clipping below
+from scipy.stats import median_abs_deviation
+from tqdm import tqdm
+
+# Set up a logger for this module
+log = logging.getLogger(__name__)
+
+def sigma_clip(data, sigma=3, maxiters=5, masked=True):
+    """
+    NumPy-native iterative sigma clipping to avoid bottleneck dependency.
+
+    Parameters
+    ----------
+    data : array-like
+        Data to clip
+    sigma : float
+        Number of standard deviations for clipping threshold
+    maxiters : int
+        Maximum number of clipping iterations
+    masked : bool
+        If True, return a masked array; otherwise return regular array
+
+    Returns
+    -------
+    np.ma.MaskedArray or np.ndarray
+        Sigma-clipped data
+    """
+    data = np.asarray(data)
+    mask = np.zeros(data.shape, dtype=bool)
+
+    for _ in range(maxiters):
+        masked_data = np.ma.masked_array(data, mask=mask)
+        med = np.ma.median(masked_data)
+        std = np.ma.std(masked_data)
+
+        if std == 0 or std is np.ma.masked:
+            break
+
+        # Find outliers
+        deviation = np.abs(data - med)
+        new_mask = deviation > (sigma * std)
+
+        # If no new points are flagged, we've converged
+        if not np.any(new_mask & ~mask):
+            break
+
+        mask = new_mask
+
+    if masked:
+        return np.ma.masked_array(data, mask=mask)
+    else:
+        return data[~mask]
+
+class DynamicSpectrum:
+    """
+    A class to represent and interact with a dynamic spectrum (freq, time).
+    """
+    def __init__(self, power_2d, frequencies_mhz, time_axis_s):
+        """
+        Initializes the DynamicSpectrum object.
+
+        Args:
+            power_2d (np.ndarray): 2D array of shape (num_channels, num_timesteps).
+            frequencies_mhz (np.ndarray): 1D array of frequencies in MHz.
+            time_axis_s (np.ndarray): 1D array of time values in seconds.
+        """
+        log.info("Initializing DynamicSpectrum object.")
+
+        # --- Data Validation using Assertions ---
+        assert isinstance(power_2d, np.ndarray), "power_2d must be a NumPy array."
+        assert power_2d.ndim == 2, f"power_2d must be 2-dimensional, but got {power_2d.ndim} dimensions."
+        assert power_2d.shape[0] == len(frequencies_mhz), "Frequency axis length does not match power_2d shape."
+        assert power_2d.shape[1] == len(time_axis_s), "Time axis length does not match power_2d shape."
+
+        self.power = np.ma.masked_invalid(power_2d, copy=True) # Work with masked arrays internally
+        self.frequencies = frequencies_mhz
+        self.times = time_axis_s
+
+        # Immediately after you assign self.power, self.frequencies, self.times
+        if self.frequencies[0] > self.frequencies[-1]:
+            self.frequencies = self.frequencies[::-1]
+            self.power       = self.power[::-1, :]         # flip channel axis
+
+
+        log.info(f"Spectrum shape: ({self.num_channels}, {self.num_timesteps})")
+
+    @classmethod
+    def from_numpy_file(cls, filepath):
+        """
+        Class method to load a dynamic spectrum from a generic .npz file.
+
+        The .npz file must contain keys: 'power_2d', 'frequencies_mhz', 'times_s'.
+        """
+        log.info(f"Loading DynamicSpectrum from file: {filepath}")
+        try:
+            with np.load(filepath) as data:
+                power = np.flip(data['power_2d'], axis=0)
+                freqs = data['frequencies_mhz']
+                times = data['times_s']
+                return cls(power, freqs, times)
+        except FileNotFoundError:
+            log.error(f"File not found: {filepath}")
+            raise
+        except KeyError as e:
+            log.error(f"Missing required key in {filepath}: {e}")
+            raise
+
+    # --- Properties for easy metadata access ---
+    @property
+    def num_channels(self):
+        return self.power.shape[0]
+
+    @property
+    def num_timesteps(self):
+        return self.power.shape[1]
+
+    @property
+    def channel_width_mhz(self):
+        return np.abs(np.mean(np.diff(self.frequencies)))
+
+    @property
+    def time_resolution_s(self):
+        return np.abs(np.mean(np.diff(self.times)))
+
+    # --- Core Methods ---
+    def downsample(
+        self,
+        f_factor: int = 1,
+        t_factor: int = 1,
+        *,
+        in_place: bool = False,
+    ) -> "DynamicSpectrum":
+        """
+        Block-average the spectrum along frequency (``f_factor``) and time
+        (``t_factor``).
+
+        Returns
+        -------
+        DynamicSpectrum
+            * ``self`` (unchanged) if both factors are 1.
+            * The same instance, modified in-place, if ``in_place=True``.
+            * A new, down-sampled instance otherwise.
+        """
+        # ── quick exit ──────────────────────────────────────────────────────────────
+        if f_factor == 1 and t_factor == 1:
+            return self            # keeps the wrapper and its methods
+
+        nf, nt = self.power.shape
+        nf_new = nf - (nf % f_factor)
+        nt_new = nt - (nt % t_factor)
+
+        # ── power (masked) ─────────────────────────────────────────────────────────
+        reshaped  = self.power[:nf_new, :nt_new].reshape(
+            nf_new // f_factor, f_factor, nt_new // t_factor, t_factor
+        )
+        new_power = np.ma.mean(reshaped, axis=(1, 3))     # keep mask!
+
+        # ── axes ───────────────────────────────────────────────────────────────────
+        new_freqs = self.frequencies[:nf_new].reshape(-1, f_factor).mean(axis=1)
+        new_times = self.times[:nt_new].reshape(-1, t_factor).mean(axis=1)
+
+        # ── return ────────────────────────────────────────────────────────────────
+        if in_place:
+            self.power       = new_power
+            self.frequencies = new_freqs
+            self.times       = new_times
+            return self
+        else:
+            return DynamicSpectrum(new_power, new_freqs, new_times)
+
+    def get_profile(self, time_window_bins=None):
+        """
+        Returns the 1D frequency-averaged time series.
+
+        Args:
+            time_window_bins (tuple): A tuple (start_bin, end_bin).
+        """
+        log.debug("Calculating frequency-averaged profile.")
+        if time_window_bins is not None:
+            start, end = time_window_bins
+            return np.ma.mean(self.power[:, start:end], axis=0)
+        else:
+            return np.ma.mean(self.power, axis=0)
+
+    def get_spectrum(self, time_window_bins, time_weights=None):
+        """
+        Returns a 1D time-averaged spectrum from a specified window.
+
+        Args:
+            time_window_bins (tuple): A tuple (start_bin, end_bin).
+            time_weights (array, optional): per-time-bin weights, either full-length
+                (num time bins) or window-length. A profile-proportional weighting is
+                the matched-filter burst-spectrum estimator: it down-weights low-S/N
+                scattering-tail bins whose diluted scintle contrast otherwise biases
+                the spectral ACF toward the smooth intrinsic envelope (injection
+                validation 2026-07-17: weighted recovery x1.05-1.18 of truth vs x2.4-5.9
+                for tail-expanded boxcar windows under scattering). The weighted mean
+                preserves the additive background level (weights normalize per channel),
+                so (mean_on - mean_off) normalization downstream stays valid.
+        """
+        start, end = time_window_bins
+        if time_weights is not None:
+            w = np.asarray(time_weights, float)
+            if w.size == self.power.shape[1]:
+                w = w[start:end]
+            if w.size != end - start:
+                raise ValueError(
+                    f"time_weights length {w.size} matches neither the window "
+                    f"({end - start}) nor the full time axis ({self.power.shape[1]})")
+            if not np.any(w > 0):
+                raise ValueError("time_weights are all non-positive")
+            log.debug(f"Weighted time-averaged spectrum from bins {start} to {end}.")
+            return np.ma.average(self.power[:, start:end], axis=1, weights=w)
+        log.debug(f"Calculating time-averaged spectrum from bins {start} to {end}.")
+        return np.ma.mean(self.power[:, start:end], axis=1)
+
+
+    def find_burst_envelope(self, thres=5, downsample_factor=8, padding_factor=0.0):
+        """
+        Finds the full time envelope containing ALL signal above a given S/N threshold.
+        Uses sigma-clipping for robust noise estimation and can apply padding.
+        """
+        log.info(f"Finding full signal envelope with S/N threshold > {thres} (downsample ×{downsample_factor}).")
+
+        prof = self.get_profile().compressed()
+        if downsample_factor > 1:
+            n = prof.size - (prof.size % downsample_factor)
+            if n == 0:
+                 log.warning("Not enough data to downsample. Using full resolution profile.")
+            else:
+                prof = prof[:n].reshape(-1, downsample_factor).mean(axis=1)
+
+        # --- Robust noise estimation using sigma-clipping ---
+        filtered_prof = sigma_clip(prof, sigma=3, maxiters=5, masked=True)
+        med = np.ma.median(filtered_prof)
+        std = np.ma.std(filtered_prof)
+
+        if std is np.ma.masked or std == 0:
+            log.warning("Zero-variance profile in noise region; returning empty envelope.")
+            return [0, 0]
+
+        snr = (prof - med) / std
+        mask = snr > thres
+        if not np.any(mask):
+            log.warning("No burst envelope found above threshold.")
+            return [0, 0]
+
+        signal_indices = np.where(mask)[0]
+        first_bin_ds = signal_indices.min()
+        last_bin_ds = signal_indices.max()
+
+        # --- Apply padding to widen burst envelope ---
+        if padding_factor > 0:
+            duration_ds = last_bin_ds - first_bin_ds
+            padding_ds = int(duration_ds * padding_factor)
+            log.info(f"Applying {padding_factor*100:.1f}% padding ({padding_ds} downsampled bins) to each side.")
+
+            first_bin_ds -= padding_ds
+            last_bin_ds += padding_ds
+
+            # Ensure we don't go out of bounds
+            first_bin_ds = max(0, first_bin_ds)
+            last_bin_ds = min(len(prof) - 1, last_bin_ds)
+
+        # --- Final calculation using the (potentially padded) bins ---
+        final_lims = [int(first_bin_ds * downsample_factor),
+                      int((last_bin_ds + 1) * downsample_factor) - 1]
+
+        log.info(f"Full signal envelope found between bins {final_lims[0]} and {final_lims[1]}.")
+        return final_lims
+
+    def mask_rfi(self, config):
+        """
+        Applies RFI masking and returns a new, cleaned DynamicSpectrum object.
+        Includes a toggle for time-domain RFI flagging.
+        """
+        log.info("Applying RFI masking.")
+        rfi_config = config.get('analysis', {}).get('rfi_masking', {})
+        preprocessing = config.get("analysis", {}).get("preprocessing", {})
+        canfar_reference = preprocessing.get("mode") == "canfar_reference"
+
+        ds_factor = rfi_config.get('rfi_downsample_factor', 8)
+        log.info(f"Using time downsampling factor of {ds_factor} for RFI statistical checks.")
+
+        remainder = self.num_timesteps % ds_factor
+        power_for_stats = self.power[:, :-remainder] if remainder > 0 else self.power
+        power_ds = np.ma.mean(power_for_stats.reshape(self.num_channels, -1, ds_factor), axis=2)
+
+        manual_window = rfi_config.get('manual_burst_window')
+        log.info(f"Manual burst window set to {manual_window}")
+        if manual_window and len(manual_window) == 2:
+            burst_lims = manual_window
+            log.info(f"RFI MASKING: Using manually specified on-pulse window: {burst_lims}")
+        else:
+            burst_lims = self.find_burst_envelope(thres=rfi_config.get('find_burst_thres', 5))
+
+        # Determine noise window - manual takes priority
+        manual_noise_window = rfi_config.get('manual_noise_window')
+        if manual_noise_window and len(manual_noise_window) == 2:
+            off_burst_start, off_burst_end = manual_noise_window
+            log.info(f"Using manually specified noise window: {off_burst_start} to {off_burst_end}")
+        elif rfi_config.get('use_symmetric_noise_window', False):
+            on_burst_duration = burst_lims[1] - burst_lims[0]
+            off_burst_end = burst_lims[0]
+            off_burst_start = off_burst_end - on_burst_duration
+            log.info(f"Using symmetric noise window of duration {on_burst_duration} bins.")
+        else:
+            # Original logic using a fixed buffer
+            off_burst_end = burst_lims[0] - rfi_config.get('off_burst_buffer', 100)
+            off_burst_start = 0
+
+        # Calculate window in terms of downsampled bins
+        off_burst_start_ds = off_burst_start // ds_factor
+        off_burst_end_ds = off_burst_end // ds_factor
+
+        # Ensure the window is valid
+        if off_burst_start_ds < 0:
+            log.warning("Calculated noise window start is before data start. Clipping to 0.")
+            off_burst_start_ds = 0
+
+        assert off_burst_end_ds > off_burst_start_ds, "Not enough off-burst data to perform RFI masking."
+        log.info(f"Using downsampled noise statistics from bins {off_burst_start_ds} to {off_burst_end_ds}.")
+
+        noise_data_ds = power_ds[:, off_burst_start_ds:off_burst_end_ds]
+
+        # Frequency Domain Flagging
+        channel_mask = np.zeros(self.num_channels, dtype=bool)
+        if canfar_reference:
+            lte_low, lte_high = preprocessing.get("lte_exclude_mhz", [730.0, 760.0])
+            # LTE band constant: reference_arc baseband_analysis_core.py:2248
+            # ((freq > 730) & (freq < 760)). RECIPE.md:161-175 and
+            # scint_funcs.py:158-167 zero flagged frequencies and convert
+            # those zeros into the ACF-respected mask.
+            channel_mask |= (self.frequencies >= float(lte_low)) & (
+                self.frequencies <= float(lte_high)
+            )
+        for _ in tqdm(range(5), desc="Iterative RFI Masking in Frequency Domain"):
+            masked_noise = np.ma.masked_array(noise_data_ds, mask=np.tile(channel_mask, (noise_data_ds.shape[1], 1)).T)
+            means = np.ma.mean(masked_noise, axis=1)
+            stds = np.ma.std(masked_noise, axis=1)
+            if np.ma.is_masked(np.ma.std(means)) or np.ma.std(stds) == 0:
+                continue
+            snr_means = (means - np.ma.median(means)) / np.ma.std(means)
+            snr_stds = (stds - np.ma.median(stds)) / np.ma.std(stds)
+            if canfar_reference:
+                # RECIPE.md:177-183 records the reference channel-statistic
+                # thresholds as mean=5 sigma and standard deviation=3 sigma.
+                mean_threshold, std_threshold = 5.0, 3.0
+            else:
+                mean_threshold = std_threshold = rfi_config.get('freq_threshold_sigma', 5.0)
+            newly_flagged = (np.abs(snr_means) > mean_threshold) | (
+                np.abs(snr_stds) > std_threshold
+            )
+            if not np.any(newly_flagged):
+                break
+            channel_mask |= newly_flagged
+
+        log.info(f"Masked {np.sum(channel_mask)} channels based on frequency-domain stats.")
+
+        # Time Domain Flagging
+        if rfi_config.get('enable_time_domain_flagging', True):
+            log.info("Performing time-domain RFI flagging.")
+            freq_masked_power_ds = np.ma.masked_array(power_ds, mask=np.tile(channel_mask, (power_ds.shape[1], 1)).T)
+            time_series_ds = np.ma.mean(freq_masked_power_ds, axis=0)
+            ts_mad = median_abs_deviation(time_series_ds.compressed(), nan_policy='omit')
+            if ts_mad == 0:
+                ts_mad = 1e-9
+            ts_median = np.ma.median(time_series_ds)
+            robust_z = 0.6745 * (time_series_ds - ts_median) / ts_mad
+            time_mask_ds = np.abs(robust_z) > rfi_config.get('time_threshold_sigma', 7.0)
+
+            time_mask = np.repeat(time_mask_ds, ds_factor)
+            if len(time_mask) < self.num_timesteps:
+                time_mask = np.pad(time_mask, (0, self.num_timesteps - len(time_mask)), 'constant')
+            log.info(f"Masked {np.sum(time_mask)} time steps based on time-domain stats.")
+        else:
+            log.info("Skipping time-domain RFI flagging as per configuration.")
+            time_mask = np.zeros(self.num_timesteps, dtype=bool)
+
+        # Combine masks and create new object
+
+        # 1. Promote existing mask (if any) to full Boolean array
+        if self.power.mask is np.ma.nomask or np.isscalar(self.power.mask):
+            base_mask = np.zeros_like(self.power.data, dtype=bool)
+        else:
+            base_mask = self.power.mask.copy()          # keeps dtype=bool
+
+        # 2. Broadcast new masks to (n_chan, n_time)
+        chan_mask_full = np.broadcast_to(channel_mask[:, None], self.power.shape)
+        time_mask_full = np.broadcast_to(time_mask[None, :], self.power.shape)
+
+        # 3. Combine
+        final_mask = base_mask | chan_mask_full | time_mask_full
+
+        # 4. Build a *new* DynamicSpectrum so callers get a fresh object
+        cleaned_data = self.power.data.copy()
+        if canfar_reference:
+            cleaned_data[channel_mask, :] = 0.0
+        new_power = np.ma.MaskedArray(cleaned_data, mask=final_mask)
+        return DynamicSpectrum(new_power, self.frequencies.copy(), self.times.copy())
+
+    def subtract_poly_baseline(self, off_pulse_spectrum, poly_order=1):
+        """
+        Fits a polynomial to an off-pulse spectrum and subtracts this baseline
+        from the dynamic spectrum.
+
+        Returns:
+            DynamicSpectrum: A new DynamicSpectrum object with the baseline subtracted.
+            np.ndarray: The 1D baseline model that was subtracted. ### NEW RETURN VALUE ###
+        """
+        log.info(f"Performing order-{poly_order} polynomial baseline subtraction using off-pulse spectrum.")
+
+        # Use only valid (unmasked) data from the off-pulse spectrum to fit the baseline
+        valid_mask = ~off_pulse_spectrum.mask
+        if np.sum(valid_mask) < poly_order + 2:
+            log.warning("Not enough valid data in off-pulse spectrum to fit baseline. Skipping subtraction.")
+            return self # Return the original object if fit is not possible
+
+        # Fit a single, stable polynomial to the time-averaged off-pulse bandpass
+        coeffs = np.polyfit(
+            self.frequencies[valid_mask],
+            off_pulse_spectrum.compressed(), # Use .compressed() to get only valid data
+            poly_order
+        )
+
+        # Evaluate this single baseline model across all frequencies
+        baseline_model = np.poly1d(coeffs)(self.frequencies)
+
+        # Subtract this 1D baseline model from the entire 2D data block.
+        # NumPy broadcasting subtracts the 1D array from every column (each time step).
+        new_power_data = self.power.data - baseline_model[:, np.newaxis]
+
+        # Create the new object, preserving the original RFI mask
+        new_power = np.ma.MaskedArray(new_power_data, mask=self.power.mask)
+
+        log.info("Baseline subtraction complete.")
+        return DynamicSpectrum(new_power, self.frequencies.copy(), self.times.copy()), baseline_model
+
+    def __repr__(self):
+        return (f"<DynamicSpectrum ({self.num_channels} channels x {self.num_timesteps} timesteps, "
+                f"{self.frequencies.min():.1f}-{self.frequencies.max():.1f} MHz)>")
+
+class ACF:
+    """
+    Container for a 1-D spectral autocorrelation function.
+    """
+
+    def __init__(
+        self,
+        acf_data,
+        lags_mhz,
+        acf_err=None,
+        *,
+        support_counts=None,
+        effective_weights=None,
+        support_threshold=None,
+        support_valid=None,
+    ):
+        # --- validate & coerce to NumPy arrays
+        acf_data = np.asarray(acf_data, dtype=float)
+        lags_mhz = np.asarray(lags_mhz, dtype=float)
+        if acf_err is not None:
+            acf_err = np.asarray(acf_err, dtype=float)
+
+        if acf_data.ndim != 1:
+            raise ValueError("ACF data must be 1-D.")
+        if len(acf_data) != len(lags_mhz):
+            raise ValueError("acf_data and lags_mhz must have the same length.")
+        if acf_err is not None and len(acf_err) != len(acf_data):
+            raise ValueError("acf_err must match acf_data length.")
+        if support_counts is not None and len(support_counts) != len(acf_data):
+            raise ValueError("support_counts must match acf_data length.")
+        if effective_weights is not None and len(effective_weights) != len(acf_data):
+            raise ValueError("effective_weights must match acf_data length.")
+
+        self.acf  = acf_data
+        self.lags = lags_mhz
+        self.err  = acf_err          # may be None
+        self.support_counts = (
+            None if support_counts is None else np.asarray(support_counts, dtype=np.int64)
+        )
+        self.effective_weights = (
+            None if effective_weights is None else np.asarray(effective_weights, dtype=float)
+        )
+        self.support_threshold = support_threshold
+        self.support_valid = support_valid
+
+    # optional convenience: length & repr
+    def __len__(self):
+        return self.acf.size
+
+    def __repr__(self):
+        return f"<ACF ({len(self)} points)>"

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Figure 3: no-diamond revision (owner-directed) at pinned registry</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1500px;margin:auto;padding:2rem;background:#f5f6f8;color:#17202a}
+.summary,.card{background:white;border:1px solid #ccd2d8;border-radius:10px;padding:1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:1rem}
+.card{margin:0;border-left:8px solid #c17d00} .status-approved{border-left-color:#16803c} .status-needs_revision{border-left-color:#b42318}
+.withheld{padding:3rem 1rem;text-align:center;background:#fff4e5;border:1px solid #c17d00;border-radius:6px}
+img{width:100%;max-height:680px;object-fit:contain;background:white} code{word-break:break-all} dt{font-weight:700;margin-top:.5rem}
+</style></head><body>
+<h1>Figure 3: no-diamond revision (owner-directed) at pinned registry</h1>
+<section class="summary"><p><strong>Batch:</strong> <code>2026-07-26-fig3-no-diamonds</code><br>
+<strong>Source revision:</strong> <code>e553a7b321e841db4b9d993bae938a3b49f935ee</code><br>
+<strong>Pipeline revision:</strong> <code>99e60c3a4e88d43b4a80b8954ce4f06404e682ab</code><br>
+<strong>DM catalog:</strong> <code>3730d486a6857d6a5e7fe8a9d445e5c989b36e57dc71b9fb2e6421079e8b6b4a</code></p>
+<p>Approval is per candidate. Reply with the stable candidate ID and either <em>approve</em> or <em>needs revision</em>, plus notes. Promotion is impossible unless the approved candidate bytes still match this packet.</p>
+<p>Figures remain hidden until exact inputs, code revisions, command, environment, and regenerated output have passed the reproduction gate.</p>
+<h3>Packet validation</h3><ul><li>None</li></ul></section>
+<main class="grid">
+<article id="fig3-halo-grid" class="card status-pending">
+  <h2>fig3-halo-grid: Figure 3: foreground halo sightlines</h2>
+  <p><strong>Status:</strong> pending</p>
+  <p></p>
+  <a href="candidates/fig3-halo-grid.pdf"><img src="previews/fig3-halo-grid.png" alt="Figure 3: foreground halo sightlines"></a>
+  <dl>
+    <dt>Reproduction gate</dt><dd>Verified</dd>
+    <dt>Manuscript section</dt><dd>Foreground galaxies / sightline halo grid</dd>
+    <dt>Claim</dt><dd>Figure 3 with corrected TNS identifiers and the budget-contributor diamond overlay removed per owner review 2026-07-26 (rendered panels contain only budget-contributing systems)</dd>
+    <dt>Owner review question</dt><dd>Approve this revision for the manuscript: corrected identifiers, no diamond overlay, cluster-crossing ring retained?</dd>
+    <dt>Manuscript target</dt><dd><code>figures/sightline_halo_grid.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>3dece7e3f81f652aedd58b1cf53cb5fb1b86c3dc590238b0c72124c937b9bccb</code></dd>
+    <dt>Generator</dt><dd><code>pipeline/galaxies/v2_0/sightline_halo_grid.py --halo-csv pipeline/galaxies/foreground/data/sightline_halo_grid.csv</code></dd>
+    <dt>Required provenance</dt><dd>expanded-catalog build manifest and SHA-256; versioned Figure 3 input and SHA-256; Verdi host-redshift source extract and SHA-256; Law host-redshift source extract and SHA-256; candidate-redshift ledger and replay receipt SHA-256; canonical selected source rows and full query responses SHA-256; manuscript-owner visual approval</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/expanded-catalog-build.json">expanded-catalog-build</a>, <a href="provenance/figure3-input.csv">figure3-input</a>, <a href="provenance/verdi-host-redshifts.csv">verdi-host-redshifts</a>, <a href="provenance/law-host-redshifts.csv">law-host-redshifts</a>, <a href="provenance/candidate-redshift-ledger.csv">candidate-redshift-ledger</a>, <a href="provenance/candidate-redshift-replay.json">candidate-redshift-replay</a>, <a href="provenance/candidate-redshift-payloads.json">candidate-redshift-payloads</a></dd>
+    <dt>DM record</dt><dd>None</dd>
+    <dt>Reviewer notes</dt><dd>Supersedes batch 2026-07-26-fig3-name-repair (owner: needs_revision, drop diamonds). Built at dsa110-FLITS main 99e60c3a (PR #235, plotting-only change); registry snapshot unchanged (96bfd323); deterministic render (SOURCE_DATE_EPOCH=1784505600), reproduced identically from a clean worktree.</dd>
+  </dl>
+</article></main></body></html>

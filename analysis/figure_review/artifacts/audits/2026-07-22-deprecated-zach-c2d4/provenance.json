@@ -1,0 +1,95 @@
+{
+  "schema": "faber2026-deprecated-fit-provenance/v1",
+  "subject": "zach C2D4 h17 job 180",
+  "producing_host": "lxd110h17",
+  "producing_job": 180,
+  "started_at": "2026-07-19T14:55:43-07:00",
+  "wall_seconds": 7280,
+  "recorded_working_directory": "/home/ubuntu/worktrees/joint-tf-fits/analysis/scattering-refit-2026-06",
+  "reconstructed_argv": [
+    "python",
+    "-u",
+    "run_joint_fit_zachfine.py",
+    "zach",
+    "400",
+    "4",
+    "--components-C",
+    "2",
+    "--components-D",
+    "4",
+    "--gain-s2",
+    "100"
+  ],
+  "source": {
+    "reported_git_revision": "d292f4b91ef02dfd120a816c015fbb67cb15261f",
+    "clean_worktree": false,
+    "fit_driver_tracked": false,
+    "sampler_seed_recorded": false,
+    "posthoc_file_hashes": {
+      "run_joint_fit_zachfine.py": "88c61aa8d61dabf68dd5ab7192938f9459a47ed0a07d2a9fdf97cd78b0395194",
+      "joint_tf_prep.py": "86019f2ed07cfe215a18811450403cbdb9bce627773b2e9eea0c1ef8a82e3395",
+      "burstfit_joint.py": "347d07a0d11e323952b5f3acfe1e45b8050c6548787263143b79b79bb11aaf90",
+      "fit_zachfine.sbatch": "35fbe140018117333d2a6e1093ade4330bcfe7257f30f834ae19531443447f8a"
+    }
+  },
+  "inputs": {
+    "chime": {
+      "path": "/home/ubuntu/flits-runs/data/zach_chime_I_262_3621_32000b_cntr_bpc.npy",
+      "sha256": "bf317648879936ce4d019f116c17e0c33a22042610e37bddceef0ba48fe40deb"
+    },
+    "dsa": {
+      "path": "/home/ubuntu/flits-runs/data/dsa/zach_dsa_I_262_368_2500b_cntr_bpc.npy",
+      "sha256": "be917e94d89134f699c456b9185422e8cfdbf3d935bbcf4d8b2e798d0ea12b01"
+    }
+  },
+  "configuration": {
+    "chime": {
+      "path": "/home/ubuntu/flits-runs/configs/zach_chime_run.yaml",
+      "sha256": "e85bb5e1085e5674b27317fb5a9fcb3fe8f46115c4e1176bcd1c038985491b21"
+    },
+    "dsa": {
+      "path": "/home/ubuntu/flits-runs/configs/zach_dsa_run.yaml",
+      "sha256": "be1a67ea388e809dcc12cebc2c0af56559f0b7f717be36a3234101f29e7d14d3"
+    },
+    "sampler": {
+      "path": "/home/ubuntu/worktrees/joint-tf-fits/scattering/configs/sampler.yaml",
+      "sha256": "198f37d4b7370aba3cfece5fca7a262ca77cf9dc7d37ac2fa9a61a7f9eee8749"
+    },
+    "telescopes": {
+      "path": "/home/ubuntu/worktrees/joint-tf-fits/scattering/configs/telescopes.yaml",
+      "sha256": "2d74a580c12e3efaf6feb739e350090cadf090219f4322133530c276bd946e63"
+    }
+  },
+  "environment_observed_posthoc": {
+    "python": "3.12.13",
+    "numpy": "2.4.6",
+    "scipy": "1.18.0",
+    "dynesty": "3.0.0",
+    "pyyaml": "6.0.3",
+    "run_time_environment_hash_recorded": false
+  },
+  "artifact_retrieval": {
+    "deprecated_C2D4": {
+      "host": "lxd110h17",
+      "fit_archive_root": "/home/ubuntu/flits-runs/data/joint/.archive/fit-products/2026-07-22/trust-reset",
+      "fit_summary": "zach_joint_fit_C2D4_s2-100_fine.json",
+      "weighted_samples": "zach_joint_samples_C2D4_s2-100_fine.npz",
+      "model_grid": "zach_jointmodel_C2D4_s2-100_fine.npz",
+      "stdout_log": "/home/ubuntu/flits-runs/logs/jtfzf_180.out",
+      "stderr_log": "/home/ubuntu/flits-runs/logs/jtfzf_180.err"
+    },
+    "diagnostic_C2D3_comparison": {
+      "repository": "https://github.com/jakobtfaber/Faber2026",
+      "revision": "1e451ad3929456488fb88f13227984262cdf0a6f",
+      "fit_summary": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_joint_fit_C2D3_s2-100_fine.json",
+      "model_grid": "figures/jointmodel_pair/fit_artifacts/candidate-jointtf-v2/zach_jointmodel_C2D3_s2-100_fine.npz"
+    }
+  },
+  "trust_boundary": {
+    "input_hashes_bound_at_run_time": false,
+    "source_hashes_bound_at_run_time": false,
+    "environment_bound_at_run_time": false,
+    "exact_fit_regeneration_possible": false,
+    "artifact_for_failure_audit_only": true
+  }
+}

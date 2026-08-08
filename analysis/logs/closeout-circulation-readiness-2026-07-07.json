@@ -1,0 +1,56 @@
+{
+  "dirtyState": [
+    {
+      "repo": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
+      "taskScoped": [
+        "docs/rse/board/readiness.html",
+        "docs/rse/journal.jsonl",
+        "main.tex",
+        "sections/conclusions.tex",
+        "sections/intro.tex",
+        "sections/methods.tex",
+        "sections/observations.tex",
+        "sections/toa.tex"
+      ],
+      "preExistingUnrelated": [
+        "pipeline",
+        "docs/rse/specs/dm-provenance-audit-2026-07-07.md",
+        "logs",
+        "logs/"
+      ],
+      "adjacentFollowup": [],
+      "generatedOrCache": [],
+      "sensitiveOrConfig": [],
+      "unknown": [],
+      "blocksCommit": true,
+      "nextQuestion": "Commit only the task-scoped manuscript and journal/board paths after collaborator-circulation scope is accepted; leave pipeline, DM-audit doc, and logs uncommitted unless the owner assigns those lanes.",
+      "residualActions": [
+        {
+          "paths": [
+            "pipeline"
+          ],
+          "action": "leave-uncommitted",
+          "rationale": "Nested FLITS submodule has pre-existing working-tree edits in batch codetection plotting/data code; this sprint did not inspect or modify them.",
+          "nextStep": "Route through the active pipeline owner/lane before committing or bumping the submodule."
+        },
+        {
+          "paths": [
+            "docs/rse/specs/dm-provenance-audit-2026-07-07.md"
+          ],
+          "action": "leave-uncommitted",
+          "rationale": "Pre-existing DM provenance audit artifact belongs to V6/revalidation documentation, not the circulation-prose patch.",
+          "nextStep": "Review and commit with the V6 DM provenance lane if accepted."
+        },
+        {
+          "paths": [
+            "logs",
+            "logs/"
+          ],
+          "action": "leave-uncommitted-or-clean-later",
+          "rationale": "Untracked execution logs and this closeout packet are local handoff artifacts, not manuscript source.",
+          "nextStep": "Keep until closeout is reviewed; remove or archive before a clean manuscript commit if desired."
+        }
+      ]
+    }
+  ]
+}

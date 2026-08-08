@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "campaign": "phase-b-absolute-dm",
+  "status": "paused",
+  "execution_authorized": false,
+  "scope": "experimental diagnostic only; not science authority; no manuscript adoption",
+  "reason": "Owner pause after the first two event-specific CHIME runs failed distinct fail-closed gates.",
+  "authorized_configs": {},
+  "observed_failures": {
+    "oran": {
+      "classification": "accepted-live fixed-support failure before the coarse grid",
+      "log_path": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/run-logs/oran.stderr",
+      "log_sha256": "d99e7d8681f5f58f2ae58632847da6bac2a89c4bab529bffada505910ad9a1d2"
+    },
+    "isha": {
+      "classification": "hybrid fine-grid maximum on an edge",
+      "log_path": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/run-logs/isha.stderr",
+      "log_sha256": "ac392634fe59af041ab7bb7da87e8f45dc962a9e98bd076d38e9084129244ca6"
+    }
+  },
+  "controller_receipt": {
+    "path": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control/authorized-run-progress.json",
+    "sha256": "e20da2b2ec002f47ddc643adf478db50989faf22bb11e55fb279d5092bc7735d"
+  },
+  "resume_gate": "Replace this paused state only through a separately reviewed authorization receipt that binds the exact event set, config hashes, event-binding hashes, and independent review hash."
+}

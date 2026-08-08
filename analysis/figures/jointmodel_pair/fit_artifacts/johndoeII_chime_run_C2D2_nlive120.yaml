@@ -1,0 +1,24 @@
+# johndoeII CHIME run-config — local-runs pattern (issue #99), beta campaign 2026-07-06.
+# dm_init 0.0: CHIME data coherently dedispersed. f/t factors from the repo
+# burst template (scattering/configs/bursts/chime/johndoeII_chime.yaml).
+burst_name: johndoeII
+chunk_size: 2000
+diagnostics: true
+dlogz: 0.5
+dm_init: 0.0
+extend_chain: true
+f_factor: 64
+fitting_method: nested
+max_chunks: 5
+model_scan: true
+nlive: 400
+nlive_walks: 15
+nproc: 8
+outer_trim: 0.15
+path: /Users/jakobfaber/Developer/scratch/flits-local-runs/data/johndoeII_chime_I_696_5184_32000b_cntr_bpc.npy
+plot: true
+sampcfg_path: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scattering/configs/sampler.yaml
+steps: 10000
+t_factor: 24
+telcfg_path: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scattering/configs/telescopes.yaml
+telescope: chime

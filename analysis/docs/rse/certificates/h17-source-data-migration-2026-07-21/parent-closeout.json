@@ -1,0 +1,32 @@
+{
+  "dirtyState": [
+    {
+      "repo": "/Users/jakobfaber/Developer/scratch/worktrees/Faber2026-h17-source-data-layout",
+      "taskScoped": [
+        "docs/rse/certificates/h17-source-data-migration-2026-07-21/",
+        "docs/rse/certificates/h17-source-data-migration-2026-07-21/parent-closeout.json",
+        "docs/rse/certificates/h17-source-data-migration-2026-07-21/pipeline-closeout.json",
+        "docs/rse/certificates/h17-source-data-migration-2026-07-21/receipt.json",
+        "docs/rse/certificates/h17-source-data-migration-2026-07-21/source-manifest.json",
+        "docs/rse/certificates/h17-source-data-migration-2026-07-21/zach-metadata-readability.json",
+        "docs/rse/certificates/l0-raw-voltage-certificates.json",
+        "docs/rse/specs/implement-h17-source-data-layout.md",
+        "docs/rse/specs/plan-h17-source-data-layout.md",
+        "docs/rse/specs/plan-trust-reset-revalidation.md",
+        "docs/rse/specs/research-h17-source-data-layout.md",
+        "docs/rse/specs/validation-h17-source-data-layout.md",
+        "pipeline",
+        "scripts/build_raw_voltage_certificates.py",
+        "scripts/h17_source_data_layout.py",
+        "tests/test_h17_source_data_layout.py"
+      ],
+      "preExistingUnrelated": [],
+      "adjacentFollowup": [],
+      "generatedOrCache": [],
+      "sensitiveOrConfig": [],
+      "unknown": [],
+      "blocksCommit": false,
+      "nextQuestion": null
+    }
+  ]
+}

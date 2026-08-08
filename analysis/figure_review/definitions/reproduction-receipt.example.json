@@ -1,0 +1,33 @@
+{
+  "candidate_id": "fig3-halo-grid",
+  "clean_worktree": true,
+  "command": [
+    "uv",
+    "run",
+    "python",
+    "-m",
+    "foregrounds.visualization.sightline_halo_grid",
+    "--halo-csv",
+    "foregrounds/census/data/sightline_halo_grid.csv",
+    "--out-dir",
+    "/absolute/path/to/isolated-output"
+  ],
+  "cwd": "analysis",
+  "environment": {
+    "identity": "analysis/uv.lock",
+    "runner": "uv --frozen",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "inputs": [
+    {
+      "path": "analysis/foregrounds/census/data/sightline_halo_grid.csv",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "output_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "pipeline_revision": "exact 40-character analysis commit",
+  "source_revision": "exact 40-character analysis commit",
+  "status": "verified",
+  "verified_at": "2026-07-22T00:00:00+00:00",
+  "verifier": "agent name"
+}
