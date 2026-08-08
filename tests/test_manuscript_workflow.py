@@ -91,6 +91,27 @@ class ManuscriptWorkflow(TestCase):
                 f"but analysis/Makefile defines no such target",
             )
 
+    def test_every_script_invocation_resolves(self) -> None:
+        # The figure-review targets call analysis/scripts/*.py directly rather
+        # than delegating, so the guard above does not cover them.  A renamed
+        # script or argparse subcommand breaks `make` exactly as invisibly as
+        # the missing delegation target did.
+        root = Path(__file__).parents[1]
+        invocations = findall(
+            r"(analysis/scripts/\S+\.py)(?:[ \t]+([a-z][a-z-]*))?",
+            MAKEFILE.read_text(),
+        )
+        self.assertTrue(invocations, "expected the Makefile to invoke some scripts")
+        for script, subcommand in invocations:
+            path = root / script
+            self.assertTrue(path.is_file(), f"Makefile invokes missing {script}")
+            if subcommand:
+                self.assertIsNotNone(
+                    search(rf'add_parser\(\s*"{subcommand}"', path.read_text()),
+                    f"Makefile runs `{script} {subcommand}`, "
+                    f"but the script registers no such subcommand",
+                )
+
 
 if __name__ == "__main__":
     main()
