@@ -35,6 +35,28 @@ class ManuscriptWorkflow(TestCase):
         self.assertIn("check_claim_anchors.py", target)
         self.assertNotIn("--validate", target)
 
+    def test_figure_flow_targets_run_in_the_project_environment(self) -> None:
+        # figure_flow's catalog loader imports PyYAML, so a `figures:` recipe
+        # under bare `python3` dies on invocation wherever the system
+        # interpreter lacks it. No workflow runs `make figures`, so nothing
+        # else would catch a regression here.
+        root = Path(__file__).parents[1]
+        recipes = [
+            line
+            for makefile in (MAKEFILE, root / "analysis/Makefile")
+            for line in makefile.read_text().replace("\\\n", " ").splitlines()
+            if "scripts/figure_flow.py" in line
+        ]
+        self.assertTrue(recipes, "expected a make target driving figure_flow")
+        for line in recipes:
+            prefix = line.split("scripts/figure_flow.py")[0]
+            self.assertIn(
+                "$(UV) run --project analysis",
+                prefix,
+                "figure_flow must run in the analysis project environment, "
+                f"not under the system interpreter: {line.strip()}",
+            )
+
     def test_provenance_lane_runs_the_whole_manuscript_test_suite(self) -> None:
         provenance = self.text.split("  provenance:", 1)[1].split(
             "  required:", 1

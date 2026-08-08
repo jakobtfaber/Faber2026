@@ -39,8 +39,8 @@ test-science: check-provenance
 	$(MAKE) -C analysis test MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
 
 figures:
-	FABER2026_ROOT="$(FABER2026_ROOT)" \
-		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
+	FABER2026_ROOT="$(FABER2026_ROOT)" $(UV) run --project analysis --frozen \
+		python analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 
 figure-review-status:
 	$(MAKE) -C analysis figure-review-status MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
