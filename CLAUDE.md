@@ -218,9 +218,9 @@ Correct an error in three statements:
   rule before the next operational phase boundary — or note it in the checkpoint receipt
   if stopped. Operational rules go in this file (mirror them to `AGENTS.md`);
   scientific or trust-state facts go in the relevant `CONTEXT.md`, and a
-  `CONTEXT.md` write inside `analysis/` is a separately scoped submodule
-  step, never a side effect. A chat correction helps once;
-  a written rule helps every later session.
+  `CONTEXT.md` write inside `analysis/` stays separately scoped from the
+  manuscript change that prompted it, never a side effect. A chat
+  correction helps once; a written rule helps every later session.
 
 ## Verification
 
@@ -292,9 +292,8 @@ Before exploratory `grep` or broad reading, run:
 python3 analysis/scripts/kb search "<topic>"   # filter: --source tickets|docs|git|code|config|refs
 ```
 
-- Searches manuscript documents, wayfinder tickets, Git history (parent
-  repository and the `analysis/` submodule), analysis code, configurations,
-  and cited references.
+- Searches manuscript documents, wayfinder tickets, the repository's Git
+  history, analysis code, configurations, and cited references.
 - Refresh with `make kb-index` only after the underlying changes are
   verified.
 - See
@@ -321,9 +320,8 @@ python3 analysis/scripts/kb search "<topic>"   # filter: --source tickets|docs|g
   `ai-research-workflows` `plan` → `implement` → `validate` (plans and notes
   under `docs/rse/specs/`), with `handoff` to carry context into a fresh
   session; investigation tickets live under `analysis/docs/rse/wayfinder/`
-  per the issue-tracker document above. Note ticket work writes inside the
-  `analysis` submodule and needs its own verified checkpoint. Do not assume
-  other named skills are installed; check before invoking.
+  per the issue-tracker document above. Do not assume other named skills
+  are installed; check before invoking.
 
 ## Owner queue walkthrough
 
@@ -382,15 +380,15 @@ Merge without a further prompt only when all hold:
 - the exact repository, base, head branch, and head commit are verified;
 - required checks pass;
 - no unresolved review finding; no concurrent writer;
-- no unrelated work; no accidental submodule-pointer change.
+- no unrelated work swept into the change.
 
 Otherwise open or update a draft pull request and stop at a verified
 checkpoint.
 
 Land by default (owner, 2026-07-27): when the conditions above hold and the
 change is mechanical, narrowly scoped, and cheaply reversible (`git revert`
-restores the previous state; no scientific judgment, no data change, no
-submodule-pin change), merge immediately rather than leaving the pull
+restores the previous state; no scientific judgment, no data
+change), merge immediately rather than leaving the pull
 request open for review. Leaving small reversible pull requests open does
 not add safety; it only accumulates open decisions for the owner. Reserve
 an open pull request for changes that genuinely need the owner's eyes.
@@ -407,9 +405,9 @@ Guardrails:
 - Do not merge a divergent branch to avoid resolving its scope.
 - Changes spanning repositories require a separate verified checkpoint in
   each.
-- The `analysis/` submodule pin is deliberate: never change it as a side
-  effect of a manuscript update — a pin change is a separately scoped,
-  verified step.
+- Keep manuscript and `analysis/` changes separately scoped: a manuscript
+  update must not sweep in analysis edits as a side effect, and vice
+  versa; a change needing both sides says so explicitly.
 - Permission prompts are controlled outside the repository; do not modify
   tooling to work around them.
 
@@ -435,7 +433,7 @@ The chat summary points to the receipt rather than reproducing it.
 
 ## Learned User Preferences
 
-- Prefer pathspec-only commits; never sweep unrelated dirty-lane or submodule-pointer changes into a manuscript/figure task commit.
+- Prefer pathspec-only commits; never sweep unrelated dirty-lane changes into a manuscript/figure task commit.
 - Manuscript figures should omit plot titles (captions carry the title) and match existing manuscript figure style (SciencePlots / shared formatting), not ad-hoc styling.
 - Prefer math notation on figure axes/labels, with prose explanation in the caption or body text rather than spelled-out descriptive axis text alone.
 - Keep claim wording tight on science readiness and open gates — do not overstate what is certified vs provisional.
@@ -461,4 +459,4 @@ The chat summary points to the receipt rather than reproducing it.
 - Local burst products live under `~/Data/Faber2026/dsa110/` (DSA-110; Stokes-I cubes in `DSA_bursts/`) and `~/Data/Faber2026/chimefrb/` (CHIME/FRB; Stokes-I cubes in `CHIME_bursts/`); do not mix instruments across those trees or paper over layout drift with compatibility symlinks — fix referencing paths universally instead.
 - Product dispersion measures in `_cntr_bpc.npy` filenames are per-band archival referral values and can differ between CHIME and DSA for the same event.
 - Retained Mac worktrees and orphan clones need an explicit content disposition — land/integrate, superseded/obsolete, or preserve — with a receipt before retirement; subject-on-main alone does not prove superseded when unique patches remain.
-- The parent manuscript pins one submodule: `analysis/` is the research-control repository, and it also houses all fitting code. Its lockfile no longer references FLITS; `dsa110-FLITS` is retired provenance and must not be imported at runtime.
+- `analysis/` is a plain directory of this repository holding the research-control surface and all fitting code (the former Faber2026-analysis submodule was folded in by the 2026-08 monorepo consolidation; the original repository is archived read-only as provenance). Its lockfile no longer references FLITS; `dsa110-FLITS` is retired provenance and must not be imported at runtime.
