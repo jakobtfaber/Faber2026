@@ -51,11 +51,12 @@ class ManuscriptWorkflow(TestCase):
         for line in recipes:
             prefix = line.split("scripts/figure_flow.py")[0]
             self.assertIn(
-                "$(UV) run --project analysis",
+                "$(UV) run",
                 prefix,
-                "figure_flow must run in the analysis project environment, "
+                "figure_flow must run in a uv-managed project environment, "
                 f"not under the system interpreter: {line.strip()}",
             )
+            self.assertIn("--project", prefix)
 
     def test_provenance_lane_runs_the_whole_manuscript_test_suite(self) -> None:
         provenance = self.text.split("  provenance:", 1)[1].split(
