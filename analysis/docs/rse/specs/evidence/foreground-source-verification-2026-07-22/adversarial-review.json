@@ -1,0 +1,91 @@
+{
+  "analysis_pr": 72,
+  "figure_3": {
+    "expanded_catalog_input_sha256": "482be53e3152030280949221d283f130e5545411f3ca8bb85fb6c9999e429ff5",
+    "grid_sha256": "ce0179a27fd2d4f18b7599cea9f8d56f98874d9c4c6a7a654e84395ff163acc3",
+    "identity_rows_in_confirmed_only_grid": 0,
+    "promoted": false,
+    "registry_sha256": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+    "unchanged_from_pipeline_base": true
+  },
+  "independent_replay": {
+    "budget_mismatches": 0,
+    "gate_pass": true,
+    "rows": 52,
+    "rows_with_discrepancies": 0,
+    "source_verified_rows": 52,
+    "tests_passed": 15,
+    "verdict_mismatches": 0
+  },
+  "pipeline_base_revision": "fba755ad7edbd69dece059c8c5f0868da41e3f2b",
+  "pipeline_repair_revision": "c913175e567db70980e5f2745dcdf8f7f3ad9fb4",
+  "review_scope": "identity, coordinates, blank-redshift semantics, provenance, and current Figure 3 inputs only",
+  "reviewed_at_utc": "2026-07-24T06:28:56Z",
+  "rows": [
+    {
+      "budget_eligible": false,
+      "key": "oran/halo/195393180643665627",
+      "redshift_state": "blank",
+      "separation_arcsec": 0.09840307668097852,
+      "source_family": "PS1-STRM",
+      "source_row_sha256": "68f79e8d8177ea1a12ee1f6307f6907bf91daf278b5f2f5ea86f8d22eebec952",
+      "stable_source_id": "objID:195393180643665627",
+      "verdict": "inconclusive"
+    },
+    {
+      "budget_eligible": false,
+      "key": "wilhelm/halo/194453151328186646",
+      "redshift_state": "blank",
+      "separation_arcsec": 0.03515141969379241,
+      "source_family": "PS1-STRM",
+      "source_row_sha256": "e9d3baa96b4f12651c6f14c586db4ada331ac66763519ae113b24f2c014fba1b",
+      "stable_source_id": "objID:194453151328186646",
+      "verdict": "inconclusive"
+    },
+    {
+      "budget_eligible": false,
+      "key": "hamilton/halo/192943050854547067",
+      "redshift_state": "blank",
+      "separation_arcsec": 0.049833683381940504,
+      "source_family": "PS1-STRM",
+      "source_row_sha256": "19aa5e0610df6f5a91c48344747f97529b97b741df56b003ffd4d55caa24e801",
+      "stable_source_id": "objID:192943050854547067",
+      "verdict": "inconclusive"
+    },
+    {
+      "budget_eligible": false,
+      "key": "chromatica/halo/196673126794497004",
+      "redshift_state": "blank",
+      "separation_arcsec": 0.09547640918568999,
+      "source_family": "PS1-STRM",
+      "source_row_sha256": "df2958421f2ce55d2cd5347470bcb4dd886611978290bca868820ccb91665f7a",
+      "stable_source_id": "objID:196673126794497004",
+      "verdict": "inconclusive"
+    },
+    {
+      "budget_eligible": false,
+      "key": "isha/halo/WISEA J044538.83+701843.3",
+      "live_vizier_designation_match": true,
+      "redshift_state": "blank",
+      "separation_arcsec": 0.0004340947489329723,
+      "source_family": "AllWISE",
+      "source_row_sha256": "3dc01ed8c21644ee2e5dae8e68151f2bdc97e01b5b3b9ce37405e80a41ce1489",
+      "stable_source_id": "AllWISE:J044538.83+701843.3",
+      "verdict": "inconclusive"
+    },
+    {
+      "budget_eligible": false,
+      "key": "oran/halo/WISEA J211150.32+724807.8",
+      "live_vizier_designation_match": true,
+      "redshift_state": "blank",
+      "separation_arcsec": 0.046368250898788606,
+      "source_family": "AllWISE",
+      "source_row_sha256": "ef19b63455af43e685f46daa0e35fb9cbe04a1b5966594103173b7b861f96663",
+      "stable_source_id": "AllWISE:J211150.32+724807.8",
+      "verdict": "inconclusive"
+    }
+  ],
+  "schema": "faber2026-analysis-foreground-identity-adversarial-review/v1",
+  "verdict": "pass",
+  "verifier_independence": "direct pinned-artifact comparison and fresh official AllWISE identity queries; PR narrative not used as evidence"
+}

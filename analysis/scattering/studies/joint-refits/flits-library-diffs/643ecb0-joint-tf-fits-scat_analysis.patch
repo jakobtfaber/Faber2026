@@ -1,0 +1,92 @@
+commit 643ecb0bb2a00a4afaf79ee26cea715988dec9aa
+Author: Jakob Faber <jakobtfaber@gmail.com>
+Date:   Mon Jul 27 00:11:54 2026 -0700
+
+    archive(h17): frozen snapshot of joint-tf-fits dirty worktree, 2026-07-27 (read-only capture; base d292f4b91ef0)
+
+diff --git a/scattering/scat_analysis/burstfit.py b/scattering/scat_analysis/burstfit.py
+index be8912a..1366666 100644
+--- a/scattering/scat_analysis/burstfit.py
++++ b/scattering/scat_analysis/burstfit.py
+@@ -30,6 +30,11 @@ from numpy.typing import NDArray
+ from scipy import stats
+ from scipy.linalg import eigh
+ from scipy.special import erfcx
++try:
++    from scipy.fft import next_fast_len as _next_fast_len
++except Exception:  # scipy.fft.next_fast_len missing on very old scipy
++    def _next_fast_len(n):
++        return 1 << int(np.ceil(np.log2(max(n, 1))))
+ 
+ from .turbulence import (
+     BETA_EXP_EPS,
+@@ -242,7 +247,11 @@ def gaussian_powerlaw_convolution(t, mu, sig, tau, beta):
+ 
+     # *dt makes the discrete linear convolution the sampled continuous one, so
+     # the returned profile integrates to ~1 like analytic_gaussian_exp_convolution.
+-    L = 2 * T
++    # A pocketfft-fast transform length (composite of primes <=11) avoids the
++    # O(N^2) fallback when 2*T has a large prime factor (e.g. T=257 prime ->
++    # 2*T=514=2*257 -> 525); the result is exact because L >= 2*T still captures
++    # the full linear convolution and the extra tail is dropped by the [:T] slice.
++    L = _next_fast_len(2 * T)
+     conv = np.fft.irfft(np.fft.rfft(g, L, axis=1) * np.fft.rfft(h, L, axis=1), L, axis=1)
+     return conv[:, :T] * dt
+ 
+diff --git a/scattering/scat_analysis/burstfit_joint.py b/scattering/scat_analysis/burstfit_joint.py
+index 4c9e390..52a9b51 100644
+--- a/scattering/scat_analysis/burstfit_joint.py
++++ b/scattering/scat_analysis/burstfit_joint.py
+@@ -515,6 +515,37 @@ def _joint_prior_spec_gain_multi(
+     return spec
+ 
+ 
++def _clamp_t0_priors_to_window(
++    spec: list[tuple[str, tuple[float, float], bool]],
++    model_C: FRBModel,
++    model_D: FRBModel,
++) -> list[tuple[str, tuple[float, float], bool]]:
++    """Bound every component t0 prior to its band's fitted window [time.min, time.max].
++
++    build_priors' default t0 window is init.t0 +/- 2*max(tau_1ghz, 10.0) = +/- 20 ms
++    (the max(...,10) floor), untethered from the ~ms fitted window, so a global sampler
++    can place components far outside the data window where the gain marginal exploits
++    their kernels as per-channel baseline dof (zach fine-pair ghost components,
++    COMPONENT_COUNT_LADDER_AUDIT 2026-07-18). This clamps t0_C* to model_C's window and
++    t0_D* to model_D's window: a component must live in the window the count test is
++    defined on (the dual of the window-contains-all-candidates rule). Non-t0 entries and
++    already-in-window bounds are unchanged; matches t0_C / t0_D (single) and
++    t0_C{i} / t0_D{i} (multi) by prefix.
++    """
++    tC = np.asarray(model_C.time, dtype=float)
++    tD = np.asarray(model_D.time, dtype=float)
++    win_C = (float(tC.min()), float(tC.max()))
++    win_D = (float(tD.min()), float(tD.max()))
++    out: list[tuple[str, tuple[float, float], bool]] = []
++    for name, (lo, hi), is_log in spec:
++        if name.startswith("t0_C"):
++            lo, hi = max(lo, win_C[0]), min(hi, win_C[1])
++        elif name.startswith("t0_D"):
++            lo, hi = max(lo, win_D[0]), min(hi, win_D[1])
++        out.append((name, (lo, hi), is_log))
++    return out
++
++
+ class _JointPriorTransform:
+     """Picklable unit-cube -> parameter transform for the 12-vector.
+ 
+@@ -1001,6 +1032,14 @@ def fit_joint_scattering(
+         spec = _joint_prior_spec(init_C, init_D, beta_bounds)
+         loglike = _JointLogLikelihood(model_C, model_D)
+ 
++    # GUARDRAIL (2026-07-18, COMPONENT_COUNT_LADDER_AUDIT): bound every component t0
++    # prior to its band's fitted window. build_priors' default t0 window is
++    # init.t0 +/- 2*max(tau_1ghz, 10.0) = +/- 20 ms (the max(...,10) floor), untethered
++    # from the ~ms fitted window -- which let the zach fine-pair place components 8-9 ms
++    # OFF-window, where the gain marginal exploits their kernels as per-channel baseline
++    # dof and manufactures a spurious count-test dlnZ. Applies to every spec variant above.
++    spec = _clamp_t0_priors_to_window(spec, model_C, model_D)
++
+     fixed_parameters = {
+         name: float(value)
+         for name, value in (

@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://faber2026.example/dualband-burst-model-params.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event",
+    "request_sha256",
+    "status",
+    "timing",
+    "shared_absolute_dm",
+    "components",
+    "model_parameters",
+    "morphology_weights",
+    "morphology_statuses",
+    "morphology_log_evidences",
+    "morphology_log_evidence_uncertainties",
+    "association_weights",
+    "verification",
+    "products"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nickname", "tns_name", "instrument_burst_ids"],
+      "properties": {
+        "nickname": {"type": "string", "minLength": 1},
+        "tns_name": {"type": "string", "minLength": 1},
+        "instrument_burst_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chimefrb", "dsa110"],
+          "properties": {
+            "chimefrb": {"type": "string", "minLength": 1},
+            "dsa110": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {
+      "enum": [
+        "blocked-input",
+        "failed-inference",
+        "failed-model-adequacy",
+        "failed-verification",
+        "provisional-owner-review",
+        "accepted"
+      ]
+    },
+    "timing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference_frequency_mhz", "coordinate"],
+      "properties": {
+        "reference_frequency_mhz": {"const": 400.0},
+        "coordinate": {"const": "geocentric unscattered arrival time"}
+      }
+    },
+    "shared_absolute_dm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["median", "lower", "upper", "uncertainty_classes"],
+      "properties": {
+        "median": {"type": "number"},
+        "lower": {"type": "number"},
+        "upper": {"type": "number"},
+        "uncertainty_classes": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "statistical",
+            "association_morphology",
+            "calibration_resolution",
+            "geometry_clock",
+            "intrinsic_lag"
+          ],
+          "properties": {
+            "statistical": {"type": "number", "minimum": 0},
+            "association_morphology": {"type": "number", "minimum": 0},
+            "calibration_resolution": {"type": "number", "minimum": 0},
+            "geometry_clock": {"type": "number", "minimum": 0},
+            "intrinsic_lag": {"type": "number", "minimum": 0}
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "geocentric_toa_400_s",
+          "geocentric_toa_400_utc",
+          "chimefrb_toa_400_s",
+          "chimefrb_toa_400_utc",
+          "dsa110_toa_400_s",
+          "dsa110_toa_400_utc"
+        ],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "geocentric_toa_400_s": {"$ref": "#/$defs/summary"},
+          "geocentric_toa_400_utc": {"$ref": "#/$defs/utcSummary"},
+          "chimefrb_toa_400_s": {"$ref": "#/$defs/summary"},
+          "chimefrb_toa_400_utc": {"$ref": "#/$defs/utcSummary"},
+          "dsa110_toa_400_s": {"$ref": "#/$defs/summary"},
+          "dsa110_toa_400_utc": {"$ref": "#/$defs/utcSummary"}
+        }
+      }
+    },
+    "model_parameters": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/summary"}
+    },
+    "morphology_weights": {"$ref": "#/$defs/weights"},
+    "morphology_statuses": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "enum": ["failed-inference", "provisional-owner-review"]
+      }
+    },
+    "morphology_log_evidences": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "number"}
+    },
+    "morphology_log_evidence_uncertainties": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "number", "minimum": 0}
+    },
+    "association_weights": {"$ref": "#/$defs/weights"},
+    "verification": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/check"}
+    },
+    "products": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "posterior.npz",
+        "model-products.npz",
+        "provenance.json",
+        "review-packet.pdf"
+      ],
+      "properties": {
+        "posterior.npz": {"$ref": "#/$defs/product"},
+        "model-products.npz": {"$ref": "#/$defs/product"},
+        "provenance.json": {"$ref": "#/$defs/product"},
+        "review-packet.pdf": {"$ref": "#/$defs/product"}
+      }
+    },
+    "owner_acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "scientific_product_sha256", "receipt_path", "receipt_sha256"],
+      "properties": {
+        "owner": {"type": "string", "minLength": 1},
+        "scientific_product_sha256": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "receipt_path": {"type": "string", "pattern": "^\\.acceptance/"},
+        "receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "accepted"}}},
+      "then": {"required": ["owner_acceptance"]}
+    }
+  ],
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["median", "lower", "upper"],
+      "properties": {
+        "median": {"type": "number"},
+        "lower": {"type": "number"},
+        "upper": {"type": "number"}
+      }
+    },
+    "utcSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["median", "lower", "upper"],
+      "properties": {
+        "median": {"type": "string", "minLength": 1},
+        "lower": {"type": "string", "minLength": 1},
+        "upper": {"type": "string", "minLength": 1}
+      }
+    },
+    "weights": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measured", "truth", "limit", "passed"],
+      "properties": {
+        "measured": {},
+        "truth": {},
+        "limit": {},
+        "passed": {"type": "boolean"}
+      }
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -1,0 +1,769 @@
+{
+  "counts": {
+    "merged": 20,
+    "empty_diff": 36,
+    "unique": 39
+  },
+  "branches": [
+    {
+      "branch": "archive/rejected-rfi-prototypes-20260724",
+      "sha": "c34276da28e28e8d6d2c5f527ee5a6b625afa97d",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 18,
+      "diff_bytes": 11149744
+    },
+    {
+      "branch": "claude-md-brief-tightening",
+      "sha": "a7abf02908b4444645c5190226de587ec7215e09",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 0,
+      "diff_bytes": 30024
+    },
+    {
+      "branch": "codex/auto-audit-results-library-conflicts",
+      "sha": "e893a64d8fd69354c9f43124ce98ce230a02588e",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 121,
+      "diff_bytes": 30201
+    },
+    {
+      "branch": "codex/bump-analysis-board-signoff",
+      "sha": "249a632f7d790318fe879496788319c9741e7d63",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 43,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/bump-analysis-dispersion-decisions",
+      "sha": "cb1578e15ef671869ba0f1da5f51e183c0eaaed1",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 47,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/bump-analysis-wayfinder-default-approval",
+      "sha": "97e8e0473cbb06285d44e559f29a61eb95c09537",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 39,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/chime-rfi-preservation-gates-successor-20260722",
+      "sha": "724f6311841eda513466f6a6159e07fbb5afd3da",
+      "status": "unique",
+      "ahead": 6,
+      "behind": 32,
+      "diff_bytes": 4639472
+    },
+    {
+      "branch": "codex/chime-rfi-validation-wayfinder",
+      "sha": "e0dcdb8eeb1fb78ca5316cebba66c177798c0f2d",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 99,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/expanded-foreground-map-closure",
+      "sha": "9ea975de30549ff996bc93ab6692c67a7eb74fb0",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 35,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/expanded-foreground-phase-two",
+      "sha": "2b33c05215fbfb78782a12039fa7f1cc50322505",
+      "status": "unique",
+      "ahead": 4,
+      "behind": 113,
+      "diff_bytes": 83414
+    },
+    {
+      "branch": "codex/faber2026-analysis-split",
+      "sha": "e825c2bffcaa0a3f2def1e3195bb3e6a3ba57891",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 74,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/fetch-pipeline-history-root-ci-20260724",
+      "sha": "2d3e41b86b2766b84adbba0193ee637b96fb13e0",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 19,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/final-author-block",
+      "sha": "86fba664d7e56f83333ef2ffbb0e24d63c0497ae",
+      "status": "unique",
+      "ahead": 2,
+      "behind": 19,
+      "diff_bytes": 715
+    },
+    {
+      "branch": "codex/handoff-joint-scattering-20260723",
+      "sha": "088e7c990d35916770d26c8e4097092fcec8ffe4",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 24,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/host-dm-current-paired-20260723",
+      "sha": "df4ec66bd14a1c98222d3d83d969f8b601a0812b",
+      "status": "unique",
+      "ahead": 11,
+      "behind": 19,
+      "diff_bytes": 34087
+    },
+    {
+      "branch": "codex/host-dm-repair",
+      "sha": "9a64841b38975470de583ca1c3be6e361263f09d",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 24,
+      "diff_bytes": 16097
+    },
+    {
+      "branch": "codex/host-dm-repair-v2",
+      "sha": "65367b178d99920892dc9a108e44cf01a43954bc",
+      "status": "unique",
+      "ahead": 8,
+      "behind": 24,
+      "diff_bytes": 27622
+    },
+    {
+      "branch": "codex/joint-scattering-controlled-20260722",
+      "sha": "088e7c990d35916770d26c8e4097092fcec8ffe4",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 24,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/joint-scattering-repro-20260722",
+      "sha": "d2db1a107b4d510660e5ae47d9afbcf199fde00b",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 25,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/morphology-nine-review-20260722",
+      "sha": "228f93dbe8c1e81845c3ca03eb0ebabdb3a114af",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 31,
+      "diff_bytes": 226
+    },
+    {
+      "branch": "codex/nine-sightline-search-contract",
+      "sha": "7b060fee1fb76b6c64055238588f9eb575458462",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 71,
+      "diff_bytes": 226
+    },
+    {
+      "branch": "codex/nine-sightline-search-contract-successor-20260722",
+      "sha": "46a34a79f2d39e4fefc7e55e162261494939fb30",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 32,
+      "diff_bytes": 226
+    },
+    {
+      "branch": "codex/overleaf-manuscript-bridge-map",
+      "sha": "a797e0dbe108f98a6203bf3f1d9bd3be72e726d2",
+      "status": "unique",
+      "ahead": 5,
+      "behind": 117,
+      "diff_bytes": 485869
+    },
+    {
+      "branch": "codex/phineas-probabilistic-budget",
+      "sha": "1867fe507a90f4e375fc08067789d007de4bccf7",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 33,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/pin-analysis-host-redshift-authority",
+      "sha": "4a3599dfa0c1aee14c4d32559d830b1fd502aad9",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 38,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/pin-analysis-issue-map-20260722",
+      "sha": "c6cfabb88f6d72298c5106929ab5bd1777b7abd5",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 20,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/pin-analysis-owner-queue-fix-20260724",
+      "sha": "2063726d786e7ef60247256e6d1a7179c0635611",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 19,
+      "diff_bytes": 226
+    },
+    {
+      "branch": "codex/pin-bump-fig3-name-repair",
+      "sha": "7d39d47c5cb4fc00906e14e003dd32a795fac699",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 1,
+      "diff_bytes": 453
+    },
+    {
+      "branch": "codex/prototype-chime-rfi-preservation-gates",
+      "sha": "cd5b67bd782608064cb1a2f6a164a52b12a43dbf",
+      "status": "unique",
+      "ahead": 12,
+      "behind": 99,
+      "diff_bytes": 21438139
+    },
+    {
+      "branch": "codex/repair-ticket14-roster",
+      "sha": "e642aab5900d50d80d889174c64c7175d7cc82f4",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 31,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/resolve-trust-assessment",
+      "sha": "31a0f1708229f819d4840b8677c2d1a21efa07c3",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 48,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/rfi-route-publish-20260722",
+      "sha": "e8ceac5f6bfc6bfb878e3d16da54c57f1a9ba3c6",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 51,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/scintillation-notebook-wayfinder",
+      "sha": "8d492feaa42685daecfd345e048878c6f0667a3d",
+      "status": "unique",
+      "ahead": 2,
+      "behind": 64,
+      "diff_bytes": 3390
+    },
+    {
+      "branch": "codex/visual-science-review",
+      "sha": "61992681c7027b3cca1e1aedc54d9957ed83f439",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 32,
+      "diff_bytes": 1173
+    },
+    {
+      "branch": "codex/wayfinder-07-pin-host-redshift-evidence",
+      "sha": "c62dab8e53ea0b498a8b06ee2b5b67a47a604662",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 35,
+      "diff_bytes": 226
+    },
+    {
+      "branch": "codex/wayfinder-18-law-host-redshifts",
+      "sha": "9ea975de30549ff996bc93ab6692c67a7eb74fb0",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 35,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "codex/zach-chime-preprocessing",
+      "sha": "00577451a2aff1bd08eb79f6fc97abfa406253a3",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 106,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "docs/authority-roles-proof-20260720",
+      "sha": "c2820a3c60d6bf6846575f2f50edb4da141405d7",
+      "status": "unique",
+      "ahead": 7,
+      "behind": 161,
+      "diff_bytes": 940929
+    },
+    {
+      "branch": "docs/dm-host-convolution-handoff-20260715",
+      "sha": "0e04071d0a173f4fd04a7947829fdd4a7b63119a",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 257,
+      "diff_bytes": 64915
+    },
+    {
+      "branch": "docs/journal-phase2-closures",
+      "sha": "635c0ad9c6af6404c0dc5ecd73a83ad91a565408",
+      "status": "unique",
+      "ahead": 2,
+      "behind": 4,
+      "diff_bytes": 2429
+    },
+    {
+      "branch": "docs/overleaf-native-git-research-20260724",
+      "sha": "804b0d5ea67869374ecd2f42862195ec2136818f",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 18,
+      "diff_bytes": 9641
+    },
+    {
+      "branch": "docs/repository-provenance-map",
+      "sha": "3d50b72197a7164056ad9a72dfdb6415bb838ab6",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 17,
+      "diff_bytes": 1281
+    },
+    {
+      "branch": "docs/results-library-audit-revalidation-20260724",
+      "sha": "86d8c9f1a6c17ac4c8fca0badf827dfecdf36354",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 17,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/05642f9-e3b0c4",
+      "sha": "642390008ceb6e66a88e85468aa08ff445dca4ee",
+      "status": "empty_diff",
+      "ahead": 1,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/1d1d6ba-e3b0c4",
+      "sha": "40c838105bce5fdb3492ef8846e072a5bc319191",
+      "status": "empty_diff",
+      "ahead": 1,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/3c22046-e3b0c4",
+      "sha": "69d6958289d9ce53abc6206562a4193651d01b3b",
+      "status": "empty_diff",
+      "ahead": 8,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/3e59e9a-e3b0c4",
+      "sha": "2e365e07376562f61e77456bb0c1558f7650ac2e",
+      "status": "empty_diff",
+      "ahead": 2,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/4918633-e3b0c4",
+      "sha": "da5da34ae3ac16bf6c8b40ec4148c35fd75ba786",
+      "status": "empty_diff",
+      "ahead": 1,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/49f6d16-e3b0c4",
+      "sha": "4f58040efb1b85e66bd6c2dd327a003c45c3928a",
+      "status": "empty_diff",
+      "ahead": 24,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/5e3c6b3-e3b0c4",
+      "sha": "7a24301923bebe2b4f5b05b106e87d7a17b835ff",
+      "status": "empty_diff",
+      "ahead": 3,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/6039921-e3b0c4",
+      "sha": "f824417c92a426e3a25de49fc6c06dd4478a4a09",
+      "status": "empty_diff",
+      "ahead": 29,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/614eb1b-e3b0c4",
+      "sha": "da00ee9f7e6237907bf36369527928deee13125c",
+      "status": "empty_diff",
+      "ahead": 1,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/693d300-e3b0c4",
+      "sha": "116419fd3cc62fecb7af62ab0ee30213a61ce3c2",
+      "status": "empty_diff",
+      "ahead": 43,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/6e7d14f-e3b0c4",
+      "sha": "4e2bae3afc1809f65582ad10e39e22ed4794b4a0",
+      "status": "empty_diff",
+      "ahead": 5,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/741d263-e3b0c4",
+      "sha": "70aa93b52424e6e28449493e336167bc39b4d173",
+      "status": "empty_diff",
+      "ahead": 2,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/995940a-e3b0c4",
+      "sha": "0ae38c55ef9dab451c43ed4433ff597394f158a4",
+      "status": "empty_diff",
+      "ahead": 14,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/a8dd7d8-e3b0c4",
+      "sha": "02b7f227dc8796c12d1a401d21d566d978a01b9d",
+      "status": "empty_diff",
+      "ahead": 44,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/ad2b522-e3b0c4",
+      "sha": "15cefc2b9c564488f8cbc7f727cbc98ff93fd840",
+      "status": "empty_diff",
+      "ahead": 18,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/b08edee-e3b0c4",
+      "sha": "f9a26f4fd56bc54266d8e5db9231c8d0ff9d2a86",
+      "status": "empty_diff",
+      "ahead": 4,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/bbda802-e3b0c4",
+      "sha": "88e353ee0fd0df080c6f84d59fa71a7ec692ddcb",
+      "status": "empty_diff",
+      "ahead": 140,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/checkpoints/v1",
+      "sha": "39784fe11c814bd1d86acbed1324dc41b0a632f2",
+      "status": "empty_diff",
+      "ahead": 1,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/e4b79f8-e3b0c4",
+      "sha": "d07629c199db79667ee4bdb8abc2ae1e0f978e33",
+      "status": "empty_diff",
+      "ahead": 1,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/eb4594e-e3b0c4",
+      "sha": "cb9f798a36f1ff7209f27863c7e50443a76ebf3d",
+      "status": "empty_diff",
+      "ahead": 56,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/eea5d50-e3b0c4",
+      "sha": "ae15bd6ac4f7af056d9cd32c40f2c670bb5413d7",
+      "status": "empty_diff",
+      "ahead": 16,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/f946668-e3b0c4",
+      "sha": "2860f5e8b822fb39622f0be6adf766f86acb32f8",
+      "status": "empty_diff",
+      "ahead": 1,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "entire/f97addb-e3b0c4",
+      "sha": "7b9a1d03a09d82ff12a588f01048866153b70f51",
+      "status": "empty_diff",
+      "ahead": 7,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "gh-pages",
+      "sha": "17151925327162032dce696ace8f5fc2be481e68",
+      "status": "empty_diff",
+      "ahead": 12,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "infra/owner-board",
+      "sha": "5ea3fad3aa8ed9e1fc1be2530d7f7a346f864882",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 449,
+      "diff_bytes": 50543
+    },
+    {
+      "branch": "main-legacy-20260712",
+      "sha": "8d0e4c504f15addf2ab662ee42a3ef30a67fb8fd",
+      "status": "empty_diff",
+      "ahead": 357,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "ms/codetection-gallery",
+      "sha": "c2d3ab2e4f3e3f742f394c6920a0d6862c20d87e",
+      "status": "empty_diff",
+      "ahead": 350,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "ms/codetection-triptych-fig1",
+      "sha": "1a987a99e1662483213600776e6148fc244ce6e9",
+      "status": "empty_diff",
+      "ahead": 367,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "ms/dm-adaptive-pass-selection",
+      "sha": "053bc512d8aae29c4243ce4a27577ee6194dbbd9",
+      "status": "empty_diff",
+      "ahead": 380,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "ms/fig1-dm-drift-closure-20260717",
+      "sha": "001fd81e4f142d9a2e605c4873661b906405ff99",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 237,
+      "diff_bytes": 1451943
+    },
+    {
+      "branch": "ms/fig1-observed-peak-audit-20260717",
+      "sha": "14d06818107ae31de124ccab91f18807fdffb433",
+      "status": "unique",
+      "ahead": 11,
+      "behind": 232,
+      "diff_bytes": 127595
+    },
+    {
+      "branch": "ms/figure1-data-grid",
+      "sha": "cbf522e9d41465e9060377d5e6a321cac20734fc",
+      "status": "empty_diff",
+      "ahead": 398,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "ms/quarantine-outdated-science-20260717",
+      "sha": "a66816fe99eaa7980c84177896ccc8f72d742b94",
+      "status": "unique",
+      "ahead": 5,
+      "behind": 221,
+      "diff_bytes": 72303
+    },
+    {
+      "branch": "ms/referee-methods-provenance",
+      "sha": "cc4118a1b9a24247802b4470139e636779fff6e2",
+      "status": "empty_diff",
+      "ahead": 373,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "ms/results-library-phase-b",
+      "sha": "0d2dd60a20383268edf25e3cd2eede14f3ed68bd",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 253,
+      "diff_bytes": 58260
+    },
+    {
+      "branch": "ms/scint-2l-joint-20260717",
+      "sha": "5acb9fea713a139c66f0db38b1aa08784ca85a9f",
+      "status": "unique",
+      "ahead": 4,
+      "behind": 236,
+      "diff_bytes": 107645
+    },
+    {
+      "branch": "ms/scint-joint-candidate-20260717",
+      "sha": "b3bddaa4770eab4e6337844c79e4370d1f05733e",
+      "status": "unique",
+      "ahead": 4,
+      "behind": 231,
+      "diff_bytes": 1279908
+    },
+    {
+      "branch": "ms/triptych-p1-remediation",
+      "sha": "7a742de44a61ddf9270533f9c19ddd8f240ee215",
+      "status": "empty_diff",
+      "ahead": 388,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "pewter-maxwell",
+      "sha": "829ed033a54dbaeccb4353cbb5a948c22717fc80",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 64,
+      "diff_bytes": 41259786
+    },
+    {
+      "branch": "pin/pipeline-f5c1d1f3",
+      "sha": "6b94d998c1afaf57043488de20f05ec132f19ac1",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 2,
+      "diff_bytes": 453
+    },
+    {
+      "branch": "publish/repository-provenance-map",
+      "sha": "3fafbc41434ee1d1002a7db67135c74877d8ed52",
+      "status": "unique",
+      "ahead": 2,
+      "behind": 16,
+      "diff_bytes": 1281
+    },
+    {
+      "branch": "publish/repository-provenance-map-followup",
+      "sha": "46aa13165c079892381a8533c6a38e5ebe0993ac",
+      "status": "unique",
+      "ahead": 3,
+      "behind": 16,
+      "diff_bytes": 1281
+    },
+    {
+      "branch": "publish/repository-provenance-refresh",
+      "sha": "94058a3da6228f7b5f52f418dc991c21449019ff",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 12,
+      "diff_bytes": 226
+    },
+    {
+      "branch": "reconcile/overleaf-2026-07-10-2233",
+      "sha": "6ea203fbd04a351a0c5c91ac024ca6104877c8e6",
+      "status": "empty_diff",
+      "ahead": 360,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "reconcile/overleaf-2026-07-11-2113",
+      "sha": "1cc729aa60fd5d15d0a6c1bb41199f28dbdd4923",
+      "status": "empty_diff",
+      "ahead": 367,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "reconcile/overleaf-2026-07-11-2147",
+      "sha": "30b17c5180290899152304439fc5a84a080bf700",
+      "status": "empty_diff",
+      "ahead": 389,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "reconcile/overleaf-2026-07-11-2226",
+      "sha": "635127582995c44cef42587219db2472743863c1",
+      "status": "empty_diff",
+      "ahead": 396,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "reconcile/overleaf-2026-07-11-2304",
+      "sha": "c184521e3ddce2c1bc8ab9d7a773881e87690e68",
+      "status": "empty_diff",
+      "ahead": 402,
+      "behind": 856,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "research/foreground-redshift-verdicts",
+      "sha": "6e6a986b78bc46d9d3dbb23415dac5252543cdef",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 153,
+      "diff_bytes": 22832
+    },
+    {
+      "branch": "research/overleaf-native-git-contract",
+      "sha": "0fb8cd66c8b8c1a7c5a06553d168943d6988c4b5",
+      "status": "unique",
+      "ahead": 1,
+      "behind": 117,
+      "diff_bytes": 9326
+    },
+    {
+      "branch": "research/rfi-route-validation",
+      "sha": "94052932dce402551cb124a465e3f1ff6c779ad2",
+      "status": "merged",
+      "ahead": 0,
+      "behind": 44,
+      "diff_bytes": 0
+    },
+    {
+      "branch": "rse/jointtf-grok-harvest-revalidation",
+      "sha": "1e451ad3929456488fb88f13227984262cdf0a6f",
+      "status": "unique",
+      "ahead": 6,
+      "behind": 173,
+      "diff_bytes": 3524747
+    }
+  ]
+}

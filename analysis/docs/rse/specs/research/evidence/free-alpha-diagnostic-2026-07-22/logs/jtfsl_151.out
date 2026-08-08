@@ -1,0 +1,6 @@
+HOST=lxd110h17 JOB=151 START=2026-07-18T15:14:41-07:00 SCINTLEAK burst=casey band=C nchan=64 gamma=0.302 m=1.0 tau=0.06 decorr=0 seed=0
+INJECT-SCINT-LEAK burst=casey band=C nchan=64 (6.2 MHz/ch) gamma=0.302MHz m=1.0 -> m_eff=0.2181 (Dnu_d/ch_bw suppression) tau=0.06 alpha_true=4.0 [STATIC-control]
+  JOINT free-alpha: alpha_apparent=4.017[3.993,4.042]  bias=+0.017  tau=0.05914  lnZ=-57751.0
+  VERDICT: no leakage (alpha recovers ~4)
+  wrote /home/ubuntu/flits-runs/data/scintleak/scintleak_casey_C64_g0.302_m1.0_sta_s0.json
+DONE SCINTLEAK burst=casey gamma=0.302 decorr=0 RC=0 WALL_SEC=2100 END=2026-07-18T15:49:41-07:00

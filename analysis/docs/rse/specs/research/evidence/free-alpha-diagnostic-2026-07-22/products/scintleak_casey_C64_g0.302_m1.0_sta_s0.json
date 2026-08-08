@@ -1,0 +1,31 @@
+{
+  "mode": "scint_leakage",
+  "truth": {
+    "burst": "casey",
+    "target_band": "C",
+    "nchan_target": 64,
+    "gamma_mhz": 0.302,
+    "m": 1.0,
+    "tau_1ghz": 0.06,
+    "alpha": 4.0,
+    "snr": 40.0,
+    "decorr": false,
+    "seed": 0,
+    "chan_width_mhz_target": 6.25,
+    "m_eff_target": 0.21809401642411047
+  },
+  "alpha_apparent": [
+    3.992629520597025,
+    4.016916268327609,
+    4.041927373976581
+  ],
+  "alpha_true": 4.0,
+  "bias": 0.016916268327609174,
+  "tau_apparent": [
+    0.05801809573520147,
+    0.059142374144617316,
+    0.060284209583999174
+  ],
+  "lnZ": -57750.98334590451,
+  "verdict": "no leakage (alpha recovers ~4)"
+}

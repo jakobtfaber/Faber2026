@@ -1,0 +1,74 @@
+{
+  "batch_id": "2026-07-22-fig3-verdi-roster",
+  "candidates": [
+    {
+      "artifact": "candidates/fig3-halo-grid.pdf",
+      "artifact_sha256": "dcac3181a06e42b9466b75cbaee80623fcda821afd14b38bc939fb0f152ab291",
+      "decision": {
+        "notes": "Calculation complete; owner visual approval required. Not installed.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "evidence_ids": [
+        "expanded-catalog-build",
+        "figure3-input",
+        "verdi-host-redshifts"
+      ],
+      "family": "foreground-halo-grid",
+      "generator": "pipeline/galaxies/v2_0/sightline_halo_grid.py --halo-csv pipeline/galaxies/foreground/data/sightline_halo_grid.csv",
+      "id": "fig3-halo-grid",
+      "preview": "previews/fig3-halo-grid.png",
+      "protect_in_manuscript": false,
+      "required_provenance": [
+        "expanded-catalog build manifest and SHA-256",
+        "versioned Figure 3 input and SHA-256",
+        "Verdi host-redshift source extract and SHA-256",
+        "manuscript-owner visual approval"
+      ],
+      "target": "figures/sightline_halo_grid.pdf",
+      "title": "Figure 3: foreground halo sightlines"
+    }
+  ],
+  "created_at": "2026-07-22T12:03:23+00:00",
+  "dm_catalog": {
+    "path": "dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "86f631aaedefc6a37571360b718589e864d80c05c7864ac1e4c21661367a11c8"
+  },
+  "evidence": [
+    {
+      "id": "expanded-catalog-build",
+      "repository": "pipeline",
+      "sha256": "7b01dcc6c5a5242e46e62057fb5b3b04b5d944bc1c2e36331f3aef22972cff0d",
+      "source_path": "galaxies/foreground/data/expanded_catalog_build.json",
+      "source_revision": "455d57a39bcdcae50dc8d1766a2178f96e9d856f",
+      "stored_path": "provenance/expanded-catalog-build.json"
+    },
+    {
+      "id": "figure3-input",
+      "repository": "pipeline",
+      "sha256": "562fb2dffcf5dedc15e235e13af9cd3cc8d40ee229709d0813ac22c7e6781395",
+      "source_path": "galaxies/foreground/data/sightline_halo_grid.csv",
+      "source_revision": "455d57a39bcdcae50dc8d1766a2178f96e9d856f",
+      "stored_path": "provenance/figure3-input.csv"
+    },
+    {
+      "id": "verdi-host-redshifts",
+      "repository": "pipeline",
+      "sha256": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa",
+      "source_path": "galaxies/foreground/data/frozen_census/verdi2025_host_redshift_extract.csv",
+      "source_revision": "455d57a39bcdcae50dc8d1766a2178f96e9d856f",
+      "stored_path": "provenance/verdi-host-redshifts.csv"
+    }
+  ],
+  "pipeline_revision": "455d57a39bcdcae50dc8d1766a2178f96e9d856f",
+  "policy": {
+    "agent_visual_review_is_not_author_approval": true,
+    "approval_is_per_candidate": true,
+    "promotion_requires_exact_hash_match": true
+  },
+  "schema_version": 1,
+  "source_revision": "155891076eb6d4034127c980c5f1f69316207c11",
+  "title": "Figure 3 after Verdi host-roster repair"
+}

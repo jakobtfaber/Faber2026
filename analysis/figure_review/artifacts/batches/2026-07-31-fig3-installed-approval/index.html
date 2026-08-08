@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Figure 3: installed sightline halo grid — owner approval</title>
+<style>
+body{font:16px system-ui,sans-serif;max-width:1500px;margin:auto;padding:2rem;background:#f5f6f8;color:#17202a}
+.summary,.card{background:white;border:1px solid #ccd2d8;border-radius:10px;padding:1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(520px,1fr));gap:1rem}
+.card{margin:0;border-left:8px solid #c17d00} .status-approved{border-left-color:#16803c} .status-needs_revision{border-left-color:#b42318}
+.withheld{padding:3rem 1rem;text-align:center;background:#fff4e5;border:1px solid #c17d00;border-radius:6px}
+img{width:100%;max-height:680px;object-fit:contain;background:white} code{word-break:break-all} dt{font-weight:700;margin-top:.5rem}
+</style></head><body>
+<h1>Figure 3: installed sightline halo grid — owner approval</h1>
+<section class="summary"><p><strong>Batch:</strong> <code>2026-07-31-fig3-installed-approval</code><br>
+<strong>Source revision:</strong> <code>2d061fe98a1149ad51f6462133682d37c11642dd</code><br>
+<strong>Producer revision:</strong> <code>2d061fe98a1149ad51f6462133682d37c11642dd</code><br>
+<strong>DM catalog:</strong> <code>3730d486a6857d6a5e7fe8a9d445e5c989b36e57dc71b9fb2e6421079e8b6b4a</code></p>
+<p>Approval is per candidate. Reply with the stable candidate ID and either <em>approve</em> or <em>needs revision</em>, plus notes. Promotion is impossible unless the approved candidate bytes still match this packet.</p>
+<p>Figures remain hidden until exact inputs, code revisions, command, environment, and regenerated output have passed the reproduction gate.</p>
+<h3>Packet validation</h3><ul><li>None</li></ul></section>
+<main class="grid">
+<article id="fig3-halo-grid" class="card status-pending">
+  <h2>fig3-halo-grid: Figure 3: foreground halo sightlines</h2>
+  <p><strong>Status:</strong> pending</p>
+  <p></p>
+  <div class="withheld"><strong>Figure withheld.</strong> Reproduction gate has not passed.</div>
+  <dl>
+    <dt>Reproduction gate</dt><dd>fig3-halo-grid: reproduction has not been certified</dd>
+    <dt>Manuscript section</dt><dd>Foreground census (Figure 3)</dd>
+    <dt>Claim</dt><dd>Not recorded</dd>
+    <dt>Owner review question</dt><dd>Approve the installed Figure 3 bytes (figures/sightline_halo_grid.pdf) or return needs_revision. The analysis-only validation passed; this call judges presentation: nine drawn panels, with three sightlines omitted for having no established host redshift.</dd>
+    <dt>Manuscript target</dt><dd><code>figures/sightline_halo_grid.pdf</code></dd>
+    <dt>Candidate SHA-256</dt><dd><code>281e4bf4c9d910c070cb822195a743920a7ecf14e249c924521e359a9d788a75</code></dd>
+    <dt>Generator</dt><dd><code>cd analysis &amp;&amp; uv run --frozen python -m foregrounds.visualization.sightline_halo_grid --halo-csv foregrounds/census/data/sightline_halo_grid.csv --out-dir figure_review/artifacts/staging/fig3_halo_grid/figures --review-candidate</code></dd>
+    <dt>Required provenance</dt><dd>expanded-catalog build manifest and SHA-256; twelve-sightline Figure 3 input and reproduction receipt SHA-256; established host-redshift source extracts and SHA-256; diagnostic dispersion-measure redshift posterior, interval, basis, and SHA-256; hostless candidate states and foreground probabilities; coverage and exact-query limitations for every hostless sightline; review-candidate output hashes and blocked-promotion state; manuscript-owner visual approval</dd>
+    <dt>Frozen evidence</dt><dd><a href="provenance/expanded-catalog-build.json">expanded-catalog-build</a>, <a href="provenance/figure3-input.csv">figure3-input</a>, <a href="provenance/verdi-host-redshifts.csv">verdi-host-redshifts</a>, <a href="provenance/law-host-redshifts.csv">law-host-redshifts</a>, <a href="provenance/candidate-redshift-ledger.csv">candidate-redshift-ledger</a>, <a href="provenance/candidate-redshift-replay.json">candidate-redshift-replay</a>, <a href="provenance/candidate-redshift-payloads.json">candidate-redshift-payloads</a></dd>
+    <dt>DM record</dt><dd>None</dd>
+    <dt>Reviewer notes</dt><dd>None yet</dd>
+  </dl>
+</article></main></body></html>

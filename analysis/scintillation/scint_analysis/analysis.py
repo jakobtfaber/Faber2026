@@ -1,0 +1,2551 @@
+# ==============================================================================
+# File: scint_analysis/scint_analysis/analysis.py
+# ==============================================================================
+import logging
+
+import numpy as np
+
+log = logging.getLogger(__name__)
+
+try:
+    import numba as nb
+
+    _NUMBA = True
+    log.info("Numba detected. Using JIT-accelerated ACF computations.")
+except (
+    ModuleNotFoundError,
+    ImportError,
+) as e:  # Catch both missing module and NumPy incompatibility
+    _NUMBA = False
+    if "NumPy 2" in str(e):
+        log.info(
+            "Numba not compatible with current NumPy version. Using pure Python ACF computations."
+        )
+    else:
+        log.info("Numba not found. Using pure Python ACF computations.")
+from collections import defaultdict
+
+from lmfit import Model
+from lmfit.models import ConstantModel
+from scipy.interpolate import interp1d
+from scipy.odr import ODR, RealData
+from scipy.odr import Model as ModelODR
+from tqdm import tqdm
+
+from .core import ACF
+
+# -------------------------
+# --- Model Definitions ---
+# -------------------------
+
+
+def lorentzian_component(x, gamma, m):
+    """A single Lorentzian component without a baseline constant."""
+    return (m**2) / (1 + (x / gamma) ** 2)
+
+
+def gaussian_component(x, sigma, m):
+    """A single Gaussian component without a baseline constant."""
+    return (m**2) * np.exp(-0.5 * (x / sigma) ** 2)
+
+
+def lorentzian_generalised(
+    x: np.ndarray | float, gamma: float, alpha: float, m: float
+) -> np.ndarray:
+    """Generalised (power‑law) Lorentzian without a baseline constant.
+
+    C(x) = m1² / [1 + |x/γ₁|^{α+2}]
+
+    *alpha = 0* reproduces the standard Lorentzian; *alpha = 5/3* is the
+    Kolmogorov diffractive prediction.
+    """
+    z = np.abs(x / gamma)
+    return (m**2.0) / (1.0 + z ** (alpha + 2.0))
+
+
+def power_law_model(x: np.ndarray | float, c: float, n: float) -> np.ndarray:
+    """Pure power-law tail without a baseline constant."""
+    eps = 1.0e-12
+    return c * (np.abs(x) + eps) ** n
+
+
+# -----------------------------------------------------------------------------
+# Fixed‑width self‑noise Gaussian
+# -----------------------------------------------------------------------------
+
+
+def gauss_fixed_width(x, sigma_self, m_self):
+    """Pure Gaussian that models the pulse-width self‑noise component without a baseline constant."""
+    return m_self**2 * np.exp(-0.5 * (x / sigma_self) ** 2)
+
+
+def _self_noise_model(sigma_self_mhz: float):
+    sn = Model(gauss_fixed_width, prefix="sn_")
+    p = sn.make_params(
+        sigma_self=sigma_self_mhz,
+        vary=True,
+        min=sigma_self_mhz * 0.25,
+        max=sigma_self_mhz * 1.75,  # ±25 %
+        m_self=0.3,
+    )
+    return sn, p
+
+
+def _baseline_registry(cfg_init: dict | None = None):
+    """Return a list describing **all** baseline scattering models.
+
+    Parameters
+    ----------
+    cfg_init : dict | None
+        Overrides for the initial‑guess dictionaries below, typically taken
+        from YAML → ``analysis → fitting → init_guess``.
+    """
+
+    if cfg_init is None:
+        cfg_init = {}
+
+    def merge(seed: dict, tag: str):
+        """Override hard‑coded seed with YAML values for the given *tag*."""
+        merged = seed.copy()
+        merged.update(cfg_init.get(tag, {}))
+        return merged
+
+    return [
+        # ------------------------------------------------------------------
+        #  SINGLE‑COMPONENT MODELS
+        # ------------------------------------------------------------------
+        (
+            "lor",
+            lorentzian_component,
+            "l_",
+            merge(dict(l_gamma=0.05, l_m=0.8), tag="lor"),
+            lambda p: (p["l_gamma"].set(min=1e-6), p["l_m"].set(min=0)),
+        ),
+        (
+            "gauss",
+            gaussian_component,
+            "g_",
+            merge(dict(g_sigma=0.05, g_m=0.8), tag="gauss"),
+            lambda p: (p["g_sigma"].set(min=1e-6), p["g_m"].set(min=0)),
+        ),
+        (
+            "lor_gen",
+            lorentzian_generalised,
+            "lg_",
+            merge(dict(lg_gamma=0.05, lg_alpha=5 / 3, lg_m=0.8), tag="lor_gen"),
+            lambda p: (
+                p["lg_gamma"].set(min=1e-6),
+                p["lg_alpha"].set(min=0.1, max=4.0),
+                p["lg_m"].set(min=0),
+            ),
+        ),
+        (
+            "power",
+            power_law_model,
+            "p_",
+            merge(dict(p_c=0.01, p_n=-2.0), tag="power"),
+            lambda p: p["p_c"].set(min=1e-6),
+        ),
+    ]
+
+
+# ----------------------------------------------
+# --- Core Calculation and Fitting Functions ---
+# ----------------------------------------------
+
+if _NUMBA:
+
+    @nb.njit(cache=True)
+    def _acf_with_errs(x, lags, denom):
+        nlag = lags.size
+        acf_vals = np.empty(nlag, dtype=np.float64)
+        stat_errs = np.empty(nlag, dtype=np.float64)
+        support_counts = np.empty(nlag, dtype=np.int64)
+        for i in range(nlag):
+            lag = lags[i]
+            prod = x[:-lag] * x[lag:]
+            count = 0
+            sum_prod = 0.0
+            sum_sq = 0.0
+            for p in prod:
+                if not np.isnan(p):
+                    count += 1
+                    sum_prod += p
+                    sum_sq += p * p
+            support_counts[i] = count
+            if count > 1:
+                mean = sum_prod / count
+                acf_vals[i] = mean / denom
+                var = (sum_sq - count * mean * mean) / (count - 1)
+                stat_errs[i] = np.sqrt(var / count) / denom
+            else:
+                acf_vals[i] = np.nan
+                stat_errs[i] = np.nan
+        return acf_vals, stat_errs, support_counts
+
+    @nb.njit(cache=True)
+    def _acf_noerrs(x, lags, denom):
+        nlag = lags.size
+        acf_vals = np.empty(nlag, dtype=np.float64)
+        support_counts = np.empty(nlag, dtype=np.int64)
+        for i in range(nlag):
+            lag = lags[i]
+            prod = x[:-lag] * x[lag:]
+            count = 0
+            sum_prod = 0.0
+            for p in prod:
+                if not np.isnan(p):
+                    count += 1
+                    sum_prod += p
+            support_counts[i] = count
+            if count > 1:
+                acf_vals[i] = sum_prod / (count * denom)
+            else:
+                acf_vals[i] = np.nan
+        return acf_vals, support_counts
+else:
+
+    def _acf_with_errs(x, lags, denom):
+        acf_vals = np.zeros(len(lags))
+        stat_errs = np.zeros(len(lags))
+        support_counts = np.zeros(len(lags), dtype=np.int64)
+        for i, lag in enumerate(lags):
+            prod = x[:-lag] * x[lag:]
+            valid_products = prod[~np.isnan(prod)]
+            num_valid = len(valid_products)
+            support_counts[i] = num_valid
+            if num_valid > 1:
+                acf_vals[i] = np.mean(valid_products) / denom
+                var_of_products = np.var(valid_products, ddof=1)
+                std_err_of_mean = np.sqrt(var_of_products / num_valid)
+                stat_errs[i] = std_err_of_mean / denom
+            else:
+                acf_vals[i] = np.nan
+                stat_errs[i] = np.nan
+        return acf_vals, stat_errs, support_counts
+
+    def _acf_noerrs(x, lags, denom):
+        acf_vals = np.zeros(len(lags))
+        support_counts = np.zeros(len(lags), dtype=np.int64)
+        for i, lag in enumerate(lags):
+            v1, v2 = x[:-lag], x[lag:]
+            prod = v1 * v2
+            num_valid = np.sum(~np.isnan(prod))
+            support_counts[i] = num_valid
+            if num_valid > 1:
+                acf_vals[i] = np.nansum(prod) / (num_valid * denom)
+            else:
+                acf_vals[i] = np.nan
+        return acf_vals, support_counts
+
+
+def _bandwidth_fields(gamma_hwhm_mhz, gamma_err_mhz=None):
+    # The reference notebooks report Delta_nu_d = gamma (HWHM), while v3 reports 2*gamma.
+    fields = {
+        "gamma_hwhm_mhz": gamma_hwhm_mhz,
+        "fwhm_mhz": 2.0 * gamma_hwhm_mhz if gamma_hwhm_mhz is not None else None,
+        "reported_dnu_definition": "HWHM",
+    }
+    if gamma_err_mhz is not None:
+        fields["gamma_hwhm_err_mhz"] = gamma_err_mhz
+    return fields
+
+
+def calculate_acf(
+    spectrum_1d,
+    channel_width_mhz,
+    off_burst_spectrum_mean=None,
+    max_lag_bins=None,
+    first_fit_lag=1,
+    min_support_pairs=2,
+    min_support_fraction=0.0,
+):
+    """
+    Calculates the ACF and its diagonal errors, including statistical and
+    finite scintle contributions.
+
+    This method calculates the standard error of the mean for the products at each
+    lag and combines it in quadrature with an estimate of the finite scintle noise.
+
+    Parameters
+    ----------
+    spectrum_1d : np.ma.MaskedArray
+        The 1D spectrum to autocorrelate.
+    channel_width_mhz : float
+        The channel width in MHz.
+    off_burst_spectrum_mean : float, optional
+        The mean of the off-burst spectrum for normalization.
+    max_lag_bins : int, optional
+        The maximum number of bins for the ACF.
+    first_fit_lag : int, optional
+        The first positive lag bin retained in the returned ACF.
+
+    Returns
+    -------
+    ACF object or None
+        An ACF object containing the ACF, lags, and combined errors, or None if
+        the calculation fails.
+    """
+    log.debug(f"Calculating ACF with robust errors for spectrum of length {len(spectrum_1d)}.")
+
+    n_unmasked = spectrum_1d.count()
+    if n_unmasked < 20:
+        log.warning(f"Not enough data ({n_unmasked} points) to calculate a reliable ACF. Skipping.")
+        return None
+
+    if max_lag_bins is None:
+        max_lag_bins = n_unmasked // 4  # Default to 1/4 of the unmasked channels
+    if max_lag_bins < 2:
+        log.warning("max_lag_bins is too small. Skipping ACF calculation.")
+        return None
+
+    # --- 1. Basic ACF Calculation ---
+    mean_on = np.ma.mean(spectrum_1d)
+    denom = (
+        (mean_on - off_burst_spectrum_mean) ** 2
+        if off_burst_spectrum_mean is not None
+        else mean_on**2
+    )
+    if denom == 0:
+        denom = 1.0
+
+    x = spectrum_1d.filled(np.nan) - mean_on
+    lags = np.arange(
+        max(1, int(first_fit_lag)),
+        min(int(max_lag_bins), len(spectrum_1d)),
+    )
+
+    acf_vals, stat_errs, support_counts = _acf_with_errs(x, lags, denom)
+    possible_pairs = len(spectrum_1d) - lags
+    effective_weights = support_counts / possible_pairs
+    support_ok = (support_counts >= int(min_support_pairs)) & (
+        effective_weights >= float(min_support_fraction)
+    )
+    acf_vals[~support_ok] = np.nan
+    stat_errs[~support_ok] = np.nan
+
+    # --- 2. Finite Scintle Error Calculation ---
+    # Use the calculated ACF to estimate the decorrelation bandwidth (Δν_DC)
+    positive_lags_mhz = lags * channel_width_mhz
+
+    # Clean out any NaNs from failed lag calculations before finding HWHM
+    clean_mask = ~np.isnan(acf_vals)
+    if not np.any(clean_mask):
+        return None  # Return if all lags failed
+
+    clean_acf = acf_vals[clean_mask]
+    clean_lags = positive_lags_mhz[clean_mask]
+
+    half_max = 0.5 * np.max(clean_acf)
+    try:
+        # Interpolate to find the HWHM accurately
+        # Note: interp needs monotonically increasing x-values (clean_acf is decreasing)
+        hwhm_mhz = np.interp(half_max, clean_acf[::-1], clean_lags[::-1])
+        delta_nu_dc = hwhm_mhz
+    except Exception:
+        delta_nu_dc = channel_width_mhz * 10  # Fallback if interpolation fails
+
+    # Number of scintles = Total Bandwidth / Decorrelation Bandwidth
+    total_bandwidth = n_unmasked * channel_width_mhz
+    n_scintles = max(1.0, total_bandwidth / delta_nu_dc)
+
+    # Fractional error due to finite scintles
+    finite_scintle_frac_err = 1.0 / np.sqrt(n_scintles)
+
+    # Convert fractional error to error in ACF units for each lag
+    finite_scintle_errs = np.abs(acf_vals) * finite_scintle_frac_err
+
+    # --- 3. Symmetrize and Combine ---
+    # Create the full, two-sided arrays for ACF, lags, and errors
+    full_acf = np.concatenate((acf_vals[clean_mask][::-1], acf_vals[clean_mask]))
+    full_lags = np.concatenate(
+        (-positive_lags_mhz[clean_mask][::-1], positive_lags_mhz[clean_mask])
+    )
+
+    full_stat_err = np.concatenate((stat_errs[clean_mask][::-1], stat_errs[clean_mask]))
+    full_finite_err = np.concatenate(
+        (finite_scintle_errs[clean_mask][::-1], finite_scintle_errs[clean_mask])
+    )
+
+    # Combine the two error sources in quadrature to get the total diagonal error
+    total_diag_err = np.sqrt(full_stat_err**2 + full_finite_err**2)
+    retained_counts = support_counts[clean_mask]
+    retained_weights = effective_weights[clean_mask]
+    return ACF(
+        full_acf,
+        full_lags,
+        acf_err=total_diag_err,
+        support_counts=np.concatenate((retained_counts[::-1], retained_counts)),
+        effective_weights=np.concatenate((retained_weights[::-1], retained_weights)),
+        support_threshold={
+            "min_pairs": int(min_support_pairs),
+            "min_fraction": float(min_support_fraction),
+        },
+        support_valid=bool(np.all(support_ok)),
+    )
+
+
+# -----------------------------------------------------------------------------
+# Helper utilities (place these anywhere in analysis.py above the main function)
+# -----------------------------------------------------------------------------
+
+
+def _estimate_sigma_self(ds, burst_lims):
+    """Return σ_self (MHz) – the Gaussian width of the self‑noise ACF component.
+
+    Uses the 16–84 % cumulative‑energy interval of the frequency‑summed burst
+    profile so that it is robust to multi‑peaked or asymmetric bursts.
+    Implements Eq. (7) of Pradeep et al. (2025).
+    """
+    # Collapse dynamic spectrum to one time series (mask ignored → filled with 0)
+    t_series = ds.power[:, burst_lims[0] : burst_lims[1]].sum(axis=0).filled(0.0)
+    if t_series.sum() == 0:
+        return None  # no useful signal
+
+    cdf = np.cumsum(t_series)
+    cdf /= cdf[-1]
+    t_bins = ds.times[: len(t_series)]
+    t16, t84 = np.interp([0.16, 0.84], cdf, t_bins)
+    sigma_t = 0.5 * (t84 - t16)  # ≈1 σ for a Gaussian pulse
+    sigma_self_hz = 1.0 / (2.0 * np.pi * sigma_t)
+    return sigma_self_hz / 1e6  # MHz
+
+
+_noise_acf_cache: dict[tuple, np.ndarray] = {}
+_noise_acf_cache_max_size: int = 100  # Limit cache size to prevent memory issues
+
+
+def _noise_descriptor_hash(noise_desc) -> int:
+    """Generate a stable hash for a NoiseDescriptor based on its content.
+
+    This replaces the fragile id()-based caching with a content-based hash
+    that remains valid even if the same descriptor object is modified.
+    """
+    if noise_desc is None:
+        return 0
+    # Hash based on the key statistical properties
+    hash_components = (
+        noise_desc.kind,
+        noise_desc.nt,
+        noise_desc.nchan,
+        round(noise_desc.mu, 8),
+        round(noise_desc.sigma, 8),
+        round(noise_desc.gamma_k, 8),
+        round(noise_desc.gamma_theta, 8),
+        round(noise_desc.phi_t, 8),
+        round(noise_desc.phi_f, 8),
+    )
+    return hash(hash_components)
+
+
+def clear_noise_acf_cache():
+    """Clear the noise ACF template cache.
+
+    Call this between pipeline runs or when noise characteristics change.
+    """
+    global _noise_acf_cache
+    _noise_acf_cache.clear()
+    log.info("Noise ACF template cache cleared.")
+
+
+def _mean_noise_acf(
+    noise_desc,
+    n_rep,
+    spec_len,
+    channel_width_mhz,
+    *,
+    mask_hash,
+    first_fit_lag=1,
+    acf_fn=calculate_acf,
+):
+    """Monte‑Carlo average spectral ACF of pure noise rows.
+
+    Parameters
+    ----------
+    noise_desc : NoiseDescriptor
+        Object capable of `.sample()` → (time, freq) array(s); statistics match data.
+    n_rep : int
+        Number of synthetic rows to average. ≥100 is recommended for smoothness.
+    spec_len : int
+        Length of the centerless, two-sided ACF to match.
+    channel_width_mhz : float
+        Frequency bin width in MHz for unit conversion.
+    mask_hash : int
+        Hash of the mask array for cache keying.
+    first_fit_lag : int, optional
+        First positive lag bin retained in the real ACF.
+    """
+    global _noise_acf_cache
+
+    # Use content-based hash instead of id()
+    desc_hash = _noise_descriptor_hash(noise_desc)
+    first_fit_lag = max(1, int(first_fit_lag))
+    key = (desc_hash, spec_len, round(channel_width_mhz, 6), mask_hash, first_fit_lag)
+
+    if key in _noise_acf_cache:
+        log.debug(f"Using cached noise ACF template (key hash: {hash(key)})")
+        return _noise_acf_cache[key]
+
+    # Limit cache size to prevent memory issues
+    if len(_noise_acf_cache) >= _noise_acf_cache_max_size:
+        # Remove oldest entry (FIFO-like behavior)
+        oldest_key = next(iter(_noise_acf_cache))
+        del _noise_acf_cache[oldest_key]
+        log.debug("Evicted oldest entry from noise ACF cache")
+
+    acfs = []
+    # Deterministic per-draw seeds keyed to the descriptor: unseeded draws
+    # made the sub-band widths (and hence the fitted alpha) drift between
+    # identical runs — casey's odr alpha flipped sign run-to-run. Python's
+    # hash() is salted per process (PYTHONHASHSEED), so use a stable digest.
+    import zlib
+
+    base_seed = zlib.crc32(
+        repr((noise_desc.kind, noise_desc.nt, noise_desc.nchan,
+              round(noise_desc.mu, 8), round(noise_desc.sigma, 8))).encode()
+    ) % (2**31)
+    for i in range(n_rep):
+        noise_row = noise_desc.sample(seed=base_seed + i)[0]  # (nchan,) synthetic row
+        acf_obj = acf_fn(
+            np.ma.masked_invalid(noise_row),
+            channel_width_mhz,
+            off_burst_spectrum_mean=0.0,
+            max_lag_bins=spec_len // 2 + first_fit_lag,
+            first_fit_lag=first_fit_lag,
+        )
+        if acf_obj is not None:
+            acfs.append(acf_obj.acf)
+
+    if not acfs:
+        return None
+
+    mean_acf = np.mean(acfs, axis=0)
+    _noise_acf_cache[key] = mean_acf
+    return mean_acf
+
+
+def calculate_acf_noerrs(
+    spectrum_1d,
+    channel_width_mhz,
+    off_burst_spectrum_mean=None,
+    max_lag_bins=None,
+    first_fit_lag=1,
+):
+    """
+    Calculates the one-sided autocorrelation function of a spectrum using
+    efficient NumPy operations.
+
+    Parameters
+    ----------
+    spectrum_1d : np.ma.MaskedArray
+        The 1D spectrum to autocorrelate. Must be a masked array.
+    channel_width_mhz : float
+        The channel width in MHz.
+    off_burst_spectrum_mean : float, optional
+        The mean of the off-burst spectrum, used for normalization.
+    max_lag_bins : int, optional
+        The maximum number of bins to compute the ACF out to.
+    first_fit_lag : int, optional
+        The first positive lag bin retained in the returned ACF.
+
+    Returns
+    -------
+    ACF: object
+    """
+    log.debug(f"Calculating ACF for a spectrum of length {len(spectrum_1d)}.")
+    valid_spec = spectrum_1d.compressed()
+    if valid_spec.size < 10:
+        return None
+
+    mean_on = np.mean(valid_spec)
+
+    # Define the normalization denominator for measuring the modulation index
+    denom = (
+        (mean_on - off_burst_spectrum_mean) ** 2
+        if off_burst_spectrum_mean is not None
+        else mean_on**2
+    )
+    if denom == 0:
+        denom = 1.0
+
+    # Prepare the mean-subtracted spectrum, using NaN for masked values
+    x = spectrum_1d.filled(np.nan) - mean_on
+    n_chan = len(x)
+    if max_lag_bins is None:
+        max_lag_bins = n_chan
+
+    lags = np.arange(
+        max(1, int(first_fit_lag)),
+        min(int(max_lag_bins), n_chan),
+    )
+    acf_vals, support_counts = _acf_noerrs(x, lags, denom)
+
+    pos_lags_mhz = lags * channel_width_mhz
+    full_acf = np.concatenate((acf_vals[::-1], acf_vals))
+    full_lags = np.concatenate((-pos_lags_mhz[::-1], pos_lags_mhz))
+
+    possible_pairs = n_chan - lags
+    effective_weights = support_counts / possible_pairs
+    return ACF(
+        full_acf,
+        full_lags,
+        support_counts=np.concatenate((support_counts[::-1], support_counts)),
+        effective_weights=np.concatenate((effective_weights[::-1], effective_weights)),
+        support_threshold={"min_pairs": 2, "min_fraction": 0.0},
+        support_valid=bool(np.all(support_counts >= 2)),
+    )
+
+
+def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=None):
+    """Calculate spectral ACFs for each frequency sub‑band of a burst.
+
+    This upgraded version (a) removes the mean radiometer‑noise contribution via
+    Monte‑Carlo synthetic spectra and (b) records σ_self so that downstream
+    model fits can add a fixed‑width Gaussian self‑noise term.
+    """
+    log.info("Starting sub‑band ACF calculations (self‑noise + synthetic‑noise aware).")
+
+    analysis_cfg = config.get("analysis", {})
+    acf_cfg = analysis_cfg.get("acf", {})
+
+    n_rep = analysis_cfg.get("noise", {}).get("template_n_draws", 15)
+    use_template = not analysis_cfg.get("noise", {}).get("disable_template", False)
+
+    fixed_slices = acf_cfg.get("subband_channel_slices")
+    if fixed_slices is not None:
+        fixed_slices = [(int(start), int(end)) for start, end in fixed_slices]
+        n_sub = len(fixed_slices)
+    else:
+        n_sub = acf_cfg.get("num_subbands", 8)
+    use_snr = acf_cfg.get("use_snr_subbanding", False)
+    max_lag_mhz_global = acf_cfg.get("max_lag_mhz", 45.0)
+    first_fit_lag = acf_cfg.get("first_fit_lag", 1)
+    min_support_pairs = int(acf_cfg.get("min_support_pairs", 2))
+    min_support_fraction = float(acf_cfg.get("min_support_fraction", 0.0))
+
+    # Self‑noise width and optional off‑burst reference
+    if config.get("analysis", {}).get("self_noise", {}).get("disable", False):
+        sigma_self_mhz = None  # ← skip Gaussian in every sub-band
+    else:
+        sigma_self_mhz = _estimate_sigma_self(masked_spectrum, burst_lims)
+        if sigma_self_mhz is None:
+            log.warning("Could not estimate σ_self; Gaussian self‑noise term will be skipped.")
+
+    if noise_desc is None:
+        # Legacy off‑burst mean estimate for downward compatibility
+        rfi_cfg = analysis_cfg.get("rfi_masking", {})
+        if rfi_cfg.get("use_symmetric_noise_window", False):
+            on_dur = burst_lims[1] - burst_lims[0]
+            off_end = max(burst_lims[0] - 1, 0)
+            off_start = max(off_end - on_dur, 0)
+        else:
+            off_end = max(burst_lims[0] - rfi_cfg.get("off_burst_buffer", 100), 0)
+            off_start = 0
+        off_burst_spec = masked_spectrum.get_spectrum((off_start, off_end))
+    else:
+        off_burst_spec = None  # not used when we have a descriptor
+
+    # Prepare results container
+    results = {
+        "subband_acfs": [],
+        "subband_lags_mhz": [],
+        "subband_acfs_err": [],
+        "subband_center_freqs_mhz": [],
+        "subband_channel_widths_mhz": [],
+        "subband_num_channels": [],
+        "subband_support_counts": [],
+        "subband_effective_weights": [],
+        "support_threshold": {
+            "min_pairs": min_support_pairs,
+            "min_fraction": min_support_fraction,
+            "software_qualified_only": True,
+        },
+        # (start, end) channel-index slice for each stored sub-band, so a
+        # downstream off-pulse ACF null (chime_artifact_guards) can re-slice the
+        # off-pulse spectrum on the IDENTICAL channel boundaries the on-pulse
+        # ACF used. Additive key; existing consumers ignore it.
+        "subband_channel_slices": [],
+        "noise_template": [],
+        "sigma_self_mhz": sigma_self_mhz,
+    }
+
+    # Split burst‑integrated spectrum into sub‑bands (uniform or equal‑S/N).
+    # Optional profile-proportional time weights (config: analysis.acf.time_weights)
+    # give the matched-filter spectrum estimator — see core.get_spectrum for why.
+    burst_spec_full = masked_spectrum.get_spectrum(
+        burst_lims, time_weights=acf_cfg.get("time_weights"))
+    start_idx = 0
+    total_signal = np.sum(burst_spec_full.compressed())
+
+    for i in tqdm(range(n_sub), desc="ACF per sub‑band"):
+        # Decide indices [start_idx:end_idx)
+        if fixed_slices is not None:
+            start_idx, end_idx = fixed_slices[i]
+            if not (0 <= start_idx < end_idx <= masked_spectrum.num_channels):
+                raise ValueError(
+                    f"invalid fixed sub-band slice {(start_idx, end_idx)} for "
+                    f"{masked_spectrum.num_channels} channels"
+                )
+        elif not use_snr:
+            sub_len = masked_spectrum.num_channels // n_sub
+            end_idx = start_idx + sub_len if i < n_sub - 1 else masked_spectrum.num_channels
+        else:
+            target_signal = total_signal / n_sub
+            cum_sig = 0.0
+            end_idx = start_idx
+            while cum_sig < target_signal and end_idx < masked_spectrum.num_channels:
+                if not burst_spec_full.mask[end_idx]:
+                    cum_sig += burst_spec_full.data[end_idx]
+                end_idx += 1
+            if i == n_sub - 1:
+                end_idx = masked_spectrum.num_channels  # ensure coverage
+
+        sub_spec = burst_spec_full[start_idx:end_idx]
+        sub_freqs = masked_spectrum.frequencies[start_idx:end_idx]
+
+        # Off‑burst mean for normalisation (noise‑aware if descriptor is present)
+        if noise_desc is not None:
+            sub_off_mean = noise_desc.mu if noise_desc.kind == "intensity" else 0.0
+        else:
+            sub_off_mean = np.ma.mean(off_burst_spec[start_idx:end_idx])
+
+        # Basic dimensions
+        if len(sub_freqs) < 2:
+            log.warning("Sub‑band %d too narrow; skipped.", i)
+            start_idx = end_idx
+            continue
+        chan_width = float(np.abs(np.mean(np.diff(sub_freqs))))
+        available_bw = sub_spec.count() * chan_width
+        max_lag_mhz = min(max_lag_mhz_global, available_bw)
+        max_lag_bins_sub = int(max_lag_mhz / chan_width)
+
+        # ACF calculation – base object
+        acf_obj = calculate_acf(
+            sub_spec,
+            chan_width,
+            off_burst_spectrum_mean=sub_off_mean,
+            max_lag_bins=max_lag_bins_sub,
+            first_fit_lag=first_fit_lag,
+            min_support_pairs=min_support_pairs,
+            min_support_fraction=min_support_fraction,
+        )
+        if not acf_obj:
+            start_idx = end_idx
+            continue
+
+        #  Synthetic-noise template handling
+        mean_noise_acf = None
+        if noise_desc is not None and use_template:
+            real_mask_hash = hash(sub_spec.mask.tobytes())  # ← mask-aware key
+            mean_noise_acf = _mean_noise_acf(
+                noise_desc,
+                n_rep=n_rep,
+                spec_len=len(acf_obj.acf),
+                channel_width_mhz=chan_width,
+                mask_hash=real_mask_hash,
+                first_fit_lag=first_fit_lag,
+            )
+            if mean_noise_acf is not None:
+                # normalise so fitted 'amp' really is the radiometer m-value
+                peak = np.max(mean_noise_acf)
+                if peak != 0:
+                    mean_noise_acf /= peak
+
+        # Store results
+        results["noise_template"].append(mean_noise_acf)
+        results["subband_acfs"].append(acf_obj.acf)
+        results["subband_lags_mhz"].append(acf_obj.lags)
+        results["subband_acfs_err"].append(acf_obj.err)
+        results["subband_support_counts"].append(acf_obj.support_counts)
+        results["subband_effective_weights"].append(acf_obj.effective_weights)
+        results["subband_center_freqs_mhz"].append(float(np.mean(sub_freqs)))
+        results["subband_channel_widths_mhz"].append(chan_width)
+        results["subband_num_channels"].append(sub_spec.count())
+        results["subband_channel_slices"].append((int(start_idx), int(end_idx)))
+
+        start_idx = end_idx  # next sub‑band
+        log.debug(f"Cache now holds {len(_noise_acf_cache)} noise ACF template(s)")
+
+    return results
+
+
+def _make_noise_model(template, lags):
+    """Return (Model, Parameters) with one free amp parameter."""
+    shape = template / np.max(template)
+    f = interp1d(lags, shape, kind="linear", bounds_error=False, fill_value=0.0)
+
+    def noise_tpl(x, amp):
+        return amp * f(x)
+
+    nmod = Model(noise_tpl, prefix="n_")
+    p = nmod.make_params(amp=0.2, min=0, max=2.0)  # free amplitude
+    return nmod, p
+
+
+def harmonic_lag_mask(lags, spacing_mhz, halfwidth_mhz):
+    """Boolean mask (True = keep) excluding lags near k*spacing_mhz, k >= 1.
+
+    CHIME upchannelized products carry bandpass structure that repeats every
+    coarse channel (400 MHz / 1024 = 0.390625 MHz), printing a comb of spikes
+    into the frequency ACF at harmonics of that spacing (visible in the
+    2025-03 scintbw_freya fine-channel ACFs; quantified in the Faber2026
+    instrumental-origin experiment, arm B1: masking +/-0.05 MHz moves the
+    freya CHIME fit 35.19 -> 42.21 kHz). Excluding the comb keeps the
+    Lorentzian fit from being pulled by instrumental power. The zero-lag
+    neighbourhood (|lag| < spacing/2) is never masked here; the k=0 region is
+    governed by the fit range itself.
+    """
+    lags = np.asarray(lags, dtype=float)
+    if spacing_mhz is None or spacing_mhz <= 0:
+        return np.ones(lags.shape, dtype=bool)
+    dist = np.abs(np.abs(lags) - np.round(np.abs(lags) / spacing_mhz) * spacing_mhz)
+    near = (dist <= float(halfwidth_mhz)) & (np.abs(lags) >= 0.5 * spacing_mhz)
+    return ~near
+
+
+def _fit_acf_models(
+    acf_object,
+    fit_lagrange_mhz: float,
+    *,
+    sub_freq: float,  # <-- Parameter added
+    sigma_self_mhz: float | None = None,
+    noise_template: np.ndarray | None = None,
+    config=None,
+):
+    """
+    Fit every scattering candidate to one ACF.
+    """
+    fit_results: dict[str, lmfit.ModelResult | None] = {}
+
+    # --- data slice & weights ---
+    m = (np.abs(acf_object.lags) <= fit_lagrange_mhz) & (acf_object.lags != 0)
+    hm_cfg = (config or {}).get("analysis", {}).get("fitting", {}).get("harmonic_mask", {})
+    if hm_cfg.get("enable"):
+        m &= harmonic_lag_mask(
+            acf_object.lags,
+            float(hm_cfg.get("spacing_mhz", 0.390625)),
+            float(hm_cfg.get("halfwidth_mhz", 0.05)),
+        )
+    x, y = acf_object.lags[m], acf_object.acf[m]
+    w = None if acf_object.err is None else 1.0 / np.maximum(acf_object.err[m], 1e-9)
+
+    # --- optional components ---
+    has_sn = sigma_self_mhz is not None
+    has_tpl = noise_template is not None
+
+    if has_sn:
+        sn_model, sn_params = _self_noise_model(sigma_self_mhz)
+    if has_tpl:
+        tpl_model, tpl_params = _make_noise_model(noise_template, acf_object.lags)
+
+    # --- iterate over baseline registry ---
+    init_cfg = config.get("analysis", {}).get("fitting", {}).get("init_guess", {})
+    # Note: The `_baseline_registry` needs to be called with the raw `init_cfg`
+    for key, mfn, prefix, seed, hook in _baseline_registry(init_cfg):
+        # Check if there is a frequency-evolving guess configuration for this model key
+        if key in init_cfg and "components" in init_cfg[key]:
+            adv_cfg = init_cfg[key]
+            ref_freq = adv_cfg["reference_frequency_mhz"]
+            p0_dict = adv_cfg.get("constants", {}).copy()
+
+            for i, comp_cfg in enumerate(adv_cfg["components"]):
+                comp_idx = i + 1
+                alpha = comp_cfg["gamma_scaling_index"]
+                gamma_ref = comp_cfg["gamma_guess"]
+                scaled_gamma = gamma_ref * (sub_freq / ref_freq) ** alpha
+                p0_dict[f"{prefix}gamma{comp_idx}"] = scaled_gamma
+                p0_dict[f"{prefix}m{comp_idx}"] = comp_cfg["m_guess"]
+
+        else:
+            # Fallback to the old method (static guesses from YAML or defaults)
+            merged_seed = seed.copy()
+            if key in init_cfg:
+                merged_seed.update(init_cfg.get(key, {}))
+            p0_dict = merged_seed
+
+        # Build the baseline model and its parameters from our calculated p0_dict
+        base_model = Model(mfn, prefix=prefix)
+        base_params = base_model.make_params(**p0_dict)
+        if hook:
+            hook(base_params)
+
+        # Decide which composite we will fit, using the correctly generated base_params
+        if has_sn and has_tpl:
+            model = sn_model + tpl_model + base_model
+            params = sn_params.copy() + tpl_params.copy() + base_params.copy()
+
+        elif has_sn:
+            model = sn_model + base_model
+            params = sn_params.copy() + base_params.copy()
+
+        elif has_tpl:
+            model = tpl_model + base_model
+            params = tpl_params.copy() + base_params.copy()
+
+        else:
+            model, params = base_model, base_params.copy()
+
+        # Run the fit
+        label = f"fit_{'sn_tpl_' if has_sn and has_tpl else 'sn_' if has_sn else 'tpl_' if has_tpl else ''}{key}"
+        try:
+            result = model.fit(
+                y, params, x=x, weights=w, method="nelder", max_nfev=4000
+            )
+            # Nelder-Mead carries no covariance, so every param.stderr is
+            # None and the sub-band bw_err/mod_err serialize as NaN (P4e
+            # audit B3) — which downstream nan_to_num turned into an
+            # all-zero error vector for the gamma scaling fit. Refine at
+            # the Nelder optimum with leastsq to populate stderr; keep the
+            # Nelder result if the refinement fails or wanders.
+            try:
+                refined = model.fit(
+                    y, result.params.copy(), x=x, weights=w,
+                    method="leastsq", max_nfev=2000
+                )
+                if refined.success and np.isfinite(refined.chisqr) and (
+                    refined.chisqr <= result.chisqr * 1.05
+                ):
+                    result = refined
+            except Exception as refine_exc:
+                log.debug(f"{label} leastsq refinement failed ({refine_exc})")
+            fit_results[label] = result
+        except Exception as e:
+            log.debug(f"{label} failed ({e})")
+            fit_results[label] = None
+
+    return fit_results
+
+
+def _interpret_scaling_index(alpha: float, alpha_err: float) -> str:
+    """Interpret the frequency scaling index based on physical expectations.
+
+    Based on theoretical predictions from Bhat et al. (2004) and Nimmo et al. (2025):
+    - α ≈ 4.0-4.4: Kolmogorov turbulence (diffractive scintillation)
+    - α ≈ 3.9: Global average with inner scale effects (Bhat et al. 2004)
+    - α ≈ 3.0: Emission region partially resolved by screen (Nimmo et al. 2025)
+    - α ≈ 2.0: Refractive scintillation
+    - α ≈ 1.0: Two screens resolving each other (Nimmo et al. 2025)
+    - α ≈ 0: No frequency dependence (intrinsic structure or instrumental)
+    - α < 0 or α > 6: Likely unphysical, suggests fit issues
+
+    Parameters
+    ----------
+    alpha : float
+        The fitted scaling index (δν_DC ∝ ν^α)
+    alpha_err : float
+        The 1-σ uncertainty on alpha
+
+    Returns
+    -------
+    str
+        Human-readable interpretation of the scaling
+
+    References
+    ----------
+    Bhat et al. 2004, ApJ, 605, 759 (multifrequency pulse broadening)
+    Nimmo et al. 2025 (FRB 20221022A scintillation constraints)
+    """
+    # Handle NaN or invalid values
+    if not np.isfinite(alpha) or not np.isfinite(alpha_err):
+        return "Unable to determine (fit failed or invalid)"
+
+    # Define physical regimes with 2-σ tolerance
+    tol = 2.0 * alpha_err if alpha_err > 0 else 0.5
+
+    if alpha < -1.0:
+        return "Unphysical (negative scaling suggests fit issues or systematic errors)"
+    elif abs(alpha - 0.0) < tol:
+        return "No significant frequency scaling (intrinsic structure or instrumental)"
+    elif 0.5 < alpha < 1.5:
+        return (
+            f"Very shallow scaling (α = {alpha:.2f} ± {alpha_err:.2f}) - "
+            "may indicate two screens resolving each other (Nimmo et al. 2025 Eq. 27)"
+        )
+    elif abs(alpha - 2.0) < tol:
+        return "Refractive scintillation regime (α ≈ 2)"
+    elif 2.5 < alpha < 3.5:
+        return (
+            f"Intermediate scaling (α = {alpha:.2f} ± {alpha_err:.2f}) - "
+            "emission region may be partially resolved by scattering screen "
+            "(Nimmo et al. 2025 Eq. 26)"
+        )
+    elif 3.5 <= alpha <= 4.2:
+        if abs(alpha - 3.9) < tol:
+            return (
+                f"Kolmogorov with inner scale effects (α = {alpha:.2f} ± {alpha_err:.2f}) - "
+                "consistent with Bhat et al. 2004 global fit (α ≈ 3.9), "
+                "suggests inner scale l_i ~ 300-800 km"
+            )
+        elif abs(alpha - 4.0) < tol:
+            return "Kolmogorov diffractive scintillation (α ≈ 4.0)"
+        else:
+            return f"Diffractive scintillation regime (α = {alpha:.2f} ± {alpha_err:.2f})"
+    elif 4.2 < alpha <= 5.0:
+        if abs(alpha - 4.4) < tol:
+            return "Classic Kolmogorov (α ≈ 4.4) - no significant inner scale effect"
+        else:
+            return f"Diffractive scintillation regime (α = {alpha:.2f} ± {alpha_err:.2f})"
+    elif alpha > 5.0:
+        return f"Steep scaling (α = {alpha:.2f}) - may indicate scattering-dominated regime"
+    else:
+        return f"Intermediate regime (α = {alpha:.2f} ± {alpha_err:.2f})"
+
+
+# =============================================================================
+# Gamma(nu) scaling estimators
+# =============================================================================
+
+
+def _linear_from_log10(log_value):
+    """Convert a log10 value without ever returning an infinite float."""
+    if not np.isfinite(log_value):
+        return None
+    with np.errstate(over="ignore", under="ignore", invalid="ignore"):
+        value = np.power(10.0, float(log_value))
+    return float(value) if np.isfinite(value) and value > 0 else None
+
+
+def _gamma_scaling_failure(method, reason, status="failed"):
+    return {
+        "alpha": None,
+        "alpha_err": None,
+        "log10_c": None,
+        "c": None,
+        "bw_at_ref_mhz": None,
+        "bw_at_ref_mhz_err": None,
+        "method": method,
+        "status": status,
+        "reason": reason,
+    }
+
+
+def joint_2d_gamma_scaling(result, ref_freq=600.0):
+    """Normalize a joint-2D fit to the named gamma-scaling estimator contract."""
+    method = "joint 2D ACF fit (fitting_2d.py)"
+    if result is None:
+        return _gamma_scaling_failure(method, "joint 2D fit not run", status="not_run")
+
+    get = result.get if isinstance(result, dict) else lambda key, default=None: getattr(
+        result, key, default
+    )
+    alpha = get("alpha")
+    alpha_err = get("alpha_err")
+    gamma_0 = get("gamma_0")
+    gamma_0_err = get("gamma_0_err")
+    nu_ref = get("nu_ref")
+    success = get("success", True)
+    if (
+        not success
+        or not np.isfinite(ref_freq)
+        or ref_freq <= 0
+        or gamma_0 is None
+        or not np.isfinite(gamma_0)
+        or gamma_0 <= 0
+        or nu_ref is None
+        or not np.isfinite(nu_ref)
+        or nu_ref <= 0
+        or alpha is None
+        or not np.isfinite(alpha)
+    ):
+        return _gamma_scaling_failure(method, "joint 2D fit unsuccessful or non-finite")
+
+    log10_c = np.log10(gamma_0) - alpha * np.log10(nu_ref)
+    log_bw_ref = log10_c + alpha * np.log10(ref_freq)
+    bw_at_ref = _linear_from_log10(log_bw_ref)
+    if bw_at_ref is None:
+        return _gamma_scaling_failure(method, "reference bandwidth is not representable")
+    assert np.isfinite(bw_at_ref)
+
+    bw_err = None
+    if gamma_0_err is not None and np.isfinite(gamma_0_err) and gamma_0_err >= 0:
+        bw_err = float(bw_at_ref * gamma_0_err / gamma_0)
+    return {
+        "alpha": float(alpha),
+        "alpha_err": float(alpha_err) if alpha_err is not None and np.isfinite(alpha_err) else None,
+        "log10_c": float(log10_c),
+        "c": _linear_from_log10(log10_c),
+        "bw_at_ref_mhz": bw_at_ref,
+        "bw_at_ref_mhz_err": bw_err,
+        "method": method,
+        "status": "ok",
+        "reason": None,
+    }
+
+
+def estimate_gamma_scaling(
+    freqs, gammas, gamma_errs=None, ref_freq=600.0, joint_2d=None
+):
+    """Report the reference ODR, notebook regression, and joint-2D estimators.
+
+    The primary estimator follows ``analysis-Copy1.py:844-891``. Its intercept
+    remains ``log10_c`` throughout fitting and reference-bandwidth evaluation;
+    linear ``c`` is only a guarded convenience field. The notebook-style
+    unweighted regression and modern joint-2D fit remain separately named.
+    """
+    odr_method = "log-space ODR (analysis-Copy1.py:844)"
+    loglog_method = "unweighted log-log polyfit (scint_wilhelm.ipynb:240)"
+    outputs = {
+        "odr_logspace": _gamma_scaling_failure(odr_method, "fit not attempted"),
+        "loglog_unweighted": _gamma_scaling_failure(loglog_method, "fit not attempted"),
+        "joint_2d": joint_2d_gamma_scaling(joint_2d, ref_freq),
+    }
+
+    freqs = np.asarray(freqs, dtype=float)
+    gammas = np.asarray(gammas, dtype=float)
+    if freqs.shape != gammas.shape or freqs.ndim != 1 or freqs.size < 2:
+        reason = "at least two paired sub-band measurements are required"
+    elif not np.isfinite(ref_freq) or ref_freq <= 0:
+        reason = "reference frequency must be finite and positive"
+    elif not np.all(np.isfinite(freqs)) or not np.all(np.isfinite(gammas)):
+        reason = "sub-band measurements contain non-finite values"
+    elif np.any(freqs <= 0) or np.any(gammas <= 0):
+        reason = "sub-band frequencies and bandwidths must be positive"
+    else:
+        log_freqs = np.log10(freqs)
+        log_bws = np.log10(gammas)
+        threshold = np.sqrt(np.finfo(float).eps) * max(
+            1.0, float(np.max(np.abs(log_freqs)))
+        )
+        reason = (
+            "frequency grid is ill-conditioned for a two-parameter power law"
+            if np.ptp(log_freqs) <= threshold
+            else None
+        )
+
+    if reason is not None:
+        outputs["odr_logspace"] = _gamma_scaling_failure(odr_method, reason)
+        outputs["loglog_unweighted"] = _gamma_scaling_failure(loglog_method, reason)
+        return outputs
+
+    sy = None
+    if gamma_errs is not None:
+        gamma_errs = np.asarray(gamma_errs, dtype=float)
+        if gamma_errs.shape == gammas.shape:
+            candidate_sy = gamma_errs / (gammas * np.log(10.0))
+            if np.all(np.isfinite(candidate_sy)) and np.all(candidate_sy > 0):
+                sy = candidate_sy
+
+    linear_model = ModelODR(lambda beta, x: beta[0] * x + beta[1])
+    odr_output = ODR(
+        RealData(log_freqs, log_bws, sy=sy), linear_model, beta0=[4.0, 0.0]
+    ).run()
+    alpha, log10_c = (float(value) for value in odr_output.beta)
+    log_bw_ref = alpha * np.log10(ref_freq) + log10_c
+    bw_at_ref = _linear_from_log10(log_bw_ref)
+    if np.isfinite(alpha) and np.isfinite(log10_c) and bw_at_ref is not None:
+        assert np.isfinite(bw_at_ref)
+        alpha_err = float(odr_output.sd_beta[0])
+        grad = np.array([np.log10(ref_freq), 1.0])
+        var_log_bw_ref = float(grad @ odr_output.cov_beta @ grad)
+        with np.errstate(over="ignore", invalid="ignore"):
+            bw_err = bw_at_ref * np.sqrt(var_log_bw_ref) * np.log(10.0)
+        outputs["odr_logspace"] = {
+            "alpha": alpha,
+            "alpha_err": alpha_err if np.isfinite(alpha_err) else None,
+            "log10_c": log10_c,
+            "c": _linear_from_log10(log10_c),
+            "bw_at_ref_mhz": bw_at_ref,
+            "bw_at_ref_mhz_err": float(bw_err) if np.isfinite(bw_err) else None,
+            "method": odr_method,
+            "status": "ok",
+            "reason": None,
+        }
+    else:
+        outputs["odr_logspace"] = _gamma_scaling_failure(
+            odr_method, "ODR returned a non-finite or unrepresentable fit"
+        )
+
+    alpha_ll, log10_c_ll = (float(value) for value in np.polyfit(log_freqs, log_bws, 1))
+    log_bw_ref_ll = alpha_ll * np.log10(ref_freq) + log10_c_ll
+    bw_at_ref_ll = _linear_from_log10(log_bw_ref_ll)
+    if np.isfinite(alpha_ll) and np.isfinite(log10_c_ll) and bw_at_ref_ll is not None:
+        assert np.isfinite(bw_at_ref_ll)
+        outputs["loglog_unweighted"] = {
+            "alpha": alpha_ll,
+            "alpha_err": None,
+            "log10_c": log10_c_ll,
+            "c": _linear_from_log10(log10_c_ll),
+            "bw_at_ref_mhz": bw_at_ref_ll,
+            "bw_at_ref_mhz_err": None,
+            "method": loglog_method,
+            "status": "ok",
+            "reason": None,
+        }
+    else:
+        outputs["loglog_unweighted"] = _gamma_scaling_failure(
+            loglog_method, "log-log regression returned a non-finite or unrepresentable fit"
+        )
+    return outputs
+
+
+# =============================================================================
+# Modulation Index & Emission Region Diagnostics
+# (Pradeep et al. 2025 screen-count framework, primary; Nimmo et al. 2025
+#  source-resolution reading, complementary in the sub-unity regime)
+# =============================================================================
+
+
+def interpret_modulation_index(m: float, m_err: float = 0.0) -> dict:
+    """Interpret modulation index using the Pradeep et al. 2025 screen-count
+    framework, with the Nimmo et al. 2025 source-resolution reading retained as
+    a complementary diagnostic in the sub-unity regime.
+
+    The modulation index m = sigma_I / <I> (Rickett 1990) equals the square root
+    of the mean-normalized ACF peak: m^2 = ACF(dnu=0). For N plasma screens that
+    do not resolve each other, Pradeep et al. 2025 give
+
+        m^2 = 2**N - 1   =>   m = 1 (N=1), sqrt(3)~1.73 (N=2), sqrt(7)~2.65 (N=3),
+
+    so a *super-unity* modulation index is the expected signature of multiple
+    screens, NOT an anomaly. One screen resolving another gradually quenches the
+    broad-scale component, lowering m back toward 1; a fully resolved two-screen
+    system is degenerate with the single-screen case (m -> 1).
+
+    The two formalisms are complementary, not exclusive. They are independent
+    multiplicative suppressions of the measured m, so in the m < 1 regime the
+    reading is degenerate: a sub-unity m is consistent with EITHER a resolved
+    emission region (Nimmo source size, see ``estimate_emission_region_size``) OR
+    instrumental dilution (finite channels, low S/N, RFI). The screen geometry,
+    alpha scaling, and number of distinct ACF scales break the degeneracy.
+
+    Parameters
+    ----------
+    m : float
+        Measured modulation index from the ACF fit (sqrt of the fitted peak).
+    m_err : float, optional
+        Uncertainty on m.
+
+    Returns
+    -------
+    dict
+        - 'm', 'm_err': measured value and uncertainty
+        - 'interpretation': human-readable reading
+        - 'resolution_regime': categorical label
+        - 'n_screens_est': screen count implied by m^2 = 2**N - 1 (>=1)
+        - 'emission_resolved': bool, sub-unity (Nimmo source-size reading applies)
+        - 'degeneracy': note when more than one physical reading is viable, else ''
+
+    References
+    ----------
+    Pradeep et al. 2025, arXiv:2505.04576 (two-screen resolution effects; m2=2^N-1)
+    Nimmo et al. 2025, Nature 637, 48 (FRB 20221022A; source-resolution reading)
+    Jow et al. 2024, PNAS 121, e2306783 (m ~ 1/N_images in the resolved limit)
+    Rickett 1990, ARA&A, 28, 561 (scintillation theory)
+
+    Examples
+    --------
+    >>> interpret_modulation_index(1.73, 0.1)['resolution_regime']
+    'two_screen'
+    """
+    SQRT3 = np.sqrt(3.0)  # two non-resolving screens
+    SQRT7 = np.sqrt(7.0)  # three non-resolving screens
+
+    result = {
+        "m": m,
+        "m_err": m_err,
+        "interpretation": "",
+        "resolution_regime": "unknown",
+        "n_screens_est": np.nan,
+        "emission_resolved": False,
+        "degeneracy": "",
+    }
+
+    if not np.isfinite(m) or m <= 0.0:
+        result["interpretation"] = "Invalid modulation index measurement"
+        return result
+
+    # Screen count implied by Pradeep m^2 = 2**N - 1 (continuous, floored at 1).
+    result["n_screens_est"] = float(max(1.0, np.log2(1.0 + m**2)))
+
+    # Tolerance for "consistent with" a reference value.
+    tol = max(2.0 * m_err, 0.05) if m_err > 0 else 0.05
+
+    if m < 1.0 - tol:
+        # Sub-unity: below the single-screen floor => a suppression mechanism.
+        # Degenerate between Nimmo source-resolution and instrumental dilution.
+        result["emission_resolved"] = True
+        result["degeneracy"] = (
+            "m < 1 is degenerate: resolved emission region (Nimmo source size, "
+            "see estimate_emission_region_size) vs. instrumental dilution "
+            "(finite channels / low S/N / RFI). Use alpha and the number of ACF "
+            "scales to discriminate."
+        )
+        if m > 0.7:
+            band = "marginally suppressed; emission region near the diffractive scale"
+            result["resolution_regime"] = "suppressed_marginal"
+        elif m > 0.3:
+            band = "significantly suppressed; emission region or low S/N"
+            result["resolution_regime"] = "suppressed_partial"
+        else:
+            band = "heavily suppressed; extended source or weak/instrumental regime"
+            result["resolution_regime"] = "suppressed_heavy"
+        result["interpretation"] = (
+            f"Sub-unity modulation (m = {m:.2f} +/- {m_err:.2f}) - {band}. "
+            "Below the single-screen floor m=1, so a suppression mechanism is "
+            "required (Pradeep et al. 2025)."
+        )
+    elif abs(m - 1.0) <= tol:
+        result["resolution_regime"] = "single_screen_or_resolved"
+        result["interpretation"] = (
+            f"Single-screen / point-source modulation (m = {m:.2f} +/- {m_err:.2f}) - "
+            "one effective screen, or a fully resolved two-screen system "
+            "(degenerate); also the Nimmo point-source limit (Pradeep et al. 2025)."
+        )
+        result["degeneracy"] = (
+            "m ~ 1 is degenerate: a single screen, a point source, or a "
+            "two-screen system whose broad component is fully quenched by mutual "
+            "resolution."
+        )
+    elif m < SQRT3 - tol:
+        result["resolution_regime"] = "two_screen_partial"
+        result["interpretation"] = (
+            f"Mild super-unity modulation (m = {m:.2f} +/- {m_err:.2f}) - two screens "
+            "partially resolving each other; the broad-scale component is partly "
+            "quenched (1 < m < sqrt(3)~1.73; Pradeep et al. 2025)."
+        )
+    elif abs(m - SQRT3) <= tol:
+        result["resolution_regime"] = "two_screen"
+        result["interpretation"] = (
+            f"Two-screen modulation (m = {m:.2f} +/- {m_err:.2f} ~ sqrt(3)) - two "
+            "plasma screens that do not resolve each other (m^2=2^2-1=3; "
+            "Pradeep et al. 2025) - the MW + host geometry."
+        )
+    elif m <= SQRT7 + tol:
+        result["resolution_regime"] = "multi_screen"
+        result["interpretation"] = (
+            f"Strong super-unity modulation (m = {m:.2f} +/- {m_err:.2f}) - consistent "
+            "with ~2-3 non-resolving screens (sqrt(3) < m <~ sqrt(7)~2.65; m^2=2^N-1, "
+            "Pradeep et al. 2025)."
+        )
+    else:  # m > sqrt(7)
+        result["resolution_regime"] = "multi_screen_or_excess"
+        result["interpretation"] = (
+            f"Very high modulation (m = {m:.2f} +/- {m_err:.2f}) - >=3 non-resolving "
+            "screens (m^2=2^N-1), or residual non-scintillation structure "
+            "(RFI / intrinsic band-limited emission) inflating m (Pradeep et al. 2025)."
+        )
+        result["degeneracy"] = (
+            "Very high m: distinguish genuine multi-screen scintillation from "
+            "RFI / intrinsic spectral structure before claiming N>=3 screens."
+        )
+
+    return result
+
+
+def estimate_emission_region_size(
+    m: float,
+    delta_nu_dc_mhz: float,
+    d_source_screen_pc: float,
+    freq_mhz: float,
+    m_err: float = 0.0,
+    delta_nu_err_mhz: float = 0.0,
+) -> dict:
+    """Estimate lateral emission region size from modulation index.
+
+    Uses the relationship between modulation index and source resolution
+    from Nimmo et al. (2025) Eq. 22-23:
+
+        m = 1 / sqrt(1 + 4(R_★obs/χ)²)
+
+        χ = (1/ν) * sqrt(c * d_s2★ * Δν_DC / 2π)  [screen resolution]
+
+    Solving for R_★obs:
+        R_★obs = sqrt((c * d_s2★ * Δν_DC) / (8π ν²) * (1/m² - 1))
+
+    Parameters
+    ----------
+    m : float
+        Measured modulation index (0 < m ≤ 1 for resolved sources)
+    delta_nu_dc_mhz : float
+        Decorrelation bandwidth in MHz
+    d_source_screen_pc : float
+        Distance from source to scattering screen in parsecs
+    freq_mhz : float
+        Observing frequency in MHz
+    m_err : float, optional
+        Uncertainty on modulation index
+    delta_nu_err_mhz : float, optional
+        Uncertainty on decorrelation bandwidth
+
+    Returns
+    -------
+    dict
+        Dictionary containing:
+        - 'R_obs_km': estimated emission region size in km
+        - 'R_obs_err_km': uncertainty in km (if errors provided)
+        - 'chi_km': diffractive scale of screen in km
+        - 'is_upper_limit': bool, True if m ≈ 1 (gives upper limit)
+        - 'physical_context': comparison to known scales
+
+    References
+    ----------
+    Nimmo et al. 2025, Eq. 21-23
+    Kumar et al. 2024, MNRAS, 527, 457 (FRB scintillation constraints)
+
+    Examples
+    --------
+    >>> # FRB 20221022A parameters from Nimmo et al.
+    >>> result = estimate_emission_region_size(
+    ...     m=0.78, delta_nu_dc_mhz=0.124, d_source_screen_pc=11000,
+    ...     freq_mhz=600, m_err=0.07
+    ... )
+    >>> print(f"R_obs < {result['R_obs_km']:.0f} km")
+    """
+    c_m_s = 2.998e8  # speed of light in m/s
+    pc_to_m = 3.086e16  # parsec to meters
+
+    # Convert units
+    delta_nu_hz = delta_nu_dc_mhz * 1e6
+    freq_hz = freq_mhz * 1e6
+    d_m = d_source_screen_pc * pc_to_m
+
+    result = {
+        "R_obs_km": np.nan,
+        "R_obs_err_km": np.nan,
+        "chi_km": np.nan,
+        "is_upper_limit": False,
+        "physical_context": "",
+    }
+
+    # Calculate screen diffractive scale χ (Nimmo Eq. 21)
+    # χ = (1/ν) * sqrt(c * d * Δν / 2π)
+    chi_m = (1.0 / freq_hz) * np.sqrt(c_m_s * d_m * delta_nu_hz / (2 * np.pi))
+    chi_km = chi_m / 1e3
+    result["chi_km"] = chi_km
+
+    # Handle edge cases
+    if m >= 1.0:
+        # Unresolved: R_obs < χ (upper limit)
+        result["R_obs_km"] = chi_km
+        result["is_upper_limit"] = True
+        result["physical_context"] = (
+            f"Unresolved (m ≥ 1): R_obs < χ = {chi_km:.1f} km (upper limit)"
+        )
+        return result
+
+    if m <= 0.0:
+        result["physical_context"] = "Invalid modulation index (m ≤ 0)"
+        return result
+
+    # Calculate R_★obs from Nimmo Eq. 23:
+    # R_★obs = sqrt((c * d * Δν) / (8π ν²) * (1/m² - 1))
+    factor = (c_m_s * d_m * delta_nu_hz) / (8 * np.pi * freq_hz**2)
+    m_factor = (1.0 / m**2) - 1.0
+
+    if m_factor <= 0:
+        result["R_obs_km"] = 0.0
+        result["physical_context"] = "Point source (m_factor ≤ 0)"
+        return result
+
+    R_obs_m = np.sqrt(factor * m_factor)
+    R_obs_km = R_obs_m / 1e3
+    result["R_obs_km"] = R_obs_km
+
+    # Error propagation (simplified, assumes dominant error from m)
+    if m_err > 0:
+        # ∂R/∂m ∝ -m⁻³ * (1/m² - 1)^(-1/2) * sqrt(factor)
+        dm_factor = np.sqrt(factor) * (m ** (-3)) / np.sqrt(m_factor)
+        R_obs_err_km = abs(dm_factor * m_err) / 1e3
+        result["R_obs_err_km"] = R_obs_err_km
+
+    # Physical context
+    context_parts = [f"Estimated R_obs = {R_obs_km:.1f} km"]
+
+    # Compare to known scales
+    if R_obs_km < 100:
+        context_parts.append("consistent with pulsar emission (~10-100 km)")
+    elif R_obs_km < 1000:
+        context_parts.append("consistent with pulsar/magnetar magnetosphere (~100-1000 km)")
+    elif R_obs_km < 1e4:
+        context_parts.append("consistent with neutron star light cylinder (~1000-10,000 km)")
+    elif R_obs_km < 1e5:
+        context_parts.append("larger than typical magnetosphere; may indicate shock emission")
+    else:
+        context_parts.append("very large; likely non-magnetospheric origin")
+
+    result["physical_context"] = "; ".join(context_parts)
+
+    return result
+
+
+def two_screen_coherence_constraint(
+    delta_nu_1_mhz: float,
+    delta_nu_2_mhz: float,
+    freq_mhz: float,
+    d_source_mpc: float,
+    C1: float = 1.0,
+    C2: float = 1.0,
+) -> dict:
+    """Calculate two-screen coherence constraint from Nimmo et al. (2025).
+
+    When two scintillation scales are observed (e.g., one Galactic, one
+    extragalactic), mutual coherence requires:
+
+        Δν_s1 * Δν_s2 >= C₁ * C₂ * ν² * (d_s1★ * d_s2★ * d_⊕s1) / (d_⊕★² * d_⊕s2)
+
+    For an extragalactic source with one Galactic screen (s1) and one
+    host-galaxy screen (s2), this simplifies to (Nimmo Eq. 10):
+
+        d_⊕s1 * d_s2★ <= Δν_s1 * Δν_s2 * d_⊕★² / (C₁ * C₂ * ν²)
+
+    Parameters
+    ----------
+    delta_nu_1_mhz : float
+        Decorrelation bandwidth of screen 1 (closest to observer) in MHz
+    delta_nu_2_mhz : float
+        Decorrelation bandwidth of screen 2 (closest to source) in MHz
+    freq_mhz : float
+        Observing frequency in MHz
+    d_source_mpc : float
+        Distance to source in Mpc
+    C1, C2 : float, optional
+        Geometry constants (typically 1-2), default 1.0
+
+    Returns
+    -------
+    dict
+        Dictionary containing:
+        - 'd_product_kpc2': upper limit on d_⊕s1 * d_s2★ in kpc²
+        - 'example_constraints': dict with example screen distance scenarios
+
+    References
+    ----------
+    Nimmo et al. 2025, Eq. 7-11
+
+    Examples
+    --------
+    >>> # FRB 20221022A: 6 kHz and 124 kHz scales at 600 MHz, d = 65 Mpc
+    >>> result = two_screen_coherence_constraint(
+    ...     delta_nu_1_mhz=0.006, delta_nu_2_mhz=0.124,
+    ...     freq_mhz=600, d_source_mpc=65.189
+    ... )
+    >>> print(f"d_⊕s1 * d_s2★ <= {result['d_product_kpc2']:.1f} kpc²")
+    """
+    # Convert to Hz
+    delta_nu_1_hz = delta_nu_1_mhz * 1e6
+    delta_nu_2_hz = delta_nu_2_mhz * 1e6
+    freq_hz = freq_mhz * 1e6
+
+    # Convert distance to meters then to kpc for result
+    d_source_m = d_source_mpc * 3.086e22  # Mpc to m
+    d_source_kpc = d_source_mpc * 1e3  # Mpc to kpc
+
+    # Constraint: d_⊕s1 * d_s2★ <= Δν₁ * Δν₂ * d_⊕★² / (C₁ * C₂ * ν²)
+    # Result in kpc² (after unit conversion)
+    numerator = delta_nu_1_hz * delta_nu_2_hz * d_source_kpc**2
+    denominator = C1 * C2 * freq_hz**2
+
+    d_product_kpc2 = numerator / denominator
+
+    result = {
+        "d_product_kpc2": d_product_kpc2,
+        "example_constraints": {},
+    }
+
+    # Example scenarios
+    galactic_distances = [0.1, 0.3, 0.64, 1.0, 3.0]  # kpc
+    for d_gal in galactic_distances:
+        d_host_max = d_product_kpc2 / d_gal
+        result["example_constraints"][f"d_gal_{d_gal}kpc"] = {
+            "d_galactic_kpc": d_gal,
+            "d_host_max_kpc": d_host_max,
+            "d_host_max_pc": d_host_max * 1e3,
+        }
+
+    return result
+
+
+def scattering_scintillation_consistency(
+    tau_d_ms: float,
+    delta_nu_dc_mhz: float,
+    C: float = 1.0,
+    tau_d_err_ms: float = 0.0,
+    delta_nu_err_mhz: float = 0.0,
+) -> dict:
+    """Check consistency between scattering timescale and decorrelation bandwidth.
+
+    The fundamental relationship is (Bhat et al. 2004, Nimmo et al. 2025):
+
+        τ_s = C / (2π Δν_DC)
+
+    where C is a geometry-dependent constant typically in range 1-2.
+
+    Parameters
+    ----------
+    tau_d_ms : float
+        Measured scattering timescale in milliseconds
+    delta_nu_dc_mhz : float
+        Measured decorrelation bandwidth in MHz
+    C : float, optional
+        Geometry constant (default 1.0)
+    tau_d_err_ms : float, optional
+        Uncertainty on scattering timescale
+    delta_nu_err_mhz : float, optional
+        Uncertainty on decorrelation bandwidth
+
+    Returns
+    -------
+    dict
+        Dictionary containing:
+        - 'tau_from_scint_ms': τ predicted from scintillation measurement
+        - 'nu_from_scat_mhz': Δν predicted from scattering measurement
+        - 'C_implied': implied geometry constant
+        - 'consistent': bool, whether measurements are consistent
+        - 'interpretation': string describing consistency
+
+    References
+    ----------
+    Bhat et al. 2004, ApJ, 605, 759
+    Cordes & Rickett 1998, ApJ, 507, 846
+
+    Examples
+    --------
+    >>> result = scattering_scintillation_consistency(
+    ...     tau_d_ms=0.1, delta_nu_dc_mhz=0.05
+    ... )
+    >>> print(f"Implied C = {result['C_implied']:.2f}")
+    """
+    # Convert units
+    tau_d_s = tau_d_ms * 1e-3
+    delta_nu_hz = delta_nu_dc_mhz * 1e6
+
+    result = {
+        "tau_from_scint_ms": np.nan,
+        "nu_from_scat_mhz": np.nan,
+        "C_implied": np.nan,
+        "consistent": False,
+        "interpretation": "",
+    }
+
+    # τ predicted from scintillation: τ = C / (2π Δν)
+    tau_from_scint_s = C / (2 * np.pi * delta_nu_hz)
+    tau_from_scint_ms = tau_from_scint_s * 1e3
+    result["tau_from_scint_ms"] = tau_from_scint_ms
+
+    # Δν predicted from scattering: Δν = C / (2π τ)
+    nu_from_scat_hz = C / (2 * np.pi * tau_d_s)
+    nu_from_scat_mhz = nu_from_scat_hz / 1e6
+    result["nu_from_scat_mhz"] = nu_from_scat_mhz
+
+    # Implied C from measurements: C = 2π τ Δν
+    C_implied = 2 * np.pi * tau_d_s * delta_nu_hz
+    result["C_implied"] = C_implied
+
+    # Check consistency — C_implied = 2π τ Δν must satisfy the repo's mandatory
+    # physics gate τ·Δν ∈ [0.1, 2.0] (AGENTS.md), so C_implied ∈ [2π·0.1, 2π·2.0].
+    C_lo = 2 * np.pi * 0.1
+    C_hi = 2 * np.pi * 2.0
+    if C_lo < C_implied < C_hi:
+        result["consistent"] = True
+        result["interpretation"] = (
+            f"Consistent: implied C = {C_implied:.2f} is within canonical range "
+            f"[{C_lo:.2f}, {C_hi:.2f}]. "
+            f"τ_scint = {tau_from_scint_ms:.3f} ms, Δν_scat = {nu_from_scat_mhz:.4f} MHz"
+        )
+    elif C_implied <= C_lo:
+        result["consistent"] = False
+        result["interpretation"] = (
+            f"Inconsistent: C = {C_implied:.2f} < {C_lo:.2f} (τ·Δν < 0.1). "
+            "Scattering may be from different screen than scintillation, "
+            "or one measurement may be affected by systematics."
+        )
+    else:  # C_implied >= C_hi
+        result["consistent"] = False
+        result["interpretation"] = (
+            f"Inconsistent: C = {C_implied:.2f} > {C_hi:.2f} (τ·Δν > 2.0). "
+            "May indicate multiple scattering screens, anisotropic scattering, "
+            "or measurement systematics."
+        )
+
+    return result
+
+
+def _select_overall_best_model(all_subband_fits):
+    """
+    Determines the best overall model by summing the BIC across all sub-bands
+    for each model type and selecting the one with the lowest total BIC.
+
+    Keep the pretty log ordering (optional):
+    ----------------------------------------
+
+    for model_name in sorted(model_bics):
+    bic_entry = model_bics[model_name]
+    if bic_entry['count'] > 0:
+        avg_bic = bic_entry['total_bic'] / bic_entry['count']
+        log.info(f"{model_name:>20s}:  Total BIC = {avg_bic:7.1f}  "
+                 f"(from {bic_entry['count']:2d} fits)")
+    """
+    # Use a dictionary to store total BICs and fit counts for each model
+    model_bics = defaultdict(lambda: {"total_bic": 0.0, "count": 0})
+
+    for fits in all_subband_fits:
+        for model_name, fit_result in fits.items():
+            if fit_result and fit_result.success:
+                model_bics[model_name]["total_bic"] += fit_result.bic
+                model_bics[model_name]["count"] += 1
+
+    log.info("--- Model Comparison (Lowest Total BIC is Best) ---")
+
+    best_model = None
+    min_bic = float("inf")
+
+    for model_name, results in model_bics.items():
+        if results["count"] > 0:
+            log.info(
+                f"Model '{model_name}': Total BIC = {results['total_bic']:.2f} (from {results['count']} fits)"
+            )
+            if results["total_bic"] < min_bic:
+                min_bic = results["total_bic"]
+                best_model = model_name
+        else:
+            log.info(f"Model '{model_name}': No successful fits.")
+
+    if best_model is None:
+        log.warning("No successful fits for any model. Defaulting to 'lorentzian_component'.")
+        return "lorentzian_component"
+
+    log.info(f"==> Best overall model selected: {best_model}")
+    return best_model
+
+
+def _determine_n_components(acf_results, max_components=3):
+    """Burst-level Lorentzian component count from the BIC + nested-F-test selector
+    (``revalidation.compare_lorentzian_components``) run on each sub-band ACF and
+    aggregated by plurality (ties → fewer components, the conservative default).
+
+    The pipeline feeds its OWN ACFs (``calculate_acf``) to the selector, so this does
+    not compromise the cross-check independence of the revalidation ACF estimator —
+    only the model-selection statistic is shared. Returns ``(n_components, per_subband)``.
+    """
+    from .revalidation import compare_lorentzian_components
+
+    per = []
+    for i in range(len(acf_results["subband_acfs"])):
+        lags = np.asarray(acf_results["subband_lags_mhz"][i], dtype=float)
+        acf = np.asarray(acf_results["subband_acfs"][i], dtype=float)
+        try:
+            per.append(compare_lorentzian_components(lags, acf, max_components=max_components))
+        except Exception as e:  # a single bad sub-band must not sink the burst
+            log.debug(f"component-count selector failed on sub-band {i}: {e}")
+            per.append({"n_preferred": 1})
+    if not per:
+        return 1, per
+    votes = {}
+    for v in per:
+        k = int(v.get("n_preferred", 1))
+        votes[k] = votes.get(k, 0) + 1
+    top = max(votes.values())
+    return min(k for k, c in votes.items() if c == top), per  # plurality, ties → fewer
+
+
+# Two Δν-sorted components are treated as the same (unresolvable) screen when their
+# widths are closer than this factor and their errors are unknown — below it the
+# ascending-Δν identity assignment is not trustworthy.
+_MIN_DNU_RATIO = 2.0
+
+
+def _components_ambiguous(comps):
+    """True if any adjacent pair of Δν-sorted components is statistically
+    inseparable. The ``_MIN_DNU_RATIO`` resolvability floor is applied
+    unconditionally — formally tiny fit errors routinely understate the real
+    degeneracy of two closely-spaced Lorentzians, so non-overlap of the reported
+    errors is not trusted to override it — and, when errors are available, an
+    additional combined-1σ overlap test catches wider-but-uncertain pairs. Such a
+    sub-band cannot reliably assign components to screens by Δν order, so it is
+    dropped from the extraction."""
+    for a, b in zip(comps[:-1], comps[1:], strict=False):
+        da, db = a["dnu_mhz"], b["dnu_mhz"]
+        if da > 0 and db / da < _MIN_DNU_RATIO:  # resolvability floor, always
+            return True
+        ea, eb = a.get("dnu_err", np.nan), b.get("dnu_err", np.nan)
+        if np.isfinite(ea) and np.isfinite(eb) and abs(db - da) < (ea + eb):
+            return True
+    return False
+
+
+def _extract_multi_component(per_subband, num_comps, n_subbands):
+    """params_per_comp from each sub-band's N-Lorentzian fit (the selector's ``fits``
+    entry for n=num_comps). Components are ordered by ascending Δν so component k is
+    the same screen across sub-bands (the per-component power-law then tracks one
+    screen). A sub-band contributes a component only when its OWN selector justified
+    >= num_comps components and the Δν-sorted split is unambiguous; otherwise (failed
+    N-fit, under-justified, ambiguous, or non-physical k-th component) it gets a
+    ``{}`` placeholder, which the downstream consumer skips."""
+    params_per_comp = [[] for _ in range(num_comps)]
+    for i in range(n_subbands):
+        verdict = per_subband[i] if per_subband and i < len(per_subband) else None
+        # Only borrow a sub-band's N-Lorentzian split if that sub-band's own selector
+        # justified >= num_comps — else its forced N-fit manufactures statistically
+        # unjustified components (per-sub-band justification, not just burst plurality).
+        justified = bool(verdict and int(verdict.get("n_preferred", 1)) >= num_comps)
+        fit_n = (
+            next(
+                (
+                    f
+                    for f in verdict.get("fits", [])
+                    if f.get("n") == num_comps and f.get("success")
+                ),
+                None,
+            )
+            if justified
+            else None
+        )
+        comps = sorted(fit_n["components"], key=lambda c: c["dnu_mhz"]) if fit_n else []
+        if comps and _components_ambiguous(comps):
+            comps = []  # inseparable widths → drop rather than mislabel screens
+        gof = {"bic": fit_n["bic"], "redchi": fit_n["redchi"]} if (fit_n and comps) else {}
+        for c in range(num_comps):
+            cc = comps[c] if c < len(comps) else None
+            if cc and np.isfinite(cc["dnu_mhz"]) and cc["dnu_mhz"] > 0:
+                params_per_comp[c].append(
+                    {
+                        "bw": cc["dnu_mhz"],
+                        "mod": cc["m"],
+                        "bw_err": cc.get("dnu_err", np.nan),
+                        "mod_err": cc.get("m_err", np.nan),
+                        "finite_err": np.nan,
+                        "gof": gof,
+                    }
+                )
+            else:
+                params_per_comp[c].append({})
+    return params_per_comp
+
+
+def analyze_scintillation_from_acfs(acf_results, config):
+    """
+    Main analysis orchestrator. Fits multiple ACF models, selects the best one,
+    and derives scintillation parameters, including goodness-of-fit checks.
+    """
+    fit_config = config.get("analysis", {}).get("fitting", {})
+    fit_lagrange_mhz = fit_config.get("fit_lagrange_mhz", 45.0)
+    ref_freq = fit_config.get("reference_frequency_mhz", 600.0)
+
+    log.info("Fitting all ACF models to all sub-band ACFs...")
+    all_fits = []
+    noise_templates = acf_results.get("noise_template", None)
+    sigma_self_mhz = acf_results.get("sigma_self_mhz", None)
+    for i in tqdm(range(len(acf_results["subband_acfs"])), desc="Fitting Sub-band ACFs"):
+        acf_data = acf_results["subband_acfs"][i]
+        lags = acf_results["subband_lags_mhz"][i]
+        sub_freq = acf_results["subband_center_freqs_mhz"][i]
+        sub_bandwidth = (
+            acf_results["subband_num_channels"][i] * acf_results["subband_channel_widths_mhz"][i]
+        )
+        current_fit_lagrange = min(fit_lagrange_mhz, sub_bandwidth / 2.0)
+        tpl = noise_templates[i] if noise_templates else None
+        fit_result = _fit_acf_models(
+            ACF(acf_data, lags),
+            current_fit_lagrange,
+            sub_freq=sub_freq,
+            sigma_self_mhz=sigma_self_mhz,
+            noise_template=tpl,
+            config=config,
+        )
+        all_fits.append(fit_result)
+
+    # 1. Get the automatically selected best model via BIC as a default.
+    auto_best_model = _select_overall_best_model(all_fits)
+
+    # 2. Check the config for a user-forced model.
+    forced_model = fit_config.get("force_model")
+
+    if forced_model:
+        # Check if the forced model is a valid option
+        valid_models = all_fits[0].keys() if all_fits else []
+        if forced_model in valid_models:
+            log.warning(
+                f"OVERRIDE: User has forced the model to '{forced_model}'. Bypassing BIC selection."
+            )
+            best_model_name = forced_model
+        else:
+            log.error(
+                f"Invalid model '{forced_model}' specified in config. Falling back to automatic BIC selection."
+            )
+            log.info(f"Valid model names are: {list(valid_models)}")
+            best_model_name = auto_best_model
+    else:
+        # If no model is forced, use the automatic selection.
+        best_model_name = auto_best_model
+
+    # Determine the statistically-justified number of Lorentzian components via the
+    # BIC + nested-F-test selector (aggregated across sub-bands). Only Lorentzian-
+    # family bursts are eligible; gauss/power/lor_gen stay single-component. This
+    # replaces a dead "2c"/"3c"-in-name heuristic that no model ever emitted.
+    n_comp_detail = None
+    if best_model_name.endswith("lor"):
+        num_comps, n_comp_detail = _determine_n_components(acf_results, max_components=3)
+    else:
+        num_comps = 1
+
+    params_per_comp = [[] for _ in range(num_comps)]
+
+    for i, fits in enumerate(all_fits):
+        fit_obj = fits.get(best_model_name)
+
+        if not (fit_obj and fit_obj.success):
+            for comp_list in params_per_comp:
+                comp_list.append({})
+            continue
+
+        p = fit_obj.params
+        sub_bw = (
+            acf_results["subband_num_channels"][i] * acf_results["subband_channel_widths_mhz"][i]
+        )
+        gof_metrics = {"bic": fit_obj.bic, "redchi": fit_obj.redchi}
+
+        def get_bw_params(param_name, is_gauss):
+            val = p[param_name].value
+            err = p[param_name].stderr if p[param_name].stderr is not None else np.nan
+            if is_gauss:
+                hwhm_factor = np.sqrt(2 * np.log(2))
+                return val * hwhm_factor, err * hwhm_factor
+            return val, err
+
+        def get_mod_err(param_name):
+            param = p.get(param_name)
+            return param.stderr if param is not None and param.stderr is not None else np.nan
+
+        # Handle different model types
+        if "power" in best_model_name:
+            # Power-law model: C(Δν) = c · |Δν|^n
+            # No direct "bandwidth" - use characteristic scale at 1 MHz
+            prefix = "p_"
+            c_val = p[f"{prefix}c"].value
+            c_err = p[f"{prefix}c"].stderr if p[f"{prefix}c"].stderr is not None else np.nan
+            n_val = p[f"{prefix}n"].value
+            n_err = p[f"{prefix}n"].stderr if p[f"{prefix}n"].stderr is not None else np.nan
+
+            # For power-law, store c and n instead of bandwidth and modulation
+            # Use c as proxy for "bandwidth scale" and set modulation to NaN
+            bw, bw_err = c_val, c_err
+            mod, mod_err = np.nan, np.nan  # Power-law has no modulation index
+
+        elif "lor_gen" in best_model_name or "gen" in best_model_name:
+            # Generalized Lorentzian: has gamma, alpha, m
+            prefix = "lg_"
+            bw, bw_err = get_bw_params(f"{prefix}gamma", False)
+            mod = p[f"{prefix}m"].value
+            mod_err = get_mod_err(f"{prefix}m")
+
+        else:
+            # Standard Lorentzian or Gaussian
+            is_gauss = "gauss" in best_model_name
+            prefix = "g_" if is_gauss else "l_"
+            p_root = "sigma" if is_gauss else "gamma"
+            bw, bw_err = get_bw_params(f"{prefix}{p_root}", is_gauss)
+            mod = p[f"{prefix}m"].value
+            mod_err = get_mod_err(f"{prefix}m")
+
+        # Append this sub-band's measurement as the dict contract the power-law
+        # consumer below expects (keys bw/mod/bw_err/mod_err/finite_err/gof).
+        # _fit_acf_models only yields single-component models, so the measured
+        # bandwidth lands in component 0; any extra components (never hit on this
+        # path) get {} to keep per-sub-band index alignment with the fail branch.
+        measurement = {
+            "bw": bw,
+            "mod": mod,
+            "bw_err": bw_err,
+            "mod_err": mod_err,
+            # finite-scintle error is already folded into bw_err via the weighted
+            # ACF fit (calculate_acf builds it into acf_err); keep nan here so the
+            # consumer's quadrature sum does not double-count it.
+            "finite_err": np.nan,
+            "gof": gof_metrics,
+        }
+        params_per_comp[0].append(measurement)
+        for comp_list in params_per_comp[1:]:
+            comp_list.append({})
+
+    # When the selector found >1 Lorentzian component, replace the single-component
+    # extraction above with per-component measurements from each sub-band's
+    # N-Lorentzian fit (component identity fixed by ascending Δν).
+    if num_comps > 1:
+        params_per_comp = _extract_multi_component(n_comp_detail, num_comps, len(all_fits))
+
+    final_results = {"best_model": best_model_name, "components": {}}
+    final_results["n_components"] = num_comps
+    if n_comp_detail is not None:
+        final_results["component_selection"] = {
+            "n_per_subband": [int(v.get("n_preferred", 1)) for v in n_comp_detail],
+            "criterion": n_comp_detail[0].get("criterion") if n_comp_detail else None,
+        }
+    all_powerlaw_fits = {}
+
+    for i, params_list in enumerate(params_per_comp):
+        name = f"component_{i + 1}" if num_comps > 1 else "scint_scale"
+        measurements = [p for p in params_list if "bw" in p]
+
+        # A 2-parameter power law needs >= 2 sub-band points; fewer (e.g. a forced
+        # multi-component split that only a couple of sub-bands actually justified)
+        # gives a degenerate/singular ODR, so report failure instead of fitting.
+        if len(measurements) < 2:
+            log.warning(
+                f"Skipping power-law fit for {name}: <2 valid sub-band measurements "
+                f"({len(measurements)})."
+            )
+            final_results["components"][name] = {
+                "power_law_fit_report": "Fit failed: <2 measurements"
+            }
+            continue
+
+        # Check for non-positive values before taking log
+        if not all(p.get("bw", -1) > 0 for p in measurements):
+            log.warning(f"Skipping power-law fit for {name}: contains non-positive bandwidths.")
+            final_results["components"][name] = {
+                "power_law_fit_report": "Fit failed: Non-positive BWs"
+            }
+            continue
+
+        freqs = np.array(
+            [
+                acf_results["subband_center_freqs_mhz"][j]
+                for j, p in enumerate(params_list)
+                if "bw" in p
+            ]
+        )
+        bws = np.array([p.get("bw") for p in measurements])
+        bw_errs = np.array([p.get("bw_err") for p in measurements], dtype=float)
+        finite_errs = np.array([p.get("finite_err") for p in measurements], dtype=float)
+        total_errs = np.sqrt(np.nan_to_num(bw_errs) ** 2 + np.nan_to_num(finite_errs) ** 2)
+        # A zeroed error (both components NaN -> nan_to_num) silently turns
+        # the weighted gamma fit into garbage; treat missing errors honestly
+        # by falling back to the unweighted estimator downstream.
+        if not np.all(total_errs > 0):
+            log.warning(
+                "Component %s: %d/%d sub-band widths carry no usable error; "
+                "gamma scaling errors are unreliable.",
+                name, int(np.sum(~(total_errs > 0))), total_errs.size,
+            )
+
+        gamma_scaling = estimate_gamma_scaling(
+            freqs, bws, gamma_errs=total_errs, ref_freq=ref_freq
+        )
+        primary = gamma_scaling["odr_logspace"]
+        all_powerlaw_fits[name] = gamma_scaling
+        if primary["status"] != "ok":
+            log.warning("Power-law fit for %s failed: %s", name, primary["reason"])
+            final_results["components"][name] = {
+                "power_law_fit_report": f"Fit failed: {primary['reason']}",
+                "gamma_scaling": gamma_scaling,
+            }
+            continue
+
+        alpha_fit = primary["alpha"]
+        alpha_err = primary["alpha_err"]
+        c_fit = primary["c"]
+        b_ref = primary["bw_at_ref_mhz"]
+        b_ref_err = primary["bw_at_ref_mhz_err"]
+
+        # ================================================================= #
+        # Use the fitted alpha and its error to suggest a
+        # physical scenario based on the findings from Pradeep et al. (2025)
+        # and Nimmo et al. (2025).
+
+        # Interpret the scaling index based on physical expectations
+        interpretation = _interpret_scaling_index(alpha_fit, alpha_err)
+
+        subband_measurements = []
+        for j, p_dict in enumerate(measurements):
+            measurement = {
+                "freq_mhz": freqs[j],
+                "bw": p_dict.get("bw"),
+                "mod": p_dict.get("mod"),
+                "bw_err": p_dict.get("bw_err"),
+                "mod_err": p_dict.get("mod_err"),
+                "finite_err": p_dict.get("finite_err"),
+                "gof": p_dict.get("gof", {}),
+                **_bandwidth_fields(p_dict.get("bw"), p_dict.get("bw_err")),
+            }
+            subband_measurements.append(measurement)
+
+        final_results["components"][name] = {
+            "power_law_fit_report": [c_fit, alpha_fit],  # Store linear-space c and slope alpha
+            "scaling_index": alpha_fit,
+            "scaling_index_err": alpha_err,
+            "bw_at_ref_mhz": b_ref,
+            "bw_at_ref_mhz_err": b_ref_err,
+            "gamma_scaling": gamma_scaling,
+            "subband_measurements": subband_measurements,
+            "scaling_interpretation": interpretation,
+            **_bandwidth_fields(b_ref, b_ref_err),
+        }
+
+    attach_modulation_index_frequency(final_results)
+    return final_results, all_fits, all_powerlaw_fits
+
+
+def attach_scintillation_interpretation(final_results, config):
+    """Attach two-screen interpretation to each component of an
+    ``analyze_scintillation_from_acfs`` result, in place.
+
+    Per-measurement inputs come from the component itself: m = median of the
+    per-subband modulation indices (m = sqrt(ACF peak); frequency-independent),
+    Δν_dc = the power-law decorrelation bandwidth at the reference frequency
+    (its HWHM). The external science inputs come from an optional
+    ``config['source']`` block:
+      - ``tau_d_ms``           -> τ_s = C/(2π Δν_dc) consistency check
+      - ``d_source_screen_pc`` -> emission-region size (Nimmo et al. 2025 Eqs 21-23)
+      - ``distance_mpc``       -> two-screen coherence constraint (needs a 2nd scale)
+
+    Each interpretation attaches ONLY when its required science input is present,
+    so on configs that don't carry a ``source`` block the call is a clean no-op
+    (Decision 3 of plan-incomplete-work-closeout). ``modulation`` always attaches
+    because m is intrinsic to the fit. Follows Nimmo et al. 2025 (arXiv:2406.11053).
+    """
+    if not isinstance(final_results, dict):
+        return final_results
+
+    def _pos(x):  # a usable physical input: present, finite, strictly positive
+        try:
+            return x is not None and np.isfinite(float(x)) and float(x) > 0
+        except (TypeError, ValueError):
+            return False
+
+    src = config.get("source", {}) if isinstance(config, dict) else {}
+    ref_freq = (
+        config.get("analysis", {}).get("fitting", {}).get("reference_frequency_mhz", 600.0)
+        if isinstance(config, dict)
+        else 600.0
+    )
+    if not _pos(ref_freq):
+        ref_freq = 600.0
+    tau_d_ms = src.get("tau_d_ms")
+    d_screen_pc = src.get("d_source_screen_pc")
+    d_source_mpc = src.get("distance_mpc")
+
+    for comp in final_results.get("components", {}).values():
+        meas = comp.get("subband_measurements") if isinstance(comp, dict) else None
+        if not meas:  # failed/empty component -> leave untouched
+            continue
+        mods = np.array([sm.get("mod", np.nan) for sm in meas], dtype=float)
+        mod_errs = np.array([sm.get("mod_err", np.nan) for sm in meas], dtype=float)
+        m = float(np.nanmedian(mods)) if np.isfinite(mods).any() else np.nan
+        m_err = float(np.nanmedian(mod_errs)) if np.isfinite(mod_errs).any() else 0.0
+        dnu = comp.get("bw_at_ref_mhz", np.nan)
+        dnu_err = comp.get("bw_at_ref_mhz_err", 0.0) or 0.0
+
+        comp["modulation"] = interpret_modulation_index(m, m_err)
+        if _pos(tau_d_ms) and _pos(dnu):
+            comp["consistency"] = scattering_scintillation_consistency(
+                float(tau_d_ms), float(dnu), delta_nu_err_mhz=float(dnu_err)
+            )
+        if _pos(d_screen_pc) and _pos(dnu) and _pos(m):
+            comp["emission_size"] = estimate_emission_region_size(
+                m,
+                float(dnu),
+                float(d_screen_pc),
+                float(ref_freq),
+                m_err=m_err,
+                delta_nu_err_mhz=float(dnu_err),
+            )
+        # Two-screen coherence: only when a second (wide+narrow) scale is present
+        # (e.g. from revalidation.fit_two_screen_acf) AND a source distance is known.
+        dnu_wide, dnu_narrow = comp.get("dnu_wide_mhz"), comp.get("dnu_narrow_mhz")
+        if _pos(dnu_wide) and _pos(dnu_narrow) and _pos(d_source_mpc):
+            comp["two_screen"] = two_screen_coherence_constraint(
+                float(dnu_wide), float(dnu_narrow), float(ref_freq), float(d_source_mpc)
+            )
+    return final_results
+
+
+ACF_AMPLITUDE_MODULATION_DEFINITION = (
+    "ACF-amplitude m = sqrt(fitted Lorentzian amplitude) per sub-band "
+    "(scinttools_v3.py:317)"
+)
+DIRECT_MODULATION_DEFINITION = (
+    "direct m = std/mean of frequency-averaged intensity in sliding time chunks "
+    "(scinttools_v3.py:611-735)"
+)
+INTRA_PULSE_ACF_MODULATION_DEFINITION = (
+    "ACF-fitted m and HWHM dnu per time slice "
+    "(analysis-Copy1.analyze_intra_pulse_scintillation:915-1033)"
+)
+
+
+def attach_modulation_index_frequency(final_results):
+    """Report fitted ACF-amplitude m(nu) without mixing in direct m(t)."""
+    components = {}
+    for name, component in final_results.get("components", {}).items():
+        measurements = component.get("subband_measurements", [])
+        components[name] = [
+            {
+                "freq_mhz": measurement.get("freq_mhz"),
+                "m": measurement.get("mod"),
+                "m_err": measurement.get("mod_err"),
+            }
+            for measurement in measurements
+        ]
+    final_results["modulation_index_frequency"] = {
+        "acf_amplitude": {
+            "definition": ACF_AMPLITUDE_MODULATION_DEFINITION,
+            "components": components,
+        }
+    }
+    return final_results
+
+
+def modulation_index_over_time(
+    power, burst_lims, chunk_bins=3, overlap_bins=2, times=None
+):
+    """Direct sliding-window m(t), matching RECIPE section 4/scinttools_v3."""
+    power = np.ma.asarray(power)
+    if power.ndim != 2:
+        raise ValueError("power must have shape (frequency, time)")
+    chunk_bins = int(chunk_bins)
+    overlap_bins = int(overlap_bins)
+    if chunk_bins <= 1:
+        raise ValueError("chunk_bins must be greater than 1")
+    if overlap_bins < 0 or overlap_bins >= chunk_bins:
+        raise ValueError("overlap_bins must satisfy 0 <= overlap_bins < chunk_bins")
+
+    start, end = (int(value) for value in burst_lims)
+    start = max(0, start)
+    end = min(end, power.shape[1])
+    step = chunk_bins - overlap_bins
+    time_idx = []
+    time_s = []
+    modulation = []
+    means = []
+    stds = []
+    counts = []
+    for chunk_start in range(start, end, step):
+        chunk_end = min(chunk_start + chunk_bins, end)
+        if chunk_end - chunk_start < 2:
+            continue
+        profile = np.ma.mean(power[:, chunk_start:chunk_end], axis=0)
+        mean = np.ma.mean(profile)
+        std = np.ma.std(profile)
+        count = int(profile.count())
+        center = 0.5 * (chunk_start + chunk_end - 1)
+        valid = (
+            count >= 2
+            and not np.ma.is_masked(mean)
+            and not np.ma.is_masked(std)
+            and np.isfinite(mean)
+            and np.isfinite(std)
+            and mean != 0
+        )
+        m = float(std / mean) if valid else np.nan
+        time_idx.append(center)
+        if times is not None:
+            time_s.append(float(np.mean(np.asarray(times)[chunk_start:chunk_end])))
+        modulation.append(m)
+        means.append(float(mean) if not np.ma.is_masked(mean) else np.nan)
+        stds.append(float(std) if not np.ma.is_masked(std) else np.nan)
+        counts.append(count)
+
+    result = {
+        "definition": DIRECT_MODULATION_DEFINITION,
+        "method": "direct std/mean (scinttools_v3.analyze_modulation_over_time)",
+        "chunk_bins": chunk_bins,
+        "overlap_bins": overlap_bins,
+        "time_idx": np.asarray(time_idx),
+        "m": np.asarray(modulation),
+        "mean": np.asarray(means),
+        "std": np.asarray(stds),
+        "num_points": np.asarray(counts),
+    }
+    if times is not None:
+        result["time_s"] = np.asarray(time_s)
+    return result
+
+
+def analyze_intra_pulse_scintillation(masked_spectrum, burst_lims, config, noise_desc):
+    """
+    Analyzes the evolution of scintillation parameters across the burst profile.
+
+    This function divides the on-pulse data into time slices, calculates the ACF
+    for each, and fits a model to track the evolution of the decorrelation
+    bandwidth and modulation index.
+
+    Args:
+        masked_spectrum (DynamicSpectrum): The processed dynamic spectrum.
+        burst_lims (tuple): The (start, end) time bins of the on-pulse region.
+        config (dict): The analysis configuration dictionary.
+        noise_desc (NoiseDescriptor): A pre-calculated noise descriptor for ACF normalization.
+
+    Returns:
+        list: A list of dictionaries, where each dictionary contains the fitted
+              parameters ('time_s', 'bw', 'bw_err', 'mod', 'mod_err') for one time slice.
+              Returns an empty list if the analysis cannot be run.
+    """
+    log.info("Starting intra-pulse scintillation analysis...")
+    acf_config = config.get("analysis", {}).get("acf", {})
+    fit_config = config.get("analysis", {}).get("fitting", {})
+    analysis_cfg = config.get("analysis", {})
+
+    if analysis_cfg.get("self_noise", {}).get("disable", False):
+        sigma_self_mhz = None
+    else:
+        sigma_self_mhz = _estimate_sigma_self(masked_spectrum, burst_lims)
+
+    noise_template = None  # always None for temporal analysis
+
+    num_time_bins = acf_config.get("intra_pulse_time_bins", 10)
+    model_to_fit = fit_config.get("intra_pulse_fit_model", "fit_lor")
+    max_lag_mhz = acf_config.get("max_lag_mhz", 45.0)
+
+    # NEW: Calculate the center frequency of the entire band once.
+    band_center_freq = np.mean(masked_spectrum.frequencies)
+
+    if not model_to_fit.endswith(("lor", "gauss")):
+        log.warning(
+            "Model '%s' is not a single Lorentzian/Gaussian; falling back to fit_lor.",
+            model_to_fit,
+        )
+        model_to_fit = "fit_lor"
+
+    results = []
+
+    on_pulse_start, on_pulse_end = burst_lims
+    total_duration_bins = on_pulse_end - on_pulse_start
+    slice_width_bins = total_duration_bins // num_time_bins
+
+    if slice_width_bins < 2:
+        log.warning(
+            "Burst duration is too short for the number of requested time slices. Skipping intra-pulse analysis."
+        )
+        return []
+
+    for i in tqdm(range(num_time_bins), desc="Analyzing ACF vs. Time"):
+        start_bin = on_pulse_start + (i * slice_width_bins)
+        end_bin = start_bin + slice_width_bins
+
+        sub_spectrum = masked_spectrum.power[:, start_bin:end_bin].mean(axis=1)
+        if sub_spectrum.count() < 10:
+            continue
+
+        if noise_desc and noise_desc.kind == "intensity":
+            sub_off_mean = noise_desc.mu
+        else:
+            sub_off_mean = 0.0
+
+        # Calculate max_lag_bins before calling the function
+        channel_width = masked_spectrum.channel_width_mhz
+        if channel_width > 0:
+            max_lag_bins_sub = int(max_lag_mhz / channel_width)
+        else:
+            continue  # Cannot proceed without a valid channel width
+
+        # Calculate ACF
+        acf_obj = calculate_acf(
+            sub_spectrum,
+            channel_width,
+            off_burst_spectrum_mean=sub_off_mean,
+            max_lag_bins=max_lag_bins_sub,
+            first_fit_lag=acf_config.get("first_fit_lag", 1),
+            min_support_pairs=int(acf_config.get("min_support_pairs", 2)),
+            min_support_fraction=float(acf_config.get("min_support_fraction", 0.0)),
+        )
+        if not acf_obj:
+            continue
+
+        # Fit models to the ACF
+        fit_results = _fit_acf_models(
+            acf_obj,
+            fit_lagrange_mhz=fit_config.get("fit_lagrange_mhz", 45.0),
+            sub_freq=band_center_freq,  # MODIFIED: Use the pre-calculated band center frequency
+            sigma_self_mhz=sigma_self_mhz,
+            noise_template=noise_template,  # always None here
+            config=config,
+        )
+        fit_obj = fit_results.get(model_to_fit)
+        if not (fit_obj and fit_obj.success):
+            continue
+
+        # Determine the exact lags used for the fit
+        fit_lagrange = fit_config.get("fit_lagrange_mhz", 45.0)
+        fit_mask = np.abs(acf_obj.lags) <= fit_lagrange
+        fit_lags = acf_obj.lags[fit_mask]  # These are the lags matching the best_fit array
+
+        # Extract parameters from the 1-component fit
+        p = fit_obj.params
+        is_gauss = "gauss" in model_to_fit
+        prefix = "g_" if is_gauss else "l_"
+        p_root = "sigma" if is_gauss else "gamma"
+
+        bw_val = p[f"{prefix}{p_root}"].value
+        bw_err = (
+            p[f"{prefix}{p_root}"].stderr
+            if p[f"{prefix}{p_root}"].stderr is not None
+            else np.nan
+        )
+
+        # Convert Gaussian sigma to HWHM if necessary
+        if is_gauss:
+            hwhm_factor = np.sqrt(2 * np.log(2))
+            bw_val *= hwhm_factor
+            if bw_err:
+                bw_err *= hwhm_factor
+
+        mod_val = p[f"{prefix}m"].value
+        mod_err = p[f"{prefix}m"].stderr if p[f"{prefix}m"].stderr is not None else np.nan
+
+        # Calculate the central time of the bin
+        center_time = np.mean(masked_spectrum.times[start_bin:end_bin])
+
+        results.append(
+            {
+                "time_s": center_time,
+                "bw": bw_val,
+                "bw_err": bw_err,
+                "mod": mod_val,
+                "mod_err": mod_err,
+                "acf_lags": acf_obj.lags,  # Full lags for the raw ACF data
+                "acf_data": acf_obj.acf,  # Raw ACF data
+                "acf_fit_lags": fit_lags,  # Lags corresponding to the fit
+                "acf_fit_best": fit_obj.best_fit,  # The best-fit line
+                "fit_success": fit_obj.success,
+                **_bandwidth_fields(bw_val, bw_err),
+            }
+        )
+
+    log.info(f"Intra-pulse analysis complete. Found results for {len(results)} time slices.")
+    return results
+
+
+# ==============================================================================
+# Fit Loading and Reconstruction (Added from notebook refactoring)
+# ==============================================================================
+
+
+def load_saved_fit(config_path, subband_index, model_name, lags, model_config=None):
+    """
+    Load a saved fit from YAML config and reconstruct the model curves.
+
+    This function reads fit results stored in the YAML configuration,
+    rebuilds the lmfit composite model, and evaluates it to regenerate
+    the best-fit curve and component curves for plotting.
+
+    Parameters
+    ----------
+    config_path : str or Path
+        Path to the YAML configuration file containing stored fits
+    subband_index : int
+        Index of the sub-band (0-indexed)
+    model_name : str
+        Name of the model fit to load, e.g. "Lorentzian+Gaussian"
+        This should match the key under stored_fits.subband_{i}
+    lags : np.ndarray
+        Lag array (MHz) on which to evaluate the model
+    model_config : dict, optional
+        Model configuration dictionary. If None, uses the default from widgets module.
+        Format: {name: {'func': callable, 'prefix': str, 'param_names': list}}
+
+    Returns
+    -------
+    dict or None
+        Dictionary containing:
+        - 'best_fit_curve': np.ndarray - composite model evaluated on lags
+        - 'component_curves': dict - individual component curves
+        - 'redchi': float - reduced chi-squared
+        - 'bic': float - Bayesian Information Criterion
+        - 'params': dict - parameter values and errors
+        - 'fit_range_mhz': list - lag range used for fitting
+
+        Returns None if the fit cannot be found or loaded.
+
+    Examples
+    --------
+    >>> from scint_analysis import analysis, plotting
+    >>> lags = acf_obj.lags
+    >>> fit_data = analysis.load_saved_fit(
+    ...     "configs/bursts/freya_dsa.yaml",
+    ...     subband_index=0,
+    ...     model_name="Lorentzian+Gaussian",
+    ...     lags=lags
+    ... )
+    >>> if fit_data:
+    ...     plotting.plot_publication_acf(acf_obj, **fit_data)
+    """
+    from pathlib import Path
+
+    import yaml
+    from lmfit import Model
+
+    # Use default model config if not provided
+    if model_config is None:
+        try:
+            from .widgets import DEFAULT_MODEL_CONFIG
+
+            model_config = DEFAULT_MODEL_CONFIG
+        except ImportError:
+            # Fallback: define minimal config
+            model_config = {
+                "Lorentzian": dict(
+                    func=lorentzian_component, prefix="l_", param_names=["gamma", "m"]
+                ),
+                "Gaussian": dict(func=gaussian_component, prefix="g_", param_names=["sigma", "m"]),
+                "Gen-Lorentz": dict(
+                    func=lorentzian_generalised, prefix="lg_", param_names=["gamma", "alpha", "m"]
+                ),
+                "Power-Law": dict(func=power_law_model, prefix="p_", param_names=["c", "n"]),
+            }
+
+    config_path = Path(config_path)
+
+    # Load YAML config
+    try:
+        with open(config_path) as f:
+            config_data = yaml.safe_load(f)
+    except Exception as e:
+        logging.error(f"Failed to load config from {config_path}: {e}")
+        return None
+
+    # Extract fit data
+    try:
+        fit_data = config_data["analysis"]["stored_fits"][f"subband_{subband_index}"][model_name]
+        saved_params = fit_data["best_fit_params"]
+        redchi = fit_data.get("redchi", np.nan)
+        bic = fit_data.get("bic", np.nan)
+        fit_range = fit_data.get("fit_range_mhz", [lags.min(), lags.max()])
+    except KeyError as e:
+        logging.error(
+            f"Could not find saved fit for sub-band {subband_index} with model '{model_name}': {e}"
+        )
+        return None
+
+    # Rebuild the lmfit composite model
+    component_keys = model_name.split("+")
+    signal_model = None
+
+    for i, key in enumerate(component_keys, start=1):
+        if key not in model_config:
+            logging.warning(f"Unknown model component '{key}', skipping")
+            continue
+
+        cfg = model_config[key]
+        m = Model(cfg["func"], prefix=f"{cfg['prefix']}{i}_")
+
+        if signal_model is None:
+            signal_model = m
+        else:
+            signal_model += m
+
+    if signal_model is None:
+        logging.error(f"No valid signal models found in '{model_name}'")
+        return None
+
+    # Add constant offset
+    const_model = ConstantModel(prefix="c_")
+    composite_model = signal_model + const_model
+    params = composite_model.make_params()
+
+    # Set parameter values from saved dictionary
+    for param_name, param_info in saved_params.items():
+        if param_name in params:
+            params[param_name].set(value=param_info["value"])
+
+    # Evaluate curves
+    best_fit_curve = composite_model.eval(params=params, x=lags)
+    component_curves = composite_model.eval_components(params=params, x=lags)
+
+    return {
+        "best_fit_curve": best_fit_curve,
+        "component_curves": component_curves,
+        "redchi": redchi,
+        "bic": bic,
+        "params": saved_params,
+        "fit_range_mhz": fit_range,
+    }

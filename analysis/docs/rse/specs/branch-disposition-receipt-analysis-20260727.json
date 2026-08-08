@@ -1,0 +1,644 @@
+{
+ "date": "2026-07-27",
+ "repo": "jakobtfaber/Faber2026-analysis",
+ "criteria": "merged=ancestor-of-origin/main; empty_diff=three-dot diff empty; prerewrite branches tree-compared two-dot (none identical)",
+ "bundle": "archive/analysis-repo-local-branches-20260727.bundle",
+ "counts": {
+  "merged": 45,
+  "unique": 38,
+  "kept-protected": 1
+ },
+ "deleted_count": 45,
+ "branches": [
+  {
+   "branch": "codex/adjudicate-host-redshift-identifiers-19",
+   "sha": "ba4c75e2ae66348e0ebc82cc5a12af3bfd7aa1b0",
+   "status": "merged",
+   "behind": 117,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/apj-wayfinder-closure",
+   "sha": "7c45a2e8ca828dfdbbbca0034a6df0da1dc2066c",
+   "status": "unique",
+   "behind": 192,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/apj-wayfinder-finalize",
+   "sha": "cef8aa795c4333036e838f476e980fe86fee2e22",
+   "status": "unique",
+   "behind": 178,
+   "ahead": 3
+  },
+  {
+   "branch": "codex/apj-wayfinder-integrate",
+   "sha": "658dfc0df4d2c7aa81fc26f13760b913bc82cc4b",
+   "status": "unique",
+   "behind": 185,
+   "ahead": 7
+  },
+  {
+   "branch": "codex/assign-open-issues-jakobtfaber-20260723",
+   "sha": "ebb7e469df87316b7335e8c2b3ec2ca493772aba",
+   "status": "unique",
+   "behind": 114,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/auto-host-redshifts",
+   "sha": "b6023c198cfc870eae618dd4c8f38a35f5ca0963",
+   "status": "merged",
+   "behind": 191,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/auto-resolve-expanded-crossmatch-contract",
+   "sha": "253d7ea542a85f8c0a13ce58d6634709adbc48e0",
+   "status": "unique",
+   "behind": 176,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/auto-review-coauthor-candidates",
+   "sha": "dfcd1d5e76c48642a3cb83dc7dd7cbd6ca26fc15",
+   "status": "merged",
+   "behind": 176,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/auto-review-count-audit",
+   "sha": "9ac847879f5dd2970bdb15c7b00bf01942b1bc54",
+   "status": "unique",
+   "behind": 176,
+   "ahead": 3
+  },
+  {
+   "branch": "codex/auto-review-rfi-preservation-limits",
+   "sha": "e2841ecee58be1c3bb20037d778342521dc935cb",
+   "status": "unique",
+   "behind": 176,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/auto-review-technical-robustness-dispositions",
+   "sha": "6972689c8c68655e11f9630387b561720f5afacc",
+   "status": "merged",
+   "behind": 177,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/auto-review-trust-ledger",
+   "sha": "75b9d5f62bbf8bf0526ad733add64a395ca8444d",
+   "status": "unique",
+   "behind": 176,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/auto-rfi-preservation",
+   "sha": "b6023c198cfc870eae618dd4c8f38a35f5ca0963",
+   "status": "merged",
+   "behind": 191,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/auto-set-expanded-figure3-gate",
+   "sha": "2b47740521dbcb144ff9923fbd1c8a2de72c4ae0",
+   "status": "merged",
+   "behind": 70,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/auto-set-expanded-independent-validation",
+   "sha": "8415f1eea3b92aa384b3b37ffff04cffc810ed45",
+   "status": "unique",
+   "behind": 48,
+   "ahead": 4
+  },
+  {
+   "branch": "codex/checkout-inventory",
+   "sha": "0677759b91651f94531b37470b12d9dadc5d0e3e",
+   "status": "unique",
+   "behind": 229,
+   "ahead": 14
+  },
+  {
+   "branch": "codex/claim-coverage-drift-packet-20260724",
+   "sha": "12af19948795c165a78ce97ee3a0d8315002571d",
+   "status": "merged",
+   "behind": 49,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/close-crossmatch-contract-02",
+   "sha": "22cabfe867fe6d1cb65104e3ad9431ef0a8f46e7",
+   "status": "unique",
+   "behind": 176,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/close-physics-authority-03",
+   "sha": "b57025a9d07219c0f94e4e9325f09ca5c34e699e",
+   "status": "unique",
+   "behind": 175,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/close-ticket09-controller",
+   "sha": "bfd37dc8ee9fce1b9c2f7d4dfc3756edc92efe7d",
+   "status": "merged",
+   "behind": 124,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/controller-queue-hardening",
+   "sha": "19ad2dde99a4649cfb6e3dfa70919e820bdc5025",
+   "status": "merged",
+   "behind": 172,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/controller-queue-repair",
+   "sha": "750b15a2dd0a669686cf98dd34118772e27338eb",
+   "status": "unique",
+   "behind": 179,
+   "ahead": 4
+  },
+  {
+   "branch": "codex/converge-coauthor11-20260722",
+   "sha": "72fa2be36756f2eb720fe385b47e4d23872d3e79",
+   "status": "unique",
+   "behind": 178,
+   "ahead": 2
+  },
+  {
+   "branch": "codex/converge-host-redshift18-20260722",
+   "sha": "c37b2411a82798b3cac4e5a3ef1eb38cc3e79843",
+   "status": "unique",
+   "behind": 178,
+   "ahead": 2
+  },
+  {
+   "branch": "codex/converge-rfi01a-20260722",
+   "sha": "095b84bbac3e6b9765220caa16dd1036e1025466",
+   "status": "unique",
+   "behind": 178,
+   "ahead": 2
+  },
+  {
+   "branch": "codex/convergence-wave-20260722",
+   "sha": "2b0effb97598b331fe3efb331cfdc91efbc7f0e1",
+   "status": "unique",
+   "behind": 164,
+   "ahead": 19
+  },
+  {
+   "branch": "codex/final-author-decision",
+   "sha": "449b0d2d698d7ef2b21b34c482e3d89a90f0694d",
+   "status": "merged",
+   "behind": 84,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/fix-path-hint-test-20260723",
+   "sha": "6addaced9400dc8442469bb50857ef8d7271573f",
+   "status": "merged",
+   "behind": 106,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/foreground-six-row-identities",
+   "sha": "e7eee61074bad7ac6c6b32a941c2110b04a473ff",
+   "status": "merged",
+   "behind": 103,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/freeze-anonymous-catalog-corpus",
+   "sha": "cb5c1339a3ba9da874f0c7c9ab5c38c0f936b41c",
+   "status": "merged",
+   "behind": 164,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/freeze-anonymous-catalog-corpus-complete",
+   "sha": "a413ffbd42a01553eeeea142d99bb6d4b9214df1",
+   "status": "unique",
+   "behind": 152,
+   "ahead": 2
+  },
+  {
+   "branch": "codex/freeze-anonymous-catalog-corpus-lfs",
+   "sha": "d000853c130837ec124baa75ac98caf15d5dc043",
+   "status": "merged",
+   "behind": 150,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/handoff-joint-scattering-20260723",
+   "sha": "c905f2d721aea72e388ab76229647d5760ea44ce",
+   "status": "merged",
+   "behind": 112,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/host-dm-current-provenance-20260723",
+   "sha": "dc18986b36e7078edb7296b24a1d3b9c765e30c8",
+   "status": "unique",
+   "behind": 52,
+   "ahead": 13
+  },
+  {
+   "branch": "codex/host-dm-repair-v2",
+   "sha": "a172521d96395de3169a840fe189e18b81c68636",
+   "status": "unique",
+   "behind": 48,
+   "ahead": 17
+  },
+  {
+   "branch": "codex/host-dm-trust-ratification",
+   "sha": "5fbbf8db34c3e5d23a40f802531825204c167837",
+   "status": "unique",
+   "behind": 146,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/integrate-trust-baseline-20260723",
+   "sha": "ba258cd04d331525d494d0323be5a2911a37135a",
+   "status": "merged",
+   "behind": 89,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/issue-map-reconcile-20260722",
+   "sha": "cd56108f04c1e5bafb8418601e2bdfbf444deec1",
+   "status": "unique",
+   "behind": 123,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/johndoeii-c2d2-controlled-rerun",
+   "sha": "0578adf3d043251c8b087faa3dcf3c77564fe99a",
+   "status": "merged",
+   "behind": 63,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/joint-scattering-controlled-20260722",
+   "sha": "2d523d6741527b6cc79b03ccba00d581807935a1",
+   "status": "merged",
+   "behind": 136,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/joint-scattering-runtime-20260722",
+   "sha": "546c6f762a2f046cfe096f7125e4ad671ff34b1e",
+   "status": "merged",
+   "behind": 115,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/kb-persistent-fastembed-cache-20260723",
+   "sha": "53e647e4adec4c44f3f6c8f8fd45655acf0d724f",
+   "status": "merged",
+   "behind": 103,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/owner-queue-date-independent-20260724",
+   "sha": "bad41d81c726dc1ed2461b273723313cad5c1245",
+   "status": "merged",
+   "behind": 78,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/packet-coauthor-candidates",
+   "sha": "cd000487f7350bf59b58b6cf422fab80682b5809",
+   "status": "merged",
+   "behind": 102,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/packet-rfi-preservation",
+   "sha": "280a38722f48e74efb4d13497fb71f0b3c9b6644",
+   "status": "merged",
+   "behind": 102,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/packet-technical-robustness",
+   "sha": "16b29015e49e25280eb93dd9a155d241660eeeff",
+   "status": "merged",
+   "behind": 102,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/phase0-queue-accounting",
+   "sha": "46df12fad47d5bc4078118cc5286cb14c84334f9",
+   "status": "unique",
+   "behind": 104,
+   "ahead": 2
+  },
+  {
+   "branch": "codex/phineas-probabilistic-crossing",
+   "sha": "45b6430bea213af039c8965c0b64aacd4f815af3",
+   "status": "merged",
+   "behind": 180,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/pr33-audit",
+   "sha": "2b0effb97598b331fe3efb331cfdc91efbc7f0e1",
+   "status": "unique",
+   "behind": 164,
+   "ahead": 19
+  },
+  {
+   "branch": "codex/pr33-governance-remediation",
+   "sha": "e1ec0a58504d739ea66de5662be5db42375a16e3",
+   "status": "merged",
+   "behind": 158,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/reconcile-board-owner-markers-20260724",
+   "sha": "5b27e3db7105f82b581153badd8043e6b601610e",
+   "status": "merged",
+   "behind": 61,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/reconcile-dm-signoff-board",
+   "sha": "e444494d96e710c1b2a20e5e5196322158533e38",
+   "status": "merged",
+   "behind": 204,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/reconcile-parent-integration-20260723",
+   "sha": "695b602129fc1a491fb18b92c62eb650dcd31eb3",
+   "status": "merged",
+   "behind": 108,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/record-no-approved-figures-20260723",
+   "sha": "2f8d66f2f7c77a29a3b43261223d4fa8af83bcef",
+   "status": "merged",
+   "behind": 87,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/refresh-owner-queue-20260723",
+   "sha": "a2efef51f2220c0b18c0a13858dffacb80eaa8da",
+   "status": "merged",
+   "behind": 80,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/repair-parent-pin-gates-20260723",
+   "sha": "d74e862947ee9ba67e3c8a179d810ab4a9f733ee",
+   "status": "unique",
+   "behind": 113,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/repair-root-science-governance-20260724",
+   "sha": "0087378b99129db44746d4ac13002c187f6785d9",
+   "status": "merged",
+   "behind": 51,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/repair-ticket14-authoritative-roster",
+   "sha": "058d293c70f2b93716997d81a6fff23968efc4e6",
+   "status": "merged",
+   "behind": 136,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/repository-archive-audit",
+   "sha": "3043b75a4017d4ff8b235bd6b4d7e495eeae31d4",
+   "status": "unique",
+   "behind": 229,
+   "ahead": 13
+  },
+  {
+   "branch": "codex/resolve-dsa-denominator",
+   "sha": "23a8ed103cc8cdaf9a83c83b63b242a0229f17f2",
+   "status": "merged",
+   "behind": 214,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/resolve-free-alpha-reporting",
+   "sha": "3b311093c37c803cf44fc5bc9f73e05ca7072079",
+   "status": "unique",
+   "behind": 224,
+   "ahead": 2
+  },
+  {
+   "branch": "codex/resolve-trust-assessment",
+   "sha": "5292337ffc6c0bb918a763860d70c0575530ae61",
+   "status": "unique",
+   "behind": 176,
+   "ahead": 8
+  },
+  {
+   "branch": "codex/retire-figure3-gate04-controller-20260724",
+   "sha": "32b8f764bc3a503dac5464606053a78e6295a277",
+   "status": "merged",
+   "behind": 53,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/review-count-audit",
+   "sha": "bc5b7f93dcc0d92594af637d6f6509893cd66af0",
+   "status": "unique",
+   "behind": 185,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/review-ticket-10",
+   "sha": "dfcd1d5e76c48642a3cb83dc7dd7cbd6ca26fc15",
+   "status": "merged",
+   "behind": 176,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/rfi-validation-01a-review",
+   "sha": "ec91989e7aa47843e91109e0d95b1c8ef3fd35c1",
+   "status": "unique",
+   "behind": 191,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/rfi-validation-contract-20260723",
+   "sha": "0d497b1f3b0ed936f2022e812a1d4bb01e6ba7df",
+   "status": "unique",
+   "behind": 90,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/supersede-rfi-automated-cleaner-tickets",
+   "sha": "1ca6183308b13a04f70f485fb40e20a7eff5d466",
+   "status": "unique",
+   "behind": 1,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/ticket20-injection-component-count",
+   "sha": "4ef360d6c781383565b456cff7929610648aa756",
+   "status": "merged",
+   "behind": 77,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/ticket6-controlled-panel-admission",
+   "sha": "abaf5ead47e1c2d3ab66697a004dead5a6f385ca",
+   "status": "merged",
+   "behind": 61,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/trust-decision-packet",
+   "sha": "1b7c29ef7923ef9b547abf5fe9f31261a477de6c",
+   "status": "merged",
+   "behind": 102,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/unblock-wayfinder-tickets",
+   "sha": "f3c44ec842e04663959173a112d212ea7bb0972a",
+   "status": "unique",
+   "behind": 229,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/verify-foreground-sources-09",
+   "sha": "04453ca6ce6435cb65ca0d5de492c48375fc1e6d",
+   "status": "merged",
+   "behind": 126,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/wayfinder-18-law-host-redshifts-v2",
+   "sha": "5e8d88ef7dc2e858b278933614d8e2b214d87caf",
+   "status": "unique",
+   "behind": 170,
+   "ahead": 3
+  },
+  {
+   "branch": "codex/wayfinder-default-recommendation-approval",
+   "sha": "b1686cde4c56416c3a9aeacdb926a54a3d0c4e7a",
+   "status": "merged",
+   "behind": 199,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/wayfinder-frontier-reconcile-20260723",
+   "sha": "2a69ade8e7db9670d805a8e4665aad632ac50e5e",
+   "status": "merged",
+   "behind": 85,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "docs/land-trust-deltas-20260724",
+   "sha": "2afbd06ec28cee80fe82cb3199f0477bcd361ad6",
+   "status": "unique",
+   "behind": 48,
+   "ahead": 1
+  },
+  {
+   "branch": "docs/raw-chime-definition-20260724",
+   "sha": "d76269e208fb0c87b4ec1a3d2e926d830ce6049e",
+   "status": "unique",
+   "behind": 47,
+   "ahead": 1
+  },
+  {
+   "branch": "docs/technical-review-decision-packet-20260724",
+   "sha": "875765c64070b2b2b54fd93a3a9708cd68bf1f70",
+   "status": "unique",
+   "behind": 45,
+   "ahead": 1
+  },
+  {
+   "branch": "feature/crossmatch-contract-20260724",
+   "sha": "de1e0331fc15b4590c0b617105240484343e6085",
+   "status": "merged",
+   "behind": 47,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "main",
+   "status": "kept-protected"
+  },
+  {
+   "branch": "ms/checkout-advisory-triage",
+   "sha": "819a22be6b7768caf5ff97d47378a8e85ec2cbca",
+   "status": "unique",
+   "behind": 133,
+   "ahead": 3
+  },
+  {
+   "branch": "ms/checkout-inventory",
+   "sha": "0dfd3ce232f9974d58b4f6188b629ad4aa3a8683",
+   "status": "merged",
+   "behind": 134,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "pr42",
+   "sha": "e9b64a8c79631ac46f24d5ace9cb843cefdbf298",
+   "status": "merged",
+   "behind": 163,
+   "ahead": 0,
+   "deleted": true
+  }
+ ]
+}

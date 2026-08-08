@@ -1,0 +1,61 @@
+nickname,ra,dec,host_redshift_status,survey,release,depth,footprint_status,footprint_source,footprint_sha256
+Zach,20h40m47.886s,+72d52m56.378s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Zach,20h40m47.886s,+72d52m56.378s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Zach,20h40m47.886s,+72d52m56.378s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Zach,20h40m47.886s,+72d52m56.378s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Zach,20h40m47.886s,+72d52m56.378s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Whitney,08h58m52.92s,+73d29m27.0s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Whitney,08h58m52.92s,+73d29m27.0s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Whitney,08h58m52.92s,+73d29m27.0s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Whitney,08h58m52.92s,+73d29m27.0s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Whitney,08h58m52.92s,+73d29m27.0s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Oran,21h12m10.760s,+72d49m38.20s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Oran,21h12m10.760s,+72d49m38.20s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Oran,21h12m10.760s,+72d49m38.20s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Oran,21h12m10.760s,+72d49m38.20s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Oran,21h12m10.760s,+72d49m38.20s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Isha,04h45m38.64s,+70d18m26.6s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Isha,04h45m38.64s,+70d18m26.6s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Isha,04h45m38.64s,+70d18m26.6s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Isha,04h45m38.64s,+70d18m26.6s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Isha,04h45m38.64s,+70d18m26.6s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Wilhelm,21h00m31.09s,+72d02m15.22s,dm_z_diagnostic,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Wilhelm,21h00m31.09s,+72d02m15.22s,dm_z_diagnostic,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Wilhelm,21h00m31.09s,+72d02m15.22s,dm_z_diagnostic,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Wilhelm,21h00m31.09s,+72d02m15.22s,dm_z_diagnostic,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Wilhelm,21h00m31.09s,+72d02m15.22s,dm_z_diagnostic,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Phineas,11h51m07.52s,+71d41m44.3s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Phineas,11h51m07.52s,+71d41m44.3s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Phineas,11h51m07.52s,+71d41m44.3s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Phineas,11h51m07.52s,+71d41m44.3s,established,SDSS_DR12,V/147/sdss12,DR12 selection,covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Phineas,11h51m07.52s,+71d41m44.3s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Freya,05h52m45.12s,+74d12m01.7s,dm_z_diagnostic,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Freya,05h52m45.12s,+74d12m01.7s,dm_z_diagnostic,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Freya,05h52m45.12s,+74d12m01.7s,dm_z_diagnostic,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Freya,05h52m45.12s,+74d12m01.7s,dm_z_diagnostic,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Freya,05h52m45.12s,+74d12m01.7s,dm_z_diagnostic,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Hamilton,20h20m08.92s,+70d47m33.96s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Hamilton,20h20m08.92s,+70d47m33.96s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Hamilton,20h20m08.92s,+70d47m33.96s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Hamilton,20h20m08.92s,+70d47m33.96s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Hamilton,20h20m08.92s,+70d47m33.96s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Mahi,02h39m03.96s,+71d01m04.3s,dm_z_diagnostic,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Mahi,02h39m03.96s,+71d01m04.3s,dm_z_diagnostic,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Mahi,02h39m03.96s,+71d01m04.3s,dm_z_diagnostic,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Mahi,02h39m03.96s,+71d01m04.3s,dm_z_diagnostic,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Mahi,02h39m03.96s,+71d01m04.3s,dm_z_diagnostic,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Chromatica,20h50m28.59s,+73d54m00.0s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Chromatica,20h50m28.59s,+73d54m00.0s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Chromatica,20h50m28.59s,+73d54m00.0s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Chromatica,20h50m28.59s,+73d54m00.0s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Chromatica,20h50m28.59s,+73d54m00.0s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Casey,11h19m56.05s,+70d40m34.4s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Casey,11h19m56.05s,+70d40m34.4s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Casey,11h19m56.05s,+70d40m34.4s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Casey,11h19m56.05s,+70d40m34.4s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Casey,11h19m56.05s,+70d40m34.4s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,
+Johndoeii,22h23m53.94s,+73d01m33.26s,established,NED,live TAP snapshot,heterogeneous,covered,all_sky_contract,
+Johndoeii,22h23m53.94s,+73d01m33.26s,established,GLADE+,VII/291/gladep,heterogeneous,covered,unavailable,
+Johndoeii,22h23m53.94s,+73d01m33.26s,established,DESI_DR8_NORTH,VII/292/north,Legacy DR8 North source selection,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490
+Johndoeii,22h23m53.94s,+73d01m33.26s,established,SDSS_DR12,V/147/sdss12,DR12 selection,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0
+Johndoeii,22h23m53.94s,+73d01m33.26s,established,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections,covered,all_sky_contract,

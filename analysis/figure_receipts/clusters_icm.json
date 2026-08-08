@@ -1,0 +1,29 @@
+{
+  "id": "clusters_icm",
+  "utc": "2026-07-29T22:17:21.551782+00:00",
+  "argv": [
+    "uv",
+    "run",
+    "--project",
+    ".",
+    "--frozen",
+    "python",
+    "-m",
+    "foregrounds.visualization.systems_figures",
+    "--results-dir",
+    "scattering/results/legacy-summary",
+    "--census-data-dir",
+    "foregrounds/census/data",
+    "--out-dir",
+    "../figures"
+  ],
+  "cwd": "analysis",
+  "dry_run": false,
+  "exit_code": 0,
+  "stdout_tail": "wrote ../figures/galaxies_cgm.pdf\nwrote ../figures/galaxies_cgm.svg\nwrote ../figures/galaxies_cgm.png\nwrote ../figures/clusters_icm.pdf\nwrote ../figures/clusters_icm.svg\nwrote ../figures/clusters_icm.png\n",
+  "stderr_tail": "WARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\nWARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\nWARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\nWARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\nWARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\nWARNING: AstropyDeprecationWarning: Use ``angular_diameter_distance(z1, z2)`` instead. [foregrounds.propagation.scattering_predict]\n",
+  "output_sha256": {
+    "figures/clusters_icm.pdf": "3c073939cfe4a971748088d29e070f666ceacb3b50c73a1125d74f650c754347"
+  },
+  "status": "OK"
+}

@@ -1,0 +1,398 @@
+# Reproducing the figures and tables in Faber2026
+
+This maps every manuscript output — each `*_table.tex` and each `figures/…`
+graphic — back to the command that regenerates it. It is the reproducibility
+spine for the ApJ Data Availability statement.
+
+The machine-readable version is [`repro_manifest.csv`](repro_manifest.csv)
+(one row per output). This file is the prose companion: how to read it and the
+caveats that a CSV cell cannot carry.
+
+## Repository structure
+
+The parent manuscript pins this repository at `analysis/`. All active
+producers and reusable scientific code live here. Historical references to
+`pipeline/` or `dsa110-FLITS` identify retired provenance; they are not
+runnable dependencies and must not be used to regenerate current products.
+
+Current producer paths are repository-relative to this checkout. Entries that
+still name a retired producer are historical records requiring explicit
+migration before they can claim current reproducibility.
+
+## Environment
+
+Python is owned by this repository's `uv` lock:
+
+```bash
+uv sync --group test --frozen
+uv run --group test --frozen python scripts/<producer.py> [args]
+```
+
+No sibling checkout, submodule, installed FLITS package, or Conda environment
+is part of the current reproduction contract.
+
+## How to read `clone_verified`
+
+`writer_verified` is a **reading** standard — someone read the `savefig` line.
+`clone_verified` is an **execution** standard: on 2026-07-09 every distinct
+`run_command` was executed from a fresh `git clone` + `git submodule update
+--init` at super-repo `733a369` × pipeline `6c87890`. The two disagree often
+enough that the DA statement should rest on the second.
+
+"Executed" here means more than *exit 0*. For each command a marker file is
+touched immediately before the run, and the verdict asks which files anywhere
+under the clone are newer than that marker. The first pass of this audit instead
+compared each output's mtime against `README.md`'s — but `git clone` writes every
+file within the same second, so that comparison reported "written" for outputs no
+producer had touched. It scored three rows `reproduced` whose producers write
+somewhere else entirely. **A generator that exits 0 while writing nothing at the
+declared path is the single most common failure here**, and it is invisible to
+both a `savefig` read and a return code.
+
+- **reproduced** — the command as written exits 0 and writes the declared
+  output into the clone.
+- **reproduced_fixed_cmd** — the command *as previously written* did not work;
+  the corrected command now in the `run_command` cell was executed and does.
+- **wrong_output_path** — the command exits 0 but does not write the declared
+  output at the declared path. Exit status alone would have hidden this.
+- **blocked_external_data** — the producer needs inputs that exist in neither
+  repository (an HPC scratch tree, or a data directory with zero tracked
+  files). Not reproducible from a clone by anyone, including the author on a
+  fresh machine.
+- **no_command** — nothing runnable is recorded.
+
+Result: of the manifest's 39 rows, **15 have a reproduced-family verdict** (6
+as written, 8 after correcting the command, and 1 pin-dependent), **4 exit 0
+while writing nothing at the declared path**, 10 are blocked on data outside
+both repositories, and 2 have no command. The remaining 8 rows are archived,
+candidate, or superseded. The 2026-07-09 execution sweep ran the 25 rows then
+present. The
+compact archival gallery, the Figure 1 data overview, and the historical
+triptych family were added later with verdicts assigned
+by inspection rather than execution. The Figure 1 data grid draws every panel
+from the archival `_cntr_bpc.npy` waterfalls (all 24 products, near-native
+display grids). It uses the observed-profile convention: DSA-110's measured
+peak is at zero and CHIME/FRB is positioned with the recorded measured peak
+offset. No joint-model fit artifact or scattering-model correction participates
+in Figure 1. The historical triptychs require the eleven local fit-delivery NPZ
+artifacts plus Chromatica's two archival waterfall products; the compact gallery
+remains diagnostic only and requires all 24 archival waterfalls.  On 2026-07-17
+the pre-PL-PBF triptych and joint-model-pair families were removed from the
+compiled manuscript.  Their bytes remain provenance records, not replacement
+candidates.
+
+Of the 13 rows currently marked `embedded_in_manuscript = yes`, 12 have a
+reproduced-family verdict and the Figure 1 data grid remains blocked on
+external archival waterfalls (see hazard 6). The
+pre-PL-PBF triptych and joint-model-pair rows are deliberately unembedded.
+Every other blocked or command-less row is a staged or historical output; it
+cannot be promoted until its inputs and scientific provenance are published
+alongside the code.
+
+⚠️ **This is a statement about the manifest, not about the manuscript.** The
+manifest does not enumerate every embedded output — see hazard 7. Until it does,
+"all embedded outputs reproduce" is *not* a claim the Data Availability statement
+can make.
+
+## How to read `writer_verified`
+
+- **yes** — I read the actual `write_text` / `fig.savefig(...)` line that emits
+  this exact filename. The command is trustworthy.
+- **candidate** — the producing *module or function* is identified, but I did
+  not confirm a single trustworthy command for this exact stem. Two sub-cases:
+  (a) the file is emitted by a multi-figure script (e.g. `systems_figures.py`,
+  `scint_census/figbank.py`, `crossmatching/plotting.py`) where I did not
+  isolate the one savefig call for this stem — the command regenerates the
+  figure *set*; or (b) the producing function is confirmed but no committed CLI
+  caller passes this stem (e.g. `freya_dsa_gamma_summary`). Confirm the
+  individual target before relying on it in the DA statement.
+- **unresolved** — no producer found anywhere in the current tree.
+
+(The **hand** status used in earlier versions is now retired: the two
+hand-maintained tables were converted to generated emitters — see the table
+regeneration section below.)
+
+## Status: what's embedded now vs. staged
+
+The manuscript is mid-draft. Of 39 tracked output rows (29 figures + 10
+tables), 13 are currently `\input`/`\includegraphics`'d (the
+`embedded_in_manuscript = yes` rows). The other 26 are staged, historical, or
+superseded outputs.  In particular, the triptych and joint-model-pair families
+are retained only as pre-PL-PBF provenance records while the post-PL-PBF
+production campaign remains outstanding. One
+of the staged figures, `ne2025_mw_characterization.pdf`, is a true orphan: it
+is the default-resolution (`--nside 8`) sibling of the embedded `_nside32`
+variant and is not referenced anywhere. Both classes are tracked so nothing is
+lost when a SLOT is filled.
+
+## Regenerating the tables
+
+All six embedded table rows have an explicit provenance path. For the verified
+DM table, the reviewed source is
+`analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` and parity is enforced by
+`tests/test_verified_dm_manuscript.py`. For the DM budget,
+the foreground/cosmological columns remain sourced from the pinned pipeline
+JSON, while `DM_obs` is overlaid from
+`analysis/dispersion/results/joint-phase/manuscript_dm_catalog.csv` and `DM_host` from
+`scripts/dm_budget_uncertainty.csv`. Run the root renderer after regenerating
+the host posterior; do not edit `budget_table.tex` directly.
+
+Both are safe to regenerate at the currently pinned submodule (`1d5633c`);
+regenerating reproduces the committed `.tex` byte-for-byte. This was briefly
+untrue — see hazard 1 for what went wrong and why the pin matters. (The pin
+reached `14e0d1f` in three steps: `6c87890 → 334cc74` as Faber2026 #68, then
+`334cc74 → 79eaf7e` as Faber2026 #71, a single commit promoting the `zach`
+C2D4 beta fit, then `79eaf7e → 14e0d1f` as the guards pin-bump PR, a single
+commit promoting the CHIME artifact-control guards (FLITS #156; scintillation
+lane only). It then advanced to `fba48c6` — `3435ba0 → fba48c6`, Faber2026
+#21 of the relinked repo, 2026-07-13, reconciling the scintillation and DM
+lanes. On 2026-07-13 the submodule was retargeted from the org upstream to
+the personal fork `jakobtfaber/dsa110-FLITS` (`f08c973`) and pinned to the
+fork's rewritten `main` at `0e0f58b` (`c5e83d2`). **`0e0f58b` is NOT a
+descendant of `fba48c6`** — the fork history was rewritten (author scrub +
+force-push), so the `merge-base --is-ancestor` bump check does not apply
+across that boundary, and every pre-rewrite SHA in this document resolves
+only via the org upstream `dsa110/dsa110-FLITS`, not via the fork. A content
+diff `fba48c6 → 0e0f58b` (2026-07-13) touches no `*_table_data.json` and
+neither table emitter, so the byte-exact regeneration of `budget_table.tex`
+and `foreground_table.tex` is unchanged from the earlier verification, and
+the `table-parity` CI job is green at `c5e83d2`. The same diff, however,
+**drops ~221 files** that `fba48c6` carried — `scintillation/scint_analysis`,
+the `dispersion/dm_phase_suite` + DM-campaign results trees, and the
+2026-07-12/13 CHIME recovery/baseband-calibration analyses — content from the
+canonical `pin/faber2026` lane that never reached the rewritten fork `main`.
+Whether to re-land that lane (cherry-picks onto the rewritten history) is an
+open decision; tables are unaffected. `beta_table.tex` is a separate matter —
+see the note below.)
+
+`#71` did change the submodule's `analysis/beta_campaign/beta_table_rows.tex`
+(the `zach` row moved from `_C1D1` to `_C2D4_cwin`). The root `beta_table.tex`
+is hand-maintained, is not `\input` by the manuscript, and is deliberately left
+untouched: `tab:beta` is deferred. Do not treat that file as regenerable-and-current.
+
+```bash
+uv run --frozen python scripts/dm_budget_uncertainty.py
+uv run --frozen python scripts/render_budget_table.py
+uv run --frozen python scripts/render_budget_table.py --check
+
+# foreground census: values in foregrounds/census/foreground_table_data.json
+uv run python -m foregrounds.propagation.foreground_table_emitter --out ../foreground_table.tex
+# verify (byte-exact vs exports/ + value cross-checks against upstream products)
+uv run --group test python -m pytest foregrounds/tests
+# Current commands run entirely from `analysis/`.
+```
+
+The emitters write generated copies under `foregrounds/results/generated/` and
+support `--check` (non-zero exit on drift).
+**`--check` is not a sufficient CI gate on its own** — it compares the emitter's
+output to `exports/<table>.tex`, and both are derived from the *same*
+submodule-local data file, so it cannot see the cross-repository drift of
+hazard 1. Measured at pin `f9e1c24`: both emitters' `--check` exited 0 while
+`test_dm_host_matches_forward_model` failed. (That test's row loop uses a bare
+`assert`, so one run reports only the first mismatching sightline —
+FRB 20220207C; replaying the comparison without short-circuiting shows all nine
+differed.) CI must run the **parity tests**, not just `--check`.
+The root budget renderer is now the authoritative cross-repository parity gate;
+the pipeline-local budget test predates the adopted phase-DM catalog and is not
+run against the manuscript table. The `\input{budget_table}` /
+`\input{foreground_table}` paths
+in `sections/` are unchanged: the emitters overwrite the manuscript's root
+`.tex` files in place, so the Overleaf lane (which has no `pipeline/` submodule)
+keeps building. `sample_table.tex` uses its own generator
+(`scripts/make_sample_table.py`); `beta_table.tex` uses
+`analysis/beta_campaign/export_beta_table.py`.
+
+The parity tests are the substantive guarantee — they tie each table to a
+*recomputable* upstream product, not just to its own export. They have already
+earned their keep once: they are what caught the drift described in hazard 1.
+- **budget** — the DM_host `median^{+p84}_{-p16}` column is cross-checked
+  value-for-value against the forward-model posteriors in
+  `scripts/dm_budget_uncertainty.csv` (emitted by `scripts/dm_budget_uncertainty.py`),
+  over the 9 non-placeholder sightlines. Green at pin `6c87890` (9/9), verified
+  2026-07-09. Note the test spans **both repositories**: it reads a super-repo
+  CSV from a submodule test, so it is only meaningful for a matched
+  (super-repo commit, submodule pin) pair.
+- **foreground** — every numeric object ID's verdict is cross-checked against
+  the census registry `foregrounds/census/data/intervening_census_registry.csv`
+  (27/27 registry-resident rows). The table is a curated subset of the registry's
+  confirmed+inconclusive systems (refuted candidates omitted; the cluster row's
+  ID comes from the WenHan2024 catalog, not the registry).
+
+## Caveats and hazards (the things worth fixing)
+
+1. **The budget-table parity test spans two repositories, so the submodule pin
+   is part of the result. (RESOLVED 2026-07-09 by PRs #48 and #53 — recorded as
+   a standing trap.)**
+
+   `test_dm_host_matches_forward_model` lives in the submodule but reads
+   `scripts/dm_budget_uncertainty.csv` from the **super-repo**. Its verdict is
+   therefore a property of the *pair* (super-repo commit, `pipeline` pin), not
+   of either repo alone. That let a drift open up silently:
+
+   - **PR #40** re-based the cosmic DM term on the TNG-calibrated IGM log-normal
+     (Connor 2025), rewriting `dm_budget_uncertainty.csv`.
+   - **PR #42** further corrected the low-z IGM spline.
+   - `budget_table.tex` was updated to follow. `budget_table_data.json`, in the
+     submodule, was not — and the pin stayed at `f9e1c24`.
+
+   For a window on 2026-07-09 the emitter was therefore *behind* the manuscript:
+   at pin `f9e1c24` all 9 non-placeholder sightlines mismatched, and running the
+   documented regenerate command would have rewritten 35 lines of
+   `budget_table.tex`, reverting the DM_host column to pre-#40 values. The
+   `% !! GENERATED FILE -- do not edit by hand` banner pointed exactly the wrong
+   way: for that window, the hand edits were the correct ones.
+
+   Note what did *not* fire: throughout that window both emitters' `--check`
+   exited 0, because the emitter and its `exports/` anchor were regenerated from
+   the same stale `budget_table_data.json`. A drift guard that compares a
+   generator to its own output is blind by construction to an upstream input
+   going stale. Only the parity test, which reaches across into the super-repo's
+   CSV, could see it.
+
+   **PRs #48 and #53 closed it** by bumping the pin to a commit that carries a
+   regenerated `budget_table_data.json`. Verified at pin `6c87890`: the parity
+   test is 9/9 green, `--check` exits 0, and the emitter's output is
+   byte-identical to the committed `budget_table.tex`. This still holds at the
+   current pin `1d5633c`: its only change from the preceding pin is
+   `DATA_LOCATIONS.md`, and the parent PR #241 parity job passed on 2026-07-24.
+   The earlier content check across `6c87890 → fba48c6 → 0e0f58b` remains the
+   historical verification across the fork rewrite.
+
+   Closing it took two tries, and the misfire is the more useful half of the
+   story. **`f9e1c24` — the pin this repo had carried since #39 — is not an
+   ancestor of `dsa110-FLITS` `main`.** It sits on `agent/sightline-halo-grid-figure`,
+   22 commits divergent since the fork at `6647753`, and the budget-table emitter
+   exists *only* on that line; `main` has never carried it. #48 bumped to
+   `c69d043`, a squash produced by merging the pin's branch into FLITS `main` —
+   which silently dragged the whole 127-file fork delta upstream, rolled back an
+   unrelated `johndoeII` promotion, and turned FLITS CI red. FLITS #145 reverted
+   it; #53 re-pinned here to `6c87890` = `f9e1c24` + the three intended files.
+
+   Second lesson, then: **before bumping the pin, check that the new commit is a
+   descendant of the old one** (`git merge-base --is-ancestor <old> <new>`).
+   A submodule pin that lives off the upstream default branch — as this one does —
+   makes "just merge it upstream" the wrong reflex.
+
+   Historical lesson: generator and cross-input parity must land together.
+   Today both live in this analysis repository; update
+   `dm_budget_uncertainty.py`, its output, `budget_table_data.json`, and the
+   parity receipt in one focused change.
+
+   (Two sightlines — FRB 20220310F and FRB 20221203A, both $z\approx0.5$ — carry
+   *negative* DM_host medians. This is intended, not a defect: their posteriors
+   are consistent with zero, `P(DM_host<0)≈0.5`, and `budget_table.tex`'s own
+   `\tablecomments` explains that the marginally negative medians reflect scatter
+   about the cosmological normalization. Do not "fix" them by censoring at zero.)
+
+2. **The two hand-maintained tables are now generated. (RESOLVED 2026-07-08,
+   with the caveat in hazard 1.)**
+   Both `budget_table.tex` and `foreground_table.tex` — previously the least
+   reproducible objects in the manuscript — are now emitted from structured
+   single-source data files with parity tests. See *Regenerating the tables*
+   below. What used to be the hazard, for the record:
+   - `budget_table.tex` had a "regenerate, not by hand" header but was in fact
+     a hand transcription; a DR8/DR9 drift had already slipped through
+     (`language_audit.md`).
+   - `foreground_table.tex`'s own header stated no generator existed.
+
+   Now each `.tex` carries a `% !! GENERATED FILE` banner naming its data source
+   and regenerate command, and a hand edit that drifts from the source data is
+   caught by the parity tests. `budget_table.tex`'s measured `tau_obs` column is
+   still withheld pending the V1 re-validation ladder (a data-content decision,
+   independent of the emitter).
+
+3. **`plot_association_cards.py` machine-specific output path. (RESOLVED 2026-07-08.)**
+   `MANUSCRIPT_OUTDIR` was `/Users/jakobfaber/Developer/overleaf/Faber2026/figures/association_cards`
+   (`b19a3d3`) — worked on one laptop only. `ae67f4f` replaced it with a
+   **repo-relative default derived from the file location**
+   (`ROOT.parent/figures/association_cards`), overridable with
+   `--manuscript-dir`; `--no-manuscript-copy` skips the copy entirely for a
+   standalone submodule checkout. No absolute machine path remains *in this
+   script*; it survives a clone to any location.
+
+   This historical defect is closed. Current figure producers use repository
+   paths and accept explicit output directories.
+
+4. **Producer resolution for the two burst-nickname figures:**
+   - `freya_dsa_gamma_summary.pdf` (freya = FRB 20230325A) — **resolved** to the
+     producing function `plot_subband_gamma_summary` in
+     `scintillation/scint_analysis/plotting.py`, confirmed by commit `18fbe98`
+     ("freya DSA gamma(nu) summary — manuscript export", FLITS #130, run at
+     pinned submodule `25b8cc6` against `scintillation/configs/bursts/freya_dsa.yaml`
+     Lorentzian fits). The function takes a caller-supplied `save_path` and no
+     committed CLI script passes the `freya_dsa_gamma_summary` stem, so it is
+     `candidate`, not `yes` — the author should confirm/commit the driver.
+   - `whitney_multiplicity.pdf` (whitney = FRB 20220310F) — **unresolved.** It
+     was committed as a binary copy-in (commit `438825f`), not by any script in
+     the tree. Commit `b96aa29` frames it as whitney's 1-component multiplicity
+     demo (α rails to 1.5 under the [1.5, 6.0] prior; whitney stays 2-component
+     canonical at α≈5.1). Almost certainly a local/HPC `burstfit` run that was
+     never committed. Needs author confirmation.
+
+5. **Foreground figure output and ordering defects. (RESOLVED 2026-07-29.)**
+
+   The canonical producers now live under `foregrounds/`. Output paths are
+   repository-relative or explicit. The figure catalog declares the
+   `sightline_budget` dependency before `clusters_icm`; both commands run in the
+   analysis environment. Direct and module execution share the same imports.
+
+6. **Ten figure rows are blocked on data outside a clone.**
+   `chime_subband_compare.py`, `joint_ladder/_subband_tau_validation.py` and
+   `plot_jointmodel_montage.py` read from `/central/scratch/jfaber/flits-runs/…`,
+   an HPC scratch tree; `scint_census/figbank.py` reads
+   `scint_census/data/scint/…`, a directory with **zero tracked files**.
+   The compact codetection gallery and DM sub-band tilt diagnostic also require
+   local `~/Data/Faber2026/` waterfall trees. These nine rows are unembedded.
+   Any of them that later enters the
+   manuscript must have its inputs published — a committed data file, or a
+   deposited archive — before the DA statement can cover it.
+
+   The tenth row is embedded: the codetection Figure 1 data grid reads all 24
+   archival CHIME/DSA `_cntr_bpc.npy` waterfalls
+   (near-native display grids) and has no fit-artifact dependency.  The
+   pre-PL-PBF triptych family reads 11 fit-delivery NPZ artifacts plus
+   Chromatica's two archival waterfalls, but it and the joint-model-pair family
+   are now unembedded and marked superseded.  New joint-fit panels require a
+   complete post-PL-PBF production refit and review-bound dumps; depositing the
+   old fit artifacts would not make them current.
+
+7. **Scintillation-output manifest coverage. (CLOSED 2026-07-17.)**
+
+   `repro_manifest.csv` now has explicit rows for both scintillation figure
+   families identified by the earlier audit. The twelve unembedded
+   `figures/dsa_scint_acf/*_dsa_acf_lorentzian_fits.pdf` panels share a producer
+   row and retain their candidate-level clone verdict. The owner-rejected
+   DSA-only `figures/dsa_lorentzian_summary.pdf` is also recorded, but is no
+   longer embedded; `sections/results.tex` reserves that slot for a separately
+   reviewed joint DSA+CHIME candidate. The generated CHIME campaign table has
+   its own row, exact command, and hashed provenance record. A future coverage
+   check should still derive the output set from manuscript `\includegraphics`
+   and `\input` directives rather than trusting the manifest to enumerate itself.
+
+## Suggested next steps
+
+- Deposit the 24 archival CHIME/DSA `_cntr_bpc.npy` waterfalls needed by the
+  embedded Figure 1 grid.  Separately, run and review the complete post-PL-PBF
+  production campaign before generating replacement triptych or
+  joint-model-pair panels; the old eleven fit-delivery artifacts are not
+  promotion candidates.
+- Fill the two unresolved producers (author knowledge) and promote their rows
+  to `writer_verified = yes`.
+- Hazards (1) and (2) are both **done**: the two tables are generated + tested,
+  and `plot_association_cards.py`'s output path is now a repo-relative default
+  with `--manuscript-dir` / `--no-manuscript-copy` overrides.
+- Hazard (5) is closed. Hazard (6) remains a data-deposition decision.
+- **`make figures` is live.** It runs
+  `python3 scripts/figure_flow.py regen --manuscript --clone-ok` against
+  [`figures/catalog.yaml`](figures/catalog.yaml) — the declarative regen graph
+  for science-ready manuscript figures (topo-sorted deps, input checks, SHA
+  receipts under `figures/.receipts/`). The clone-safe set matches the
+  `clone_verified = reproduced*` figure rows that do not need `~/Data` or
+  external flits-runs trees. Fig. 1 (`fig1_gallery`) is data-bound
+  (`clone_ok: false`); regenerate with
+  `python3 scripts/figure_flow.py regen --id fig1_gallery` (writes staging
+  under `figure_review/artifacts/staging/`, then `figure_review.py new-batch` — never
+  silent promote). The Oran DSA qualification PNG is **not** a manuscript
+  figure (`manuscript: false` / `embedded_in_manuscript=no`). Agent runbook:
+  [`figures/ax/SKILL.md`](../figures/ax/SKILL.md). Broader inventory:
+  [`repro_manifest.csv`](repro_manifest.csv).
