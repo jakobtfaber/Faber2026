@@ -1,9 +1,10 @@
 from pathlib import Path
-from re import findall
+from re import findall, search
 from unittest import TestCase, main
 
 WORKFLOW = Path(__file__).parents[1] / ".github/workflows/manuscript-provenance.yml"
 MAKEFILE = Path(__file__).parents[1] / "Makefile"
+ANALYSIS_MAKEFILE = Path(__file__).parents[1] / "analysis/Makefile"
 
 
 class ManuscriptWorkflow(TestCase):
@@ -75,6 +76,20 @@ class ManuscriptWorkflow(TestCase):
             Path(__file__).parents[1] / ".github/workflows/analysis-ci.yml"
         ).read_text()
         self.assertIn("name: analysis-ci", analysis_ci)
+
+    def test_every_analysis_delegation_names_a_target_that_exists(self) -> None:
+        # `make` reports a missing sub-target only when the parent target is
+        # actually run, so a delegation to a target that analysis/Makefile
+        # never defined stays invisible until someone invokes it.
+        analysis = ANALYSIS_MAKEFILE.read_text()
+        delegated = findall(r"\$\(MAKE\) -C analysis (\S+)", MAKEFILE.read_text())
+        self.assertTrue(delegated, "expected the parent to delegate some targets")
+        for target in delegated:
+            self.assertIsNotNone(
+                search(rf"(?m)^{target}:", analysis),
+                f"Makefile delegates `make -C analysis {target}`, "
+                f"but analysis/Makefile defines no such target",
+            )
 
 
 if __name__ == "__main__":

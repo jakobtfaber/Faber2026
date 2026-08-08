@@ -43,10 +43,12 @@ figures:
 		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 
 figure-review-status:
-	$(MAKE) -C analysis figure-review-status MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
+	FABER2026_ROOT="$(FABER2026_ROOT)" $(UV) run --project analysis \
+		--group test --frozen python analysis/scripts/figure_review.py status
 
 figure-review-next:
-	$(MAKE) -C analysis figure-review-next MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
+	FABER2026_ROOT="$(FABER2026_ROOT)" $(UV) run --project analysis \
+		--group test --frozen python analysis/scripts/figure_review.py next
 
 kb-index:
 	$(MAKE) -C analysis kb-index MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
