@@ -92,11 +92,14 @@ Scope and guardrails — this authorization is not a licence to be careless:
   Never force-push a branch that has concurrent writers.
 - **Prefer the clean path.** Land figure/section updates via a focused branch +
   PR that mirrors existing precedent (e.g. the `ms/…` jointmodel-panel PRs),
-  not a divergent-branch merge that drags in unrelated submodule-pointer bumps.
+  not a divergent-branch merge that drags in unrelated changes.
 - **Never delete or rewrite shared history** (`push --force`, branch deletion on
   `main`, `reset --hard` on a shared ref) without an explicit, separate request.
-- **The parent `analysis/` pin is deliberate** — update it only as a focused,
-  reviewed manuscript integration step.
+- **Keep manuscript and `analysis/` changes separately scoped** — since the
+  2026-08 monorepo consolidation `analysis/` is a plain directory of the
+  Faber2026 repository, so the former submodule-pin rules become scope
+  rules: do not sweep analysis edits into a manuscript change as a side
+  effect, or vice versa.
 
 > Note: a repo file records the *preference* so future sessions inherit it. The
 > platform's enforced no-approval **gate** is understood to live in the agent's

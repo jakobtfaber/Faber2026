@@ -264,11 +264,13 @@ jobs:
           make lint
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
-          # The pure filtered tip of the 2026-08 analysis import: diffing
-          # against the manuscript history alone would mark every imported
-          # legacy file as changed and turn the changed-files lint into a
-          # whole-tree lint. Files must differ from BOTH bases to be linted.
-          LINT_BASE_INTERSECT: 06c51f4430434fb41b7de82737430113e91067e2
+          # The squash commit that landed the 2026-08 analysis import
+          # (PR #347): diffing against the pre-import manuscript history
+          # alone would mark every imported legacy file as changed and turn
+          # the changed-files lint into a whole-tree lint. Files must differ
+          # from BOTH bases to be linted. Anchored to a main-reachable
+          # commit so shallow checkouts can always fetch it.
+          LINT_BASE_INTERSECT: cb060fc7f13a2892ad5cc4a4b3a5be6ea3754a16
       - run: uv run --group test --frozen zizmor --pedantic ../.github/workflows
       - uses: rhysd/actionlint@914e7df21a07ef503a81201c76d2b11c789d3fca # v1.7.12
 
