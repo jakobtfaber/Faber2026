@@ -97,9 +97,12 @@ class ManuscriptWorkflow(TestCase):
         # script or argparse subcommand breaks `make` exactly as invisibly as
         # the missing delegation target did.
         root = Path(__file__).parents[1]
+        # Join `\`-continued recipe lines first: a later rewrap that pushes the
+        # subcommand onto the next physical line would otherwise make the guard
+        # silently stop checking that invocation instead of failing.
         invocations = findall(
             r"(analysis/scripts/\S+\.py)(?:[ \t]+([a-z][a-z-]*))?",
-            MAKEFILE.read_text(),
+            MAKEFILE.read_text().replace("\\\n", " "),
         )
         self.assertTrue(invocations, "expected the Makefile to invoke some scripts")
         for script, subcommand in invocations:
