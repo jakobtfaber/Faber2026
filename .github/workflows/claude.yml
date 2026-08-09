@@ -1,0 +1,44 @@
+name: Claude Code
+
+# Official anthropics/claude-code-action. Responds to an explicit `@claude`
+# mention. Distinct from the `tend-*` workflows, which answer to
+# `@tend-jakobtfaber` and run the Claude CLI through max-sixty/tend; the two
+# trigger phrases do not overlap, so a comment wakes at most one of them.
+#
+# `pull_request_review` and `pull_request_review_comment` are deliberately
+# absent: those events run on `refs/pull/N/merge`, which the `tend`
+# environment's branch policy (main only) refuses, so a mention inside an
+# inline review comment would only produce a rejected deployment. Mention
+# `@claude` in a normal pull-request comment instead.
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+    # Holds the CLAUDE_CODE_OAUTH_TOKEN shared with the tend workflows.
+    environment: tend
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read # Required for Claude to read CI results on PRs
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
