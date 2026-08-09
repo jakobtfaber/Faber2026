@@ -1,6 +1,9 @@
+from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 from re import findall
+from types import SimpleNamespace
 from unittest import TestCase, main
+from unittest.mock import patch
 
 WORKFLOW = Path(__file__).parents[1] / ".github/workflows/manuscript-provenance.yml"
 MAKEFILE = Path(__file__).parents[1] / "Makefile"
@@ -75,6 +78,32 @@ class ManuscriptWorkflow(TestCase):
             Path(__file__).parents[1] / ".github/workflows/analysis-ci.yml"
         ).read_text()
         self.assertIn("name: analysis-ci", analysis_ci)
+
+    def test_ax_front_door_reaches_the_runner_in_its_project_environment(self) -> None:
+        # figures/ax/agent.py shells out to figure_flow for every tool call.
+        # It resolved the runner under the repository root, where the
+        # monorepo consolidation no longer leaves one, and launched it with
+        # sys.executable, which generally has no PyYAML. Nothing imports this
+        # module in CI, so only an agent following the skill would find out.
+        spec = spec_from_file_location(
+            "_ax_front_door", Path(__file__).parents[1] / "figures/ax/agent.py"
+        )
+        ax = module_from_spec(spec)
+        spec.loader.exec_module(ax)
+        self.assertTrue(
+            ax.FLOW.is_file(),
+            f"the Ax front door resolves figure_flow to a missing path: {ax.FLOW}",
+        )
+        with patch.object(ax.subprocess, "run") as run:
+            run.return_value = SimpleNamespace(returncode=0, stdout="", stderr="")
+            ax.list_figures()
+        argv = run.call_args.args[0]
+        self.assertEqual(
+            argv[:2],
+            ["uv", "run"],
+            f"figure_flow must be launched in the analysis project environment: {argv}",
+        )
+        self.assertIn("--project", argv)
 
 
 if __name__ == "__main__":
