@@ -176,11 +176,36 @@ def test_throttle_stamp_lands_in_a_real_directory_in_a_worktree(name: str, tmp_p
         text=True,
     )
     stamp = Path(completed.stdout)
-    assert stamp.parent.is_dir(), (
-        f"{name} would write its throttle stamp into {stamp.parent}, which is "
-        "not a directory in a linked worktree"
+    expected = (primary / ".git" / "worktrees" / "linked").resolve()
+    # Not just `is_dir()`: the `${TMPDIR:-/tmp}` fallback also names a real
+    # directory, so the weaker check stays green even if git resolution fails.
+    assert stamp.parent == expected, (
+        f"{name} would write its throttle stamp into {stamp.parent}, not this "
+        f"worktree's git directory {expected}"
     )
     stamp.write_text("0")
+
+
+PROTOCOL = ANALYSIS / "docs/rse/protocols/journal-protocol.md"
+
+# `scripts/foo.sh` and `analysis/scripts/foo.sh` both appear in the protocol
+# document; only one of them resolves for any given script, and the consolidation
+# changed which. These are commands an agent copy-pastes, so a wrong prefix is
+# not cosmetic.
+SCRIPT_REF = re.compile(r"\b((?:analysis/)?scripts/[A-Za-z0-9_./-]+)")
+
+
+def test_protocol_document_script_references_resolve() -> None:
+    # The scripts themselves are covered above; this covers the document those
+    # scripts' reminder strings send agents to, where a moved path survives as
+    # prose that no `"$VAR/..."` check can see.
+    missing = sorted(
+        {ref for ref in SCRIPT_REF.findall(PROTOCOL.read_text()) if not (REPO / ref).exists()}
+    )
+    assert not missing, (
+        f"{PROTOCOL.relative_to(REPO)} names scripts that do not resolve from the "
+        f"repository root: {missing}"
+    )
 
 
 def test_watchdog_plist_points_at_the_watchdog_script() -> None:
