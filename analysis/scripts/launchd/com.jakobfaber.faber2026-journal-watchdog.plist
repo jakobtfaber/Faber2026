@@ -7,7 +7,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>
-    <string>/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/scripts/journal-watchdog.sh</string>
+    <string>/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/scripts/journal-watchdog.sh</string>
   </array>
   <key>StartInterval</key>
   <integer>300</integer>
