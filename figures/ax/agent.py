@@ -23,7 +23,7 @@ def _run_flow(*args: str) -> str:
     # project environment; sys.executable is whichever interpreter launched
     # this front door and generally has no yaml.
     proc = subprocess.run(
-        ["uv", "run", "--project", str(PROJECT), "--frozen", "python", str(FLOW), *args],
+        ["uv", "run", "--quiet", "--project", str(PROJECT), "--frozen", "python", str(FLOW), *args],
         cwd=ROOT,
         check=False,
         text=True,
