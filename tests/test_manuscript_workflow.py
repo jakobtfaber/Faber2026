@@ -58,6 +58,21 @@ class ManuscriptWorkflow(TestCase):
             )
             self.assertIn("--project", prefix)
 
+    def test_figure_skill_does_not_document_the_bare_interpreter(self) -> None:
+        # The figure skill is the front door an agent reads before touching a
+        # plot script, so a bare-`python3` recipe there fails the same way the
+        # make target did — with the agent, not CI, hitting MISSING_DEP.
+        skill = (Path(__file__).parents[1] / "figures/ax/SKILL.md").read_text()
+        for line in skill.splitlines():
+            if "figure_flow.py" not in line:
+                continue
+            self.assertNotIn(
+                "python3 analysis/scripts/figure_flow.py",
+                line,
+                "figure_flow must be documented under the analysis project "
+                f"environment, not the system interpreter: {line.strip()}",
+            )
+
     def test_provenance_lane_runs_the_whole_manuscript_test_suite(self) -> None:
         provenance = self.text.split("  provenance:", 1)[1].split(
             "  required:", 1

@@ -18,21 +18,27 @@ source. The LLM must never draw or restyle figures.
 
 ## Commands
 
+`figure_flow.py` loads the catalog with PyYAML, so it runs in the analysis
+project environment; under a bare `python3` it exits `ERROR MISSING_DEP`
+before doing anything.
+
 ```bash
+FLOW="uv run --project analysis --frozen python analysis/scripts/figure_flow.py"
+
 # Inventory
-python3 analysis/scripts/figure_flow.py list
-python3 analysis/scripts/figure_flow.py stale
+$FLOW list
+$FLOW stale
 
 # Clone-safe embedded set (same as `make figures`)
-python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
+$FLOW regen --manuscript --clone-ok
 make figures
 
 # One figure (fails closed if inputs missing)
-python3 analysis/scripts/figure_flow.py regen --id toa_offset_decomposition
-python3 analysis/scripts/figure_flow.py regen --id clusters_icm   # runs sightline_budget first
+$FLOW regen --id toa_offset_decomposition
+$FLOW regen --id clusters_icm   # runs sightline_budget first
 
 # Fig. 1 — external waterfalls; staging only
-python3 analysis/scripts/figure_flow.py regen --id fig1_gallery
+$FLOW regen --id fig1_gallery
 # then follow the approval hint to analysis/scripts/figure_review.py
 ```
 
