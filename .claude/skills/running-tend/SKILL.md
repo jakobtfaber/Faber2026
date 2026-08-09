@@ -77,11 +77,11 @@ gh pr list --state open --author "$BOT_LOGIN" \
 
 Compare by the files the new change would touch, not by title. GitHub's
 `mergeable` flag compares a branch against its base and never against
-another branch, so two open bot branches that both edit one file each
-report `mergeable: true` and then collide when the owner merges the
-second. The bot cannot see that collision through the usual check; the
-owner absorbs it. When a sibling already edits the file, extend the
-sibling.
+another branch, so two open bot branches that touch the same region of
+one file both report `mergeable: true` and then collide when the owner
+merges the second. The bot cannot see that collision through the usual
+check; the owner absorbs it. When a sibling is on the same defect, or
+edits the same region, extend the sibling rather than opening another.
 
 ## The daily item budget
 
