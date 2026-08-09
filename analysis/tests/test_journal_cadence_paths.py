@@ -12,13 +12,17 @@ The check resolves each `"$VAR/..."` expression against the directory the
 script assigns to `VAR`, so it also catches a future move of the store, the
 append helper, or the readiness board. A script that inlines its base, or that
 names a moved path only in a comment or a reminder string, exposes no such
-expression to resolve; the substring checks cover that case.
+expression to resolve; the substring checks cover that case. The throttle
+stamp fails the same quiet way for a different reason — an unwritable stamp
+path turns the three-minute reminder throttle into no throttle at all — so it
+is checked by running the assignment rather than by reading it.
 """
 
 from __future__ import annotations
 
 import plistlib
 import re
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -114,6 +118,69 @@ def test_cadence_script_names_no_pre_consolidation_path(name: str) -> None:
         f"{name} still names pre-consolidation path(s) {stale}; the store is now "
         "analysis/docs/rse/protocols/, the board analysis/docs/rse/control/board/"
     )
+
+
+THROTTLED_HOOKS = [
+    "journal-cadence-cursor-hook.sh",
+    "journal-cadence-posttool-hook.sh",
+]
+
+
+def _git(cwd: Path, *args: str) -> None:
+    subprocess.run(["git", "-C", str(cwd), *args], check=True, capture_output=True)
+
+
+@pytest.mark.parametrize("name", THROTTLED_HOOKS)
+def test_throttle_stamp_lands_in_a_real_directory_in_a_worktree(name: str, tmp_path: Path) -> None:
+    # The reminder throttle is a stamp file; if the write fails the stamp
+    # never exists, `[ -f "$NAG" ]` is never true, and the hook nags after
+    # every tool call instead of every three minutes. In a linked worktree —
+    # which this repository uses routinely — `.git` is a file, so a stamp path
+    # built from the checkout root is not writable. The spelling checks above
+    # cannot see that; this runs the assignment and looks at where it lands.
+    primary = tmp_path / "primary"
+    primary.mkdir()
+    _git(primary, "init", "-q")
+    _git(
+        primary,
+        "-c",
+        "user.email=t@t",
+        "-c",
+        "user.name=t",
+        "commit",
+        "-q",
+        "--allow-empty",
+        "-m",
+        "init",
+    )
+    linked = tmp_path / "linked"
+    _git(primary, "worktree", "add", "-q", str(linked))
+    analysis = linked / "analysis"
+    analysis.mkdir()
+
+    assignment = next(
+        line for line in (SCRIPTS / name).read_text().splitlines() if line.startswith("NAG=")
+    )
+    # ROOT is what the pre-fix hooks used, so define it too: the old form must
+    # be exercised as written rather than expanding to an empty path.
+    completed = subprocess.run(
+        [
+            "bash",
+            "-c",
+            'ROOT="$(git rev-parse --show-toplevel)"\n'
+            f'ANALYSIS="{analysis}"\n{assignment}\nprintf "%s" "$NAG"\n',
+        ],
+        cwd=linked,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    stamp = Path(completed.stdout)
+    assert stamp.parent.is_dir(), (
+        f"{name} would write its throttle stamp into {stamp.parent}, which is "
+        "not a directory in a linked worktree"
+    )
+    stamp.write_text("0")
 
 
 def test_watchdog_plist_points_at_the_watchdog_script() -> None:
