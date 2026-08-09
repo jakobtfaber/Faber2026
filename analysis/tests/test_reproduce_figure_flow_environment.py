@@ -7,9 +7,9 @@ interpreter lacks it — a fresh CI runner, a plain clone — a documented
 regenerating, so the recipe a reader copies out of `REPRODUCE.md` cannot
 work. Every invocation there has to name the project environment.
 
-The manuscript-side guard on `figures/ax/SKILL.md` keys on the literal
-`python3 analysis/scripts/figure_flow.py`; `REPRODUCE.md` writes its paths
-relative to `analysis/`, so this assertion matches either spelling.
+The manuscript-side guard proposed in #356 for `figures/ax/SKILL.md` keys on
+the literal `python3 analysis/scripts/figure_flow.py`; `REPRODUCE.md` writes
+its paths relative to `analysis/`, so this assertion matches either spelling.
 """
 
 from __future__ import annotations
