@@ -1,0 +1,509 @@
+{
+  "schema_version": 1,
+  "status": "phase_b_paused_experimental_diagnostic_configs_not_science_authority_execution_disabled",
+  "source_receipts": {
+    "h17_control_root": "/data/Faber2026/evidence/dm-toa-geometry-20260728/phase-b-control",
+    "inventory_sha256": "7b442b3086a3b2e594772c5e1c1e421ed26d1863068191f599408249cdf382cc",
+    "hash_manifest_sha256": "834c74f749e7bb577ffcd671729f68426159f1b19f5f4867cbec5e2fe134e67e",
+    "dsa_reconstruction_sha256": "6a68082dde735f81efe4cd0f990bd86ffe346baded0078fb6ba073110a4197a2",
+    "dsa_calibration_sha256": "9644ad4de456fe29f5f212e65fa399f988bbcfcc5244a47784202fdfc66252ce",
+    "timing_results_sha256": "3743073c9feb8e5f8ad54f10ebe015b712e8ef908adc6be3f8892ae20f558c8c",
+    "trigger_recovery_sha256": "87852969eb41c2abfa4c6534557ad03ed4f3e16e64cf1b28bd9da35f4ff89a0e",
+    "reproduction_fixture_sha256": "2b139029b054c4d42e6950bb346d9cf8738c306ad1a4e2e621d16da6af9e60d1"
+  },
+  "selection_rules": {
+    "chime_anchor": "geometry DM rounded to 0.01 pc cm^-3",
+    "chime_grid": "minimum 0.10 pc cm^-3 half-width, widened in 0.05 steps to cover accepted CHIME DM, H5 coherent-power DM, and geometry DM with 0.03 pc cm^-3 margin",
+    "chime_window": "minimum 0.03 s, widened in 0.01 s steps to at least 1.25 times the fixture pulse width",
+    "dsa_input_state": "material residuals use inferred raw DM with v3 uncertainty; nonmaterial residuals use accepted-product DM as nominal with half-width abs(fitted residual) plus v3 uncertainty",
+    "dsa_endpoint_gates": "both bound endpoints must remain within 16 native time samples at 400 MHz and peak-aligned profile correlation must be at least 0.98 for anchor, hybrid-fit, and geometry products",
+    "authorization": "campaign paused; generated configs are always execution-disabled; a separately reviewed tracked campaign-state receipt is required before any future launch"
+  },
+  "configs": [
+    {
+      "event": "zach",
+      "config": "analysis-configs/absolute-dm/phase-b/zach/workflow-config.json",
+      "event_binding_sha256": "ad0ee78bfde9ef1108da07b67e7e405b95378722e536cc69373e2d9e1b98971e",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 262.3621,
+        "h5_coherent_power_dm_pc_cm3": 262.4359033801,
+        "geometry_dm_pc_cm3": 262.41153036968103,
+        "anchor_dm_pc_cm3": 262.41,
+        "coarse_half_width_pc_cm3": 0.1,
+        "reference_pulse_fwhm_s": 0.0009640310519211329,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 262.368,
+        "crop_start_candidate_sample": 14025,
+        "crop_start_at_400_mhz_fit_sample": 14025.214907353346,
+        "input_dm_method": "accepted_product_dm_nominal_with_residual_bound",
+        "input_dm_bound_source": "v3_conservative_residual_bound",
+        "nominal_input_dm_pc_cm3": 262.368,
+        "input_dm_half_width_pc_cm3": 0.05255686832769321,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          0.021692838795894037,
+          0.05255686832769321
+        ],
+        "calibration_attempt": {
+          "sha256": "9644ad4de456fe29f5f212e65fa399f988bbcfcc5244a47784202fdfc66252ce",
+          "accepted_for_bound_narrowing": false,
+          "failed_checks": [
+            "all_windows_calibrated",
+            "zero_control"
+          ]
+        },
+        "reference_400_timing_half_width_native_samples": 38.74679539234703,
+        "matched_start_sample_min": 13998,
+        "matched_start_sample_max": 13999,
+        "direct_median_correlation": 0.8399957578598781,
+        "reversed_median_correlation": 0.08152545607424767,
+        "inferred_reference_minus_raw_dm_pc_cm3": -2.1011566358127285e-15,
+        "blockers": [
+          "campaign_paused_no_execution_authorization",
+          "dsa_calibration_not_accepted_for_bound_narrowing",
+          "dsa_input_dm_bound_exceeds_timing_resolution_gate"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "whitney",
+      "config": "analysis-configs/absolute-dm/phase-b/whitney/workflow-config.json",
+      "event_binding_sha256": "52f100945aab7190eeed504cbf3d759f194ce08f8ba1427bbea4eabc30c19b9f",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 462.1891,
+        "h5_coherent_power_dm_pc_cm3": 462.21369248940266,
+        "geometry_dm_pc_cm3": 462.2426275703691,
+        "anchor_dm_pc_cm3": 462.24,
+        "coarse_half_width_pc_cm3": 0.1,
+        "reference_pulse_fwhm_s": 0.0004865476390232406,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 462.174,
+        "crop_start_candidate_sample": 13953,
+        "crop_start_at_400_mhz_fit_sample": 13953.086835295946,
+        "input_dm_method": "accepted_product_dm_nominal_with_residual_bound",
+        "input_dm_bound_source": "v3_conservative_residual_bound",
+        "nominal_input_dm_pc_cm3": 462.174,
+        "input_dm_half_width_pc_cm3": 0.08239484931362011,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          -0.08239484931362011,
+          -0.03993751542919986
+        ],
+        "calibration_attempt": {
+          "sha256": "9644ad4de456fe29f5f212e65fa399f988bbcfcc5244a47784202fdfc66252ce",
+          "accepted_for_bound_narrowing": false,
+          "failed_checks": [
+            "all_windows_calibrated",
+            "zero_control"
+          ]
+        },
+        "reference_400_timing_half_width_native_samples": 60.74441779583537,
+        "matched_start_sample_min": 13997,
+        "matched_start_sample_max": 13998,
+        "direct_median_correlation": 0.8242827046555421,
+        "reversed_median_correlation": 0.08187551670043042,
+        "inferred_reference_minus_raw_dm_pc_cm3": -0.07873547523860092,
+        "blockers": [
+          "campaign_paused_no_execution_authorization",
+          "dsa_calibration_not_accepted_for_bound_narrowing",
+          "dsa_input_dm_bound_exceeds_timing_resolution_gate"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "oran",
+      "config": "analysis-configs/absolute-dm/phase-b/oran/workflow-config.json",
+      "event_binding_sha256": "0619864b9c6f0d563128a84dbf0aad3f8c0a7d64ddc672e99cfb1f7e6a43e887",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 397.0153,
+        "h5_coherent_power_dm_pc_cm3": 397.1745458567546,
+        "geometry_dm_pc_cm3": 397.0627412986305,
+        "anchor_dm_pc_cm3": 397.06,
+        "coarse_half_width_pc_cm3": 0.15,
+        "reference_pulse_fwhm_s": 0.07420172254439145,
+        "window_s": 0.1,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 396.882,
+        "crop_start_candidate_sample": 13918,
+        "crop_start_at_400_mhz_fit_sample": 13918.45857137469,
+        "input_dm_method": "inferred_raw_reference_row_timing",
+        "input_dm_bound_source": "v3_inferred_value",
+        "nominal_input_dm_pc_cm3": 396.98989665718847,
+        "input_dm_half_width_pc_cm3": 0.015432014765899588,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          -0.12332867195437287,
+          -0.0924646424225737
+        ],
+        "calibration_attempt": null,
+        "reference_400_timing_half_width_native_samples": 11.377030969535962,
+        "matched_start_sample_min": 13996,
+        "matched_start_sample_max": 13998,
+        "direct_median_correlation": 0.8287299226542528,
+        "reversed_median_correlation": 0.08177841176615822,
+        "inferred_reference_minus_raw_dm_pc_cm3": -0.11493372750070635,
+        "blockers": [
+          "campaign_paused_no_execution_authorization"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "isha",
+      "config": "analysis-configs/absolute-dm/phase-b/isha/workflow-config.json",
+      "event_binding_sha256": "279aea46dd09a940b6221229cfe54ef22f6613ac62c4a12d06177d1b5342e3c0",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 411.4359,
+        "h5_coherent_power_dm_pc_cm3": 411.6966845542555,
+        "geometry_dm_pc_cm3": 411.62294699065603,
+        "anchor_dm_pc_cm3": 411.62,
+        "coarse_half_width_pc_cm3": 0.25,
+        "reference_pulse_fwhm_s": 0.0018052781950282418,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 411.568,
+        "crop_start_candidate_sample": 14077,
+        "crop_start_at_400_mhz_fit_sample": 14077.330328001584,
+        "input_dm_method": "inferred_raw_reference_row_timing",
+        "input_dm_bound_source": "v3_inferred_value",
+        "nominal_input_dm_pc_cm3": 411.46038077173273,
+        "input_dm_half_width_pc_cm3": 0.015432014765899588,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          0.09218721350133836,
+          0.12305124303313754
+        ],
+        "calibration_attempt": null,
+        "reference_400_timing_half_width_native_samples": 11.377030969535962,
+        "matched_start_sample_min": 13998,
+        "matched_start_sample_max": 14000,
+        "direct_median_correlation": 0.8519341312026312,
+        "reversed_median_correlation": 0.0798183415333621,
+        "inferred_reference_minus_raw_dm_pc_cm3": 0.11731518849453391,
+        "blockers": [
+          "campaign_paused_no_execution_authorization"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "wilhelm",
+      "config": "analysis-configs/absolute-dm/phase-b/wilhelm/workflow-config.json",
+      "event_binding_sha256": "12fa133393061960778d70b92a795be25dc83e4d9a91debc211216101f1b70b4",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 602.3809,
+        "h5_coherent_power_dm_pc_cm3": 602.3856322646565,
+        "geometry_dm_pc_cm3": 602.4342897389619,
+        "anchor_dm_pc_cm3": 602.43,
+        "coarse_half_width_pc_cm3": 0.1,
+        "reference_pulse_fwhm_s": 0.000388705087251503,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 602.346,
+        "crop_start_candidate_sample": 14000,
+        "crop_start_at_400_mhz_fit_sample": 14000.488936533093,
+        "input_dm_method": "accepted_product_dm_nominal_with_residual_bound",
+        "input_dm_bound_source": "v3_conservative_residual_bound",
+        "nominal_input_dm_pc_cm3": 602.346,
+        "input_dm_half_width_pc_cm3": 0.018813544333807837,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          -0.012050485197991337,
+          0.018813544333807837
+        ],
+        "calibration_attempt": null,
+        "reference_400_timing_half_width_native_samples": 13.870015016149598,
+        "matched_start_sample_min": 13998,
+        "matched_start_sample_max": 13998,
+        "direct_median_correlation": 0.9039163890303982,
+        "reversed_median_correlation": 0.08123692020341061,
+        "inferred_reference_minus_raw_dm_pc_cm3": 4.989596912259917e-14,
+        "blockers": [
+          "campaign_paused_no_execution_authorization"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "phineas",
+      "config": "analysis-configs/absolute-dm/phase-b/phineas/workflow-config.json",
+      "event_binding_sha256": "11a95cd079afc25164fe3b35c2f747f5c30c3d07f7dd11600f1b61ab92854ed6",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 610.2894,
+        "h5_coherent_power_dm_pc_cm3": 610.5774929068482,
+        "geometry_dm_pc_cm3": 610.3590204110363,
+        "anchor_dm_pc_cm3": 610.36,
+        "coarse_half_width_pc_cm3": 0.25,
+        "reference_pulse_fwhm_s": 0.0029886274679480082,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 610.274,
+        "crop_start_candidate_sample": 14015,
+        "crop_start_at_400_mhz_fit_sample": 14015.25374943277,
+        "input_dm_method": "accepted_product_dm_nominal_with_residual_bound",
+        "input_dm_bound_source": "v3_conservative_residual_bound",
+        "nominal_input_dm_pc_cm3": 610.274,
+        "input_dm_half_width_pc_cm3": 0.059402376700311385,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          0.02853834716851221,
+          0.059402376700311385
+        ],
+        "calibration_attempt": {
+          "sha256": "9644ad4de456fe29f5f212e65fa399f988bbcfcc5244a47784202fdfc66252ce",
+          "accepted_for_bound_narrowing": false,
+          "failed_checks": [
+            "all_windows_calibrated",
+            "zero_control"
+          ]
+        },
+        "reference_400_timing_half_width_native_samples": 43.7935479997636,
+        "matched_start_sample_min": 13983,
+        "matched_start_sample_max": 13984,
+        "direct_median_correlation": 0.8305285626986987,
+        "reversed_median_correlation": 0.08073622805163388,
+        "inferred_reference_minus_raw_dm_pc_cm3": 0.047129318709449766,
+        "blockers": [
+          "campaign_paused_no_execution_authorization",
+          "dsa_calibration_not_accepted_for_bound_narrowing",
+          "dsa_input_dm_bound_exceeds_timing_resolution_gate"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "freya",
+      "config": "analysis-configs/absolute-dm/phase-b/freya/workflow-config.json",
+      "event_binding_sha256": "fa8694f59c2165679e1c134e1bbe43bdd77fa61036b87ecd120323308d6bc5a8",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 912.4067,
+        "h5_coherent_power_dm_pc_cm3": 912.469850608889,
+        "geometry_dm_pc_cm3": 912.5725002863397,
+        "anchor_dm_pc_cm3": 912.57,
+        "coarse_half_width_pc_cm3": 0.2,
+        "reference_pulse_fwhm_s": 0.00040065937342767413,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 912.4,
+        "crop_start_candidate_sample": 13913,
+        "crop_start_at_400_mhz_fit_sample": 13912.886531222961,
+        "input_dm_method": "inferred_raw_reference_row_timing",
+        "input_dm_bound_source": "v3_inferred_value",
+        "nominal_input_dm_pc_cm3": 912.5154314584005,
+        "input_dm_half_width_pc_cm3": 0.015432014765899588,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          -0.13086347316641206,
+          -0.09999944363461287
+        ],
+        "calibration_attempt": null,
+        "reference_400_timing_half_width_native_samples": 11.377030969535962,
+        "matched_start_sample_min": 13996,
+        "matched_start_sample_max": 13998,
+        "direct_median_correlation": 0.8767633193706104,
+        "reversed_median_correlation": 0.08131785219085269,
+        "inferred_reference_minus_raw_dm_pc_cm3": -0.11688584340486269,
+        "blockers": [
+          "campaign_paused_no_execution_authorization"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "johndoeii",
+      "config": "analysis-configs/absolute-dm/phase-b/johndoeii/workflow-config.json",
+      "event_binding_sha256": "406b88be99bc6771bedc81d9372aeeec5b61f067cb84e699a3b96e8bb4932cd9",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 696.5184,
+        "h5_coherent_power_dm_pc_cm3": 696.545741314261,
+        "geometry_dm_pc_cm3": 696.5833816400645,
+        "anchor_dm_pc_cm3": 696.58,
+        "coarse_half_width_pc_cm3": 0.1,
+        "reference_pulse_fwhm_s": 0.0006957157720124573,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 696.506,
+        "crop_start_candidate_sample": 14014,
+        "crop_start_at_400_mhz_fit_sample": 14014.21389637921,
+        "input_dm_method": "accepted_product_dm_nominal_with_residual_bound",
+        "input_dm_bound_source": "v3_conservative_residual_bound",
+        "nominal_input_dm_pc_cm3": 696.506,
+        "input_dm_half_width_pc_cm3": 0.0885563044978777,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          0.042608521502016425,
+          0.0885563044978777
+        ],
+        "calibration_attempt": {
+          "sha256": "9644ad4de456fe29f5f212e65fa399f988bbcfcc5244a47784202fdfc66252ce",
+          "accepted_for_bound_narrowing": false,
+          "failed_checks": [
+            "all_windows_calibrated",
+            "zero_control"
+          ]
+        },
+        "reference_400_timing_half_width_native_samples": 65.28686202700638,
+        "matched_start_sample_min": 13966,
+        "matched_start_sample_max": 13967,
+        "direct_median_correlation": 0.8426962288781947,
+        "reversed_median_correlation": 0.08040479255329437,
+        "inferred_reference_minus_raw_dm_pc_cm3": 0.07861546991213922,
+        "blockers": [
+          "campaign_paused_no_execution_authorization",
+          "dsa_calibration_not_accepted_for_bound_narrowing",
+          "dsa_input_dm_bound_exceeds_timing_resolution_gate"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "hamilton",
+      "config": "analysis-configs/absolute-dm/phase-b/hamilton/workflow-config.json",
+      "event_binding_sha256": "3ef48c2e39c291836d073938a252c9df67477fb908e3ec53d02a14d4b029bf3d",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 518.8007,
+        "h5_coherent_power_dm_pc_cm3": 518.7895523214872,
+        "geometry_dm_pc_cm3": 518.8633949327346,
+        "anchor_dm_pc_cm3": 518.86,
+        "coarse_half_width_pc_cm3": 0.15,
+        "reference_pulse_fwhm_s": 0.00020177869209009037,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 518.799,
+        "crop_start_candidate_sample": 14015,
+        "crop_start_at_400_mhz_fit_sample": 14015.129855947996,
+        "input_dm_method": "accepted_product_dm_nominal_with_residual_bound",
+        "input_dm_bound_source": "v3_conservative_residual_bound",
+        "nominal_input_dm_pc_cm3": 518.799,
+        "input_dm_half_width_pc_cm3": 0.0467248230123323,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          2.389997921792286e-13,
+          0.0467248230123323
+        ],
+        "calibration_attempt": {
+          "sha256": "9644ad4de456fe29f5f212e65fa399f988bbcfcc5244a47784202fdfc66252ce",
+          "accepted_for_bound_narrowing": false,
+          "failed_checks": [
+            "all_windows_calibrated",
+            "zero_control"
+          ]
+        },
+        "reference_400_timing_half_width_native_samples": 34.447203850015434,
+        "matched_start_sample_min": 13998,
+        "matched_start_sample_max": 13999,
+        "direct_median_correlation": 0.8629064095656924,
+        "reversed_median_correlation": 0.08062925495990267,
+        "inferred_reference_minus_raw_dm_pc_cm3": 4.8922169707779644e-14,
+        "blockers": [
+          "campaign_paused_no_execution_authorization",
+          "dsa_calibration_not_accepted_for_bound_narrowing",
+          "dsa_input_dm_bound_exceeds_timing_resolution_gate"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "mahi",
+      "config": "analysis-configs/absolute-dm/phase-b/mahi/workflow-config.json",
+      "event_binding_sha256": "36975fc4c5ac090a58897cf833770f524e75a2cb077b60f74b1e397835626092",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 960.1316,
+        "h5_coherent_power_dm_pc_cm3": 960.2070196241272,
+        "geometry_dm_pc_cm3": 960.2095635159394,
+        "anchor_dm_pc_cm3": 960.21,
+        "coarse_half_width_pc_cm3": 0.15,
+        "reference_pulse_fwhm_s": 0.02428602673053888,
+        "window_s": 0.04,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 960.128,
+        "crop_start_candidate_sample": 14027,
+        "crop_start_at_400_mhz_fit_sample": 14026.73138929634,
+        "input_dm_method": "inferred_raw_reference_row_timing",
+        "input_dm_bound_source": "v3_inferred_value",
+        "nominal_input_dm_pc_cm3": 960.0456327382708,
+        "input_dm_half_width_pc_cm3": 0.017539854299085535,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          0.06482740743017804,
+          0.09990711602834912
+        ],
+        "calibration_attempt": null,
+        "reference_400_timing_half_width_native_samples": 12.931005354064153,
+        "matched_start_sample_min": 13966,
+        "matched_start_sample_max": 13968,
+        "direct_median_correlation": 0.8403591012462968,
+        "reversed_median_correlation": 0.08093251101920475,
+        "inferred_reference_minus_raw_dm_pc_cm3": 0.09209832241041274,
+        "blockers": [
+          "campaign_paused_no_execution_authorization"
+        ],
+        "status": "blocked"
+      }
+    },
+    {
+      "event": "chromatica",
+      "config": "analysis-configs/absolute-dm/phase-b/chromatica/workflow-config.json",
+      "event_binding_sha256": "89346bd116255bbd105a7b9b7f631720811e54fe0165058a93e479a97b3fa9b1",
+      "execution_authorized": false,
+      "chime_config_review": {
+        "accepted_reference_dm_pc_cm3": 272.6382,
+        "h5_coherent_power_dm_pc_cm3": 272.7101628840501,
+        "geometry_dm_pc_cm3": 272.69841533818845,
+        "anchor_dm_pc_cm3": 272.7,
+        "coarse_half_width_pc_cm3": 0.1,
+        "reference_pulse_fwhm_s": 0.0008209283218365908,
+        "window_s": 0.03,
+        "status": "passed"
+      },
+      "dsa_config_review": {
+        "accepted_reference_dm_pc_cm3": 272.368,
+        "crop_start_candidate_sample": 13798,
+        "crop_start_at_400_mhz_fit_sample": 13797.909475257602,
+        "input_dm_method": "inferred_raw_reference_row_timing",
+        "input_dm_bound_source": "v3_inferred_value",
+        "nominal_input_dm_pc_cm3": 272.6393665213762,
+        "input_dm_half_width_pc_cm3": 0.015432014765899588,
+        "reference_minus_raw_dm_interval_pc_cm3": [
+          -0.2867985361421106,
+          -0.25593450661031136
+        ],
+        "calibration_attempt": null,
+        "reference_400_timing_half_width_native_samples": 11.377030969535962,
+        "matched_start_sample_min": 13993,
+        "matched_start_sample_max": 13998,
+        "direct_median_correlation": 0.8796335378467471,
+        "reversed_median_correlation": 0.08105665618429543,
+        "inferred_reference_minus_raw_dm_pc_cm3": -0.27378023020643427,
+        "blockers": [
+          "campaign_paused_no_execution_authorization"
+        ],
+        "status": "blocked"
+      }
+    }
+  ]
+}
