@@ -56,6 +56,33 @@ One pull request does one thing. Do not bundle an adjacent cleanup,
 a lint fix in an untouched file, or a documentation edit into a change
 that is about something else.
 
+"One thing" means one defect, not one call site. When the same defect
+appears at several call sites, repair them together in one pull request
+and name the sites in the body. The manuscript and `analysis/` separation
+above forbids sweeping in an *unrelated* edit; it does not require
+splitting a single defect across branches, and both this file and
+`CLAUDE.md` already provide for a change that genuinely needs both trees
+so long as the body says so.
+
+Before opening a pull request, look for a sibling the bot already has
+open on the same defect, and push to that branch instead of opening
+another:
+
+```bash
+BOT_LOGIN=$(gh api user --jq '.login')
+gh pr list --state open --author "$BOT_LOGIN" \
+  --json number,title,headRefName,files \
+  --jq '.[] | "\(.number) \(.title)\n  \([.files[].path] | join(" "))"'
+```
+
+Compare by the files the new change would touch, not by title. GitHub's
+`mergeable` flag compares a branch against its base and never against
+another branch, so two open bot branches that both edit one file each
+report `mergeable: true` and then collide when the owner merges the
+second. The bot cannot see that collision through the usual check; the
+owner absorbs it. When a sibling already edits the file, extend the
+sibling.
+
 ## The daily item budget
 
 Opening an issue or a pull request spends a shared, repository-wide daily
