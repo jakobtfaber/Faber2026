@@ -10,7 +10,9 @@ the pre-move `docs/rse/journal.jsonl`, which is exactly that silent failure.
 
 The check resolves each `"$VAR/..."` expression against the directory the
 script assigns to `VAR`, so it also catches a future move of the store, the
-append helper, or the readiness board.
+append helper, or the readiness board. A script that inlines its base, or that
+names a moved path only in a comment or a reminder string, exposes no such
+expression to resolve; the substring checks cover that case.
 """
 
 from __future__ import annotations
@@ -34,9 +36,19 @@ CADENCE_SCRIPTS = [
     "journal-watchdog.sh",
 ]
 
-# The throttle stamp under `.git/` is a scratch file the scripts create on
-# demand, so its absence says nothing about a stale path.
-IGNORED_SUFFIXES = frozenset({"/.git/*", "/.git/journal-last-nag"})
+# The watchdog prunes the git directory from its activity scan by glob; the
+# directory is the claim, and its contents are not this test's business.
+IGNORED_SUFFIXES = frozenset({"/.git/*"})
+
+# Paths the 2026-08 monorepo consolidation moved. A script may name one in a
+# comment or a reminder string rather than in a `"$VAR/..."` expression, where
+# the resolution check below cannot see it — but an agent reading the comment
+# still follows it to a file that is not there.
+PRE_CONSOLIDATION_PATHS = (
+    "docs/rse/journal.jsonl",
+    "docs/rse/journal-protocol.md",
+    "docs/rse/board/",
+)
 
 PATH_EXPR = re.compile(r"\$(ROOT|REPO|ANALYSIS)(/[A-Za-z0-9_./*-]+)")
 ASSIGNMENT = re.compile(r"^(ROOT|REPO|ANALYSIS)=(.*)$", re.MULTILINE)
@@ -91,6 +103,16 @@ def test_cadence_script_reads_the_current_journal(name: str) -> None:
     assert "docs/rse/protocols/journal.jsonl" in text, (
         f"{name} does not read {JOURNAL.relative_to(REPO)}; a stale path makes "
         'it exit silently at its `[ -f "$J" ]` guard'
+    )
+
+
+@pytest.mark.parametrize("name", CADENCE_SCRIPTS)
+def test_cadence_script_names_no_pre_consolidation_path(name: str) -> None:
+    text = (SCRIPTS / name).read_text()
+    stale = [path for path in PRE_CONSOLIDATION_PATHS if path in text]
+    assert not stale, (
+        f"{name} still names pre-consolidation path(s) {stale}; the store is now "
+        "analysis/docs/rse/protocols/, the board analysis/docs/rse/control/board/"
     )
 
 
