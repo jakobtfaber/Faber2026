@@ -13,6 +13,7 @@ from scintillation.scint_analysis import auto_rfi_flag as arf
 
 NCHAN, NTIME = 64, 400
 OFF = (0, NTIME)
+SIGMA = 5.0  # the auto_flag default this file exercises
 
 
 @pytest.fixture
@@ -21,7 +22,11 @@ def spectrum() -> np.ma.MaskedArray:
     rng = np.random.default_rng(0)
     power = rng.normal(0.0, 1.0, (NCHAN, NTIME))
     power[7] *= 12.0  # variable-gain RFI: a time-std outlier
-    power[19] = np.cumsum(rng.normal(0.0, 1.0, NTIME)) * 0.3  # temporally correlated RFI
+    walk = np.cumsum(rng.normal(0.0, 1.0, NTIME))
+    # Temporally correlated RFI, rescaled to the ordinary time-std of the noise
+    # channels: a random walk left unscaled is also a large time-std outlier, so
+    # the lag-1 cut would never be the statistic under test.
+    power[19] = walk / walk.std()
     power[31] += 25.0  # bright channel mean, ordinary variance and no correlation
     masked = np.ma.MaskedArray(power, mask=np.zeros(power.shape, bool))
     masked.mask[52, :] = True  # already fully masked by the pipeline
@@ -32,6 +37,17 @@ def test_time_std_and_lag_one_autocorrelation_outliers_are_flagged(spectrum) -> 
     flagged, _ = arf.auto_flag(spectrum, OFF)
     assert flagged[7], "a time-std outlier should be flagged"
     assert flagged[19], "a temporally correlated channel should be flagged"
+
+
+def test_the_correlated_channel_is_not_a_time_std_outlier(spectrum) -> None:
+    # Without this, dropping tac1 from the flagger would leave the test above
+    # green: channel 19 has to be invisible to the time-std cut for its flag to
+    # be attributable to the lag-1 autocorrelation cut alone.
+    _, sd, _ = arf.offpulse_channel_stats(spectrum, OFF)
+    finite = sd[np.isfinite(sd)]
+    mad = np.median(np.abs(finite - np.median(finite))) * 1.4826
+    z = (sd[19] - np.median(finite)) / mad
+    assert abs(z) < SIGMA
 
 
 def test_a_bright_channel_mean_alone_is_not_flagged(spectrum) -> None:
@@ -54,7 +70,7 @@ def test_only_the_planted_defects_are_flagged(spectrum) -> None:
     assert info["n_chan"] == NCHAN
 
 
-def test_pure_noise_flags_nothing(spectrum) -> None:
+def test_pure_noise_flags_nothing() -> None:
     rng = np.random.default_rng(1)
     clean = np.ma.MaskedArray(rng.normal(0.0, 1.0, (NCHAN, NTIME)))
     flagged, info = arf.auto_flag(clean, OFF)
