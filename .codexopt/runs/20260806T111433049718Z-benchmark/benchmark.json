@@ -1,0 +1,66 @@
+{
+  "counts": {
+    "agents": 2,
+    "issues": 0,
+    "skills": 0
+  },
+  "evidence": {
+    "issue_paths": [],
+    "issue_themes": {},
+    "repo_root": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026",
+    "rollout_tasks": [],
+    "task_keywords": [],
+    "task_paths": [],
+    "task_statements": [],
+    "task_themes": {}
+  },
+  "files": [
+    {
+      "details": {
+        "criteria_scores": {
+          "clarity": 1.0,
+          "output_contract": 1.0,
+          "repo_specificity": 1.0,
+          "safety": 1.0,
+          "token_efficiency": 1.0,
+          "verification": 1.0,
+          "workflow": 1.0
+        },
+        "feedback": [
+          "Instruction asset is structurally solid under current checks."
+        ],
+        "task_keyword_coverage": 1.0,
+        "token_estimate": 1743,
+        "words": 1311
+      },
+      "issues": [],
+      "kind": "agents",
+      "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/AGENTS.md",
+      "score": 1.0
+    },
+    {
+      "details": {
+        "criteria_scores": {
+          "clarity": 1.0,
+          "output_contract": 1.0,
+          "repo_specificity": 1.0,
+          "safety": 1.0,
+          "token_efficiency": 1.0,
+          "verification": 1.0,
+          "workflow": 1.0
+        },
+        "feedback": [
+          "Instruction asset is structurally solid under current checks."
+        ],
+        "task_keyword_coverage": 1.0,
+        "token_estimate": 1659,
+        "words": 1248
+      },
+      "issues": [],
+      "kind": "agents",
+      "path": "/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/AGENTS.md",
+      "score": 1.0
+    }
+  ],
+  "overall_score": 1.0
+}

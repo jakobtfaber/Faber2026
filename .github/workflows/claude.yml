@@ -1,0 +1,61 @@
+name: Claude Code
+
+# Official anthropics/claude-code-action. Responds to an explicit `@claude`
+# mention. Distinct from the `tend-*` workflows, which answer to
+# `@tend-jakobtfaber` and run the Claude CLI through max-sixty/tend; the two
+# trigger phrases do not overlap, so a comment wakes at most one of them.
+#
+# `pull_request_review` and `pull_request_review_comment` are deliberately
+# absent: those events run on `refs/pull/N/merge`, which the `tend`
+# environment's branch policy (main only) refuses, so a mention inside an
+# inline review comment would only produce a rejected deployment. Mention
+# `@claude` in a normal pull-request comment instead.
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+
+# No job may rely on the repository default; the one job below states the
+# token scopes it needs and nothing else inherits them.
+permissions: {}
+
+# One agent per issue or pull request at a time. Runs are not cancelled: an
+# in-flight agent may already have pushed a branch or posted a comment, and
+# killing it mid-way leaves that half-done.
+concurrency:
+  group: claude-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  claude:
+    name: Respond to @claude
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+    # Holds the CLAUDE_CODE_OAUTH_TOKEN shared with the tend workflows. Its
+    # branch policy admits main only, which is the ref these two events carry.
+    environment: tend
+    permissions:
+      contents: write # push the agent's working branch
+      pull-requests: write # open a pull request and comment on one
+      issues: write # post the reply the mention asked for
+      id-token: write # OIDC subject the action uses to prove the run's origin
+      actions: read # read CI results on a pull request
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 1
+          # The action authenticates its own writes; leaving the checkout
+          # credential in .git/config would only widen what a prompt-injected
+          # agent could reach.
+          persist-credentials: false
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@6b082c41935b4c8a3b8b0ef85ba4ba4d9eeb8975 # v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

@@ -1,0 +1,6 @@
+HOST=lxd110h17 JOB=121 BETA=3.99 TAU=0.019 W=1.0 AMP=0.1 DT=0.1 NLIVE=300
+INJECT-LEAKAGE tau_1ghz=0.019 beta=3.99 alpha_true=4.000 W/tau=1.0 amp_frac=0.1 dt_offset=0.1ms sig2_frac=1.0
+  1-COMP EMG fit alpha_apparent=3.756[3.702,3.808]  (alpha_true=4.000)  bias=-0.244  lnZ=-29117.8
+  tau_apparent=0.0249 (true=0.0190) ratio=1.308
+  LEAKAGE-BIAS -0.244  (harsh-tail single-comp max was -0.21; need ~-1.6)
+DONE LEAKAGE amp=0.1 dt=0.1 RC=0 WALL=1144

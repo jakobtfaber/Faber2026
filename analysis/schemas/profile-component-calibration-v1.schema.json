@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://faber2026.jakobfaber.com/schemas/profile-component-calibration-v1.schema.json",
+  "title": "Profile-component injection calibration evidence",
+  "type": "object",
+  "required": [
+    "schema",
+    "domain",
+    "status",
+    "manuscript_count_setting_enabled",
+    "provenance",
+    "comparison_contract",
+    "cells",
+    "scientific_gate"
+  ],
+  "properties": {
+    "schema": {"const": "faber2026-profile-component-calibration/v1"},
+    "domain": {"const": "time_frequency_profile"},
+    "status": {"enum": ["calibration_only", "scientific_gate_pending"]},
+    "manuscript_count_setting_enabled": {"const": false},
+    "provenance": {
+      "type": "object",
+      "required": ["pipeline_git_sha", "config_sha256", "input_manifest_sha256", "command", "seed_rule"]
+    },
+    "comparison_contract": {
+      "type": "object",
+      "required": [
+        "same_likelihood",
+        "same_time_frequency_support",
+        "ordered_arrivals",
+        "gain_prior_arms"
+      ]
+    },
+    "cells": {"type": "array", "minItems": 1},
+    "scientific_gate": {
+      "type": "object",
+      "required": [
+        "owner_ratified",
+        "maximum_overcount_rate",
+        "maximum_undercount_rate",
+        "supported_domain"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

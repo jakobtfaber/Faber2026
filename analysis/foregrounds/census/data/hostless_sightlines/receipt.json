@@ -1,0 +1,263 @@
+{
+  "blockers": [
+    "exact_query_receipts_missing",
+    "coverage_evidence_incomplete",
+    "legacy_empty_result_is_not_a_verified_non_detection"
+  ],
+  "candidates": [
+    {
+      "adopted_z": 0.3047,
+      "adopted_z_err": 0.068,
+      "classification": "GALAXY",
+      "impact_kpc": 60.1,
+      "m200c_msun": 13018977990494.793,
+      "model_fields_complete": true,
+      "nickname": "freya",
+      "object_id": "197030881733398302",
+      "r200c_kpc": 445.8656126627757,
+      "science_admitted": false,
+      "source_disposition": "frozen_not_admitted",
+      "source_family": "PS1-STRM",
+      "source_row_sha256": "87dcccc8370c027ae81b6171f77ea9df53094032e04545fd73be7833e2ed11f9",
+      "type": "halo"
+    },
+    {
+      "adopted_z": 0.6175,
+      "adopted_z_err": 0.1255,
+      "classification": "GALAXY",
+      "impact_kpc": 233.9,
+      "m200c_msun": 2492956128051.4624,
+      "model_fields_complete": true,
+      "nickname": "freya",
+      "object_id": "197040882212782495",
+      "r200c_kpc": 226.86812138090824,
+      "science_admitted": false,
+      "source_disposition": "frozen_not_admitted",
+      "source_family": "PS1-STRM",
+      "source_row_sha256": "6208dfe94a02806d8108ad7714e38af7b08f14352f2e55865f52b29a7285408a",
+      "type": "halo"
+    },
+    {
+      "adopted_z": null,
+      "adopted_z_err": null,
+      "classification": "UNSURE",
+      "impact_kpc": 232.0,
+      "m200c_msun": null,
+      "model_fields_complete": false,
+      "nickname": "wilhelm",
+      "object_id": "194453151328186646",
+      "r200c_kpc": null,
+      "science_admitted": false,
+      "source_disposition": "identity_verified_no_catalog_redshift",
+      "source_family": "PS1-STRM",
+      "source_row_sha256": "e9d3baa96b4f12651c6f14c586db4ada331ac66763519ae113b24f2c014fba1b",
+      "type": "halo"
+    }
+  ],
+  "coverage": [
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": null,
+      "footprint_source": "all_sky_contract",
+      "footprint_status": "covered",
+      "nickname": "freya",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "Wen & Han 2024 + PSZ2 + MCXC + MCXC-II",
+      "survey": "CLUSTERS"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": "9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490",
+      "footprint_source": "data/survey_footprints/desi_dr8_north.moc.fits",
+      "footprint_status": "not_covered",
+      "nickname": "freya",
+      "query_receipt_status": "not_required",
+      "query_required": false,
+      "release": "VII/292/north",
+      "survey": "DESI_DR8_NORTH"
+    },
+    {
+      "footprint_evidence_ready": false,
+      "footprint_sha256": null,
+      "footprint_source": "unavailable",
+      "footprint_status": "covered",
+      "nickname": "freya",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "VII/291/gladep",
+      "survey": "GLADE+"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": null,
+      "footprint_source": "all_sky_contract",
+      "footprint_status": "covered",
+      "nickname": "freya",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "live TAP snapshot",
+      "survey": "NED"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": "979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0",
+      "footprint_source": "data/survey_footprints/sdss_dr12.moc.fits",
+      "footprint_status": "not_covered",
+      "nickname": "freya",
+      "query_receipt_status": "not_required",
+      "query_required": false,
+      "release": "V/147/sdss12",
+      "survey": "SDSS_DR12"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": null,
+      "footprint_source": "all_sky_contract",
+      "footprint_status": "covered",
+      "nickname": "mahi",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "Wen & Han 2024 + PSZ2 + MCXC + MCXC-II",
+      "survey": "CLUSTERS"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": "9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490",
+      "footprint_source": "data/survey_footprints/desi_dr8_north.moc.fits",
+      "footprint_status": "not_covered",
+      "nickname": "mahi",
+      "query_receipt_status": "not_required",
+      "query_required": false,
+      "release": "VII/292/north",
+      "survey": "DESI_DR8_NORTH"
+    },
+    {
+      "footprint_evidence_ready": false,
+      "footprint_sha256": null,
+      "footprint_source": "unavailable",
+      "footprint_status": "covered",
+      "nickname": "mahi",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "VII/291/gladep",
+      "survey": "GLADE+"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": null,
+      "footprint_source": "all_sky_contract",
+      "footprint_status": "covered",
+      "nickname": "mahi",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "live TAP snapshot",
+      "survey": "NED"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": "979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0",
+      "footprint_source": "data/survey_footprints/sdss_dr12.moc.fits",
+      "footprint_status": "not_covered",
+      "nickname": "mahi",
+      "query_receipt_status": "not_required",
+      "query_required": false,
+      "release": "V/147/sdss12",
+      "survey": "SDSS_DR12"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": null,
+      "footprint_source": "all_sky_contract",
+      "footprint_status": "covered",
+      "nickname": "wilhelm",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "Wen & Han 2024 + PSZ2 + MCXC + MCXC-II",
+      "survey": "CLUSTERS"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": "9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490",
+      "footprint_source": "data/survey_footprints/desi_dr8_north.moc.fits",
+      "footprint_status": "not_covered",
+      "nickname": "wilhelm",
+      "query_receipt_status": "not_required",
+      "query_required": false,
+      "release": "VII/292/north",
+      "survey": "DESI_DR8_NORTH"
+    },
+    {
+      "footprint_evidence_ready": false,
+      "footprint_sha256": null,
+      "footprint_source": "unavailable",
+      "footprint_status": "covered",
+      "nickname": "wilhelm",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "VII/291/gladep",
+      "survey": "GLADE+"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": null,
+      "footprint_source": "all_sky_contract",
+      "footprint_status": "covered",
+      "nickname": "wilhelm",
+      "query_receipt_status": "missing",
+      "query_required": true,
+      "release": "live TAP snapshot",
+      "survey": "NED"
+    },
+    {
+      "footprint_evidence_ready": true,
+      "footprint_sha256": "979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0",
+      "footprint_source": "data/survey_footprints/sdss_dr12.moc.fits",
+      "footprint_status": "not_covered",
+      "nickname": "wilhelm",
+      "query_receipt_status": "not_required",
+      "query_required": false,
+      "release": "V/147/sdss12",
+      "survey": "SDSS_DR12"
+    }
+  ],
+  "schema_version": 1,
+  "sightlines": [
+    {
+      "dec_deg": 74.2004722222,
+      "foreground_free": false,
+      "legacy_candidate_count": 2,
+      "legacy_candidate_state": "present_unverified",
+      "nickname": "freya",
+      "ra_deg": 88.188,
+      "tns": "FRB 20230325C"
+    },
+    {
+      "dec_deg": 71.0178611111,
+      "foreground_free": false,
+      "legacy_candidate_count": 0,
+      "legacy_candidate_state": "empty_unverified",
+      "nickname": "mahi",
+      "ra_deg": 39.7665,
+      "tns": "FRB 20240122A"
+    },
+    {
+      "dec_deg": 72.0375611111,
+      "foreground_free": false,
+      "legacy_candidate_count": 1,
+      "legacy_candidate_state": "present_unverified",
+      "nickname": "wilhelm",
+      "ra_deg": 315.1295416667,
+      "tns": "FRB 20221203A"
+    }
+  ],
+  "source_files": {
+    "candidate_redshift_provenance.csv": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
+    "candidate_redshift_source_payloads_2026-07-22.json": "814845249e0acae8091f7177a56a08015ace03bfdf5786c75198f3e34f4b6cee",
+    "expanded_catalog_cross_references.csv": "017a03147b058a500427b54b4b89c374379242091a45171fca68732c599061aa",
+    "frozen_census/bursts.csv": "6610aabb1527137c647149b86f6f65a3a1c4782680d618dd5c5f712b9f3c4536",
+    "intervening_census_registry.csv": "96bfd32302b00df943ba998ba3bf6557f3d8c06d882079cad1a5c9846d47d06a",
+    "survey_coverage/all_12_sightlines.csv": "4a95273417cdf24bcf61d6c8b704109e481d7e11f53f8465ebdef84dd0e5b3e7"
+  },
+  "status": "blocked"
+}

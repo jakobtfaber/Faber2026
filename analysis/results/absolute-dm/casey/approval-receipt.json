@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "status": "casey_hybrid_pending_independent_and_owner_review",
+  "burst": "casey",
+  "scope": "one event only",
+  "accepted_chime_route": {
+    "description": "current Figure 1 archival-product route supplies accepted support only; no archival array is shifted in the hybrid fit",
+    "sources": [
+      {
+        "path": "docs/rse/wayfinder/tickets/rfi-validation-01-define-acceptance-contract.md",
+        "sha256": "2a89c7f8226dc89d13194b3d4d2cc6e1d7ffc93b5de3cf4207935cd22f29a1e2"
+      },
+      {
+        "path": "docs/rse/control/BOARD.md",
+        "sha256": "f6a656447935232fe0c4e60328fb97a0c5d61015d666c85cb039e3dcded9c576"
+      },
+      {
+        "path": "scripts/plot_codetection_data_grid.py",
+        "sha256": "ccfd7dab384d2798c2556eea96d2108bdd6341005d3cab730a748608c274158a"
+      },
+      {
+        "path": "scripts/plot_codetection_triptych.py",
+        "sha256": "9999e5983d5380ad8b78cc509cc452368068a205e488887f084d47100278ca67"
+      },
+      {
+        "path": "scripts/plot_codetection_gallery.py",
+        "sha256": "c7de250771f0cc1660a7eac7208d8cca8edd57bba5f6605e93fc4ed229801c95"
+      }
+    ]
+  },
+  "inputs": {
+    "chime_result": {
+      "path": "dm-toa-geometry-20260728/absolute-dm-products/casey-hybrid/chime/casey_hybrid_result.json",
+      "sha256": "003c40bc742d19c5a47bfd510aac5524b7c3806ebfb99e2fc091230d55e32e07"
+    },
+    "dsa_result": {
+      "path": "dm-toa-geometry-20260728/absolute-dm-products/casey-hybrid/dsa/casey_dsa_hybrid_result.json",
+      "sha256": "8e67d07614d3f3ff2f619796a922a16e255e7ae77c59430b2d3680ceda7e59e9"
+    },
+    "dsa_input_state_audit": {
+      "path": "dm-toa-geometry-20260728/absolute-dm-products/casey-hybrid/dsa_state_audit.json",
+      "sha256": "38ed58d13bcf08951f0891aabc4ae85c94dddd99371bd1328b7f42ccf79e1eca"
+    },
+    "run_provenance": {
+      "path": "dm-toa-geometry-20260728/absolute-dm-products/casey-hybrid/run-provenance.json",
+      "sha256": "7c25d318d200d1797301ae54ca940c5de2fff147746200c5d7ceeddb0e119715"
+    },
+    "accepted_chime_reference": {
+      "path": "/Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+      "sha256": "79e9cba92716263d7644cafafe4d35a3ea646f18509be094033b67c6fc4440c4"
+    },
+    "accepted_dsa_reference": {
+      "path": "/Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts/casey_dsa_I_491_211_2500b_cntr_bpc.npy",
+      "sha256": "5ec04b0d83f66b67209e1539a37e5b917c294784ac85ae6572116fbd319bc4df"
+    }
+  },
+  "checks": {
+    "chime_source_missing_count": 253,
+    "chime_present_accepted_dead_count": 51,
+    "chime_accepted_live_count": 720,
+    "chime_proposed_extra_bad_rows": [],
+    "chime_fit_crop_display_only_invalid_fine_rows": 0,
+    "coherent_anchor_count": 1,
+    "full_coherent_oracle_passed": true,
+    "full_coherent_oracle_peak_difference_pc_cm3": 4.8211949490450934e-05,
+    "full_coherent_normalised_curve_max_abs_difference": 0.005016164233344167,
+    "full_coherent_center_score_ratio": 1.0007722164781736,
+    "smearing_bound_passed": true,
+    "smearing_fraction_of_upchannel_sample": 0.07068044641392637,
+    "smearing_fraction_of_reference_pulse_fwhm": 0.032203237876689925,
+    "injected_recovery_passed": true,
+    "injected_recovery_absolute_error_pc_cm3": 0.00020747189745407013,
+    "dsa_input_total_dm_pc_cm3": 491.211,
+    "dsa_direct_frequency_order_median_correlation": 0.90586974313201,
+    "dsa_reversed_frequency_order_median_correlation": 0.08104195911765325,
+    "reference_frequency_mhz": 400.0,
+    "hybrid_fit_dm_pc_cm3": 491.27737153955155,
+    "geometry_dm_pc_cm3": 491.27924166266934
+  },
+  "outputs": {
+    "svg": {
+      "path": "dm-toa-geometry-20260728/casey-hybrid/casey_hybrid_packet.svg",
+      "sha256": "1fea1f6cb6c70fa2ea3e4bad504e353c74666d910ec64867ed48d763c57daf97"
+    },
+    "png": {
+      "path": "dm-toa-geometry-20260728/casey-hybrid/casey_hybrid_packet.png",
+      "sha256": "9f7fadeecdf534853dd9eb53b2c5d896816adc6ac5948e0fdaab38edc4cda16d"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "checks": {
+    "all_contract_file_hashes": true,
+    "common_preprocessing": true,
+    "contract_c1d1_seed": true,
+    "crop_environment": true,
+    "diagnostic_c1d1": true,
+    "diagnostics_present": true,
+    "diagnostics_reproduced": true,
+    "diagnostics_run_b_raw_hash": true,
+    "fit_summary_present": true,
+    "fit_summary_reproduced": true,
+    "fit_summary_run_b_raw_hash": true,
+    "fit_values_untrusted": true,
+    "frozen_controls": true,
+    "model_grid_present": true,
+    "model_grid_reproduced": true,
+    "model_grid_run_b_raw_hash": true,
+    "panel_present": true,
+    "panel_reproduced": true,
+    "panel_run_b_raw_hash": true,
+    "prior_edge_diagnostics_present": true,
+    "residual_diagnostics_present": true,
+    "run_a_gates": true,
+    "run_a_identity": true,
+    "run_b_gates": true,
+    "run_b_identity": true,
+    "source_revision": true,
+    "weighted_samples_present": true,
+    "weighted_samples_reproduced": true,
+    "weighted_samples_run_b_raw_hash": true,
+    "window_diagnostics_present": true
+  },
+  "contract_sha256": "1cbab9184e8a318e9fc4401d1c2dd841c7cb0ae9a055ae9ca8cc5a6d0265fb30",
+  "h17": {
+    "job_id": 205,
+    "run_root": "/home/ubuntu/flits-controlled/joint-scattering-2026-07-23-v4/oran",
+    "slurm_accounting": "disabled; COMPLETED marker and complete receipts present",
+    "source_worktree": "/home/ubuntu/Developer/worktrees/dsa110-FLITS-controlled-oran-20260723-v4"
+  },
+  "morphology": "C1D1",
+  "next_gate": "independent scientific and visual review through ticket 6",
+  "outputs": {
+    "diagnostics": {
+      "method": "exact_bytes",
+      "verified_sha256": "fbe97fcaea02ca8cd93b211dd34e8dc845ab31f4a6c929fbab02467e06f201a8"
+    },
+    "fit_summary": {
+      "method": "exact_bytes",
+      "verified_sha256": "a5aa9e255a7dbb46e6b42652c1ebb7173332c55a70515d59c49ee511c47c3110"
+    },
+    "model_grid": {
+      "method": "canonical_scientific_arrays",
+      "verified_sha256": "077680641f8a212690dc230925058b27028193425ed2f97812ce146bac7b9f07"
+    },
+    "panel": {
+      "method": "exact_bytes",
+      "verified_sha256": "01bbe8cdcd15cd47c1d02b5901f43bb7e451f728e5f37e04c5a61b7828a0f5ce"
+    },
+    "weighted_samples": {
+      "method": "canonical_scientific_arrays",
+      "verified_sha256": "857e8bb2dac04380d4412166330591cab3a4e2bf095b082990c0ac4fbe573045"
+    }
+  },
+  "panel_approved": false,
+  "panel_review_eligible": false,
+  "reproduction_receipt_sha256": "2ed0932c686c27a36da454ecf6aced970ef5f136dac98ef58be813b64eea077f",
+  "run_a_receipt_sha256": "cd6b2cb1b5e3fb8a70856e0b84b54c4a0a3cb953eb0bee8a12c0f0c667621071",
+  "run_b_receipt_sha256": "cd6b2cb1b5e3fb8a70856e0b84b54c4a0a3cb953eb0bee8a12c0f0c667621071",
+  "schema": "faber2026-analysis-oran-c1d1-independent-verification/v1",
+  "scientific_trust": "pending",
+  "source_revision": "fba755ad7edbd69dece059c8c5f0868da41e3f2b",
+  "superseded_artifacts": [
+    {
+      "path": "figure_review/batches/2026-07-22-joint-scattering-current/candidates/triptych-oran.pdf",
+      "sha256": "490d297f3d0fee5d44d55cfd5d9f24f7bceafcb49b4c11d236b3b70b6e3febca"
+    },
+    {
+      "path": "figure_review/batches/2026-07-22-joint-scattering-current/previews/triptych-oran.png",
+      "sha256": "2328c64b2c986f1b1382bce15011313aebd5d16184cbc9fa664cca4b156f4b03"
+    }
+  ]
+}

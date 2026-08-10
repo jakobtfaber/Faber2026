@@ -1,0 +1,16 @@
+nickname,survey,release,footprint_status,footprint_source,footprint_sha256,footprint_evidence_ready,query_required,query_receipt_status
+freya,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,covered,all_sky_contract,,True,True,missing
+freya,DESI_DR8_NORTH,VII/292/north,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490,True,False,not_required
+freya,GLADE+,VII/291/gladep,covered,unavailable,,False,True,missing
+freya,NED,live TAP snapshot,covered,all_sky_contract,,True,True,missing
+freya,SDSS_DR12,V/147/sdss12,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0,True,False,not_required
+mahi,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,covered,all_sky_contract,,True,True,missing
+mahi,DESI_DR8_NORTH,VII/292/north,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490,True,False,not_required
+mahi,GLADE+,VII/291/gladep,covered,unavailable,,False,True,missing
+mahi,NED,live TAP snapshot,covered,all_sky_contract,,True,True,missing
+mahi,SDSS_DR12,V/147/sdss12,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0,True,False,not_required
+wilhelm,CLUSTERS,Wen & Han 2024 + PSZ2 + MCXC + MCXC-II,covered,all_sky_contract,,True,True,missing
+wilhelm,DESI_DR8_NORTH,VII/292/north,not_covered,data/survey_footprints/desi_dr8_north.moc.fits,9b9f73e2adf21cccb6f9beae400415da336990b37dd5e5ce0777809a321d4490,True,False,not_required
+wilhelm,GLADE+,VII/291/gladep,covered,unavailable,,False,True,missing
+wilhelm,NED,live TAP snapshot,covered,all_sky_contract,,True,True,missing
+wilhelm,SDSS_DR12,V/147/sdss12,not_covered,data/survey_footprints/sdss_dr12.moc.fits,979aed51bcb317b79d1d2ea5cdf87ee22af91ee0788ed67c314783613f5df4c0,True,False,not_required

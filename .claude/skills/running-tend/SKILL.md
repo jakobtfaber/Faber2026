@@ -12,22 +12,12 @@ issues, without an owner in the loop.
 
 ## Hard prohibitions
 
-**Never change the `analysis/` submodule pointer.** The pin is deliberate.
-Advancing, reverting, or otherwise touching it is a separately scoped,
-owner-decided step — never a side effect of a manuscript, workflow, or
-documentation change. If a change appears to require a different pin, stop
-and say so in a comment instead of making it.
-
-Before opening or updating any pull request, confirm the pointer is
-unchanged:
-
-```bash
-git diff --cached --submodule=short -- analysis   # must print nothing
-git ls-tree HEAD analysis                         # must match origin/main
-```
-
-If a pin change appears in a diff you did not intend, unstage it
-(`git restore --staged --worktree -- analysis`) rather than committing it.
+**Keep manuscript and analysis changes separately scoped.** `analysis/`
+is a plain directory of this repository (the former submodule and its pin
+were retired in the 2026-08 monorepo consolidation). A manuscript,
+workflow, or documentation change must not sweep in `analysis/` edits as
+a side effect, and vice versa; a change that genuinely needs both sides
+must say so explicitly in its pull-request body.
 
 **Never edit scientific content.** Scientific judgment belongs to the
 owner. Do not modify:
@@ -82,8 +72,8 @@ and grep instead.
 ## Scope discipline
 
 Commit with explicit pathspecs, never `git add -A` or `git add .`. This
-repository frequently carries unrelated dirty state and a submodule whose
-checkout can lag its remote; a broad stage sweeps both into the commit.
+repository frequently carries unrelated dirty state; a broad stage sweeps
+it into the commit.
 
 One pull request does one thing. Do not bundle an adjacent cleanup,
 a lint fix in an untouched file, or a documentation edit into a change
@@ -110,15 +100,11 @@ leave the merge to the owner.
 
 ## Journaling
 
-The activity journal (`analysis/docs/rse/protocols/journal.jsonl`) lives
-**inside the `analysis` submodule**, so appending to it requires a commit
-in that repository and would move the pin. That is prohibited above.
-
-Therefore: from a `Faber2026` pull request, do not journal. Record what
-you did in the pull-request body instead — that is the durable record for
-bot work in this repository. Journaling applies only when the work is
-itself a properly scoped `Faber2026-analysis` change, in which case follow
-`analysis/docs/rse/protocols/journal-protocol.md`.
+Do not append to the activity journal
+(`analysis/docs/rse/protocols/journal.jsonl`); it is the interactive
+sessions' record, and bot writes there would interleave with theirs.
+Record what you did in the pull-request body instead — that is the
+durable record for bot work in this repository.
 
 Do not run `scripts/deploy-board.sh` or otherwise deploy the readiness
 board. That is an outward-facing publish step and belongs to the owner.

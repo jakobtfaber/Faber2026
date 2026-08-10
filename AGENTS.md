@@ -52,18 +52,19 @@ Scope and guardrails — this authorization is not a licence to be careless:
   Never force-push a branch that has concurrent writers.
 - **Prefer the clean path.** Land figure/section updates via a focused branch +
   PR that mirrors existing precedent (e.g. the `ms/…` jointmodel-panel PRs),
-  not a divergent-branch merge that drags in unrelated submodule-pointer bumps.
+  not a divergent-branch merge that drags in unrelated changes.
 - **Never delete or rewrite shared history** (`push --force`, branch deletion on
   `main`, `reset --hard` on a shared ref) without an explicit, separate request.
   Standing exception (owner, 2026-07-27): a merged-PR head branch may be
   deleted by default once patch equivalence with the base is proven
   (`git cherry`/`range-diff` for squash merges); `overleaf-*` sync branches
   are never deleted.
-- **The `analysis/` submodule pin is deliberate** — do not bump the gitlink as
-  a side effect of a manuscript change; that is its own reviewed step.
+- **Keep manuscript and `analysis/` changes separately scoped** — do not
+  sweep analysis edits into a manuscript change as a side effect, or vice
+  versa; a change needing both sides says so explicitly.
 - **Land by default** (owner, 2026-07-27): a mechanical, narrowly scoped,
   cheaply reversible pull request (revert restores the previous state; no
-  scientific judgment, no data or pin change) merges immediately — do not
+  scientific judgment, no data change) merges immediately — do not
   leave it open for review.
 - **Queue quietly** (owner, 2026-07-27): owner-facing requests go into a
   queue source (ticket, figure-review batch, board line, pull request), not
@@ -81,7 +82,7 @@ Scope and guardrails — this authorization is not a licence to be careless:
 
 ## Learned User Preferences
 
-- Prefer pathspec-only commits; never sweep unrelated dirty-lane or submodule-pointer changes into a manuscript/figure task commit.
+- Prefer pathspec-only commits; never sweep unrelated dirty-lane changes into a manuscript/figure task commit.
 - Manuscript figures should omit plot titles (captions carry the title) and match existing manuscript figure style (SciencePlots / shared formatting), not ad-hoc styling.
 - Prefer math notation on figure axes/labels, with prose explanation in the caption or body text rather than spelled-out descriptive axis text alone.
 - Keep claim wording tight on science readiness and open gates — do not overstate what is certified vs provisional.
@@ -107,4 +108,4 @@ Scope and guardrails — this authorization is not a licence to be careless:
 - Local burst products live under `~/Data/Faber2026/dsa110/` (DSA-110; Stokes-I cubes in `DSA_bursts/`) and `~/Data/Faber2026/chimefrb/` (CHIME/FRB; Stokes-I cubes in `CHIME_bursts/`); do not mix instruments across those trees or paper over layout drift with compatibility symlinks — fix referencing paths universally instead.
 - Product dispersion measures in `_cntr_bpc.npy` filenames are per-band archival referral values and can differ between CHIME and DSA for the same event.
 - Retained Mac worktrees and orphan clones need an explicit content disposition — land/integrate, superseded/obsolete, or preserve — with a receipt before retirement; subject-on-main alone does not prove superseded when unique patches remain.
-- The parent manuscript pins one submodule: `analysis/` is the research-control repository, and it also houses all fitting code. Its lockfile no longer references FLITS; `dsa110-FLITS` is retired provenance and must not be imported at runtime.
+- `analysis/` is a plain directory of this repository holding the research-control surface and all fitting code (the former Faber2026-analysis submodule was folded in by the 2026-08 monorepo consolidation; the original repository is archived read-only as provenance). Its lockfile no longer references FLITS; `dsa110-FLITS` is retired provenance and must not be imported at runtime.

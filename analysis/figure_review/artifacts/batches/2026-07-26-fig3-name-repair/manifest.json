@@ -1,0 +1,118 @@
+{
+  "batch_id": "2026-07-26-fig3-name-repair",
+  "candidates": [
+    {
+      "artifact": "candidates/fig3-halo-grid.pdf",
+      "artifact_sha256": "a56d43ccffa31189e27573969d34dacec9b0223e058a545dff6fc1c19cfcf191",
+      "claim": "Figure 3 rebuilt at pinned registry (sha 96bfd323) with frozen-census TNS names corrected to burst_metadata authority: FRB 20230325C (freya), FRB 20230913G (hamilton), FRB 20240203D (chromatica)",
+      "decision": {
+        "notes": "Built at dsa110-FLITS main 2463289015a8ffe0d6934e1c2206c9b49eeda345 (PR #234). Only the seven name cells changed vs the prior build; registry snapshot unchanged (96bfd323). freya has no z_spec so it has no panel.",
+        "reviewed_at": null,
+        "reviewer": null,
+        "reviewer_role": null,
+        "status": "pending"
+      },
+      "evidence_ids": [
+        "expanded-catalog-build",
+        "figure3-input",
+        "verdi-host-redshifts",
+        "law-host-redshifts",
+        "candidate-redshift-ledger",
+        "candidate-redshift-replay",
+        "candidate-redshift-payloads"
+      ],
+      "family": "foreground-halo-grid",
+      "generator": "pipeline/galaxies/v2_0/sightline_halo_grid.py --halo-csv pipeline/galaxies/foreground/data/sightline_halo_grid.csv",
+      "id": "fig3-halo-grid",
+      "manuscript_section": "Foreground galaxies / sightline halo grid",
+      "preview": "previews/fig3-halo-grid.png",
+      "priority": 100,
+      "protect_in_manuscript": false,
+      "required_provenance": [
+        "expanded-catalog build manifest and SHA-256",
+        "versioned Figure 3 input and SHA-256",
+        "Verdi host-redshift source extract and SHA-256",
+        "Law host-redshift source extract and SHA-256",
+        "candidate-redshift ledger and replay receipt SHA-256",
+        "canonical selected source rows and full query responses SHA-256",
+        "manuscript-owner visual approval"
+      ],
+      "review_question": "Do the corrected transient identifiers and panel set match the intended sightline sample?",
+      "target": "figures/sightline_halo_grid.pdf",
+      "title": "Figure 3: foreground halo sightlines"
+    }
+  ],
+  "created_at": "2026-07-27T00:57:59+00:00",
+  "dm_catalog": {
+    "path": "dm-joint-phase-v2/manuscript_dm_catalog.csv",
+    "sha256": "3730d486a6857d6a5e7fe8a9d445e5c989b36e57dc71b9fb2e6421079e8b6b4a"
+  },
+  "evidence": [
+    {
+      "id": "expanded-catalog-build",
+      "repository": "pipeline",
+      "sha256": "fcb27985f4b914f7b3a904bfe80ab55643a277ef5ed1d3458d3f3cd2509b1521",
+      "source_path": "galaxies/foreground/data/expanded_catalog_build.json",
+      "source_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+      "stored_path": "provenance/expanded-catalog-build.json"
+    },
+    {
+      "id": "figure3-input",
+      "repository": "pipeline",
+      "sha256": "2a59fb28bfe196fde63f2335548030ff911dfbeda9e07e133823ca511fdf79e9",
+      "source_path": "galaxies/foreground/data/sightline_halo_grid.csv",
+      "source_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+      "stored_path": "provenance/figure3-input.csv"
+    },
+    {
+      "id": "verdi-host-redshifts",
+      "repository": "pipeline",
+      "sha256": "2d38d171ca065ccf9f65e88045c7a695cb7d36240b84e6d76061445be6d5b3aa",
+      "source_path": "galaxies/foreground/data/frozen_census/verdi2025_host_redshift_extract.csv",
+      "source_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+      "stored_path": "provenance/verdi-host-redshifts.csv"
+    },
+    {
+      "id": "law-host-redshifts",
+      "repository": "pipeline",
+      "sha256": "fe8441914e81ddc519404a80652926cded9509053888e6455c5e94014876faaf",
+      "source_path": "galaxies/foreground/data/frozen_census/law2024_host_redshift_extract.csv",
+      "source_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+      "stored_path": "provenance/law-host-redshifts.csv"
+    },
+    {
+      "id": "candidate-redshift-ledger",
+      "repository": "pipeline",
+      "sha256": "0a2ba35f3dd7dfdcc855d4d589e062c08e5788e135970802cb7b7b798c47afe7",
+      "source_path": "galaxies/foreground/data/candidate_redshift_provenance.csv",
+      "source_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+      "stored_path": "provenance/candidate-redshift-ledger.csv"
+    },
+    {
+      "id": "candidate-redshift-replay",
+      "repository": "pipeline",
+      "sha256": "4f9a78864b8bc824dd5f81c588f9e8c704f0d589de2535c061951a72fe1df3f3",
+      "source_path": "galaxies/foreground/data/candidate_redshift_replay_2026-07-22.json",
+      "source_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+      "stored_path": "provenance/candidate-redshift-replay.json"
+    },
+    {
+      "id": "candidate-redshift-payloads",
+      "repository": "pipeline",
+      "sha256": "814845249e0acae8091f7177a56a08015ace03bfdf5786c75198f3e34f4b6cee",
+      "source_path": "galaxies/foreground/data/candidate_redshift_source_payloads_2026-07-22.json",
+      "source_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+      "stored_path": "provenance/candidate-redshift-payloads.json"
+    }
+  ],
+  "pipeline_revision": "2463289015a8ffe0d6934e1c2206c9b49eeda345",
+  "policy": {
+    "agent_visual_review_is_not_author_approval": true,
+    "approval_is_per_candidate": true,
+    "owner_preview_requires_verified_reproduction": true,
+    "promotion_requires_exact_hash_match": true
+  },
+  "schema_version": 1,
+  "source_revision": "7b41c0f13eae492483e83f8e48511aedff423e12",
+  "title": "Figure 3: corrected transient identifiers (pinned registry, TNS authority)"
+}

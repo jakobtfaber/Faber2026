@@ -1,0 +1,68 @@
+"""Guards for obsolete manuscript science moved into the archive."""
+
+import json
+from pathlib import Path
+
+from scripts.workspace import manuscript_root
+
+ANALYSIS_ROOT = Path(__file__).resolve().parents[1]
+ROOT = manuscript_root()
+ARCHIVE = ANALYSIS_ROOT / ".archive" / "outdated-science" / "2026-07-17"
+
+
+def test_obsolete_tables_and_full_ledger_are_archived():
+    moved = {
+        ROOT / "joint_fit_provisional_table.tex":
+            ARCHIVE / "joint_fit_provisional_table.tex",
+        ROOT / "dsa_scint_provisional_table.tex":
+            ARCHIVE / "dsa_scint_provisional_table.tex",
+        ROOT / "foreground_propagation_provisional_table.tex":
+            ARCHIVE / "foreground_propagation_provisional_table.tex",
+    }
+    for active, archived in moved.items():
+        assert archived.is_file(), archived
+        assert not active.exists(), active
+    assert (ARCHIVE / "analysis/provisional_propagation/results.json").is_file()
+
+
+def test_compiled_tex_has_no_archived_labels_or_inputs():
+    compiled = "\n".join(
+        (ROOT / path).read_text()
+        for path in ("sections/results.tex", "sections/discussion.tex")
+    )
+    for token in (
+        "tab:joint-fit-provisional",
+        "tab:dsa-scint-provisional",
+        "tab:foreground-propagation-provisional",
+        "joint_fit_provisional_table",
+        "dsa_scint_provisional_table",
+        "foreground_propagation_provisional_table",
+        "approximately 22\\%",
+        "factor of about 11",
+    ):
+        assert token not in compiled
+    assert "\\input{twoscreen_provisional_table}" in compiled
+
+
+def test_active_propagation_ledger_is_fail_closed_only():
+    active = json.loads(
+        (ANALYSIS_ROOT / "foregrounds/results/provisional-propagation/results.json").read_text()
+    )
+    assert active["screen_analysis_status"] == "PENDING_ALPHA4_CONSISTENCY_REFITS"
+    assert "foreground_alignment_rows" not in active
+    assert len(active["screen_rows"]) == 7
+    assert all(not row["products"] for row in active["screen_rows"])
+
+
+def test_generator_cannot_recreate_live_obsolete_tables():
+    source = (ANALYSIS_ROOT / "scripts/build_provisional_propagation_tables.py").read_text()
+    assert '".archive" / "outdated-science" / "2026-07-17"' in source
+    assert 'table(ROOT / "joint_fit_provisional_table.tex"' not in source
+    assert 'table(ROOT / "dsa_scint_provisional_table.tex"' not in source
+    assert 'table(ROOT / "foreground_propagation_provisional_table.tex"' not in source
+
+
+def test_archive_has_review_index():
+    index = (ARCHIVE / "README.md").read_text()
+    assert "Do not cite" in index
+    assert "Original path" in index

@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "date_checked": "2026-07-22",
+  "inputs": {
+    "pyhesdm": {
+      "version": "0.1.6",
+      "sha256": "3dd0293f822a60ee17530091f3f08227c17e5230c870b68c3d5fb65dc17eade0",
+      "url": "https://pypi.org/project/pyhesdm/0.1.6/"
+    },
+    "konietzka": {
+      "filename": "Konietzka2025_DMmap_continuous_v1.hdf5",
+      "sha256": "fab9bb7dc0babe1c8577c4b6c500d756fc21c0f5049057350976ce977d928e44",
+      "url": "https://ralfkonietzka.github.io/fast-radio-bursts/ray-tracing-catalogs/"
+    }
+  },
+  "method": {
+    "hybrid": "pyhesdm diffuse IGM from 3.4 to 120 Mpc plus the current Walker/Connor diffuse distribution scaled to the remaining Macquart-integral path; common f_IGM draw; explicit known halos retained",
+    "konietzka": "raw continuous-TNG total-cosmic rays interpolated to the source redshift; explicit known halos omitted to prevent double counting"
+  },
+  "sightlines": [
+    {
+      "burst": "FRB 20220207C",
+      "redshift": 0.043,
+      "ra_deg": 310.1995,
+      "dec_deg": 72.8823,
+      "comoving_distance_mpc": 188.60020365726467,
+      "local_path_fraction": 0.6362665451733606,
+      "pyhesdm": {
+        "galactic_l_deg": 106.93846915307378,
+        "galactic_b_deg": 18.389583227630474,
+        "healpix_pixel": 16588,
+        "mean_at_figm_0p8": 13.481112199113207,
+        "std_at_figm_0p8": 2.283341615209339,
+        "mean_at_adopted_figm": 12.807056589157547,
+        "std_at_adopted_figm": 2.169174534448872,
+        "model_end_redshift": 0.0272569948498526,
+        "statistical_remainder_fraction": 0.3686092303650882
+      },
+      "cosmic_dm": {
+        "current_diffuse_igm": {
+          "p16": 21.96318138576869,
+          "p50": 31.619691815126632,
+          "p84": 45.316737285032225
+        },
+        "pyhesdm_hybrid_diffuse_igm": {
+          "p16": 19.4028222177872,
+          "p50": 24.52091388994239,
+          "p84": 30.787624995435
+        },
+        "konietzka_total_cosmic": {
+          "p16": 17.615997585743667,
+          "p50": 28.293623947103384,
+          "p84": 55.172204620985184
+        }
+      },
+      "host_dm_observer_frame": {
+        "current": {
+          "p16": 82.54184671576041,
+          "p50": 114.79081079740781,
+          "p84": 141.11748757923,
+          "p_host_negative": 0.0020882353924647954
+        },
+        "pyhesdm_hybrid": {
+          "p16": 93.34007896510101,
+          "p50": 123.38231250227918,
+          "p84": 147.49140975016968,
+          "p_host_negative": 0.0008994318449486007
+        },
+        "konietzka_total_cosmic": {
+          "p16": 73.23861810507903,
+          "p50": 114.55107877896894,
+          "p84": 143.90191278617345,
+          "p_host_negative": 0.027193140490696835
+        }
+      },
+      "host_median_shift": {
+        "pyhesdm_minus_current": 8.591501704871362,
+        "konietzka_minus_current": -0.23973201843887182
+      }
+    },
+    {
+      "burst": "FRB 20240203A",
+      "redshift": 0.074,
+      "ra_deg": 312.6191,
+      "dec_deg": 73.9,
+      "comoving_distance_mpc": 322.14715420648895,
+      "local_path_fraction": 0.3725005744520181,
+      "pyhesdm": {
+        "galactic_l_deg": 108.23494135020093,
+        "galactic_b_deg": 18.396687944970537,
+        "healpix_pixel": 16589,
+        "mean_at_figm_0p8": 13.574900603735086,
+        "std_at_figm_0p8": 2.263052488700208,
+        "mean_at_adopted_figm": 12.89615557354833,
+        "std_at_adopted_figm": 2.1498998642651976,
+        "model_end_redshift": 0.0272569948498526,
+        "statistical_remainder_fraction": 0.6358276155472031
+      },
+      "cosmic_dm": {
+        "current_diffuse_igm": {
+          "p16": 38.11586142456017,
+          "p50": 54.85792221738704,
+          "p84": 78.60539250567015
+        },
+        "pyhesdm_hybrid_diffuse_igm": {
+          "p16": 36.09221857307182,
+          "p50": 47.808797663180265,
+          "p84": 63.724871003863704
+        },
+        "konietzka_total_cosmic": {
+          "p16": 35.449952363203295,
+          "p50": 53.59524431855702,
+          "p84": 94.56292342726248
+        }
+      },
+      "host_dm_observer_frame": {
+        "current": {
+          "p16": 32.79478627001929,
+          "p50": 72.18207448839958,
+          "p84": 104.92721770500789,
+          "p_host_negative": 0.04460558079575051
+        },
+        "pyhesdm_hybrid": {
+          "p16": 44.82779863215697,
+          "p50": 80.2460873987355,
+          "p84": 109.85861770928776,
+          "p_host_negative": 0.02087580274785527
+        },
+        "konietzka_total_cosmic": {
+          "p16": 48.40314428054566,
+          "p50": 98.98553341663212,
+          "p84": 132.9598150953657,
+          "p_host_negative": 0.05928137919735145
+        }
+      },
+      "host_median_shift": {
+        "pyhesdm_minus_current": 8.064012910335919,
+        "konietzka_minus_current": 26.803458928232544
+      }
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+ "date": "2026-07-27",
+ "repo": "jakobtfaber/dsa110-FLITS",
+ "criteria": "merged=ancestor-of-origin/main; empty_diff=three-dot diff empty; prerewrite branches tree-compared two-dot (none identical)",
+ "bundle": "analysis/archive/flits-repo-local-branches-20260727.bundle",
+ "counts": {
+  "unique": 14,
+  "unique_prerewrite": 14,
+  "merged": 17,
+  "kept-protected": 2
+ },
+ "deleted_count": 17,
+ "branches": [
+  {
+   "branch": "agent/chime-artifact-consolidation",
+   "sha": "691dc7d355e7506cceea621818309934904fb2d1",
+   "status": "unique",
+   "behind": 130,
+   "ahead": 12
+  },
+  {
+   "branch": "agent/chime-crossacf-inventory",
+   "sha": "aa79612244065ad141cb2b7d5e4135e2b9b3b2cc",
+   "status": "unique",
+   "behind": 130,
+   "ahead": 10
+  },
+  {
+   "branch": "agent/chime-legacy-diagnostics",
+   "sha": "aa79612244065ad141cb2b7d5e4135e2b9b3b2cc",
+   "status": "unique",
+   "behind": 130,
+   "ahead": 10
+  },
+  {
+   "branch": "agent/chime-trigger-bundle",
+   "sha": "aa79612244065ad141cb2b7d5e4135e2b9b3b2cc",
+   "status": "unique",
+   "behind": 130,
+   "ahead": 10
+  },
+  {
+   "branch": "agent/dm-phase-suite-v1",
+   "sha": "5e15f96b29f53dae42d7cff928ab4887f1bd3b7c",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "agent/dm-phase-v2",
+   "sha": "c07f1f1660ee0736459eead04ebf69eaa82aebc4",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "agent/quarantine-outdated-science-20260717",
+   "sha": "9ddb4def3c35bf587dd7d9610d6192af23bcb57e",
+   "status": "unique",
+   "behind": 60,
+   "ahead": 1
+  },
+  {
+   "branch": "agent/revert-dm-phase-v1",
+   "sha": "a08597b87971461c6abc9e5f6fa707789297bb22",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "census/attribution-matrix-parity-20260715",
+   "sha": "90d8f2dadb36c2cbcd6caf2cbe0919797a577ff0",
+   "status": "merged",
+   "behind": 97,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "census/v4-extension-20260715",
+   "sha": "c9d78260aa38734971e1e2df38ea0140aa667f61",
+   "status": "unique",
+   "behind": 103,
+   "ahead": 2
+  },
+  {
+   "branch": "codex/adopt-verdi-tns-identifiers-19",
+   "sha": "b6a7501e859d6a5875a27cb468e3cf2111acc4c5",
+   "status": "unique",
+   "behind": 20,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/archive-historical-diagnostics-20260720",
+   "sha": "c505d07318e198503d7a1b5b56e34c28071a9f47",
+   "status": "unique",
+   "behind": 44,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/b4-figure-review-20260720",
+   "sha": "8f63185cc9b9f2a9810f5a4f2e275216427bd194",
+   "status": "unique",
+   "behind": 44,
+   "ahead": 3
+  },
+  {
+   "branch": "codex/chromatica-cross-band-scintillation",
+   "sha": "3feb82ec6b303f7d972f4f532b1e372f9e946e3e",
+   "status": "unique",
+   "behind": 63,
+   "ahead": 4
+  },
+  {
+   "branch": "codex/controlled-venv-executable-20260722",
+   "sha": "9c46c81772fa5a75b8c4aef03b1b995703ae4163",
+   "status": "merged",
+   "behind": 15,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/expanded-foreground-phase-two",
+   "sha": "db73ac7045f4d9341778eb7e826ffc81d089169d",
+   "status": "merged",
+   "behind": 36,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/h17-source-data-layout",
+   "sha": "dc4b3e7ed715745b65c50a9a42399c3226c1c329",
+   "status": "merged",
+   "behind": 38,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/h17-source-data-worker-paths",
+   "sha": "7973304d58924b6b40edf4a065e7ae66c0025f23",
+   "status": "merged",
+   "behind": 32,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/joint-resolution-final-window-20260722",
+   "sha": "3d1ed22f3129d40c0543f2058ac016a5cbf1deaf",
+   "status": "merged",
+   "behind": 13,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/joint-scattering-seeded-20260722",
+   "sha": "9fb550107c4384af596798d844c07c720c32421c",
+   "status": "merged",
+   "behind": 18,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/model-grid-exact-support-20260722",
+   "sha": "8750f27a3b0d5b1f98d7190036fb6a465e2ce02f",
+   "status": "merged",
+   "behind": 11,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/reconcile-foreground-verdict-20260723",
+   "sha": "caab0ac01f607bb85b71b45b8ca74fa7c782db19",
+   "status": "merged",
+   "behind": 10,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/reconcile-verdi-identifiers-parent-20260723",
+   "sha": "d1aaa04967b3912224a087dd57bce5d11e5a51ac",
+   "status": "merged",
+   "behind": 11,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/repair-production-registry-roster",
+   "sha": "f3c8d22a9088914e0179cfecf1ee4086777dc927",
+   "status": "merged",
+   "behind": 20,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "codex/repository-archive-audit",
+   "sha": "cdb9845b4b7a45327949be2be1ef2d31b1edb025",
+   "status": "unique",
+   "behind": 39,
+   "ahead": 1
+  },
+  {
+   "branch": "codex/results-library-chime-path-repair",
+   "sha": "f1d56c3aa5ec1ff098e8485293bf967d8b5a3ac1",
+   "status": "unique",
+   "behind": 44,
+   "ahead": 1
+  },
+  {
+   "branch": "dm-campaign-2026-07",
+   "sha": "75cb2a8d46bb3f51107ce879099933a04ff30e51",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "docs/correct-h23-candidate-inventory",
+   "sha": "12804919c4df90a3a6e2d3bddc2afa3c98d051a1",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "docs/scrub-docs-superpowers-rse",
+   "sha": "46dec19e949cd769321601df75890380580ff627",
+   "status": "unique",
+   "behind": 59,
+   "ahead": 1
+  },
+  {
+   "branch": "entire/checkpoints/v1",
+   "status": "kept-protected"
+  },
+  {
+   "branch": "fix/class-aware-pcc-20260712",
+   "sha": "528b21eab0681d9b5d2fd195764a8ec3d48def3c",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "fix/class-aware-pcc-upstream-20260712",
+   "sha": "c97177ce878b521e8ab4dba3d2e9e7420fa59f74",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "main",
+   "status": "kept-protected"
+  },
+  {
+   "branch": "scint/c1-allpairs-crossgp",
+   "sha": "80094decdaec38addd35c20886ee9c8be7872f30",
+   "status": "merged",
+   "behind": 114,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "scint/chime-highband-crossacf",
+   "sha": "66f015241d5594949837297c2fb9c640d152994e",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "scint/chime-recovery-failclosed",
+   "sha": "0f9282616112c731a0d58a7d721db835dbd5b65d",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "scint/chime-recovery-loop",
+   "sha": "e0a566225f87a20978a3fb96f1f6cf3ca19f2bed",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "scint/eligibility-caveats",
+   "sha": "3ef219780a59ed2c2e59fa68bde02312ccf16902",
+   "status": "merged",
+   "behind": 115,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "scint/p1-window-upchan",
+   "sha": "72f9dbb48af65c211e753085a7a10b7c1f20ead7",
+   "status": "merged",
+   "behind": 121,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "scint/p2-routeb-voltage",
+   "sha": "c952849e5e7a692b4fc043f3559d5f2edade83b9",
+   "status": "merged",
+   "behind": 111,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "scint/p3-optimal-estimator",
+   "sha": "4dcdb8ead3b66b7b216f3a4c29aa0e4e7acc8140",
+   "status": "merged",
+   "behind": 107,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "scint/p4-envelope-model",
+   "sha": "0cf0558f9b35f6f8c1c810b9e972efe5b20b4d40",
+   "status": "unique",
+   "behind": 106,
+   "ahead": 2
+  },
+  {
+   "branch": "scint/recovered-notebook-replay",
+   "sha": "7db0d4633c11b60dcdac8cd260ebbb5334243265",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "scint/reference-arc-rescue",
+   "sha": "9237e4c982b46f1993363cb3242298a81f3b7dd2",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "scint/reference-parity",
+   "sha": "46429ca37ba93a1c43c86f5c5f3892d658965893",
+   "status": "unique_prerewrite"
+  },
+  {
+   "branch": "scint/window-tuning-campaign",
+   "sha": "ae67bdf2abfb1950582bc2d6219c019256f2e51b",
+   "status": "merged",
+   "behind": 63,
+   "ahead": 0,
+   "deleted": true
+  },
+  {
+   "branch": "sync/upstream-157120e",
+   "sha": "21e201b94d7560c5bec0871ccce9da87662bf105",
+   "status": "unique_prerewrite"
+  }
+ ]
+}

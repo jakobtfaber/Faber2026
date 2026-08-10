@@ -1,0 +1,350 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://faber2026.example/dualband-burst-model-request.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event", "source", "geometry", "fit", "synthetic", "verification", "uncertainty_budget"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nickname", "tns_name", "instrument_burst_ids"],
+      "properties": {
+        "nickname": {"type": "string", "minLength": 1},
+        "tns_name": {"type": "string", "minLength": 1},
+        "instrument_burst_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chimefrb", "dsa110"],
+          "properties": {
+            "chimefrb": {"type": "string", "minLength": 1},
+            "dsa110": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {"kind": {"const": "synthetic"}}
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_frequency_mhz",
+        "epoch_unix_ns",
+        "station_delays_s",
+        "station_delay_uncertainties_s",
+        "clock_uncertainties_s",
+        "independent_projection_difference_s",
+        "maximum_projection_difference_s"
+      ],
+      "properties": {
+        "reference_frequency_mhz": {"const": 400.0},
+        "epoch_unix_ns": {"type": "integer"},
+        "station_delays_s": {"$ref": "#/$defs/instrumentNumbers"},
+        "station_delay_uncertainties_s": {"$ref": "#/$defs/positiveInstrumentNumbers"},
+        "clock_uncertainties_s": {"$ref": "#/$defs/positiveInstrumentNumbers"},
+        "independent_projection_difference_s": {"type": "number", "minimum": 0},
+        "maximum_projection_difference_s": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "fit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_ids",
+        "band_component_ids",
+        "band_component_toa_bounds_s",
+        "associations",
+        "morphologies",
+        "dm_bounds",
+        "toa_bounds_s",
+        "width_bounds_s",
+        "width_index_bounds",
+        "scattering_tau_1ghz_bounds_s",
+        "beta_bounds",
+        "seed",
+        "nlive",
+        "dlogz",
+        "maximum_failed_morphology_weight",
+        "component_amplitude_bounds"
+      ],
+      "properties": {
+        "component_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "band_component_ids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chimefrb", "dsa110"],
+          "properties": {
+            "chimefrb": {"$ref": "#/$defs/stringList"},
+            "dsa110": {"$ref": "#/$defs/stringList"}
+          }
+        },
+        "band_component_toa_bounds_s": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chimefrb", "dsa110"],
+          "properties": {
+            "chimefrb": {"$ref": "#/$defs/componentTimeWindows"},
+            "dsa110": {"$ref": "#/$defs/componentTimeWindows"}
+          }
+        },
+        "associations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/association"}
+        },
+        "morphologies": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["gaussian", "emg", "powerlaw"]}
+        },
+        "dm_bounds": {"$ref": "#/$defs/numberPair"},
+        "toa_bounds_s": {"$ref": "#/$defs/numberPairList"},
+        "width_bounds_s": {"$ref": "#/$defs/positivePairList"},
+        "width_index_bounds": {"$ref": "#/$defs/numberPair"},
+        "scattering_tau_1ghz_bounds_s": {"$ref": "#/$defs/positivePair"},
+        "beta_bounds": {
+          "type": "array",
+          "prefixItems": [
+            {"type": "number", "exclusiveMinimum": 2, "maximum": 4},
+            {"type": "number", "exclusiveMinimum": 2, "maximum": 4}
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "seed": {"type": "integer", "minimum": 0},
+        "nlive": {"type": "integer", "minimum": 20},
+        "dlogz": {"type": "number", "exclusiveMinimum": 0},
+        "maximum_failed_morphology_weight": {"type": "number", "minimum": 0, "exclusiveMaximum": 1}
+        ,"component_amplitude_bounds": {"$ref": "#/$defs/positivePair"}
+      }
+    },
+    "synthetic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["truth", "truth_association_id", "grids", "noise_seed", "injected_morphology"],
+      "properties": {
+        "noise_seed": {"type": "integer", "minimum": 0},
+        "truth_association_id": {"type": "string", "minLength": 1},
+        "injected_morphology": {"enum": ["gaussian", "emg", "powerlaw"]},
+        "truth": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "absolute_dm",
+            "geocentric_toa_s",
+            "width_400_s",
+            "width_index",
+            "tau_1ghz_s",
+            "matched_amplitudes",
+            "local_components",
+            "beta"
+          ],
+          "properties": {
+            "absolute_dm": {"type": "number"},
+            "geocentric_toa_s": {"type": "number"},
+            "width_400_s": {"type": "number", "exclusiveMinimum": 0},
+            "width_index": {"type": "number"},
+            "tau_1ghz_s": {"type": "number", "exclusiveMinimum": 0},
+            "matched_amplitudes": {"$ref": "#/$defs/positiveInstrumentNumbers"},
+            "local_components": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["chimefrb", "dsa110"],
+              "properties": {
+                "chimefrb": {"$ref": "#/$defs/localComponents"},
+                "dsa110": {"$ref": "#/$defs/localComponents"}
+              }
+            }
+            ,"beta": {"type": "number", "exclusiveMinimum": 2, "maximum": 4}
+          }
+        },
+        "grids": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chimefrb", "dsa110"],
+          "properties": {
+            "chimefrb": {"$ref": "#/$defs/syntheticGrid"},
+            "dsa110": {"$ref": "#/$defs/syntheticGrid"}
+          }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "absolute_dm_error_max",
+        "toa_error_s_max",
+        "width_error_s_max",
+        "width_index_error_max",
+        "scattering_tau_error_s_max",
+        "maximum_incorrect_association_weight",
+        "maximum_omitted_tail_mass",
+        "maximum_log_evidence_uncertainty",
+        "maximum_reduced_residual_power",
+        "maximum_structured_residual_correlation",
+        "minimum_valid_sample_fraction",
+        "maximum_prior_edge_mass"
+      ],
+      "properties": {
+        "absolute_dm_error_max": {"type": "number", "exclusiveMinimum": 0},
+        "toa_error_s_max": {"type": "number", "exclusiveMinimum": 0},
+        "width_error_s_max": {"type": "number", "exclusiveMinimum": 0},
+        "width_index_error_max": {"type": "number", "exclusiveMinimum": 0},
+        "scattering_tau_error_s_max": {"type": "number", "exclusiveMinimum": 0},
+        "maximum_incorrect_association_weight": {"type": "number", "minimum": 0, "maximum": 1},
+        "maximum_omitted_tail_mass": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "maximum_log_evidence_uncertainty": {"type": "number", "exclusiveMinimum": 0},
+        "maximum_reduced_residual_power": {"type": "number", "exclusiveMinimum": 1},
+        "maximum_structured_residual_correlation": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "minimum_valid_sample_fraction": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "maximum_prior_edge_mass": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "uncertainty_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calibration_resolution_dm", "intrinsic_lag_dm", "basis"],
+      "properties": {
+        "calibration_resolution_dm": {"type": "number", "minimum": 0},
+        "intrinsic_lag_dm": {"type": "number", "minimum": 0},
+        "basis": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "$defs": {
+    "componentTimeWindows": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/numberPair"}
+    },
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "association": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["association_id", "matches"],
+      "properties": {
+        "association_id": {"type": "string", "minLength": 1},
+        "matches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "latent_id",
+              "chimefrb_component_id",
+              "dsa110_component_id"
+            ],
+            "properties": {
+              "latent_id": {"type": "string", "minLength": 1},
+              "chimefrb_component_id": {"type": "string", "minLength": 1},
+              "dsa110_component_id": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "localComponents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "toa_s", "width_s", "amplitude"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "toa_s": {"type": "number"},
+          "width_s": {"type": "number", "exclusiveMinimum": 0},
+          "amplitude": {"type": "number", "exclusiveMinimum": 0}
+        }
+      }
+    },
+    "numberPair": {
+      "type": "array",
+      "prefixItems": [{"type": "number"}, {"type": "number"}],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "positivePair": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number", "exclusiveMinimum": 0},
+        {"type": "number", "exclusiveMinimum": 0}
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "numberPairList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/numberPair"}
+    },
+    "positivePairList": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/positivePair"}
+    },
+    "instrumentNumbers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chimefrb", "dsa110"],
+      "properties": {
+        "chimefrb": {"type": "number"},
+        "dsa110": {"type": "number"}
+      }
+    },
+    "positiveInstrumentNumbers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chimefrb", "dsa110"],
+      "properties": {
+        "chimefrb": {"type": "number", "exclusiveMinimum": 0},
+        "dsa110": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "syntheticGrid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frequency_low_mhz",
+        "frequency_high_mhz",
+        "frequency_channels",
+        "time_samples",
+        "sample_interval_s",
+        "product_dm",
+        "noise_std",
+        "gain_prior_std"
+        ,"time_origin_offset_s"
+        ,"time_origin_utc"
+      ],
+      "properties": {
+        "frequency_low_mhz": {"type": "number", "exclusiveMinimum": 0},
+        "frequency_high_mhz": {"type": "number", "exclusiveMinimum": 0},
+        "frequency_channels": {"type": "integer", "minimum": 2},
+        "time_samples": {"type": "integer", "minimum": 3},
+        "sample_interval_s": {"type": "number", "exclusiveMinimum": 0},
+        "product_dm": {"type": "number"},
+        "noise_std": {"type": "number", "exclusiveMinimum": 0},
+        "gain_prior_std": {"type": "number", "exclusiveMinimum": 0}
+        ,"time_origin_offset_s": {"type": "number"}
+        ,"time_origin_utc": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
