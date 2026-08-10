@@ -14,10 +14,11 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 RETIRED = "galaxies.foreground"
 
-# Dated provenance artifacts, not live code: `.archive/` holds superseded
-# trees, and `docs/rse/specs/s1-scripts/` holds one-off experiment records
-# that are kept as they ran. Neither is imported by anything.
-EXCLUDED = (".archive", "docs")
+# Not live repository code: `.archive/` holds superseded trees,
+# `docs/rse/specs/s1-scripts/` holds one-off experiment records that are
+# kept as they ran, and `.venv/` is the environment `uv run` builds inside
+# `analysis/`. `scripts/kb/config.py` excludes the same set.
+EXCLUDED = (".archive", ".venv", "docs")
 
 
 SELF = Path(__file__).resolve()
