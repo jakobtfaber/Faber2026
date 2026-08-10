@@ -660,7 +660,9 @@ class ScintillationAnalysis:
 
         # Attach two-screen / emission-size / consistency interpretation per component
         # (bridge fills config['source'] from tau_consistency + optional multi-scale Δν).
-        from galaxies.foreground.scintillation_bridge import attach_interpretation_with_bridge
+        from foregrounds.propagation.scintillation_bridge import (
+            attach_interpretation_with_bridge,
+        )
 
         nick = self.config.get("burst_id") or (self.config.get("source") or {}).get("nickname")
         self.config = attach_interpretation_with_bridge(
