@@ -37,7 +37,13 @@ jobs:
     runs-on: ubuntu-latest
     # Holds the CLAUDE_CODE_OAUTH_TOKEN shared with the tend workflows. Its
     # branch policy admits main only, which is the ref these two events carry.
-    environment: tend
+    # `deployment: false` keeps the environment as a credential gate only: the
+    # scalar form files a deployment record per run and posts it on the pull
+    # request, which is noise for an agent reply. The generated `tend-*.yaml`
+    # workflows use the same pair.
+    environment:
+      name: tend
+      deployment: false
     permissions:
       contents: write # push the agent's working branch
       pull-requests: write # open a pull request and comment on one
