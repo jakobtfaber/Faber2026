@@ -79,7 +79,11 @@ def environment_declarations(text: str) -> list[tuple[str, bool]]:
                     break
                 block.append(following)
             fields = _fields(block)
-        found.append((fields.get("name", ""), fields.get("deployment") != "false"))
+        # `false`, `False`, and `FALSE` are one boolean under the YAML core
+        # schema, so all three suppress the record. Any other spelling is not
+        # that boolean and leaves the job reported.
+        gated = fields.get("deployment") in ("false", "False", "FALSE")
+        found.append((fields.get("name", ""), not gated))
     return found
 
 
@@ -127,6 +131,26 @@ class WorkflowEnvironments(TestCase):
         self.assertEqual(
             [("tend", True)], environment_declarations(flow_without_the_flag)
         )
+
+    def test_every_yaml_spelling_of_the_false_flag_counts_as_gated(self) -> None:
+        # The YAML core schema resolves `false`, `False`, and `FALSE` to the
+        # same boolean, so a workflow using any of them is correctly gated and
+        # must not be reported.
+        for spelling in ("false", "False", "FALSE"):
+            gated = (
+                f"jobs:\n  a:\n    environment:\n      name: tend\n"
+                f"      deployment: {spelling}\n    steps: []\n"
+            )
+            self.assertEqual([("tend", False)], environment_declarations(gated))
+            flow = f"jobs:\n  a:\n    environment: {{name: tend, deployment: {spelling}}}\n"
+            self.assertEqual([("tend", False)], environment_declarations(flow))
+        # Not the boolean: a quoted string, and `true`. Both still report.
+        for spelling in ("'false'", "true"):
+            ungated = (
+                f"jobs:\n  a:\n    environment:\n      name: tend\n"
+                f"      deployment: {spelling}\n    steps: []\n"
+            )
+            self.assertEqual([("tend", True)], environment_declarations(ungated))
 
     def test_an_environment_key_outside_a_job_is_not_a_declaration(self) -> None:
         step_input = (
