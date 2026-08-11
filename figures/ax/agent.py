@@ -10,17 +10,20 @@ from __future__ import annotations
 
 import argparse
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-FLOW = ROOT / "scripts" / "figure_flow.py"
+PROJECT = ROOT / "analysis"
+FLOW = PROJECT / "scripts" / "figure_flow.py"
 SKILL_PATH = Path(__file__).resolve().parent / "SKILL.md"
 
 
 def _run_flow(*args: str) -> str:
+    # figure_flow loads the catalog with PyYAML, so it needs the analysis
+    # project environment; sys.executable is whichever interpreter launched
+    # this front door and generally has no yaml.
     proc = subprocess.run(
-        [sys.executable, str(FLOW), *args],
+        ["uv", "run", "--quiet", "--project", str(PROJECT), "--frozen", "python", str(FLOW), *args],
         cwd=ROOT,
         check=False,
         text=True,
@@ -101,7 +104,8 @@ def build_agent():
     except ImportError as exc:  # pragma: no cover
         raise SystemExit(
             "axllm not installed. Install with: pip install axllm\n"
-            "Or use the deterministic CLI: python3 analysis/scripts/figure_flow.py --help"
+            "Or use the deterministic CLI: uv run --project analysis --frozen "
+            "python analysis/scripts/figure_flow.py --help"
         ) from exc
 
     skill_body = load_skill_text()

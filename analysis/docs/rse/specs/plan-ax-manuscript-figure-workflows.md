@@ -1,6 +1,10 @@
 # Plan: Ax-structured manuscript figure workflows
 
-**Status:** implemented 2026-07-20 — catalog + `scripts/figure_flow.py` + `make figures` + `figures/ax/`  
+**Status:** implemented 2026-07-20 — `analysis/figures/catalog.yaml` +
+`analysis/scripts/figure_flow.py` + `make figures` + `figures/ax/`. Paths below
+predate the 2026-08 monorepo consolidation: the catalog and runner moved under
+`analysis/`, and the shipped runner is `figure_flow.py`, not `figures.ax_cli`.
+
 **Goal:** agents (and humans) regenerate science-ready manuscript figures from a
 typed, prescriptive graph — without re-reading plot scripts each time.
 
