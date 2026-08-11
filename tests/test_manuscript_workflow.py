@@ -1,12 +1,13 @@
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-from re import findall
+from re import findall, search
 from types import SimpleNamespace
 from unittest import TestCase, main
 from unittest.mock import patch
 
 WORKFLOW = Path(__file__).parents[1] / ".github/workflows/manuscript-provenance.yml"
 MAKEFILE = Path(__file__).parents[1] / "Makefile"
+ANALYSIS_MAKEFILE = Path(__file__).parents[1] / "analysis/Makefile"
 
 
 class ManuscriptWorkflow(TestCase):
@@ -37,6 +38,44 @@ class ManuscriptWorkflow(TestCase):
         )[0]
         self.assertIn("check_claim_anchors.py", target)
         self.assertNotIn("--validate", target)
+
+    def test_figure_flow_targets_run_in_the_project_environment(self) -> None:
+        # figure_flow's catalog loader imports PyYAML, so a `figures:` recipe
+        # under bare `python3` dies on invocation wherever the system
+        # interpreter lacks it. No workflow runs `make figures`, so nothing
+        # else would catch a regression here.
+        root = Path(__file__).parents[1]
+        recipes = [
+            line
+            for makefile in (MAKEFILE, root / "analysis/Makefile")
+            for line in makefile.read_text().replace("\\\n", " ").splitlines()
+            if "scripts/figure_flow.py" in line
+        ]
+        self.assertTrue(recipes, "expected a make target driving figure_flow")
+        for line in recipes:
+            prefix = line.split("scripts/figure_flow.py")[0]
+            self.assertIn(
+                "$(UV) run",
+                prefix,
+                "figure_flow must run in a uv-managed project environment, "
+                f"not under the system interpreter: {line.strip()}",
+            )
+            self.assertIn("--project", prefix)
+
+    def test_figure_skill_does_not_document_the_bare_interpreter(self) -> None:
+        # The figure skill is the front door an agent reads before touching a
+        # plot script, so a bare-`python3` recipe there fails the same way the
+        # make target did — with the agent, not CI, hitting MISSING_DEP.
+        skill = (Path(__file__).parents[1] / "figures/ax/SKILL.md").read_text()
+        for line in skill.splitlines():
+            if "figure_flow.py" not in line:
+                continue
+            self.assertNotIn(
+                "python3 analysis/scripts/figure_flow.py",
+                line,
+                "figure_flow must be documented under the analysis project "
+                f"environment, not the system interpreter: {line.strip()}",
+            )
 
     def test_provenance_lane_runs_the_whole_manuscript_test_suite(self) -> None:
         provenance = self.text.split("  provenance:", 1)[1].split(
@@ -104,6 +143,44 @@ class ManuscriptWorkflow(TestCase):
             f"figure_flow must be launched in the analysis project environment: {argv}",
         )
         self.assertIn("--project", argv)
+
+    def test_every_analysis_delegation_names_a_target_that_exists(self) -> None:
+        # `make` reports a missing sub-target only when the parent target is
+        # actually run, so a delegation to a target that analysis/Makefile
+        # never defined stays invisible until someone invokes it.
+        analysis = ANALYSIS_MAKEFILE.read_text()
+        delegated = findall(r"\$\(MAKE\) -C analysis (\S+)", MAKEFILE.read_text())
+        self.assertTrue(delegated, "expected the parent to delegate some targets")
+        for target in delegated:
+            self.assertIsNotNone(
+                search(rf"(?m)^{target}:", analysis),
+                f"Makefile delegates `make -C analysis {target}`, "
+                f"but analysis/Makefile defines no such target",
+            )
+
+    def test_every_script_invocation_resolves(self) -> None:
+        # The figure-review targets call analysis/scripts/*.py directly rather
+        # than delegating, so the guard above does not cover them.  A renamed
+        # script or argparse subcommand breaks `make` exactly as invisibly as
+        # the missing delegation target did.
+        root = Path(__file__).parents[1]
+        # Join `\`-continued recipe lines first: a later rewrap that pushes the
+        # subcommand onto the next physical line would otherwise make the guard
+        # silently stop checking that invocation instead of failing.
+        invocations = findall(
+            r"(analysis/scripts/\S+\.py)(?:[ \t]+([a-z][a-z-]*))?",
+            MAKEFILE.read_text().replace("\\\n", " "),
+        )
+        self.assertTrue(invocations, "expected the Makefile to invoke some scripts")
+        for script, subcommand in invocations:
+            path = root / script
+            self.assertTrue(path.is_file(), f"Makefile invokes missing {script}")
+            if subcommand:
+                self.assertIsNotNone(
+                    search(rf'add_parser\(\s*"{subcommand}"', path.read_text()),
+                    f"Makefile runs `{script} {subcommand}`, "
+                    f"but the script registers no such subcommand",
+                )
 
 
 if __name__ == "__main__":
