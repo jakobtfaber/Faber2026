@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-FLOW = ROOT / "scripts" / "figure_flow.py"
+FLOW = ROOT / "analysis" / "scripts" / "figure_flow.py"
 SKILL_PATH = Path(__file__).resolve().parent / "SKILL.md"
 
 
