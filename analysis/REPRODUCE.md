@@ -387,10 +387,8 @@ earned their keep once: they are what caught the drift described in hazard 1.
   [`figures/catalog.yaml`](figures/catalog.yaml) — the declarative regen graph
   for science-ready manuscript figures (topo-sorted deps, input checks, SHA
   receipts under `figures/.receipts/`). `figure_flow.py` parses the catalog
-  with PyYAML, so it needs the environment above; the `make figures` recipe
-  still spells the interpreter `python3`, so on a host without PyYAML it
-  exits `ERROR MISSING_DEP` before it reads the catalog. To drive the same
-  clone-safe set directly:
+  with PyYAML, so `make figures` runs it inside the analysis project
+  environment. To drive the same clone-safe set directly:
   `uv run --frozen python scripts/figure_flow.py regen --manuscript --clone-ok`.
   That set matches the `clone_verified = reproduced*` figure rows that do not
   need `~/Data` or external flits-runs trees. Fig. 1 (`fig1_gallery`) is
