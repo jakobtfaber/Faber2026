@@ -1,9 +1,10 @@
 from pathlib import Path
-from re import findall
+from re import findall, search
 from unittest import TestCase, main
 
 WORKFLOW = Path(__file__).parents[1] / ".github/workflows/manuscript-provenance.yml"
 MAKEFILE = Path(__file__).parents[1] / "Makefile"
+ANALYSIS_MAKEFILE = Path(__file__).parents[1] / "analysis/Makefile"
 
 
 class ManuscriptWorkflow(TestCase):
@@ -75,6 +76,44 @@ class ManuscriptWorkflow(TestCase):
             Path(__file__).parents[1] / ".github/workflows/analysis-ci.yml"
         ).read_text()
         self.assertIn("name: analysis-ci", analysis_ci)
+
+    def test_every_analysis_delegation_names_a_target_that_exists(self) -> None:
+        # `make` reports a missing sub-target only when the parent target is
+        # actually run, so a delegation to a target that analysis/Makefile
+        # never defined stays invisible until someone invokes it.
+        analysis = ANALYSIS_MAKEFILE.read_text()
+        delegated = findall(r"\$\(MAKE\) -C analysis (\S+)", MAKEFILE.read_text())
+        self.assertTrue(delegated, "expected the parent to delegate some targets")
+        for target in delegated:
+            self.assertIsNotNone(
+                search(rf"(?m)^{target}:", analysis),
+                f"Makefile delegates `make -C analysis {target}`, "
+                f"but analysis/Makefile defines no such target",
+            )
+
+    def test_every_script_invocation_resolves(self) -> None:
+        # The figure-review targets call analysis/scripts/*.py directly rather
+        # than delegating, so the guard above does not cover them.  A renamed
+        # script or argparse subcommand breaks `make` exactly as invisibly as
+        # the missing delegation target did.
+        root = Path(__file__).parents[1]
+        # Join `\`-continued recipe lines first: a later rewrap that pushes the
+        # subcommand onto the next physical line would otherwise make the guard
+        # silently stop checking that invocation instead of failing.
+        invocations = findall(
+            r"(analysis/scripts/\S+\.py)(?:[ \t]+([a-z][a-z-]*))?",
+            MAKEFILE.read_text().replace("\\\n", " "),
+        )
+        self.assertTrue(invocations, "expected the Makefile to invoke some scripts")
+        for script, subcommand in invocations:
+            path = root / script
+            self.assertTrue(path.is_file(), f"Makefile invokes missing {script}")
+            if subcommand:
+                self.assertIsNotNone(
+                    search(rf'add_parser\(\s*"{subcommand}"', path.read_text()),
+                    f"Makefile runs `{script} {subcommand}`, "
+                    f"but the script registers no such subcommand",
+                )
 
 
 if __name__ == "__main__":
