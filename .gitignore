@@ -84,3 +84,6 @@ graphify-out/
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
 teaching/
+
+# GPD writes this with an absolute venv path; not portable.
+/.mcp.json

@@ -7,7 +7,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/usr/bin/python3</string>
-    <string>/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/scripts/running_notes.py</string>
+    <string>/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026/analysis/scripts/running_notes.py</string>
     <string>serve</string>
     <string>--port</string>
     <string>18765</string>
