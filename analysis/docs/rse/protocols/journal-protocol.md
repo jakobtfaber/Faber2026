@@ -35,7 +35,7 @@ the readiness board (now `board/readiness.md`, markdown) records it.
    boundary (task start, finish, block, decision, commit), append:
 
    ```bash
-   scripts/journal-append.sh "<agent>" "<lane>" "<state>" "<note>"
+   analysis/scripts/journal-append.sh "<agent>" "<lane>" "<state>" "<note>"
    ```
 
 2. **Rebake + redeploy the board** at natural boundaries (turn end, task
@@ -43,7 +43,7 @@ the readiness board (now `board/readiness.md`, markdown) records it.
    the view):
 
    ```bash
-   python3 scripts/render_journal_panel.py
+   python3 analysis/scripts/render_journal_panel.py
    scripts/deploy-board.sh   # pushes to gh-pages; board/ subdir only
    ```
 
@@ -63,12 +63,12 @@ the readiness board (now `board/readiness.md`, markdown) records it.
    or moved a component's status, edit `program-state.toml` and regenerate:
 
    ```bash
-   python3 scripts/sync_state.py           # rewrites owner-view.json + ACTIVE_LANES.md + claims-audit.md
-   python3 scripts/render_journal_panel.py # then bakes both board panels
+   python3 analysis/scripts/sync_state.py           # rewrites owner-view.json + ACTIVE_LANES.md + claims-audit.md
+   python3 analysis/scripts/render_journal_panel.py # then bakes both board panels
    ```
 
    Hand-editing `owner-view.json` (or `ACTIVE_LANES.md` / `claims-audit.md`)
-   now fails `make check-state` (`scripts/sync_state.py --check --offline`),
+   now fails `make check-state` (`analysis/scripts/sync_state.py --check --offline`),
    which `make test-science` and `scripts/deploy-board.sh` both enforce. Bump
    `[owner_view].updated` in `program-state.toml` on every owner-view edit.
 
@@ -96,14 +96,17 @@ the readiness board (now `board/readiness.md`, markdown) records it.
 
 5. **Enforcement — two hooks in `.claude/settings.json`** (verified live
    pickup: settings changes take effect without a session restart):
-   - `scripts/journal-staleness-hook.sh` (UserPromptSubmit): reminder on
+   - `analysis/scripts/journal-staleness-hook.sh` (UserPromptSubmit): reminder on
      each user prompt when the last entry is >10 min old.
-   - `scripts/journal-cadence-posttool-hook.sh` (PostToolUse, all tools):
+   - `analysis/scripts/journal-cadence-posttool-hook.sh` (PostToolUse, all tools):
      the every-10-minutes trigger for **active** sessions — fires after
      every tool call, and once the journal is ≥10 min stale it injects a
      mid-turn instruction to append an entry covering what is being
      worked on right now. Throttled to one reminder per 3 min (state:
-     `.git/journal-last-nag`, untracked). An active session therefore
+     `journal-last-nag` in the checkout's own git directory, untracked —
+     `git rev-parse --absolute-git-dir`, which is `.git/` in a primary
+     checkout and `.git/worktrees/<name>/` in a linked worktree, so
+     concurrent worktrees throttle independently). An active session therefore
      journals every ~10 min even during long autonomous turns; an idle
      session triggers nothing (nothing is being worked on).
 6. **Non-Claude harnesses** (parity landed 2026-07-06 ~21:30; Cursor
@@ -113,8 +116,9 @@ the readiness board (now `board/readiness.md`, markdown) records it.
    *advisory only* and enforces nothing:
    - **Codex** (mechanical, VERIFIED 2026-07-06): both hooks mirrored in
      `.codex/hooks.json` (PostToolUse cadence + UserPromptSubmit
-     staleness; scripts resolve the repo root via
-     `git rev-parse --show-toplevel`). Verified end-to-end by live
+     staleness; each script resolves the store from its own location,
+     `dirname "$0"/..`, so it does not depend on how a harness sets its
+     project directory). Verified end-to-end by live
      headless `codex exec` canary tests: gpt-5.5 quoted both injected
      reminders verbatim (Codex's hooks engine is Claude-compatible —
      `ClaudeHooksEngine` in openai/codex). Two operational constraints
@@ -134,9 +138,9 @@ the readiness board (now `board/readiness.md`, markdown) records it.
         the `hookSpecificOutput` JSON shape, which both Claude and
         Codex parse.
    - **Cursor** (mechanical): `.cursor/hooks.json` registers
-     `scripts/journal-cadence-cursor-hook.sh` (postToolUse — same
+     `analysis/scripts/journal-cadence-cursor-hook.sh` (postToolUse — same
      10-min trigger, Cursor's `additional_context` output shape) and
-     `scripts/journal-cursor-afteredit-hook.sh` (afterFileEdit —
+     `analysis/scripts/journal-cursor-afteredit-hook.sh` (afterFileEdit —
      self-journaling fallback: if a Cursor session edits a file while
      the journal is ≥10 min stale, the hook itself appends an
      attributed `[auto]` entry; no model cooperation needed).
@@ -145,8 +149,8 @@ the readiness board (now `board/readiness.md`, markdown) records it.
      protocol for them, but it is a courtesy sign, not a trigger.
    - **Wall-clock backstop, all harnesses**: launchd agent
      `com.jakobfaber.faber2026-journal-watchdog` (plist source:
-     `scripts/launchd/`, installed to `~/Library/LaunchAgents/`) runs
-     `scripts/journal-watchdog.sh` every 5 min; when repo files changed
+     `analysis/scripts/launchd/`, installed to `~/Library/LaunchAgents/`) runs
+     `analysis/scripts/journal-watchdog.sh` every 5 min; when repo files changed
      in the last 10 min while the journal is ≥10 min stale, it appends an
      `unattributed activity` entry naming the touched files — the board
      then shows the honest gap even if the writer never self-reports.
