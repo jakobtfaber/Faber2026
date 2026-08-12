@@ -39,14 +39,16 @@ test-science: check-provenance
 	$(MAKE) -C analysis test MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
 
 figures:
-	FABER2026_ROOT="$(FABER2026_ROOT)" \
-		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
+	FABER2026_ROOT="$(FABER2026_ROOT)" $(UV) run --project analysis --frozen \
+		python analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 
 figure-review-status:
-	$(MAKE) -C analysis figure-review-status MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
+	FABER2026_ROOT="$(FABER2026_ROOT)" $(UV) run --project analysis \
+		--group test --frozen python analysis/scripts/figure_review.py status
 
 figure-review-next:
-	$(MAKE) -C analysis figure-review-next MANUSCRIPT_ROOT="$(FABER2026_ROOT)"
+	FABER2026_ROOT="$(FABER2026_ROOT)" $(UV) run --project analysis \
+		--group test --frozen python analysis/scripts/figure_review.py next
 
 kb-index:
 	$(MAKE) -C analysis kb-index MANUSCRIPT_ROOT="$(FABER2026_ROOT)"

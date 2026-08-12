@@ -12,16 +12,21 @@ TRUST BASIS
 
 METHOD (iterative, MAD-robust, off-pulse only)
   For each fine channel compute, over the off-pulse window:
-     mu   = time-mean            (persistent bright/dead channels)
      sd   = time-std             (variable-gain / bursty RFI)
      tac1 = lag-1 temporal autocorr of the off-pulse time series (RFI is temporally correlated;
-            thermal noise is not) — catches RFI that a mean/std cut misses.
-  Robust z = (x - median)/(1.4826*MAD) across surviving channels; flag |z|>SIGMA on ANY statistic,
-  iterate to convergence (<=ITERS). Dead channels (mu<=0 or non-finite) are flagged too.
+            thermal noise is not) — catches RFI that a std cut misses.
+  Robust z = (x - median)/(1.4826*MAD) across surviving channels; flag |z|>SIGMA on EITHER
+  statistic, iterate to convergence (<=ITERS). Dead channels are flagged too: those already
+  fully masked by the pipeline across the off-pulse window, or with a non-finite or non-positive
+  time-std.
+  The time-mean mu is returned by offpulse_channel_stats but is NOT a flagging statistic — the
+  spectrum is de-scalloped and baseline-subtracted before this runs, so a channel mean of ~0 is
+  normal rather than dead, and a mean cut would flag good channels (see auto_flag).
 
 This is a channel (frequency) flag. It is applied ON TOP of any existing pipeline mask.
 """
 from __future__ import annotations
+
 import numpy as np
 
 

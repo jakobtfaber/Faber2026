@@ -30,11 +30,11 @@ existing lane system. The map does not carry the execution itself.
   [scint-redo-01](tickets/scint-redo-01-interactive-recampaign-from-raw-data.md),
   [the scint-scattering coupling design closure](tickets/04-close-scint-scattering-coupling-design.md), and
   [the zach component-count adjudication](tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md).
-- **Monorepo consolidation (owner-chartered, 2026-08-07):**
-  [consolidate Faber2026-analysis into the parent repository](tickets/monorepo-consolidation.md)
-  as a plain `analysis/` directory with filtered history, retiring the
-  submodule pin; sequenced after pull request #260 lands and #259/#339 are
-  dispositioned. Operational, not a submission gate.
+- **Monorepo consolidation (owner-chartered, 2026-08-07; resolved
+  same day):** [the consolidation ticket](tickets/monorepo-consolidation.md)
+  is resolved - Faber2026-analysis is folded into the parent as a plain
+  `analysis/` directory (squash commit `cb060fc7`, all checks green) and
+  the original repository is archived read-only as provenance.
 - **Standing delegation (owner, 2026-07-20):** [delegated decision authority](standing-delegation-2026-07-20.md)
   covers only tickets recorded open at `main` commit `33e9e1ce3570`; it permits
   evidence-backed recommendations to be accepted by default. Covered

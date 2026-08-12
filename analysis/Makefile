@@ -76,8 +76,8 @@ ci: lint test
 
 figures: check-mount
 	cd "$(MANUSCRIPT_ROOT_ABS)" && \
-		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" \
-		python3 analysis/scripts/figure_flow.py regen --manuscript --clone-ok
+		FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" $(UV) run --project analysis --frozen \
+		python analysis/scripts/figure_flow.py regen --manuscript --clone-ok
 
 kb-index: check-mount
 	FABER2026_ROOT="$(MANUSCRIPT_ROOT_ABS)" python3 scripts/kb index

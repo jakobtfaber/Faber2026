@@ -14,6 +14,13 @@ GEMINI.md
 .github/
 .config/
 analysis/
+# Overleaf's importer does not apply the "analysis/" directory pattern to
+# hidden subdirectories: during the 2026-08-08 sync it imported 81 files
+# from analysis/.archive/ despite the line above, which makes every
+# subsequent sync push a divergent branch demanding a manual merge.
+# Exclude hidden trees under analysis/ explicitly.
+analysis/.archive/
+analysis/.*
 pipeline/
 scripts/
 zizmor.yml

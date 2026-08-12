@@ -1,6 +1,7 @@
 #!/bin/bash
-# Append an entry to the repo agent journal (docs/rse/journal-protocol.md).
-# Usage: scripts/journal-append.sh <agent> <lane> <state> <note...>
+# Append an entry to the repo agent journal
+# (analysis/docs/rse/protocols/journal-protocol.md).
+# Usage: analysis/scripts/journal-append.sh <agent> <lane> <state> <note...>
 #   state: working | done | blocked | info
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

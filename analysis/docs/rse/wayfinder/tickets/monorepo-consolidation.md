@@ -1,7 +1,7 @@
 # Consolidate Faber2026-analysis into Faber2026 as a monorepo
 
 - Type: `wayfinder:task` (owner-chartered)
-- Status: open
+- Status: resolved
 - Assignee: unassigned
 - Blocked by: none (sequencing preconditions listed below)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -73,3 +73,17 @@ Overleaf sync, and the knowledge base working against the merged layout;
 Faber2026-analysis is archived read-only; a receipt records the import
 command, the exclusions, and the tree-equivalence check against the last
 submodule pin.
+
+## Resolution (2026-08-07)
+
+Executed same-day. The import landed as Faber2026 PR #347, squash-merged
+by the owner as main commit `cb060fc7` with all continuous-integration
+lanes green on the main push run. Deviations from the phase plan, all
+recorded in the receipt
+([receipt-monorepo-consolidation-2026-08-07](../../specs/receipt-monorepo-consolidation-2026-08-07.md)):
+the squash keeps the imported commit lineage off main (preserved instead
+as `archive/monorepo-analysis-import-history` and in the archived
+original repository), and the oversized evidence bundle was already on
+Git LFS, so the history weight came from one pre-LFS blob rather than a
+plain-blob push limit. Remaining owner items at resolution: main-ruleset
+relaxation and the routine Overleaf pull check.

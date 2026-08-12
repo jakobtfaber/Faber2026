@@ -54,7 +54,7 @@ notebook = [
 test = [
   "pytest>=7.0",
   "pytest-cov>=4.0",
-  "ruff>=0.15.18",
+  "ruff>=0.16.1",
   "zizmor==1.29.0",
 ]
 dev = [
