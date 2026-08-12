@@ -7,6 +7,55 @@ notebooks/scintillation_interactive_walkthrough.ipynb
 import json
 import os
 
+# Stage 1 builds the notebook's import surface, so it is the cell most
+# likely to need editing; it lives here rather than inside create_notebook
+# to keep that function readable as the sequence of cells it assembles.
+CELL1_MARKDOWN = (
+    "# Stage 1: Setup & Environment Configuration\n"
+    "Loads required packages, adds `analysis/` to `sys.path`, and imports canonical "
+    "scintillation analysis functions from `scintillation.scint_analysis`."
+)
+CELL1_CODE = (
+    "import os\n"
+    "import sys\n"
+    "from pathlib import Path\n"
+    "import numpy as np\n"
+    "import matplotlib.pyplot as plt\n"
+    "try:\n"
+    "    import ipywidgets as widgets\n"
+    "    from IPython.display import display\n"
+    "except ImportError:\n"
+    "    widgets = None\n"
+    "    display = print\n"
+    "\n"
+    "# The scintillation package lives under analysis/, not at the manuscript\n"
+    "# root, so analysis/ is what goes on sys.path. Jupyter's working directory\n"
+    "# is wherever the notebook was opened from, so search upwards for the\n"
+    "# package rather than assume the root.\n"
+    "start = Path.cwd().resolve()\n"
+    "for candidate in (start, *start.parents):\n"
+    "    analysis_root = candidate / 'analysis'\n"
+    "    if (analysis_root / 'scintillation').is_dir():\n"
+    "        break\n"
+    "else:\n"
+    "    raise RuntimeError(f'no analysis/scintillation directory at or above {start}')\n"
+    "if str(analysis_root) not in sys.path:\n"
+    "    sys.path.insert(0, str(analysis_root))\n"
+    "from scintillation.scint_analysis.core import DynamicSpectrum\n"
+    "from scintillation.scint_analysis.analysis import (\n"
+    "    calculate_acf,\n"
+    "    calculate_acfs_for_subbands,\n"
+    "    _fit_acf_models,\n"
+    "    estimate_gamma_scaling,\n"
+    "    modulation_index_over_time,\n"
+    "    attach_modulation_index_frequency,\n"
+    ")\n"
+    "from scintillation.scint_analysis.fitting_2d import fit_2d_scintillation\n"
+    "\n"
+    "print('✓ Successfully imported canonical scintillation modules.')"
+)
+
+
 def create_notebook():
     notebook_path = "notebooks/scintillation_interactive_walkthrough.ipynb"
     os.makedirs(os.path.dirname(notebook_path), exist_ok=True)
@@ -14,52 +63,8 @@ def create_notebook():
     cells = []
 
     # --- Cell 1: Setup & Imports ---
-    c1_md = (
-        "# Stage 1: Setup & Environment Configuration\n"
-        "Loads required packages, adds `analysis/` to `sys.path`, and imports canonical "
-        "scintillation analysis functions from `scintillation.scint_analysis`."
-    )
-    c1_code = (
-        "import os\n"
-        "import sys\n"
-        "from pathlib import Path\n"
-        "import numpy as np\n"
-        "import matplotlib.pyplot as plt\n"
-        "try:\n"
-        "    import ipywidgets as widgets\n"
-        "    from IPython.display import display\n"
-        "except ImportError:\n"
-        "    widgets = None\n"
-        "    display = print\n"
-        "\n"
-        "# The scintillation package lives under analysis/, not at the manuscript\n"
-        "# root, so analysis/ is what goes on sys.path. Jupyter's working directory\n"
-        "# is wherever the notebook was opened from, so search upwards for the\n"
-        "# package rather than assume the root.\n"
-        "start = Path.cwd().resolve()\n"
-        "for candidate in (start, *start.parents):\n"
-        "    analysis_root = candidate / 'analysis'\n"
-        "    if (analysis_root / 'scintillation').is_dir():\n"
-        "        break\n"
-        "else:\n"
-        "    raise RuntimeError(f'no analysis/scintillation directory at or above {start}')\n"
-        "if str(analysis_root) not in sys.path:\n"
-        "    sys.path.insert(0, str(analysis_root))\n"
-        "from scintillation.scint_analysis.core import DynamicSpectrum\n"
-        "from scintillation.scint_analysis.analysis import (\n"
-        "    calculate_acf,\n"
-        "    calculate_acfs_for_subbands,\n"
-        "    _fit_acf_models,\n"
-        "    estimate_gamma_scaling,\n"
-        "    modulation_index_over_time,\n"
-        "    attach_modulation_index_frequency,\n"
-        ")\n"
-        "from scintillation.scint_analysis.fitting_2d import fit_2d_scintillation\n"
-        "\n"
-        "print('✓ Successfully imported canonical scintillation modules.')"
-    )
-    cells.append({"cell_type": "markdown", "metadata": {}, "source": c1_md.splitlines(True)})
-    cells.append({"cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [], "source": c1_code.splitlines(True)})
+    cells.append({"cell_type": "markdown", "metadata": {}, "source": CELL1_MARKDOWN.splitlines(True)})
+    cells.append({"cell_type": "code", "execution_count": None, "metadata": {}, "outputs": [], "source": CELL1_CODE.splitlines(True)})
 
     # --- Cell 2: Event Selection & Configuration ---
     c2_md = (
