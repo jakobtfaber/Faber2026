@@ -36,6 +36,23 @@ report it in a pull-request comment or an issue with the evidence. Do not
 Mechanical work on prose, build tooling, workflows, tests, and
 documentation is in scope, subject to the rest of this file.
 
+## The knowledge base finds nothing in CI
+
+`CLAUDE.md` asks every agent to run
+`python3 analysis/scripts/kb search "<topic>"` before exploratory
+grepping. The index that command reads lives at `analysis/.kb/kb.sqlite3`
+(`analysis/scripts/kb/config.py`), and `analysis/.gitignore` excludes
+`/.kb/`, so the directory is never present in a runner's checkout. With no
+index the command still exits 0 and prints `no results` for every query.
+That is a silent false negative, not evidence of absence.
+
+Verified on `main` at `1ef291a4`: `kb search "dispersion measure"` and
+`kb search "catalog" --source code` both print `no results` in a checkout
+that contains `analysis/figures/catalog.yaml`.
+
+Read `no results` as "no index built here", never as "no such thing
+exists", and search with `grep` instead.
+
 ## Scope discipline
 
 Commit with explicit pathspecs, never `git add -A` or `git add .`. This
