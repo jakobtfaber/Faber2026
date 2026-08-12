@@ -16,7 +16,7 @@ def create_notebook():
     # --- Cell 1: Setup & Imports ---
     c1_md = (
         "# Stage 1: Setup & Environment Configuration\n"
-        "Loads required packages, adds the repository root to `sys.path`, and imports canonical "
+        "Loads required packages, adds `analysis/` to `sys.path`, and imports canonical "
         "scintillation analysis functions from `scintillation.scint_analysis`."
     )
     c1_code = (
@@ -32,10 +32,19 @@ def create_notebook():
         "    widgets = None\n"
         "    display = print\n"
         "\n"
-        "# Add the manuscript repository root to sys.path.\n"
-        "repo_root = Path.cwd().resolve()\n"
-        "if str(repo_root) not in sys.path:\n"
-        "    sys.path.insert(0, str(repo_root))\n"
+        "# The scintillation package lives under analysis/, not at the manuscript\n"
+        "# root, so analysis/ is what goes on sys.path. Jupyter's working directory\n"
+        "# is wherever the notebook was opened from, so search upwards for the\n"
+        "# package rather than assume the root.\n"
+        "start = Path.cwd().resolve()\n"
+        "for candidate in (start, *start.parents):\n"
+        "    analysis_root = candidate / 'analysis'\n"
+        "    if (analysis_root / 'scintillation').is_dir():\n"
+        "        break\n"
+        "else:\n"
+        "    raise RuntimeError(f'no analysis/scintillation directory at or above {start}')\n"
+        "if str(analysis_root) not in sys.path:\n"
+        "    sys.path.insert(0, str(analysis_root))\n"
         "from scintillation.scint_analysis.core import DynamicSpectrum\n"
         "from scintillation.scint_analysis.analysis import (\n"
         "    calculate_acf,\n"
