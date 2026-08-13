@@ -100,17 +100,27 @@ class _ModuleLevelScan:
             self.walk(decorator, scoped)
 
     def _comprehension(self, node: ast.AST, scoped: frozenset[str]) -> None:
+        self._element(node, self._generator_scope(node, scoped))
+
+    def _generator_scope(self, node: ast.AST, scoped: frozenset[str]) -> frozenset[str]:
+        """Walk the `for ... in ... if ...` clauses; return the names they bind.
+
+        The first iterable is evaluated in the enclosing scope; the targets it
+        binds are visible to every clause after it.
+        """
         inner = set(scoped)
         for generator in node.generators:
-            # The first iterable is evaluated in the enclosing scope; the
-            # targets it binds are visible to everything after it.
             self.walk(generator.iter, frozenset(inner))
             inner |= _bound_by(generator.target)
             for condition in generator.ifs:
                 self.walk(condition, frozenset(inner))
+        return frozenset(inner)
+
+    def _element(self, node: ast.AST, scoped: frozenset[str]) -> None:
+        """Walk the element expression, which sees every generator target."""
         for child in ast.iter_child_nodes(node):
             if child not in node.generators:
-                self.walk(child, frozenset(inner))
+                self.walk(child, scoped)
 
     def _import(self, node: ast.Import) -> None:
         # `import a.b` binds `a`, not `a.b`.
