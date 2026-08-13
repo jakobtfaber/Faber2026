@@ -62,7 +62,9 @@ def test_the_gate_passes_force_exclude_to_ruff(monkeypatch: pytest.MonkeyPatch) 
     recorded: list[list[str]] = []
 
     monkeypatch.setattr(lint_changed.subprocess, "run", _recording_run(recorded))
-    monkeypatch.setattr(lint_changed, "_changed_python_files", lambda base: ["scripts/lint_changed.py"])
+    monkeypatch.setattr(
+        lint_changed, "_changed_python_files", lambda base: ["scripts/lint_changed.py"]
+    )
     monkeypatch.delenv("LINT_BASE_INTERSECT", raising=False)
     monkeypatch.setenv("BASE_SHA", "HEAD")
 
