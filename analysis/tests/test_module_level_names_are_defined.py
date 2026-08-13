@@ -177,12 +177,17 @@ class _ModuleLevelScan:
         from Python 3.14 without it. Reading the annotation as an import-time
         load would report modules that import fine — the same interpreter split
         that keeps signature annotations out of `_evaluated_at_definition`.
+
+        The target is skipped only for a bare name with no value. `x: int`
+        records an annotation, binding nothing and evaluating nothing, but
+        `obj.attr: int` and `d["k"]: int` still evaluate `obj` and `d` at
+        import — so guarding on `node.value` alone would drop a real load.
         """
-        if node.value is None:
-            # `x: int` records an annotation and binds nothing.
+        if isinstance(node.target, ast.Name) and node.value is None:
             return
         self.walk(node.target, scoped)
-        self.walk(node.value, scoped)
+        if node.value is not None:
+            self.walk(node.value, scoped)
 
     def _class_body(self, node: ast.ClassDef, scoped: frozenset[str]) -> None:
         """Walk a class body: its loads are the enclosing scope's, its binds are not.
@@ -345,11 +350,7 @@ def test_a_class_attribute_does_not_bind_at_module_level(tmp_path: Path) -> None
     assert undefined_module_level_names(masked) == {"Path"}
 
     method = tmp_path / "method.py"
-    method.write_text(
-        "class Config:\n"
-        "    def resolve(self):\n"
-        '        return Missing(".")\n'
-    )
+    method.write_text('class Config:\n    def resolve(self):\n        return Missing(".")\n')
     # A method body is still call-time, even inside an import-time class body.
     assert undefined_module_level_names(method) == set()
 
@@ -377,8 +378,25 @@ def test_an_annotation_is_never_an_import_time_load(tmp_path: Path) -> None:
     # The value beside an annotation is ordinary import-time code, so the gap
     # is the annotation alone rather than the whole statement.
     valued = tmp_path / "valued.py"
-    valued.write_text("from __future__ import annotations\n\nx: int = Path(\".\")\n")
+    valued.write_text('from __future__ import annotations\n\nx: int = Path(".")\n')
     assert undefined_module_level_names(valued) == {"Path"}
+
+
+def test_a_non_name_annotation_target_is_evaluated_at_import(tmp_path: Path) -> None:
+    """`obj.attr: int` evaluates `obj` even with no value; `x: int` does not."""
+    attribute = tmp_path / "attribute.py"
+    attribute.write_text("MissingThing.attr: int\n")
+    assert undefined_module_level_names(attribute) == {"MissingThing"}
+
+    subscript = tmp_path / "subscript.py"
+    subscript.write_text('MissingMap["k"]: int\n')
+    assert undefined_module_level_names(subscript) == {"MissingMap"}
+
+    # A bare name is the one target that evaluates nothing, and annotating it
+    # binds nothing either, so a later load of it is still reported.
+    bare = tmp_path / "bare.py"
+    bare.write_text("x: int\nY = x\n")
+    assert undefined_module_level_names(bare) == {"x"}
 
 
 def test_a_type_parameter_binds_inside_the_definition_it_heads(tmp_path: Path) -> None:
