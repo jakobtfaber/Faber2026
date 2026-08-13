@@ -41,6 +41,15 @@ BUILTINS = frozenset(dir(builtins)) | {
 SCOPES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)
 COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
 
+# Nodes that bind a name through a plain string attribute rather than an
+# `ast.Name`, so walking their children would never see the binding.
+CAPTURES = {
+    ast.ExceptHandler: "name",
+    ast.MatchAs: "name",
+    ast.MatchStar: "name",
+    ast.MatchMapping: "rest",
+}
+
 
 def live_python_sources() -> list[Path]:
     return [
@@ -96,8 +105,25 @@ class _ModuleLevelScan:
         # The definition itself binds a module-level name; its body does not.
         if not isinstance(node, ast.Lambda):
             self.bound.add(node.name)
-        for decorator in getattr(node, "decorator_list", []):
-            self.walk(decorator, scoped)
+        for expression in self._evaluated_at_definition(node):
+            self.walk(expression, scoped)
+
+    @staticmethod
+    def _evaluated_at_definition(node: ast.AST) -> list[ast.AST]:
+        """Decorators, bases, class keywords and defaults all run at import time.
+
+        `class Chunk(Enum)` and `def load(root=Path("."))` raise `NameError` on
+        import just as surely as a bare `Path(__file__)` does, so they belong to
+        the enclosing scope's loads even though the body they head does not.
+        """
+        args = getattr(node, "args", None)
+        defaults = [*args.defaults, *filter(None, args.kw_defaults)] if args else []
+        return [
+            *getattr(node, "decorator_list", []),
+            *getattr(node, "bases", []),
+            *(keyword.value for keyword in getattr(node, "keywords", [])),
+            *defaults,
+        ]
 
     def _comprehension(self, node: ast.AST, scoped: frozenset[str]) -> None:
         self._element(node, self._generator_scope(node, scoped))
@@ -141,8 +167,9 @@ class _ModuleLevelScan:
             self.loaded.add(node.id)
 
     def _descend(self, node: ast.AST, scoped: frozenset[str]) -> None:
-        if isinstance(node, ast.ExceptHandler) and node.name:
-            self.bound.add(node.name)
+        capture = CAPTURES.get(type(node))
+        if capture and getattr(node, capture):
+            self.bound.add(getattr(node, capture))
         for child in ast.iter_child_nodes(node):
             self.walk(child, scoped)
 
@@ -200,3 +227,22 @@ def test_the_check_catches_the_defect_it_was_written_for(tmp_path: Path) -> None
     )
     # `p` is the comprehension target, not an unbound module-level load.
     assert undefined_module_level_names(fixed) == set()
+
+
+def test_a_definition_header_is_import_time_code(tmp_path: Path) -> None:
+    """A class base or a default value runs on import; only the body waits."""
+    header = tmp_path / "header.py"
+    header.write_text(
+        'class Chunk(Enum):\n    pass\ndef load(root=Path(".")):\n    return Missing(root)\n'
+    )
+    # `Missing` is inside the body, so it is a call-time question, not this one.
+    assert undefined_module_level_names(header) == {"Enum", "Path"}
+
+
+def test_a_match_capture_binds_its_name(tmp_path: Path) -> None:
+    """`case [prog, *rest]` binds through a string attribute, not an `ast.Name`."""
+    captured = tmp_path / "captured.py"
+    captured.write_text(
+        "import sys\nmatch sys.argv:\n    case [prog, *rest]:\n        print(prog, rest)\n"
+    )
+    assert undefined_module_level_names(captured) == set()
