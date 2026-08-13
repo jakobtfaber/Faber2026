@@ -121,6 +121,35 @@ else in an existing open issue, in the pull-request body, or in a comment.
 At the limit, file nothing, and say in a comment what would have been
 filed and why it was held.
 
+### The limit is resumable
+
+Once the workflows pin `max-sixty/tend/claude@0.1.15` or later, tripping
+the limit is no longer a wait for the midnight UTC reset. The base formula
+is unchanged, so the queries above still print the number the preflight
+applies; what changed is the recovery. A run refused over that number files
+or reopens a `tend-rate-limit` issue naming the runs it refused, and the
+owner closing that issue doubles the ceiling for the rest of the UTC day,
+each further close doubling it again. The bot cannot approve itself:
+closes by its own account, or by any GitHub App including
+`github-actions[bot]`, are not counted, so it takes a person's close —
+today the owner's, who is this repository's only other collaborator.
+Refused runs do not retry on their own and need
+`gh run rerun <id> --failed` once it is lifted.
+
+Two things follow for a run reading this. A refused run aborts before the
+model starts, so it cannot post the comment the paragraph above asks for —
+that instruction is for a run still executing that would push the count
+over, not for one already refused. And `tend-rate-limit` is a bot-health
+label like `tend-outage`: `tend-mention`'s verify gate and `tend-triage`
+both skip issues carrying it, which is what stops a pause notice from
+re-triggering the mention loop, so do not expect a comment there to reach
+the bot.
+
+The 20-minute burst caps — more than ten pull requests, or more than ten
+issues, created in that window — are separate and are not resumable. The
+preflight files no pause issue for a burst trip, because closing one would
+not lift the cap.
+
 Group findings by theme rather than by instance. One issue that names a
 class of defect and enumerates its instances costs one item and reads
 better than five issues; splitting a single finding into a parent issue and
@@ -135,7 +164,10 @@ review owed to [#339](https://github.com/jakobtfaber/Faber2026/pull/339)
 when it opened that morning was never delivered, and it was still missing
 a day later. Two of the twelve items were the `review-runs` workflow's own
 tracking issue and pull request, so a housekeeping run can spend the
-budget that a review of real work then cannot get.
+budget that a review of real work then cannot get. That fifteen-hour stall
+is the shape the resumable ceiling above now shortens — but only if
+someone notices the pause issue, so the budget still deserves the care
+this section asks for.
 
 ## Pull request conventions
 
