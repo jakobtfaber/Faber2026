@@ -51,6 +51,10 @@ CAPTURES = {
     ast.MatchMapping: "rest",
 }
 
+# PEP 695 type parameters bind the same way — through a string attribute — but
+# only inside the definition they head, so they are scoped rather than bound.
+TYPE_PARAMETERS = (ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)
+
 
 def live_python_sources() -> list[Path]:
     return [
@@ -88,10 +92,18 @@ class _ModuleLevelScan:
     `scoped` carries the comprehension-local names visible at each node, and
     is empty everywhere outside a comprehension.
 
-    Known gap: annotations. `def f(x: Missing)` is an import-time `NameError`
-    on Python 3.12 and 3.13 but not on 3.14, where PEP 649 defers evaluation,
-    and `requires-python = ">=3.12"` admits both. Reporting them would be
-    right on one interpreter and wrong on another, so they are left alone.
+    Known gap: annotations, both in a signature and on a variable. `def f(x:
+    Missing)` and `x: Missing = 1` are import-time `NameError`s on Python 3.12
+    and 3.13 but not on 3.14, where PEP 649 defers evaluation, and not on any
+    version under `from __future__ import annotations`, which live modules
+    under `analysis/` already carry. `requires-python = ">=3.12"` admits all
+    of those, so reporting an annotation would name modules that import
+    cleanly. A false positive gets a tree-wide check deleted rather than
+    fixed, so annotations are skipped and this gap is the deliberate cost.
+
+    PEP 695 type parameters are handled rather than skipped: `class
+    Registry[T](list[T])` binds `T` for the bases that follow it, and both a
+    parameter's bound and a `type` alias value are lazily evaluated.
     """
 
     def __init__(self) -> None:
@@ -108,6 +120,10 @@ class _ModuleLevelScan:
             self._import(node)
         elif isinstance(node, ast.ImportFrom):
             self._import_from(node)
+        elif isinstance(node, ast.TypeAlias):
+            self._type_alias(node)
+        elif isinstance(node, ast.AnnAssign):
+            self._annotated_assignment(node, scoped)
         elif isinstance(node, ast.Name):
             self._name(node, scoped)
         else:
@@ -118,10 +134,49 @@ class _ModuleLevelScan:
         # body waits for a call; a class body runs now, so it is walked below.
         if not isinstance(node, ast.Lambda):
             self.bound.add(node.name)
+        inner = scoped | self._type_parameters(node)
         for expression in self._evaluated_at_definition(node):
-            self.walk(expression, scoped)
+            self.walk(expression, inner)
         if isinstance(node, ast.ClassDef):
-            self._class_body(node, scoped)
+            self._class_body(node, inner)
+
+    @staticmethod
+    def _type_parameters(node: ast.AST) -> frozenset[str]:
+        """Names PEP 695 type parameters bind inside the definition they head.
+
+        `class Registry[T](list[T])` resolves `T` from the parameter list, not
+        from the module, so `T` has to be visible while the bases are walked.
+        Nothing inside `type_params` is itself walked: a parameter's bound and
+        default are lazily evaluated, so they are not import-time loads.
+        """
+        return frozenset(
+            parameter.name
+            for parameter in getattr(node, "type_params", [])
+            if isinstance(parameter, TYPE_PARAMETERS)
+        )
+
+    def _type_alias(self, node: ast.TypeAlias) -> None:
+        """`type Alias[T] = list[T]` binds the alias; the value is lazy.
+
+        PEP 695 defers the value until the alias is resolved, so a name used
+        there is never an import-time load.
+        """
+        self.bound.add(node.name.id)
+
+    def _annotated_assignment(self, node: ast.AnnAssign, scoped: frozenset[str]) -> None:
+        """Walk the target and value; the annotation is the documented gap.
+
+        `x: Missing = 1` imports cleanly under `from __future__ import
+        annotations`, which live modules under `analysis/` already carry, and
+        from Python 3.14 without it. Reading the annotation as an import-time
+        load would report modules that import fine — the same interpreter split
+        that keeps signature annotations out of `_evaluated_at_definition`.
+        """
+        if node.value is None:
+            # `x: int` records an annotation and binds nothing.
+            return
+        self.walk(node.target, scoped)
+        self.walk(node.value, scoped)
 
     def _class_body(self, node: ast.ClassDef, scoped: frozenset[str]) -> None:
         """Walk a class body: its loads are the enclosing scope's, its binds are not.
@@ -291,6 +346,49 @@ def test_a_class_attribute_does_not_bind_at_module_level(tmp_path: Path) -> None
     )
     # A method body is still call-time, even inside an import-time class body.
     assert undefined_module_level_names(method) == set()
+
+
+def test_an_annotation_is_never_an_import_time_load(tmp_path: Path) -> None:
+    """A module that imports cleanly must never be reported.
+
+    Under `from __future__ import annotations` both of these are strings at
+    import; on Python 3.14 they are strings without the future import too.
+    """
+    annotated = tmp_path / "annotated.py"
+    annotated.write_text(
+        "from __future__ import annotations\n"
+        "\n"
+        "x: Missing = 1\n"
+        "\n"
+        "class C:\n"
+        "    y: AlsoMissing = 2\n"
+        "\n"
+        "def f(z: StillMissing) -> AlsoStillMissing:\n"
+        "    return z\n"
+    )
+    assert undefined_module_level_names(annotated) == set()
+
+    # The value beside an annotation is ordinary import-time code, so the gap
+    # is the annotation alone rather than the whole statement.
+    valued = tmp_path / "valued.py"
+    valued.write_text("from __future__ import annotations\n\nx: int = Path(\".\")\n")
+    assert undefined_module_level_names(valued) == {"Path"}
+
+
+def test_a_type_parameter_binds_inside_the_definition_it_heads(tmp_path: Path) -> None:
+    """PEP 695 generics import cleanly, so none of these names is unbound."""
+    generic = tmp_path / "generic.py"
+    generic.write_text("class Registry[T](list[T]):\n    pass\n")
+    assert undefined_module_level_names(generic) == set()
+
+    alias = tmp_path / "alias.py"
+    alias.write_text("type Pair[T] = tuple[T, T]\nVALUE: Pair = None\n")
+    assert undefined_module_level_names(alias) == set()
+
+    # The parameter is scoped to its own definition and must not leak out.
+    leaked = tmp_path / "leaked.py"
+    leaked.write_text("class Registry[T](list[T]):\n    pass\n\nSTRAY = T\n")
+    assert undefined_module_level_names(leaked) == {"T"}
 
 
 def test_a_match_capture_binds_its_name(tmp_path: Path) -> None:
