@@ -61,71 +61,88 @@ def _bound_by(node: ast.AST) -> set[str]:
     return names
 
 
-def _module_level_names(tree: ast.Module) -> tuple[set[str], set[str], bool]:
-    """Return (bound, loaded, has_star_import) for module-level code only.
+class _ModuleLevelScan:
+    """Names bound and loaded by module-level code, one node kind per method.
 
     Function and class bodies are skipped: their names resolve at call time,
     not import time. Comprehension targets bind inside their own scope, so a
     `for p in ...` inside a generator must not count as a module-level load —
     which is precisely the shape of the expression this test was written for.
+
+    `scoped` carries the comprehension-local names visible at each node, and
+    is empty everywhere outside a comprehension.
     """
-    bound: set[str] = set()
-    loaded: set[str] = set()
-    star = False
 
-    def walk(node: ast.AST, comprehension_locals: frozenset[str]) -> None:
-        nonlocal star
+    def __init__(self) -> None:
+        self.bound: set[str] = set()
+        self.loaded: set[str] = set()
+        self.star = False
+
+    def walk(self, node: ast.AST, scoped: frozenset[str]) -> None:
         if isinstance(node, SCOPES):
-            # The definition itself binds a module-level name; its body does not.
-            if not isinstance(node, ast.Lambda):
-                bound.add(node.name)
-            for decorator in getattr(node, "decorator_list", []):
-                walk(decorator, comprehension_locals)
-            return
+            self._definition(node, scoped)
+        elif isinstance(node, COMPREHENSIONS):
+            self._comprehension(node, scoped)
+        elif isinstance(node, ast.Import):
+            self._import(node)
+        elif isinstance(node, ast.ImportFrom):
+            self._import_from(node)
+        elif isinstance(node, ast.Name):
+            self._name(node, scoped)
+        else:
+            self._descend(node, scoped)
 
-        if isinstance(node, COMPREHENSIONS):
-            inner = set(comprehension_locals)
-            for generator in node.generators:
-                # The first iterable is evaluated in the enclosing scope; the
-                # targets it binds are visible to everything after it.
-                walk(generator.iter, frozenset(inner))
-                inner |= _bound_by(generator.target)
-                for condition in generator.ifs:
-                    walk(condition, frozenset(inner))
-            for child in ast.iter_child_nodes(node):
-                if child not in node.generators:
-                    walk(child, frozenset(inner))
-            return
+    def _definition(self, node: ast.AST, scoped: frozenset[str]) -> None:
+        # The definition itself binds a module-level name; its body does not.
+        if not isinstance(node, ast.Lambda):
+            self.bound.add(node.name)
+        for decorator in getattr(node, "decorator_list", []):
+            self.walk(decorator, scoped)
 
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                bound.add(alias.asname or alias.name.split(".")[0])
-            return
-        if isinstance(node, ast.ImportFrom):
-            for alias in node.names:
-                if alias.name == "*":
-                    star = True
-                else:
-                    bound.add(alias.asname or alias.name)
-            return
-
-        if isinstance(node, ast.Name):
-            if isinstance(node.ctx, ast.Load):
-                if node.id not in comprehension_locals:
-                    loaded.add(node.id)
-            else:
-                bound.add(node.id)
-            return
-
-        if isinstance(node, ast.ExceptHandler) and node.name:
-            bound.add(node.name)
-
+    def _comprehension(self, node: ast.AST, scoped: frozenset[str]) -> None:
+        inner = set(scoped)
+        for generator in node.generators:
+            # The first iterable is evaluated in the enclosing scope; the
+            # targets it binds are visible to everything after it.
+            self.walk(generator.iter, frozenset(inner))
+            inner |= _bound_by(generator.target)
+            for condition in generator.ifs:
+                self.walk(condition, frozenset(inner))
         for child in ast.iter_child_nodes(node):
-            walk(child, comprehension_locals)
+            if child not in node.generators:
+                self.walk(child, frozenset(inner))
 
+    def _import(self, node: ast.Import) -> None:
+        # `import a.b` binds `a`, not `a.b`.
+        for alias in node.names:
+            self.bound.add(alias.asname or alias.name.split(".")[0])
+
+    def _import_from(self, node: ast.ImportFrom) -> None:
+        for alias in node.names:
+            if alias.name == "*":
+                self.star = True
+            else:
+                self.bound.add(alias.asname or alias.name)
+
+    def _name(self, node: ast.Name, scoped: frozenset[str]) -> None:
+        if not isinstance(node.ctx, ast.Load):
+            self.bound.add(node.id)
+        elif node.id not in scoped:
+            self.loaded.add(node.id)
+
+    def _descend(self, node: ast.AST, scoped: frozenset[str]) -> None:
+        if isinstance(node, ast.ExceptHandler) and node.name:
+            self.bound.add(node.name)
+        for child in ast.iter_child_nodes(node):
+            self.walk(child, scoped)
+
+
+def _module_level_names(tree: ast.Module) -> tuple[set[str], set[str], bool]:
+    """Return (bound, loaded, has_star_import) for module-level code only."""
+    scan = _ModuleLevelScan()
     for statement in tree.body:
-        walk(statement, frozenset())
-    return bound, loaded, star
+        scan.walk(statement, frozenset())
+    return scan.bound, scan.loaded, scan.star
 
 
 def undefined_module_level_names(path: Path) -> set[str]:
