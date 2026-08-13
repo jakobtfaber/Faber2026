@@ -131,8 +131,9 @@ or reopens a `tend-rate-limit` issue naming the runs it refused, and the
 owner closing that issue doubles the ceiling for the rest of the UTC day,
 each further close doubling it again. The bot cannot approve itself:
 closes by its own account, or by any GitHub App including
-`github-actions[bot]`, are not counted, so only the owner's close lifts
-the ceiling. Refused runs do not retry on their own and need
+`github-actions[bot]`, are not counted, so it takes a person's close —
+today the owner's, who is this repository's only other collaborator.
+Refused runs do not retry on their own and need
 `gh run rerun <id> --failed` once it is lifted.
 
 Two things follow for a run reading this. A refused run aborts before the
