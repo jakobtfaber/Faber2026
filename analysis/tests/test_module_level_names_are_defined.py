@@ -55,6 +55,19 @@ CAPTURES = {
 # only inside the definition they head, so they are scoped rather than bound.
 TYPE_PARAMETERS = (ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)
 
+# Node type -> handler name on `_ModuleLevelScan`. Every handler takes
+# `(node, scoped)` so `walk` can call any of them without a branch; a handler
+# that has no use for `scoped` still accepts it.
+HANDLERS = {
+    **dict.fromkeys(SCOPES, "_definition"),
+    **dict.fromkeys(COMPREHENSIONS, "_comprehension"),
+    ast.Import: "_import",
+    ast.ImportFrom: "_import_from",
+    ast.TypeAlias: "_type_alias",
+    ast.AnnAssign: "_annotated_assignment",
+    ast.Name: "_name",
+}
+
 
 def live_python_sources() -> list[Path]:
     return [
@@ -112,22 +125,15 @@ class _ModuleLevelScan:
         self.star = False
 
     def walk(self, node: ast.AST, scoped: frozenset[str]) -> None:
-        if isinstance(node, SCOPES):
-            self._definition(node, scoped)
-        elif isinstance(node, COMPREHENSIONS):
-            self._comprehension(node, scoped)
-        elif isinstance(node, ast.Import):
-            self._import(node)
-        elif isinstance(node, ast.ImportFrom):
-            self._import_from(node)
-        elif isinstance(node, ast.TypeAlias):
-            self._type_alias(node)
-        elif isinstance(node, ast.AnnAssign):
-            self._annotated_assignment(node, scoped)
-        elif isinstance(node, ast.Name):
-            self._name(node, scoped)
-        else:
-            self._descend(node, scoped)
+        """Dispatch one node to its handler, `_descend` for anything unlisted.
+
+        A table rather than an `isinstance` chain: every entry is a concrete
+        `ast` node class, none of which is subclassed, so exact-type lookup
+        decides the same cases a chain would while keeping this method one
+        branch wide as handlers are added.
+        """
+        handler = getattr(self, HANDLERS.get(type(node), "_descend"))
+        handler(node, scoped)
 
     def _definition(self, node: ast.AST, scoped: frozenset[str]) -> None:
         # The definition itself binds a name in the enclosing scope. A function
@@ -155,7 +161,7 @@ class _ModuleLevelScan:
             if isinstance(parameter, TYPE_PARAMETERS)
         )
 
-    def _type_alias(self, node: ast.TypeAlias) -> None:
+    def _type_alias(self, node: ast.TypeAlias, scoped: frozenset[str]) -> None:
         """`type Alias[T] = list[T]` binds the alias; the value is lazy.
 
         PEP 695 defers the value until the alias is resolved, so a name used
@@ -233,12 +239,12 @@ class _ModuleLevelScan:
             if child not in node.generators:
                 self.walk(child, scoped)
 
-    def _import(self, node: ast.Import) -> None:
+    def _import(self, node: ast.Import, scoped: frozenset[str]) -> None:
         # `import a.b` binds `a`, not `a.b`.
         for alias in node.names:
             self.bound.add(alias.asname or alias.name.split(".")[0])
 
-    def _import_from(self, node: ast.ImportFrom) -> None:
+    def _import_from(self, node: ast.ImportFrom, scoped: frozenset[str]) -> None:
         for alias in node.names:
             if alias.name == "*":
                 self.star = True
