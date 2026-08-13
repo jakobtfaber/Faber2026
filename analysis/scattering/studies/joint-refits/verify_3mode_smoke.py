@@ -7,6 +7,7 @@ stress on the GP likelihood.
 """
 import os
 import sys
+from pathlib import Path
 import numpy as np
 
 REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))

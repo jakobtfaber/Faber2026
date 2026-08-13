@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """hamilton CHIME only, maximum clarity — settle single vs double peak."""
 import sys
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")

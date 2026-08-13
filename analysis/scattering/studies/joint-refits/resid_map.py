@@ -13,6 +13,7 @@ For each band of one burst (using the cropped on-pulse window the fit saw):
 import json
 import os
 import sys
+from pathlib import Path
 import numpy as np
 import matplotlib
 

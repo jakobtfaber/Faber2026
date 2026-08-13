@@ -11,6 +11,7 @@ signature freya shows.
   python scint_framework_proof.py            (local; FABER2026_ANALYSIS -> local repo)
 """
 import os, sys
+from pathlib import Path
 import numpy as np
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt

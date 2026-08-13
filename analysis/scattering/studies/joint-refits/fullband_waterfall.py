@@ -20,6 +20,7 @@ greatly in absolute brightness), so the burst is visible in both.
 import json
 import os
 import sys
+from pathlib import Path
 
 import matplotlib
 import numpy as np

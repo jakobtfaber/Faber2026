@@ -2,6 +2,7 @@
 modes (default 12, gain 8, scint-GP 10) return in seconds. Goal is path /
 signature integrity + well-formed posterior shape, NOT convergence."""
 import os, sys, numpy as np
+from pathlib import Path
 REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 sys.path.insert(0, f"{REPO}/scattering")
 from scattering.scat_analysis.burstfit import FRBModel, FRBParams

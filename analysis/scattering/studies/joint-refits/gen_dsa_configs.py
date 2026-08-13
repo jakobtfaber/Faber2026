@@ -7,6 +7,7 @@ the arc-path typos in the repo configs don't matter), telescope=dsa (so the
 freq_descending flip applies), and the corrected sampler knobs.
 """
 import glob, os, yaml
+from pathlib import Path
 
 REPO = next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 RUNS = "/central/scratch/jfaber/flits-runs"

@@ -12,6 +12,7 @@ lnZ(2) >> lnZ(1)). Synthetic only; no HPCC.
 """
 import os
 import sys
+from pathlib import Path
 
 import numpy as np
 
