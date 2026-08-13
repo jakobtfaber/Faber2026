@@ -156,6 +156,52 @@ Never merge. `main` is admin-gated and the bot's write access is below
 the bypass threshold by design. Open the pull request, let CI run, and
 leave the merge to the owner.
 
+## Revising the bot's own pull requests
+
+A bot pull request wakes `tend-review`; the review wakes `tend-mention`,
+which speaks as the pull request's author; its commit fires `synchronize`,
+which wakes `tend-review` again. Third-party review bots sit in the same
+loop — a CodeScene code-health gate that fails on a file this pull request
+introduced wakes `tend-mention` exactly as a tend review does.
+
+The loop earns its cost while it finds something in the code the pull
+request set out to change. It stops earning it the moment every finding is
+in code the pull request itself introduced, because a reviewer reading
+only the diff will keep finding something, and nobody outside the loop has
+read any of it yet.
+
+So, when a review on the bot's own pull request reports only findings in
+code that pull request itself introduced, write them down in a reply
+and stop. Do not push another commit. The same holds for a code-health
+gate that fails on a file the pull request introduced: say in a comment
+that the gate is scoring code the owner has not yet seen, and leave it.
+
+That boundary covers the opening commit too, not only later turns of the
+loop: #374's loop ran mostly on a test module its opening commit added.
+The cost is that a genuine defect in code the pull request introduced
+gets written down rather than fixed — it then reaches the owner as a
+recorded finding at the merge gate, which is where every bot pull request
+stops anyway.
+
+The scope a pull request opens with is the scope it keeps. "One pull
+request does one thing" governs what a branch grows into, not only what it
+opens with, so a review finding outside the opening scope belongs in a
+comment or an issue rather than in a new commit on the branch.
+
+**VERIFIED**, 2026-08-13:
+[#374](https://github.com/jakobtfaber/Faber2026/pull/374) opened at 07:00
+UTC to add one missing import to thirty-five scripts, and reached twelve
+commits by 08:17. Ten of the twelve revise two test modules the pull
+request itself introduced. A CodeScene gate on the older of them — the
+one the opening commit `5c95959e` added, twenty-two minutes before the
+other module existed — drove the first two ([run
+31676150442](https://github.com/jakobtfaber/Faber2026/actions/runs/31676150442),
+$6.10 over thirty minutes); three self-reviews drove the rest, each
+closing two findings and opening two more. The four completed
+`tend-review` sessions on the branch cost $8.67 between them, and the loop
+was still running when this was written, with nothing outside the added
+test modules yet in question.
+
 ## Journaling
 
 Do not append to the activity journal
