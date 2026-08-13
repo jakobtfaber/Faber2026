@@ -10,10 +10,11 @@ Nothing caught it because `[tool.ruff] extend-exclude` lists `*/studies/*`, so
 the linter that reports exactly this (`F821`) never reads the tree the defect
 lives in. This check is deliberately independent of that setting.
 
-Scope is module level only — a name used inside a function body is a runtime
+Scope is import time only — a name used inside a function body is a runtime
 question about that call path, not an import-time break, and the reference
 trees under `scintillation/studies/reference_analysis/` carry many of those by
-design.
+design. A class body is import-time code and is covered; see
+`_ModuleLevelScan` for what that costs and for the one gap left open.
 """
 
 import ast
@@ -73,13 +74,24 @@ def _bound_by(node: ast.AST) -> set[str]:
 class _ModuleLevelScan:
     """Names bound and loaded by module-level code, one node kind per method.
 
-    Function and class bodies are skipped: their names resolve at call time,
-    not import time. Comprehension targets bind inside their own scope, so a
-    `for p in ...` inside a generator must not count as a module-level load —
-    which is precisely the shape of the expression this test was written for.
+    Function bodies are skipped: their names resolve at call time, not import
+    time. A class body is not skipped — it runs on import like any other
+    module-level statement, so `class Config: root = Path(".")` is an
+    import-time `NameError` — but it binds into the class rather than the
+    module, so its bindings are held in a nested scan and only its unresolved
+    loads reach the enclosing scope.
+
+    Comprehension targets bind inside their own scope, so a `for p in ...`
+    inside a generator must not count as a module-level load — which is
+    precisely the shape of the expression this test was written for.
 
     `scoped` carries the comprehension-local names visible at each node, and
     is empty everywhere outside a comprehension.
+
+    Known gap: annotations. `def f(x: Missing)` is an import-time `NameError`
+    on Python 3.12 and 3.13 but not on 3.14, where PEP 649 defers evaluation,
+    and `requires-python = ">=3.12"` admits both. Reporting them would be
+    right on one interpreter and wrong on another, so they are left alone.
     """
 
     def __init__(self) -> None:
@@ -102,11 +114,28 @@ class _ModuleLevelScan:
             self._descend(node, scoped)
 
     def _definition(self, node: ast.AST, scoped: frozenset[str]) -> None:
-        # The definition itself binds a module-level name; its body does not.
+        # The definition itself binds a name in the enclosing scope. A function
+        # body waits for a call; a class body runs now, so it is walked below.
         if not isinstance(node, ast.Lambda):
             self.bound.add(node.name)
         for expression in self._evaluated_at_definition(node):
             self.walk(expression, scoped)
+        if isinstance(node, ast.ClassDef):
+            self._class_body(node, scoped)
+
+    def _class_body(self, node: ast.ClassDef, scoped: frozenset[str]) -> None:
+        """Walk a class body: its loads are the enclosing scope's, its binds are not.
+
+        `class Config: root = Path(".")` raises `NameError` on import, so the
+        loads belong here. `class Config: Path = 1` binds a class attribute and
+        must not mask a missing module-level `Path`, so the nested scan keeps
+        the bindings and only unresolved loads escape.
+        """
+        inner = _ModuleLevelScan()
+        for statement in node.body:
+            inner.walk(statement, scoped)
+        self.loaded |= inner.loaded - inner.bound
+        self.star = self.star or inner.star
 
     @staticmethod
     def _evaluated_at_definition(node: ast.AST) -> list[ast.AST]:
@@ -114,7 +143,8 @@ class _ModuleLevelScan:
 
         `class Chunk(Enum)` and `def load(root=Path("."))` raise `NameError` on
         import just as surely as a bare `Path(__file__)` does, so they belong to
-        the enclosing scope's loads even though the body they head does not.
+        the enclosing scope's loads even though a function body they head does
+        not.
         """
         args = getattr(node, "args", None)
         defaults = [*args.defaults, *filter(None, args.kw_defaults)] if args else []
@@ -237,6 +267,30 @@ def test_a_definition_header_is_import_time_code(tmp_path: Path) -> None:
     )
     # `Missing` is inside the body, so it is a call-time question, not this one.
     assert undefined_module_level_names(header) == {"Enum", "Path"}
+
+
+def test_a_class_body_is_import_time_code(tmp_path: Path) -> None:
+    """A class body runs on import, so an unbound name in one is a real break."""
+    body = tmp_path / "body.py"
+    body.write_text('class Config:\n    root = Path(".")\n')
+    assert undefined_module_level_names(body) == {"Path"}
+
+
+def test_a_class_attribute_does_not_bind_at_module_level(tmp_path: Path) -> None:
+    """Class-local bindings must not mask a genuinely missing module-level name."""
+    masked = tmp_path / "masked.py"
+    masked.write_text('class Config:\n    Path = 1\n\nROOT = Path(".")\n')
+    # The class attribute is `Config.Path`; the module-level call still breaks.
+    assert undefined_module_level_names(masked) == {"Path"}
+
+    method = tmp_path / "method.py"
+    method.write_text(
+        "class Config:\n"
+        "    def resolve(self):\n"
+        '        return Missing(".")\n'
+    )
+    # A method body is still call-time, even inside an import-time class body.
+    assert undefined_module_level_names(method) == set()
 
 
 def test_a_match_capture_binds_its_name(tmp_path: Path) -> None:
