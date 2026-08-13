@@ -29,8 +29,12 @@ class _Result:
     stdout = ""
 
 
-def _ruff_capturing_run(recorded: list[list[str]]):
-    """A `subprocess.run` stub: record the ruff call, pass everything to git.
+def _recording_run(recorded: list[list[str]]):
+    """A `subprocess.run` stub: record every call, answer ruff, pass on the rest.
+
+    Recording every call rather than only ruff's is what lets a test assert
+    that git was reached; recording ruff alone cannot tell "the fall-through
+    ran" from "nothing took that branch".
 
     `real_run` is read here, before the caller's `monkeypatch.setattr` replaces
     the attribute. `lint_changed` and this module hold the same `subprocess`
@@ -41,26 +45,31 @@ def _ruff_capturing_run(recorded: list[list[str]]):
     real_run = subprocess.run
 
     def fake_run(argv, *args, **kwargs):
+        recorded.append(list(argv))
         if argv and argv[0] == "ruff":
-            recorded.append(list(argv))
             return _Result()
         return real_run(argv, *args, **kwargs)
 
     return fake_run
 
 
+def _calls_to(recorded: list[list[str]], program: str) -> list[list[str]]:
+    return [argv for argv in recorded if argv and argv[0] == program]
+
+
 def test_the_gate_passes_force_exclude_to_ruff(monkeypatch: pytest.MonkeyPatch) -> None:
     """Exercise the real code path rather than grepping its source."""
     recorded: list[list[str]] = []
 
-    monkeypatch.setattr(lint_changed.subprocess, "run", _ruff_capturing_run(recorded))
+    monkeypatch.setattr(lint_changed.subprocess, "run", _recording_run(recorded))
     monkeypatch.setattr(lint_changed, "_changed_python_files", lambda base: ["scripts/lint_changed.py"])
     monkeypatch.delenv("LINT_BASE_INTERSECT", raising=False)
     monkeypatch.setenv("BASE_SHA", "HEAD")
 
     assert lint_changed.main() == 0
-    assert recorded, "the gate never invoked ruff"
-    assert recorded[0][:3] == ["ruff", "check", "--force-exclude"], recorded[0]
+    ruff_calls = _calls_to(recorded, "ruff")
+    assert ruff_calls, "the gate never invoked ruff"
+    assert ruff_calls[0][:3] == ["ruff", "check", "--force-exclude"], ruff_calls[0]
 
 
 def test_the_stub_falls_through_to_real_git(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -68,17 +77,23 @@ def test_the_stub_falls_through_to_real_git(monkeypatch: pytest.MonkeyPatch) -> 
 
     `_changed_python_files` is deliberately left unstubbed, so `main()` drives
     real git plumbing through that branch. `BASE_SHA=HEAD` makes the diff empty,
-    so the gate returns 0 without reaching ruff — the assertion worth having is
-    that it returns at all instead of raising `RecursionError`.
+    so the gate returns 0 without reaching ruff.
+
+    Returning rather than raising `RecursionError` is the property this was
+    written for, but returning is not enough on its own: the test would pass
+    just as quietly if `_changed_python_files` stopped routing through
+    `subprocess`, leaving the guard exercising nothing. Asserting a `git` call
+    was recorded pins the fall-through itself.
     """
     recorded: list[list[str]] = []
 
-    monkeypatch.setattr(lint_changed.subprocess, "run", _ruff_capturing_run(recorded))
+    monkeypatch.setattr(lint_changed.subprocess, "run", _recording_run(recorded))
     monkeypatch.delenv("LINT_BASE_INTERSECT", raising=False)
     monkeypatch.setenv("BASE_SHA", "HEAD")
 
     assert lint_changed.main() == 0
-    assert not recorded, "an empty diff should never reach ruff"
+    assert _calls_to(recorded, "git"), f"the fall-through never reached git: {recorded}"
+    assert not _calls_to(recorded, "ruff"), "an empty diff should never reach ruff"
 
 
 @pytest.mark.skipif(shutil.which("ruff") is None, reason="ruff is a test-group dependency")
