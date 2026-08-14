@@ -85,7 +85,8 @@ verdict, and repeating it is the self-review loop rather than a recovery.
 run on [#377](https://github.com/jakobtfaber/Faber2026/pull/377) that
 ended on `API Error: 529 Overloaded` with `turns: 1` and zero tokens —
 moved that pull request's `review` check from `FAILURE` back to
-`IN_PROGRESS` within fifteen seconds. The same shape stranded
+`IN_PROGRESS` within fifteen seconds, and the rerun posted the review
+that had been lost four minutes later. The same shape stranded
 [#339](https://github.com/jakobtfaber/Faber2026/pull/339) on 2026-08-06,
 where the cause was the rate-limit preflight instead; that check stayed
 red for four days, and the review it owed was never delivered.
