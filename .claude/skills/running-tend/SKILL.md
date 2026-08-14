@@ -53,6 +53,54 @@ that contains `analysis/figures/catalog.yaml`.
 Read `no results` as "no index built here", never as "no such thing
 exists", and search with `grep` instead.
 
+## A review that never ran needs a rerun
+
+`tend-review` fires only on `pull_request_target`. A run that dies before
+the model starts — refused by the rate-limit preflight, or killed by a
+transient API error — therefore leaves a red `review` check that no later
+event re-registers, and a review that was never delivered. Nothing retries
+it, and the pull request carries the red check until someone acts.
+
+As a nightly task, list the open pull requests whose `review` check
+failed:
+
+```bash
+gh pr list --state open --json number --jq '.[].number' | while read -r N; do
+  gh pr view "$N" --json statusCheckRollup --jq \
+    ".statusCheckRollup[] | select((.name // .context) == \"review\" and .conclusion == \"FAILURE\") | \"$N \(.detailsUrl)\""
+done
+```
+
+`detailsUrl` is a job URL (`…/runs/<run-id>/job/<job-id>`), not a run URL,
+so slice the run id out of it before anything that takes one:
+`sed -E 's#.*/runs/([0-9]+)/.*#\1#'`.
+
+Then read that run's session artifact. A `token-usage.json` whose token
+counts and `cost_usd` are all zero means the session never got a model
+response, so nothing was reviewed and nothing was posted, and `gh run
+rerun <run-id>` is the whole remedy — the rerun re-registers the check on
+the same run. Rerun only while `gh run view <run-id> --json attempt`
+reports `1`; a run already on attempt 2 failed its own recovery, so leave
+it and say so rather than rerunning again.
+
+Do not rerun a review that did reach the model. That one delivered its
+verdict, and repeating it is the self-review loop rather than a recovery.
+
+**VERIFIED**, 2026-08-14: `gh run rerun 31682807371` — the `tend-review`
+run on [#377](https://github.com/jakobtfaber/Faber2026/pull/377) that
+ended on `API Error: 529 Overloaded` with zero tokens — moved that pull
+request's `review` check from `FAILURE` back to `IN_PROGRESS` within
+fifteen seconds, and the rerun posted the review that had been lost four
+minutes later. That run now reports `attempt: 2`, and its artifact holds
+the successful attempt's `token-usage.json` (`turns: 24`, real tokens),
+so after a rerun the attempt number is what stays readable and the
+artifact is not. The same shape stranded
+[#339](https://github.com/jakobtfaber/Faber2026/pull/339) on 2026-08-06,
+where the cause was the rate-limit preflight instead; its
+`token-usage.json` records `turns: 0` rather than `turns: 1`, which is
+why the test above is zero tokens and not a turn count. That check stayed
+red for four days, and the review it owed was never delivered.
+
 ## Scope discipline
 
 Commit with explicit pathspecs, never `git add -A` or `git add .`. This
