@@ -14,8 +14,9 @@ import pytest
 
 from radio_pipeline.scattering.broaden import scatter_broaden
 
-# 0.1 ms sampling over 25.6 ms — long enough that a 1 ms exponential tail decays
-# well inside the window, so the trimmed convolution keeps essentially all flux.
+# 0.1 ms sampling over 25.6 ms. The kernel is capped at 10 * tau / dt = 100
+# samples, so an impulse at sample 20 puts the last non-zero output at sample
+# 119 — inside the 256-sample window, and nothing is trimmed.
 TIME_MS = np.arange(256) * 0.1
 TAU_MS = 1.0
 IMPULSE_SAMPLE = 20
@@ -37,9 +38,10 @@ def test_two_dimensional_broadening_conserves_flux_for_every_input_dtype(dtype) 
 
     assert broadened.dtype == np.float64
     assert broadened.shape == spectrum.shape
-    # Total flux is preserved to 0.5%: the only loss is the exponential tail
-    # trimmed at the end of the window.
-    assert broadened.sum() == pytest.approx(float(spectrum.sum()), rel=5e-3)
+    # Flux is conserved exactly: the kernel is normalised to unit integral and
+    # the impulse sits far enough from the end of the window that the trimmed
+    # convolution keeps the whole tail, so the tolerance is rounding only.
+    assert broadened.sum() == pytest.approx(float(spectrum.sum()), rel=1e-9)
 
 
 def test_integer_input_is_not_truncated_toward_zero() -> None:
