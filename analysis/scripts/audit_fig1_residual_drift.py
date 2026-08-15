@@ -7,7 +7,6 @@ import argparse
 import csv
 import json
 import subprocess
-import sys
 import tomllib
 from pathlib import Path
 
@@ -16,16 +15,8 @@ import numpy as np
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
-DM_ARCHIVE = (
-    ANALYSIS_ROOT
-    / ".archive/flits/outdated-science/dm-battery-2026-07"
-)
-sys.path.insert(0, str(DM_ARCHIVE))
 
 from dispersion.chime_dm import K_DM, measure_dm  # noqa: E402
-from dm_campaign.render_dm_zoom_comparison import (  # noqa: E402
-    _subband_arrival_times,
-)
 from dispersion.dm_power_analysis import (  # noqa: E402
     CHIME_DT_S,
     DSA_DT_S,
