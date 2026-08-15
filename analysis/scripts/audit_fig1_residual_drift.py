@@ -6,12 +6,10 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import subprocess
 import tomllib
 from pathlib import Path
 
 import numpy as np
-
 from workspace import ANALYSIS_ROOT, manuscript_root
 
 ROOT = manuscript_root()
