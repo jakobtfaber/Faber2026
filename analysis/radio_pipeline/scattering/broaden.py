@@ -57,8 +57,13 @@ def _validate_and_prepare_inputs(
     signal: NDArray[np.floating],
     t: NDArray[np.floating],
     tau_ms: float | NDArray[np.floating],
-) -> tuple[float, int, NDArray[np.floating], float, bool]:
-    """Validate inputs and prepare parameters for scattering."""
+) -> tuple[NDArray[np.float64], float, int, NDArray[np.floating], float, bool]:
+    """Validate inputs and prepare parameters for scattering.
+
+    Returns the signal cast to float64 as the first element. The caller must use
+    that array rather than its own: allocating the output with the caller's dtype
+    truncates the convolution back to integers, or loses precision on float32.
+    """
     if len(t) < 2:
         raise ValueError("Time axis must have at least 2 samples.")
 
@@ -88,7 +93,7 @@ def _validate_and_prepare_inputs(
     else:
         raise ValueError(f"signal must be 1D or 2D, got shape {signal.shape}.")
 
-    return dt, ntime, tau_arr, tau_scalar, is_2d
+    return signal, dt, ntime, tau_arr, tau_scalar, is_2d
 
 
 def scatter_broaden(
@@ -121,13 +126,14 @@ def scatter_broaden(
     Returns
     -------
     ndarray
-        Broadened signal, same shape as input.
+        Broadened signal, same shape as the input and always float64 — the
+        convolution output is real-valued regardless of the input dtype.
 
     Notes
     -----
     The kernel is normalized to unit integral to preserve total flux.
     """
-    dt, ntime, tau_arr, tau_scalar, is_2d = _validate_and_prepare_inputs(signal, t, tau_ms)
+    signal, dt, ntime, tau_arr, tau_scalar, is_2d = _validate_and_prepare_inputs(signal, t, tau_ms)
 
     if is_2d:
         result = np.zeros_like(signal)
