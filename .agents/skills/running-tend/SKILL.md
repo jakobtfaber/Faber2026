@@ -5,8 +5,8 @@ description: Guardrails for the tend bot acting autonomously on Faber2026 pull r
 
 # Running tend on Faber2026
 
-`CLAUDE.md` and `AGENTS.md` already carry this repository's operating rules
-and are loaded alongside this file. This file covers only what is specific
+`AGENTS.md` carries this repository's shared operating rules; Claude also
+loads `CLAUDE.md`. This file covers only what is specific
 to an autonomous agent with write access acting on pull requests and
 issues, without an owner in the loop.
 
