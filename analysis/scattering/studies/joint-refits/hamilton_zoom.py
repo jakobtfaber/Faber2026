@@ -7,6 +7,7 @@ shows up. Single big band-integrated profile can blur two close peaks; the
 sub-band overlay + zoom resolves them.
 """
 import sys
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")

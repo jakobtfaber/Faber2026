@@ -7,6 +7,7 @@ above a fraction of the peak), so close doublets are resolved in BOTH bands.
 """
 import os
 import sys
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")

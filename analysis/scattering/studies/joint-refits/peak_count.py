@@ -8,6 +8,7 @@ from neighbours by >= MIN_SEP samples. Prominence (in sigma) is reported per pea
 so marginal 2nd components are explicit, not hidden behind a yes/no.
 """
 import sys
+from pathlib import Path
 import numpy as np
 from scipy.signal import find_peaks
 from scipy.ndimage import gaussian_filter1d

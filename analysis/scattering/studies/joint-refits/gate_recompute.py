@@ -12,6 +12,7 @@ plus alpha-rail (<1.3 or >5.7 = pinned to the [1,6] prior bound).
 """
 import glob, json, os, sys
 from dataclasses import replace
+from pathlib import Path
 import numpy as np
 import yaml
 REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))

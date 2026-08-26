@@ -7,6 +7,7 @@ knobs (nested + evidence, outer_trim 0.15, nlive 400 + pool, alpha_fixed 4.0,
 nproc 8). Writes <burst>_chime_run.yaml into the configs dir.
 """
 import glob, os, yaml
+from pathlib import Path
 
 REPO = next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 RUNS = "/central/scratch/jfaber/flits-runs"

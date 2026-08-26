@@ -17,6 +17,7 @@ import argparse
 import json
 import os
 import sys
+from pathlib import Path
 
 REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 RUNS = os.environ.get("FABER2026_RUNS", "/central/scratch/jfaber/flits-runs")
