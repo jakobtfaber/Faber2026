@@ -147,7 +147,7 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: analysis/uv.lock
-      - uses: max-sixty/tend/claude@0.1.14
+      - uses: max-sixty/tend/claude@0.1.22
         if: steps.check.outputs.count != '0' || github.event_name == 'workflow_dispatch'
         with:
           github_token: ${{ secrets.TEND_BOT_TOKEN }}
