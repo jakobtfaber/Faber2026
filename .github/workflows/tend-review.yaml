@@ -29,7 +29,7 @@ jobs:
       # Two checkouts: `setup:` runs against the base tree, and the PR's own
       # tree lands after it. Setup executes as the runner user, outside the
       # containment the harness builds for the contributor's code.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -62,7 +62,7 @@ jobs:
             echo "ref=refs/pull/$PR/head" >> "$GITHUB_OUTPUT"
             echo "::notice::refs/pull/$PR/merge unavailable (likely merge conflict); falling back to /head"
           fi
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           ref: ${{ steps.pr_ref.outputs.ref }}
           allow-unsafe-pr-checkout: true
