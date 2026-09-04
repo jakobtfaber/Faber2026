@@ -6,11 +6,11 @@ _Only scientific, visual, and operational-authority decisions. Silence leaves ev
 
 **Decision:** How should the still-open Zach component-count question proceed now that seed scatter makes the frozen all-variance acceptance rule unresolvable at gain-prior variances 10 and 100?
 
-**Recommended:** `restrict-s2-1` — Restricting the comparison to gain-prior variance 1 is the smallest experiment that preserves multi-seed stability evidence: five additional fits complete C2D4 seeds 20220208 and 20220209 plus C2D5 for all three seeds. The existing variance-1 C2D4-minus-C2D3 step is -25.91 and the C2D3 seed spread contributes 20.0 after the contract's factor of two. This requires a recorded contract amendment before any fit runs or value is admitted.
+**Recommended:** `restrict-s2-1` — Restricting the comparison to gain-prior variance 1 is the smallest experiment that preserves multi-seed stability evidence: seven additional contract fits complete C2D3 and C2D4 seeds 20220208 and 20220209 plus C2D5 for all three seeds. The existing variance-1 C2D4-minus-C2D3 step is -25.91 and the diagnostic C2D3 seed spread contributes 20.0 after the contract's factor of two. This requires a recorded contract amendment before any fit runs or value is admitted.
 
 **Choose:**
 
-- `restrict-s2-1` — Amend the experiment to variance 1 only and run five remaining multi-seed fits; adjudicate C2D3, C2D4 and C2D5 there.
+- `restrict-s2-1` — Amend the experiment to variance 1 only and run seven remaining contract fits; adjudicate C2D3, C2D4 and C2D5 across three seeds there.
 - `resolve-sampler-split` — Keep all three variances, define a convergence gate, and rerun trapped rungs with a stronger sampler before adjudication.
 - `owner-morphology` — Use the contract fallback: record the owner-confirmed morphology while leaving fitted parameters and count evidence unaccepted.
 
