@@ -1,7 +1,7 @@
 # Controlled joint-scattering v4 owner review
 
-Status: owner scientific and visual decision pending. No panel is approved,
-review-admitted, or manuscript-eligible.
+Status: owner selected revise for all three panels on 2026-09-04. No panel is
+approved, review-admitted, or manuscript-eligible.
 
 All three v4 panels reproduce exactly and are bound to complete controlled-run
 receipts. Full-size inspection nevertheless finds scientific-readiness defects
@@ -22,7 +22,7 @@ three-panel packet, with **revise** recommended for all three.
   residual structure remains. Reproduction does not make that morphology
   scientifically adequate.
 
-Owner choice: **approve for independent review** / **revise**
+Owner choice: **revise** (2026-09-04)
 
 ### JohnDoeII — C2D2
 
@@ -36,7 +36,7 @@ Owner choice: **approve for independent review** / **revise**
   than the fitted window. The DSA-110 residual profile also retains repeated
   excursions. The visually quieter map is not enough to clear these guards.
 
-Owner choice: **approve for independent review** / **revise**
+Owner choice: **revise** (2026-09-04)
 
 ### Zach — C2D4
 
@@ -49,7 +49,7 @@ Owner choice: **approve for independent review** / **revise**
   low-fluence guards fire; strong time-localized residual structure is plainly
   visible in both bands. This is not ready for scientific or visual admission.
 
-Owner choice: **approve for independent review** / **revise**
+Owner choice: **revise** (2026-09-04)
 
 ## Boundaries
 
@@ -59,5 +59,5 @@ measurement. Choosing “approve for independent review” would admit only the
 exact SVG and its receipt-bound diagnostic bundle to a later review step; it
 would not approve a figure, trust a value, or enable manuscript promotion.
 
-Machine-readable paths, hashes, recommendations, and unset owner decisions are
+Machine-readable paths, hashes, recommendations, and recorded owner decisions are
 in [`decision-packet.json`](decision-packet.json).

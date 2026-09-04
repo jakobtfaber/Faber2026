@@ -4,7 +4,6 @@ import hashlib
 import json
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 PACKET_DIR = (
     ROOT
@@ -25,7 +24,7 @@ def sha256(path: Path) -> str:
 def test_owner_packet_is_exact_and_fail_closed() -> None:
     packet = json.loads(PACKET.read_text(encoding="utf-8"))
 
-    assert packet["status"] == "owner_scientific_visual_decision_pending"
+    assert packet["status"] == "owner_revision_required"
     assert packet["scientific_trust"] == "pending"
     assert packet["manuscript_promotion_enabled"] is False
     assert [panel["burst"] for panel in packet["panels"]] == [
@@ -38,7 +37,7 @@ def test_owner_packet_is_exact_and_fail_closed() -> None:
         receipt = (PACKET_DIR / panel["verification_receipt_path"]).resolve()
         assert sha256(receipt) == panel["verification_receipt_sha256"]
         assert panel["recommendation"] == "revise"
-        assert panel["owner_decision"] is None
+        assert panel["owner_decision"] == "revise"
         assert panel["panel_review_eligible"] is False
         assert panel["panel_approved"] is False
         assert panel["readiness_flags"]
@@ -48,6 +47,6 @@ def test_ticket_stops_at_owner_gate() -> None:
     ticket = TICKET.read_text(encoding="utf-8")
     normalized = " ".join(ticket.split())
 
-    assert "owner scientific and visual decision pending" in ticket
+    assert "owner selected revision for all three panels" in ticket
     assert "No panel was promoted" in normalized
     assert "fitted values remain untrusted" in normalized
