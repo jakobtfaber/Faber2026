@@ -59,5 +59,5 @@ measurement. Choosing “approve for independent review” would admit only the
 exact SVG and its receipt-bound diagnostic bundle to a later review step; it
 would not approve a figure, trust a value, or enable manuscript promotion.
 
-Machine-readable paths, hashes, recommendations, and unset owner decisions are
+Machine-readable paths, hashes, recommendations, and recorded owner decisions are
 in [`decision-packet.json`](decision-packet.json).

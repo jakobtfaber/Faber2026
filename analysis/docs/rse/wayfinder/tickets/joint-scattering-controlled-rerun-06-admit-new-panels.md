@@ -50,10 +50,10 @@ its fail-closed effect are recorded above and in the machine-readable packet.
     {
       "label": "Owner review with exact panels and diagnostic reasons",
       "path": "docs/rse/verify/joint-scattering-controlled-rerun-06-owner-review-20260723/README.md",
-      "sha256": "b548c532c345a6395c57e272560b38b3ec7b65cc169f4f988db82297b5fae1d2"
+      "sha256": "7f930986efc84284c0299a8b75e77d0a0a3f29b378e207e38bfcbbf40c1331a2"
     },
     {
-      "label": "Machine-readable panel identities, receipt hashes and unset decisions",
+      "label": "Machine-readable panel identities, receipt hashes and recorded revise decisions",
       "path": "docs/rse/verify/joint-scattering-controlled-rerun-06-owner-review-20260723/decision-packet.json",
       "sha256": "91305964d71ea5a75e46a2a33b8b8d0b7f0720d9b169055fbaf8afe983cb7fba"
     }
@@ -105,7 +105,7 @@ admission:
 The smallest owner packet is
 [`joint-scattering-controlled-rerun-06-owner-review-20260723`](../../verify/joint-scattering-controlled-rerun-06-owner-review-20260723/README.md).
 It contains the exact reproduced SVGs, hashes, receipt bindings, readiness
-flags, and unset owner decisions.
+flags, and recorded revise decisions.
 
 No panel was promoted or added to the final-draft figure queue. Registry trust
 and fitted values remain untrusted; manuscript promotion remains disabled.
