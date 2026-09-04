@@ -122,22 +122,59 @@ def pair_records(
     return pairs, malformed_pairs
 
 
-def run(roots: tuple[Path, ...]) -> dict[str, Any]:
-    resolved_roots = [str(root.resolve()) for root in roots]
+def inspect_roots(roots: tuple[Path, ...]) -> list[dict[str, Any]]:
     paths = [
         (root, path) for root in roots for path in sorted(root.glob(PATTERN))
     ]
-    cubes = [inspect_cube(path, root) for root, path in paths]
+    return [inspect_cube(path, root) for root, path in paths]
+
+
+def find_topology_errors(
+    roots: tuple[Path, ...], resolved_roots: list[str], filename_count: int
+) -> list[str]:
+    rules = (
+        (len(roots) == 2, "expected-exactly-two-roots"),
+        (len(set(resolved_roots)) == len(resolved_roots), "roots-not-distinct"),
+        (filename_count == 12, "expected-exactly-twelve-filenames"),
+    )
+    return [message for valid, message in rules if not valid]
+
+
+def build_summary(
+    cubes: list[dict[str, Any]],
+    filename_count: int,
+    pairs: list[dict[str, Any]],
+    failed: list[str],
+    malformed_pairs: list[str],
+    topology_errors: list[str],
+) -> dict[str, Any]:
+    all_24_pass = all(
+        (
+            len(cubes) == 24,
+            not failed,
+            not malformed_pairs,
+            not topology_errors,
+        )
+    )
+    return {
+        "cube_count": len(cubes),
+        "unique_filename_count": filename_count,
+        "direct_pass_count": len(cubes) - len(failed),
+        "direct_fail_count": len(failed),
+        "pair_count": len(pairs),
+        "malformed_pair_count": len(malformed_pairs),
+        "topology_error_count": len(topology_errors),
+        "all_24_pass": all_24_pass,
+    }
+
+
+def run(roots: tuple[Path, ...]) -> dict[str, Any]:
+    resolved_roots = [str(root.resolve()) for root in roots]
+    cubes = inspect_roots(roots)
     by_name = group_by_filename(cubes)
     pairs, malformed_pairs = pair_records(by_name, resolved_roots)
     failed = [cube["path"] for cube in cubes if cube["verdict"] != "pass"]
-    topology_errors = []
-    if len(roots) != 2:
-        topology_errors.append("expected-exactly-two-roots")
-    if len(set(resolved_roots)) != len(resolved_roots):
-        topology_errors.append("roots-not-distinct")
-    if len(by_name) != 12:
-        topology_errors.append("expected-exactly-twelve-filenames")
+    topology_errors = find_topology_errors(roots, resolved_roots, len(by_name))
     return {
         "schema": "faber2026-chime-scattering-lineage-check/v1",
         "read_only": True,
@@ -149,21 +186,14 @@ def run(roots: tuple[Path, ...]) -> dict[str, Any]:
             "centroid_fraction_open_interval": [0.4, 0.6],
         },
         "roots": [str(root) for root in roots],
-        "summary": {
-            "cube_count": len(cubes),
-            "unique_filename_count": len(by_name),
-            "direct_pass_count": len(cubes) - len(failed),
-            "direct_fail_count": len(failed),
-            "pair_count": len(pairs),
-            "malformed_pair_count": len(malformed_pairs),
-            "topology_error_count": len(topology_errors),
-            "all_24_pass": (
-                len(cubes) == 24
-                and not failed
-                and not malformed_pairs
-                and not topology_errors
-            ),
-        },
+        "summary": build_summary(
+            cubes,
+            len(by_name),
+            pairs,
+            failed,
+            malformed_pairs,
+            topology_errors,
+        ),
         "failed_paths": failed,
         "malformed_pairs": malformed_pairs,
         "topology_errors": topology_errors,
