@@ -63,7 +63,7 @@ def profile_metrics(profile: np.ndarray) -> dict[str, Any]:
     }
 
 
-def inspect_cube(path: Path) -> dict[str, Any]:
+def inspect_cube(path: Path, root: Path) -> dict[str, Any]:
     cube = np.load(path, mmap_mode="r")
     if cube.ndim != 2:
         raise ValueError(f"{path}: expected two dimensions, got {cube.shape}")
@@ -71,6 +71,7 @@ def inspect_cube(path: Path) -> dict[str, Any]:
         profile = np.nanmean(cube, axis=0, dtype=np.float64)
     result = {
         "path": str(path),
+        "root": str(root.resolve()),
         "filename": path.name,
         "sha256": sha256(path),
         "bytes": path.stat().st_size,
@@ -82,29 +83,61 @@ def inspect_cube(path: Path) -> dict[str, Any]:
     return result
 
 
-def run(roots: tuple[Path, ...]) -> dict[str, Any]:
-    paths = [path for root in roots for path in sorted(root.glob(PATTERN))]
-    cubes = [inspect_cube(path) for path in paths]
+def group_by_filename(
+    cubes: list[dict[str, Any]],
+) -> dict[str, list[dict[str, Any]]]:
     by_name: dict[str, list[dict[str, Any]]] = {}
     for cube in cubes:
         by_name.setdefault(cube["filename"], []).append(cube)
-    pairs = []
+    return by_name
+
+
+def pair_records(
+    by_name: dict[str, list[dict[str, Any]]], expected_roots: list[str]
+) -> tuple[list[dict[str, Any]], list[str]]:
+    pairs: list[dict[str, Any]] = []
     for filename, matches in sorted(by_name.items()):
         hashes = {match["sha256"] for match in matches}
+        copy_roots = [match["root"] for match in matches]
+        roots_match = (
+            sorted(copy_roots) == sorted(expected_roots)
+            and len(set(copy_roots)) == len(copy_roots)
+        )
         pairs.append(
             {
                 "filename": filename,
                 "copies": len(matches),
                 "hashes_match": len(hashes) == 1,
+                "roots_match": roots_match,
                 "sha256": matches[0]["sha256"],
             }
         )
-    failed = [cube["path"] for cube in cubes if cube["verdict"] != "pass"]
     malformed_pairs = [
         pair["filename"]
         for pair in pairs
-        if pair["copies"] != len(roots) or not pair["hashes_match"]
+        if pair["copies"] != 2
+        or not pair["hashes_match"]
+        or not pair["roots_match"]
     ]
+    return pairs, malformed_pairs
+
+
+def run(roots: tuple[Path, ...]) -> dict[str, Any]:
+    resolved_roots = [str(root.resolve()) for root in roots]
+    paths = [
+        (root, path) for root in roots for path in sorted(root.glob(PATTERN))
+    ]
+    cubes = [inspect_cube(path, root) for root, path in paths]
+    by_name = group_by_filename(cubes)
+    pairs, malformed_pairs = pair_records(by_name, resolved_roots)
+    failed = [cube["path"] for cube in cubes if cube["verdict"] != "pass"]
+    topology_errors = []
+    if len(roots) != 2:
+        topology_errors.append("expected-exactly-two-roots")
+    if len(set(resolved_roots)) != len(resolved_roots):
+        topology_errors.append("roots-not-distinct")
+    if len(by_name) != 12:
+        topology_errors.append("expected-exactly-twelve-filenames")
     return {
         "schema": "faber2026-chime-scattering-lineage-check/v1",
         "read_only": True,
@@ -123,10 +156,17 @@ def run(roots: tuple[Path, ...]) -> dict[str, Any]:
             "direct_fail_count": len(failed),
             "pair_count": len(pairs),
             "malformed_pair_count": len(malformed_pairs),
-            "all_24_pass": len(cubes) == 24 and not failed and not malformed_pairs,
+            "topology_error_count": len(topology_errors),
+            "all_24_pass": (
+                len(cubes) == 24
+                and not failed
+                and not malformed_pairs
+                and not topology_errors
+            ),
         },
         "failed_paths": failed,
         "malformed_pairs": malformed_pairs,
+        "topology_errors": topology_errors,
         "pairs": pairs,
         "cubes": cubes,
     }

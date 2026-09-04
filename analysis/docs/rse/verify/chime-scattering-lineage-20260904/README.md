@@ -1,6 +1,6 @@
 # CHIME scattering-input lineage check — 2026-09-04
 
-Status: **partial pass**. No tested cube has the greater-than-5-sigma edge
+Status: **direct-test partial pass**. No tested cube has the greater-than-5-sigma edge
 power expected from the generation-1 circular de-chirp defect. Sixteen of 24
 copies also pass the pre-registered centering test. The remaining eight copies
 (four byte-unique bursts) are inconclusive because their band-averaged profiles
@@ -12,7 +12,7 @@ does not close the full lineage gate.
 - Host: `lxd110h17`; run at `2026-09-04T17:19:21Z`.
 - Base repository revision: `5ad64c3521ca58407f6c69734c384ae28bea3036`.
 - Checker: `analysis/scripts/check_chime_scattering_lineage.py`, SHA-256
-  `e54fbbff5d701d8e5ae4db1be5e7a8ca8c2aed4623ee26ef7284e2e67767e194`.
+  `c60ff5d22153da48c0465641edb7fb4d132d19daa90b8c27be06787d6da1a4e7`.
 - Remote runtime: Python 3.8.10, NumPy 1.24.4.
 - h17 access was read-only. The checker opened arrays with NumPy memory
   mapping and streamed SHA-256; it wrote nothing on h17.
@@ -62,6 +62,17 @@ regions combined.
 Totals: 16 direct passes; 8 inconclusive copies; 0 edge-significance
 detections; 12 of 12 paired hashes match.
 
+## Existing cross-lineage failures
+
+This receipt does not supersede the six `fail` rows in
+`analysis/observations/studies/cube-integrity/cube_crosscheck_lags.csv`:
+casey −208 bins, freya −217, isha +98, mahi +22, phineas −64 and whitney
++15. The producing `cube_crosscheck.py` did not apply the time-of-arrival
+alignment required by P2.3, so those values cannot satisfy or reject P2.3's
+absolute-lag-below-five-bin criterion. They remain unresolved documented
+failures pending an aligned cross-lineage rerun. The direct edge and centering
+tests reported here address only P2.3(a–b).
+
 ## Scientific verdict
 
 The direct array test finds **no positive evidence that any of the 24 cubes
@@ -98,4 +109,5 @@ manuscript value becomes trusted from this receipt alone.
 
 An independent rerun at `2026-09-04T18:49:08Z` reproduced all 24 file hashes,
 12 matching pairs, 16 passes, eight inconclusive copies, zero edge detections,
-and every reported maximum signal-to-noise ratio and centroid.
+and every reported maximum signal-to-noise ratio and centroid. The focused
+suite contains nine passing tests, including fail-closed topology cases.
