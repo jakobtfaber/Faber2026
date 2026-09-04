@@ -1,7 +1,7 @@
 # Admit only newly reproduced joint-scattering panels
 
 - Type: `wayfinder:task` (AFK)
-- Status: owner scientific and visual decision pending (2026-07-23)
+- Status: open
 - Assignee: Jakob T. Faber
 - Blocked by: [Regenerate Oran C1D1](joint-scattering-controlled-rerun-03-regenerate-oran-c1d1.md), [Regenerate JohnDoeII C2D2](joint-scattering-controlled-rerun-04-regenerate-johndoeii-c2d2.md), [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
 - Map: [ApJ submission](../map-apj-submission.md)
@@ -31,6 +31,8 @@ manuscript promotion.
 - [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
 
 ## Agent review — 2026-07-23
+
+Owner scientific and visual decision pending since 2026-07-23.
 
 All three v4 bundles pass exact reproduction and provenance checks. Full-size
 inspection and the receipt-bound diagnostics do not support automatic

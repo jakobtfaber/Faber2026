@@ -1,8 +1,8 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:task` (AFK)
+- Type: `wayfinder:grilling` (HITL)
 - Status: open
-- Assignee: Orchestrator
+- Assignee: owner + agent (joint, interactive)
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Plan: [Controlled joint-scattering reruns](../../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md)
@@ -125,6 +125,34 @@ plausibility — not a cheap route to the component-count answer, and its output
 must never be mixed into that comparison. The component-count question remains
 open and unanswered.
 
+## Seed-scatter diagnostic (2026-09-04)
+
+Direct reads of the completed h17 joint-fit products expose two sampler
+families. The table gives C2D3 log evidence by stability seed; `2 × spread` is
+twice the sample standard deviation across the three seeds.
+
+| Gain-prior variance | Seed 20220207 | Seed 20220208 | Seed 20220209 | Spread | 2 × spread |
+|---:|---:|---:|---:|---:|---:|
+| 1 | 29990.56 | 30008.90 | 30006.57 | 10.0 | 20.0 |
+| 10 | 29175.37 | 30017.28 | 30034.24 | 491.0 | 982.1 |
+| 100 | 29088.71 | 29890.35 | 29113.25 | 455.9 | 911.8 |
+
+At variance 1, the completed seed-20220207 C2D4 fit gives a C2D4-minus-C2D3
+step of -25.91. At variance 10 the same step is +7.80, but the seed spread is
+about 982 after the contract's factor of two, so it cannot clear the threshold
+of 5. Reported per-fit errors are only 0.47 to 0.57. All fourteen diagnostic
+products report 1000 live points; the five campaign receipts report complete
+outputs. The seed-20220207 C2D3 values are bit-identical between the campaign
+and diagnostic trees. Three of the five completed campaign rungs occupy the
+lower-log-evidence family.
+
+The seed-20220208 and seed-20220209 values come from the quarantined r4 tree
+and are diagnostic evidence about sampler behaviour only. They are not
+contract rungs and cannot enter count adjudication. This diagnostic therefore
+does not choose a count; it shows that the frozen design cannot meet its own
+all-variance acceptance rule at variances 10 and 100 without first resolving
+the sampler-family split.
+
 ## Queued next steps (agent work, no owner decision pending)
 
 Item 2 below is **done** — that is the pivot's cost ladder, recorded above.
@@ -169,6 +197,58 @@ Also corrected 2026-08-04: issue #205's body still specified native
 superseded. The issue body now states 65.536 microseconds and cites this ticket
 and the frozen contract. The contract and the running campaign were already
 correct; only the issue text was stale.
+
+## Owner decision card
+
+```json
+{
+  "id": "zach-count-adjudicability",
+  "kind": "scientific",
+  "title": "Zach component-count adjudicability",
+  "decision": "How should the still-open Zach component-count question proceed now that seed scatter makes the frozen all-variance acceptance rule unresolvable at gain-prior variances 10 and 100?",
+  "recommended": {
+    "choice": "restrict-s2-1",
+    "reason": "Restricting the comparison to gain-prior variance 1 is the smallest experiment that preserves multi-seed stability evidence: five additional fits complete C2D4 seeds 20220208 and 20220209 plus C2D5 for all three seeds. The existing variance-1 C2D4-minus-C2D3 step is -25.91 and the C2D3 seed spread contributes 20.0 after the contract's factor of two. This requires a recorded contract amendment before any fit runs or value is admitted."
+  },
+  "choices": [
+    {
+      "id": "restrict-s2-1",
+      "label": "Amend the experiment to variance 1 only and run five remaining multi-seed fits; adjudicate C2D3, C2D4 and C2D5 there."
+    },
+    {
+      "id": "resolve-sampler-split",
+      "label": "Keep all three variances, define a convergence gate, and rerun trapped rungs with a stronger sampler before adjudication."
+    },
+    {
+      "id": "owner-morphology",
+      "label": "Use the contract fallback: record the owner-confirmed morphology while leaving fitted parameters and count evidence unaccepted."
+    }
+  ],
+  "context": [
+    "The 2026-08-05 pivot retired the costly 27-rung schedule but explicitly left the component-count question open and unanswered.",
+    "Across diagnostic C2D3 seeds, twice the log-evidence spread is 20.0 at variance 1, 982.1 at variance 10 and 911.8 at variance 100; the latter two overwhelm the acceptance threshold of 5.",
+    "The extra seeds are quarantined diagnostic products, not admissible contract rungs; no count or fitted value is promoted by this card."
+  ],
+  "evidence": [
+    {
+      "label": "Frozen count contract, numerical acceptance rule and morphology fallback",
+      "path": "scattering/studies/joint-refits/zach_count_20260729/MANIFEST.md",
+      "sha256": "765ecbb152c1aa7af448c51aafbff50ae410bb5dc2f1335b2b6993249e03d677"
+    },
+    {
+      "label": "Campaign stop state and five receipt-complete rungs",
+      "path": "docs/rse/verify/zach-count-relaunch-20260804/README.md",
+      "sha256": "fde405a6dd8e682992a290f52266e575079a90c0cf7277b15b144f6f20f55ccb"
+    }
+  ],
+  "effect": "Selects either a recorded variance-1 contract amendment, a convergence investigation before the full comparison, or the existing morphology-only fallback. Nothing runs and no value is promoted until the choice is recorded.",
+  "recorder": {
+    "path": "docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+    "action": "Record the chosen option in this ticket before amending the contract, launching any fit, or applying the morphology fallback."
+  },
+  "priority": 30
+}
+```
 
 ## Owner decision card — sampler cost, resolved 2026-08-05
 
