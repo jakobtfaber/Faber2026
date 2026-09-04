@@ -144,10 +144,11 @@ def build_summary(
     cubes: list[dict[str, Any]],
     filename_count: int,
     pairs: list[dict[str, Any]],
-    failed: list[str],
-    malformed_pairs: list[str],
-    topology_errors: list[str],
+    checks: dict[str, list[str]],
 ) -> dict[str, Any]:
+    failed = checks["failed_paths"]
+    malformed_pairs = checks["malformed_pairs"]
+    topology_errors = checks["topology_errors"]
     all_24_pass = all(
         (
             len(cubes) == 24,
@@ -173,8 +174,15 @@ def run(roots: tuple[Path, ...]) -> dict[str, Any]:
     cubes = inspect_roots(roots)
     by_name = group_by_filename(cubes)
     pairs, malformed_pairs = pair_records(by_name, resolved_roots)
-    failed = [cube["path"] for cube in cubes if cube["verdict"] != "pass"]
-    topology_errors = find_topology_errors(roots, resolved_roots, len(by_name))
+    checks = {
+        "failed_paths": [
+            cube["path"] for cube in cubes if cube["verdict"] != "pass"
+        ],
+        "malformed_pairs": malformed_pairs,
+        "topology_errors": find_topology_errors(
+            roots, resolved_roots, len(by_name)
+        ),
+    }
     return {
         "schema": "faber2026-chime-scattering-lineage-check/v1",
         "read_only": True,
@@ -190,13 +198,9 @@ def run(roots: tuple[Path, ...]) -> dict[str, Any]:
             cubes,
             len(by_name),
             pairs,
-            failed,
-            malformed_pairs,
-            topology_errors,
+            checks,
         ),
-        "failed_paths": failed,
-        "malformed_pairs": malformed_pairs,
-        "topology_errors": topology_errors,
+        **checks,
         "pairs": pairs,
         "cubes": cubes,
     }

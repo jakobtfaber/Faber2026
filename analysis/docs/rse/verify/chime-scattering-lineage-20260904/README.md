@@ -12,7 +12,7 @@ does not close the full lineage gate.
 - Host: `lxd110h17`; run at `2026-09-04T17:19:21Z`.
 - Base repository revision: `5ad64c3521ca58407f6c69734c384ae28bea3036`.
 - Checker: `analysis/scripts/check_chime_scattering_lineage.py`, SHA-256
-  `66d1a0dc26a4b0c5016138fdf52267eee17f9cb8eb34c9f1631a21491cab42e4`.
+  `6e55b1ab2113414f00dd71cad2b72a00d8bf98272baf30f03cfcf0ff676384f1`.
 - Remote runtime: Python 3.8.10, NumPy 1.24.4.
 - h17 access was read-only. The checker opened arrays with NumPy memory
   mapping and streamed SHA-256; it wrote nothing on h17.
