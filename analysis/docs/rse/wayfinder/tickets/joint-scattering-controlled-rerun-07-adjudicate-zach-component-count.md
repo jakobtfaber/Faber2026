@@ -1,8 +1,8 @@
 # Adjudicate the bounded-window Zach component count
 
-- Type: `wayfinder:grilling` (HITL)
+- Type: `wayfinder:task` (AFK)
 - Status: open
-- Assignee: owner + agent (joint, interactive)
+- Assignee: Orchestrator
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
 - Map: [ApJ submission](../map-apj-submission.md)
 - Plan: [Controlled joint-scattering reruns](../../specs/plan-controlled-joint-scattering-reruns-2026-07-22.md)
@@ -153,6 +153,17 @@ does not choose a count; it shows that the frozen design cannot meet its own
 all-variance acceptance rule at variances 10 and 100 without first resolving
 the sampler-family split.
 
+## Owner decision — restrict the experiment to variance 1 (2026-09-04)
+
+- Decision: amend the component-count experiment to gain-prior variance 1
+  only, then compare C2D3, C2D4 and C2D5 across all three stability seeds.
+- Recorded: manuscript owner during the owner-queue walkthrough, 2026-09-04.
+- Required work: seven new admissible contract fits — C2D3 and C2D4 at seeds
+  20220208 and 20220209, plus C2D5 at all three seeds.
+- Boundary: the r4 products remain diagnostic-only and cannot satisfy the new
+  contract. No contract is amended, fit launched, count accepted or fitted
+  value promoted by recording this decision.
+
 ## Queued next steps (agent work, no owner decision pending)
 
 Item 2 below is **done** — that is the pivot's cost ladder, recorded above.
@@ -198,7 +209,10 @@ superseded. The issue body now states 65.536 microseconds and cites this ticket
 and the frozen contract. The contract and the running campaign were already
 correct; only the issue text was stale.
 
-## Owner decision card
+## Owner decision card — adjudicability, resolved 2026-09-04
+
+Retained for provenance. The owner selected `restrict-s2-1` on 2026-09-04;
+the decision and its execution boundary are recorded above.
 
 ```json
 {

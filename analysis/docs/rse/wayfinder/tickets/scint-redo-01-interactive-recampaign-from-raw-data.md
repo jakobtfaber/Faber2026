@@ -3,7 +3,7 @@
 - Type: `wayfinder:grilling` (HITL)
 - Status: open
 - Assignee: owner + agent (joint, interactive)
-- Blocked by: —
+- Blocked by: repository integration and worktree cleanup
 - Map: [ApJ submission](../map-apj-submission.md)
 - Authorization: owner charter, 2026-07-26
 
@@ -17,7 +17,7 @@
   "decision": "Should the interactive raw-data scintillation campaign resume?",
   "recommended": {
     "choice": "paused",
-    "reason": "Repository integration completed in the 2026-08-07 monorepo fold. Keep the campaign paused until the owner explicitly resumes the interactive checkpoints; one additional Traycer worktree remains and does not supply an automatic scientific go-ahead."
+    "reason": "Keep it paused until repository integration and worktree cleanup are complete."
   },
   "choices": [
     {
@@ -32,7 +32,7 @@
   "context": [
     "The 24-file raw-input set is frozen and accepted.",
     "All previous scintillation results remain first-pass rather than final manuscript measurements.",
-    "The repository was integrated by the 2026-08-07 monorepo fold; the remaining choice is whether the owner is ready to resume the interactive campaign."
+    "The owner directed execution to wait for a fully reconciled workspace."
   ],
   "evidence": [
     {
@@ -44,7 +44,7 @@
   "effect": "The choice either starts the next interactive checkpoint or preserves the current pause.",
   "recorder": {
     "path": "docs/rse/wayfinder/tickets/scint-redo-01-interactive-recampaign-from-raw-data.md",
-    "action": "Record the choice here before starting the next interactive checkpoint."
+    "action": "Record the choice and clear the blocker only after workspace reconciliation."
   },
   "priority": 50
 }
@@ -115,10 +115,6 @@ Consequences:
   begins from a fully reconciled workspace. Remaining sub-decisions when it
   resumes: DM reference data and band roles; uncertainty convention; then
   the one-burst pilot.
-
-Repository integration completed with the 2026-08-07 monorepo fold
-(`cb060fc7`). The obsolete free-text blocker was cleared on 2026-09-04 so the
-owner can decide whether to resume; this does not itself authorize execution.
 
 ## Resolution
 

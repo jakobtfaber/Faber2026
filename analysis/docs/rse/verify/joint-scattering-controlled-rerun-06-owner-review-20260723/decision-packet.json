@@ -1,6 +1,6 @@
 {
   "schema": "faber2026-controlled-joint-scattering-owner-review/v1",
-  "status": "owner_scientific_visual_decision_pending",
+  "status": "owner_revision_required",
   "scientific_trust": "pending",
   "manuscript_promotion_enabled": false,
   "panels": [
@@ -14,7 +14,7 @@
       "verification_receipt_sha256": "8369131511e8c14f71642c791e602453d8f9e5a62d82670658be2ffee11ce247",
       "reproduction_receipt_sha256": "2ed0932c686c27a36da454ecf6aced970ef5f136dac98ef58be813b64eea077f",
       "recommendation": "revise",
-      "owner_decision": null,
+      "owner_decision": "revise",
       "panel_review_eligible": false,
       "panel_approved": false,
       "readiness_flags": [
@@ -34,7 +34,7 @@
       "verification_receipt_sha256": "1858c6e4e5b58a81ef59e1d9ce8162fb1434795bea0c5944a08ac5f0470ef559",
       "reproduction_receipt_sha256": "f2b1fec84bb92cc69d9a4ef218f5fc05d7e8512fba059e04dfb540afc3e42326",
       "recommendation": "revise",
-      "owner_decision": null,
+      "owner_decision": "revise",
       "panel_review_eligible": false,
       "panel_approved": false,
       "readiness_flags": [
@@ -54,7 +54,7 @@
       "verification_receipt_sha256": "76f2540e709953d32ec586b12457f3613b50e7eed30f64c2878499bced7af9dd",
       "reproduction_receipt_sha256": "d8a24df4a12798db29f25e4ce873590ce7a8d95447359a6a4dcea32a78bb46da",
       "recommendation": "revise",
-      "owner_decision": null,
+      "owner_decision": "revise",
       "panel_review_eligible": false,
       "panel_approved": false,
       "readiness_flags": [
