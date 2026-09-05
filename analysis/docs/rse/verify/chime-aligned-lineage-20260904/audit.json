@@ -1,0 +1,597 @@
+{
+  "schema": "chime-alignment-prerequisites-v1",
+  "status": "aligned-verification-blocked",
+  "runtime": {
+    "python": "3.8.10",
+    "numpy": "1.24.4",
+    "platform": "Linux-5.4.0-216-generic-x86_64-with-glibc2.29",
+    "host": "lxd110h17"
+  },
+  "reference_builder": {
+    "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/scripts/upchannelize_chime.py",
+    "sha256": "45761458bde9085dbb6ce0c662f48678ee38b4417902718c9ef67088a3332a0d",
+    "bytes": 17055
+  },
+  "events": [
+    {
+      "burst": "casey",
+      "native": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes/casey_chime_I_491_2085_32000b_cntr_bpc.npy",
+        "sha256": "79e9cba92716263d7644cafafe4d35a3ea646f18509be094033b67c6fc4440c4",
+        "bytes": 131072128,
+        "shape": [
+          1024,
+          32000
+        ],
+        "dtype": "float32"
+      },
+      "native_dt_s_config": 2.56e-06,
+      "native_dm_filename": 491.2085,
+      "reference": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/casey_chime_upchan.npy",
+        "sha256": "5daaaa0253c4039f0271377897cecdc773e815d154035cadfac66bb722c40091",
+        "bytes": 86253440,
+        "shape": [
+          12336,
+          1748
+        ],
+        "dtype": "float32",
+        "frequency_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/casey_chime_freq.npy",
+          "sha256": "045c266606d2364479a55c4c108fb0d2f46001062eabb27e311e77bc21836e33",
+          "bytes": 98816,
+          "shape": [
+            12336
+          ],
+          "dtype": "float64"
+        },
+        "time0_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/casey_time0_metadata.json",
+          "sha256": "7b82a72c230a55eb05b03ddde36845d8a8255723e26cbacab8723a63bcc12aef",
+          "bytes": 23165
+        },
+        "generation_log": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/upchannelize_casey_noshift_20260706.log",
+          "sha256": "292c0ac93e7c45ec968ba2c7e2e891e85ee3ee539d23487d82725855492644c2",
+          "bytes": 502
+        },
+        "dt_s": 8.192e-05,
+        "dm": 491.207
+      },
+      "reference_sample_in_native_bins": 32.0,
+      "native_origin_evidence": null,
+      "aligned_lag_native_bins": null,
+      "cross_verdict": "blocked-missing-native-crop-origin",
+      "diagnostics": [
+        {
+          "width_native_samples": 1,
+          "width_us": 2.56,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 118.68382446122165,
+          "edge_max_snr": 2.8338485624618652,
+          "noise_mad": 0.0005614719995157245
+        }
+      ]
+    },
+    {
+      "burst": "freya",
+      "native": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes/freya_chime_I_912_4067_32000b_cntr_bpc.npy",
+        "sha256": "55561c3d9daad2023f876d62e7579ecea987b214022882a6930fe8c242d59f80",
+        "bytes": 131072128,
+        "shape": [
+          1024,
+          32000
+        ],
+        "dtype": "float32"
+      },
+      "native_dt_s_config": 2.56e-06,
+      "native_dm_filename": 912.4067,
+      "reference": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/freya_chime_upchan.npy",
+        "sha256": "f7ce42985a99eeb70565abb1b8458ec888fa2e65396cef2e2bf9b367941f62b9",
+        "bytes": 99678080,
+        "shape": [
+          57024,
+          437
+        ],
+        "dtype": "float32",
+        "frequency_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/freya_chime_freq.npy",
+          "sha256": "b686f99e71ad37a0b9014aae8ea480865b7eda8c94f0eb6c1d82e11d6a800255",
+          "bytes": 456320,
+          "shape": [
+            57024
+          ],
+          "dtype": "float64"
+        },
+        "time0_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/freya_time0_metadata.json",
+          "sha256": "c6bfb1661936a19b03b34912dec9466eff24ac0110470df11699c85b79994fff",
+          "bytes": 28631
+        },
+        "generation_log": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/upchannelize_freya_noshift_20260704.log",
+          "sha256": "04f08cfd310ccb591b289e8d460177da0995599d584b24abe32ba4d487357e2b",
+          "bytes": 510
+        },
+        "dt_s": 0.00032768,
+        "dm": 912.4
+      },
+      "reference_sample_in_native_bins": 128.0,
+      "native_origin_evidence": null,
+      "aligned_lag_native_bins": null,
+      "cross_verdict": "blocked-missing-native-crop-origin",
+      "diagnostics": [
+        {
+          "width_native_samples": 1,
+          "width_us": 2.56,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 30.330971252610464,
+          "edge_max_snr": 3.4242299704269485,
+          "noise_mad": 0.0011320149519089234
+        }
+      ]
+    },
+    {
+      "burst": "isha",
+      "native": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes/isha_chime_I_411_4359_32000b_cntr_bpc.npy",
+        "sha256": "c372d6cb2ef62c1ceca28fb6f130cc6fac253bcf97087c3f0555c3f4580b9c2c",
+        "bytes": 131072128,
+        "shape": [
+          1024,
+          32000
+        ],
+        "dtype": "float32"
+      },
+      "native_dt_s_config": 2.56e-06,
+      "native_dm_filename": 411.4359,
+      "reference": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/isha_chime_upchan.npy",
+        "sha256": "19053ac881c4bdae5605758539e6268aee4637777b894be6074c36086e3a2f34",
+        "bytes": 91860096,
+        "shape": [
+          210688,
+          109
+        ],
+        "dtype": "float32",
+        "frequency_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/isha_chime_freq.npy",
+          "sha256": "0f43476df77e4edbcad3e91818002d917dd88a924eec788005e3eaabcdc588db",
+          "bytes": 1685632,
+          "shape": [
+            210688
+          ],
+          "dtype": "float64"
+        },
+        "time0_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/isha_time0_metadata.json",
+          "sha256": "7200ed6380a049e0952db0fbc5ee76189eb2217f71bf4cecc9905a8ff29492f2",
+          "bytes": 24769
+        },
+        "generation_log": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/upchannelize_isha_noshift_20260706.log",
+          "sha256": "a97616f6b0e1077f5fc49593f43648fc419dec50938a832a304642e3b3e0f353",
+          "bytes": 500
+        },
+        "dt_s": 0.00131072,
+        "dm": 411.568
+      },
+      "reference_sample_in_native_bins": 512.0,
+      "native_origin_evidence": null,
+      "aligned_lag_native_bins": null,
+      "cross_verdict": "blocked-missing-native-crop-origin",
+      "diagnostics": [
+        {
+          "width_native_samples": 1,
+          "width_us": 2.56,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 4.876500499282465,
+          "edge_max_snr": 3.7522559757230103,
+          "noise_mad": 0.0028911158739982775
+        },
+        {
+          "width_native_samples": 4,
+          "width_us": 10.24,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 5.605797740160846,
+          "edge_max_snr": 2.4079413950141633,
+          "noise_mad": 0.0015296993831393007
+        },
+        {
+          "width_native_samples": 16,
+          "width_us": 40.96,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 8.045212118305525,
+          "edge_max_snr": 1.9830641501405506,
+          "noise_mad": 0.0007936666595136167
+        },
+        {
+          "width_native_samples": 64,
+          "width_us": 163.84,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 12.173727248917206,
+          "edge_max_snr": 1.783184837866808,
+          "noise_mad": 0.0004435854220302772
+        },
+        {
+          "width_native_samples": 256,
+          "width_us": 655.36,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 25.406248003623325,
+          "edge_max_snr": 0.9127955389825169,
+          "noise_mad": 0.00018685640276432263
+        },
+        {
+          "width_native_samples": 1024,
+          "width_us": 2621.44,
+          "discarded_tail_samples": 256,
+          "central_max_snr": 27.833743528658598,
+          "edge_max_snr": -0.8629165536583954,
+          "noise_mad": 0.00012200629786154142
+        }
+      ]
+    },
+    {
+      "burst": "mahi",
+      "native": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes/mahi_chime_I_960_1316_32000b_cntr_bpc.npy",
+        "sha256": "be722c48157beb989c53b209f0842e5445f08d7695cba49f23593c6b5d06d61f",
+        "bytes": 131072128,
+        "shape": [
+          1024,
+          32000
+        ],
+        "dtype": "float32"
+      },
+      "native_dt_s_config": 2.56e-06,
+      "native_dm_filename": 960.1316,
+      "reference": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/mahi_chime_upchan.npy",
+        "sha256": "1a39b0ef474503d464e439ad2791a7b459efdceb942ac9358839a0725316f045",
+        "bytes": 83607680,
+        "shape": [
+          387072,
+          54
+        ],
+        "dtype": "float32",
+        "frequency_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/mahi_chime_freq.npy",
+          "sha256": "bddf6341c97d77bfb7ada3e62a3a95509858304bd9484233cf2a2a0265f41590",
+          "bytes": 3096704,
+          "shape": [
+            387072
+          ],
+          "dtype": "float64"
+        },
+        "time0_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/mahi_time0_metadata.json",
+          "sha256": "96dad0bf84954aeb53a4dddfa75fa67caeb4257abe93f4c8d10ece20121cd008",
+          "bytes": 23451
+        },
+        "generation_log": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/upchannelize_mahi_noshift_20260706.log",
+          "sha256": "4e15d0171a01fc82c4f485edb0d2bab022afca0774bc3edb98987f8c45e39932",
+          "bytes": 499
+        },
+        "dt_s": 0.00262144,
+        "dm": 960.128
+      },
+      "reference_sample_in_native_bins": 1024.0,
+      "native_origin_evidence": null,
+      "aligned_lag_native_bins": null,
+      "cross_verdict": "blocked-missing-native-crop-origin",
+      "diagnostics": [
+        {
+          "width_native_samples": 1,
+          "width_us": 2.56,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 4.375396569317125,
+          "edge_max_snr": 3.1748659334537552,
+          "noise_mad": 0.0026701037045473493
+        },
+        {
+          "width_native_samples": 4,
+          "width_us": 10.24,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 4.6974760553203145,
+          "edge_max_snr": 2.8686229204708265,
+          "noise_mad": 0.001371476940253817
+        },
+        {
+          "width_native_samples": 16,
+          "width_us": 40.96,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 6.3405041890111935,
+          "edge_max_snr": 1.5343799068070472,
+          "noise_mad": 0.000737109143059374
+        },
+        {
+          "width_native_samples": 64,
+          "width_us": 163.84,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 9.921229018402167,
+          "edge_max_snr": 1.6856420310762394,
+          "noise_mad": 0.00038801523958659575
+        },
+        {
+          "width_native_samples": 256,
+          "width_us": 655.36,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 14.61487085186838,
+          "edge_max_snr": -0.3087689899208841,
+          "noise_mad": 0.0001949657801359582
+        },
+        {
+          "width_native_samples": 1024,
+          "width_us": 2621.44,
+          "discarded_tail_samples": 256,
+          "central_max_snr": 14.78437175461891,
+          "edge_max_snr": -0.1317696612346493,
+          "noise_mad": 0.00011789149221731835
+        }
+      ]
+    },
+    {
+      "burst": "oran",
+      "native": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes/oran_chime_I_397_0153_32000b_cntr_bpc.npy",
+        "sha256": "73ca14a4d467e7a612cb5c8a9df5d1b17e4dba448e23710663dd1195b0f12092",
+        "bytes": 131072128,
+        "shape": [
+          1024,
+          32000
+        ],
+        "dtype": "float32"
+      },
+      "native_dt_s_config": 2.56e-06,
+      "native_dm_filename": 397.0153,
+      "reference": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/oran_chime_upchan.npy",
+        "sha256": "f98a306f3e22f52057c05773eb1e751dce7d2c8d3994792a17e2830ec71417e2",
+        "bytes": 123742336,
+        "shape": [
+          108928,
+          284
+        ],
+        "dtype": "float32",
+        "frequency_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/oran_chime_freq.npy",
+          "sha256": "36fe0d015b66c44ca9ca02e2ba4b7ddcafe105d4058e14384175612dedf9e868",
+          "bytes": 871552,
+          "shape": [
+            108928
+          ],
+          "dtype": "float64"
+        },
+        "time0_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/oran_time0_metadata.json",
+          "sha256": "78d13fda63af8cfdb69b25bec96aa333df1b33f4dc034b6708108f8b4c7fd91b",
+          "bytes": 25658
+        },
+        "generation_log": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/upchannelize_oran_noshift_20260707.log",
+          "sha256": "e63c308da9951e8b85c13070f968e38fac455f06e06b9e032297c90a948d6b33",
+          "bytes": 500
+        },
+        "dt_s": 0.00065536,
+        "dm": 396.882
+      },
+      "reference_sample_in_native_bins": 256.0,
+      "native_origin_evidence": null,
+      "aligned_lag_native_bins": null,
+      "cross_verdict": "blocked-missing-native-crop-origin",
+      "diagnostics": [
+        {
+          "width_native_samples": 1,
+          "width_us": 2.56,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 4.265272832998018,
+          "edge_max_snr": 3.1676637282589666,
+          "noise_mad": 0.002670270290664482
+        },
+        {
+          "width_native_samples": 4,
+          "width_us": 10.24,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 4.239476393370218,
+          "edge_max_snr": 2.1307901329137677,
+          "noise_mad": 0.0013995258893765908
+        },
+        {
+          "width_native_samples": 16,
+          "width_us": 40.96,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 4.241495015313619,
+          "edge_max_snr": 1.437554392412698,
+          "noise_mad": 0.0007750552469136758
+        },
+        {
+          "width_native_samples": 64,
+          "width_us": 163.84,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 5.905079471452868,
+          "edge_max_snr": 1.265992445545855,
+          "noise_mad": 0.0004566709057790556
+        },
+        {
+          "width_native_samples": 256,
+          "width_us": 655.36,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 8.905359094876529,
+          "edge_max_snr": 0.44690597338328036,
+          "noise_mad": 0.0002589049396335281
+        },
+        {
+          "width_native_samples": 1024,
+          "width_us": 2621.44,
+          "discarded_tail_samples": 256,
+          "central_max_snr": 8.31127832392344,
+          "edge_max_snr": 0.0,
+          "noise_mad": 0.00024116225626636753
+        }
+      ]
+    },
+    {
+      "burst": "phineas",
+      "native": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes/phineas_chime_I_610_2894_32000b_cntr_bpc.npy",
+        "sha256": "6f2e3f4c09c131af98dc061e3788fae6817406f4239e77e91dbe209631ebccd7",
+        "bytes": 131072128,
+        "shape": [
+          1024,
+          32000
+        ],
+        "dtype": "float32"
+      },
+      "native_dt_s_config": 2.56e-06,
+      "native_dm_filename": 610.2894,
+      "reference": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/phineas_chime_upchan.npy",
+        "sha256": "8bb56c07d73e2e8e583e94f0f7a96954356f0c7455d0f425fe0b9c52281b49aa",
+        "bytes": 132117376,
+        "shape": [
+          14512,
+          2276
+        ],
+        "dtype": "float32",
+        "frequency_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/phineas_chime_freq.npy",
+          "sha256": "38efd87c3935a986c98d56bb1e7184e02207e88c9dd71132e107fbb2d3bef9e9",
+          "bytes": 116224,
+          "shape": [
+            14512
+          ],
+          "dtype": "float64"
+        },
+        "time0_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/phineas_time0_metadata.json",
+          "sha256": "cb15bc2792c802c03c0c9982e87aa1240a5dee897f33ad0f2e455ea194a01ce6",
+          "bytes": 27275
+        },
+        "generation_log": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/upchannelize_phineas_noshift_20260706.log",
+          "sha256": "b260ac9c8b7e3311bd169c89e682ce5c180c39e99a2be70cf4e4387e75ca151d",
+          "bytes": 506
+        },
+        "dt_s": 8.192e-05,
+        "dm": 610.274
+      },
+      "reference_sample_in_native_bins": 32.0,
+      "native_origin_evidence": null,
+      "aligned_lag_native_bins": null,
+      "cross_verdict": "blocked-missing-native-crop-origin",
+      "diagnostics": [
+        {
+          "width_native_samples": 1,
+          "width_us": 2.56,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 4.816531872510376,
+          "edge_max_snr": 2.9750160539614368,
+          "noise_mad": 0.0025511975022496406
+        },
+        {
+          "width_native_samples": 4,
+          "width_us": 10.24,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 6.0116193509041,
+          "edge_max_snr": 2.559692516254686,
+          "noise_mad": 0.001409086462957309
+        },
+        {
+          "width_native_samples": 16,
+          "width_us": 40.96,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 8.943439445905488,
+          "edge_max_snr": 2.4096270561442625,
+          "noise_mad": 0.0007158233368133733
+        },
+        {
+          "width_native_samples": 64,
+          "width_us": 163.84,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 15.586071351900983,
+          "edge_max_snr": 1.5625751136951302,
+          "noise_mad": 0.0003763619690701456
+        },
+        {
+          "width_native_samples": 256,
+          "width_us": 655.36,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 24.575554571592846,
+          "edge_max_snr": 0.17777583181364387,
+          "noise_mad": 0.00022148988746703265
+        },
+        {
+          "width_native_samples": 1024,
+          "width_us": 2621.44,
+          "discarded_tail_samples": 256,
+          "central_max_snr": 41.00835577334425,
+          "edge_max_snr": -1.01916056457984,
+          "noise_mad": 0.0001190637691722699
+        }
+      ]
+    },
+    {
+      "burst": "whitney",
+      "native": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes/whitney_chime_I_462_1891_32000b_cntr_bpc.npy",
+        "sha256": "fb1e5c93291cf35d0b269ebfa6a63409954b4da0aac097b404b926c380f24959",
+        "bytes": 131072128,
+        "shape": [
+          1024,
+          32000
+        ],
+        "dtype": "float32"
+      },
+      "native_dt_s_config": 2.56e-06,
+      "native_dm_filename": 462.1891,
+      "reference": {
+        "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/whitney_chime_upchan.npy",
+        "sha256": "a5d108e44f4760db6ec5d454c29e64acb4a0f6deba43b15eda11dd57a447d418",
+        "bytes": 96545664,
+        "shape": [
+          13808,
+          1748
+        ],
+        "dtype": "float32",
+        "frequency_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/whitney_chime_freq.npy",
+          "sha256": "3367d19d3507f959ac2fbdf786c8f2b96448f1c10435a8570dd0396c9f421e0f",
+          "bytes": 110592,
+          "shape": [
+            13808
+          ],
+          "dtype": "float64"
+        },
+        "time0_file": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/whitney_time0_metadata.json",
+          "sha256": "0f3d932938f8191b5290c561b3bfe3523ad74bade0525eeb819449fd70d58984",
+          "bytes": 26815
+        },
+        "generation_log": {
+          "path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/upchannelize_whitney_noshift_20260706.log",
+          "sha256": "404501e3d2e19143f9ac8c668541f03037ff2ca9f183660a8f253918339d62b1",
+          "bytes": 506
+        },
+        "dt_s": 8.192e-05,
+        "dm": 462.174
+      },
+      "reference_sample_in_native_bins": 32.0,
+      "native_origin_evidence": null,
+      "aligned_lag_native_bins": null,
+      "cross_verdict": "blocked-missing-native-crop-origin",
+      "diagnostics": [
+        {
+          "width_native_samples": 1,
+          "width_us": 2.56,
+          "discarded_tail_samples": 0,
+          "central_max_snr": 5.570719999489807,
+          "edge_max_snr": 2.9106083358583765,
+          "noise_mad": 0.0024023986921202617
+        }
+      ]
+    }
+  ]
+}
