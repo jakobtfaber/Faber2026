@@ -118,9 +118,9 @@ Executed audit verifier SHA-256:
 Current source separates input loading, channel collection and reporting,
 and simplifies validation conditions; numerical thresholds are unchanged.
 Current waveform verifier SHA-256:
-`4b1a9b0354a8513ba2d3b73e13184c8cd2984b93dc1a35c771c50b854b0ba7f7`.
+`abd64454a4381fffb9bf2bd9b48ddf68fb66e2f5fce12065c4e26e317bc50410`.
 Current audit verifier SHA-256:
-`786c35eca14605ab0e85ab81532d90432bc108d41fbffd57b7f62ca2d13aeade`.
+`0b256bd46e3e956965a03f1d6b29028923e996e154cc38cf366c66661545dc6a`.
 Lockfile SHA-256:
 `3af5a39d2dd51bbb6e833df933fb0891156d62b7e0a7501ccceb496ee2cee43c`.
 

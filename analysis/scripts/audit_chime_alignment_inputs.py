@@ -52,9 +52,10 @@ def block_diagnostic(profile, width):
 def target_config(path):
     tree = ast.parse(path.read_text())
     for node in tree.body:
-        if isinstance(node, ast.Assign) and any(
-            isinstance(t, ast.Name) and t.id == "TARGETS" for t in node.targets
-        ):
+        if not isinstance(node, ast.Assign):
+            continue
+        names = [t.id for t in node.targets if isinstance(t, ast.Name)]
+        if "TARGETS" in names:
             return ast.literal_eval(node.value)
     raise ValueError("TARGETS literal missing")
 

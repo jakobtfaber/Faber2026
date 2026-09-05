@@ -65,7 +65,9 @@ def match_noise(reference, native):
     if origin + HOLD.start < 0 or origin + HOLD.stop > reference.size:
         return None
     held = correlation(native[HOLD], reference[origin + HOLD.start : origin + HOLD.stop])
-    if train_score < 0.95 or held < 0.95 or alternate > 0.5:
+    if train_score < 0.95 or held < 0.95:
+        return None
+    if alternate > 0.5:
         return None
     return {
         "origin_sample": origin,
@@ -158,14 +160,7 @@ def native_rejection(native):
     return None
 
 
-def collect_channels(h5, cube, dm):
-    matches, rejected = [], []
-    native_sum = np.zeros(32000)
-    reference_sum = np.zeros(32000)
-    groups = {label: [np.zeros(32000), np.zeros(32000), 0] for label in ("low", "high")}
-    native_finite = set(np.flatnonzero(np.isfinite(cube).any(axis=1)).tolist())
-    constant_channels = {i for i in native_finite if np.nanstd(cube[i]) == 0}
-    native_live = native_finite - constant_channels
+def frequency_ids(h5):
     frequency_map = h5["index_map/freq"][:]
     ids = frequency_map["id"].astype(int)
     if len(set(ids)) != len(ids):
@@ -174,20 +169,23 @@ def collect_channels(h5, cube, dm):
         raise ValueError("invalid frequency identities")
     if float(h5.attrs["delta_time"]) != 2.56e-6:
         raise ValueError("unexpected native cadence")
+    return ids
+
+
+def channel_results(h5, cube, dm, native_live):
+    ids = frequency_ids(h5)
     counters = h5["time0"]["fpga_count"]
-    present = 0
     for row, channel in enumerate(ids):
         native = np.asarray(cube[channel], dtype=float)
         if channel not in native_live:
             continue
         reason = native_rejection(native)
         if reason:
-            rejected.append({"channel_id": int(channel), "reason": reason})
+            yield int(channel), reason, 0
             continue
-        present += 1
         result = reconstruct_row(h5, row, native, dm)
         if isinstance(result, str):
-            rejected.append({"channel_id": int(channel), "reason": result})
+            yield int(channel), result, 1
             continue
         match, normal_native, normal_reference = result
         frequency = match["frequency_mhz"]
@@ -196,10 +194,29 @@ def collect_channels(h5, cube, dm):
         match["origin_at_400_s"] = (
             match["origin_sample"] * 2.56e-6 + ctime - K_DM * dm * (frequency**-2 - 400**-2)
         )
+        yield int(channel), (match, normal_native, normal_reference), 1
+
+
+def collect_channels(h5, cube, dm):
+    matches, rejected = [], []
+    native_sum = np.zeros(32000)
+    reference_sum = np.zeros(32000)
+    groups = {label: [np.zeros(32000), np.zeros(32000), 0] for label in ("low", "high")}
+    native_finite = set(np.flatnonzero(np.isfinite(cube).any(axis=1)).tolist())
+    constant_channels = {i for i in native_finite if np.nanstd(cube[i]) == 0}
+    native_live = native_finite - constant_channels
+    ids = frequency_ids(h5)
+    present = 0
+    for channel, result, usable in channel_results(h5, cube, dm, native_live):
+        present += usable
+        if isinstance(result, str):
+            rejected.append({"channel_id": channel, "reason": result})
+            continue
+        match, normal_native, normal_reference = result
         matches.append(match)
         native_sum += normal_native
         reference_sum += normal_reference
-        group = groups["low" if frequency < 600 else "high"]
+        group = groups["low" if match["frequency_mhz"] < 600 else "high"]
         group[0] += normal_native
         group[1] += normal_reference
         group[2] += 1
