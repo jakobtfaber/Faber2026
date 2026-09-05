@@ -235,23 +235,8 @@ def collect_channels(h5, cube, dm):
     )
 
 
-def finalize_report(report, native_sum, reference_sum, groups):
+def set_verdict(report):
     matches = report["matched_channels"]
-    if not matches:
-        report["verdict"] = "inconclusive-no-noise-alignment"
-        return report
-    origin = np.array([m["origin_at_400_s"] for m in matches])
-    spread = float(np.ptp(origin) / 2.56e-6)
-    report.update(
-        origin_at_400_s=float(np.median(origin)),
-        origin_spread_bins=spread,
-        pulse=pulse_lag(native_sum, reference_sum),
-        subbands={
-            label: {"channels": g[2], **pulse_lag(g[0], g[1])}
-            for label, g in groups.items()
-            if g[2]
-        },
-    )
     lag_ok = all(
         abs(x["lag_native_bins"]) < 5 and not x["search_boundary"]
         for x in [report["pulse"], *report["subbands"].values()]
@@ -271,9 +256,29 @@ def finalize_report(report, native_sum, reference_sum, groups):
     )
     report["verdict"] = (
         "heldout-waveform-identity-pass"
-        if all((lag_ok, identity_ok, support_ok, spread <= 1.1))
+        if all((lag_ok, identity_ok, support_ok, report["origin_spread_bins"] <= 1.1))
         else "inconclusive-alignment-or-support"
     )
+
+
+def finalize_report(report, native_sum, reference_sum, groups):
+    matches = report["matched_channels"]
+    if not matches:
+        report["verdict"] = "inconclusive-no-noise-alignment"
+        return report
+    origin = np.array([m["origin_at_400_s"] for m in matches])
+    spread = float(np.ptp(origin) / 2.56e-6)
+    report.update(
+        origin_at_400_s=float(np.median(origin)),
+        origin_spread_bins=spread,
+        pulse=pulse_lag(native_sum, reference_sum),
+        subbands={
+            label: {"channels": g[2], **pulse_lag(g[0], g[1])}
+            for label, g in groups.items()
+            if g[2]
+        },
+    )
+    set_verdict(report)
     report["plot_profiles"] = {
         "native": (native_sum / len(matches)).reshape(-1, 128).mean(1).tolist(),
         "reference": [
