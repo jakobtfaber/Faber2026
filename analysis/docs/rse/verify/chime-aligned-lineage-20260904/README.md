@@ -107,14 +107,20 @@ errors, edge coverage and runtime: [voltage-identity-final.jsonl](voltage-identi
 Base: `27c7d962d8cf64a897cb81aedfda0fc2cf586eda`.
 Executed verifier SHA-256 (first complete run):
 `49cceed743eb3c5cbb1a2689168013ee8b4176f2aa2febf9a92c58b725703f0c`.
-Current verifier SHA-256:
+Executed reporting-corrected verifier SHA-256:
 `d7291b750cef01ca9fe4af66e6c02b15013037511928e2a8943d12b09e655fc2`.
 The reporting-only correction names otherwise silently skipped unusable
 channels. Its full seven-event confirmation run completed successfully;
 all seven complete result dictionaries exactly equal the first run in
 `voltage-identity.jsonl`, preserving every reported scientific result.
-Audit verifier SHA-256:
+Executed audit verifier SHA-256:
 `8910e27b17c6747cf14723979edea4c3d79e55b280497d25924ce6efa8dbf6fa`.
+Current source separates input loading, channel collection and reporting,
+and simplifies validation conditions; numerical thresholds are unchanged.
+Current waveform verifier SHA-256:
+`4b1a9b0354a8513ba2d3b73e13184c8cd2984b93dc1a35c771c50b854b0ba7f7`.
+Current audit verifier SHA-256:
+`786c35eca14605ab0e85ab81532d90432bc108d41fbffd57b7f62ca2d13aeade`.
 Lockfile SHA-256:
 `3af5a39d2dd51bbb6e833df933fb0891156d62b7e0a7501ccceb496ee2cee43c`.
 

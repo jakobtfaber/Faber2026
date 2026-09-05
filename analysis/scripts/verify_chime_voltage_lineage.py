@@ -102,7 +102,7 @@ def reconstruct_row(h5, row, native, dm):
     valid = np.isfinite(voltage).all(axis=0)
     missing = np.flatnonzero(~valid)
     length = int(missing[0]) if missing.size else valid.size
-    if length < HOLD.stop or not np.isfinite(native).all() or np.std(native[TRAIN]) == 0:
+    if length < HOLD.stop or native_rejection(native):
         return "invalid-voltage-or-native-support"
     frequency = float(h5["index_map/freq"][row]["centre"])
     input_dm = float(h5["tiedbeam_baseband"].attrs.get("DM", 0))
@@ -133,7 +133,7 @@ def reconstruct_row(h5, row, native, dm):
     return match, native, reference
 
 
-def event(name):
+def event_inputs(name):
     cube_paths = list(
         Path("/data/research/astrophysics/frbs/chime-dsa-codetections/manifest_cubes").glob(
             name + "_chime_I_*_32000b_cntr_bpc.npy"
@@ -147,6 +147,18 @@ def event(name):
     if cube.shape != (1024, 32000):
         raise ValueError("unexpected native cube shape")
     dm = float(".".join(cube_path.stem.split("_")[3:5]))
+    return cube_path, raw_path, cube, dm
+
+
+def native_rejection(native):
+    if not np.isfinite(native).all():
+        return "nonfinite-native-support"
+    if np.std(native[TRAIN]) == 0:
+        return "constant-training-window"
+    return None
+
+
+def collect_channels(h5, cube, dm):
     matches, rejected = [], []
     native_sum = np.zeros(32000)
     reference_sum = np.zeros(32000)
@@ -154,64 +166,60 @@ def event(name):
     native_finite = set(np.flatnonzero(np.isfinite(cube).any(axis=1)).tolist())
     constant_channels = {i for i in native_finite if np.nanstd(cube[i]) == 0}
     native_live = native_finite - constant_channels
-    with h5py.File(raw_path, "r") as h5:
-        frequency_map = h5["index_map/freq"][:]
-        ids = frequency_map["id"].astype(int)
-        if len(set(ids)) != len(ids) or np.any(ids < 0) or np.any(ids >= 1024):
-            raise ValueError("invalid frequency identities")
-        if float(h5.attrs["delta_time"]) != 2.56e-6:
-            raise ValueError("unexpected native cadence")
-        counters = h5["time0"]["fpga_count"]
-        present = 0
-        for row, channel in enumerate(ids):
-            native = np.asarray(cube[channel], dtype=float)
-            if channel not in native_live:
-                continue
-            if not np.isfinite(native).all():
-                rejected.append({"channel_id": int(channel), "reason": "nonfinite-native-support"})
-                continue
-            if np.std(native[TRAIN]) == 0:
-                rejected.append({"channel_id": int(channel), "reason": "constant-training-window"})
-                continue
-            present += 1
-            result = reconstruct_row(h5, row, native, dm)
-            if isinstance(result, str):
-                rejected.append({"channel_id": int(channel), "reason": result})
-                continue
-            match, normal_native, normal_reference = result
-            frequency = match["frequency_mhz"]
-            ctime = (int(counters[row]) - int(counters[-1])) * 2.56e-6
-            match["channel_id"] = int(channel)
-            match["origin_at_400_s"] = (
-                match["origin_sample"] * 2.56e-6 + ctime - K_DM * dm * (frequency**-2 - 400**-2)
-            )
-            matches.append(match)
-            native_sum += normal_native
-            reference_sum += normal_reference
-            group = groups["low" if frequency < 600 else "high"]
-            group[0] += normal_native
-            group[1] += normal_reference
-            group[2] += 1
-    report = {
-        "burst": name,
-        "native_path": str(cube_path),
-        "raw_path": str(raw_path),
-        "native_sha256": sha256(cube_path),
-        "raw_sha256": sha256(raw_path),
-        "dm_filename_package_coordinate": dm,
-        "matched_channels": matches,
-        "native_present_channels": present,
-        "native_live_channels": len(native_live),
-        "native_constant_channels": sorted(constant_channels),
-        "native_channels_missing_from_h5": sorted(native_live - set(ids.tolist())),
-        "rejected_channels": rejected,
-        "runtime": {
-            "python": platform.python_version(),
-            "numpy": np.__version__,
-            "h5py": h5py.__version__,
-            "platform": platform.platform(),
+    frequency_map = h5["index_map/freq"][:]
+    ids = frequency_map["id"].astype(int)
+    if len(set(ids)) != len(ids):
+        raise ValueError("invalid frequency identities")
+    if np.any(ids < 0) or np.any(ids >= 1024):
+        raise ValueError("invalid frequency identities")
+    if float(h5.attrs["delta_time"]) != 2.56e-6:
+        raise ValueError("unexpected native cadence")
+    counters = h5["time0"]["fpga_count"]
+    present = 0
+    for row, channel in enumerate(ids):
+        native = np.asarray(cube[channel], dtype=float)
+        if channel not in native_live:
+            continue
+        reason = native_rejection(native)
+        if reason:
+            rejected.append({"channel_id": int(channel), "reason": reason})
+            continue
+        present += 1
+        result = reconstruct_row(h5, row, native, dm)
+        if isinstance(result, str):
+            rejected.append({"channel_id": int(channel), "reason": result})
+            continue
+        match, normal_native, normal_reference = result
+        frequency = match["frequency_mhz"]
+        ctime = (int(counters[row]) - int(counters[-1])) * 2.56e-6
+        match["channel_id"] = int(channel)
+        match["origin_at_400_s"] = (
+            match["origin_sample"] * 2.56e-6 + ctime - K_DM * dm * (frequency**-2 - 400**-2)
+        )
+        matches.append(match)
+        native_sum += normal_native
+        reference_sum += normal_reference
+        group = groups["low" if frequency < 600 else "high"]
+        group[0] += normal_native
+        group[1] += normal_reference
+        group[2] += 1
+    return (
+        {
+            "matched_channels": matches,
+            "native_present_channels": present,
+            "native_live_channels": len(native_live),
+            "native_constant_channels": sorted(constant_channels),
+            "native_channels_missing_from_h5": sorted(native_live - set(ids.tolist())),
+            "rejected_channels": rejected,
         },
-    }
+        native_sum,
+        reference_sum,
+        groups,
+    )
+
+
+def finalize_report(report, native_sum, reference_sum, groups):
+    matches = report["matched_channels"]
     if not matches:
         report["verdict"] = "inconclusive-no-noise-alignment"
         return report
@@ -237,12 +245,16 @@ def event(name):
     )
     report["waveform_identity_tolerance"] = float(IDENTITY_TOLERANCE)
     report["waveform_identity_pass"] = identity_ok
-    support_ok = (
-        len(matches) >= 16 and len(matches) == len(native_live) and len(report["subbands"]) == 2
+    support_ok = all(
+        (
+            len(matches) >= 16,
+            len(matches) == report["native_live_channels"],
+            len(report["subbands"]) == 2,
+        )
     )
     report["verdict"] = (
         "heldout-waveform-identity-pass"
-        if lag_ok and identity_ok and support_ok and spread <= 1.1
+        if all((lag_ok, identity_ok, support_ok, spread <= 1.1))
         else "inconclusive-alignment-or-support"
     )
     report["plot_profiles"] = {
@@ -253,6 +265,27 @@ def event(name):
         ],
     }
     return report
+
+
+def event(name):
+    cube_path, raw_path, cube, dm = event_inputs(name)
+    with h5py.File(raw_path, "r") as h5:
+        report, native_sum, reference_sum, groups = collect_channels(h5, cube, dm)
+    report.update(
+        burst=name,
+        native_path=str(cube_path),
+        raw_path=str(raw_path),
+        native_sha256=sha256(cube_path),
+        raw_sha256=sha256(raw_path),
+        dm_filename_package_coordinate=dm,
+        runtime={
+            "python": platform.python_version(),
+            "numpy": np.__version__,
+            "h5py": h5py.__version__,
+            "platform": platform.platform(),
+        },
+    )
+    return finalize_report(report, native_sum, reference_sum, groups)
 
 
 if __name__ == "__main__":

@@ -25,7 +25,9 @@ def identity(path):
 
 def block_diagnostic(profile, width):
     values = np.asarray(profile, dtype=np.float64)
-    if width < 1 or width > values.size or not np.isfinite(values).all():
+    if not 1 <= width <= values.size:
+        raise ValueError("finite profile and positive supported width required")
+    if not np.isfinite(values).all():
         raise ValueError("finite profile and positive supported width required")
     size = values.size // width
     reduced = values[: size * width].reshape(size, width).mean(axis=1)
