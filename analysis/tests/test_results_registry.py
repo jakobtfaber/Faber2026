@@ -584,6 +584,7 @@ def test_analysis_provenance_rejects_missing_or_inexact_commit(bad_commit: str) 
     )
 
 
+@pytest.mark.integration
 def test_analysis_provenance_rejects_wrong_path_at_existing_commit() -> None:
     registry = deepcopy(_registry())
     ref = next(
