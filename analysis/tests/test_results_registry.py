@@ -562,3 +562,39 @@ def test_results_view_is_byte_current() -> None:
         [sys.executable, str(RENDERER), "--stdout"], cwd=ROOT
     )
     assert first == second == RESULTS.read_bytes()
+
+
+@pytest.mark.parametrize("bad_commit", ["0" * 40, "HEAD"])
+def test_analysis_provenance_rejects_missing_or_inexact_commit(bad_commit: str) -> None:
+    registry = deepcopy(_registry())
+    ref = next(
+        ref
+        for row in registry["result"]
+        for ref in row["provenance_refs"]
+        if ref["repository"] == "analysis" and ref["commit"]
+    )
+    ref["commit"] = bad_commit
+    errors = validate_registry(registry, _manuscript_root())
+    if bad_commit == "0" * 40:
+        assert any("make prepare-provenance" in error for error in errors)
+    assert any(
+        "provenance commit does not exist in analysis" in error
+        or "provenance commit must be full 40-hex" in error
+        for error in errors
+    )
+
+
+@pytest.mark.integration
+def test_analysis_provenance_rejects_wrong_path_at_existing_commit() -> None:
+    registry = deepcopy(_registry())
+    ref = next(
+        ref
+        for row in registry["result"]
+        for ref in row["provenance_refs"]
+        if ref["repository"] == "analysis" and ref["commit"]
+    )
+    ref["path"] = "scripts/nonexistent-provenance-artifact.py"
+    errors = validate_registry(registry, _manuscript_root())
+    assert any(
+        "provenance path does not exist at declared analysis commit" in error for error in errors
+    )

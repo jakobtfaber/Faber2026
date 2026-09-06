@@ -4,8 +4,8 @@ Manuscript: **Scattering, Scintillation, and Energetics of Fast Radio Bursts
 Codetected by CHIME/FRB and DSA-110**
 
 This repository is the compact manuscript authority synchronized with Overleaf.
-Research-control material and the fitting code live in one pinned submodule,
-`analysis`.
+Research-control material and fitting code live in the plain `analysis/`
+directory of this repository.
 
 ## Layout
 
@@ -13,19 +13,21 @@ Research-control material and the fitting code live in one pinned submodule,
 main.tex          root manuscript (AASTeX631)
 auth.tex          author and affiliation block
 sections/         manuscript sections and parked section drafts
-figures/          final embedded assets and figure catalog
+figures/          final embedded assets
 bib/refs.bib      bibliography
-analysis/         Faber2026-analysis submodule: research control and fitting code
+analysis/         research control and fitting code
 ```
 
 Overleaf compiles only the root TeX, bibliography, generated tables, and final
-figure assets. It does not need the submodule.
+figure assets. It does not execute the analysis code.
 
 ## Start here
 
-After initializing the analysis submodule, read the
+Read the
 [repository and provenance map](analysis/docs/rse/ops/repository-map.md).
-It explains the three repositories, scientific data chain, authority roles,
+Its repository-boundary descriptions predate consolidation; use the current
+root AGENTS.md for that boundary. The map describes the scientific data chain,
+authority roles,
 and how to trace a manuscript claim, figure, table, or fit to its sources.
 
 ## Build
@@ -68,10 +70,24 @@ that retained metadata is disposable.
 
 ## Research workspace
 
-Initialize the analysis pin before running analysis or control tooling:
+The current `analysis/` is a plain directory in this repository. Before the
+first full provenance check in a clone, prepare the exact historical Git
+objects named by the results registry:
 
 ```sh
-git submodule update --init --recursive
+make prepare-provenance
 make test-science
-make kb-index
 ```
+
+`prepare-provenance` uses the existing `scripts/fetch_provenance_commits.py`,
+as continuous integration does. It fetches missing original analysis commits
+from the archived `jakobtfaber/Faber2026-analysis` repository and missing
+manuscript commits from `origin`. It changes Git object availability (and fetch
+metadata), not the checkout, registry, scientific trust, or data. It requires
+network access when objects are missing; rerunning with all objects present
+requires no fetch. A failed fetch remains a blocking preparation failure.
+
+Validation remains offline and still checks each full commit identity and
+artifact path at that commit. Preparation is explicit, never an implicit
+network side effect of a validation command. The archived repository is a
+historical evidence source, not an analysis runtime dependency.
