@@ -722,6 +722,12 @@ def validate_registry(registry: dict, root: Path) -> list[str]:
                     if verified.returncode:
                         errors.append(
                             f"{row_id}: provenance commit does not exist in {repository}: {commit}"
+                            + (
+                                "; from the manuscript root run `make prepare-provenance` "
+                                "to fetch exact historical objects, then retry validation"
+                                if repository in {"analysis", "manuscript"}
+                                else ""
+                            )
                         )
                     else:
                         repository_path = path.split()[0]

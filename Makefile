@@ -3,7 +3,7 @@ MAIN := main
 UV ?= uv
 FABER2026_ROOT := $(CURDIR)
 
-.PHONY: all clean watch check-manuscript check-state check-provenance test-science figures figure-review-status figure-review-next kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
+.PHONY: all clean watch prepare-provenance check-manuscript check-state check-provenance test-science figures figure-review-status figure-review-next kb-index kb-refs-sync notes-serve notes wayfinder-plan wayfinder-status wayfinder-launch
 
 all: $(MAIN).pdf
 
@@ -16,6 +16,9 @@ watch:
 clean:
 	latexmk -C
 	rm -f $(MAIN).bbl
+
+prepare-provenance:
+	python3 scripts/fetch_provenance_commits.py
 
 check-state:
 	FABER2026_ROOT="$(FABER2026_ROOT)" \
