@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.10.2-jakob-attribution.1",
+  "checkpoint_id": "01M27VGGWVEG43KN674E7MKDRX",
+  "strategy": "manual-commit",
+  "branch": "method-reassessment-2026-09-11",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "analysis/docs/rse/protocols/journal.jsonl",
+    "analysis/docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+    "analysis/docs/rse/wayfinder/tickets/method-reassessment-01-scattering-fit-method-class.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 518,
+    "cache_creation_tokens": 146973,
+    "cache_read_tokens": 1986224,
+    "output_tokens": 27796,
+    "api_call_count": 19
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "cli_version": "0.10.2-jakob-attribution.1",
+  "checkpoint_id": "01M27VGGWVEG43KN674E7MKDRX",
+  "session_id": "ab1a5e63-6cf5-40e0-ab2f-8f33057870b1",
+  "strategy": "manual-commit",
+  "created_at": "2026-09-11T09:06:56.329269Z",
+  "branch": "method-reassessment-2026-09-11",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "analysis/docs/rse/protocols/journal.jsonl",
+    "analysis/docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+    "analysis/docs/rse/wayfinder/tickets/method-reassessment-01-scattering-fit-method-class.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-fable-5-1",
+  "turn_id": "80cfff2479bd",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 518,
+    "cache_creation_tokens": 146973,
+    "cache_read_tokens": 1986224,
+    "output_tokens": 27796,
+    "api_call_count": 19
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-09-11T09:06:56.279564Z",
+    "agent_lines": 86,
+    "agent_removed": 1,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 86,
+    "total_lines_changed": 87,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 1542,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".devin/config.local.json": 8,
+        ".devin/wiki.json": 155,
+        ".hydradb-plugin-data/state.json": 18,
+        ".skillopt-sleep/reviewed-tasks/20260804-generalized-safety.json": 127,
+        ".skillopt-sleep/staging/20260804-151428/diagnostics.json": 42,
+        ".skillopt-sleep/staging/20260804-151428/manifest.json": 7,
+        ".skillopt-sleep/staging/20260804-151428/proposed_CLAUDE.md": 475,
+        ".skillopt-sleep/staging/20260804-151428/proposed_SKILL.md": 23,
+        ".skillopt-sleep/staging/20260804-151428/report.json": 75,
+        ".skillopt-sleep/staging/20260804-151428/report.md": 29,
+        ".skillopt-sleep/staging/20260804-174532/diagnostics.json": 51,
+        ".skillopt-sleep/staging/20260804-174532/manifest.json": 7,
+        ".skillopt-sleep/staging/20260804-174532/proposed_CLAUDE.md": 464,
+        ".skillopt-sleep/staging/20260804-174532/proposed_SKILL.md": 20,
+        ".skillopt-sleep/staging/20260804-174532/report.json": 26,
+        ".skillopt-sleep/staging/20260804-174532/report.md": 15
+      }
+    }
+  ]
+}
