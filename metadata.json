@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.10.2-jakob-attribution.1",
+  "checkpoint_id": "01M29RFS16VXK8X4SR4VF0WDBE",
+  "strategy": "manual-commit",
+  "branch": "method-reassessment-2026-09-11",
+  "checkpoints_count": 4,
+  "files_touched": [
+    "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/history-ledger.md",
+    "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-exp-a5.0-F1.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 5508,
+    "cache_creation_tokens": 960628,
+    "cache_read_tokens": 24914804,
+    "output_tokens": 185092,
+    "api_call_count": 205,
+    "subagent_tokens": {
+      "input_tokens": 1224,
+      "cache_creation_tokens": 833810,
+      "cache_read_tokens": 8989361,
+      "output_tokens": 97036,
+      "api_call_count": 87
+    }
+  }
+}
