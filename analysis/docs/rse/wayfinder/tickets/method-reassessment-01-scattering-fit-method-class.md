@@ -75,10 +75,26 @@
       and per-case recovery tables and figures.
 - [ ] Decision memo with a recommended family and the manuscript claims
       it supports.
-- [ ] Independent cross-provider review of the decision memo recorded in
+- [x] Independent cross-provider review of the decision memo recorded in
       the evidence root.
-- [ ] Method decision card appended to this ticket.
+- [x] Method decision card appended to this ticket (provisional; charter incomplete).
 
 ## Decision card
 
-_Pending._
+- Recommendation: family 3, **provisional**. Intended headline is per-band
+  exponential scales plus a descriptive index; beta is conditional on a
+  separately validated thin-screen comparison.
+- Evidence: [decision memo](../../specs/research/method-reassessment-2026-09-11/decision-memo.md),
+  29 harness cases and five production controls. Selected synthetic mismatches
+  yield rails or misleading interior fits; complete production kernel/alpha
+  discontinuity is reproduced.
+- Review: initial independent Codex verdict **BLOCK**. Corrections remove invalid
+  mean-delay targets, unsupported sampler/bias causation and current-capability
+  overclaims. Final independent Claude review approves provisional draft publication; no scientific validation approval.
+- Unfinished charter requirement: assign actual sightline causes. This synthetic
+  assessment does not fulfill that requirement, and it is not waived.
+- Follow-ups: complete-model continuity; implement specified headline path;
+  repeated calibration, prior and geometry checks; actual-sightline diagnosis;
+  repair current simulation-gate import. Production changes remain separate.
+- Disposition: ticket stays open; ticket 07 parked. A reviewed draft pull request
+  may publish the provisional evidence. No scientific merge or manuscript promotion.

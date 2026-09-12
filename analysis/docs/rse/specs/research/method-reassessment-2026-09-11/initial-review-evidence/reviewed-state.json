@@ -1,0 +1,380 @@
+{
+  "timestamp": "2026-09-12T02:25:37.544998+00:00",
+  "head": "237502d455dcdb9f691600b8773d589406962e52",
+  "branch": "method-reassessment-2026-09-11",
+  "base": "3afb381dcf3e2923b5e087e888a14c957523649f",
+  "files": [
+    {
+      "path": "analysis/CONTEXT.md",
+      "sha256": "10534f3f66b44283afb95813b7e3c8c699243e0c85b1aecab374b5ad4a31387e",
+      "bytes": 34536,
+      "mtime_ns": 1789120883773897649
+    },
+    {
+      "path": "analysis/docs/rse/protocols/journal.jsonl",
+      "sha256": "aaf5d09e7c949c15b30163399dbdc66fdd2533c8616090ff124f7ef545995de0",
+      "bytes": 312600,
+      "mtime_ns": 1789123303985816767
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/code-audit.md",
+      "sha256": "9128b9e370897f332282c2e625da5f8602c0c5f7404c928fe64b4a92f5b1cea7",
+      "bytes": 14431,
+      "mtime_ns": 1789118258219075303
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/decision-memo.md",
+      "sha256": "885dc543aa8e47e21a9fe90348b0a0bc1f21ab4f8f7c70298f5877bafec9cd45",
+      "bytes": 26214,
+      "mtime_ns": 1789123096478264666
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/fig-arm-a-recovery.svg",
+      "sha256": "09bbc4962146dd5565c5dace984d784301189627fbb068b4aaecb7b12a1bb993",
+      "bytes": 28773,
+      "mtime_ns": 1789122519447511045
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/fig-arm-b-mismatch.svg",
+      "sha256": "c241e46484b6f24c3cdbda456b730a36ca7da7d6f70622d7f944b35149482d80",
+      "bytes": 139449,
+      "mtime_ns": 1789122519687903426
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/fig-arm-c-sensitivity.svg",
+      "sha256": "b296c435b300925f70653aec5133689ac7fd339f9b75895063dde2d07f8fc2cc",
+      "bytes": 35007,
+      "mtime_ns": 1789122519813461386
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/fig-kernel-switch.svg",
+      "sha256": "886ce059622e7e65c3aec539db443814abde778f8082a7c948ff3dd140d26a12",
+      "bytes": 20714,
+      "mtime_ns": 1789120294190821674
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/history-ledger.md",
+      "sha256": "7d14b6fd309ac0802a8572f17a9686e2ae25df9087e2f0272cd9132508625e37",
+      "bytes": 19522,
+      "mtime_ns": 1789119487051276669
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/injection-recovery-results.md",
+      "sha256": "2e2e7e6d50c6ec0e9bc6e8a5c6a945fad4ff56212a8f504a169c29de52290037",
+      "bytes": 9205,
+      "mtime_ns": 1789122519814530135
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/injection_recovery.py",
+      "sha256": "ca70d57858fd7ef530b802641e9325045c8edd3df5a13d8aa085971d19fbe06b",
+      "bytes": 23740,
+      "mtime_ns": 1789122518716654945
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/kernel_switch_check.py",
+      "sha256": "f58e412982e6e79cdeb9992d14f016949ba57afb7b54e82dc31eed0154cbaf60",
+      "bytes": 10063,
+      "mtime_ns": 1789120259853827981
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/make_report.py",
+      "sha256": "751605bb955781e1b03e61013c3077ebd1deae54324d03bd5c9de2ce3db4b4e5",
+      "bytes": 13961,
+      "mtime_ns": 1789121181704563500
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/production_path_injection.py",
+      "sha256": "5f5d1e6859a7825191983a53e41004da69a13cb5dc4990005dbb67b5184e54a2",
+      "bytes": 8439,
+      "mtime_ns": 1789121037633476886
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/referee-methods-review.md",
+      "sha256": "ef18a2989be64626a70f9cf146a2b552aedf217111a82459f4e99d60713f6435",
+      "bytes": 17539,
+      "mtime_ns": 1789117884988807782
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-exp-a4-tau1e-03-F1.json",
+      "sha256": "21713aea36aea0f3710b968f08770974ccebfc5c63a171cabcf0a43107c16ae3",
+      "bytes": 48098,
+      "mtime_ns": 1789119501861167506
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.3-tau1e-03-F1.json",
+      "sha256": "8cbe2a8280d939f63c0ac22e4d8a8b48e03e7dcc5cd206fb9593a5d3d5dbe24c",
+      "bytes": 47988,
+      "mtime_ns": 1789118806912843279
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.3-tau1e-04-F1.json",
+      "sha256": "dac1bc00f9fc293990057b2e2d927a65843d3ef9619a2be26a1ec3c1f5b36a79",
+      "bytes": 47991,
+      "mtime_ns": 1789118678806959348
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.67-tau1e-03-F1-seed2.json",
+      "sha256": "68c6ca5dcb9fecb13b71a7f477634b0b2dd042e5384dc486aa78ada07e24797b",
+      "bytes": 48009,
+      "mtime_ns": 1789119635199402773
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.67-tau1e-03-F1-seed3.json",
+      "sha256": "bc7f97ea69936b9cedd4db4f9bd0ae77b189b33b7039aa3fc72d752df6cdf220",
+      "bytes": 48044,
+      "mtime_ns": 1789119767999972211
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.67-tau1e-03-F1-seed4.json",
+      "sha256": "5d4df10d8f83c3919f33a94075861b6db7646eb568efc7ed89596c145bfdfb58",
+      "bytes": 47999,
+      "mtime_ns": 1789119921404393658
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.67-tau1e-03-F1.json",
+      "sha256": "e548557bb4ecfba2c2ebe0ad72c0fdf3d5b09b6fbbae56d53bbfda46748407e1",
+      "bytes": 48047,
+      "mtime_ns": 1789119078460132642
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.67-tau1e-04-F1.json",
+      "sha256": "25cd98aa6fd00539362ebc74479ca44fba4d9a79345ed090ed0d73cbae1a648f",
+      "bytes": 48047,
+      "mtime_ns": 1789118941976775000
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.9-tau1e-03-F1.json",
+      "sha256": "467e7a61de575b783922eed0dc640baad985d8d9bb438e8e38c53ec029305e22",
+      "bytes": 48018,
+      "mtime_ns": 1789119358316007203
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/a-thin-b3.9-tau1e-04-F1.json",
+      "sha256": "15e31c2b291a766da82e0052833a789cfd332d22a42010d71df775cab93d3657",
+      "bytes": 48068,
+      "mtime_ns": 1789119220725184503
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-exp-a3.2-F1.json",
+      "sha256": "4ac6478d6d3f975aa83d24f81886e567d67d8c1c4f48e8002e4c540306bde331",
+      "bytes": 47975,
+      "mtime_ns": 1789120077080586848
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-exp-a3.2-F2.json",
+      "sha256": "3c064e0ee761b418d3c91fe9ca2f5447f165555139564351d9a784ef71ecae57",
+      "bytes": 47978,
+      "mtime_ns": 1789120204283705848
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-exp-a5.0-F1.json",
+      "sha256": "0c07b600286452a084dc73daee4143a7b5376368312f8d22895d3ecd6faa385d",
+      "bytes": 47976,
+      "mtime_ns": 1789120369540341218
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-exp-a5.0-F2.json",
+      "sha256": "1583d6ae29dd9a7b2e9fca0b1a6204e7c5e652478beaa1b14ffa1f2a6dbd43e1",
+      "bytes": 46987,
+      "mtime_ns": 1789120500445819345
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-thick-a4-F1.json",
+      "sha256": "6af859d2a9a2ab0e7a5abcf7c84c1147f9a790fff204a89d25a764aca925dc90",
+      "bytes": 48005,
+      "mtime_ns": 1789120647284618209
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-thick-a4-F2.json",
+      "sha256": "d25964d44d446001b80e48d3a49a32e08eb3836982a0de4ef11952d8939b537b",
+      "bytes": 47039,
+      "mtime_ns": 1789120762730359937
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-thin2comp-b3.67-F1.json",
+      "sha256": "4b7f0c4fa8fa47b21fe18ae996f7f9386f86be83c52d2d65b1b7ce934753b415",
+      "bytes": 48065,
+      "mtime_ns": 1789121154687614792
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-thin2comp-b3.67-F2.json",
+      "sha256": "1fc620d350a6851af1267163ff1b0343ca43ecbe710b447f91e3df1c6975658f",
+      "bytes": 47087,
+      "mtime_ns": 1789121264594845843
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-twoscreen-F1.json",
+      "sha256": "95b8c331c09497ceb5f52a3c72062cd76752d8eb187291b58a5ac4cc88ef0242",
+      "bytes": 47977,
+      "mtime_ns": 1789120911409613784
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/b-twoscreen-F2.json",
+      "sha256": "42fe4ef15b18ae3898fbef25d54ea5d8d825f39d82838ffc542acebbd6d2ac7e",
+      "bytes": 47036,
+      "mtime_ns": 1789121025257277187
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-s2x0.1-F1.json",
+      "sha256": "ad29eac7112b55d2a8ceba39e836119ebb620c3831edf3689e4cc2637c80126c",
+      "bytes": 47929,
+      "mtime_ns": 1789121660613197217
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-s2x0.1-F2.json",
+      "sha256": "01c7a4dd85832378e82d2d90612386c6ad88efd71516c8b159be917ee9823f3d",
+      "bytes": 46984,
+      "mtime_ns": 1789121959511277865
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-s2x1-F1.json",
+      "sha256": "982e04536501f0cbc8e4e1aa284557e9ac06dcf8a491d8a8a702f4266ea4b914",
+      "bytes": 47982,
+      "mtime_ns": 1789121764684316307
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-s2x1-F2.json",
+      "sha256": "1235bc3997d2192273d874c87c11362eb595bae253a45a4312c0786d07a30438",
+      "bytes": 47075,
+      "mtime_ns": 1789122046359372640
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-s2x10-F2.json",
+      "sha256": "e9da4de915e470c0b2a838a4bf650a210ddce355d2f8bb8150b0c96de074c4ed",
+      "bytes": 47070,
+      "mtime_ns": 1789122130588465379
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-s2x100-F1.json",
+      "sha256": "d7e3b8ada9b93459934a05f507f2a61bada06ee4a781a1d6923210640a0cace1",
+      "bytes": 47953,
+      "mtime_ns": 1789121869789182345
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-s2x100-F2.json",
+      "sha256": "27a4942b327d622810186f2643b8f99548392be6047016dd35b5e0b84c1e9eda",
+      "bytes": 47035,
+      "mtime_ns": 1789122212985154038
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-snr30-F1.json",
+      "sha256": "6ef39e85164f19ec76b7e8e4a11c486425dcb849b54a78cd04313b31f4c47aba",
+      "bytes": 48009,
+      "mtime_ns": 1789121379163050679
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/c-snr300-F1.json",
+      "sha256": "f16dd5fd20f0a8268f9e90ec9ddd0514c7e925d4f65df4e8317d266691266d29",
+      "bytes": 47927,
+      "mtime_ns": 1789121550473347016
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/kernel-branch-discontinuity.json",
+      "sha256": "bdc76c4ab3bda9f2ed73111aa5f1c1d9045e11db050e2ef17f1b9b1bcadebb3a",
+      "bytes": 714,
+      "mtime_ns": 1789120262353442091
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/kernel-check.json",
+      "sha256": "2fb28be238ff4dff2d47b7dc9fb91262abe8dc52cce77c2324a4f2ebed78288d",
+      "bytes": 674,
+      "mtime_ns": 1789118526568191697
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/kernel-switch-check.json",
+      "sha256": "f4f87a16b8d23b65bbc6d5a9a3a6745139d8ed3b358a766d32124b32c401b573",
+      "bytes": 11785,
+      "mtime_ns": 1789120284048585688
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/kernel-switch-free-t0.json",
+      "sha256": "77174d9dc266059ae77367d043854d66f7b002fce2a5e552a26094296fa2b34f",
+      "bytes": 1163,
+      "mtime_ns": 1789120291150737293
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/kernel-switch-posterior-flip.json",
+      "sha256": "50d8f6c02561d4fc83b86069b09af91403dfed4704e91355ea705749fda7b7f9",
+      "bytes": 1789,
+      "mtime_ns": 1789121440624158181
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/kernel-switch.log",
+      "sha256": "7a9daae29eebacf855f01cc64df056ad3d06ab190e309e87b0a9912a05397b7b",
+      "bytes": 751,
+      "mtime_ns": 1789120293887303156
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/production-path/exp-a3.0.json",
+      "sha256": "2bd82769085980c84d2cb4ed8678a06777445bc0f0451df9b1e31b8e156c38fc",
+      "bytes": 49135,
+      "mtime_ns": 1789120143668367267
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/production-path/exp-a3.0.percentiles-only.v1.json",
+      "sha256": "dc21fd9b74c6a18705116d7f6f52b2b375b8f8017557fda186d2b9d51205d8ca",
+      "bytes": 888,
+      "mtime_ns": 1789119414062331900
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/production-path/exp-a4.0.json",
+      "sha256": "73580132cfab5571141fbc9256ab15cbc34a192ec36050eeba82700d5d7c4a3f",
+      "bytes": 68430,
+      "mtime_ns": 1789120576923943157
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/production-path/exp-a4.4.json",
+      "sha256": "58791234446102bed2b9becb1860d6daaf9c5cd76659b12fd24faa2db9fefbd7",
+      "bytes": 67227,
+      "mtime_ns": 1789121305571079413
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/production-path/run.log",
+      "sha256": "5b0431be03bf9e485876dfbc34b16c51b1e72136ac6ec1818d49e3ff0d86ca46",
+      "bytes": 6772,
+      "mtime_ns": 1789121553231063219
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/production-path/thin-b3.67-tau0.2.json",
+      "sha256": "d2ca683fa82d703ae8107637b1eb4866a9124b08a3591f2749013da9504733ec",
+      "bytes": 47049,
+      "mtime_ns": 1789121553130185209
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/production-path/thin-b3.67.json",
+      "sha256": "3e504e2392b7f8cc168870e7d59f2dfcb52ebd2d5f719d2c67c421405dbba07e",
+      "bytes": 46996,
+      "mtime_ns": 1789120952051704477
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/run.log",
+      "sha256": "e8a796148a4aac8985a640c82b2659476666c88faedf8acbcc0865ac955c3b36",
+      "bytes": 6053,
+      "mtime_ns": 1789122212998067492
+    },
+    {
+      "path": "analysis/docs/rse/specs/research/method-reassessment-2026-09-11/results/summary.csv",
+      "sha256": "277a93720e8db9c248b7b2c24cc652f63123b346ac85d3de10f52fc1276dbed3",
+      "bytes": 7814,
+      "mtime_ns": 1789122519071248665
+    },
+    {
+      "path": "analysis/docs/rse/wayfinder/map-apj-submission.md",
+      "sha256": "abaa0d1bb307ae7d7d0003bf51dc1d8ec3a14e2bfd606f5d3b46f811a342f0fb",
+      "bytes": 9836,
+      "mtime_ns": 1789120867203592276
+    },
+    {
+      "path": "analysis/docs/rse/wayfinder/tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md",
+      "sha256": "e2c81c4d27e44712cf435331ef539e318edba90f74c64e6307876535c46a7659",
+      "bytes": 25008,
+      "mtime_ns": 1789120867203213110
+    },
+    {
+      "path": "analysis/docs/rse/wayfinder/tickets/method-reassessment-01-scattering-fit-method-class.md",
+      "sha256": "184f1d90c0b2112727295c86a1bda113a8f1c27c08596aee05933dc99b909dcb",
+      "bytes": 4305,
+      "mtime_ns": 1789117606424074433
+    }
+  ]
+}
