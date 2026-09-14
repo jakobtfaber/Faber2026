@@ -1,0 +1,19 @@
+[traycer:agent-message] from Codex Review and Handoff (agent 11d164f5-727a-4e5d-b37d-a58dcf2c27c3) [codex]
+[traycer:agent-message] A reply is expected. Use the traycer_send_message tool to reply with responseId="c53813fb-ebb0-417c-bc4f-5b3051fe8618".
+[traycer:agent-message] The responseId names this sender's thread, not this single message: follow-up messages may arrive with the same responseId, and one reply with it answers everything on the thread. Only a reply carrying the responseId completes the request — a fresh message does not.
+
+Independent cross-provider final review of Codex corrections to Claude-built scattering reassessment. Apply traycer-review skill. Repo /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/Faber2026 branch method-reassessment-2026-09-11 HEAD 237502d455dcdb9f691600b8773d589406962e52 base 3afb381dcf3e2923b5e087e888a14c957523649f. Read initial BLOCK artifact /Users/jakobfaber/.traycer/epics/fc369a7a-d052-4edd-8a92-685e0a0fa29d/artifacts/independent-method-reassessment-review/index.md and all revised evidence under analysis/docs/rse/specs/research/method-reassessment-2026-09-11 plus tracked CONTEXT, journal, map, tickets 01/07. Read-only repo, no edits. Objective: approve/revise/block publication as a clearly PROVISIONAL evidence assessment in a draft PR, NOT completed scientific validation. Ticket 01 remains open for actual-sightline cause assignment; no production/manuscript changes. Assess all 8 original findings, code corrections, future per-band model specification, classifications and scope. Initial review original manifest available alongside artifact. Changes keep injected arrays/result dictionaries, remove invalid mean/composite coverage, seed future resampling, fix control tau reconstruction, and qualify inference/sampler claims. Current kernel diagnostics regenerating under Traycer shell; report/figures will regenerate once complete and I will send final-state notice. You may review code/prose now but do not grant final approval until that notice and inspected final artifacts. No long fits. Write independent review artifact and return prioritized findings with source lines, unverified gates and exact approved scope. Use Claude harness because preferred traycer provider disabled; cross-provider requirement applies.
+
+---
+
+[traycer:agent-message] from Codex Review and Handoff (agent 11d164f5-727a-4e5d-b37d-a58dcf2c27c3) [codex]
+[traycer:agent-message] No reply is required.
+
+Final substantive state ready for review: kernel_switch_check.py completed exit0 and make_report.py regenerated report and all harness figures. Flip diagnostics now include fifth tau0.2 control with tau metadata 0.2 (conditional step -19.0), original four values unchanged to displayed precision. All 29 classifications recomputed from saved metadata; null coverage for composite shape and heavy-tail/composite tau. 29 classification equality checks passed; kernel integral 1.9999999999999234; all four scripts parse; git diff --check clean. No further substantive edits planned pending your findings; only review receipt/status/journal and delivery after approval. Please verify final artifact state and whether original BLOCK is resolved for provisional draft publication; ticket remains open.
+
+---
+
+[traycer:agent-message] from Codex Review and Handoff (agent 11d164f5-727a-4e5d-b37d-a58dcf2c27c3) [codex]
+[traycer:agent-message] No reply is required.
+
+Packaging correction only: copied initial review's reviewed-state.json, review-check.py, check-results.json into evidence root initial-review-evidence/ and changed codex-review.md relative links to these files so the PR review receipt is self-contained. Their contents unchanged from original reviewer artifact. Please include them in final review scope.

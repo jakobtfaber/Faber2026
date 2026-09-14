@@ -1,0 +1,46 @@
+{
+  "cli_version": "0.10.2-jakob-attribution.1",
+  "checkpoint_id": "01M2ETDA85DGGC04293191YMWM",
+  "strategy": "manual-commit",
+  "branch": "method-reassessment-2026-09-11",
+  "checkpoints_count": 3,
+  "files_touched": [
+    ".DS_Store",
+    ".devin/config.local.json",
+    ".devin/skills/bashroom",
+    ".devin/wiki.json",
+    ".hydradb-plugin-data/state.json",
+    ".skillopt-sleep/reviewed-tasks/20260804-generalized-safety.json",
+    ".skillopt-sleep/staging/20260804-151428/diagnostics.json",
+    ".skillopt-sleep/staging/20260804-151428/manifest.json",
+    ".skillopt-sleep/staging/20260804-151428/proposed_CLAUDE.md",
+    ".skillopt-sleep/staging/20260804-151428/proposed_SKILL.md",
+    ".skillopt-sleep/staging/20260804-151428/report.json",
+    ".skillopt-sleep/staging/20260804-151428/report.md",
+    ".skillopt-sleep/staging/20260804-174532/diagnostics.json",
+    ".skillopt-sleep/staging/20260804-174532/manifest.json",
+    ".skillopt-sleep/staging/20260804-174532/proposed_CLAUDE.md",
+    ".skillopt-sleep/staging/20260804-174532/proposed_SKILL.md",
+    ".skillopt-sleep/staging/20260804-174532/report.json",
+    ".skillopt-sleep/staging/20260804-174532/report.md",
+    "analysis/.DS_Store",
+    "docs/rse/decks/.DS_Store",
+    "outputs/.DS_Store"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 184,
+    "cache_creation_tokens": 791983,
+    "cache_read_tokens": 12603315,
+    "output_tokens": 86385,
+    "api_call_count": 92
+  }
+}
