@@ -3,7 +3,7 @@
   "checkpoint_id": "01M2EX4GR6VJNCM9RTAD4Q0HGF",
   "strategy": "manual-commit",
   "branch": "method-reassessment-2026-09-11",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     "analysis/docs/analysis/scattering-mathematical-foundations/check-results.json",
     "analysis/docs/analysis/scattering-mathematical-foundations/checks.py",
@@ -19,13 +19,20 @@
       "compact_transcript": "/0/transcript.jsonl",
       "content_hash": "/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/1/metadata.json",
+      "transcript": "/1/full.jsonl",
+      "compact_transcript": "/1/transcript.jsonl",
+      "content_hash": "/1/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
-    "input_tokens": 98,
-    "cache_creation_tokens": 108034,
-    "cache_read_tokens": 414909,
-    "output_tokens": 3835,
-    "api_call_count": 4
+    "input_tokens": 390,
+    "cache_creation_tokens": 299400,
+    "cache_read_tokens": 1882630,
+    "output_tokens": 7837,
+    "api_call_count": 15
   }
 }

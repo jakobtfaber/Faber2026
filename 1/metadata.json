@@ -1,0 +1,93 @@
+{
+  "cli_version": "0.10.2-jakob-attribution.1",
+  "checkpoint_id": "01M2EX4GR6VJNCM9RTAD4Q0HGF",
+  "session_id": "b959b802-e0c1-4c29-82d4-34c3c78af849",
+  "strategy": "manual-commit",
+  "created_at": "2026-09-14T02:50:01.128912Z",
+  "branch": "method-reassessment-2026-09-11",
+  "checkpoints_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-fable-5-1",
+  "turn_id": "5aad1e9a03d9",
+  "checkpoint_transcript_start": 832,
+  "transcript_lines_at_start": 832,
+  "compact_transcript_start": 121,
+  "token_usage": {
+    "input_tokens": 292,
+    "cache_creation_tokens": 191366,
+    "cache_read_tokens": 1467721,
+    "output_tokens": 4002,
+    "api_call_count": 11
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_018V8KQP8rTaqeEvgnptRABs",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "traycer-review"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "6f8726b02c31",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 29,
+        "end": 30,
+        "entry_ids": [
+          "38833a58-0ef2-497a-8ece-cb969f062fc8"
+        ],
+        "tool_use_id": "toolu_018V8KQP8rTaqeEvgnptRABs"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_018V8KQP8rTaqeEvgnptRABs"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: traycer-review",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 2405,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".devin/config.local.json": 8,
+        ".devin/wiki.json": 155,
+        ".hydradb-plugin-data/state.json": 18,
+        ".skillopt-sleep/reviewed-tasks/20260804-generalized-safety.json": 127,
+        ".skillopt-sleep/staging/20260804-151428/diagnostics.json": 42,
+        ".skillopt-sleep/staging/20260804-151428/manifest.json": 7,
+        ".skillopt-sleep/staging/20260804-151428/proposed_CLAUDE.md": 475,
+        ".skillopt-sleep/staging/20260804-151428/proposed_SKILL.md": 23,
+        ".skillopt-sleep/staging/20260804-151428/report.json": 75,
+        ".skillopt-sleep/staging/20260804-151428/report.md": 29,
+        ".skillopt-sleep/staging/20260804-174532/diagnostics.json": 51,
+        ".skillopt-sleep/staging/20260804-174532/manifest.json": 7,
+        ".skillopt-sleep/staging/20260804-174532/proposed_CLAUDE.md": 464,
+        ".skillopt-sleep/staging/20260804-174532/proposed_SKILL.md": 20,
+        ".skillopt-sleep/staging/20260804-174532/report.json": 26,
+        ".skillopt-sleep/staging/20260804-174532/report.md": 15,
+        "analysis/docs/analysis/scattering-mathematical-foundations/check-results.json": 23,
+        "analysis/docs/analysis/scattering-mathematical-foundations/checks.py": 98,
+        "analysis/docs/analysis/scattering-mathematical-foundations/index.md": 101,
+        "analysis/docs/analysis/scattering-mathematical-foundations/physics-sources.md": 197,
+        "analysis/docs/analysis/scattering-mathematical-foundations/review.md": 187,
+        "analysis/docs/analysis/scattering-mathematical-foundations/statistics-and-sampling.md": 257
+      }
+    }
+  ]
+}
