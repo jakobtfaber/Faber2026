@@ -20,12 +20,12 @@ class MatrixModel:
         return self.k[:, int(key)][None, :]
 
 
-def evaluate(k, d, s2, sigma=1.0, floor=1e-6):
+def evaluate(k, d, s2, sigma=1.0):
     model = MatrixModel(k, d, sigma)
     n = model.k.shape[1]
     return _gain_marginal_multi_band_impl(
         model, [FRBParams(c0=1., t0=0., gamma=0.)] * n, [str(i) for i in range(n)],
-        s2=s2, eig_rel_floor=floor,
+        s2=s2,
     )
 
 
@@ -57,8 +57,12 @@ def test_audit_counterexample_and_diagnostic_threshold_invariance():
     k = np.diag([1., 1e-4])
     d = np.array([0., 100.])
     expected, expected_gain = covariance_oracle(k, d, 1e12, 1.)
+    model = MatrixModel(k, d)
+    params = [FRBParams(c0=1., t0=0., gamma=0.)] * 2
     for floor in [0., 1e-6, 1.]:
-        actual, _, gain = evaluate(k, d, 1e12, floor=floor)
+        actual, _, gain = _gain_marginal_multi_band_impl(
+            model, params, ["0", "1"], s2=1e12, eig_rel_floor=floor,
+        )
         np.testing.assert_allclose(actual, expected, atol=1e-8, rtol=0)
         np.testing.assert_allclose(gain[0], expected_gain, atol=1e-8, rtol=0)
 
