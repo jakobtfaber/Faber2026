@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.10.2-jakob-attribution.1",
+  "checkpoint_id": "01M2EX4GR6VJNCM9RTAD4Q0HGF",
+  "strategy": "manual-commit",
+  "branch": "method-reassessment-2026-09-11",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "analysis/docs/analysis/scattering-mathematical-foundations/check-results.json",
+    "analysis/docs/analysis/scattering-mathematical-foundations/checks.py",
+    "analysis/docs/analysis/scattering-mathematical-foundations/index.md",
+    "analysis/docs/analysis/scattering-mathematical-foundations/physics-sources.md",
+    "analysis/docs/analysis/scattering-mathematical-foundations/review.md",
+    "analysis/docs/analysis/scattering-mathematical-foundations/statistics-and-sampling.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 98,
+    "cache_creation_tokens": 108034,
+    "cache_read_tokens": 414909,
+    "output_tokens": 3835,
+    "api_call_count": 4
+  }
+}

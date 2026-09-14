@@ -1,0 +1,73 @@
+{
+  "cli_version": "0.10.2-jakob-attribution.1",
+  "checkpoint_id": "01M2EX4GR6VJNCM9RTAD4Q0HGF",
+  "session_id": "464127f9-bb1e-4784-a2cc-7bb479801256",
+  "strategy": "manual-commit",
+  "created_at": "2026-09-14T02:50:00.172105Z",
+  "branch": "method-reassessment-2026-09-11",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "analysis/docs/analysis/scattering-mathematical-foundations/check-results.json",
+    "analysis/docs/analysis/scattering-mathematical-foundations/checks.py",
+    "analysis/docs/analysis/scattering-mathematical-foundations/index.md",
+    "analysis/docs/analysis/scattering-mathematical-foundations/physics-sources.md",
+    "analysis/docs/analysis/scattering-mathematical-foundations/review.md",
+    "analysis/docs/analysis/scattering-mathematical-foundations/statistics-and-sampling.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-fable-5-1",
+  "turn_id": "18d89b0f9e16",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 98,
+    "cache_creation_tokens": 108034,
+    "cache_read_tokens": 414909,
+    "output_tokens": 3835,
+    "api_call_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-09-14T02:50:00.143845Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 0,
+    "total_lines_changed": 0,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 2405,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".devin/config.local.json": 8,
+        ".devin/wiki.json": 155,
+        ".hydradb-plugin-data/state.json": 18,
+        ".skillopt-sleep/reviewed-tasks/20260804-generalized-safety.json": 127,
+        ".skillopt-sleep/staging/20260804-151428/diagnostics.json": 42,
+        ".skillopt-sleep/staging/20260804-151428/manifest.json": 7,
+        ".skillopt-sleep/staging/20260804-151428/proposed_CLAUDE.md": 475,
+        ".skillopt-sleep/staging/20260804-151428/proposed_SKILL.md": 23,
+        ".skillopt-sleep/staging/20260804-151428/report.json": 75,
+        ".skillopt-sleep/staging/20260804-151428/report.md": 29,
+        ".skillopt-sleep/staging/20260804-174532/diagnostics.json": 51,
+        ".skillopt-sleep/staging/20260804-174532/manifest.json": 7,
+        ".skillopt-sleep/staging/20260804-174532/proposed_CLAUDE.md": 464,
+        ".skillopt-sleep/staging/20260804-174532/proposed_SKILL.md": 20,
+        ".skillopt-sleep/staging/20260804-174532/report.json": 26,
+        ".skillopt-sleep/staging/20260804-174532/report.md": 15,
+        "analysis/docs/analysis/scattering-mathematical-foundations/check-results.json": 23,
+        "analysis/docs/analysis/scattering-mathematical-foundations/checks.py": 98,
+        "analysis/docs/analysis/scattering-mathematical-foundations/index.md": 101,
+        "analysis/docs/analysis/scattering-mathematical-foundations/physics-sources.md": 197,
+        "analysis/docs/analysis/scattering-mathematical-foundations/review.md": 187,
+        "analysis/docs/analysis/scattering-mathematical-foundations/statistics-and-sampling.md": 257
+      }
+    }
+  ]
+}
