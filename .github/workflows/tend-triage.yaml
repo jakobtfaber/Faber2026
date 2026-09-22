@@ -37,7 +37,7 @@ jobs:
           TARGET: issues/${{ github.event.issue.number }}
           GITHUB_TOKEN: ${{ secrets.TEND_BOT_TOKEN }}
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           ref: main
           fetch-depth: 0
