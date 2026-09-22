@@ -65,11 +65,13 @@ Checkpoint refs already on the public remotes before this change:
 | dsa110-FLITS `origin` | `refs/heads/entire/checkpoints/v1` |
 | Faber2026-analysis `origin` | none |
 
-Deleting remote refs is a one-way door and needs the owner's named
-approval. It has been queued in the task store as a separate item rather
-than performed. A third checkpoint (`GF/01M2EX…`) differs between local
-and remote, so the local copy would be the one to keep if the remote refs
-are removed.
+Owner approval given 2026-09-22 ("approve item 1", queue walkthrough).
+All six refs were then deleted with `git push origin --delete`; dsa110-FLITS
+was unarchived through the GitHub API for the deletion and re-archived
+immediately after (`archived: true` confirmed). `git ls-remote` on both
+remotes now returns no `refs/entire/*` or `refs/heads/entire/*`. Local
+copies of every ref remain in the checkouts. The `GF/01M2EX…` checkpoint
+differed between local and remote; the local copy is the surviving one.
 
 ## Task store disposition
 
@@ -79,5 +81,5 @@ Completed with annotation pointing to this receipt:
 - `d2789e02-5397-553e-b43f-27c7cd6347de` (dsa110-FLITS disable)
 - `f3af14e5-c189-5701-a50d-26291e120c1b` (Faber2026 checkpoint privacy)
 
-Queued: remove already-pushed Entire checkpoint refs from the public
-Faber2026 and dsa110-FLITS remotes (owner approval required).
+Also completed after owner approval: `74135af5-543b-4ab7-bffc-4bf020e2e06e`
+(remove the already-pushed checkpoint refs from the public remotes).
