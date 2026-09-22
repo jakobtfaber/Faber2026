@@ -138,7 +138,7 @@ jobs:
             echo "$COUNT processable notification(s) — proceeding"
           fi
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         if: steps.check.outputs.count != '0' || github.event_name == 'workflow_dispatch'
         with:
           ref: main
