@@ -47,7 +47,6 @@ COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
 # Nodes that bind a name through a plain string attribute rather than an
 # `ast.Name`, so walking their children would never see the binding.
 CAPTURES = {
-    ast.ExceptHandler: "name",
     ast.MatchAs: "name",
     ast.MatchStar: "name",
     ast.MatchMapping: "rest",
@@ -65,7 +64,11 @@ HANDLERS = {
     **dict.fromkeys(COMPREHENSIONS, "_comprehension"),
     ast.GeneratorExp: "_generator_expression",
     ast.If: "_conditional",
+    ast.While: "_conditional",
+    ast.Assert: "_assert",
+    ast.ExceptHandler: "_exception_handler",
     ast.Try: "_try",
+    ast.TryStar: "_try",
     ast.Import: "_import",
     ast.ImportFrom: "_import_from",
     ast.TypeAlias: "_type_alias",
@@ -115,6 +118,12 @@ class _ModuleLevelScan:
     handler are skipped. Immediately consumed generators and re-raising
     handlers can therefore hide failures. Unknown conditions are scanned on
     both branches; binding order and exception aliases are not resolved.
+    Exception type expressions and assertion messages without a literal-false test are skipped:
+    their evaluation depends on failure paths this scan does not establish.
+    This can hide missing names on those failure paths. Qualified builtin
+    exception names require a recorded builtins binding but are otherwise recognized
+    syntactically, without resolving aliases
+    or rebinding of the builtins module.
 
     Another known gap: annotations, both in a signature and on a variable. `def f(x:
     Missing)` and `x: Missing = 1` are import-time `NameError`s on Python 3.12
@@ -241,12 +250,28 @@ class _ModuleLevelScan:
         # this conservative scan; Path in the original defect is in this iterable.
         self.walk(node.generators[0].iter, scoped)
 
-    def _conditional(self, node: ast.If, scoped: frozenset[str]) -> None:
+    def _conditional(self, node: ast.If | ast.While, scoped: frozenset[str]) -> None:
         self.walk(node.test, scoped)
         branches = [*node.body, *node.orelse]
         if isinstance(node.test, ast.Constant):
-            branches = node.body if node.test.value else node.orelse
+            if not node.test.value:
+                branches = node.orelse
+            else:
+                branches = node.body
         for statement in branches:
+            self.walk(statement, scoped)
+
+    def _assert(self, node: ast.Assert, scoped: frozenset[str]) -> None:
+        self.walk(node.test, scoped)
+        if isinstance(node.test, ast.Constant) and not node.test.value and node.msg:
+            self.walk(node.msg, scoped)
+
+    def _exception_handler(self, node: ast.ExceptHandler, scoped: frozenset[str]) -> None:
+        # The type expression is evaluated only while matching an exception.
+        # Keep checking handler bodies, but do not assume matching is reached.
+        if node.name:
+            self.bound.add(node.name)
+        for statement in node.body:
             self.walk(statement, scoped)
 
     def _try(self, node: ast.Try, scoped: frozenset[str]) -> None:
@@ -263,13 +288,19 @@ class _ModuleLevelScan:
         for statement in [*node.handlers, *node.orelse, *node.finalbody]:
             self.walk(statement, scoped)
 
-    @staticmethod
-    def _catches_name_error(handler: ast.ExceptHandler) -> bool:
+    def _catches_name_error(self, handler: ast.ExceptHandler) -> bool:
         if handler.type is None:
             return True
         types = handler.type.elts if isinstance(handler.type, ast.Tuple) else [handler.type]
         return any(
-            isinstance(kind, ast.Name) and kind.id in {"NameError", "Exception", "BaseException"}
+            (isinstance(kind, ast.Name) and kind.id in {"NameError", "Exception", "BaseException"})
+            or (
+                isinstance(kind, ast.Attribute)
+                and isinstance(kind.value, ast.Name)
+                and kind.value.id == "builtins"
+                and "builtins" in self.bound
+                and kind.attr in {"NameError", "Exception", "BaseException"}
+            )
             for kind in types
         )
 
@@ -476,6 +507,16 @@ def test_a_match_capture_binds_its_name(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "source",
     [
+        "try:\n    pass\nexcept Missing:\n    pass\n",
+        "try:\n    pass\nexcept (ValueError, Missing):\n    pass\n",
+        "while False:\n    Missing()\nelse:\n    value = 1\n",
+        "while 0:\n    Missing()\n",
+        "while True:\n    break\nelse:\n    Missing()\n",
+        "try:\n    Missing\nexcept* NameError:\n    pass\n",
+        "assert True, Missing\n",
+        "value = True\nassert value, Missing\n",
+        "import builtins\ntry:\n    Missing\nexcept builtins.NameError:\n    pass\n",
+        "import builtins\ntry:\n    Missing\nexcept (ValueError, builtins.Exception):\n    pass\n",
         "items = (Missing(x) for x in [1] if Unknown(x))\n",
         "items = (x for x in [1] for y in Missing)\n",
         "if False:\n    Missing()\nelse:\n    value = 1\n",
@@ -494,6 +535,14 @@ def test_valid_deferred_or_guarded_loads(source: str, tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     "source",
     [
+        "while Missing:\n    pass\n",
+        "while True:\n    Missing()\n",
+        "while False:\n    pass\nelse:\n    Missing()\n",
+        "try:\n    Missing\nexcept builtins.NameError:\n    pass\n",
+        "assert Missing\n",
+        "assert False, Missing\n",
+        "import builtins\ntry:\n    Missing\nexcept builtins.ValueError:\n    pass\n",
+        "import builtins\ntry:\n    Unknown\nexcept builtins.NameError:\n    Missing\n",
         "items = (x for x in Missing)\n",
         "if True:\n    Missing()\n",
         "if False:\n    pass\nelse:\n    Missing()\n",
