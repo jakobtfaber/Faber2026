@@ -1,4 +1,4 @@
-"""A module-level name a file never binds makes that file unimportable.
+"""Conservative scan for potentially undefined names in module-level code.
 
 Thirty-five scripts under `scattering/studies/joint-refits/` computed their
 repository root with `Path(__file__)` while importing `os` and `sys` but never
@@ -14,12 +14,14 @@ Scope is import time only — a name used inside a function body is a runtime
 question about that call path, not an import-time break, and the reference
 trees under `scintillation/studies/reference_analysis/` carry many of those by
 design. A class body is import-time code and is covered; see
-`_ModuleLevelScan` for what that costs and for the one gap left open.
+`_ModuleLevelScan` for the deliberate gaps. This is not an importability proof.
 """
 
 import ast
 import builtins
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -61,6 +63,9 @@ TYPE_PARAMETERS = (ast.TypeVar, ast.ParamSpec, ast.TypeVarTuple)
 HANDLERS = {
     **dict.fromkeys(SCOPES, "_definition"),
     **dict.fromkeys(COMPREHENSIONS, "_comprehension"),
+    ast.GeneratorExp: "_generator_expression",
+    ast.If: "_conditional",
+    ast.Try: "_try",
     ast.Import: "_import",
     ast.ImportFrom: "_import_from",
     ast.TypeAlias: "_type_alias",
@@ -105,7 +110,13 @@ class _ModuleLevelScan:
     `scoped` carries the comprehension-local names visible at each node, and
     is empty everywhere outside a comprehension.
 
-    Known gap: annotations, both in a signature and on a variable. `def f(x:
+    This is a lexical heuristic, not control-flow or call analysis. Generator
+    bodies, literal-false branches and loads protected by a builtin NameError
+    handler are skipped. Immediately consumed generators and re-raising
+    handlers can therefore hide failures. Unknown conditions are scanned on
+    both branches; binding order and exception aliases are not resolved.
+
+    Another known gap: annotations, both in a signature and on a variable. `def f(x:
     Missing)` and `x: Missing = 1` are import-time `NameError`s on Python 3.12
     and 3.13 but not on 3.14, where PEP 649 defers evaluation, and not on any
     version under `from __future__ import annotations`, which live modules
@@ -224,6 +235,44 @@ class _ModuleLevelScan:
     def _comprehension(self, node: ast.AST, scoped: frozenset[str]) -> None:
         self._element(node, self._generator_scope(node, scoped))
 
+    def _generator_expression(self, node: ast.GeneratorExp, scoped: frozenset[str]) -> None:
+        # Creating a generator evaluates only its outermost iterable. Even
+        # when a caller consumes it immediately, tracing that call is outside
+        # this conservative scan; Path in the original defect is in this iterable.
+        self.walk(node.generators[0].iter, scoped)
+
+    def _conditional(self, node: ast.If, scoped: frozenset[str]) -> None:
+        self.walk(node.test, scoped)
+        branches = [*node.body, *node.orelse]
+        if isinstance(node.test, ast.Constant):
+            branches = node.body if node.test.value else node.orelse
+        for statement in branches:
+            self.walk(statement, scoped)
+
+    def _try(self, node: ast.Try, scoped: frozenset[str]) -> None:
+        # NameError probes are valid module code. Keep body bindings, but
+        # suppress its loads when a handler can catch a missing name. Loads
+        # from handlers, else and finally remain independently checked.
+        inner = _ModuleLevelScan()
+        for statement in node.body:
+            inner.walk(statement, scoped)
+        self.bound |= inner.bound
+        self.star = self.star or inner.star
+        if not any(self._catches_name_error(handler) for handler in node.handlers):
+            self.loaded |= inner.loaded
+        for statement in [*node.handlers, *node.orelse, *node.finalbody]:
+            self.walk(statement, scoped)
+
+    @staticmethod
+    def _catches_name_error(handler: ast.ExceptHandler) -> bool:
+        if handler.type is None:
+            return True
+        types = handler.type.elts if isinstance(handler.type, ast.Tuple) else [handler.type]
+        return any(
+            isinstance(kind, ast.Name) and kind.id in {"NameError", "Exception", "BaseException"}
+            for kind in types
+        )
+
     def _generator_scope(self, node: ast.AST, scoped: frozenset[str]) -> frozenset[str]:
         """Walk the `for ... in ... if ...` clauses; return the names they bind.
 
@@ -299,7 +348,7 @@ def test_no_live_module_uses_an_unbound_name_at_module_level() -> None:
         if (undefined := undefined_module_level_names(path))
     }
     assert not offenders, (
-        "these modules raise NameError on import, before any of their own code runs:\n"
+        "potentially undefined module-level names (inspect the reported paths):\n"
         + "\n".join(f"  {path}: {', '.join(names)}" for path, names in sorted(offenders.items()))
     )
 
@@ -422,3 +471,42 @@ def test_a_match_capture_binds_its_name(tmp_path: Path) -> None:
         "import sys\nmatch sys.argv:\n    case [prog, *rest]:\n        print(prog, rest)\n"
     )
     assert undefined_module_level_names(captured) == set()
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "items = (Missing(x) for x in [1] if Unknown(x))\n",
+        "items = (x for x in [1] for y in Missing)\n",
+        "if False:\n    Missing()\nelse:\n    value = 1\n",
+        "if True:\n    value = 1\nelse:\n    Missing()\n",
+        "try:\n    Missing\nexcept NameError:\n    pass\n",
+        "try:\n    Missing\nexcept (ValueError, NameError):\n    pass\n",
+    ],
+)
+def test_valid_deferred_or_guarded_loads(source: str, tmp_path: Path) -> None:
+    module = tmp_path / "valid.py"
+    module.write_text(source)
+    exec(compile(source, str(module), "exec"), {})
+    assert undefined_module_level_names(module) == set()
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        "items = (x for x in Missing)\n",
+        "if True:\n    Missing()\n",
+        "if False:\n    pass\nelse:\n    Missing()\n",
+        "try:\n    Missing\nexcept ValueError:\n    pass\n",
+        "try:\n    Unknown\nexcept NameError:\n    Missing\n",
+        "try:\n    pass\nexcept NameError:\n    pass\nelse:\n    Missing\n",
+        "try:\n    Unknown\nexcept NameError:\n    pass\nfinally:\n    Missing\n",
+        "try:\n    Missing\nexcept NameError:\n    pass\nMissing\n",
+    ],
+)
+def test_eager_unguarded_loads_still_report(source: str, tmp_path: Path) -> None:
+    module = tmp_path / "broken.py"
+    module.write_text(source)
+    with pytest.raises(NameError):
+        exec(compile(source, str(module), "exec"), {})
+    assert undefined_module_level_names(module) == {"Missing"}
