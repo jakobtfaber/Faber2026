@@ -11,6 +11,7 @@ scattered burst in two bands, then verifies:
      residual (std >> 1) -- demonstrating the fix.
 """
 import os, sys
+from pathlib import Path
 import numpy as np
 REPO = os.environ.get("FABER2026_ANALYSIS", next(str(p) for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists()))
 sys.path.insert(0, f"{REPO}/scattering")

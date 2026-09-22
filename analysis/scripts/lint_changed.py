@@ -102,7 +102,15 @@ def main() -> int:
     if not paths:
         print("No changed Python files.")
         return 0
-    return subprocess.run(["ruff", "check", *paths], cwd=ROOT, check=False).returncode
+    # --force-exclude: ruff ignores `extend-exclude` for paths named on the
+    # command line, and every path here is named. Without it this gate lints
+    # trees pyproject.toml declares out of scope (`*/studies/*`, `.archive`)
+    # the moment a commit touches one, which is how a one-line import repair
+    # in `scattering/studies/joint-refits/` inherited 215 pre-existing
+    # style findings. The flag makes the gate honour the configured scope.
+    return subprocess.run(
+        ["ruff", "check", "--force-exclude", *paths], cwd=ROOT, check=False
+    ).returncode
 
 
 if __name__ == "__main__":

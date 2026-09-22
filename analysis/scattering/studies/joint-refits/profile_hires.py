@@ -5,6 +5,7 @@ survive image downscaling) + sub-band overlays, so close doublets (e.g. the
 """
 import os
 import sys
+from pathlib import Path
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
