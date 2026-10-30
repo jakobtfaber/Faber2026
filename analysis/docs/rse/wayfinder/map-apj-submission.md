@@ -30,6 +30,12 @@ existing lane system. The map does not carry the execution itself.
   [scint-redo-01](tickets/scint-redo-01-interactive-recampaign-from-raw-data.md),
   [the scint-scattering coupling design closure](tickets/04-close-scint-scattering-coupling-design.md), and
   [the zach component-count adjudication](tickets/joint-scattering-controlled-rerun-07-adjudicate-zach-component-count.md).
+  Added 2026-09-11: the
+  [scattering-fit method reassessment](tickets/method-reassessment-01-scattering-fit-method-class.md)
+  provisionally recommends per-band exponential scales with a descriptive index,
+  plus a separately validated thin-screen test. Implementation, calibration and
+  actual-sightline diagnosis remain unfinished; ticket 07 stays parked.
+
 - **Monorepo consolidation (owner-chartered, 2026-08-07; resolved
   same day):** [the consolidation ticket](tickets/monorepo-consolidation.md)
   is resolved - Faber2026-analysis is folded into the parent as a plain
@@ -106,6 +112,11 @@ existing lane system. The map does not carry the execution itself.
 - [Adjudicate the conflicting halo-mass prescriptions on the phineas sightline](tickets/06-adjudicate-phineas-halo-mass-prescriptions.md)
   — adopt a probabilistic crossing mixture tied to the modified-NFW gas
   truncation radius; retain `R200c` crossing as a reported geometry sensitivity.
+
+- [Reassess the two-band scattering fit method class](tickets/method-reassessment-01-scattering-fit-method-class.md)
+  — provisional recommendation only. Initial review blocked overclaims and truth
+  definitions; corrected evidence retains the full-model continuity hold and
+  unresolved production calibration. No manuscript promotion; ticket remains open.
 
 ## Not yet specified
 

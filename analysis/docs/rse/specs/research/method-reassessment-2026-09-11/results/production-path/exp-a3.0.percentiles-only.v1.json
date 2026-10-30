@@ -1,0 +1,37 @@
+{
+ "case": "exp-a3.0",
+ "kernel": "exp",
+ "shape_true": 3.0,
+ "alpha_true": 3.0,
+ "expect": "rail-ceiling",
+ "beta_bounds": [
+  3.0,
+  4.0
+ ],
+ "nlive": 200,
+ "maxcall": 400000,
+ "seed": 20260911,
+ "beta": {
+  "median": 3.968503620506498,
+  "err_minus": 0.02251503521002185,
+  "err_plus": 0.008505775672507099
+ },
+ "alpha_derived": 4.032000326710497,
+ "tau_1ghz": {
+  "median": 0.023542911183589244,
+  "lower": 0.022841038637429804,
+  "upper": 0.024126185440782707,
+  "err_minus": 0.0007018725461594398,
+  "err_plus": 0.0005832742571934627
+ },
+ "edge_mass_beta": {
+  "low": 4.605691479620563e-65,
+  "high": 4.51175600146337e-105
+ },
+ "rail_class": "interior",
+ "log_evidence": -18440.362216686102,
+ "log_evidence_err": 0.8086015178245415,
+ "ncall": 336536,
+ "runtime_s": 431.9618239402771,
+ "entry_point": "scattering.scat_analysis.burstfit_joint.fit_joint_scattering(shared_zeta=True)"
+}
