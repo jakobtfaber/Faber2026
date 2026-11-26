@@ -491,6 +491,19 @@ co-detections with PPC verification: freya β=3.72 and phineas β=3.23
 interior; 9 railed-hi table rows; chromatica gate-FAIL. Report:
 `scattering/studies/beta-campaign/CAMPAIGN_REPORT.md`.
 
+**Method reassessment (2026-09-11; corrected after review)**: family 3 is a
+provisional recommendation, not an adopted or validated production method
+(ticket `method-reassessment-01`, memo under
+`docs/rse/specs/research/method-reassessment-2026-09-11/`). Intended headline:
+per-band exponential scales and a descriptive index; a beta-coupled fit would
+be a separately validated consistency test. Nine selected harness recoveries
+do not clear production inference. The production beta=3.98 switch changes
+both convolution convention and alpha; its full continuity needs correction.
+Synthetic mismatches can produce rails or misleading interior fits, but actual
+sightline causes and calibration remain unresolved. Initial independent review
+blocked the memo; corrections and final review are recorded with the evidence.
+Ticket 01 remains open, ticket 07 parked. No fitted value is promoted.
+
 ## Relationships
 
 - **Figure 1** is locked (owner decision 2026-07-14,

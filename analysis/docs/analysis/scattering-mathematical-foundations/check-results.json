@@ -1,0 +1,23 @@
+{
+  "williamson_area": 1.0000000000000395,
+  "williamson_mean": 1.2337005501361702,
+  "williamson_laplace_errors": [
+    1.5987211554602254e-14,
+    3.8913317013111737e-14,
+    4.092559624524483e-14
+  ],
+  "beta3_transform_errors": [
+    2.220446049250313e-16,
+    1.27675647831893e-15,
+    3.941638682114501e-14
+  ],
+  "proper_full_rank_error": 0.0,
+  "rank_fallback_exact_loglike": -20.75855781286188,
+  "rank_fallback_implemented_loglike": -5015.653387624374,
+  "rank_fallback_error": -4994.894829811512,
+  "large_gain_variance_loglike_step": -4.605170039013963,
+  "expected_step": -4.605170185988092,
+  "gaussian_exponential_quadrature_error": 1.1102230246251565e-16,
+  "normalized_piecewise_kernel_area": 0.9999999981649295,
+  "scope": "Deterministic algebra/counterexamples only; no scientific calibration or campaign"
+}

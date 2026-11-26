@@ -1,0 +1,97 @@
+[
+ {
+  "case": "exp-a3.0",
+  "tau_1ghz_true": 0.05,
+  "tau_source": "legacy CASES inventory",
+  "beta_median": 3.968503620506498,
+  "lnL_at_median": -18379.27922055238,
+  "lnL_fft_3979": -18378.52432074355,
+  "lnL_analytic_3981": -18374.78034339998,
+  "step_lnL_free_t0": 3.743977343568986,
+  "t0_shift_C_samples": -0.43273786750130405,
+  "t0_shift_D_samples": -0.274084304183896,
+  "mass_above": {
+   "3.9": 0.9873587738010587,
+   "3.95": 0.8057201548550209,
+   "3.98": 0.0,
+   "3.99": 0.0
+  },
+  "rail_class": "interior"
+ },
+ {
+  "case": "exp-a4.0",
+  "tau_1ghz_true": 0.05,
+  "tau_source": "legacy CASES inventory",
+  "beta_median": 3.859895571741042,
+  "lnL_at_median": -18326.026240876956,
+  "lnL_fft_3979": -18328.078040873297,
+  "lnL_analytic_3981": -18329.47363343949,
+  "step_lnL_free_t0": -1.3955925661939546,
+  "t0_shift_C_samples": -0.46471284130715607,
+  "t0_shift_D_samples": -0.38365034675712495,
+  "mass_above": {
+   "3.9": 0.2406234372395399,
+   "3.95": 0.06651108518086347,
+   "3.98": 0.0,
+   "3.99": 0.0
+  },
+  "rail_class": "interior"
+ },
+ {
+  "case": "exp-a4.4",
+  "tau_1ghz_true": 0.05,
+  "tau_source": "legacy CASES inventory",
+  "beta_median": 3.747768593016665,
+  "lnL_at_median": -18324.727641976715,
+  "lnL_fft_3979": -18342.175924432653,
+  "lnL_analytic_3981": -18346.40908260004,
+  "step_lnL_free_t0": -4.2331581673861365,
+  "t0_shift_C_samples": -0.4714887164909555,
+  "t0_shift_D_samples": -0.4103815795135263,
+  "mass_above": {
+   "3.9": 0.0,
+   "3.95": 0.0,
+   "3.98": 0.0,
+   "3.99": 0.0
+  },
+  "rail_class": "interior"
+ },
+ {
+  "case": "thin-b3.67-tau0.2",
+  "tau_1ghz_true": 0.2,
+  "tau_source": "record",
+  "beta_median": 3.63958279450426,
+  "lnL_at_median": -18343.870941982437,
+  "lnL_fft_3979": -18500.45663354798,
+  "lnL_analytic_3981": -18519.452386868805,
+  "step_lnL_free_t0": -18.995753320825315,
+  "t0_shift_C_samples": -0.4912489416185115,
+  "t0_shift_D_samples": -0.49878217306561634,
+  "mass_above": {
+   "3.9": 0.0,
+   "3.95": 0.0,
+   "3.98": 0.0,
+   "3.99": 0.0
+  },
+  "rail_class": "interior"
+ },
+ {
+  "case": "thin-b3.67",
+  "tau_1ghz_true": 0.05,
+  "tau_source": "legacy CASES inventory",
+  "beta_median": 3.5714434769480077,
+  "lnL_at_median": -18325.05854029058,
+  "lnL_fft_3979": -18387.295058156276,
+  "lnL_analytic_3981": -18393.03431061283,
+  "step_lnL_free_t0": -5.739252456554823,
+  "t0_shift_C_samples": -0.47169736683675456,
+  "t0_shift_D_samples": -0.41046935093486,
+  "mass_above": {
+   "3.9": 0.0,
+   "3.95": 0.0,
+   "3.98": 0.0,
+   "3.99": 0.0
+  },
+  "rail_class": "interior"
+ }
+]

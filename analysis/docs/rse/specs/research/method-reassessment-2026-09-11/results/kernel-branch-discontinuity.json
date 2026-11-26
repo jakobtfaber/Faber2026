@@ -1,0 +1,20 @@
+[
+ {
+  "band": "CHIME",
+  "dt_ms": 0.07158836689038031,
+  "tau_centre_ms": 0.2219409634391934,
+  "max_diff_over_peak_3979_vs_3981": 0.16963561159941515,
+  "max_diff_over_peak_390_vs_3981": 0.15852365688680747,
+  "centroid_offset_samples_fft_minus_analytic": -0.381271337046189,
+  "max_diff_over_peak_fft_vs_analytic_at_bin_centre": 0.013745022386847003
+ },
+ {
+  "band": "DSA",
+  "dt_ms": 0.018808777429467086,
+  "tau_centre_ms": 0.0073907275150859476,
+  "max_diff_over_peak_3979_vs_3981": 0.05220328577196706,
+  "max_diff_over_peak_390_vs_3981": 0.05351287974966211,
+  "centroid_offset_samples_fft_minus_analytic": -0.3030815370160724,
+  "max_diff_over_peak_fft_vs_analytic_at_bin_centre": 0.03323396556834516
+ }
+]

@@ -1,7 +1,7 @@
 # Adjudicate the bounded-window Zach component count
 
 - Type: `wayfinder:task` (AFK)
-- Status: open
+- Status: parked (2026-09-11) — [method-reassessment-01](method-reassessment-01-scattering-fit-method-class.md) provisionally recommends family 3, but its headline path, calibration and actual-sightline diagnosis remain unfinished. Reruns await a validated method; beta-coupled comparisons also await complete forward-model continuity across the kernel/alpha switch. Prior blocker (ticket 05) resolved 2026-07-23
 - Assignee: Orchestrator
 - Blocked by: [Regenerate Zach C2D4](joint-scattering-controlled-rerun-05-regenerate-zach-c2d4.md)
 - Map: [ApJ submission](../map-apj-submission.md)
